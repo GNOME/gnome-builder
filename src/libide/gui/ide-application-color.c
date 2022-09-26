@@ -24,70 +24,11 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include <libide-sourceview.h>
+
 #include "ide-application.h"
 #include "ide-application-private.h"
 #include "ide-recoloring-private.h"
-
-static void
-add_style_name (GPtrArray   *ar,
-                const gchar *base,
-                gboolean     dark)
-{
-  g_ptr_array_add (ar, g_strdup_printf ("%s-%s", base, dark ? "dark" : "light"));
-}
-
-static gchar *
-find_similar_style_scheme (const gchar *name,
-                           gboolean     is_dark_mode)
-{
-  g_autoptr(GPtrArray) attempts = NULL;
-  GtkSourceStyleSchemeManager *mgr;
-  const gchar * const *scheme_ids;
-  const gchar *dash;
-
-  g_assert (name != NULL);
-
-  attempts = g_ptr_array_new_with_free_func (g_free);
-
-  mgr = gtk_source_style_scheme_manager_get_default ();
-  scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (mgr);
-
-  add_style_name (attempts, name, is_dark_mode);
-
-  if ((dash = strrchr (name, '-')))
-    {
-      if (g_str_equal (dash, "-light") ||
-          g_str_equal (dash, "-dark"))
-        {
-          g_autofree gchar *base = NULL;
-
-          base = g_strndup (name, dash - name);
-          add_style_name (attempts, base, is_dark_mode);
-
-          /* Add the base name last so light/dark matches first */
-          g_ptr_array_add (attempts, g_steal_pointer (&base));
-        }
-    }
-
-  /*
-   * Instead of using gtk_source_style_scheme_manager_get_scheme(), we get the
-   * IDs and look using case insensitive search so that its more likely we get
-   * a match when something is named Dark or Light in the id.
-   */
-
-  for (guint i = 0; i < attempts->len; i++)
-    {
-      const gchar *attempt = g_ptr_array_index (attempts, i);
-
-      for (guint j = 0; scheme_ids[j] != NULL; j++)
-        {
-          if (strcasecmp (attempt, scheme_ids[j]) == 0)
-            return g_strdup (scheme_ids[j]);
-        }
-    }
-
-  return NULL;
-}
 
 static void
 _ide_application_update_color (IdeApplication *self)
@@ -126,14 +67,18 @@ _ide_application_update_color (IdeApplication *self)
 static void
 _ide_application_update_style_scheme (IdeApplication *self)
 {
-  AdwStyleManager *manager;
-  g_autoptr(GSettings) editor_settings = NULL;
-  g_autofree gchar *old_name = NULL;
-  g_autofree gchar *new_name = NULL;
+  GtkSourceStyleSchemeManager *scheme_manager;
+  GtkSourceStyleScheme *old_scheme;
+  GtkSourceStyleScheme *new_scheme;
+  AdwStyleManager *style_manager;
+  g_autofree char *old_name = NULL;
+  const char *new_name;
+  const char *variant;
 
   g_assert (IDE_IS_APPLICATION (self));
 
-  manager = adw_style_manager_get_default ();
+  style_manager = adw_style_manager_get_default ();
+  scheme_manager = gtk_source_style_scheme_manager_get_default ();
 
   /*
    * Now that we have our color up to date, we need to possibly update the
@@ -144,13 +89,31 @@ _ide_application_update_style_scheme (IdeApplication *self)
    * based on some naming conventions. If found, switch the current style
    * scheme to match.
    */
+  old_name = g_settings_get_string (self->editor_settings, "style-scheme-name");
+  old_scheme = gtk_source_style_scheme_manager_get_scheme (scheme_manager, old_name);
 
-  editor_settings = g_settings_new ("org.gnome.builder.editor");
-  old_name = g_settings_get_string (editor_settings, "style-scheme-name");
-  new_name = find_similar_style_scheme (old_name, adw_style_manager_get_dark (manager));
+  /* Something weird happend like the style-scheme was removed but
+   * not updated in GSettings. Just fallback to Builder.
+   */
+  if (old_scheme == NULL)
+    old_scheme = gtk_source_style_scheme_manager_get_scheme (scheme_manager, "Builder");
 
-  if (new_name != NULL)
-    g_settings_set_string (editor_settings, "style-scheme-name", new_name);
+  /* Installation broken if we don't have a scheme */
+  g_assert (GTK_SOURCE_IS_STYLE_SCHEME (old_scheme));
+
+  /* Currently only support light/dark */
+  if (adw_style_manager_get_dark (style_manager))
+    variant = "dark";
+  else
+    variant = "light";
+
+  /* Get the closest variant. This function always returns a scheme. */
+  new_scheme = ide_source_style_scheme_get_variant (old_scheme, variant);
+  new_name = gtk_source_style_scheme_get_id (new_scheme);
+
+  /* Only write-back if it changed to avoid spurious changed signals */
+  if (!ide_str_equal0 (old_name, new_name))
+    g_settings_set_string (self->editor_settings, "style-scheme-name", new_name);
 }
 
 static void
