@@ -49,6 +49,7 @@ struct _GbpVcsuiClonePage
   AdwEntryRow        *uri_row;
   IdeProgressIcon    *progress;
   GtkLabel           *failure_message;
+  GtkLabel           *error_label;
 
   IdeVcsCloneRequest *request;
 };
@@ -147,6 +148,7 @@ gbp_vcsui_clone_page_clone_cb (GObject      *object,
       gtk_stack_set_visible_child_name (self->stack, "details");
       gtk_label_set_label (self->failure_message,
                            _("A failure occurred while cloning the repository."));
+      gtk_label_set_label (self->error_label, error->message);
       IDE_GOTO (failure);
     }
   else
@@ -248,6 +250,7 @@ clone_action (GtkWidget  *widget,
   gtk_widget_action_set_enabled (widget, "clone-page.clone", FALSE);
 
   gtk_label_set_label (self->failure_message, NULL);
+  gtk_label_set_label (self->error_label, NULL);
 
   ide_vcs_clone_request_clone_async (self->request,
                                      notif,
@@ -394,6 +397,7 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_button);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, error_label);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, failure_message);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
