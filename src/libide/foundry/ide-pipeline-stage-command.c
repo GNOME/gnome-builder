@@ -29,12 +29,11 @@
 #include "ide-run-command.h"
 #include "ide-run-context.h"
 
-struct _IdePipelineStageCommand
+typedef struct
 {
-  IdePipelineStage  parent_instance;
-  IdeRunCommand    *build_command;
-  IdeRunCommand    *clean_command;
-};
+  IdeRunCommand *build_command;
+  IdeRunCommand *clean_command;
+} IdePipelineStageCommandPrivate;
 
 enum {
   PROP_0,
@@ -43,7 +42,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE_TYPE_PIPELINE_STAGE)
+G_DEFINE_TYPE_WITH_PRIVATE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE_TYPE_PIPELINE_STAGE)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -79,6 +78,7 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
                                         gpointer             user_data)
 {
   IdePipelineStageCommand *self = (IdePipelineStageCommand *)stage;
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunContext) run_context = NULL;
@@ -95,13 +95,13 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_pipeline_stage_command_build_async);
 
-  if (self->build_command == NULL)
+  if (priv->build_command == NULL)
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, self->build_command);
+  run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
 
   _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
 
@@ -152,6 +152,7 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
                                         gpointer             user_data)
 {
   IdePipelineStageCommand *self = (IdePipelineStageCommand *)stage;
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeTask) task = NULL;
@@ -167,13 +168,13 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_pipeline_stage_command_clean_async);
 
-  if (self->clean_command == NULL)
+  if (priv->clean_command == NULL)
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, self->clean_command);
+  run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
 
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
@@ -213,9 +214,10 @@ static void
 ide_pipeline_stage_command_finalize (GObject *object)
 {
   IdePipelineStageCommand *self = (IdePipelineStageCommand *)object;
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
 
-  g_clear_object (&self->build_command);
-  g_clear_object (&self->clean_command);
+  g_clear_object (&priv->build_command);
+  g_clear_object (&priv->clean_command);
 
   G_OBJECT_CLASS (ide_pipeline_stage_command_parent_class)->finalize (object);
 }
@@ -227,15 +229,16 @@ ide_pipeline_stage_command_get_property (GObject    *object,
                                          GParamSpec *pspec)
 {
   IdePipelineStageCommand *self = IDE_PIPELINE_STAGE_COMMAND (object);
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_BUILD_COMMAND:
-      g_value_set_object (value, self->build_command);
+      g_value_set_object (value, priv->build_command);
       break;
 
     case PROP_CLEAN_COMMAND:
-      g_value_set_object (value, self->clean_command);
+      g_value_set_object (value, priv->clean_command);
       break;
 
     default:
@@ -250,15 +253,16 @@ ide_pipeline_stage_command_set_property (GObject      *object,
                                          GParamSpec   *pspec)
 {
   IdePipelineStageCommand *self = IDE_PIPELINE_STAGE_COMMAND (object);
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_BUILD_COMMAND:
-      g_set_object (&self->build_command, g_value_get_object (value));
+      g_set_object (&priv->build_command, g_value_get_object (value));
       break;
 
     case PROP_CLEAN_COMMAND:
-      g_set_object (&self->clean_command, g_value_get_object (value));
+      g_set_object (&priv->clean_command, g_value_get_object (value));
       break;
 
     default:
@@ -320,10 +324,12 @@ void
 ide_pipeline_stage_command_set_build_command (IdePipelineStageCommand *self,
                                               IdeRunCommand           *build_command)
 {
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
   g_return_if_fail (!build_command || IDE_IS_RUN_COMMAND (build_command));
 
-  if (g_set_object (&self->build_command, build_command))
+  if (g_set_object (&priv->build_command, build_command))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMAND]);
 }
 
@@ -331,9 +337,11 @@ void
 ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
                                               IdeRunCommand           *clean_command)
 {
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
   g_return_if_fail (!clean_command || IDE_IS_RUN_COMMAND (clean_command));
 
-  if (g_set_object (&self->clean_command, clean_command))
+  if (g_set_object (&priv->clean_command, clean_command))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_COMMAND]);
 }
