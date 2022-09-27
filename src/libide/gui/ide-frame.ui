@@ -23,7 +23,7 @@
             <child>
               <object class="GtkShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
-                <property name="accelerator" translatable="yes">&lt;Control&gt;Return</property>
+                <property name="accelerator">&lt;Control&gt;Return</property>
                 <layout>
                   <property name="row">0</property>
                   <property name="column">1</property>
@@ -43,7 +43,7 @@
             <child>
               <object class="GtkShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
-                <property name="accelerator" translatable="yes">F9</property>
+                <property name="accelerator">F9</property>
                 <layout>
                   <property name="row">1</property>
                   <property name="column">1</property>
@@ -63,7 +63,7 @@
             <child>
               <object class="GtkShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
-                <property name="accelerator" translatable="yes">&lt;Ctrl&gt;&amp;0</property>
+                <property name="accelerator">&lt;Ctrl&gt;&amp;0</property>
                 <layout>
                   <property name="row">2</property>
                   <property name="column">1</property>
@@ -83,7 +83,7 @@
             <child>
               <object class="GtkShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
-                <property name="accelerator" translatable="yes">&lt;Ctrl&gt;&amp;&lt;Shift&gt;&amp;T</property>
+                <property name="accelerator">&lt;Ctrl&gt;&amp;&lt;Shift&gt;&amp;T</property>
                 <layout>
                   <property name="row">3</property>
                   <property name="column">1</property>
