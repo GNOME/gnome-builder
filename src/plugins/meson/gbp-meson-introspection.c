@@ -316,7 +316,7 @@ gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
       get_string_member (obj, "name", &name);
       get_string_member (obj, "type", &type);
 
-      if (ide_str_equal0 (type, "executable"))
+      if (ide_str_equal0 (type, "executable") || ide_str_equal0 (type, "custom"))
         {
           g_auto(GStrv) filename = NULL;
           gboolean installed = FALSE;
@@ -324,24 +324,40 @@ gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
           get_strv_member (obj, "filename", &filename);
           get_bool_member (obj, "installed", &installed);
 
-          if (filename != NULL && filename[0] != NULL)
+          if (!ide_str_empty0 (filename))
             {
-              g_autoptr(IdeRunCommand) run_command = ide_run_command_new ();
+              g_autoptr(IdeRunCommand) run_command = NULL;
               g_auto(GStrv) install_filename = NULL;
               g_autofree char *install_dir = NULL;
 
+              if (get_strv_member (obj, "install_filename", &install_filename) &&
+                  install_filename != NULL &&
+                  install_filename[0] != NULL)
+                install_dir = g_path_get_dirname (install_filename[0]);
+
+              /* Ignore custom unless it's installed to somewhere/bin/ */
+              if (ide_str_equal0 (type, "custom") &&
+                  (install_dir == NULL || !g_str_has_suffix (install_dir, "/bin")))
+                continue;
+
+              run_command = ide_run_command_new ();
+
+              /* Setup basics for run command information */
               ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_UTILITY);
               ide_run_command_set_id (run_command, id);
               ide_run_command_set_display_name (run_command, name);
-              ide_run_command_set_argv (run_command, IDE_STRV_INIT (filename[0]));
+
+              /* Only allow automatic discovery if it's installed */
               ide_run_command_set_can_default (run_command, installed);
 
-              /* Deprioritize any executable not installed to $prefix/bin/ */
-              if (get_strv_member (obj, "install_filename", &install_filename) &&
-                  install_filename != NULL &&
-                  install_filename[0] != NULL &&
-                  (install_dir = g_path_get_dirname (install_filename[0])) &&
-                  g_str_has_suffix (install_dir, "/bin"))
+              /* Use installed path if it's provided. */
+              if (install_filename != NULL && install_filename[0] != NULL)
+                ide_run_command_set_argv (run_command, IDE_STRV_INIT (install_filename[0]));
+              else
+                ide_run_command_set_argv (run_command, IDE_STRV_INIT (filename[0]));
+
+              /* Lower priority for any executable not installed to somewhere/bin/ */
+              if (install_dir != NULL && g_str_has_suffix (install_dir, "/bin"))
                 ide_run_command_set_priority (run_command, 0);
               else
                 ide_run_command_set_priority (run_command, 1000);
