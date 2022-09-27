@@ -1,6 +1,6 @@
 /* ide-subprocess-launcher.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -204,16 +204,14 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-#ifdef IDE_ENABLE_TRACE
   {
     g_autofree char *str = NULL;
     g_autofree char *env = NULL;
     str = g_strjoinv (" ", (char **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
-    IDE_TRACE_MSG ("Launching %s [env %s] %s parent environment",
-                   str, env, priv->clear_env ? "clearing" : "inheriting");
+    g_debug ("Launching %s [env %s] [directory %s] %s parent environment",
+             str, env, priv->cwd, priv->clear_env ? "clearing" : "inheriting");
   }
-#endif
 
   if (priv->stdout_file_path != NULL &&
       !ide_unix_fd_map_open_file (priv->unix_fd_map,
@@ -281,8 +279,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     str = g_strjoinv (" ", (char **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
 
-    g_debug ("Launching '%s' from directory '%s' with environment %s %s parent environment",
-             str, priv->cwd, env, priv->clear_env ? "clearing" : "inheriting");
+    g_debug ("Launching %s [env %s] [directory %s] %s parent environment",
+             str, env, priv->cwd, priv->clear_env ? "clearing" : "inheriting");
   }
 
   launcher = g_subprocess_launcher_new (priv->flags);
