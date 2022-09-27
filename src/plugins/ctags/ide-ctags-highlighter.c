@@ -32,7 +32,6 @@ struct _IdeCtagsHighlighter
   IdeObject           parent_instance;
 
   GPtrArray          *indexes;
-  IdeCtagsService    *service;
   IdeHighlightEngine *engine;
 };
 
@@ -280,22 +279,13 @@ ide_ctags_highlighter_real_set_engine (IdeHighlighter      *highlighter,
 
   if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
       (service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
-    {
-      g_set_weak_pointer (&self->service, service);
-      ide_ctags_service_register_highlighter (service, self);
-    }
+    ide_ctags_service_register_highlighter (service, self);
 }
 
 static void
 ide_ctags_highlighter_finalize (GObject *object)
 {
   IdeCtagsHighlighter *self = (IdeCtagsHighlighter *)object;
-
-  if (self->service != NULL)
-    {
-      ide_ctags_service_unregister_highlighter (self->service, self);
-      g_clear_weak_pointer (&self->service);
-    }
 
   g_clear_pointer (&self->indexes, g_ptr_array_unref);
 
