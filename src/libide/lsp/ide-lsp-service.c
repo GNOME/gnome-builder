@@ -607,6 +607,9 @@ ide_lsp_service_restart (IdeLspService *self)
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
   g_return_if_fail (!ide_object_in_destruction (IDE_OBJECT (self)));
 
+  g_debug ("Request to restart LSP service %s",
+           G_OBJECT_TYPE_NAME (self));
+
   ide_lsp_service_stop (self);
 
   if ((context = ide_object_get_context (IDE_OBJECT (self))))
@@ -624,6 +627,13 @@ on_pipeline_loaded_cb (IdeLspService *self,
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
+  g_signal_handlers_disconnect_by_func (pipeline,
+                                        G_CALLBACK (on_pipeline_loaded_cb),
+                                        self);
+
+  g_debug ("Pipeline has completed loading, restarting LSP service %s",
+           G_OBJECT_TYPE_NAME (self));
+
   ide_lsp_service_restart (self);
 
   IDE_EXIT;
@@ -640,6 +650,9 @@ on_notify_pipeline_cb (IdeLspService   *self,
 
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  g_debug ("Pipeline changed, requesting LSP service %s restart",
+           G_OBJECT_TYPE_NAME (self));
 
   ide_lsp_service_stop (self);
 
