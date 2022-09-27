@@ -475,6 +475,7 @@ ide_unix_fd_map_create_stream (IdeUnixFDMap  *self,
   g_return_val_if_fail (dest_read_fd > -1, NULL);
   g_return_val_if_fail (dest_write_fd > -1, NULL);
 
+  /* pipe2(int[read,write]) */
   if (pipe2 (stdin_pair, O_CLOEXEC) != 0 ||
       pipe2 (stdout_pair, O_CLOEXEC) != 0)
     {
