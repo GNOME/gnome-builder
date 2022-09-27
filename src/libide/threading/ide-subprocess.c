@@ -264,6 +264,10 @@ ide_subprocess_send_signal (IdeSubprocess *self,
 {
   g_return_if_fail (IDE_IS_SUBPROCESS (self));
 
+  g_debug ("Send signal %d on subprocess %s",
+           signal_num,
+           ide_subprocess_get_identifier (self));
+
   WRAP_INTERFACE_METHOD (self, send_signal, NULL, signal_num);
 }
 
@@ -271,6 +275,9 @@ void
 ide_subprocess_force_exit (IdeSubprocess *self)
 {
   g_return_if_fail (IDE_IS_SUBPROCESS (self));
+
+  g_debug ("Force exit on subprocess %s",
+           ide_subprocess_get_identifier (self));
 
   WRAP_INTERFACE_METHOD (self, force_exit, NULL);
 }
