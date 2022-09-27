@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Provides integration with the pylsp language server for Python
+Embedded=_gbp_pylsp_register_types
+Module=pylsp-language-server
+Name=Python Language Server (PyLSP)
+X-Category=lsps
+X-Completion-Provider-Languages=python,python3
+X-Symbol-Resolver-Languages=python,python3
+X-Diagnostic-Provider-Languages=python,python3
+X-Highlighter-Languages=python,python3
+X-Hover-Provider-Languages=python,python3
+X-Rename-Provider-Languages=python,python3
+X-Formatter-Languages=python,python3
+X-Code-Action-Languages=python,python3

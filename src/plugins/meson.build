@@ -104,6 +104,7 @@ subdir('podman')
 subdir('project-tree')
 subdir('projectui')
 subdir('pygi')
+subdir('python-lsp-server')
 subdir('qemu')
 subdir('quick-highlight')
 subdir('recent')
@@ -218,6 +219,7 @@ status += [
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jdtls ......................... (Java) : @0@'.format(get_option('plugin_jdtls')),
   'jedi-language-server ........ (Python) : @0@ **'.format(get_option('plugin_jedi_language_server')),
+  'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vls')),

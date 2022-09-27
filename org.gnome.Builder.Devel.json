@@ -88,6 +88,7 @@
     ],
     "modules" : [
         "build-aux/flatpak/python-deps.json",
+        "build-aux/flatpak/python3-python-lsp-server.json",
         {
             "name" : "gperftools",
             "cleanup" : [
