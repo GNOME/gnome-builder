@@ -162,6 +162,19 @@ ide_settings_resolve_schema_path (const char *schema_id,
       else
         return g_strconcat ("/org/gnome/builder/projects/", path_suffix, NULL);
     }
+  else if (g_str_equal (schema_id, "org.gnome.builder.editor.language"))
+    {
+      /* This is a special case so that we don't have to migrate users settings
+       * from one path to another. Otherwise, we'd be perfectly fine doing it
+       * other way (but that'd require changes to ide-language-defaults.c too).
+       *
+       * Bug: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1813
+       */
+      if (project_id != NULL)
+        return g_strconcat ("/org/gnome/builder/projects/", project_id, "/editor/language/", path_suffix, NULL);
+      else
+        return g_strconcat ("/org/gnome/builder/editor/language/", path_suffix, NULL);
+    }
   else
     {
       const char *suffix = schema_id + strlen ("org.gnome.builder.");
