@@ -8,6 +8,7 @@ plugins_sources += files([
   'gbp-cmake-build-target.c',
   'gbp-cmake-build-target-provider.c',
   'gbp-cmake-pipeline-addin.c',
+  'gbp-cmake-run-command-provider.c',
   'gbp-cmake-toolchain.c',
   'gbp-cmake-toolchain-provider.c',
   'gbp-cmake-build-stage-codemodel.c',

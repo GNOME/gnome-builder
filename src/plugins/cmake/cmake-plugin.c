@@ -23,11 +23,12 @@
 #include <libpeas/peas.h>
 #include <libide-foundry.h>
 
-#include "gbp-cmake-build-system.h"
 #include "gbp-cmake-build-system-discovery.h"
-#include "gbp-cmake-pipeline-addin.h"
-#include "gbp-cmake-toolchain-provider.h"
+#include "gbp-cmake-build-system.h"
 #include "gbp-cmake-build-target-provider.h"
+#include "gbp-cmake-pipeline-addin.h"
+#include "gbp-cmake-run-command-provider.h"
+#include "gbp-cmake-toolchain-provider.h"
 
 _IDE_EXTERN void
 _gbp_cmake_register_types (PeasObjectModule *module)
@@ -47,4 +48,7 @@ _gbp_cmake_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_TARGET_PROVIDER,
                                               GBP_TYPE_CMAKE_BUILD_TARGET_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_CMAKE_RUN_COMMAND_PROVIDER);
 }
