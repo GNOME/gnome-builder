@@ -33,11 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeCtagsService, ide_ctags_service, IDE, CTAGS_SERVICE, Id
 
 void       ide_ctags_service_register_highlighter   (IdeCtagsService            *self,
                                                      IdeCtagsHighlighter        *highlighter);
-void       ide_ctags_service_unregister_highlighter (IdeCtagsService            *self,
-                                                     IdeCtagsHighlighter        *highlighter);
 void       ide_ctags_service_register_completion    (IdeCtagsService            *self,
-                                                     IdeCtagsCompletionProvider *completion);
-void       ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
                                                      IdeCtagsCompletionProvider *completion);
 void       ide_ctags_service_pause                  (IdeCtagsService            *self);
 void       ide_ctags_service_unpause                (IdeCtagsService            *self);

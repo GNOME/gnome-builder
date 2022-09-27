@@ -290,7 +290,7 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
   IdeTaskCache *cache = (IdeTaskCache *)object;
   g_autoptr(IdeCtagsService) self = user_data;
   g_autoptr(IdeCtagsIndex) index = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -302,8 +302,6 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
       /* don't log if it was an empty file */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NONE))
         g_debug ("%s", error->message);
-
-      g_clear_error (&error);
 
       IDE_EXIT;
     }
@@ -865,35 +863,66 @@ ide_ctags_service_get_indexes (IdeCtagsService *self)
   return ide_task_cache_get_values (self->indexes);
 }
 
+static void
+ide_ctags_service_highlighter_destroyed_cb (IdeCtagsService     *self,
+                                            IdeCtagsHighlighter *highlighter)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (IDE_IS_CTAGS_HIGHLIGHTER (highlighter));
+
+  if (self->highlighters != NULL)
+    g_ptr_array_remove (self->highlighters, highlighter);
+
+  IDE_EXIT;
+}
+
 void
 ide_ctags_service_register_highlighter (IdeCtagsService     *self,
                                         IdeCtagsHighlighter *highlighter)
 {
   g_autoptr(GPtrArray) values = NULL;
-  gsize i;
 
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
   g_return_if_fail (IDE_IS_CTAGS_HIGHLIGHTER (highlighter));
 
+  g_ptr_array_add (self->highlighters, highlighter);
+  g_signal_connect_object (highlighter,
+                           "destroy",
+                           G_CALLBACK (ide_ctags_service_highlighter_destroyed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   values = ide_task_cache_get_values (self->indexes);
 
-  for (i = 0; i < values->len; i++)
+  for (guint i = 0; i < values->len; i++)
     {
       IdeCtagsIndex *index = g_ptr_array_index (values, i);
       ide_ctags_highlighter_add_index (highlighter, index);
     }
 
-  g_ptr_array_add (self->highlighters, highlighter);
+  IDE_EXIT;
 }
 
-void
-ide_ctags_service_unregister_highlighter (IdeCtagsService     *self,
-                                          IdeCtagsHighlighter *highlighter)
+static void
+ide_ctags_service_completion_destroyed_cb (IdeCtagsService            *self,
+                                           IdeCtagsCompletionProvider *completion)
 {
-  g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
-  g_return_if_fail (IDE_IS_CTAGS_HIGHLIGHTER (highlighter));
+  IDE_ENTRY;
 
-  g_ptr_array_remove (self->highlighters, highlighter);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (completion));
+
+  if (self->completions != NULL)
+    g_ptr_array_remove (self->completions, completion);
+
+  IDE_EXIT;
 }
 
 void
@@ -901,30 +930,28 @@ ide_ctags_service_register_completion (IdeCtagsService            *self,
                                        IdeCtagsCompletionProvider *completion)
 {
   g_autoptr(GPtrArray) values = NULL;
-  gsize i;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
   g_return_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (completion));
 
+  g_ptr_array_add (self->completions, completion);
+  g_signal_connect_object (completion,
+                           "destroy",
+                           G_CALLBACK (ide_ctags_service_completion_destroyed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   values = ide_task_cache_get_values (self->indexes);
 
-  for (i = 0; i < values->len; i++)
+  for (guint i = 0; i < values->len; i++)
     {
       IdeCtagsIndex *index = g_ptr_array_index (values, i);
       ide_ctags_completion_provider_add_index (completion, index);
     }
 
-  g_ptr_array_add (self->completions, completion);
-}
-
-void
-ide_ctags_service_unregister_completion (IdeCtagsService            *self,
-                                         IdeCtagsCompletionProvider *completion)
-{
-  g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
-  g_return_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (completion));
-
-  g_ptr_array_remove (self->completions, completion);
+  IDE_EXIT;
 }
 
 void

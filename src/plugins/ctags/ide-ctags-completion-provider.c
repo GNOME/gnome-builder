@@ -136,20 +136,6 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
 }
 
 static void
-ide_ctags_completion_provider_dispose (GObject *object)
-{
-  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
-  g_autoptr(IdeCtagsService) service = NULL;
-  IdeContext *context;
-
-  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
-      (service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
-    ide_ctags_service_unregister_completion (service, self);
-
-  G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->dispose (object);
-}
-
-static void
 ide_ctags_completion_provider_finalize (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
@@ -191,7 +177,6 @@ ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass
     "union", "while",
   };
 
-  object_class->dispose = ide_ctags_completion_provider_dispose;
   object_class->finalize = ide_ctags_completion_provider_finalize;
 
   i_object_class->parent_set = ide_ctags_completion_provider_parent_set;
