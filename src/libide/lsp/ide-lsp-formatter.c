@@ -240,13 +240,16 @@ ide_lsp_formatter_format_call_cb (GObject      *object,
   IdeLspFormatter *self;
   IdeBuffer *buffer;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_LSP_CLIENT (client));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
 
   if (!ide_lsp_client_call_finish (client, result, &reply, &error))
     {
+      g_debug ("Failed to format selection: %s", error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   self = ide_task_get_source_object (task);
@@ -258,6 +261,8 @@ ide_lsp_formatter_format_call_cb (GObject      *object,
   ide_lsp_formatter_apply_changes (self, buffer, reply);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -280,12 +285,23 @@ ide_lsp_formatter_format_async (IdeFormatter        *formatter,
   gint tab_size;
   gboolean insert_spaces;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_lsp_formatter_format_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
+
+  if (priv->client == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "No language server connected");
+      IDE_EXIT;
+    }
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   gtk_text_iter_order (&begin, &end);
@@ -310,11 +326,13 @@ ide_lsp_formatter_format_async (IdeFormatter        *formatter,
   );
 
   ide_lsp_client_call_async (priv->client,
-                                  "textDocument/formatting",
-                                  params,
-                                  cancellable,
-                                  ide_lsp_formatter_format_call_cb,
-                                  g_steal_pointer (&task));
+                             "textDocument/formatting",
+                             params,
+                             cancellable,
+                             ide_lsp_formatter_format_call_cb,
+                             g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static gboolean
