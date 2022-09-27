@@ -210,7 +210,7 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
     g_autofree char *env = NULL;
     str = g_strjoinv (" ", (char **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
-    IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
+    IDE_TRACE_MSG ("Launching %s [env %s] %s parent environment",
                    str, env, priv->clear_env ? "clearing" : "inheriting");
   }
 #endif
