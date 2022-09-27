@@ -471,7 +471,6 @@ ide_source_view_maybe_delete_match (IdeSourceView *self)
     case '(':  match = ')';  break;
     case '"':  match = '"';  break;
     case '\'': match = '\''; break;
-    case '<':  match = '>';  break;
     default:   match = 0;    break;
     }
 
@@ -594,9 +593,16 @@ ide_source_view_key_pressed_cb (IdeSourceView         *self,
           insert = "\"\"";
           break;
 
+#if 0
+        /* We don't do this because it makes it very annoying to do things
+         * like << in any language, without much benefit for Foo<T>.
+         *
+         * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1824
+         */
         case GDK_KEY_less:
           insert = "<>";
           break;
+#endif
 
         default:
           break;
