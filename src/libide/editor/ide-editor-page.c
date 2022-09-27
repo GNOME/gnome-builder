@@ -142,6 +142,17 @@ ide_editor_page_style_scheme_changed_cb (IdeEditorPage *self,
     ide_gutter_style_changed (self->gutter);
 }
 
+static gboolean
+file_to_basename (GBinding     *binding,
+                  const GValue *from_value,
+                  GValue       *to_value,
+                  gpointer      user_data)
+{
+  GFile *file = g_value_get_object (from_value);
+  g_value_take_string (to_value, g_file_get_basename (file));
+  return TRUE;
+}
+
 static void
 ide_editor_page_set_buffer (IdeEditorPage *self,
                             IdeBuffer     *buffer)
@@ -187,8 +198,13 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                                self,
                                G_CONNECT_SWAPPED);
 
+      g_object_bind_property_full (buffer, "file",
+                                   self, "title",
+                                   G_BINDING_SYNC_CREATE,
+                                   file_to_basename, NULL,
+                                   NULL, NULL);
       g_object_bind_property (buffer, "title",
-                              self, "title",
+                              self, "tooltip",
                               G_BINDING_SYNC_CREATE);
 
       ide_editor_page_notify_file_cb (self, NULL, buffer);
