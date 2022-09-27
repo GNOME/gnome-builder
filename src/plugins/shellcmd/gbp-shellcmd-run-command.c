@@ -24,6 +24,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-run-context-private.h"
+
 #include "gbp-shellcmd-enums.h"
 #include "gbp-shellcmd-run-command.h"
 
@@ -123,7 +125,13 @@ gbp_shellcmd_run_command_prepare_to_run (IdeRunCommand *run_command,
     }
 
   if (self->use_shell)
-    ide_run_context_push_shell (run_context, FALSE);
+    {
+      if (runtime != NULL &&
+          ide_runtime_contains_program_in_path (runtime, ide_get_user_shell (), NULL))
+        _ide_run_context_push_user_shell (run_context, FALSE);
+      else
+        ide_run_context_push_shell (run_context, FALSE);
+    }
 
   IDE_RUN_COMMAND_CLASS (gbp_shellcmd_run_command_parent_class)->prepare_to_run (run_command, run_context, context);
 
