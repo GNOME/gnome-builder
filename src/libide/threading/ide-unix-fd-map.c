@@ -31,6 +31,7 @@
 #include <gio/gunixoutputstream.h>
 
 #include "ide-unix-fd-map.h"
+#include "ide-unix-fd-map-private.h"
 
 typedef struct
 {
@@ -521,4 +522,31 @@ failure:
     close (stdout_pair[1]);
 
   IDE_RETURN (g_steal_pointer (&ret));
+}
+
+gboolean
+ide_unix_fd_map_silence_fd (IdeUnixFdMap  *self,
+                            int            dest_fd,
+                            GError       **error)
+{
+  int null_fd = -1;
+
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (self), FALSE);
+
+  if (dest_fd < 0)
+    return TRUE;
+
+  if (-1 == (null_fd = open ("/dev/null", O_WRONLY)))
+    {
+      int errsv = errno;
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           g_io_error_from_errno (errsv),
+                           g_strerror (errsv));
+      return FALSE;
+    }
+
+  ide_unix_fd_map_take (self, ide_steal_fd (&null_fd), dest_fd);
+
+  return TRUE;
 }
