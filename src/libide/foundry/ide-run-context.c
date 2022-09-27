@@ -31,6 +31,7 @@
 #include "ide-private.h"
 
 #include "ide-run-context.h"
+#include "ide-run-context-private.h"
 
 typedef struct
 {
@@ -347,6 +348,20 @@ ide_run_context_push_host (IdeRunContext *self)
     }
 }
 
+typedef struct
+{
+  char *shell;
+  guint login : 1;
+} Shell;
+
+static void
+shell_free (gpointer data)
+{
+  Shell *shell = data;
+  g_clear_pointer (&shell->shell, g_free);
+  g_slice_free (Shell, shell);
+}
+
 static gboolean
 ide_run_context_shell_handler (IdeRunContext       *self,
                                const char * const  *argv,
@@ -356,13 +371,15 @@ ide_run_context_shell_handler (IdeRunContext       *self,
                                gpointer             user_data,
                                GError             **error)
 {
+  Shell *shell = user_data;
   g_autoptr(GString) str = NULL;
-  gboolean login = !!GPOINTER_TO_INT (user_data);
 
   g_assert (IDE_IS_RUN_CONTEXT (self));
   g_assert (argv != NULL);
   g_assert (env != NULL);
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+  g_assert (shell != NULL);
+  g_assert (shell->shell != NULL);
 
   if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
     return FALSE;
@@ -370,8 +387,8 @@ ide_run_context_shell_handler (IdeRunContext       *self,
   if (cwd != NULL)
     ide_run_context_set_cwd (self, cwd);
 
-  ide_run_context_append_argv (self, "/bin/sh");
-  if (login)
+  ide_run_context_append_argv (self, shell->shell);
+  if (shell->login)
     ide_run_context_append_argv (self, "-l");
   ide_run_context_append_argv (self, "-c");
 
@@ -417,12 +434,41 @@ void
 ide_run_context_push_shell (IdeRunContext *self,
                             gboolean       login)
 {
+  Shell *shell;
+
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  shell = g_slice_new0 (Shell);
+  shell->shell = g_strdup ("/bin/sh");
+  shell->login = !!login;
 
   ide_run_context_push (self,
                         ide_run_context_shell_handler,
-                        GINT_TO_POINTER (!!login),
-                        NULL);
+                        shell, shell_free);
+}
+
+void
+_ide_run_context_push_user_shell (IdeRunContext *self,
+                                  gboolean       login)
+{
+  const char *user_shell;
+  Shell *shell;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  user_shell = ide_get_user_shell ();
+
+  if (!ide_shell_supports_dash_c (user_shell) ||
+      (login && !ide_shell_supports_dash_login (user_shell)))
+    user_shell = "/bin/sh";
+
+  shell = g_slice_new0 (Shell);
+  shell->shell = g_strdup (user_shell);
+  shell->login = !!login;
+
+  ide_run_context_push (self,
+                        ide_run_context_shell_handler,
+                        shell, shell_free);
 }
 
 static gboolean
