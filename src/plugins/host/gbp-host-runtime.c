@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-run-context-private.h"
+
 #include "gbp-host-runtime.h"
 
 struct _GbpHostRuntime
@@ -58,7 +60,7 @@ gbp_host_runtime_flatpak_contains_program_in_path (IdeRuntime   *runtime,
   run_context = ide_run_context_new ();
   ide_run_context_push_host (run_context);
   ide_run_context_add_minimal_environment (run_context);
-  ide_run_context_push_shell (run_context, TRUE);
+  _ide_run_context_push_user_shell (run_context, TRUE);
   ide_run_context_append_argv (run_context, "which");
   ide_run_context_append_argv (run_context, program);
 
@@ -87,7 +89,7 @@ gbp_host_runtime_prepare_to_build (IdeRuntime    *runtime,
 
   ide_run_context_push_host (run_context);
   ide_run_context_add_minimal_environment (run_context);
-  ide_run_context_push_shell (run_context, TRUE);
+  _ide_run_context_push_user_shell (run_context, TRUE);
 
   IDE_EXIT;
 }
@@ -109,7 +111,7 @@ gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
 
   ide_run_context_push_host (run_context);
   ide_run_context_add_minimal_environment (run_context);
-  ide_run_context_push_shell (run_context, TRUE);
+  _ide_run_context_push_user_shell (run_context, TRUE);
 
   config = ide_pipeline_get_config (pipeline);
   prefix = ide_config_get_prefix (config);
