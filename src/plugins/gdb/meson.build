@@ -16,6 +16,7 @@ plugins_sources += plugin_gdb_resources
 gdbwire = static_library('gdbwire', ['gdbwire.c'],
   c_args: [ '-Wno-redundant-decls',
             '-Wno-switch-default',
+            '-Wno-switch-enum',
             '-Wno-missing-declarations',
             '-Wno-uninitialized',
             '-Wno-declaration-after-statement' ],
