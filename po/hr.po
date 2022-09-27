@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-26 16:14+0000\n"
-"PO-Revision-Date: 2022-09-26 21:43+0200\n"
+"POT-Creation-Date: 2022-09-27 05:25+0000\n"
+"PO-Revision-Date: 2022-09-27 16:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -508,12 +508,12 @@ msgid "Directory for all Builder projects."
 msgstr "Direktorij za sve projekte Graditeja."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-msgid "Restore Previous Files"
-msgstr "Vrati prijašnje datoteke"
+msgid "Restore Session"
+msgstr "Obnovi sesiju"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-msgid "Restore previously opened files when loading a project."
-msgstr "Vrati prije otvorene datoteke pri učitavanju projekta."
+msgid "Restores the projects previous session when loading."
+msgstr "Vraća projekte prijašnje sesije pri učitavanju."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -685,7 +685,7 @@ msgstr "Novi radni prostor uređivača"
 msgid "D-Bus Inspector"
 msgstr "D-Bus inspektor"
 
-#: src/libide/code/ide-buffer.c:3674
+#: src/libide/code/ide-buffer.c:3685
 msgid "The current language lacks a symbol resolver."
 msgstr "Trenutnom jeziku nedostaje razrješitelj simbola."
 
@@ -728,7 +728,7 @@ msgstr "Bezimeno"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1500
+#: src/libide/gui/ide-workbench.c:1517
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -743,8 +743,8 @@ msgstr "_Odustani"
 msgid "A suitable debugger could not be found."
 msgstr "Prikladan otklanjatelj grešaka nije pronađen."
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1496
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
+#: src/libide/gui/ide-workbench.c:1513
 msgid "Open File…"
 msgstr "Otvori datoteku…"
 
@@ -935,7 +935,7 @@ msgstr "Spremi"
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "Odustani"
 
@@ -1053,97 +1053,98 @@ msgstr "Moje računalo (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Moje računalo (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:834
+#: src/libide/foundry/ide-pipeline.c:835
 msgid "The build pipeline is in a failed state"
 msgstr "Slivnika izgradnje je u neuspjelom stanju"
 
-#: src/libide/foundry/ide-pipeline.c:844
+#: src/libide/foundry/ide-pipeline.c:845
 msgid "The build configuration has errors"
 msgstr "Podešavanje izgradnje sadrži greške"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1095
+#: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
 msgid "Build (%s)"
 msgstr "Izgradnja (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1136
+#: src/libide/foundry/ide-pipeline.c:1137
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Naknadna instalacija (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3075
+#: src/libide/foundry/ide-pipeline.c:3077
+#: src/libide/foundry/ide-pipeline.c:3116
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Neuspjelo stvaranje pseudo terminala. Značajke terminala će biti ograničene."
 
-#: src/libide/foundry/ide-pipeline.c:3272
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Cleaning…"
 msgstr "Uklanjanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3276
-#: src/libide/foundry/ide-pipeline.c:3333
+#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3374
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Neuspjelo"
 
-#: src/libide/foundry/ide-pipeline.c:3278
-#: src/libide/foundry/ide-pipeline.c:3341
+#: src/libide/foundry/ide-pipeline.c:3319
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Ready"
 msgstr "Spremno"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3334
 msgid "Downloading…"
 msgstr "Preuzimanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3338
 msgid "Building dependencies…"
 msgstr "Izgradnja zavisnosti…"
 
-#: src/libide/foundry/ide-pipeline.c:3301
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Bootstrapping…"
 msgstr "Samopokretanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3305
+#: src/libide/foundry/ide-pipeline.c:3346
 msgid "Configuring…"
 msgstr "Podešavanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3309
+#: src/libide/foundry/ide-pipeline.c:3350
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Izgradnja…"
 
-#: src/libide/foundry/ide-pipeline.c:3313
+#: src/libide/foundry/ide-pipeline.c:3354
 msgid "Installing…"
 msgstr "Instalacija…"
 
-#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3358
 msgid "Committing…"
 msgstr "Slanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3321
+#: src/libide/foundry/ide-pipeline.c:3362
 msgid "Exporting…"
 msgstr "Izvažanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3325
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3370
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Uspješno"
 
-#: src/libide/foundry/ide-pipeline.c:3337
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Preparing…"
 msgstr "Pripremanje…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3693
+#: src/libide/foundry/ide-pipeline.c:3734
 #, c-format
 msgid "Removing %s"
 msgstr "Uklanjam %s"
 
-#: src/libide/foundry/ide-pipeline.c:3752
+#: src/libide/foundry/ide-pipeline.c:3793
 msgid "Removing build directories…"
 msgstr "Uklanjanje zavisnosti izgradnje…"
 
@@ -1220,7 +1221,7 @@ msgid "Directory"
 msgstr "Direktorij"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
+#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
 #, c-format
 msgid "Builder — %s"
 msgstr "Graditelj — %s"
@@ -1257,7 +1258,7 @@ msgid "Select Project File"
 msgstr "Odaberi datoteku projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1499
+#: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -1319,7 +1320,7 @@ msgstr "Otvori"
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Odaberi"
 
@@ -1481,33 +1482,17 @@ msgstr "Otvori datoteku u terminalu"
 msgid "Use the page switcher above or use one of the following:"
 msgstr "Koristite prebacivača stranice iznad ili koristite jedno od sljedećg:"
 
-#: src/libide/gui/ide-frame.ui:26
-msgid "Ctrl+Enter"
-msgstr "Ctrl+Enter"
-
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
 msgstr "Bočna traka projekta"
-
-#: src/libide/gui/ide-frame.ui:46
-msgid "F9"
-msgstr "F9"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
 msgstr "Otvori datoteku"
 
-#: src/libide/gui/ide-frame.ui:66
-msgid "Ctrl+O"
-msgstr "Ctrl+O"
-
-#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
+#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:114
 msgid "New Terminal"
 msgstr "Novi terminal"
-
-#: src/libide/gui/ide-frame.ui:86
-msgid "Ctrl+Shift+T"
-msgstr "Ctrl+Shift+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
@@ -2614,12 +2599,12 @@ msgstr ""
 "SDK korišten za izgradnju vaše aplikacije je automatski otkriven iz tijeka "
 "izvođenja."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 msgid "Fetch dependencies"
 msgstr "Preuzmi zavisnosti"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:199
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
 msgid "Build project"
 msgstr "Izgradi projekt"
 
@@ -2676,7 +2661,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
 msgid "Configure project"
 msgstr "Podesi projekt"
 
@@ -2724,7 +2709,7 @@ msgstr "Neuspjelo učitavanje projekta: %s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:996
+#: src/plugins/ctags/ide-ctags-service.c:1023
 msgid "Indexing Source Code"
 msgstr "Popisivanje izvornog kôda"
 
@@ -2861,7 +2846,7 @@ msgid "Display the project creation guide"
 msgstr "Prikaži vodič stvaranja projekta"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
 msgid "Select Location"
 msgstr "Odaberi lokaciju"
 
@@ -2950,7 +2935,7 @@ msgstr ""
 "Pretraga,automatsko dovršavanje i simboli informacije mogu biti ograničeni "
 "dok se Ctag popisivanje ne završi."
 
-#: src/plugins/ctags/ide-ctags-service.c:953
+#: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
 msgstr "Popisivanje izvornog kôda (Pauzirano)"
 
@@ -3957,7 +3942,7 @@ msgstr "Nemoguće postavljanje AMEND i GPG_SIGN oznaka"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Nemoguće potpisati sadržaj slanja bez GPG_KEY_ID"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:402
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Nemoguće nadgledanje datoteka izvan radnog direktorija"
@@ -3970,13 +3955,13 @@ msgstr "Kontrola git inačice se ne koristi"
 msgid "Updating Git Submodules"
 msgstr "Nadopuna Git podmodula"
 
-#: src/plugins/git/gbp-git-submodule-stage.c:136
-msgid "Network is not available, skipping submodule update"
-msgstr "Mreža je nedostupna, preskakanje nadopune podmodula"
-
-#: src/plugins/git/gbp-git-submodule-stage.c:208
+#: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
 msgstr "Pokretanje git submodula"
+
+#: src/plugins/git/gbp-git-submodule-stage.c:133
+msgid "Network is not available, skipping submodule update"
+msgstr "Mreža je nedostupna, preskakanje nadopune podmodula"
 
 #: src/plugins/git/gbp-git-vcs.c:206
 msgid "Pushed."
@@ -4255,7 +4240,7 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Učitaj Meson samoispitivanje"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:274
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
 msgid "Install project"
 msgstr "Instaliraj projekt"
 
@@ -5610,7 +5595,7 @@ msgstr "Pretraži curenje memorije pri izlazu"
 msgid "Begin cloning project from URI"
 msgstr "Započni klonirati projekt iz URI-a"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "Došlo je do greške pri kloniranju repozitorija."
 
@@ -5702,6 +5687,21 @@ msgstr "Nemoguće stvaranje XML stabla."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Datoteka mora biti spremljena lokalno kako bi se mogla obraditi."
+
+#~ msgid "Restore Previous Files"
+#~ msgstr "Vrati prijašnje datoteke"
+
+#~ msgid "Ctrl+Enter"
+#~ msgstr "Ctrl+Enter"
+
+#~ msgid "F9"
+#~ msgstr "F9"
+
+#~ msgid "Ctrl+O"
+#~ msgstr "Ctrl+O"
+
+#~ msgid "Ctrl+Shift+T"
+#~ msgstr "Ctrl+Shift+T"
 
 #~ msgid "R_ebuild"
 #~ msgstr "Ponovno _izgradi"
