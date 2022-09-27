@@ -23,7 +23,7 @@
             <child>
               <object class="GtkShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
-                <property name="accelerator" translatable="yes">&lt;Ctrl&gt;&amp;Enter</property>
+                <property name="accelerator" translatable="yes">&lt;Control&gt;Return</property>
                 <layout>
                   <property name="row">0</property>
                   <property name="column">1</property>
