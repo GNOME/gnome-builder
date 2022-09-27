@@ -658,7 +658,7 @@ editor_text_buffer_spell_adapter_set_checker (EditorTextBufferSpellAdapter *self
 
       if (length > 0)
         {
-          _cjh_text_region_remove (self->region, 0, length - 1);
+          _cjh_text_region_remove (self->region, 0, length);
           _cjh_text_region_insert (self->region, 0, length, RUN_UNCHECKED);
           g_assert_cmpint (length, ==, _cjh_text_region_get_length (self->region));
         }
