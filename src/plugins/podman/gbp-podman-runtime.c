@@ -1,6 +1,6 @@
 /* gbp-podman-runtime.c
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2019-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -214,7 +214,6 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
 {
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GMutexLocker) locker = NULL;
   GbpPodmanRuntime *self = (GbpPodmanRuntime *) runtime;
   gboolean found;
   gboolean ret;
