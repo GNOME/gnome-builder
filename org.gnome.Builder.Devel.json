@@ -88,7 +88,6 @@
     ],
     "modules" : [
         "build-aux/flatpak/python-deps.json",
-        "build-aux/flatpak/python3-jedi-language-server.json",
         {
             "name" : "gperftools",
             "cleanup" : [
