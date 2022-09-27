@@ -168,9 +168,15 @@ ide_lsp_formatter_apply_changes (IdeLspFormatter *self,
   g_assert (IDE_IS_LSP_FORMATTER (self));
   g_assert (text_edits != NULL);
 
-  if (!g_variant_is_container (text_edits))
+  /* We use "mv" to signify null/empty-set/nothing */
+  if (g_variant_is_of_type (text_edits, G_VARIANT_TYPE ("mv")))
+    IDE_EXIT;
+
+  /* We use "av" which is really "a<a{sv}>" */
+  if (!g_variant_is_of_type (text_edits, G_VARIANT_TYPE ("av")))
     {
-      g_warning ("variant is not a container, ignoring");
+      g_warning ("Unexpected result of type %s for text edits",
+                 g_variant_get_type_string (text_edits));
       IDE_EXIT;
     }
 
