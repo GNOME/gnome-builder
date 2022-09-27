@@ -1,3 +1,44 @@
+# GNOME Builder 43.1
+
+Thanks to all of the prompt testing by users, we have a new release with
+may bug fixes for you this week.
+
+ * Raise debug panel when debug session begins.
+ * Fix how file-descriptors are passed through flatpak-spawn to the host>
+ * Improve Meson run command provider to support CLI applications.
+ * Fix support for using deviced to run Flatpak application on remote device.
+ * Fix icon for LSP search results in global search.
+ * Use -Wno-unused-function for headers for Clang diagnostics to avoid
+   reporting errors for static inlines. This removes a workaround from
+   previous releases of Builder which causes errors with some C++ code.
+ * Fix style-preview height in preferences window.
+ * Fix TTY integration with podman containers so color terminals work
+   with the build panel.
+ * Include a backend-specific error message when version control cloning
+   files in the greeter workspace.
+ * Fix invalid property value in URL bar for webkit pages.
+ * Port meson and cargo plugins to use run commands. This fixes an issue
+   where run contexts don't know they need TTY support until too late.
+   This affected podman usage.
+ * Port git plugin to use run commands for submodule initialization. This
+   also helps ensure we have TTY access.
+ * Fix "hold" counts on document buffers so they cannot be reclaimed
+   immediately after loading of the buffer completes.
+ * When renaming files in the project-tree, the old file will be closed
+   and the new file re-opened in it's place. Previously we only closed
+   the file and did not re-open.
+ * gnome-builder-git daemon gained some optimizations and improvements
+   around monitoring .git indexes.
+ * Git file changes are now properly reloaded after commits are detected
+   to the underlying index.
+ * Life-cycle tracking of highlighter/completion providers for Ctags has
+   been improved.
+ * The empty-state for page frames has been updated to fit better with
+   adwaita styling.
+ * Layered settings for syntax languages has been fixed.
+ * Translation updates
+
+
 # GNOME Builder 43.0
 
 After about 6 months of development, GNOME Builder 43.0 is here!
