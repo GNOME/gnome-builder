@@ -445,7 +445,7 @@ pipe2 (int      fd_pair[2],
 
 /**
  * ide_unix_fd_map_create_stream:
- * @self: a #IdeUnixFdMap
+ * @self: a #IdeUnixFDMap
  * @dest_read_fd: the FD number in the destination process for the read side (stdin)
  * @dest_write_fd: the FD number in the destinatino process for the write side (stdout)
  *
@@ -525,7 +525,7 @@ failure:
 }
 
 gboolean
-ide_unix_fd_map_silence_fd (IdeUnixFdMap  *self,
+ide_unix_fd_map_silence_fd (IdeUnixFDMap  *self,
                             int            dest_fd,
                             GError       **error)
 {
