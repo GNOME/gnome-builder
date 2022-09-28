@@ -24,9 +24,9 @@
 
 G_BEGIN_DECLS
 
-typedef struct _IdeUnixFDMap IdeUnixFdMap;
+typedef struct _IdeUnixFDMap IdeUnixFDMap;
 
-gboolean ide_unix_fd_map_silence_fd (IdeUnixFdMap  *self,
+gboolean ide_unix_fd_map_silence_fd (IdeUnixFDMap  *self,
                                      int            dest_fd,
                                      GError       **error);
 
