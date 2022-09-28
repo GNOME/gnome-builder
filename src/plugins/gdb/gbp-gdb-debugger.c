@@ -29,9 +29,8 @@
 #include <gio/gunixoutputstream.h>
 
 #include <libide-io.h>
+#include <libide-threading.h>
 #include <libide-terminal.h>
-
-#include "ide-unix-fd-map-private.h"
 
 #include "gbp-gdb-debugger.h"
 

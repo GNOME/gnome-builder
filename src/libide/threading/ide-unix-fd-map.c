@@ -31,7 +31,6 @@
 #include <gio/gunixoutputstream.h>
 
 #include "ide-unix-fd-map.h"
-#include "ide-unix-fd-map-private.h"
 
 typedef struct
 {
@@ -525,7 +524,7 @@ failure:
 }
 
 gboolean
-ide_unix_fd_map_silence_fd (IdeUnixFdMap  *self,
+ide_unix_fd_map_silence_fd (IdeUnixFDMap  *self,
                             int            dest_fd,
                             GError       **error)
 {

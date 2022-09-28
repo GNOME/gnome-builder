@@ -89,5 +89,9 @@ GIOStream    *ide_unix_fd_map_create_stream   (IdeUnixFDMap  *self,
                                                int            dest_read_fd,
                                                int            dest_write_fd,
                                                GError       **error);
+IDE_AVAILABLE_IN_44
+gboolean      ide_unix_fd_map_silence_fd      (IdeUnixFDMap  *self,
+                                               int            dest_fd,
+                                               GError       **error);
 
 G_END_DECLS
