@@ -20,9 +20,16 @@
 
 #define G_LOG_DOMAIN "gbp-gdb-debugger"
 
+#include "config.h"
+
+#include <string.h>
+#include <unistd.h>
+
+#include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
+
 #include <libide-io.h>
 #include <libide-terminal.h>
-#include <string.h>
 
 #include "gbp-gdb-debugger.h"
 
@@ -2373,6 +2380,7 @@ gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
    */
   pty_source_fd = ide_unix_fd_map_steal_stdout (unix_fd_map);
   g_warn_if_fail (pty_source_fd != -1);
+  g_warn_if_fail (isatty (pty_source_fd));
 
   /* Save the PTY fd around to attach after spawning */
   pty_dest_fd = ide_unix_fd_map_get_max_dest_fd (unix_fd_map) + 1;
@@ -2385,6 +2393,10 @@ gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
                                                    STDIN_FILENO, STDOUT_FILENO,
                                                    error)))
     IDE_RETURN (FALSE);
+
+  /* Make sure we don't have a PTY for our in/out stream */
+  g_warn_if_fail (!isatty (g_unix_input_stream_get_fd (G_UNIX_INPUT_STREAM (g_io_stream_get_input_stream (io_stream)))));
+  g_warn_if_fail (!isatty (g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (g_io_stream_get_output_stream (io_stream)))));
 
   /* Now merge the FD map down a layer */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
