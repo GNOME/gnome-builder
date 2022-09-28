@@ -31,6 +31,8 @@
 #include <libide-io.h>
 #include <libide-terminal.h>
 
+#include "ide-unix-fd-map-private.h"
+
 #include "gbp-gdb-debugger.h"
 
 #define READ_BUFFER_LEN 4096
@@ -2387,11 +2389,13 @@ gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
   ide_unix_fd_map_take (unix_fd_map, ide_steal_fd (&pty_source_fd), pty_dest_fd);
 
   /* Setup a stream to communicate with GDB over which is just a
-   * regular pipe[2] for stdin/stdout.
+   * regular pipe[2] for stdin/stdout and /dev/null for stderr.
+   *
+   * Otherwise, stderr may get merged and we wont be able to
+   * parse the results from gdb.
    */
-  if (!(io_stream = ide_unix_fd_map_create_stream (unix_fd_map,
-                                                   STDIN_FILENO, STDOUT_FILENO,
-                                                   error)))
+  if (!(io_stream = ide_unix_fd_map_create_stream (unix_fd_map, STDIN_FILENO, STDOUT_FILENO, error)) ||
+      !ide_unix_fd_map_silence_fd (unix_fd_map, STDERR_FILENO, error))
     IDE_RETURN (FALSE);
 
   /* Make sure we don't have a PTY for our in/out stream */
