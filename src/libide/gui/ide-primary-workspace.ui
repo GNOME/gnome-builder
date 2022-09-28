@@ -20,7 +20,7 @@
         <child type="title">
           <object class="AdwClamp">
             <property name="orientation">horizontal</property>
-            <property name="maximum-size">500</property>
+            <property name="maximum-size">400</property>
             <child>
               <object class="IdeOmniBar" id="omni_bar">
                 <property name="icon-name">builder-build-symbolic</property>
