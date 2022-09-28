@@ -2,7 +2,7 @@
     "name": "python3-python-lsp-server",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"python-lsp-server[all]\" --no-build-isolation"
+        "pip3 install --verbose --use-deprecated legacy-resolver --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"python-lsp-server[all]\" --no-build-isolation"
     ],
     "sources": [
         {
@@ -122,8 +122,13 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/18/31/2a87f292f752d39c6c207f9e44137e3e1d4250da880a9fbc0bbf630138e0/tomlkit-0.11.4-py3-none-any.whl",
-            "sha256": "25d4e2e446c453be6360c67ddfb88838cfc42026322770ba13d1fbd403a93a5c"
+            "url": "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl",
+            "sha256": "939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/df/b6/310fe14933403413f7352be0c8e75b7ed23db2170d769ed69e40f40130a3/tomlkit-0.11.5-py3-none-any.whl",
+            "sha256": "f2ef9da9cef846ee027947dc99a45d6b68a63b0ebc21944649505bf2e8bc5fe7"
         },
         {
             "type": "file",
