@@ -41,6 +41,13 @@
         <attribute name="action">context.build-manager.clean</attribute>
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Stop Building</attribute>
+        <attribute name="description" translatable="yes">Cancel the current build operation</attribute>
+        <attribute name="action">context.build-manager.cancel</attribute>
+        <attribute name="verb-icon">process-stop-symbolic</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;c</attribute>
+      </item>
     </section>
     <section id="build-export">
       <attribute name="page" translatable="yes">Code Foundry</attribute>
