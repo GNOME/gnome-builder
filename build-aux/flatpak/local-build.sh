@@ -5,7 +5,7 @@ rm -rf _build ; mkdir _build
 rm -rf _repo ; mkdir _repo
 
 STATE_DIR=~/.cache/gnome-builder/flatpak-builder
-BRANCH=master
+BRANCH=main
 
 flatpak-builder \
     --ccache --force-clean \
