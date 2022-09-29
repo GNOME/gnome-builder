@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="ide-source-view-popup-menu-selection-submenu">
-    <section id="ide-source-view-popup-menu-selection-comment-code-section">
+  <menu id="ide-source-view-popup-menu-format-submenu">
+    <section id="ide-source-view-popup-menu-comment-section">
       <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Code Comments</attribute>
