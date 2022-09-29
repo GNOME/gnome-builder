@@ -60,6 +60,7 @@ subdir('debuggerui')
 subdir('deviced')
 subdir('doap')
 subdir('dspy')
+subdir('dub')
 subdir('editorui')
 subdir('editorconfig')
 subdir('eslint')
@@ -164,6 +165,7 @@ status += [
   'Copyright ............................ : @0@'.format(get_option('plugin_copyright')),
   'Deviced .............................. : @0@'.format(get_option('plugin_deviced')),
   'D-Bus Spy ............................ : @0@'.format(get_option('plugin_dspy')),
+  'Dub .................................. : @0@'.format(get_option('plugin_dub')),
   'Editorconfig ......................... : @0@'.format(get_option('plugin_editorconfig')),
   'ESLint ............................... : @0@'.format(get_option('plugin_eslint')),
   'File Search .......................... : @0@'.format(get_option('plugin_file_search')),

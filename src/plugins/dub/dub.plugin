@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Steven Oliver <oliver.steven@gmail.com>
+Builtin=true
+Copyright=Copyright © 2022 Steven Oliver
+Description=Provides integration with the dub build system
+Embedded=_gbp_dub_register_types
+Module=dub
+Name=dub
+X-Category=buildsystems
+X-Project-File-Filter-Name=dub (dub.json)
+X-Project-File-Filter-Pattern=dub.json
