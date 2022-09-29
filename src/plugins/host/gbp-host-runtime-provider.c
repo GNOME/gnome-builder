@@ -90,8 +90,11 @@ gbp_host_runtime_provider_unload (IdeRuntimeProvider *provider,
   ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->host));
   ide_clear_and_destroy_object (&self->host);
 
-  ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->noop));
-  ide_clear_and_destroy_object (&self->noop);
+  if (self->noop != NULL)
+    {
+      ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->noop));
+      ide_clear_and_destroy_object (&self->noop);
+    }
 
   IDE_EXIT;
 }
