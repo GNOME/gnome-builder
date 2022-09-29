@@ -185,8 +185,13 @@
   </menu>
   <menu id="ide-source-view-popup-menu-format-section">
     <item>
+      <attribute name="label" translatable="yes">Format Document</attribute>
+      <attribute name="action">page.editor.format-document</attribute>
+      <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;f</attribute>
+    </item>
+    <item>
       <attribute name="label" translatable="yes">Format Selection</attribute>
-      <attribute name="action">page.editor.format</attribute>
+      <attribute name="action">page.editor.format-selection</attribute>
       <attribute name="accel">&lt;shift&gt;&lt;alt&gt;f</attribute>
     </item>
   </menu>

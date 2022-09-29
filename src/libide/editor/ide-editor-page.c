@@ -99,20 +99,40 @@ ide_editor_page_notify_file_cb (IdeEditorPage *self,
 }
 
 static void
+ide_editor_page_update_actions (IdeEditorPage *self)
+{
+  IdeFormatter *formatter;
+  gboolean has_selection;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  formatter = ide_buffer_get_formatter (self->buffer);
+  has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (self->buffer));
+
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "editor.format-document", formatter && !has_selection);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "editor.format-selection", formatter && has_selection);
+}
+
+static void
 ide_editor_page_notify_formatter_cb (IdeEditorPage *self,
                                      GParamSpec    *pspec,
                                      IdeBuffer     *buffer)
 {
-  IdeFormatter *formatter;
-
   g_assert (IDE_IS_EDITOR_PAGE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  formatter = ide_buffer_get_formatter (buffer);
+  ide_editor_page_update_actions (self);
+}
 
-  panel_widget_action_set_enabled (PANEL_WIDGET (self),
-                                   "editor.format",
-                                   formatter != NULL);
+static void
+ide_editor_page_notify_has_selection_cb (IdeEditorPage *self,
+                                         GParamSpec    *pspec,
+                                         IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  ide_editor_page_update_actions (self);
 }
 
 static void
@@ -183,6 +203,12 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
       g_signal_connect_object (buffer,
                                "notify::formatter",
                                G_CALLBACK (ide_editor_page_notify_formatter_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (buffer,
+                               "notify::has-selection",
+                               G_CALLBACK (ide_editor_page_notify_has_selection_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
@@ -769,7 +795,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
   panel_widget_class_install_action (panel_widget_class, "editor.print", NULL, print_action);
-  panel_widget_class_install_action (panel_widget_class, "editor.format", NULL, format_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.format-document", NULL, format_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.format-selection", NULL, format_action);
   panel_widget_class_install_action (panel_widget_class, "editor.reload", NULL, reload_action);
 
   g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);

@@ -1,5 +1,6 @@
 { "trigger" : "<Control>i", "action" : "workspace.editorui.page.go-to-line", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Shift><Alt>f", "action": "page.editor.format", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift><Alt>f", "action": "page.editor.format-document", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Shift><Alt>f", "action": "page.editor.format-selection", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Control>f", "action" : "page.search.begin-find", "when" : "canEdit()", "phase" : "bubble" },
 { "trigger" : "<Control>h", "action" : "page.search.begin-replace", "when" : "canEdit()", "phase" : "bubble" },
 { "trigger" : "<Control>s", "action" : "page.save", "when" : "canEdit()", "phase" : "capture" },
