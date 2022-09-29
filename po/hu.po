@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-22 20:29+0000\n"
-"PO-Revision-Date: 2022-09-23 01:23+0200\n"
+"POT-Creation-Date: 2022-09-29 15:15+0000\n"
+"PO-Revision-Date: 2022-09-29 18:35+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -513,12 +513,14 @@ msgid "Directory for all Builder projects."
 msgstr "Az összes Építő projekt könyvtára."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-msgid "Restore Previous Files"
-msgstr "Előző fájlok visszaállítása"
+#| msgid "Restore Previous Session"
+msgid "Restore Session"
+msgstr "Munkamenet helyreállítása"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-msgid "Restore previously opened files when loading a project."
-msgstr "Korábban megnyitott fájlok visszaállítása projekt betöltésekor."
+#| msgid "Restore previously opened files when loading a project."
+msgid "Restores the projects previous session when loading."
+msgstr "Helyreállítja a projektek korábbi munkamenetét a betöltéskor."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -690,7 +692,7 @@ msgstr "Új szerkesztő munkaterület"
 msgid "D-Bus Inspector"
 msgstr "D-Bus vizsgáló"
 
-#: src/libide/code/ide-buffer.c:3674
+#: src/libide/code/ide-buffer.c:3685
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó."
 
@@ -733,7 +735,7 @@ msgstr "Névtelen"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1500
+#: src/libide/gui/ide-workbench.c:1517
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -748,8 +750,8 @@ msgstr "_Mégse"
 msgid "A suitable debugger could not be found."
 msgstr "Nem található megfelelő hibakereső."
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1496
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
+#: src/libide/gui/ide-workbench.c:1513
 msgid "Open File…"
 msgstr "Fájl megnyitása…"
 
@@ -940,7 +942,7 @@ msgstr "Mentés"
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "Mégse"
 
@@ -1060,98 +1062,99 @@ msgstr "Sajátgép (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Számítógép (%s) – %s"
 
-#: src/libide/foundry/ide-pipeline.c:834
+#: src/libide/foundry/ide-pipeline.c:835
 msgid "The build pipeline is in a failed state"
 msgstr "Az összeállítási futószalag sikertelen állapotban van"
 
-#: src/libide/foundry/ide-pipeline.c:844
+#: src/libide/foundry/ide-pipeline.c:845
 msgid "The build configuration has errors"
 msgstr "Az összeállítási konfiguráció hibákat tartalmaz"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1095
+#: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
 msgid "Build (%s)"
 msgstr "Összeállítás (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1136
+#: src/libide/foundry/ide-pipeline.c:1137
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Telepítés utáni lépések (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3071
+#: src/libide/foundry/ide-pipeline.c:3077
+#: src/libide/foundry/ide-pipeline.c:3116
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "A pszeduo-terminál létrehozása sikertelen. A terminálfunkciók korlátozottak "
 "lesznek."
 
-#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Cleaning…"
 msgstr "Takarítás…"
 
-#: src/libide/foundry/ide-pipeline.c:3272
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3374
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Sikertelen"
 
-#: src/libide/foundry/ide-pipeline.c:3274
-#: src/libide/foundry/ide-pipeline.c:3337
+#: src/libide/foundry/ide-pipeline.c:3319
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Ready"
 msgstr "Kész"
 
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3334
 msgid "Downloading…"
 msgstr "Letöltés…"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3338
 msgid "Building dependencies…"
 msgstr "Függőségek összeállítása…"
 
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Bootstrapping…"
 msgstr "Indítás…"
 
-#: src/libide/foundry/ide-pipeline.c:3301
+#: src/libide/foundry/ide-pipeline.c:3346
 msgid "Configuring…"
 msgstr "Beállítás…"
 
-#: src/libide/foundry/ide-pipeline.c:3305
+#: src/libide/foundry/ide-pipeline.c:3350
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Összeállítás…"
 
-#: src/libide/foundry/ide-pipeline.c:3309
+#: src/libide/foundry/ide-pipeline.c:3354
 msgid "Installing…"
 msgstr "Telepítés…"
 
-#: src/libide/foundry/ide-pipeline.c:3313
+#: src/libide/foundry/ide-pipeline.c:3358
 msgid "Committing…"
 msgstr "Véglegesítés…"
 
-#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3362
 msgid "Exporting…"
 msgstr "Exportálás…"
 
-#: src/libide/foundry/ide-pipeline.c:3321
-#: src/libide/foundry/ide-pipeline.c:3325
+#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3370
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Sikeres"
 
-#: src/libide/foundry/ide-pipeline.c:3333
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Preparing…"
 msgstr "Előkészítés…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3689
+#: src/libide/foundry/ide-pipeline.c:3734
 #, c-format
 msgid "Removing %s"
 msgstr "%s eltávolítása"
 
-#: src/libide/foundry/ide-pipeline.c:3748
+#: src/libide/foundry/ide-pipeline.c:3793
 msgid "Removing build directories…"
 msgstr "Összeállítási könyvtárak eltávolítása…"
 
@@ -1228,7 +1231,7 @@ msgid "Directory"
 msgstr "Könyvtár"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
+#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
 #, c-format
 msgid "Builder — %s"
 msgstr "Építő – %s"
@@ -1265,7 +1268,7 @@ msgid "Select Project File"
 msgstr "Válasszon projektfájlt"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1499
+#: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
 msgstr "_Megnyitás"
 
@@ -1327,7 +1330,7 @@ msgstr "Megnyitás"
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Kijelölés"
 
@@ -1490,33 +1493,17 @@ msgstr "Fájl vagy terminál megnyitása"
 msgid "Use the page switcher above or use one of the following:"
 msgstr "Használja a fenti lapválasztót, vagy használja a következők egyikét:"
 
-#: src/libide/gui/ide-frame.ui:26
-msgid "Ctrl+Enter"
-msgstr "Ctrl+Enter"
-
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
 msgstr "Projekt oldalsáv"
-
-#: src/libide/gui/ide-frame.ui:46
-msgid "F9"
-msgstr "F9"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
-#: src/libide/gui/ide-frame.ui:66
-msgid "Ctrl+O"
-msgstr "Ctrl+O"
-
-#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
+#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:114
 msgid "New Terminal"
 msgstr "Új terminál"
-
-#: src/libide/gui/ide-frame.ui:86
-msgid "Ctrl+Shift+T"
-msgstr "Ctrl+Shift+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
@@ -1800,7 +1787,7 @@ msgid "Code Navigation"
 msgstr "Kódnavigáció"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1556
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2630,12 +2617,12 @@ msgstr ""
 "Az alkalmazás összeállításához használt SDK automatikusan lett meghatározva "
 "a futtatókörnyezetből."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 msgid "Fetch dependencies"
 msgstr "Függőségek lekérése"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:199
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
 msgid "Build project"
 msgstr "Projekt összeállítása"
 
@@ -2694,7 +2681,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
 msgid "Configure project"
 msgstr "Projekt beállítása"
 
@@ -2742,7 +2729,7 @@ msgstr "A projekt betöltése sikertelen: %s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:996
+#: src/plugins/ctags/ide-ctags-service.c:1023
 msgid "Indexing Source Code"
 msgstr "Forráskód indexelése"
 
@@ -2765,6 +2752,12 @@ msgstr "Deklaráció"
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Lehetséges elírás a következőben: „%s”. Erre gondolt: „%s”?"
 
+#: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
+#, c-format
+#| msgid "Failed to format selection: %s"
+msgid "Failed to format while saving document: %s"
+msgstr "A formázás sikertelen a dokumentum mentése során: %s"
+
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
 msgid "Symbol Not Selected"
 msgstr "Nincs szimbólum kiválasztva"
@@ -2775,12 +2768,10 @@ msgstr "Az átnevezendő szimbólumot ki kell választani"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
-#| msgid "_Find References"
 msgid "Find References"
 msgstr "Hivatkozások keresése"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
-#| msgid "Preferences"
 msgid "No references found"
 msgstr "Nem találhatók hivatkozások"
 
@@ -2791,12 +2782,10 @@ msgstr ""
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
-#| msgid "Failed to open file: %s"
 msgid "Failed to rename symbol: %s"
 msgstr "A szimbólum átnevezése sikertelen: %s"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
-#| msgid "Unnamed Symbol"
 msgid "Rename Symbol"
 msgstr "Szimbólum átnevezése"
 
@@ -2815,17 +2804,14 @@ msgid "New Symbol name"
 msgstr "Új szimbólumnév"
 
 #: src/plugins/codeui/gtk/menus.ui:7
-#| msgid "Select Symbol…"
 msgid "R_ename Symbol…"
 msgstr "Szimbólum átn_evezése…"
 
 #: src/plugins/codeui/gtk/menus.ui:13
-#| msgid "Declaration"
 msgid "_Go to Declaration"
 msgstr "_Ugrás a deklarációhoz"
 
 #: src/plugins/codeui/gtk/menus.ui:14
-#| msgid "Jump to file and location where item is defined"
 msgid "Jump to file and location where item is declared"
 msgstr "Ugrás az elem deklarációjának fájljára és pozíciójára"
 
@@ -2884,7 +2870,7 @@ msgid "Display the project creation guide"
 msgstr "A projekt létrehozási útmutató megjelenítése"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
 msgid "Select Location"
 msgstr "Hely kiválasztása"
 
@@ -2973,7 +2959,7 @@ msgstr ""
 "A keresés, az automatikus kiegészítés és a szimbóluminformációk "
 "korlátozottak lehetnek, amíg a Ctags indexelés el nem készül."
 
-#: src/plugins/ctags/ide-ctags-service.c:953
+#: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
 msgstr "Forráskód indexelése (szüneteltetve)"
 
@@ -3476,7 +3462,8 @@ msgid "Prefer a space before commas"
 msgstr "Szóközök előnyben részesítése a vesszők előtt"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-msgid "Prefer a space before simicolons"
+#| msgid "Prefer a space before simicolons"
+msgid "Prefer a space before semicolons"
 msgstr "Szóközök előnyben részesítése a pontosvesszők előtt"
 
 #: src/plugins/editorui/tweaks.ui:10
@@ -3984,7 +3971,7 @@ msgstr "Az AMEND és GPG_SIGN jelzők nem állíthatók be"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "A véglegesítés nem írható alá GPG_KEY_ID nélkül"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:402
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "A munkakönyvtáron kívüli fájlok nem figyelhetők"
@@ -3997,13 +3984,13 @@ msgstr "A Git verziókövető nincs használatban"
 msgid "Updating Git Submodules"
 msgstr "Git részmodulok frissítése"
 
-#: src/plugins/git/gbp-git-submodule-stage.c:136
-msgid "Network is not available, skipping submodule update"
-msgstr "A hálózat nem érhető el, részmodulfrissítés kihagyása"
-
-#: src/plugins/git/gbp-git-submodule-stage.c:208
+#: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
 msgstr "Git részmodulok előkészítése"
+
+#: src/plugins/git/gbp-git-submodule-stage.c:133
+msgid "Network is not available, skipping submodule update"
+msgstr "A hálózat nem érhető el, részmodulfrissítés kihagyása"
 
 #: src/plugins/git/gbp-git-vcs.c:206
 msgid "Pushed."
@@ -4278,11 +4265,11 @@ msgstr "Összeállítás során talált hibák és figyelmeztetések megjelenít
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:584
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "Meson önelemzés betöltése"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:274
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
 msgid "Install project"
 msgstr "Projekt telepítése"
 
@@ -4580,12 +4567,12 @@ msgid "Drop Down"
 msgstr "Legördülő"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:681
+#: src/plugins/podman/gbp-podman-runtime.c:686
 msgid "Containers/Toolbox"
 msgstr "Konténerek/Eszköztár"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:687
+#: src/plugins/podman/gbp-podman-runtime.c:692
 msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
@@ -4857,9 +4844,9 @@ msgid "Proc Macros"
 msgstr "Procedurális makrók"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-msgstr ""
-"Engedélyezi a kísérleti Procedurális makrók funkciót a rust-analyzerben"
+#| msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgid "Enables the Proc Macros feature of rust-analyzer"
+msgstr "Engedélyezi a rust-analyzer Procedurális makrók funkcióját"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
 msgid "Cargo Build Scripts"
@@ -5128,6 +5115,15 @@ msgstr "Szimbólum kiválasztása (Ctrl+Shift+K)"
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
 msgstr "Ugrás egy szimbólumhoz a jelenlegi lapon"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:307
+#| msgid "Application ID…"
+msgid "Profiling Application…"
+msgstr "Alkalmazás profilozása…"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:308
+msgid "Symbol decoding will begin after application exits"
+msgstr "A szimbólumdekódolás az alkalmazás kilépése után kezdődik"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5637,7 +5633,7 @@ msgstr "Memóriaszivárgások keresése kilépéskor"
 msgid "Begin cloning project from URI"
 msgstr "Projekt klónozásának elkezdése az URI-ról"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "Hiba történt a tároló klónozása során."
 
