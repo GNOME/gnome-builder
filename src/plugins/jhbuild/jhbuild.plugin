@@ -2,6 +2,7 @@
 Authors=Patrick Griffis <tingping@tingping.se>, Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2016 Patrick Griffis, Copyright © 2022 Christian Hergert
+Depends=host
 Description=Provides integration with JHBuild to build various GNOME projects
 Embedded=_gbp_jhbuild_register_types
 Module=jhbuild
