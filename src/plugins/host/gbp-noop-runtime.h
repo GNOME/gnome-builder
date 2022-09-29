@@ -1,4 +1,4 @@
-/* gbp-host-runtime.h
+/* gbp-noop-runtime.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -24,11 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_HOST_RUNTIME (gbp_host_runtime_get_type())
+#define GBP_TYPE_NOOP_RUNTIME (gbp_noop_runtime_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpHostRuntime, gbp_host_runtime, GBP, HOST_RUNTIME, IdeRuntime)
-
-void _gbp_host_runtime_prepare_to_run (IdePipeline   *pipeline,
-                                       IdeRunContext *run_context);
+G_DECLARE_FINAL_TYPE (GbpNoopRuntime, gbp_noop_runtime, GBP, NOOP_RUNTIME, IdeRuntime)
 
 G_END_DECLS

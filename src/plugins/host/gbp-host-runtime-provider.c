@@ -28,11 +28,13 @@
 
 #include "gbp-host-runtime.h"
 #include "gbp-host-runtime-provider.h"
+#include "gbp-noop-runtime.h"
 
 struct _GbpHostRuntimeProvider
 {
   IdeObject       parent_instance;
-  GbpHostRuntime *runtime;
+  GbpHostRuntime *host;
+  GbpNoopRuntime *noop;
 };
 
 static void
@@ -47,13 +49,28 @@ gbp_host_runtime_provider_load (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_HOST_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
-  self->runtime = g_object_new (GBP_TYPE_HOST_RUNTIME,
-                                "id", "host",
-                                "name", _("Host Operating System"),
-                                "category", _("Host System"),
-                                "parent", self,
-                                NULL);
-  ide_runtime_manager_add (runtime_manager, IDE_RUNTIME (self->runtime));
+  self->host = g_object_new (GBP_TYPE_HOST_RUNTIME,
+                             "id", "host",
+                             "name", _("Host Operating System"),
+                             "category", _("Host System"),
+                             "parent", self,
+                             NULL);
+  ide_runtime_manager_add (runtime_manager, IDE_RUNTIME (self->host));
+
+  if (ide_is_flatpak ())
+    {
+      /* Allow using Builder itself as a runtime/SDK to allow for
+       * cases where there are no other toolchain options.
+       */
+      self->noop = g_object_new (GBP_TYPE_NOOP_RUNTIME,
+                                 "id", "noop",
+                                 /* translators: Bundled means a runtime "bundled" with Builder */
+                                 "name", _("Bundled with Builder"),
+                                 "category", _("Host System"),
+                                 "parent", self,
+                                 NULL);
+      ide_runtime_manager_add (runtime_manager, IDE_RUNTIME (self->noop));
+    }
 
   IDE_EXIT;
 }
@@ -70,8 +87,11 @@ gbp_host_runtime_provider_unload (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_HOST_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
-  ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->runtime));
-  ide_clear_and_destroy_object (&self->runtime);
+  ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->host));
+  ide_clear_and_destroy_object (&self->host);
+
+  ide_runtime_manager_remove (runtime_manager, IDE_RUNTIME (self->noop));
+  ide_clear_and_destroy_object (&self->noop);
 
   IDE_EXIT;
 }

@@ -2,6 +2,7 @@ plugins_sources += files([
   'host-plugin.c',
   'gbp-host-runtime.c',
   'gbp-host-runtime-provider.c',
+  'gbp-noop-runtime.c',
 ])
 
 plugin_host_resources = gnome.compile_resources(

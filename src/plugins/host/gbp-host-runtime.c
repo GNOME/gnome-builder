@@ -94,10 +94,9 @@ gbp_host_runtime_prepare_to_build (IdeRuntime    *runtime,
   IDE_EXIT;
 }
 
-static void
-gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
-                                 IdePipeline   *pipeline,
-                                 IdeRunContext *run_context)
+void
+_gbp_host_runtime_prepare_to_run (IdePipeline   *pipeline,
+                                  IdeRunContext *run_context)
 {
   g_autofree char *libdir = NULL;
   const char *prefix;
@@ -105,7 +104,6 @@ gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_HOST_RUNTIME (runtime));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
@@ -149,6 +147,18 @@ gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
     }
 
   IDE_EXIT;
+}
+
+void
+gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
+                                 IdePipeline   *pipeline,
+                                 IdeRunContext *run_context)
+{
+  g_assert (GBP_IS_HOST_RUNTIME (runtime));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  _gbp_host_runtime_prepare_to_run (pipeline, run_context);
 }
 
 static void
