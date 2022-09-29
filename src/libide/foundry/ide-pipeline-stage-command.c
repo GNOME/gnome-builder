@@ -186,6 +186,8 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
 
   run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
 
+  _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
+
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
