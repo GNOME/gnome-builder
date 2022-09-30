@@ -65,16 +65,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static char *
-get_staging_directory (GbpFlatpakRuntime *self)
-{
-  g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
-  g_autoptr(IdeBuildManager) build_manager = ide_build_manager_ref_from_context (context);
-  g_autoptr(IdePipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
-
-  return gbp_flatpak_get_staging_dir (pipeline);
-}
-
 static gboolean
 gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                               const char   *program,
@@ -490,132 +480,6 @@ gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
     }
 }
 
-static const char *
-gbp_flatpak_runtime_get_runtime_dir (GbpFlatpakRuntime *self)
-{
-  if G_UNLIKELY (self->runtime_dir == NULL)
-    {
-      g_autofree char *sdk_name = NULL;
-      const char *ids[2];
-
-      sdk_name = gbp_flatpak_runtime_get_sdk_name (self);
-
-      ids[0] = self->platform;
-      ids[1] = sdk_name;
-
-      for (guint i = 0; i < G_N_ELEMENTS (ids); i++)
-        {
-          const char *id = ids[i];
-          g_autofree char *name = g_strdup_printf ("%s.Debug", id);
-          g_autofree char *deploy_path = NULL;
-          g_autofree char *path = NULL;
-
-          /*
-           * The easiest way to reliably stay within the same installation
-           * is to just use relative paths to the checkout of the deploy dir.
-           */
-          deploy_path = g_file_get_path (self->deploy_dir_files);
-          path = g_build_filename (deploy_path, "..", "..", "..", "..", "..",
-                                   name, ide_triplet_get_arch (self->triplet),
-                                   self->branch, "active", "files",
-                                   NULL);
-          if (g_file_test (path, G_FILE_TEST_IS_DIR))
-            {
-              self->runtime_dir = g_steal_pointer (&path);
-              break;
-            }
-        }
-    }
-
-  return self->runtime_dir;
-}
-
-static GFile *
-gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
-                                    GFile      *file)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  const char *runtime_dir;
-  g_autofree char *path = NULL;
-  g_autofree char *build_dir = NULL;
-  g_autofree char *app_files_path = NULL;
-  g_autofree char *debug_dir = NULL;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (G_IS_FILE (file));
-
-  /*
-   * If we have a manifest and the runtime is not yet installed,
-   * then we can't do a whole lot right now. We have to wait for
-   * the runtime to be installed and a new runtime instance will
-   * be loaded.
-   */
-  if (self->deploy_dir_files == NULL || self->deploy_dir == NULL)
-    return NULL;
-
-  if (!g_file_is_native (file))
-    return NULL;
-
-  if (NULL == (path = g_file_get_path (file)))
-    return NULL;
-
-  runtime_dir = gbp_flatpak_runtime_get_runtime_dir (self);
-
-  if (runtime_dir != NULL)
-    {
-      if (g_str_has_prefix (path, "/run/build-runtime/"))
-        {
-          g_autofree char *translated = NULL;
-
-          translated = g_build_filename (runtime_dir,
-                                         "source",
-                                         path + strlen ("/run/build-runtime/"),
-                                         NULL);
-          return g_file_new_for_path (translated);
-        }
-
-      debug_dir = g_build_filename (runtime_dir, "usr", "lib", NULL);
-
-      if (g_str_equal (path, "/usr/lib/debug") ||
-          g_str_equal (path, "/usr/lib/debug/"))
-        return g_file_new_for_path (debug_dir);
-
-      if (g_str_has_prefix (path, "/usr/lib/debug/"))
-        {
-          g_autofree char *translated = NULL;
-
-          translated = g_build_filename (debug_dir,
-                                         path + strlen ("/usr/lib/debug/"),
-                                         NULL);
-          return g_file_new_for_path (translated);
-        }
-    }
-
-  if (g_str_equal ("/usr", path))
-    return g_object_ref (self->deploy_dir_files);
-
-  if (g_str_has_prefix (path, "/usr/"))
-    return g_file_get_child (self->deploy_dir_files, path + strlen ("/usr/"));
-
-  build_dir = get_staging_directory (self);
-  app_files_path = g_build_filename (build_dir, "files", NULL);
-
-  if (g_str_equal (path, "/app") || g_str_equal (path, "/app/"))
-    return g_file_new_for_path (app_files_path);
-
-  if (g_str_has_prefix (path, "/app/"))
-    {
-      g_autofree char *translated = NULL;
-
-      translated = g_build_filename (app_files_path,
-                                     path + strlen ("/app/"),
-                                     NULL);
-      return g_file_new_for_path (translated);
-    }
-
-  return NULL;
-}
-
 IdeTriplet *
 gbp_flatpak_runtime_get_triplet (GbpFlatpakRuntime *self)
 {
@@ -835,7 +699,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->prepare_to_build = gbp_flatpak_runtime_prepare_to_build;
   runtime_class->prepare_to_run = gbp_flatpak_runtime_prepare_to_run;
-  runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
   runtime_class->get_triplet = gbp_flatpak_runtime_real_get_triplet;
   runtime_class->supports_toolchain = gbp_flatpak_runtime_supports_toolchain;
