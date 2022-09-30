@@ -322,7 +322,7 @@ ide_runtime_manager_prepare_cb (GObject      *object,
 
 void
 _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
-                                    IdePipeline    *pipeline,
+                                    IdePipeline         *pipeline,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
@@ -332,6 +332,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   PrepareState *state;
   const gchar *runtime_id;
   InstallLookup lookup = { 0 };
+  IdeRuntime *runtime;
 
   IDE_ENTRY;
 
@@ -366,8 +367,8 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
    * the runtime as already registered. But that isn't enough since we
    * might need to also install an SDK.
    */
-
-  lookup.runtime_id = runtime_id;
+  if ((runtime = ide_runtime_manager_get_runtime (self, runtime_id)))
+    _ide_pipeline_set_runtime (pipeline, runtime);
 
   /*
    * Detect extensions that are a runtime-provider for the configured runtime_id.
@@ -375,6 +376,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
    * that they do provide the runtime for the current runtime_id. The runtime can then
    * use the bootstrap_async method to finish the setup and let us know when it's ready.
    */
+  lookup.runtime_id = runtime_id;
   ide_extension_set_adapter_foreach (self->extensions,
                                      (IdeExtensionSetAdapterForeachFunc) provides_lookup_cb,
                                      &lookup);
