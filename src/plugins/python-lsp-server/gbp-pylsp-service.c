@@ -37,22 +37,12 @@ static void
 gbp_pylsp_service_configure_client (IdeLspService *service,
                                     IdeLspClient  *client)
 {
-  g_autoptr(GVariant) params = NULL;
-
   IDE_ENTRY;
 
   g_assert (GBP_IS_PYLSP_SERVICE (service));
   g_assert (IDE_IS_LSP_CLIENT (client));
 
   ide_lsp_client_add_language (client, "python");
-
-  params = JSONRPC_MESSAGE_NEW (
-    "autoImportModules", "[",
-      JSONRPC_MESSAGE_PUT_STRING ("gi"),
-    "]"
-  );
-
-  ide_lsp_client_set_initialization_options (client, params);
 
   IDE_EXIT;
 }
