@@ -512,12 +512,13 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
         default:
           if (g_str_has_prefix (param, "-std=") ||
               g_str_has_prefix (param, "--std=") ||
-              ide_str_equal0 (param, "-pthread") ||
-              g_str_has_prefix (param, "-isystem"))
+              ide_str_equal0 (param, "-pthread"))
             {
               g_ptr_array_add (ar, g_strdup (param));
             }
-          else if (next != NULL && ide_str_equal0 (param, "-include"))
+          else if (next != NULL &&
+                   (ide_str_equal0 (param, "-include") ||
+                    ide_str_equal0 (param, "-isystem")))
             {
               g_ptr_array_add (ar, g_strdup (param));
               g_ptr_array_add (ar, ide_compile_commands_resolve (self, info, next));
