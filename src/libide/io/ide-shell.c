@@ -36,7 +36,13 @@ ide_shell_supports_dash_c (const char *shell)
     return FALSE;
 
   return strcmp (shell, "bash") == 0 || g_str_has_suffix (shell, "/bash") ||
+#if 0
+         /* Fish does apparently support -l and -c in testing, but it is causing
+          * issues with users, so we will disable it for now so that we fallback
+          * to using `sh -l -c ''` instead.
+          */
          strcmp (shell, "fish") == 0 || g_str_has_suffix (shell, "/fish") ||
+#endif
          strcmp (shell, "zsh") == 0 || g_str_has_suffix (shell, "/zsh") ||
          strcmp (shell, "dash") == 0 || g_str_has_suffix (shell, "/dash") ||
          strcmp (shell, "tcsh") == 0 || g_str_has_suffix (shell, "/tcsh") ||
@@ -60,7 +66,9 @@ ide_shell_supports_dash_login (const char *shell)
     return FALSE;
 
   return strcmp (shell, "bash") == 0 || g_str_has_suffix (shell, "/bash") ||
+#if 0
          strcmp (shell, "fish") == 0 || g_str_has_suffix (shell, "/fish") ||
+#endif
          strcmp (shell, "zsh") == 0 || g_str_has_suffix (shell, "/zsh") ||
          strcmp (shell, "dash") == 0 || g_str_has_suffix (shell, "/dash") ||
 #if 0
