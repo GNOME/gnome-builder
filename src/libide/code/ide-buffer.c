@@ -1,6 +1,6 @@
 /* ide-buffer.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -235,7 +235,7 @@ static void     ide_buffer_on_tag_added            (IdeBuffer              *self
                                                     GtkTextTagTable        *table);
 static void     ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
                                                     PeasPluginInfo         *plugin_info,
-                                                    PeasExtension          *exten,
+                                                    PeasExtension          *extension,
                                                     gpointer                user_data);
 static void     ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
                                                     PeasPluginInfo         *plugin_info,
@@ -912,7 +912,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * IdeBuffer:language-id:
    *
    * The "language-id" property is a convenience property to set the
-   * #GtkSourceBuffer:langauge property using a string name.
+   * #GtkSourceBuffer:language property using a string name.
    */
   properties [PROP_LANGUAGE_ID] =
     g_param_spec_string ("language-id",
@@ -3219,7 +3219,7 @@ ide_buffer_get_word_at_iter (IdeBuffer         *self,
  * Gets the #IdeRenameProvider for this buffer, or %NULL.
  *
  * Returns: (nullable) (transfer none): An #IdeRenameProvider or %NULL if
- *   there is no #IdeRenameProvider that can statisfy the buffer.
+ *   there is no #IdeRenameProvider that can satisfy the buffer.
  */
 IdeRenameProvider *
 ide_buffer_get_rename_provider (IdeBuffer *self)
@@ -3782,10 +3782,10 @@ ide_buffer_get_selection_bounds (IdeBuffer   *self,
 static void
 ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
                                     PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *exten,
+                                    PeasExtension          *extension,
                                     gpointer                user_data)
 {
-  IdeSymbolResolver *resolver = (IdeSymbolResolver *)exten;
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
   GPtrArray *ar = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -3935,7 +3935,7 @@ _ide_buffer_cancel_cursor_restore (IdeBuffer *self)
  * The hold count is similar to a reference count, as it allows the buffer
  * manager to know when a buffer may be destroyed cleanly.
  *
- * Doing so ensures that the buffer wont be unloaded or have reference
+ * Doing so ensures that the buffer will not be unloaded or have reference
  * cycles broken.
  *
  * Release the hold with ide_buffer_release().
@@ -4071,10 +4071,10 @@ settle_cb (GObject      *object,
 static void
 settle_foreach_cb (IdeExtensionSetAdapter *set,
                    PeasPluginInfo         *plugin_info,
-                   PeasExtension          *exten,
+                   PeasExtension          *extension,
                    gpointer                user_data)
 {
-  IdeBufferAddin *addin = (IdeBufferAddin *)exten;
+  IdeBufferAddin *addin = (IdeBufferAddin *)extension;
   IdeTask *task = user_data;
   gint *n_active;
 
@@ -4177,7 +4177,7 @@ _ide_buffer_is_file (IdeBuffer *self,
  * internally within the GtkTextBuffer. You can use these instead
  * of signals like #GtkTextBuffer::insert-text or
  * #GtkTextBuffer::delete-range when you want to be sure you're
- * getting unprocessed changes right before they are commited to
+ * getting unprocessed changes right before they are committed to
  * underlying GTK data structures.
  *
  * However, this has the requirement that you do not change this
