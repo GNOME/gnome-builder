@@ -155,7 +155,7 @@ gbp_vcsui_clone_page_clone_cb (GObject      *object,
     {
       g_autoptr(IdeProjectInfo) project_info = NULL;
 
-      g_debug ("Clone request complete\n");
+      g_debug ("Clone request complete");
 
       project_info = ide_project_info_new ();
       ide_project_info_set_file (project_info, directory);
