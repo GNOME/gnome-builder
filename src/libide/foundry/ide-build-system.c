@@ -318,35 +318,36 @@ ide_build_system_default_init (IdeBuildSystemInterface *iface)
   g_object_interface_install_property (iface, properties [PROP_PROJECT_FILE]);
 }
 
-static gchar *
-ide_build_system_translate (IdeBuildSystem   *self,
-                            IdePipeline *pipeline,
-                            const gchar      *prefix,
-                            const gchar      *path)
+static char *
+ide_build_system_translate (IdeBuildSystem *self,
+                            IdePipeline    *pipeline,
+                            const char     *prefix,
+                            const char     *path)
 {
-  g_autofree gchar *freeme = NULL;
-  g_autofree gchar *translated_path = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autoptr(GFile) translated = NULL;
-  IdeRuntime *runtime;
+  IdeConfig *config;
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
   g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
   g_assert (prefix != NULL);
   g_assert (path != NULL);
 
-  if (NULL == pipeline ||
-      NULL == (runtime = ide_pipeline_get_runtime (pipeline)))
-    return g_strdup_printf ("%s%s", prefix, path);
+  if (pipeline && (config = ide_pipeline_get_config (pipeline)))
+    {
+      g_autofree char *freeme = NULL;
+      g_autoptr(GFile) file = NULL;
+      g_autoptr(GFile) translated = NULL;
 
-  if (!g_path_is_absolute (path))
-    path = freeme = ide_pipeline_build_builddir_path (pipeline, path, NULL);
+      if (!g_path_is_absolute (path))
+        path = freeme = ide_pipeline_build_builddir_path (pipeline, path, NULL);
 
-  file = g_file_new_for_path (path);
-  translated = ide_runtime_translate_file (runtime, file);
-  translated_path = g_file_get_path (translated);
+      file = g_file_new_for_path (path);
 
-  return g_strdup_printf ("%s%s", prefix, translated_path);
+      if ((translated = ide_config_translate_file (config, file)) &&
+          g_file_is_native (translated))
+        return g_strdup_printf ("%s%s", prefix, g_file_peek_path (translated));
+    }
+
+  return g_strdup_printf ("%s%s", prefix, path);
 }
 
 static void
