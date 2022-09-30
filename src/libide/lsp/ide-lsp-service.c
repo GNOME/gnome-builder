@@ -284,6 +284,7 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
           launcher = ide_subprocess_launcher_new (flags);
           ide_subprocess_launcher_push_argv (launcher, path);
           ide_subprocess_launcher_set_cwd (launcher, srcdir);
+          ide_subprocess_launcher_set_clear_env (launcher, FALSE);
           IDE_RETURN (g_steal_pointer (&launcher));
         }
     }
