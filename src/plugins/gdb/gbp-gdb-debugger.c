@@ -45,7 +45,7 @@ struct _GbpGdbDebugger
   GCancellable             *read_cancellable;
   GHashTable               *register_names;
   GFile                    *builddir;
-  IdeRuntime               *current_runtime;
+  IdeConfig                *current_config;
 
   struct gdbwire_mi_parser *parser;
 
@@ -130,12 +130,13 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
   else
     file = g_file_resolve_relative_path (self->builddir, path);
 
-  /* If we still have access to the runtime, translate */
-  if (self->current_runtime != NULL)
+  /* If we still have access to the config, translate */
+  if (self->current_config != NULL)
     {
-      GFile *freeme = file;
-      file = ide_runtime_translate_file (self->current_runtime, file);
-      g_clear_object (&freeme);
+      g_autoptr(GFile) translated = ide_config_translate_file (self->current_config, file);
+
+      if (translated != NULL)
+        g_set_object (&file, translated);
     }
 
   return g_file_get_path (file);
@@ -2469,8 +2470,8 @@ gbp_gdb_debugger_prepare_for_run (IdeDebugger   *debugger,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  g_set_object (&self->current_runtime,
-                ide_pipeline_get_runtime (pipeline));
+  g_set_object (&self->current_config,
+                ide_pipeline_get_config (pipeline));
   ide_run_context_push (run_context,
                         gbp_gdb_debugger_run_context_handler_cb,
                         g_object_ref (self),
@@ -2553,7 +2554,7 @@ gbp_gdb_debugger_dispose (GObject *object)
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
 
-  g_clear_object (&self->current_runtime);
+  g_clear_object (&self->current_config);
 
   list = self->cmdqueue.head;
 
