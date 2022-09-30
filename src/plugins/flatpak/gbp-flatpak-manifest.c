@@ -30,6 +30,7 @@
 #include "gbp-flatpak-client.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
+#include "gbp-flatpak-sdk.h"
 #include "gbp-flatpak-util.h"
 
 #include "daemon/ipc-flatpak-service.h"
@@ -85,6 +86,125 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static GbpFlatpakSdk *
+get_sdk (IdeSdkManager *sdk_manager,
+         const char    *id)
+{
+  g_autofree char *full_id = NULL;
+  guint n_items;
+
+  g_assert (IDE_IS_SDK_MANAGER (sdk_manager));
+  g_assert (id != NULL);
+
+  full_id = g_strdup_printf ("runtime/%s", id);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (sdk_manager));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeSdk) sdk = g_list_model_get_item (G_LIST_MODEL (sdk_manager), i);
+      const char *sdk_id;
+
+      if (!GBP_IS_FLATPAK_SDK (sdk))
+        continue;
+
+      if ((sdk_id = gbp_flatpak_sdk_get_id (GBP_FLATPAK_SDK (sdk))) &&
+          ide_str_equal0 (full_id, sdk_id))
+        return GBP_FLATPAK_SDK (g_steal_pointer (&sdk));
+    }
+
+  return NULL;
+}
+
+static GFile *
+gbp_flatpak_manifest_translate_file (IdeConfig *config,
+                                     GFile     *file)
+{
+  GbpFlatpakManifest *self = (GbpFlatpakManifest *)config;
+  g_autoptr(GbpFlatpakSdk) platform = NULL;
+  g_autofree char *id = NULL;
+  g_autofree char *arch = NULL;
+  IdeBuildManager *build_manager;
+  IdeSdkManager *sdk_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
+  GFile *translated;
+  const char *path;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (G_IS_FILE (file));
+
+  /* FIXME:
+   *
+   * This could probably all be improved by creating a "translation object"
+   * which can be backend specific so that it can cache this state without
+   * so much overhead.
+   */
+
+  /* We can only translate native paths */
+  if (!g_file_is_native (file) || !(path = g_file_peek_path (file)))
+    return g_object_ref (file);
+
+  context = ide_object_get_context (IDE_OBJECT (config));
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  sdk_manager = ide_sdk_manager_get_default ();
+
+  /* If this is /app/, then it's in the staging directory */
+  if (g_str_equal (path, "/app") || g_str_has_prefix (path, "/app/"))
+    {
+      g_autofree char *staging_dir = gbp_flatpak_get_staging_dir (pipeline);
+
+      if (path[4] == 0 || !(path = g_path_skip_root (path + 4)) || path[0] == 0)
+        path = NULL;
+
+      return g_file_new_build_filename (staging_dir, "files", path, NULL);
+    }
+
+  if (pipeline != NULL)
+    arch = ide_pipeline_get_arch (pipeline);
+  else
+    arch = g_strdup (ide_get_system_arch ());
+
+  /* Start with SDK-extensions, since they tend to have the
+   * Longest Common Prefix with the target.
+   */
+  if (self->sdk_extensions != NULL)
+    {
+      for (guint i = 0; self->sdk_extensions[i]; i++)
+        {
+          g_autoptr(GbpFlatpakSdk) sdk_extension = get_sdk (sdk_manager, self->sdk_extensions[i]);
+
+          if (sdk_extension != NULL &&
+              (translated = gbp_flatpak_sdk_translate_file (sdk_extension, file)))
+            return g_steal_pointer (&translated);
+        }
+    }
+
+  if (self->sdk != NULL)
+    {
+      g_autofree char *sdk_id = g_strdup_printf ("%s/%s/%s", self->sdk, arch, self->runtime_version);
+      g_autofree char *sdk_debug_id = g_strdup_printf ("%s.Debug/%s/%s", self->sdk, arch, self->runtime_version);
+      g_autoptr(GbpFlatpakSdk) sdk = NULL;
+      g_autoptr(GbpFlatpakSdk) sdk_debug = NULL;
+
+      if (g_str_has_prefix (path, "/usr/lib/debug/") &&
+          ((sdk_debug = get_sdk (sdk_manager, sdk_debug_id)) &&
+           (translated = gbp_flatpak_sdk_translate_file (sdk_debug, file))))
+        return g_steal_pointer (&translated);
+
+      if ((sdk = get_sdk (sdk_manager, sdk_id)) &&
+          (translated = gbp_flatpak_sdk_translate_file (sdk, file)))
+        return g_steal_pointer (&translated);
+    }
+
+  id = g_strdup_printf ("%s/%s/%s", self->runtime, arch, self->runtime_version);
+  if ((platform = get_sdk (sdk_manager, id)) &&
+      (translated = gbp_flatpak_sdk_translate_file (platform, file)))
+    return g_steal_pointer (&translated);
+
+  return NULL;
+}
 
 static gboolean
 validate_properties (GbpFlatpakManifest  *self,
@@ -762,6 +882,7 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
   config_class->get_extensions = gbp_flatpak_manifest_get_extensions;
   config_class->supports_runtime = gbp_flatpak_manifest_supports_runtime;
   config_class->get_description = gbp_flatpak_manifest_get_description;
+  config_class->translate_file = gbp_flatpak_manifest_translate_file;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",
