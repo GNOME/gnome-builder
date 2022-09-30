@@ -172,6 +172,21 @@ ide_config_emit_changed (IdeConfig *self)
     g_signal_emit (self, signals [CHANGED], 0);
 }
 
+static GFile *
+ide_config_real_translate_file (IdeConfig *self,
+                                GFile     *file)
+{
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_CONFIG (self));
+  g_assert (G_IS_FILE (file));
+
+  if ((runtime = ide_config_get_runtime (self)))
+    return ide_runtime_translate_file (runtime, file);
+
+  return g_object_ref (file);
+}
+
 static IdeRuntime *
 ide_config_real_get_runtime (IdeConfig *self)
 {
@@ -587,6 +602,7 @@ ide_config_class_init (IdeConfigClass *klass)
 
   klass->get_runtime = ide_config_real_get_runtime;
   klass->set_runtime = ide_config_real_set_runtime;
+  klass->translate_file = ide_config_real_translate_file;
 
   properties[PROP_DESCRIPTION] =
     g_param_spec_string ("description", NULL, NULL,
@@ -1993,4 +2009,25 @@ ide_config_get_description (IdeConfig *self)
     ret = g_strdup (G_OBJECT_TYPE_NAME (self));
 
   return ret;
+}
+
+/**
+ * ide_config_translate_file:
+ * @self: a #IdeConfig
+ *
+ * Requests translation of the file path to one available in the
+ * current process. That might mean translating to a path that
+ * allows access outside Builder's sandbox such as using
+ * /var/run/host or depoy-directories of OSTree commits.
+ *
+ * Returns: (transfer full) (nullable): a #GFile or %NULL
+ */
+GFile *
+ide_config_translate_file (IdeConfig *self,
+                           GFile     *file)
+{
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  return IDE_CONFIG_GET_CLASS (self)->translate_file (self, file);
 }

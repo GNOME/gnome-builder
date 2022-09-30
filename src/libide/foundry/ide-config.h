@@ -55,9 +55,11 @@ struct _IdeConfigClass
                                    IdeRuntime *runtime);
   GPtrArray  *(*get_extensions)   (IdeConfig  *self);
   char       *(*get_description)  (IdeConfig  *self);
+  GFile      *(*translate_file)   (IdeConfig  *self,
+                                   GFile      *file);
 
   /*< private >*/
-  gpointer _reserved[15];
+  gpointer _reserved[14];
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -239,6 +241,8 @@ IDE_AVAILABLE_IN_ALL
 void                  ide_config_set_args_for_phase        (IdeConfig             *self,
                                                             IdePipelinePhase       phase,
                                                             const gchar *const    *args);
-
+IDE_AVAILABLE_IN_44
+GFile                *ide_config_translate_file            (IdeConfig             *self,
+                                                            GFile                 *file);
 
 G_END_DECLS
