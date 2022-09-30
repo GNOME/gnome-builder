@@ -1,6 +1,6 @@
 /* ide-lsp-completion-provider.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -243,6 +243,7 @@ ide_lsp_completion_provider_complete_cb (GObject      *object,
 
   if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
     {
+      IDE_TRACE_MSG ("Completion call failed: %s", error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
@@ -251,8 +252,16 @@ ide_lsp_completion_provider_complete_cb (GObject      *object,
   priv = ide_lsp_completion_provider_get_instance_private (self);
 
   ret = ide_lsp_completion_results_new (return_value);
-  if (priv->word != NULL && *priv->word != 0)
-    ide_lsp_completion_results_refilter (ret, priv->word);
+
+  g_debug ("%s populated initial result set of %u items",
+           G_OBJECT_TYPE_NAME (self),
+           g_list_model_get_n_items (G_LIST_MODEL (ret)));
+
+  if (!ide_str_empty0 (priv->word))
+    {
+      IDE_TRACE_MSG ("Filtering results to %s", priv->word);
+      ide_lsp_completion_results_refilter (ret, priv->word);
+    }
 
   ide_task_return_object (task, g_steal_pointer (&ret));
 
