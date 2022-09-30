@@ -622,19 +622,28 @@ static void
 on_pipeline_loaded_cb (IdeLspService *self,
                        IdePipeline   *pipeline)
 {
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  g_signal_handlers_disconnect_by_func (pipeline,
-                                        G_CALLBACK (on_pipeline_loaded_cb),
-                                        self);
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(build_manager = ide_build_manager_from_context (context)) ||
+      pipeline != ide_build_manager_get_pipeline (build_manager) ||
+      ide_pipeline_is_ready (pipeline))
+    g_signal_handlers_disconnect_by_func (pipeline,
+                                          G_CALLBACK (on_pipeline_loaded_cb),
+                                          self);
 
-  g_debug ("Pipeline has completed loading, restarting LSP service %s",
-           G_OBJECT_TYPE_NAME (self));
-
-  ide_lsp_service_restart (self);
+  if (ide_pipeline_is_ready (pipeline))
+    {
+      g_debug ("Pipeline has completed loading, restarting LSP service %s",
+               G_OBJECT_TYPE_NAME (self));
+      ide_lsp_service_restart (self);
+    }
 
   IDE_EXIT;
 }
