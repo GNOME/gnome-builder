@@ -30,5 +30,7 @@ G_DECLARE_FINAL_TYPE (GbpFlatpakSdk, gbp_flatpak_sdk, GBP, FLATPAK_SDK, IdeSdk)
 
 GbpFlatpakSdk *gbp_flatpak_sdk_new_from_variant (GVariant      *variant);
 const char    *gbp_flatpak_sdk_get_id           (GbpFlatpakSdk *self);
+GFile         *gbp_flatpak_sdk_translate_file   (GbpFlatpakSdk *self,
+                                                 GFile         *file);
 
 G_END_DECLS
