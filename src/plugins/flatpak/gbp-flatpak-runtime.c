@@ -652,12 +652,8 @@ gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  if (g_strcmp0 (branch, self->branch) != 0)
-    {
-      g_free (self->branch);
-      self->branch = g_strdup (branch);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
-    }
+  if (ide_set_string (&self->branch, branch))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
 }
 
 const char *
@@ -674,9 +670,8 @@ gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  g_free (self->platform);
-  self->platform = g_strdup (platform);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
+  if (ide_set_string (&self->platform, platform))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
 }
 
 const char *
