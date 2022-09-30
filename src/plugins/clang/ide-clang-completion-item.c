@@ -222,7 +222,8 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Optional:
-          g_string_append_printf (markup, "<i>%s</i>", text);
+          if (!ide_str_empty0 (text))
+            g_string_append (markup, text);
           break;
 
         default:
