@@ -369,6 +369,7 @@ ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
 
   for (guint i = 0; flags[i] != NULL; i++)
     {
+      const char *next = flags[i+1];
       gchar *flag = flags[i];
       gchar *translated;
 
@@ -404,7 +405,15 @@ ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
         case 'f': /* -fPIC */
         case 'W': /* -Werror... */
         case 'm': /* -m64 -mtune=native */
+
         default:
+          if (next != NULL &&
+              (ide_str_equal0 (flag, "-include") ||
+               ide_str_equal0 (flag, "-isystem")))
+            {
+              translated = ide_build_system_translate (self, pipeline, "", next);
+              ide_take_string (&flags[i+1], translated);
+            }
           break;
         }
     }
