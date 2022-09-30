@@ -64,6 +64,8 @@ typedef struct
 
 G_DEFINE_FINAL_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
 
+static GHashTable *unsupported_by_clang;
+
 static void
 unsaved_files_free (UnsavedFiles *uf)
 {
@@ -231,9 +233,12 @@ ide_clang_cook_flags (const gchar         *path,
     {
       for (guint i = 0; flags[i]; i++)
         {
-          g_ptr_array_add (cooked, g_strdup (flags[i]));
-
           is_cplusplus |= is_cplusplus_param (flags[i]);
+
+          if (g_hash_table_contains (unsupported_by_clang, flags[i]))
+            continue;
+
+          g_ptr_array_add (cooked, g_strdup (flags[i]));
 
           if (g_strcmp0 (include, flags[i]) == 0)
             g_clear_pointer (&include, g_free);
@@ -530,6 +535,9 @@ ide_clang_class_init (IdeClangClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_clang_finalize;
+
+  unsupported_by_clang = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_add (unsupported_by_clang, (char *)"-Wstrict-null-sentinel");
 }
 
 static void
