@@ -249,6 +249,8 @@ ide_clang_proposals_clear (IdeClangProposals *self)
   GList *list;
   guint old_len;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
   self->line = -1;
@@ -276,6 +278,8 @@ ide_clang_proposals_clear (IdeClangProposals *self)
     }
 
   g_list_free (list);
+
+  IDE_EXIT;
 }
 
 IdeClangProposals *
@@ -320,6 +324,8 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
   guint old_len = 0;
   guint n_items;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
   old_len = self->match_indexes->len;
@@ -344,7 +350,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
 
       g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->match_indexes->len);
 
-      return;
+      IDE_EXIT;
     }
 
   if (old_len > 0)
@@ -354,6 +360,8 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
     n_items = (guint)results_get_length (self->results_ref);
   else
     n_items = 0;
+
+  IDE_TRACE_MSG ("Filtering with filter: '%s'", self->filter ? self->filter : "");
 
   if (self->filter == NULL || self->filter[0] == 0)
     {
@@ -399,7 +407,11 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
       g_array_sort (self->match_indexes, sort_by_priority);
     }
 
+  IDE_TRACE_MSG ("Filtered %u into %u proposals", n_items, self->match_indexes->len);
+
   g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->match_indexes->len);
+
+  IDE_EXIT;
 }
 
 static void
@@ -409,8 +421,13 @@ ide_clang_proposals_flush (IdeClangProposals *self,
 {
   GList *list;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
   g_assert (results != NULL || error != NULL);
+
+  if (error != NULL)
+    g_debug ("Completion query failed: %s", error->message);
 
   if (results != NULL)
     g_variant_ref_sink (results);
@@ -443,6 +460,8 @@ ide_clang_proposals_flush (IdeClangProposals *self,
     }
 
   g_list_free (list);
+
+  IDE_EXIT;
 }
 
 static void
@@ -454,6 +473,8 @@ ide_clang_proposals_query_complete_cb (GObject      *object,
   g_autoptr(GVariant) variant = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -467,6 +488,8 @@ ide_clang_proposals_query_complete_cb (GObject      *object,
     ide_task_return_pointer (task,
                              g_steal_pointer (&variant),
                              g_variant_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -481,6 +504,8 @@ ide_clang_proposals_query_build_flags_cb (GObject      *object,
   GCancellable *cancellable;
   Query *query;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -488,7 +513,7 @@ ide_clang_proposals_query_build_flags_cb (GObject      *object,
   flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
 
   if (ide_task_return_error_if_cancelled (task))
-    return;
+    IDE_EXIT;
 
   query = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
@@ -506,6 +531,8 @@ ide_clang_proposals_query_build_flags_cb (GObject      *object,
                                    cancellable,
                                    ide_clang_proposals_query_complete_cb,
                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -521,6 +548,8 @@ ide_clang_proposals_query_async (IdeClangProposals   *self,
   IdeBuildSystem *build_system;
   IdeContext *context;
   Query *q;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
   g_assert (G_IS_FILE (file));
@@ -545,6 +574,8 @@ ide_clang_proposals_query_async (IdeClangProposals   *self,
                                           cancellable,
                                           ide_clang_proposals_query_build_flags_cb,
                                           g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static GVariant *
@@ -553,6 +584,8 @@ ide_clang_proposals_query_finish (IdeClangProposals  *self,
                                   GError            **error)
 {
   g_autoptr(GVariant) ret = NULL;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CLANG_PROPOSALS (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
@@ -567,11 +600,11 @@ ide_clang_proposals_query_finish (IdeClangProposals  *self,
                        G_IO_ERROR,
                        G_IO_ERROR_CANCELLED,
                        "Query is no longer valid");
-          return NULL;
+          IDE_RETURN (NULL);
         }
     }
 
-  return g_steal_pointer (&ret);
+  IDE_RETURN (g_steal_pointer (&ret));
 }
 
 static void
@@ -720,10 +753,16 @@ ide_clang_proposals_populate_finish (IdeClangProposals  *self,
                                      GAsyncResult       *result,
                                      GError            **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_CLANG_PROPOSALS (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 void
@@ -732,11 +771,15 @@ ide_clang_proposals_refilter (IdeClangProposals *self,
 {
   gboolean fast_refilter;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
   fast_refilter = self->filter && word && g_str_has_prefix (word, self->filter);
   ide_set_string (&self->filter, word);
   ide_clang_proposals_do_refilter (self, fast_refilter);
+
+  IDE_EXIT;
 }
 
 static guint

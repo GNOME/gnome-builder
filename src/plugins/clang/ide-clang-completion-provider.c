@@ -306,6 +306,8 @@ ide_clang_completion_provider_refilter (GtkSourceCompletionProvider *provider,
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (G_IS_LIST_MODEL (proposals));
@@ -319,7 +321,11 @@ ide_clang_completion_provider_refilter (GtkSourceCompletionProvider *provider,
       gtk_source_completion_context_get_bounds (context, &begin, &end);
       self->refilter_word = gtk_text_iter_get_slice (&begin, &end);
       ide_clang_proposals_refilter (self->proposals, self->refilter_word);
+
+      IDE_EXIT;
     }
+
+  IDE_EXIT;
 }
 
 static gchar *
@@ -334,6 +340,8 @@ ide_clang_completion_provider_load (IdeClangCompletionProvider *self)
   g_autoptr(IdeClangClient) client = NULL;
   g_autoptr(IdeContext) context = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (self->loaded == FALSE);
 
@@ -343,6 +351,8 @@ ide_clang_completion_provider_load (IdeClangCompletionProvider *self)
   client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
 
   g_set_object (&self->client, client);
+
+  IDE_EXIT;
 }
 
 static void
@@ -354,14 +364,22 @@ ide_clang_completion_provider_populate_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (proposals));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   if (!ide_clang_proposals_populate_finish (proposals, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_object_ref (proposals), g_object_unref);
+    {
+      IDE_TRACE_MSG ("Clang completion failed: %s", error->message);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  ide_task_return_pointer (task, g_object_ref (proposals), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -374,6 +392,8 @@ ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *prov
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   GtkTextIter begin, end;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -408,17 +428,26 @@ ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *prov
                                       cancellable,
                                       ide_clang_completion_provider_populate_cb,
                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static GListModel *
 ide_clang_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
-                                               GAsyncResult           *result,
-                                               GError                **error)
+                                               GAsyncResult                 *result,
+                                               GError                      **error)
 {
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
