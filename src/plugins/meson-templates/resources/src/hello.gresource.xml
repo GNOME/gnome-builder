@@ -2,7 +2,7 @@
 <gresources>
   <gresource prefix="{{appid_path}}">
     <file preprocess="xml-stripblanks">{{ui_file}}</file>
-{{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
+{{if is_gtk4}}
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
 {{end}}
   </gresource>
