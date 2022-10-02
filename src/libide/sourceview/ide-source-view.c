@@ -962,8 +962,28 @@ ide_source_view_set_font_scale (IdeSourceView *self,
 
   if (self->font_scale != font_scale)
     {
+      /* If we're zooming in from zoom out, make sure we're actually
+       * making progress zooming.
+       */
+      if (self->font_scale < 0 && self->font_scale+1 == font_scale)
+        {
+          int size = pango_font_description_get_size (self->font_desc) / PANGO_SCALE;
+
+          if (self->font_scale <= -size)
+            {
+              /* We want to make progress, and -size that requires
+               * incrementing twice.
+               */
+              self->font_scale = -size + 1 + 1;
+              goto update;
+            }
+        }
+
       self->font_scale = font_scale;
+
+    update:
       ide_source_view_update_css (self);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FONT_SCALE]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ZOOM_LEVEL]);
     }
@@ -1003,9 +1023,9 @@ ide_source_view_zoom (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (amount == 0)
-    self->font_scale = 0;
+    ide_source_view_set_font_scale (self, 0);
   else
-    self->font_scale += amount;
+    ide_source_view_set_font_scale (self, self->font_scale + amount);
 
   ide_source_view_update_css (self);
 
