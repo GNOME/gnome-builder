@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
-"PO-Revision-Date: 2022-09-27 16:15+0200\n"
+"POT-Creation-Date: 2022-09-29 04:12+0000\n"
+"PO-Revision-Date: 2022-10-02 16:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -600,7 +600,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Koje okruženje treba koristiti kada se izvode testovi jedinice"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:177 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Opširnije zapisivanje"
 
@@ -806,8 +806,8 @@ msgstr "Stranice"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:139
-#: src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:150
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
@@ -904,31 +904,31 @@ msgid "Unsaved document has been restored."
 msgstr "Nespremljeni dokument je obnovljen."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:452
+#: src/libide/editor/ide-editor-page.c:494
 #, c-format
 msgid "Print failed: %s"
 msgstr "Neuspjeli ispis: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:528
+#: src/libide/editor/ide-editor-page.c:570
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Neuspjelo preformatiranje odabira: %s"
 
-#: src/libide/editor/ide-editor-page.c:948
+#: src/libide/editor/ide-editor-page.c:991
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Spremi datoteku"
 
-#: src/libide/editor/ide-editor-page.c:951
+#: src/libide/editor/ide-editor-page.c:994
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Spremi"
 
-#: src/libide/editor/ide-editor-page.c:951
+#: src/libide/editor/ide-editor-page.c:994
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1177,7 +1177,8 @@ msgid "Deploying to device…"
 msgstr "Implementacija na uređaj…"
 
 #: src/libide/foundry/ide-runtime.c:413
-#: src/plugins/host/gbp-host-runtime-provider.c:53
+#: src/plugins/host/gbp-host-runtime-provider.c:55
+#: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
@@ -1369,7 +1370,7 @@ msgstr[0] "Oko %u godine"
 msgstr[1] "Oko %u godine"
 msgstr[2] "Oko %u godina"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:49
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:56
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instaliraj"
@@ -1544,7 +1545,7 @@ msgstr "Ostalo"
 msgid "There are unsaved documents"
 msgstr "Postoje nespremljeni dokumenti"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:132
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1642,7 +1643,7 @@ msgstr "Inačica"
 
 #: src/libide/plugins/ide-plugin-view.ui:97
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Web naslovnica"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
@@ -1715,7 +1716,7 @@ msgstr "_Odabir"
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:143
 msgid "Formatting"
 msgstr "Formatiranje"
 
@@ -1771,13 +1772,17 @@ msgstr "Razvrstaj _redke"
 msgid "D_uplicate Line"
 msgstr "D_upliciraj redak"
 
-#: src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:140
+msgid "_Formatting"
+msgstr "_Formatiranje"
+
+#: src/libide/sourceview/gtk/menus.ui:151
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Navigacija kôda"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1556
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1908,7 +1913,7 @@ msgstr "NIjedan"
 msgid "Blank page"
 msgstr "Prazna stranica"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:130
 msgid "Settings"
 msgstr "Postavke"
 
@@ -2176,10 +2181,10 @@ msgid "Configure settings related to the project"
 msgstr "Podesi postavke povezane s projektom"
 
 #: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
-#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
-#: src/plugins/buildui/gtk/menus.ui:73 src/plugins/buildui/gtk/menus.ui:83
-#: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:53
+#: src/plugins/buildui/gtk/menus.ui:80 src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:104 src/plugins/buildui/gtk/menus.ui:113
+#: src/plugins/buildui/gtk/menus.ui:126
 msgid "Code Foundry"
 msgstr "Tvornica kôda"
 
@@ -2196,8 +2201,8 @@ msgstr "Odabir odredišta izgradnje…"
 msgid "Change default build target"
 msgstr "Promjena zadanog odredišta izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
-#: src/plugins/buildui/gtk/menus.ui:84
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:81
+#: src/plugins/buildui/gtk/menus.ui:91
 msgid "Building"
 msgstr "Izgradnja"
 
@@ -2225,19 +2230,27 @@ msgstr "_Ukloni"
 msgid "Clean the project"
 msgstr "Ukloni projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:45
+msgid "Stop Building"
+msgstr "Zaustavi izgradnju"
+
+#: src/plugins/buildui/gtk/menus.ui:46
+msgid "Cancel the current build operation"
+msgstr "Zaustavi trenutnu radnju izgradnje"
+
+#: src/plugins/buildui/gtk/menus.ui:54
 msgid "Install & Deployment"
 msgstr "Instalacija i implementacija"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:58
 msgid "Install the project"
 msgstr "Instaliraj projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:62
 msgid "Deploy to Device…"
 msgstr "Implementiraj na uređaj…"
 
-#: src/plugins/buildui/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/menus.ui:64
 msgid "Deploy project to current device"
 msgstr "Implementiraj projekt na trenutni uređaj"
 
@@ -2245,85 +2258,85 @@ msgstr "Implementiraj projekt na trenutni uređaj"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:66
+#: src/plugins/buildui/gtk/menus.ui:73
 msgid "_Export"
 msgstr "_Izvezi"
 
-#: src/plugins/buildui/gtk/menus.ui:68
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Export project"
 msgstr "Izvezi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:76
+#: src/plugins/buildui/gtk/menus.ui:83
 msgid "Stop Build"
 msgstr "Zaustavi izgradnju"
 
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Stop building project"
 msgstr "Zaustavi izgradnju projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:93
 msgid "Show Build _Log"
 msgstr "Prikaži zapis _izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:89
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Display panel containing the build log"
 msgstr "Prikazuje panel koji sadrži zapis izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
+#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:114
 msgid "Running"
 msgstr "Pokretanje"
 
-#: src/plugins/buildui/gtk/menus.ui:100
+#: src/plugins/buildui/gtk/menus.ui:107
 msgid "Select Run Command…"
 msgstr "Odaberi naredbu pokretanja…"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Run"
 msgstr "Pokreni"
 
-#: src/plugins/buildui/gtk/menus.ui:115
+#: src/plugins/buildui/gtk/menus.ui:122
 msgid "Run the project"
 msgstr "Pokreni projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Testiranje jedinice"
 
-#: src/plugins/buildui/gtk/menus.ui:127
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Follow System Style"
 msgstr "Izgled sustava"
 
-#: src/plugins/buildui/gtk/menus.ui:133
+#: src/plugins/buildui/gtk/menus.ui:140
 msgid "Force Light"
 msgstr "Prisili svjetli"
 
-#: src/plugins/buildui/gtk/menus.ui:139
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Force Dark"
 msgstr "Prisili tamni"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Accessibility"
 msgstr "Pristupačnost"
 
-#: src/plugins/buildui/gtk/menus.ui:148
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:160
 msgid "Text Direction"
 msgstr "Smjer teksta"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Left-to-Right"
 msgstr "S lijeva na desno"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:168
 msgid "Right-to-Left"
 msgstr "S desna na lijevo"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Tools"
 msgstr "Alati"
 
@@ -3300,6 +3313,10 @@ msgid "Print…"
 msgstr "Ispis…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
+msgid "Format Document"
+msgstr "Format dokumenta"
+
+#: src/plugins/editorui/gtk/menus.ui:193
 msgid "Format Selection"
 msgstr "Odabir formata"
 
@@ -4107,9 +4124,14 @@ msgstr "Dopusti _uobičajene izraze"
 msgid "_Find in Files"
 msgstr "_Pretraži u datotekama"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:52
+#: src/plugins/host/gbp-host-runtime-provider.c:54
 msgid "Host Operating System"
 msgstr "Operativni sustav računala"
+
+#. translators: Bundled means a runtime "bundled" with Builder
+#: src/plugins/host/gbp-host-runtime-provider.c:68
+msgid "Bundled with Builder"
+msgstr "U paketu s Graditeljem"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4236,7 +4258,7 @@ msgstr "Prikazuje greške i upozorenja pronađenih tijekom izgradnje"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:624
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "Učitaj Meson samoispitivanje"
 
@@ -4538,12 +4560,12 @@ msgid "Drop Down"
 msgstr "Padajuća"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:685
 msgid "Containers/Toolbox"
 msgstr "Spremnici/Alati"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:691
 msgid "Containers/Podman"
 msgstr "Spremnici/Podman"
 
