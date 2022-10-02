@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
-"PO-Revision-Date: 2022-09-27 16:15+0200\n"
+"POT-Creation-Date: 2022-09-27 14:17+0000\n"
+"PO-Revision-Date: 2022-10-02 16:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -1642,7 +1642,7 @@ msgstr "Inačica"
 
 #: src/libide/plugins/ide-plugin-view.ui:97
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Web naslovnica"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
