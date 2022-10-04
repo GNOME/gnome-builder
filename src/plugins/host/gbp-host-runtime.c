@@ -28,7 +28,8 @@
 
 struct _GbpHostRuntime
 {
-  IdeRuntime parent_instance;
+  IdeRuntime    parent_instance;
+  IdePathCache *path_cache;
 };
 
 G_DEFINE_FINAL_TYPE (GbpHostRuntime, gbp_host_runtime, IDE_TYPE_RUNTIME)
@@ -38,7 +39,19 @@ gbp_host_runtime_native_contains_program_in_path (IdeRuntime   *runtime,
                                                   const char   *program,
                                                   GCancellable *cancellable)
 {
-  return g_find_program_in_path (program) != NULL;
+  GbpHostRuntime *self = (GbpHostRuntime *)runtime;
+  g_autofree char *path = NULL;
+  gboolean found;
+
+  g_assert (GBP_IS_HOST_RUNTIME (self));
+  g_assert (program != NULL);
+
+  if (ide_path_cache_contains (self->path_cache, program, &found))
+    return found;
+
+  path = g_find_program_in_path (program);
+  ide_path_cache_insert (self->path_cache, program, path);
+  return path != NULL;
 }
 
 static gboolean
@@ -46,16 +59,20 @@ gbp_host_runtime_flatpak_contains_program_in_path (IdeRuntime   *runtime,
                                                    const char   *program,
                                                    GCancellable *cancellable)
 {
+  GbpHostRuntime *self = (GbpHostRuntime *)runtime;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(GError) error = NULL;
-  gboolean ret = FALSE;
+  gboolean found = FALSE;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_HOST_RUNTIME (runtime));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (ide_path_cache_contains (self->path_cache, program, &found))
+    return found;
 
   run_context = ide_run_context_new ();
   ide_run_context_push_host (run_context);
@@ -68,12 +85,15 @@ gbp_host_runtime_flatpak_contains_program_in_path (IdeRuntime   *runtime,
   ide_run_context_take_fd (run_context, -1, STDERR_FILENO);
 
   if ((subprocess = ide_run_context_spawn (run_context, &error)))
-    ret = ide_subprocess_wait_check (subprocess, cancellable, NULL);
+    {
+      found = ide_subprocess_wait_check (subprocess, cancellable, NULL);
+      ide_path_cache_insert (self->path_cache, program, found ? program : NULL);
+      IDE_RETURN (found);
+    }
 
-  if (error != NULL)
-    g_warning ("Failed to spawn subprocess: %s", error->message);
+  g_warning ("Failed to spawn subprocess: %s", error->message);
 
-  IDE_RETURN (ret);
+  IDE_RETURN (FALSE);
 }
 
 static void
@@ -162,9 +182,22 @@ gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
 }
 
 static void
+gbp_host_runtime_finalize (GObject *object)
+{
+  GbpHostRuntime *self = (GbpHostRuntime *)object;
+
+  g_clear_object (&self->path_cache);
+
+  G_OBJECT_CLASS (gbp_host_runtime_parent_class)->finalize (object);
+}
+
+static void
 gbp_host_runtime_class_init (GbpHostRuntimeClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRuntimeClass *runtime_class = IDE_RUNTIME_CLASS (klass);
+
+  object_class->finalize = gbp_host_runtime_finalize;
 
   if (ide_is_flatpak ())
     runtime_class->contains_program_in_path = gbp_host_runtime_flatpak_contains_program_in_path;
@@ -178,5 +211,7 @@ gbp_host_runtime_class_init (GbpHostRuntimeClass *klass)
 static void
 gbp_host_runtime_init (GbpHostRuntime *self)
 {
+  self->path_cache = ide_path_cache_new ();
+
   ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-host-symbolic");
 }
