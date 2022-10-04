@@ -8,8 +8,30 @@
             <property name="title" translatable="yes">Keyboard Shortcuts</property>
             <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
             <child>
-              <object class="IdeTweaksGroup">
+              <object class="IdeTweaksGroup" id="shortcut_theme_group">
                 <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                <child>
+                  <object class="IdeTweaksCombo" id="shortcut_theme_combo">
+                    <property name="title" translatable="yes">Keyboard Theme</property>
+                    <property name="subtitle" translatable="yes">Shortcut themes provide a keyboard experience similar to other IDEs and editors</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.editor</property>
+                        <property name="schema-key">keybindings</property>
+                      </object>
+                    </property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Builder</property>
+                        <property name="value">'default'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
                 <child>
                   <object class="IdeTweaksWidget">
                     <signal name="create-for-item" handler="shortcutui_create_shortcuts_cb" object="GbpShortcutuiTweaksAddin" swapped="true"/>

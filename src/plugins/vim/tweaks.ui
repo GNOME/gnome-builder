@@ -3,24 +3,16 @@
   <template class="IdeTweaks">
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
-        <child internal-child="editor_page">
+        <child internal-child="shortcuts_page">
           <object class="IdeTweaksPage">
-            <child internal-child="editor_page_internal_section">
-              <object class="IdeTweaksSection">
-                <child internal-child="editor_keyboard_page">
-                  <object class="IdeTweaksPage">
-                    <child internal-child="shortcut_theme_group">
-                      <object class="IdeTweaksGroup">
-                        <child internal-child="shortcut_theme_combo">
-                          <object class="IdeTweaksCombo">
-                            <child>
-                              <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">Vim</property>
-                                <property name="value">'vim'</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
+            <child internal-child="shortcut_theme_group">
+              <object class="IdeTweaksGroup">
+                <child internal-child="shortcut_theme_combo">
+                  <object class="IdeTweaksCombo">
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Vim</property>
+                        <property name="value">'vim'</property>
                       </object>
                     </child>
                   </object>

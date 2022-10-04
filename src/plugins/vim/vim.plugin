@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2022 Christian Hergert
-Depends=editorui;
+Depends=editorui;shortcutui;
 Description=Emulation of various VIM features
 Embedded=_gbp_vim_register_types
 Module=vim
