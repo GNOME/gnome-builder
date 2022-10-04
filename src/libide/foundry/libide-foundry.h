@@ -49,6 +49,7 @@ G_BEGIN_DECLS
 #include "ide-foundry-compat.h"
 #include "ide-foundry-global.h"
 #include "ide-local-device.h"
+#include "ide-path-cache.h"
 #include "ide-pipeline-addin.h"
 #include "ide-pipeline-stage-command.h"
 #include "ide-pipeline-stage-launcher.h"
