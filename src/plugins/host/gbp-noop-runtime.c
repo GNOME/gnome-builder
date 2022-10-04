@@ -31,7 +31,8 @@
 
 struct _GbpNoopRuntime
 {
-  IdeRuntime parent_instance;
+  IdeRuntime    parent_instance;
+  IdePathCache *path_cache;
 };
 
 G_DEFINE_FINAL_TYPE (GbpNoopRuntime, gbp_noop_runtime, IDE_TYPE_RUNTIME)
@@ -41,7 +42,19 @@ gbp_noop_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                            const char   *program,
                                            GCancellable *cancellable)
 {
-  return g_find_program_in_path (program) != NULL;
+  GbpNoopRuntime *self = (GbpNoopRuntime *)runtime;
+  g_autofree char *path = NULL;
+  gboolean found;
+
+  g_assert (GBP_IS_NOOP_RUNTIME (self));
+  g_assert (program != NULL);
+
+  if (ide_path_cache_contains (self->path_cache, program, &found))
+    return found;
+
+  path = g_find_program_in_path (program);
+  ide_path_cache_insert (self->path_cache, program, path);
+  return path != NULL;
 }
 
 static void
@@ -69,11 +82,23 @@ gbp_noop_runtime_prepare_to_run (IdeRuntime    *runtime,
   _gbp_host_runtime_prepare_to_run (pipeline, run_context);
 }
 
+static void
+gbp_noop_runtime_finalize (GObject *object)
+{
+  GbpNoopRuntime *self = (GbpNoopRuntime *)object;
+
+  g_clear_object (&self->path_cache);
+
+  G_OBJECT_CLASS (gbp_noop_runtime_parent_class)->finalize (object);
+}
 
 static void
 gbp_noop_runtime_class_init (GbpNoopRuntimeClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRuntimeClass *runtime_class = IDE_RUNTIME_CLASS (klass);
+
+  object_class->finalize = gbp_noop_runtime_finalize;
 
   runtime_class->contains_program_in_path = gbp_noop_runtime_contains_program_in_path;
   runtime_class->prepare_to_run = gbp_noop_runtime_prepare_to_run;
@@ -83,5 +108,7 @@ gbp_noop_runtime_class_init (GbpNoopRuntimeClass *klass)
 static void
 gbp_noop_runtime_init (GbpNoopRuntime *self)
 {
+  self->path_cache = ide_path_cache_new ();
+
   ide_runtime_set_icon_name (IDE_RUNTIME (self), "container-terminal-symbolic");
 }
