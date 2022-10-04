@@ -31,15 +31,15 @@
 
 struct _GbpShortcutuiDialog
 {
-  GtkWindow           parent_instance;
-  GtkSearchEntry     *search;
-  GtkListBox         *results_list_box;
-  AdwPreferencesPage *overview;
-  AdwPreferencesPage *results;
-  AdwPreferencesPage *empty;
-  GtkStringFilter    *string_filter;
-  GtkFilterListModel *filter_model;
-  guint               update_source;
+  GtkWindow            parent_instance;
+  GtkSearchEntry      *search;
+  GtkListBox          *results_list_box;
+  AdwPreferencesGroup *overview;
+  AdwPreferencesGroup *results;
+  AdwPreferencesGroup *empty;
+  GtkStringFilter     *string_filter;
+  GtkFilterListModel  *filter_model;
+  guint                update_source;
 };
 
 G_DEFINE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GTK_TYPE_WINDOW)
@@ -121,16 +121,98 @@ gbp_shortcutui_dialog_dispose (GObject *object)
   G_OBJECT_CLASS (gbp_shortcutui_dialog_parent_class)->dispose (object);
 }
 
+static void
+gbp_shortcutui_dialog_group_header_cb (GtkListBoxRow *row,
+                                       GtkListBoxRow *before,
+                                       gpointer       user_data)
+{
+  const char *page = g_object_get_data (G_OBJECT (row), "PAGE");
+  const char *last_page = before ? g_object_get_data (G_OBJECT (before), "PAGE") : NULL;
+
+  if (!ide_str_equal0 (page, last_page))
+    {
+      GtkLabel *label;
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "css-classes", IDE_STRV_INIT ("heading"),
+                            "label", page,
+                            "use-markup", TRUE,
+                            "xalign", .0f,
+                            NULL);
+      gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), GTK_WIDGET (label));
+      gtk_widget_add_css_class (GTK_WIDGET (row), "has-header");
+    }
+}
+
 void
 gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
                                  GListModel          *model)
 {
   g_autoptr(GListModel) wrapped = NULL;
+  AdwExpanderRow *last_group_row = NULL;
+  g_autofree char *last_page = NULL;
+  g_autofree char *last_group = NULL;
+  GtkListBox *list_box = NULL;
+  guint n_items;
 
   g_return_if_fail (GBP_IS_SHORTCUTUI_DIALOG (self));
   g_return_if_fail (G_IS_LIST_MODEL (model));
 
   wrapped = gbp_shortcutui_action_model_new (model);
+  n_items = g_list_model_get_n_items (wrapped);
+
+  /* Collect all our page/groups for the overview selection */
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GbpShortcutuiAction) action = g_list_model_get_item (wrapped, i);
+      g_autofree char *page = NULL;
+      g_autofree char *group = NULL;
+
+      g_object_get (action,
+                    "page", &page,
+                    "group", &group,
+                    NULL);
+
+      if (ide_str_equal0 (page, "ignore") || ide_str_equal0 (group, "ignore"))
+        continue;
+
+      if (!ide_str_equal0 (page, last_page) || !ide_str_equal0 (group, last_group))
+        {
+          AdwExpanderRow *row;
+
+          row = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                              "title", group,
+                              NULL);
+
+          g_object_set_data_full (G_OBJECT (row), "PAGE", g_strdup (page), g_free);
+
+          adw_preferences_group_add (self->overview, GTK_WIDGET (row));
+
+          if (list_box == NULL)
+            list_box = GTK_LIST_BOX (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_LIST_BOX));
+
+          ide_set_string (&last_group, group);
+          ide_set_string (&last_page, page);
+
+          last_group_row = row;
+        }
+
+      if (last_group_row != NULL)
+        {
+          GbpShortcutuiRow *row;
+
+          row = g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
+                              "action", action,
+                              NULL);
+          adw_expander_row_add_row (last_group_row, GTK_WIDGET (row));
+        }
+    }
+
+  if (list_box != NULL)
+    gtk_list_box_set_header_func (list_box,
+                                  gbp_shortcutui_dialog_group_header_cb,
+                                  NULL, NULL);
+
   gtk_filter_list_model_set_model (self->filter_model, wrapped);
 }
 
