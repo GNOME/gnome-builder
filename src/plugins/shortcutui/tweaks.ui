@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="shortcuts_page">
+            <property name="title" translatable="yes">Keyboard Shortcuts</property>
+            <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                <child>
+                  <object class="IdeTweaksWidget">
+                    <signal name="create-for-item" handler="shortcutui_create_shortcuts_cb" object="GbpShortcutuiTweaksAddin" swapped="true"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

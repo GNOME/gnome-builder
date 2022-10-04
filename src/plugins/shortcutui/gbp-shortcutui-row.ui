@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpShortcutuiRow" parent="AdwActionRow">
+    <child type="suffix">
+      <object class="GtkShortcutLabel" id="shortcut">
+        <property name="valign">center</property>
+      </object>
+    </child>
+  </template>
+</interface>

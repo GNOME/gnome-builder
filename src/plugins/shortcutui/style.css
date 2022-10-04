@@ -1,0 +1,8 @@
+window.shortcutui list.search row.has-header {
+  border-top: 1px solid @card_shade_color;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+window.shortcutui list.search label.heading {
+  padding: 10px 12px 12px 16px;
+}

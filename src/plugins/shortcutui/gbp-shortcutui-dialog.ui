@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpShortcutuiDialog" parent="GtkWindow">
+    <style>
+      <class name="shortcutui"/>
+    </style>
+    <child type="titlebar">
+      <object class="AdwHeaderBar">
+        <child type="start">
+          <object class="GtkButton">
+            <property name="label" translatable="yes">Reset All…</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStack" id="stack">
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">primary</property>
+            <property name="child">
+              <object class="AdwPreferencesPage">
+                <child>
+                  <object class="AdwPreferencesGroup">
+                    <child>
+                      <object class="GtkSearchEntry" id="search">
+                        <property name="halign">center</property>
+                        <property name="width-chars">30</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup" id="overview">
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup" id="results">
+                    <property name="visible">false</property>
+                    <child>
+                      <object class="GtkListBox" id="results_list_box">
+                        <style>
+                          <class name="boxed-list"/>
+                          <class name="search"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup" id="empty">
+                    <property name="visible">false</property>
+                    <child>
+                      <object class="AdwStatusPage">
+                        <property name="icon-name">edit-find-symbolic</property>
+                        <property name="title" translatable="yes">No keyboard shortcut found</property>
+                        <property name="description" translatable="yes">Try a different search</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkFilterListModel" id="filter_model">
+    <signal name="notify::n-items" handler="gbp_shortcutui_dialog_queue_update" swapped="true" object="GbpShortcutuiDialog"/>
+    <property name="incremental">false</property>
+    <property name="filter">
+      <object class="GtkStringFilter" id="string_filter">
+        <signal name="notify::search" handler="gbp_shortcutui_dialog_queue_update" swapped="true" object="GbpShortcutuiDialog"/>
+        <binding name="search">
+          <lookup name="text">search</lookup>
+        </binding>
+        <property name="ignore-case">true</property>
+        <property name="match-mode">substring</property>
+        <property name="expression">
+          <lookup name="search-text" type="GbpShortcutuiAction"/>
+        </property>
+      </object>
+    </property>
+  </object>
+</interface>
