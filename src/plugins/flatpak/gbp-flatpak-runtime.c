@@ -40,7 +40,7 @@ struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
-  GHashTable *program_paths_cache;
+  IdePathCache *path_cache;
 
   IdeTriplet *triplet;
   char *branch;
@@ -73,14 +73,14 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   static const char *known_path_dirs[] = { "/bin" };
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   gboolean ret = FALSE;
-  gpointer val = NULL;
+  gboolean found;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (g_hash_table_lookup_extended (self->program_paths_cache, program, NULL, &val))
-    return GPOINTER_TO_UINT (val);
+  if (ide_path_cache_contains (self->path_cache, program, &found))
+    return found;
 
   for (guint i = 0; i < G_N_ELEMENTS (known_path_dirs); i++)
     {
@@ -115,9 +115,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
     }
 
   /* Cache both positive and negative lookups */
-  g_hash_table_insert (self->program_paths_cache,
-                       (char *)g_intern_string (program),
-                       GUINT_TO_POINTER (ret));
+  ide_path_cache_insert (self->path_cache, program, ret ? program : NULL);
 
   return ret;
 }
@@ -679,8 +677,8 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->deploy_dir, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->sdk, g_free);
-  g_clear_pointer (&self->program_paths_cache, g_hash_table_unref);
   g_clear_object (&self->deploy_dir_files);
+  g_clear_object (&self->path_cache);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
 }
@@ -744,7 +742,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
 static void
 gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
-  self->program_paths_cache = g_hash_table_new (g_str_hash, g_str_equal);
+  self->path_cache = ide_path_cache_new ();
 
   ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-flatpak-symbolic");
 }
