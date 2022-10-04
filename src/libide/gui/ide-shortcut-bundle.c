@@ -38,14 +38,6 @@ struct _IdeShortcutBundle
   GPtrArray *items;
 };
 
-typedef struct
-{
-  TmplExpr            *when;
-  GVariant            *args;
-  GtkShortcutAction   *action;
-  GtkPropagationPhase  phase;
-} IdeShortcut;
-
 static TmplScope *imports_scope;
 
 static IdeShortcut *
@@ -61,7 +53,7 @@ ide_shortcut_new (const char          *action,
 
   ret = g_slice_new0 (IdeShortcut);
   ret->action = gtk_named_action_new (action);
-  ret->args = args ? g_variant_ref (args) : NULL;
+  ret->args = args ? g_variant_ref_sink (args) : NULL;
   ret->when = when ? tmpl_expr_ref (when) : NULL;
   ret->phase = phase;
 
@@ -315,6 +307,7 @@ populate_from_object (IdeShortcutBundle  *self,
   const char *phase_str = NULL;
   const char *command = NULL;
   const char *action = NULL;
+  IdeShortcut *state;
   GtkPropagationPhase phase = 0;
   JsonObject *obj;
 
@@ -396,12 +389,13 @@ populate_from_object (IdeShortcutBundle  *self,
       return FALSE;
     }
 
-  callback = gtk_callback_action_new (ide_shortcut_activate,
-                                      ide_shortcut_new (action, args, when, phase),
+  state = ide_shortcut_new (action, args, when, phase);
+  callback = gtk_callback_action_new (ide_shortcut_activate, state,
                                       (GDestroyNotify) ide_shortcut_free);
   shortcut = gtk_shortcut_new (g_steal_pointer (&trigger),
                                g_steal_pointer (&callback));
   g_object_set_data (G_OBJECT (shortcut), "PHASE", GINT_TO_POINTER (phase));
+  g_object_set_data (G_OBJECT (shortcut), "IDE_SHORTCUT", state);
   g_ptr_array_add (self->items, g_steal_pointer (&shortcut));
 
   return TRUE;

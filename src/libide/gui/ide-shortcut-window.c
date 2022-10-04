@@ -27,6 +27,7 @@
 #include <libide-gtk.h>
 
 #include "ide-application-private.h"
+#include "ide-shortcut-bundle-private.h"
 #include "ide-shortcut-info.h"
 #include "ide-shortcut-window-private.h"
 
@@ -118,7 +119,7 @@ page_info_free (PageInfo *pi)
   g_slice_free (PageInfo, pi);
 }
 
-static const char *
+static char *
 find_accel_for_action (GHashTable *accel_map,
                        const char *action)
 {
@@ -132,7 +133,7 @@ find_accel_for_action (GHashTable *accel_map,
     return NULL;
 
   if ((accel = g_hash_table_lookup (accel_map, action)))
-    return accel;
+    return g_strdup (accel);
 
   if ((split = strstr (action, "::")))
     alt = g_strdup (split + 2);
@@ -141,7 +142,7 @@ find_accel_for_action (GHashTable *accel_map,
   else
     return NULL;
 
-  return g_hash_table_lookup (accel_map, alt);
+  return g_strdup (g_hash_table_lookup (accel_map, alt));
 }
 
 static void
@@ -165,11 +166,11 @@ populate_from_menu_model (GQueue     *queue,
       g_autofree char *icon_name = NULL;
       g_autofree char *item_group = NULL;
       g_autofree char *item_page = NULL;
+      g_autofree char *accel = NULL;
       g_autofree char *subtitle = NULL;
       g_autofree char *title = NULL;
       g_autoptr(GVariant) target = NULL;
       ShortcutInfo *si;
-      const char *accel;
 
       if (!g_menu_model_get_item_attribute (menu, i, "action", "s", &action))
         continue;
@@ -190,7 +191,7 @@ populate_from_menu_model (GQueue     *queue,
 
       si = g_slice_new0 (ShortcutInfo);
       si->link.data = si;
-      si->accel = g_strdup (accel);
+      si->accel = g_steal_pointer (&accel);
       si->icon_name = g_steal_pointer (&icon_name);
       si->subtitle = g_steal_pointer (&subtitle);
       si->title = g_steal_pointer (&title);
@@ -524,17 +525,61 @@ struct _IdeShortcutInfo
   GVariant *action_target;
 };
 
+/**
+ * ide_shortcut_info_foreach:
+ * @shortcuts: a #GListModel of #GtkShortcut
+ * @func: (scope call): a callback for each shortcut info
+ * @func_data: closure data for @func
+ *
+ * Calls @func for every shortcut info. Accelerators come from
+ * @shortcuts by matching action and target.
+ */
 void
-ide_shortcut_info_foreach (const IdeShortcutInfoFunc func,
-                           gpointer                  func_data)
+ide_shortcut_info_foreach (GListModel                *shortcuts,
+                           const IdeShortcutInfoFunc  func,
+                           gpointer                   func_data)
 {
   g_autoptr(GHashTable) accel_map = NULL;
   GQueue pages = G_QUEUE_INIT;
   IdeShortcutInfo info = {0};
 
   g_return_if_fail (func != NULL);
+  g_return_if_fail (!shortcuts || G_IS_LIST_MODEL (shortcuts));
 
-  accel_map = g_hash_table_new (NULL, NULL);
+  accel_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  if (shortcuts != NULL)
+    {
+      guint n_items = g_list_model_get_n_items (shortcuts);
+
+      /* First build a hashmap of action names to shortcut triggers */
+      for (guint i = n_items; i > 0; i--)
+        {
+          g_autoptr(GtkShortcut) shortcut = g_list_model_get_item (shortcuts, i-1);
+          GtkShortcutTrigger *trigger = gtk_shortcut_get_trigger (shortcut);
+          GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
+          IdeShortcut *state;
+
+          if (GTK_IS_NAMED_ACTION (action))
+            {
+              g_autofree char *accel = gtk_shortcut_trigger_to_string (trigger);
+              const char *name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (action));
+
+              g_hash_table_insert (accel_map, g_strdup (name), g_steal_pointer (&accel));
+            }
+          else if ((state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT")) &&
+                   GTK_IS_NAMED_ACTION (state->action))
+            {
+              g_autofree char *accel = gtk_shortcut_trigger_to_string (trigger);
+              const char *name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (state->action));
+
+              g_hash_table_insert (accel_map,
+                                   g_strdup (name),
+                                   g_steal_pointer (&accel));
+            }
+        }
+    }
+
   populate_info (&pages, accel_map);
 
   for (const GList *piter = pages.head; piter; piter = piter->next)

@@ -30,7 +30,8 @@ typedef void (*IdeShortcutInfoFunc) (const IdeShortcutInfo *info,
                                      gpointer               user_data);
 
 IDE_AVAILABLE_IN_44
-void        ide_shortcut_info_foreach           (const IdeShortcutInfoFunc  func,
+void        ide_shortcut_info_foreach           (GListModel                *shortcuts,
+                                                 const IdeShortcutInfoFunc  func,
                                                  gpointer                   func_data);
 IDE_AVAILABLE_IN_44
 const char *ide_shortcut_info_get_accelerator   (const IdeShortcutInfo     *self);

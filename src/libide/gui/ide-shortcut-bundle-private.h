@@ -20,11 +20,22 @@
 
 #pragma once
 
+#include <gtk/gtk.h>
+#include <tmpl-glib.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SHORTCUT_BUNDLE (ide_shortcut_bundle_get_type())
+
+typedef struct
+{
+  TmplExpr            *when;
+  GVariant            *args;
+  GtkShortcutAction   *action;
+  GtkPropagationPhase  phase;
+} IdeShortcut;
 
 G_DECLARE_FINAL_TYPE (IdeShortcutBundle, ide_shortcut_bundle, IDE, SHORTCUT_BUNDLE, GObject)
 
