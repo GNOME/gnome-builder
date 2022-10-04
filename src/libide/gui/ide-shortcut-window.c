@@ -27,14 +27,17 @@
 #include <libide-gtk.h>
 
 #include "ide-application-private.h"
+#include "ide-shortcut-info.h"
 #include "ide-shortcut-window-private.h"
 
 typedef struct _ShortcutInfo
 {
   GList link;
   char *accel;
+  char *action;
   char *icon_name;
   char *subtitle;
+  GVariant *target;
   char *title;
   const char *group;
   const char *page;
@@ -66,8 +69,10 @@ shortcut_info_free (ShortcutInfo *si)
   si->group = NULL;
 
   g_clear_pointer (&si->accel, g_free);
+  g_clear_pointer (&si->action, g_free);
   g_clear_pointer (&si->icon_name, g_free);
   g_clear_pointer (&si->subtitle, g_free);
+  g_clear_pointer (&si->target, g_variant_unref);
   g_clear_pointer (&si->title, g_free);
 
   g_slice_free (ShortcutInfo, si);
@@ -162,6 +167,7 @@ populate_from_menu_model (GQueue     *queue,
       g_autofree char *item_page = NULL;
       g_autofree char *subtitle = NULL;
       g_autofree char *title = NULL;
+      g_autoptr(GVariant) target = NULL;
       ShortcutInfo *si;
       const char *accel;
 
@@ -174,6 +180,8 @@ populate_from_menu_model (GQueue     *queue,
 
       if (!g_menu_model_get_item_attribute (menu, i, "label", "s", &title))
         continue;
+
+      target = g_menu_model_get_item_attribute_value (menu, i, "target", NULL);
 
       g_menu_model_get_item_attribute (menu, i, "description", "s", &subtitle);
       g_menu_model_get_item_attribute (menu, i, "verb-icon", "s", &icon_name);
@@ -188,6 +196,8 @@ populate_from_menu_model (GQueue     *queue,
       si->title = g_steal_pointer (&title);
       si->page = item_page ? g_intern_string (item_page) : page;
       si->group = item_group ? g_intern_string (item_group) : group;
+      si->action = g_steal_pointer (&action);
+      si->target = g_steal_pointer (&target);
 
       g_queue_push_head_link (queue, &si->link);
     }
@@ -321,18 +331,67 @@ remove_underline_and_ellipsis (char *str)
   str[i] = 0;
 }
 
+static void
+populate_info (GQueue     *pages,
+               GHashTable *accel_map)
+{
+  IdeMenuManager *menu_manager = IDE_APPLICATION_DEFAULT->menu_manager;
+  const char * const *menu_ids = ide_menu_manager_get_menu_ids (menu_manager);
+  g_autoptr(GHashTable) page_map = g_hash_table_new (NULL, NULL);
+  g_autoptr(GHashTable) group_map = g_hash_table_new (NULL, NULL);
+  GQueue queue = G_QUEUE_INIT;
+
+  /* Find all of the "links" to sections/subpages/etc and stash
+   * any attributes denoting what the page/group should be so
+   * that they can be inherited by items.
+   */
+  for (guint i = 0; menu_ids[i]; i++)
+    {
+      GMenu *menu;
+
+      if (!(menu = ide_menu_manager_get_menu_by_id (menu_manager, menu_ids[i])))
+        continue;
+
+      populate_page_and_group (page_map, group_map, G_MENU_MODEL (menu));
+    }
+
+  /* Now populate items using the mined information */
+  for (guint i = 0; menu_ids[i]; i++)
+    {
+      const char *page;
+      const char *group;
+      GMenu *menu;
+
+      if (!(menu = ide_menu_manager_get_menu_by_id (menu_manager, menu_ids[i])))
+        continue;
+
+      page = g_hash_table_lookup (page_map, menu);
+      group = g_hash_table_lookup (group_map, menu);
+
+      populate_from_menu_model (&queue, accel_map, page, group, G_MENU_MODEL (menu));
+    }
+
+  /* Build our page tree for the shortcuts */
+  while (queue.length)
+    {
+      ShortcutInfo *si = g_queue_peek_head (&queue);
+      PageInfo *page = find_page (pages, si->page);
+      GroupInfo *group = find_group (&page->groups, si->group);
+
+      g_queue_unlink (&queue, &si->link);
+      g_queue_push_head_link (&group->shortcuts, &si->link);
+    }
+
+  g_queue_sort (pages, (GCompareDataFunc)sort_pages_func, NULL);
+}
+
 GtkWidget *
 ide_shortcut_window_new (GListModel *shortcuts)
 {
   g_autoptr(GHashTable) accel_map = NULL;
-  g_autoptr(GHashTable) page_map = NULL;
-  g_autoptr(GHashTable) group_map = NULL;
   g_autoptr(GtkBuilder) builder = NULL;
   g_autoptr(GString) xml = NULL;
-  const char * const *menu_ids;
-  IdeApplication *app;
   GtkWidget *window = NULL;
-  GQueue queue = G_QUEUE_INIT;
   GQueue pages = G_QUEUE_INIT;
   guint n_items;
 
@@ -341,11 +400,7 @@ ide_shortcut_window_new (GListModel *shortcuts)
   g_return_val_if_fail (G_IS_LIST_MODEL (shortcuts), NULL);
   g_return_val_if_fail (g_type_is_a (g_list_model_get_item_type (shortcuts), GTK_TYPE_SHORTCUT), NULL);
 
-  app = IDE_APPLICATION_DEFAULT;
-  menu_ids = ide_menu_manager_get_menu_ids (app->menu_manager);
   accel_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-  page_map = g_hash_table_new (NULL, NULL);
-  group_map = g_hash_table_new (NULL, NULL);
   n_items = g_list_model_get_n_items (shortcuts);
 
   /* First build a hashmap of action names to shortcut triggers */
@@ -364,48 +419,7 @@ ide_shortcut_window_new (GListModel *shortcuts)
         }
     }
 
-  /* Find all of the "links" to sections/subpages/etc and stash
-   * any attributes denoting what the page/group should be so
-   * that they can be inherited by items.
-   */
-  for (guint i = 0; menu_ids[i]; i++)
-    {
-      GMenu *menu;
-
-      if (!(menu = ide_menu_manager_get_menu_by_id (app->menu_manager, menu_ids[i])))
-        continue;
-
-      populate_page_and_group (page_map, group_map, G_MENU_MODEL (menu));
-    }
-
-  /* Now populate items using the mined information */
-  for (guint i = 0; menu_ids[i]; i++)
-    {
-      const char *page;
-      const char *group;
-      GMenu *menu;
-
-      if (!(menu = ide_menu_manager_get_menu_by_id (app->menu_manager, menu_ids[i])))
-        continue;
-
-      page = g_hash_table_lookup (page_map, menu);
-      group = g_hash_table_lookup (group_map, menu);
-
-      populate_from_menu_model (&queue, accel_map, page, group, G_MENU_MODEL (menu));
-    }
-
-  /* Build our page tree for the shortcuts */
-  while (queue.length)
-    {
-      ShortcutInfo *si = g_queue_peek_head (&queue);
-      PageInfo *page = find_page (&pages, si->page);
-      GroupInfo *group = find_group (&page->groups, si->group);
-
-      g_queue_unlink (&queue, &si->link);
-      g_queue_push_head_link (&group->shortcuts, &si->link);
-    }
-
-  g_queue_sort (&pages, (GCompareDataFunc)sort_pages_func, NULL);
+  populate_info (&pages, accel_map);
 
   /* Generate XML for the shortcuts window */
   xml = g_string_new ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -497,4 +511,117 @@ ide_shortcut_window_new (GListModel *shortcuts)
                           g_object_unref);
 
   IDE_RETURN (window);
+}
+
+struct _IdeShortcutInfo
+{
+  const char *page;
+  const char *group;
+  const char *title;
+  const char *subtitle;
+  const char *accel;
+  const char *action_name;
+  GVariant *action_target;
+};
+
+void
+ide_shortcut_info_foreach (const IdeShortcutInfoFunc func,
+                           gpointer                  func_data)
+{
+  g_autoptr(GHashTable) accel_map = NULL;
+  GQueue pages = G_QUEUE_INIT;
+  IdeShortcutInfo info = {0};
+
+  g_return_if_fail (func != NULL);
+
+  accel_map = g_hash_table_new (NULL, NULL);
+  populate_info (&pages, accel_map);
+
+  for (const GList *piter = pages.head; piter; piter = piter->next)
+    {
+      PageInfo *pi = piter->data;
+      g_autofree char *page_title = g_markup_escape_text (pi->title, -1);
+
+      info.page = page_title;
+
+      for (const GList *giter = pi->groups.head; giter; giter = giter->next)
+        {
+          GroupInfo *gi = giter->data;
+          g_autofree char *group_title = g_markup_escape_text (gi->title, -1);
+
+          info.group = group_title;
+
+          for (const GList *siter = gi->shortcuts.head; siter; siter = siter->next)
+            {
+              ShortcutInfo *si = siter->data;
+              g_autofree char *accel = g_markup_escape_text (si->accel, -1);
+              g_autofree char *shortcut_title = g_markup_escape_text (si->title, -1);
+
+              remove_underline_and_ellipsis (shortcut_title);
+
+              info.title = shortcut_title;
+              info.subtitle = si->subtitle;
+              info.accel = si->accel;
+              info.action_name = si->action;
+              info.action_target = si->target;
+
+              func (&info, func_data);
+            }
+        }
+    }
+
+  while (pages.length)
+    {
+      PageInfo *pi = g_queue_peek_head (&pages);
+      g_queue_unlink (&pages, &pi->link);
+      page_info_free (pi);
+    }
+}
+
+const char *
+ide_shortcut_info_get_action_name (const IdeShortcutInfo *self)
+{
+  return self->action_name;
+}
+
+/**
+ * ide_shortcut_info_get_action_target:
+ * @self: a #IdeShortcutInfo
+ *
+ * Returns: (transfer none) (nullable): a #GVariant or %NULL
+ */
+GVariant *
+ide_shortcut_info_get_action_target (const IdeShortcutInfo *self)
+{
+  return self->action_target;
+}
+
+const char *
+ide_shortcut_info_get_page (const IdeShortcutInfo *self)
+{
+  return self->page;
+}
+
+const char *
+ide_shortcut_info_get_group (const IdeShortcutInfo *self)
+{
+  return self->group;
+}
+
+const char *
+ide_shortcut_info_get_title (const IdeShortcutInfo *self)
+{
+  return self->title;
+}
+
+const char *
+ide_shortcut_info_get_subtitle (const IdeShortcutInfo *self)
+{
+  return self->subtitle;
+}
+
+const char *
+ide_shortcut_info_get_accelerator (const IdeShortcutInfo *self)
+{
+  return self->accel;
 }
