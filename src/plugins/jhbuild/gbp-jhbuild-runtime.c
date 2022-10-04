@@ -26,9 +26,10 @@
 
 struct _GbpJhbuildRuntime
 {
-  IdeRuntime runtime;
-  char *executable_path;
-  char *install_prefix;
+  IdeRuntime    parent_instance;
+  IdePathCache *path_cache;
+  char         *executable_path;
+  char         *install_prefix;
 };
 
 enum {
@@ -121,10 +122,14 @@ gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
+  gboolean found;
 
   g_assert (GBP_IS_JHBUILD_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (ide_path_cache_contains (self->path_cache, program, &found))
+    return found;
 
   run_context = ide_run_context_new ();
   ide_run_context_push_host (run_context);
@@ -147,7 +152,9 @@ gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
       return FALSE;
     }
 
-  return ide_subprocess_wait_check (subprocess, cancellable, NULL);
+  found = ide_subprocess_wait_check (subprocess, cancellable, NULL);
+  ide_path_cache_insert (self->path_cache, program, found ? program : NULL);
+  return found;
 }
 
 static void
@@ -172,6 +179,7 @@ gbp_jhbuild_runtime_finalize (GObject *object)
 
   g_clear_pointer (&self->executable_path, g_free);
   g_clear_pointer (&self->install_prefix, g_free);
+  g_clear_object (&self->path_cache);
 
   G_OBJECT_CLASS (gbp_jhbuild_runtime_parent_class)->finalize (object);
 }
@@ -253,5 +261,7 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
 static void
 gbp_jhbuild_runtime_init (GbpJhbuildRuntime *self)
 {
+  self->path_cache = ide_path_cache_new ();
+
   ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-jhbuild-symbolic");
 }
