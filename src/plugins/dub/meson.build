@@ -3,6 +3,8 @@ if get_option('plugin_dub')
 plugins_sources += files([
   'dub-plugin.c',
   'gbp-dub-build-system.c',
+  'gbp-dub-build-system-discovery.c',
+  'gbp-dub-pipeline-addin.c',
 ])
 
 plugin_dub_resources = gnome.compile_resources(

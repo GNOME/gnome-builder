@@ -29,6 +29,8 @@
 #include <libide-tree.h>
 
 #include "gbp-dub-build-system.h"
+#include "gbp-dub-build-system-discovery.h"
+#include "gbp-dub-pipeline-addin.h"
 
 _IDE_EXTERN void
 _gbp_dub_register_types (PeasObjectModule *module)
@@ -36,4 +38,10 @@ _gbp_dub_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM,
                                               GBP_TYPE_DUB_BUILD_SYSTEM);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
+                                              GBP_TYPE_DUB_BUILD_SYSTEM_DISCOVERY);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PIPELINE_ADDIN,
+                                              GBP_TYPE_DUB_PIPELINE_ADDIN);
 }
