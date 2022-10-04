@@ -18,6 +18,9 @@
           </object>
         </child>
         <child>
+          <object class="IdeTweaksPage" id="shortcuts_page"/>
+        </child>
+        <child>
           <object class="IdeTweaksPage" id="editor_page">
             <property name="icon-name">document-edit-symbolic</property>
             <property name="title" translatable="yes">Text Editor</property>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/shortcutui">
+    <file>shortcutui.plugin</file>
+    <file>style.css</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
+    <file preprocess="xml-stripblanks">gbp-shortcutui-dialog.ui</file>
+    <file preprocess="xml-stripblanks">gbp-shortcutui-row.ui</file>
+  </gresource>
+</gresources>
