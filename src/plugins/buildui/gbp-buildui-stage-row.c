@@ -30,7 +30,7 @@ struct _GbpBuilduiStageRow
 
   IdePipelineStage   *stage;
 
-  GtkLabel           *label;
+  GtkInscription     *label;
 };
 
 enum {
@@ -87,7 +87,7 @@ gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
   if (name == NULL)
     name = G_OBJECT_TYPE_NAME (stage);
 
-  gtk_label_set_label (self->label, name);
+  gtk_inscription_set_text (self->label, name);
 
   g_signal_connect_object (stage,
                            "notify::completed",
@@ -102,9 +102,6 @@ gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
                            G_CONNECT_SWAPPED);
 
   g_object_bind_property (stage, "disabled", self, "sensitive", G_BINDING_DEFAULT);
-#if 0
-  g_object_bind_property (stage, "active", self->label, "bold", G_BINDING_DEFAULT);
-#endif
 
   gbp_buildui_stage_row_notify_completed (self, NULL, stage);
 }
