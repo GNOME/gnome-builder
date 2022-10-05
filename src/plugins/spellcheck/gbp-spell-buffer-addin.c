@@ -40,6 +40,7 @@ struct _GbpSpellBufferAddin
   EditorSpellChecker *checker;
   EditorTextBufferSpellAdapter *adapter;
   GPropertyAction *enabled_action;
+  GPropertyAction *language_action;
   guint commit_funcs_handler;
   guint enabled : 1;
 };
@@ -207,10 +208,11 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                            G_CONNECT_SWAPPED);
 
   self->enabled_action = g_property_action_new ("enabled", self, "enabled");
-
   g_object_bind_property_full (buffer, "state", self->adapter, "enabled",
                                G_BINDING_SYNC_CREATE,
                                state_to_enabled, NULL, self, NULL);
+
+  self->language_action = g_property_action_new ("language", self->checker, "language");
 
   IDE_EXIT;
 }
@@ -236,6 +238,7 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
   g_clear_object (&self->checker);
   g_clear_object (&self->adapter);
   g_clear_object (&self->enabled_action);
+  g_clear_object (&self->language_action);
 
   self->buffer = NULL;
 
@@ -415,4 +418,12 @@ gbp_spell_buffer_addin_get_enabled_action (GbpSpellBufferAddin *self)
   g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
 
   return G_ACTION (self->enabled_action);
+}
+
+GAction *
+gbp_spell_buffer_addin_get_language_action (GbpSpellBufferAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
+
+  return G_ACTION (self->language_action);
 }
