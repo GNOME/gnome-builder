@@ -8,4 +8,7 @@
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file>style.css</file>
   </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">
+    <file>plain.lang</file>
+  </gresource>
 </gresources>

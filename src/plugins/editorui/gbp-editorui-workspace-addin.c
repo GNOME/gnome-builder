@@ -119,8 +119,8 @@ language_to_label (GBinding     *binding,
   if (language != NULL)
     g_value_set_string (to_value, gtk_source_language_get_name (language));
   else
-    /* translators: "Text" means plaintext or text/plain */
-    g_value_set_static_string (to_value, _("Text"));
+    /* translators: "Plain Text" means text without formatting */
+    g_value_set_static_string (to_value, _("Plain Text"));
 
   return TRUE;
 }
