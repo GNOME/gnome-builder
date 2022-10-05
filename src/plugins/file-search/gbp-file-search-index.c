@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-file-search-index"
 
 #include <glib/gi18n.h>
+
 #include <libide-search.h>
 #include <libide-code.h>
 #include <libide-vcs.h>
@@ -397,6 +398,7 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
                                  "score", match->score,
                                  "title", filename,
                                  "path", filename,
+                                 "subtitle", _("Open file or folder"),
                                  NULL);
 
           if (themed_icon != NULL)
