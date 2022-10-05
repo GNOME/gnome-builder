@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-sourceview.h>
+
 #include "gbp-menu-search-result.h"
 
 struct _GbpMenuSearchResult
@@ -59,10 +61,23 @@ gbp_menu_search_result_matches (IdeSearchResult *result,
                                 const char      *query)
 {
   const char *title = ide_search_result_get_title (result);
-  const char *subtitle = ide_search_result_get_subtitle (result);
+  const char *subtitle;
+  guint prio = 0;
 
-  return (title && strcasestr (title, query) != NULL) ||
-         (subtitle && strcasestr (subtitle, query) != NULL);
+  if (title && gtk_source_completion_fuzzy_match (title, query, &prio))
+    {
+      ide_search_result_set_priority (result, prio);
+      return TRUE;
+    }
+
+  subtitle = ide_search_result_get_subtitle (result);
+  if (subtitle && gtk_source_completion_fuzzy_match (subtitle, query, &prio))
+    {
+      ide_search_result_set_priority (result, prio);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -103,5 +118,5 @@ gbp_menu_search_result_set_action (GbpMenuSearchResult *self,
 
   ide_set_string (&self->action, action);
   g_clear_pointer (&self->target, g_variant_unref);
-  self->target = target ? g_variant_ref (target) : NULL;
+  self->target = target ? g_variant_ref_sink (target) : NULL;
 }
