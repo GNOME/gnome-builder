@@ -32,8 +32,12 @@
 struct _GbpSpellEditorPageAddin
 {
   GObject              parent_instance;
+
+  /* Borrowed references */
   IdeEditorPage       *page;
   GbpSpellBufferAddin *buffer_addin;
+
+  /* Owned references */
   GMenuModel          *menu;
   GMenu               *spell_section;
   GSimpleActionGroup  *actions;
@@ -221,9 +225,6 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                    self);
   g_action_map_add_action (G_ACTION_MAP (self->actions),
                            gbp_spell_buffer_addin_get_enabled_action (self->buffer_addin));
-  panel_widget_insert_action_group (PANEL_WIDGET (page),
-                                    "spelling",
-                                    G_ACTION_GROUP (self->actions));
 
   g_signal_connect_object (view,
                            "populate-menu",
@@ -246,8 +247,6 @@ gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (page), "spelling", NULL);
-
   view = ide_editor_page_get_view (page);
   ide_source_view_remove_menu (view, G_MENU_MODEL (self->spell_section));
 
@@ -259,10 +258,18 @@ gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_clear_object (&self->spell_section);
   g_clear_object (&self->actions);
 
+  g_clear_pointer (&self->spelling_word, g_free);
+
   self->buffer_addin = NULL;
   self->page = NULL;
 
   IDE_EXIT;
+}
+
+static GActionGroup *
+gbp_spell_editor_page_addin_ref_action_group (IdeEditorPageAddin *addin)
+{
+  return g_object_ref (G_ACTION_GROUP (GBP_SPELL_EDITOR_PAGE_ADDIN (addin)->actions));
 }
 
 static void
@@ -270,6 +277,7 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
   iface->load = gbp_spell_editor_page_addin_load;
   iface->unload = gbp_spell_editor_page_addin_unload;
+  iface->ref_action_group = gbp_spell_editor_page_addin_ref_action_group;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSpellEditorPageAddin, gbp_spell_editor_page_addin, G_TYPE_OBJECT,
