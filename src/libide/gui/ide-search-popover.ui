@@ -53,17 +53,16 @@
 <property name="child">
   <object class="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="margin-top">6</property>
-    <property name="margin-bottom">6</property>
+    <property name="margin-top">3</property>
+    <property name="margin-bottom">3</property>
     <property name="margin-start">9</property>
     <property name="margin-end">6</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkImage">
         <property name="pixel-size">16</property>
-        <property name="valign">start</property>
+        <property name="valign">center</property>
         <property name="margin-end">6</property>
-        <property name="margin-top">2</property>
         <binding name="gicon">
           <lookup name="gicon" type="IdeSearchResult">
             <lookup name="item">GtkListItem</lookup>
@@ -74,7 +73,7 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">3</property>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">true</property>

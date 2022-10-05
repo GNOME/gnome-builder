@@ -27,12 +27,18 @@ stylevariantpreview widget.header.light {
   box-shadow: inset 0 -1px alpha(black, .07);
 }
 
-window popover.global-search contents {
+popover.global-search contents {
   padding: 0;
   margin: 0;
 }
-window popover.global-search .navigation-sidebar {
+popover.global-search .navigation-sidebar {
   border-right: 1px solid @borders;
+}
+popover.global-search listview row {
+  border-bottom: 1px solid @borders;
+}
+popover.global-search listview row:last-child {
+  border-bottom: 1px solid transparent;
 }
 
 notificationstack button {
