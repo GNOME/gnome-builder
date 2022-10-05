@@ -5,12 +5,15 @@
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
         <child>
-          <object class="GtkLabel" id="label">
+          <object class="GtkInscription" id="label">
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
             <property name="margin-start">9</property>
             <property name="margin-bottom">9</property>
             <property name="xalign">0.0</property>
+            <property name="hexpand">true</property>
+            <property name="text-overflow">ellipsize-end</property>
+            <property name="nat-lines">1</property>
           </object>
         </child>
       </object>
