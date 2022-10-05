@@ -84,6 +84,7 @@ subdir('jdtls')
 subdir('jedi-language-server')
 subdir('jhbuild')
 subdir('ls')
+subdir('lua-language-server')
 subdir('make')
 subdir('make-templates')
 subdir('markdown-preview')
@@ -221,6 +222,7 @@ status += [
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jdtls ......................... (Java) : @0@'.format(get_option('plugin_jdtls')),
   'jedi-language-server ........ (Python) : @0@ **'.format(get_option('plugin_jedi_language_server')),
+  'lua-language-server ............ (Lua) : @0@'.format(get_option('plugin_lua_language_server')),
   'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),

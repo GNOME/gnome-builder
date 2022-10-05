@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Provides integration with lua-language-server
+Embedded=_gbp_lua_register_types
+Module=lua-language-server
+Name=Lua Language Server
+X-Category=lsps
+X-Completion-Provider-Languages=lua
+X-Symbol-Resolver-Languages=lua
+X-Diagnostic-Provider-Languages=lua
+X-Highlighter-Languages=lua
+X-Hover-Provider-Languages=lua
+X-Rename-Provider-Languages=lua
+X-Formatter-Languages=lua
+X-Code-Action-Languages=lua
