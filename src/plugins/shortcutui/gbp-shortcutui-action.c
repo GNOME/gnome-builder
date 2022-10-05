@@ -282,6 +282,12 @@ gbp_shortcutui_action_compare (const GbpShortcutuiAction *a,
   return 0;
 }
 
+const char *
+gbp_shortcutui_action_get_accelerator (const GbpShortcutuiAction *self)
+{
+  return self->accelerator;
+}
+
 gboolean
 gbp_shortcutui_action_is_same_group (const GbpShortcutuiAction *a,
                                      const GbpShortcutuiAction *b)

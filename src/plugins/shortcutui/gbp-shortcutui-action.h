@@ -28,11 +28,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiAction, gbp_shortcutui_action, GBP, SHORTCUTUI_ACTION, GObject)
 
-const char *gbp_shortcutui_action_get_page      (const GbpShortcutuiAction *self);
-const char *gbp_shortcutui_action_get_group     (const GbpShortcutuiAction *self);
-int         gbp_shortcutui_action_compare       (const GbpShortcutuiAction *a,
-                                                 const GbpShortcutuiAction *b);
-gboolean    gbp_shortcutui_action_is_same_group (const GbpShortcutuiAction *a,
-                                                 const GbpShortcutuiAction *b);
+const char *gbp_shortcutui_action_get_accelerator (const GbpShortcutuiAction *self);
+const char *gbp_shortcutui_action_get_page        (const GbpShortcutuiAction *self);
+const char *gbp_shortcutui_action_get_group       (const GbpShortcutuiAction *self);
+int         gbp_shortcutui_action_compare         (const GbpShortcutuiAction *a,
+                                                   const GbpShortcutuiAction *b);
+gboolean    gbp_shortcutui_action_is_same_group   (const GbpShortcutuiAction *a,
+                                                   const GbpShortcutuiAction *b);
 
 G_END_DECLS

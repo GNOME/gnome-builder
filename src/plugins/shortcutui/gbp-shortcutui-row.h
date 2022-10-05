@@ -28,7 +28,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiRow, gbp_shortcutui_row, GBP, SHORTCUTUI_ROW, AdwActionRow)
 
-void gbp_shortcutui_row_update_header (GbpShortcutuiRow *self,
-                                       GbpShortcutuiRow *before);
+const char *gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self);
+void        gbp_shortcutui_row_update_header   (GbpShortcutuiRow *self,
+                                                GbpShortcutuiRow *before);
 
 G_END_DECLS
