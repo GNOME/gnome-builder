@@ -35,6 +35,7 @@ struct _GbpSpellEditorPageAddin
   IdeEditorPage       *page;
   GbpSpellBufferAddin *buffer_addin;
   GMenuModel          *menu;
+  GMenu               *spell_section;
   GSimpleActionGroup  *actions;
   char                *spelling_word;
 };
@@ -192,7 +193,6 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                   IdeEditorPage      *page)
 {
   GbpSpellEditorPageAddin *self = (GbpSpellEditorPageAddin *)addin;
-  g_autoptr(GMenu) spell_section = NULL;
   IdeBufferAddin *buffer_addin;
   IdeSourceView *view;
   IdeBuffer *buffer;
@@ -210,9 +210,9 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
   self->buffer_addin = GBP_SPELL_BUFFER_ADDIN (buffer_addin);
 
   self->menu = editor_spell_menu_new ();
-  spell_section = g_menu_new ();
-  g_menu_append_section (spell_section, NULL, self->menu);
-  ide_source_view_append_menu (view, G_MENU_MODEL (spell_section));
+  self->spell_section = g_menu_new ();
+  g_menu_append_section (self->spell_section, NULL, self->menu);
+  ide_source_view_append_menu (view, G_MENU_MODEL (self->spell_section));
 
   self->actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
@@ -249,13 +249,14 @@ gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
   gtk_widget_insert_action_group (GTK_WIDGET (page), "spelling", NULL);
 
   view = ide_editor_page_get_view (page);
-  ide_source_view_remove_menu (view, self->menu);
+  ide_source_view_remove_menu (view, G_MENU_MODEL (self->spell_section));
 
   g_signal_handlers_disconnect_by_func (view,
                                         G_CALLBACK (gbp_spell_editor_page_addin_populate_menu_cb),
                                         self);
 
   g_clear_object (&self->menu);
+  g_clear_object (&self->spell_section);
   g_clear_object (&self->actions);
 
   self->buffer_addin = NULL;
