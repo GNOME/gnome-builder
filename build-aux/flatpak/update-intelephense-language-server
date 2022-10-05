@@ -4,10 +4,6 @@
 
 ERROR=0
 
-if [[ ! -f "flatpak-node-generator.py" ]]; then
-    echo "Error: Place flatpak-node-generator.py in this directory (https://github.com/flatpak/flatpak-builder-tools/tree/master/node)"
-    ERROR=1
-fi
 if [ -z "$1" ]; then
     echo "Error: Pass the intelephense version number as argument (e.g. 'update-intelephense-language-server 0.6.5')"
     ERROR=1
@@ -39,7 +35,7 @@ cd $TEMP_DIR/$PACKAGE_DIR
 npm install --package-lock-only
 cd ../../
 
-python flatpak-node-generator.py npm $TEMP_DIR/$PACKAGE_DIR/package-lock.json -o intelephense-language-server-deps.json
+flatpak-node-generator npm $TEMP_DIR/$PACKAGE_DIR/package-lock.json -o intelephense-language-server-deps.json
 
 rm -rf $TEMP_DIR
 
