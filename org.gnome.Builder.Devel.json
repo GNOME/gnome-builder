@@ -102,7 +102,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/gperftools/gperftools.git"
+                    "url" : "https://github.com/gperftools/gperftools.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -218,7 +219,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/universal-ctags/ctags.git"
+                    "url" : "https://github.com/universal-ctags/ctags.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -296,7 +298,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/vte.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/vte.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -311,7 +314,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -368,7 +372,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -550,7 +555,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/deviced.git"
+                    "url" : "https://gitlab.gnome.org/chergert/deviced.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -581,7 +587,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/htacg/tidy-html5.git"
+                    "url" : "https://github.com/htacg/tidy-html5.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -599,7 +606,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/commonmark/cmark"
+                    "url" : "https://github.com/commonmark/cmark",
+                    "branch" : "master"
                 }
             ]
         },
