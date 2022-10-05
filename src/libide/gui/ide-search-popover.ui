@@ -52,26 +52,29 @@
 <template class="GtkListItem">
 <property name="child">
   <object class="GtkBox">
-    <property name="orientation">vertical</property>
+    <property name="orientation">horizontal</property>
     <property name="margin-top">6</property>
     <property name="margin-bottom">6</property>
-    <property name="margin-start">6</property>
+    <property name="margin-start">9</property>
     <property name="margin-end">6</property>
     <property name="spacing">6</property>
     <child>
+      <object class="GtkImage">
+        <property name="pixel-size">16</property>
+        <property name="valign">start</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">2</property>
+        <binding name="gicon">
+          <lookup name="gicon" type="IdeSearchResult">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox">
-        <property name="orientation">horizontal</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
-        <child>
-          <object class="GtkImage">
-            <property name="pixel-size">16</property>
-            <binding name="gicon">
-              <lookup name="gicon" type="IdeSearchResult">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
         <child>
           <object class="GtkLabel">
             <property name="hexpand">true</property>
@@ -96,9 +99,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkShortcutLabel">
-            <binding name="accelerator">
-              <lookup name="accelerator" type="IdeSearchResult">
+          <object class="GtkInscription">
+            <property name="xalign">0</property>
+            <property name="text-overflow">ellipsize-end</property>
+            <style>
+              <class name="caption"/>
+              <class name="dim-label"/>
+            </style>
+            <binding name="markup">
+              <lookup name="subtitle" type="IdeSearchResult">
                 <lookup name="item">GtkListItem</lookup>
               </lookup>
             </binding>
@@ -107,15 +116,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkInscription">
-        <property name="xalign">0</property>
-        <property name="text-overflow">ellipsize-end</property>
-        <style>
-          <class name="caption"/>
-          <class name="dim-label"/>
-        </style>
-        <binding name="markup">
-          <lookup name="subtitle" type="IdeSearchResult">
+      <object class="GtkShortcutLabel">
+        <property name="valign">center</property>
+        <binding name="accelerator">
+          <lookup name="accelerator" type="IdeSearchResult">
             <lookup name="item">GtkListItem</lookup>
           </lookup>
         </binding>
