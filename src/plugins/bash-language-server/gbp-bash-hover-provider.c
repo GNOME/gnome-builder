@@ -40,7 +40,7 @@ gbp_bash_hover_provider_prepare (IdeLspHoverProvider *provider)
   g_assert (GBP_IS_BASH_HOVER_PROVIDER (provider));
 
   g_object_set (provider,
-                "category", "Python",
+                "category", "Bash",
                 "priority", 200,
                 NULL);
 
