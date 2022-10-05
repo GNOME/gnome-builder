@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 
 #include "gbp-shortcutui-action.h"
@@ -54,19 +56,6 @@ gbp_shortcutui_dialog_update_header_cb (GtkListBoxRow *row,
 
   gbp_shortcutui_row_update_header (GBP_SHORTCUTUI_ROW (row),
                                     GBP_SHORTCUTUI_ROW (before));
-}
-
-static GtkWidget *
-gbp_shortcutui_dialog_create_row_cb (gpointer item,
-                                     gpointer user_data)
-{
-  GbpShortcutuiAction *action = item;
-
-  g_assert (GBP_IS_SHORTCUTUI_ACTION (action));
-
-  return g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
-                       "action", action,
-                       NULL);
 }
 
 static gboolean
@@ -144,6 +133,97 @@ gbp_shortcutui_dialog_group_header_cb (GtkListBoxRow *row,
     }
 }
 
+static void
+set_accel (GbpShortcutuiDialog *self,
+           const char          *accel)
+{
+  g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+
+  /* TODO: Set accel for dialog */
+  g_printerr ("Set accel to %s\n", accel);
+}
+
+static void
+shortcut_dialog_response_cb (GbpShortcutuiDialog    *self,
+                             int                     response_id,
+                             IdeShortcutAccelDialog *dialog)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+  g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      const char *accel;
+
+      accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
+      set_accel (self, accel);
+    }
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_shortcutui_dialog_row_activated_cb (GbpShortcutuiDialog *self,
+                                        GbpShortcutuiRow    *row)
+{
+  IdeShortcutAccelDialog *dialog;
+  const char *accel;
+  const char *name;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+  g_assert (GBP_IS_SHORTCUTUI_ROW (row));
+
+  name = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+  accel = gbp_shortcutui_row_get_accelerator (row);
+  dialog = g_object_new (IDE_TYPE_SHORTCUT_ACCEL_DIALOG,
+                         "accelerator", accel,
+                         "transient-for", self,
+                         "modal", TRUE,
+                         "shortcut-title", name,
+                         "title", _("Set Shortcut"),
+                         "use-header-bar", 1,
+                         NULL);
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (shortcut_dialog_response_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static GtkWidget *
+gbp_shortcutui_dialog_create_row_cb (gpointer item,
+                                     gpointer user_data)
+{
+  GbpShortcutuiAction *action = item;
+  GbpShortcutuiDialog *self = user_data;
+  GtkWidget *row;
+
+  g_assert (GBP_IS_SHORTCUTUI_ACTION (action));
+  g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+
+  row = g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
+                      "activatable", TRUE,
+                      "action", action,
+                      NULL);
+  g_signal_connect_object (row,
+                           "activated",
+                           G_CALLBACK (gbp_shortcutui_dialog_row_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  return row;
+}
+
 void
 gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
                                  GListModel          *model)
@@ -202,8 +282,14 @@ gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
           GbpShortcutuiRow *row;
 
           row = g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
+                              "activatable", TRUE,
                               "action", action,
                               NULL);
+          g_signal_connect_object (row,
+                                   "activated",
+                                   G_CALLBACK (gbp_shortcutui_dialog_row_activated_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
           adw_expander_row_add_row (last_group_row, GTK_WIDGET (row));
         }
     }
@@ -246,5 +332,5 @@ gbp_shortcutui_dialog_init (GbpShortcutuiDialog *self)
   gtk_list_box_bind_model (self->results_list_box,
                            G_LIST_MODEL (self->filter_model),
                            gbp_shortcutui_dialog_create_row_cb,
-                           NULL, NULL);
+                           self, NULL);
 }

@@ -184,3 +184,11 @@ gbp_shortcutui_row_update_header (GbpShortcutuiRow *self,
 
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (self), header);
 }
+
+const char *
+gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self)
+{
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_ROW (self), NULL);
+
+  return gbp_shortcutui_action_get_accelerator (self->action);
+}
