@@ -27,6 +27,10 @@
             "sha256": "4aa7890ef7acb044f99b9ca4293e540a90fd67f7b5ef16b542f92cecbfb4ebc6",
             "dest": "typescript-language-server"
         },
+        {
+            "type" : "patch",
+            "path" : "typescript-package.json.patch"
+        },
         "typescript-language-server-deps.json"
     ]
 }
