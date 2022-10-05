@@ -71,8 +71,8 @@ platformui_create_style_selector (IdeTweaks       *tweaks,
   for (guint i = 0; i < G_N_ELEMENTS (variants); i++)
     {
       IdeStyleVariantPreview *preview;
+      GtkInscription *label;
       GtkButton *button;
-      GtkLabel *label;
       GtkBox *vbox;
 
       vbox = g_object_new (GTK_TYPE_BOX,
@@ -91,9 +91,11 @@ platformui_create_style_selector (IdeTweaks       *tweaks,
                              "child", preview,
                              NULL);
       gtk_actionable_set_action_target (GTK_ACTIONABLE (button), "s", variants[i].key);
-      label = g_object_new (GTK_TYPE_LABEL,
-                            "xalign", 0.5f,
-                            "label", g_dgettext (NULL, variants[i].title),
+      label = g_object_new (GTK_TYPE_INSCRIPTION,
+                            "xalign", .5f,
+                            "text", g_dgettext (NULL, variants[i].title),
+                            "tooltip-text", g_dgettext (NULL, variants[i].title),
+                            "text-overflow", GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END,
                             NULL);
       gtk_box_append (vbox, GTK_WIDGET (button));
       gtk_box_append (vbox, GTK_WIDGET (label));
