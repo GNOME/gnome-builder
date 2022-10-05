@@ -195,14 +195,14 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                          "Paintable",
                          "The paintable for the row icon",
                          GDK_TYPE_PAINTABLE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_GICON] =
     g_param_spec_object ("gicon",
                          "GIcon",
                          "The GIcon for the row icon",
                          G_TYPE_ICON,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -211,7 +211,7 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                       G_MININT,
                       G_MAXINT,
                       0,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                      (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SCORE] =
     g_param_spec_float ("score",
@@ -220,31 +220,31 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                         -G_MINFLOAT,
                         G_MAXFLOAT,
                         0.0f,
-                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
                          "Title",
                          "The title of the search result",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle",
                          "Subtitle",
                          "The subtitle of the search result",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
