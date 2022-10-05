@@ -22,14 +22,10 @@
     ],
     "sources" : [
         {
-            "type": "archive",
-            "url": "https://github.com/typescript-language-server/typescript-language-server/archive/refs/tags/v2.0.0.tar.gz",
-            "sha256": "4aa7890ef7acb044f99b9ca4293e540a90fd67f7b5ef16b542f92cecbfb4ebc6",
-            "dest": "typescript-language-server"
-        },
-        {
-            "type" : "patch",
-            "path" : "typescript-package.json.patch"
+            "type" : "archive",
+            "url" : "https://github.com/typescript-language-server/typescript-language-server/archive/refs/tags/v0.6.5.tar.gz",
+            "sha256" : "a7a7a4bcf8cb76c95aadb374f78042c7d716422fa6e497bc0849995d15ba21fa",
+            "dest" : "typescript-language-server"
         },
         "typescript-language-server-deps.json"
     ]
