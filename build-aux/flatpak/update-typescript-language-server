@@ -4,10 +4,6 @@
 
 ERROR=0
 
-if [[ ! -f "flatpak-node-generator.py" ]]; then
-    echo "Error: Place flatpak-node-generator.py in this directory (https://github.com/flatpak/flatpak-builder-tools/tree/master/node)"
-    ERROR=1
-fi
 if [ -z "$1" ]; then
     echo "Error: Pass the typescript-language-server version number as argument (e.g. 'update-typescript-language-server 0.6.5')"
     ERROR=1
@@ -35,7 +31,7 @@ PACKAGE_DIR="$(ls | head -n 1)"
 
 cd $CURRENT_DIR
 
-python flatpak-node-generator.py yarn $TEMP_DIR/$PACKAGE_DIR/yarn.lock -o typescript-language-server-deps.json
+flatpak-node-generator yarn $TEMP_DIR/$PACKAGE_DIR/yarn.lock -o typescript-language-server-deps.json
 
 rm -rf $TEMP_DIR
 
