@@ -521,6 +521,7 @@ struct _IdeShortcutInfo
   const char *title;
   const char *subtitle;
   const char *accel;
+  const char *icon_name;
   const char *action_name;
   GVariant *action_target;
 };
@@ -609,6 +610,7 @@ ide_shortcut_info_foreach (GListModel                *shortcuts,
               info.accel = si->accel;
               info.action_name = si->action;
               info.action_target = si->target;
+              info.icon_name = si->icon_name;
 
               func (&info, func_data);
             }
@@ -669,4 +671,10 @@ const char *
 ide_shortcut_info_get_accelerator (const IdeShortcutInfo *self)
 {
   return self->accel;
+}
+
+const char *
+ide_shortcut_info_get_icon_name (const IdeShortcutInfo *self)
+{
+  return self->icon_name;
 }
