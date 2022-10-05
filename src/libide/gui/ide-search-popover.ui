@@ -95,6 +95,15 @@
             </binding>
           </object>
         </child>
+        <child>
+          <object class="GtkShortcutLabel">
+            <binding name="accelerator">
+              <lookup name="accelerator" type="IdeSearchResult">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
       </object>
     </child>
     <child>
