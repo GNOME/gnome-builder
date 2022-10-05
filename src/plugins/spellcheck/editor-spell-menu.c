@@ -88,7 +88,7 @@ editor_spell_corrections_get_item_attributes (GMenuModel  *model,
   correction = self->corrections[position];
 
   ht = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_variant_unref);
-  g_hash_table_insert (ht, g_strdup (G_MENU_ATTRIBUTE_ACTION), g_variant_ref_sink (g_variant_new_string ("page.spelling.correct")));
+  g_hash_table_insert (ht, g_strdup (G_MENU_ATTRIBUTE_ACTION), g_variant_ref_sink (g_variant_new_string ("page.spellcheck.correct")));
   g_hash_table_insert (ht, g_strdup (G_MENU_ATTRIBUTE_TARGET), g_variant_ref_sink (g_variant_new_string (correction)));
   g_hash_table_insert (ht, g_strdup (G_MENU_ATTRIBUTE_LABEL), g_variant_ref_sink (g_variant_new_string (correction)));
 
@@ -233,7 +233,7 @@ populate_languages (GMenu *menu)
       g_assert (G_IS_MENU (group_menu));
 
       item = g_menu_item_new (name, NULL);
-      g_menu_item_set_action_and_target (item, "page.spelling.language", "s", code);
+      g_menu_item_set_action_and_target (item, "page.spellcheck.language", "s", code);
       g_menu_append_item (group_menu, item);
     }
 }
@@ -245,9 +245,9 @@ editor_spell_menu_new (void)
   static GMenuItem *languages_item;
   g_autoptr(GMenu) menu = g_menu_new ();
   g_autoptr(GMenuModel) corrections_menu = editor_spell_corrections_new ();
-  g_autoptr(GMenuItem) add_item = g_menu_item_new (_("Add to Dictionary"), "page.spelling.add");
-  g_autoptr(GMenuItem) ignore_item = g_menu_item_new (_("Ignore"), "page.spelling.ignore");
-  g_autoptr(GMenuItem) check_item = g_menu_item_new (_("Check Spelling"), "page.spelling.enabled");
+  g_autoptr(GMenuItem) add_item = g_menu_item_new (_("Add to Dictionary"), "page.spellcheck.add");
+  g_autoptr(GMenuItem) ignore_item = g_menu_item_new (_("Ignore"), "page.spellcheck.ignore");
+  g_autoptr(GMenuItem) check_item = g_menu_item_new (_("Check Spelling"), "page.spellcheck.enabled");
 
   if (languages_menu == NULL)
     {
