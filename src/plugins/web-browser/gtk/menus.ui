@@ -6,6 +6,7 @@
         <attribute name="label" translatable="yes">New _Browser Page</attribute>
         <attribute name="action">workspace.web-browser.page.new</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;b</attribute>
+        <attribute name="description" translatable="yes">Open a web browser in a new page</attribute>
       </item>
     </section>
   </menu>

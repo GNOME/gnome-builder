@@ -36,29 +36,28 @@
         <attribute name="action">workspace.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
         <attribute name="verb-icon">preferences-desktop-keyboard-shortcuts-symbolic</attribute>
-        <attribute name="group" translatable="yes">Help</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-help</attribute>
         <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="description" translatable="yes">Get help with using Builder</attribute>
         <attribute name="action">app.help</attribute>
         <attribute name="accel">F1</attribute>
-        <attribute name="group" translatable="yes">Help</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-about</attribute>
         <attribute name="label" translatable="yes">About Builder</attribute>
         <attribute name="action">app.about</attribute>
         <attribute name="description" translatable="yes">Show information about Builder</attribute>
-        <attribute name="group" translatable="yes">Help</attribute>
       </item>
     </section>
     <section id="ide-primary-workspace-menu-quit-section">
       <attribute name="page" translatable="yes">Application</attribute>
-      <attribute name="group" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">General</attribute>
       <item>
         <attribute name="id">ide-primary-workspace-menu-quit</attribute>
         <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="description" translatable="yes">Quit without saving changes</attribute>
         <attribute name="action">app.quit</attribute>
         <attribute name="accel">&lt;control&gt;q</attribute>
       </item>
