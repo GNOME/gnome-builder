@@ -93,5 +93,10 @@ gboolean         ide_search_result_get_use_underline (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
 void             ide_search_result_set_use_underline (IdeSearchResult *self,
                                                       gboolean         use_underline);
+IDE_AVAILABLE_IN_44
+const char      *ide_search_result_get_accelerator   (IdeSearchResult *self);
+IDE_AVAILABLE_IN_44
+void             ide_search_result_set_accelerator   (IdeSearchResult *self,
+                                                      const char      *accelerator);
 
 G_END_DECLS

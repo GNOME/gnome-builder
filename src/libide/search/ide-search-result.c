@@ -32,6 +32,7 @@ typedef struct
   char         *subtitle;
   GdkPaintable *paintable;
   GIcon        *gicon;
+  char         *accelerator;
   float         score;
   guint         priority;
   guint         use_underline : 1;
@@ -40,6 +41,7 @@ typedef struct
 
 enum {
   PROP_0,
+  PROP_ACCELERATOR,
   PROP_PAINTABLE,
   PROP_GICON,
   PROP_PRIORITY,
@@ -81,6 +83,7 @@ ide_search_result_finalize (GObject *object)
   g_clear_object (&priv->paintable);
   g_clear_pointer (&priv->title, g_free);
   g_clear_pointer (&priv->subtitle, g_free);
+  g_clear_pointer (&priv->accelerator, g_free);
 
   G_OBJECT_CLASS (ide_search_result_parent_class)->finalize (object);
 }
@@ -95,6 +98,10 @@ ide_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACCELERATOR:
+      g_value_set_string (value, ide_search_result_get_accelerator (self));
+      break;
+
     case PROP_PAINTABLE:
       g_value_set_object (value, ide_search_result_get_paintable (self));
       break;
@@ -142,6 +149,10 @@ ide_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACCELERATOR:
+      ide_search_result_set_accelerator (self, g_value_get_string (value));
+      break;
+
     case PROP_PAINTABLE:
       ide_search_result_set_paintable (self, g_value_get_object (value));
       break;
@@ -189,6 +200,11 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
   object_class->set_property = ide_search_result_set_property;
 
   klass->matches = ide_search_result_real_matches;
+
+  properties [PROP_ACCELERATOR] =
+    g_param_spec_string ("accelerator", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PAINTABLE] =
     g_param_spec_object ("paintable",
@@ -517,4 +533,26 @@ ide_search_result_set_use_markup (IdeSearchResult *self,
       priv->use_markup = use_markup;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_MARKUP]);
     }
+}
+
+const char *
+ide_search_result_get_accelerator (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->accelerator;
+}
+
+void
+ide_search_result_set_accelerator (IdeSearchResult *self,
+                                   const char      *accelerator)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  if (ide_set_string (&priv->accelerator, accelerator))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
 }
