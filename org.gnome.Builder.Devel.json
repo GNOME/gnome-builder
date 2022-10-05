@@ -278,7 +278,7 @@
         },
         {
             "name" : "libeditorconfig",
-            "buildsystem" : "cmake",
+            "buildsystem" : "cmake-ninja",
             "config-opts" : [ "-DBUILD_DOCUMENTATION=OFF", "-DINSTALL_HTML_DOC=OFF" ],
             "sources" : [
                 {
