@@ -20,7 +20,7 @@
     <section id="ide-primary-workspace-menu-placeholder3"/>
     <section id="ide-primary-workspace-menu-app-section">
       <attribute name="page" translatable="yes">Application</attribute>
-      <attribute name="group" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">General</attribute>
       <item>
         <attribute name="id">ide-primary-workspace-menu-preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
