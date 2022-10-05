@@ -225,6 +225,8 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                    self);
   g_action_map_add_action (G_ACTION_MAP (self->actions),
                            gbp_spell_buffer_addin_get_enabled_action (self->buffer_addin));
+  g_action_map_add_action (G_ACTION_MAP (self->actions),
+                           gbp_spell_buffer_addin_get_language_action (self->buffer_addin));
 
   g_signal_connect_object (view,
                            "populate-menu",
