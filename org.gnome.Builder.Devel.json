@@ -34,7 +34,6 @@
         "--socket=ssh-auth",
         "--socket=session-bus",
         "--socket=system-bus",
-        "--filesystem=home",
         "--filesystem=host",
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
