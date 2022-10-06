@@ -185,6 +185,8 @@ ide_terminal_update_url_actions (IdeTerminal *self,
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   g_autofree char *pattern = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TERMINAL (self));
 
   pattern = ide_terminal_get_pattern_at_coords (self, x, y);
@@ -193,6 +195,10 @@ ide_terminal_update_url_actions (IdeTerminal *self,
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", pattern != NULL);
 
   ide_set_string (&priv->url, pattern);
+
+  IDE_TRACE_MSG ("URL pattern set to %s", pattern);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -226,6 +232,8 @@ ide_terminal_popup (IdeTerminal *self,
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TERMINAL (self));
 
   ide_terminal_update_clipboard_actions (self);
@@ -251,6 +259,8 @@ ide_terminal_popup (IdeTerminal *self,
                                &(GdkRectangle) { x, y, 1, 1 });
 
   gtk_popover_popup (priv->popover);
+
+  IDE_EXIT;
 }
 
 static void
@@ -278,6 +288,7 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
         {
           gtk_widget_activate_action (GTK_WIDGET (self), "terminal.open-link", NULL);
           gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+          IDE_EXIT;
         }
     }
   else if (button == 3)
@@ -286,8 +297,8 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
         gtk_widget_grab_focus (GTK_WIDGET (self));
 
       ide_terminal_popup (self, x, y);
-
       gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+      IDE_EXIT;
     }
 
   IDE_EXIT;
