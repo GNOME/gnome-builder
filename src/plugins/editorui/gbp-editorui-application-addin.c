@@ -140,12 +140,14 @@ gbp_editorui_application_addin_add_option_entries (IdeApplicationAddin *addin,
 
 static void
 gbp_editorui_application_addin_open_all_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
 {
   IdeWorkbench *workbench = (IdeWorkbench *) object;
   g_autoptr(GApplicationCommandLine) cmdline = user_data;
   g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKBENCH (workbench));
@@ -160,12 +162,14 @@ gbp_editorui_application_addin_open_all_cb (GObject      *object,
 
   if (cmdline != NULL)
     g_application_command_line_set_exit_status (cmdline, error == NULL ? EXIT_SUCCESS : EXIT_FAILURE);
+
+  IDE_EXIT;
 }
 
 static void
 gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *addin,
-                                                  IdeApplication          *application,
-                                                  GApplicationCommandLine *cmdline)
+                                                    IdeApplication          *application,
+                                                    GApplicationCommandLine *cmdline)
 {
   g_autoptr(IdeWorkbench) workbench = NULL;
   IdeApplication *app = (IdeApplication *)application;
@@ -174,6 +178,8 @@ gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *add
   g_auto(GStrv) argv = NULL;
   GVariantDict *options;
   gint argc;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (app));
@@ -206,12 +212,12 @@ gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *add
 
           ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
 
-          return;
+          IDE_EXIT;
         }
     }
 
   if (argc < 2)
-    return;
+    IDE_EXIT;
 
   /*
    * If the user is trying to open various files using the command line with
@@ -263,6 +269,8 @@ gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *add
                                 NULL,
                                 gbp_editorui_application_addin_open_all_cb,
                                 g_object_ref (cmdline));
+
+  IDE_EXIT;
 }
 
 static void
