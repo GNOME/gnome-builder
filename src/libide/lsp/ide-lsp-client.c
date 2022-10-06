@@ -1090,18 +1090,26 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
     {
       g_autoptr(GVariant) config = NULL;
 
+      /* TODO: Subclasses will really need the params to be able to handle
+       *       workspace/configuration correctly.
+       */
+
       g_signal_emit (self, signals [LOAD_CONFIGURATION], 0, &config);
 
-      if (config != NULL)
+      if (config == NULL)
         {
-          /* Ensure we didn't get anything floating */
-          g_variant_take_ref (config);
+          GVariantBuilder builder;
 
-          jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
-          IDE_RETURN (TRUE);
+          g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+          config = g_variant_builder_end (&builder);
         }
 
-      g_debug ("No configuration provided, ignoring \"workspace/configuration\" request");
+      /* Ensure we didn't get anything floating */
+      g_variant_take_ref (config);
+
+      jsonrpc_client_reply_async (client, id, config, NULL, NULL, NULL);
+
+      IDE_RETURN (TRUE);
     }
   else if (strcmp (method, "workspace/applyEdit") == 0)
     {
