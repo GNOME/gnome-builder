@@ -30,6 +30,7 @@ libide_gui_public_headers = [
   'ide-search-popover.h',
   'ide-session.h',
   'ide-session-item.h',
+  'ide-shortcut-info.h',
   'ide-shortcut-provider.h',
   'ide-workbench.h',
   'ide-workbench-addin.h',
