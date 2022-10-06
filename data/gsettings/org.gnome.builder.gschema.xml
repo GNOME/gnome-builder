@@ -64,5 +64,10 @@
       <summary>Default License</summary>
       <description>The default license to use for new projects</description>
     </key>
+    <key name="lsp-inherit-stderr" type="b">
+      <default>false</default>
+      <summary>Inherit Language Server stderr</summary>
+      <description>If enabled, stderr of language servers will be redirected to the console.</description>
+    </key>
   </schema>
 </schemalist>

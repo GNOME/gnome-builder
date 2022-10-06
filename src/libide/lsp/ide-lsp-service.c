@@ -564,6 +564,7 @@ ensure_started (IdeLspService *self,
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocessSupervisor) supervisor = NULL;
+  g_autoptr(GSettings) settings = NULL;
   IdeBuildManager *build_manager;
   IdeLspServiceClass *klass;
   IdePipeline *pipeline = NULL;
@@ -584,13 +585,14 @@ ensure_started (IdeLspService *self,
   klass = IDE_LSP_SERVICE_GET_CLASS (self);
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
+  settings = g_settings_new ("org.gnome.builder");
 
   /* Delay until pipeline is ready */
   if (!ide_pipeline_is_ready (pipeline))
     IDE_EXIT;
 
   flags = G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE;
-  if (!priv->inherit_stderr)
+  if (!priv->inherit_stderr && !g_settings_get_boolean (settings, "lsp-inherit-stderr"))
     flags |= G_SUBPROCESS_FLAGS_STDERR_SILENCE;
 
   /* Allow subclasses to control launcher creation */

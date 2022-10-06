@@ -140,6 +140,18 @@
                     </property>
                   </object>
                 </child>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Inherit Language Server stderr</property>
+                    <property name="subtitle" translatable="yes">If enabled, stderr of language servers will be redirected to the console.</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder</property>
+                        <property name="schema-key">lsp-inherit-stderr</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
