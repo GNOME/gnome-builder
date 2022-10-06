@@ -140,18 +140,6 @@
                     </property>
                   </object>
                 </child>
-                <child>
-                  <object class="IdeTweaksSwitch">
-                    <property name="title" translatable="yes">Inherit Language Server stderr</property>
-                    <property name="subtitle" translatable="yes">If enabled, stderr of language servers will be redirected to the console.</property>
-                    <property name="binding">
-                      <object class="IdeTweaksSetting">
-                        <property name="schema-id">org.gnome.builder</property>
-                        <property name="schema-key">lsp-inherit-stderr</property>
-                      </object>
-                    </property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
@@ -215,6 +203,23 @@
                               <object class="IdeTweaksSetting">
                                 <property name="schema-id">org.gnome.builder.build</property>
                                 <property name="schema-key">clear-build-log-pane</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Language Servers</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Log to Console</property>
+                            <property name="subtitle" translatable="yes">Redirect language server error logs to stderr</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder</property>
+                                <property name="schema-key">lsp-inherit-stderr</property>
                               </object>
                             </property>
                           </object>
