@@ -255,6 +255,8 @@ ide_editor_info_bar_set_property (GObject      *object,
                                    G_CALLBACK (on_notify_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+          on_notify_cb (self, NULL, self->buffer);
         }
       break;
 
