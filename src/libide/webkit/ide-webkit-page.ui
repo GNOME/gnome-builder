@@ -99,5 +99,11 @@
         <attribute name="action">web.enable-javascript</attribute>
       </item>
     </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Print</attribute>
+        <attribute name="action">page.web.print</attribute>
+      </item>
+    </section>
   </menu>
 </interface>

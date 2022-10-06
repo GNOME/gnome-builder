@@ -66,5 +66,7 @@ IDE_AVAILABLE_IN_ALL
 void           ide_webkit_page_reload_ignoring_cache (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_webkit_page_has_generator         (IdeWebkitPage        *self);
+IDE_AVAILABLE_IN_44
+void           ide_webkit_page_print                 (IdeWebkitPage        *self);
 
 G_END_DECLS
