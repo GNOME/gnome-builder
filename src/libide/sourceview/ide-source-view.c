@@ -1050,6 +1050,9 @@ ide_source_view_push_snippet (GtkSourceView    *source_view,
 
   context = gtk_source_snippet_get_context (snippet);
 
+  if (!gtk_source_snippet_context_get_variable (context, "fullname"))
+    gtk_source_snippet_context_set_variable (context, "fullname", g_get_real_name ());
+
   if (self->buffer != NULL)
     {
       if ((file = ide_buffer_get_file (self->buffer)))
