@@ -31,8 +31,8 @@
 
 typedef struct
 {
-  IdeLspClient *client;
-  IdeSignalGroup    *client_signals;
+  IdeLspClient   *client;
+  IdeSignalGroup *client_signals;
 } IdeLspDiagnosticProviderPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -51,8 +51,8 @@ static GParamSpec *properties [N_PROPS];
 
 static void
 ide_lsp_diagnostic_provider_get_diagnostics_cb (GObject      *object,
-                                                     GAsyncResult *result,
-                                                     gpointer      user_data)
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeDiagnostics) diagnostics = NULL;
@@ -149,9 +149,9 @@ ide_lsp_diagnostic_provider_finalize (GObject *object)
 
 static void
 ide_lsp_diagnostic_provider_get_property (GObject    *object,
-                                               guint       prop_id,
-                                               GValue     *value,
-                                               GParamSpec *pspec)
+                                          guint       prop_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec)
 {
   IdeLspDiagnosticProvider *self = IDE_LSP_DIAGNOSTIC_PROVIDER (object);
 
@@ -168,9 +168,9 @@ ide_lsp_diagnostic_provider_get_property (GObject    *object,
 
 static void
 ide_lsp_diagnostic_provider_set_property (GObject      *object,
-                                               guint         prop_id,
-                                               const GValue *value,
-                                               GParamSpec   *pspec)
+                                          guint         prop_id,
+                                          const GValue *value,
+                                          GParamSpec   *pspec)
 {
   IdeLspDiagnosticProvider *self = IDE_LSP_DIAGNOSTIC_PROVIDER (object);
 
@@ -237,7 +237,7 @@ ide_lsp_diagnostic_provider_get_client (IdeLspDiagnosticProvider *self)
 
 void
 ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
-                                             IdeLspClient             *client)
+                                        IdeLspClient             *client)
 {
   IdeLspDiagnosticProviderPrivate *priv = ide_lsp_diagnostic_provider_get_instance_private (self);
 
