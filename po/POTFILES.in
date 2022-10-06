@@ -33,6 +33,7 @@ src/libide/editor/ide-editor-page.c
 src/libide/editor/ide-editor-search-bar.ui
 src/libide/editor/ide-editor-utils.c
 src/libide/editor/ide-editor-workspace.ui
+src/libide/editor/plain.lang
 src/libide/foundry/ide-build-manager.c
 src/libide/foundry/ide-config-manager.c
 src/libide/foundry/ide-device-manager.c
@@ -172,6 +173,7 @@ src/plugins/editorui/gbp-editorui-workspace-addin.c
 src/plugins/editorui/gtk/menus.ui
 src/plugins/editorui/tweaks-language.ui
 src/plugins/editorui/tweaks.ui
+src/plugins/file-search/gbp-file-search-index.c
 src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c
 src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c
 src/plugins/flatpak/gbp-flatpak-client.c
