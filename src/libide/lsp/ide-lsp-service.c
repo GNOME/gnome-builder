@@ -217,6 +217,8 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
       ide_run_context_append_argv (run_context, priv->program);
       ide_run_context_set_cwd (run_context, srcdir);
 
+      IDE_LSP_SERVICE_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
+
       if ((launcher = ide_run_context_end (run_context, NULL)))
         {
           ide_subprocess_launcher_set_flags (launcher, flags);
@@ -238,6 +240,8 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
           ide_runtime_prepare_to_build (host, pipeline, run_context);
           ide_run_context_append_argv (run_context, priv->program);
           ide_run_context_set_cwd (run_context, srcdir);
+
+          IDE_LSP_SERVICE_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
 
           if ((launcher = ide_run_context_end (run_context, NULL)))
             {
@@ -264,6 +268,8 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
                   ide_run_context_append_argv (run_context, path);
                   ide_run_context_set_cwd (run_context, srcdir);
 
+                  IDE_LSP_SERVICE_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
+
                   if ((launcher = ide_run_context_end (run_context, NULL)))
                     {
                       ide_subprocess_launcher_set_flags (launcher, flags);
@@ -281,11 +287,18 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
 
       if ((path = g_find_program_in_path (priv->program)))
         {
-          launcher = ide_subprocess_launcher_new (flags);
-          ide_subprocess_launcher_push_argv (launcher, path);
-          ide_subprocess_launcher_set_cwd (launcher, srcdir);
-          ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-          IDE_RETURN (g_steal_pointer (&launcher));
+          g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
+
+          ide_run_context_append_argv (run_context, path);
+          ide_run_context_set_cwd (run_context, srcdir);
+
+          IDE_LSP_SERVICE_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
+
+          if ((launcher = ide_run_context_end (run_context, NULL)))
+            {
+              ide_subprocess_launcher_set_flags (launcher, flags);
+              IDE_RETURN (g_steal_pointer (&launcher));
+            }
         }
     }
 
@@ -300,6 +313,20 @@ ide_lsp_service_real_configure_client (IdeLspService *self,
   g_assert (IDE_IS_LSP_CLIENT (client));
 
   g_assert_not_reached ();
+}
+
+static void
+ide_lsp_service_real_prepare_run_context (IdeLspService *self,
+                                          IdePipeline   *pipeline,
+                                          IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  IDE_EXIT;
 }
 
 static void
@@ -340,6 +367,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
   service_class->configure_client = ide_lsp_service_real_configure_client;
   service_class->configure_launcher = ide_lsp_service_real_configure_launcher;
   service_class->configure_supervisor = ide_lsp_service_real_configure_supervisor;
+  service_class->prepare_run_context = ide_lsp_service_real_prepare_run_context;
 
   /**
    * IdeLspService:client:

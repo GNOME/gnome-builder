@@ -50,6 +50,9 @@ struct _IdeLspServiceClass
                                                   IdeSubprocessSupervisor *supervisor);
   void                   (*configure_client)     (IdeLspService           *self,
                                                   IdeLspClient            *client);
+  void                   (*prepare_run_context)  (IdeLspService           *service,
+                                                  IdePipeline             *pipeline,
+                                                  IdeRunContext           *run_context);
 };
 
 IDE_AVAILABLE_IN_ALL
