@@ -91,34 +91,17 @@ ide_editor_info_bar_update (IdeEditorInfoBar *self)
       gtk_widget_hide (GTK_WIDGET (self->save));
       gtk_info_bar_set_revealed (self->discard_infobar, TRUE);
     }
-#if 0
-  /* TODO: If we end up doing drafts like g-t-e, we might need this */
-  else if (_ide_buffer_get_was_restored (self->buffer))
+  else if (ide_buffer_has_encoding_error (self->buffer))
     {
-      if (ide_buffer_get_file (self->buffer) == NULL)
-        {
-          gtk_button_set_label (self->save, _("Save _As…"));
-          gtk_actionable_set_action_name (GTK_ACTIONABLE (self->save), "page.save-as");
-          gtk_label_set_label (self->title, _("Buffer Restored"));
-          gtk_label_set_label (self->subtitle, _("Unsaved buffer has been restored."));
-          gtk_widget_hide (GTK_WIDGET (self->discard));
-          gtk_widget_show (GTK_WIDGET (self->save));
-        }
-      else
-        {
-          gtk_button_set_label (self->save, _("_Save…"));
-          gtk_actionable_set_action_name (GTK_ACTIONABLE (self->save), "page.confirm-save");
-          gtk_button_set_label (self->discard, _("_Discard…"));
-          gtk_actionable_set_action_name (GTK_ACTIONABLE (self->discard), "page.confirm-discard-changes");
-          gtk_label_set_label (self->title, _("Draft Changes Restored"));
-          gtk_label_set_label (self->subtitle, _("Unsaved changes to the buffer have been restored."));
-          gtk_widget_show (GTK_WIDGET (self->discard));
-          gtk_widget_show (GTK_WIDGET (self->save));
-        }
-
+      gtk_button_set_label (self->discard, _("_Discard Changes and Reload"));
+      gtk_button_set_use_underline (self->discard, TRUE);
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (self->discard), "page.editor.reload");
+      gtk_label_set_label (self->title, _("File Contains Encoding Errors"));
+      gtk_label_set_label (self->subtitle, _("The encoding used to load the file detected errors. You may select an alternate encoding from the statusbar and reload."));
+      gtk_widget_show (GTK_WIDGET (self->discard));
+      gtk_widget_hide (GTK_WIDGET (self->save));
       gtk_info_bar_set_revealed (self->discard_infobar, TRUE);
     }
-#endif
   else
     {
       gtk_info_bar_set_revealed (self->discard_infobar, FALSE);
@@ -236,12 +219,6 @@ ide_editor_info_bar_set_property (GObject      *object,
     case PROP_BUFFER:
       if (g_set_object (&self->buffer, g_value_get_object (value)))
         {
-#if 0
-          /* TODO: If we end up suggesting admin:// URIs */
-          g_object_bind_property (self->buffer, "suggest-admin",
-                                  self->access_try_admin, "visible",
-                                  G_BINDING_SYNC_CREATE);
-#endif
           g_object_bind_property (self->buffer, "failed",
                                   self->access_infobar, "revealed",
                                   G_BINDING_SYNC_CREATE);
@@ -252,6 +229,11 @@ ide_editor_info_bar_set_property (GObject      *object,
                                    G_CONNECT_SWAPPED);
           g_signal_connect_object (self->buffer,
                                    "notify::changed-on-volume",
+                                   G_CALLBACK (on_notify_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (self->buffer,
+                                   "notify::has-encoding-error",
                                    G_CALLBACK (on_notify_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
