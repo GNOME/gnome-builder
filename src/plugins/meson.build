@@ -72,6 +72,7 @@ subdir('gdb')
 subdir('gdiagnose')
 subdir('gettext')
 subdir('git')
+subdir('glsl-language-server')
 subdir('gopls')
 subdir('gradle')
 subdir('greeter')
@@ -217,6 +218,7 @@ status += [
   'bash-language-server .......... (Bash) : @0@'.format(get_option('plugin_bash_language_server')),
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
+  'glsl-language-server .......... (GLSL) : @0@'.format(get_option('plugin_glsl_language_server')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
   'gopls ........................... (Go) : @0@'.format(get_option('plugin_gopls')),
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
