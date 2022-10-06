@@ -354,6 +354,14 @@ add_property_action (gpointer    object,
 }
 
 static void
+ide_webkit_page_print_action (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *param)
+{
+  ide_webkit_page_print (IDE_WEBKIT_PAGE (widget));
+}
+
+static void
 ide_webkit_page_constructed (GObject *object)
 {
   IdeWebkitPage *self = (IdeWebkitPage *)object;
@@ -425,6 +433,7 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  PanelWidgetClass *p_widget_class = PANEL_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_webkit_page_constructed;
   object_class->dispose = ide_webkit_page_dispose;
@@ -452,6 +461,8 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_toolbar_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_webkit_page_update_reload);
   gtk_widget_class_bind_template_callback (widget_class, on_web_view_decide_policy_cb);
+
+  panel_widget_class_install_action (p_widget_class, "web.print", NULL, ide_webkit_page_print_action);
 
   g_type_ensure (WEBKIT_TYPE_SETTINGS);
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
@@ -733,4 +744,19 @@ ide_webkit_page_get_view (IdeWebkitPage *self)
   g_return_val_if_fail (IDE_IS_WEBKIT_PAGE (self), NULL);
 
   return GTK_WIDGET (priv->web_view);
+}
+
+void
+ide_webkit_page_print (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  g_autoptr(WebKitPrintOperation) operation = NULL;
+  GtkRoot *root;
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  operation = webkit_print_operation_new (priv->web_view);
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+
+  webkit_print_operation_run_dialog (operation, GTK_WINDOW (root));
 }
