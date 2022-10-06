@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <chergert@redhat.com>
+Copyright=Copyright © 2022 Christian Hergert
+Description=Provides linting of shell scripts using shellcheck
+Embedded=_gbp_shellcheck_register_types
+Module=shellcheck
+Name=Shellcheck
+X-Category=diagnostics
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=sh
