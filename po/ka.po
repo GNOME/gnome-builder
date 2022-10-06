@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-28 15:15+0000\n"
-"PO-Revision-Date: 2022-09-28 20:37+0200\n"
+"POT-Creation-Date: 2022-10-06 18:38+0000\n"
+"PO-Revision-Date: 2022-10-06 23:23+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -1721,7 +1721,7 @@ msgid "Code Navigation"
 msgstr "დოკუმენტის ნავიგაცია"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1559
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1857,6 +1857,10 @@ msgstr "მორგება"
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr ""
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "დაბეჭდვა"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -3731,7 +3735,7 @@ msgstr "სახელი"
 msgid "Architecture"
 msgstr "არქიტექტურა"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4435,12 +4439,12 @@ msgid "Drop Down"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "კონტეინერები/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "კონტეინერები/Podman"
 
@@ -5023,7 +5027,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr ""
+msgstr "CPU -ის გამოყენება"
 
 #: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
@@ -5505,7 +5509,7 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
 msgid "_Tags"
-msgstr ""
+msgstr "_ჭდეები"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
 msgid "_Switch to branch"
