@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Provides integration with the serve-d language server for D
+Embedded=_gbp_served_register_types
+Module=serve-d
+Name=D Language Server (serve-d)
+X-Category=lsps
+X-Completion-Provider-Languages=d
+X-Symbol-Resolver-Languages=d
+X-Diagnostic-Provider-Languages=d
+X-Highlighter-Languages=d
+X-Hover-Provider-Languages=d
+X-Rename-Provider-Languages=d
+X-Formatter-Languages=d
+X-Code-Action-Languages=d

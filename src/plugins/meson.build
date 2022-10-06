@@ -117,6 +117,7 @@ subdir('rstcheck')
 subdir('rubocop')
 subdir('rust-analyzer')
 subdir('sdkui')
+subdir('serve-d')
 subdir('sessionui')
 subdir('shellcheck')
 subdir('shellcmd')
@@ -227,6 +228,7 @@ status += [
   'jedi-language-server ........ (Python) : @0@ **'.format(get_option('plugin_jedi_language_server')),
   'lua-language-server ............ (Lua) : @0@'.format(get_option('plugin_lua_language_server')),
   'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
+  'serve-d .......................... (D) : @0@'.format(get_option('plugin_serve_d')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vls')),
