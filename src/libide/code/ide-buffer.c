@@ -107,6 +107,7 @@ struct _IdeBuffer
   guint                   enable_addins : 1;
   guint                   changed_on_volume : 1;
   guint                   read_only : 1;
+  guint                   has_encoding_error : 1;
   guint                   highlight_diagnostics : 1;
   GtkSourceNewlineType    newline_type : 2;
 };
@@ -157,6 +158,7 @@ enum {
   PROP_FILE,
   PROP_FILE_SETTINGS,
   PROP_HAS_DIAGNOSTICS,
+  PROP_HAS_ENCODING_ERROR,
   PROP_HAS_SYMBOL_RESOLVERS,
   PROP_HIGHLIGHT_DIAGNOSTICS,
   PROP_IS_TEMPORARY,
@@ -249,6 +251,8 @@ static gboolean ide_buffer_can_do_newline_hack     (IdeBuffer              *self
                                                     guint                   len);
 static void     ide_buffer_guess_language          (IdeBuffer              *self);
 static void     ide_buffer_real_loaded             (IdeBuffer              *self);
+static void     _ide_buffer_set_has_encoding_error (IdeBuffer              *self,
+                                                    gboolean                has_encoding_error);
 static void     settle_async                       (IdeBuffer              *self,
                                                     GCancellable           *cancellable,
                                                     GAsyncReadyCallback     callback,
@@ -613,6 +617,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_boolean (value, ide_buffer_has_diagnostics (self));
       break;
 
+    case PROP_HAS_ENCODING_ERROR:
+      g_value_set_boolean (value, ide_buffer_has_encoding_error (self));
+      break;
+
     case PROP_HAS_SYMBOL_RESOLVERS:
       g_value_set_boolean (value, ide_buffer_has_symbol_resolvers (self));
       break;
@@ -862,6 +870,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
     g_param_spec_boolean ("has-diagnostics",
                           "Has Diagnostics",
                           "The diagnostics for the buffer",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_HAS_ENCODING_ERROR] =
+    g_param_spec_boolean ("has-encoding-error", NULL, NULL,
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -1402,6 +1415,27 @@ ide_buffer_progress_cb (goffset  current_num_bytes,
   ide_notification_set_progress (notif, progress);
 }
 
+static gboolean
+should_ignore_load_error (IdeBuffer    *self,
+                          const GError *error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (error != NULL);
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+    return TRUE;
+
+  if (g_error_matches (error, GTK_SOURCE_FILE_LOADER_ERROR, GTK_SOURCE_FILE_LOADER_ERROR_CONVERSION_FALLBACK) ||
+      g_error_matches (error, GTK_SOURCE_FILE_LOADER_ERROR, GTK_SOURCE_FILE_LOADER_ERROR_ENCODING_AUTO_DETECTION_FAILED))
+    {
+      _ide_buffer_set_has_encoding_error (self, TRUE);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_buffer_load_file_cb (GObject      *object,
                          GAsyncResult *result,
@@ -1431,8 +1465,9 @@ ide_buffer_load_file_cb (GObject      *object,
 
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+      if (!should_ignore_load_error (self, error))
         {
+          g_debug ("Failure loading file: %s", error->message);
           ide_buffer_set_state (self, IDE_BUFFER_STATE_FAILED);
           ide_notification_set_progress (state->notif, 0.0);
           ide_task_return_error (task, g_steal_pointer (&error));
@@ -1498,12 +1533,30 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
   ide_task_set_task_data (task, state, load_state_free);
 
   ide_buffer_set_state (self, IDE_BUFFER_STATE_LOADING);
+  _ide_buffer_set_has_encoding_error (self, FALSE);
 
   /* Disable some features while we reload */
   gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (self), FALSE);
   ide_highlight_engine_pause (self->highlight_engine);
 
+  /* Create our loader, inheriting some values like encoding from the
+   * source_file if previously set.
+   */
   loader = gtk_source_file_loader_new (GTK_SOURCE_BUFFER (self), self->source_file);
+
+  /* If the user specified an encoding, make sure that we apply
+   * that when reloading the file.
+   */
+  if (self->encoding != NULL)
+    {
+      g_autofree char *uri = g_file_get_uri (state->file);
+      GSList list = { (gpointer)self->encoding, NULL };
+
+      gtk_source_file_loader_set_candidate_encodings (loader, &list);
+      g_debug ("Using user-selected encoding of %s while loading '%s'",
+               gtk_source_encoding_get_charset (self->encoding), uri);
+    }
+
   gtk_source_file_loader_load_async (loader,
                                      G_PRIORITY_DEFAULT,
                                      cancellable,
@@ -1815,6 +1868,9 @@ ide_buffer_save_file_async (IdeBuffer            *self,
     }
 
   ide_buffer_set_state (self, IDE_BUFFER_STATE_SAVING);
+
+  /* We're attempting to write our contents now, clear error */
+  _ide_buffer_set_has_encoding_error (self, FALSE);
 
   settle_async (self,
                 cancellable,
@@ -4248,6 +4304,7 @@ void
 ide_buffer_set_charset (IdeBuffer  *self,
                         const char *charset)
 {
+  const GtkSourceEncoding *encoding = NULL;
   GSList *all;
 
   g_return_if_fail (IDE_IS_BUFFER (self));
@@ -4259,17 +4316,26 @@ ide_buffer_set_charset (IdeBuffer  *self,
 
   for (const GSList *iter = all; iter; iter = iter->next)
     {
-      const GtkSourceEncoding *encoding = iter->data;
+      const GtkSourceEncoding *candidate_encoding = iter->data;
 
-      if (g_strcmp0 (charset, gtk_source_encoding_get_charset (encoding)) == 0)
+      if (g_strcmp0 (charset, gtk_source_encoding_get_charset (candidate_encoding)) == 0)
         {
-          if (self->encoding != encoding)
-            {
-              self->encoding = encoding;
-              g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHARSET]);
-              break;
-            }
+          encoding = candidate_encoding;
+          break;
         }
+    }
+
+  if (self->encoding != encoding)
+    {
+      self->encoding = encoding;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHARSET]);
+
+      /* We changed encoding and the buffer is not modified. We should just
+       * reload the file using the new encoding so that the user can see the
+       * document as they expected it to.
+       */
+      if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self)))
+        _ide_buffer_load_file_async (self, NULL, NULL, NULL, NULL);
     }
 
   g_slist_free (all);
@@ -4297,4 +4363,40 @@ ide_buffer_set_newline_type (IdeBuffer            *self,
 
   self->newline_type = newline_type;
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NEWLINE_TYPE]);
+}
+
+static void
+_ide_buffer_set_has_encoding_error (IdeBuffer *self,
+                                    gboolean   has_encoding_error)
+{
+  g_assert (IDE_IS_BUFFER (self));
+
+  has_encoding_error = !!has_encoding_error;
+
+  if (has_encoding_error != self->has_encoding_error)
+    {
+      self->has_encoding_error = has_encoding_error;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_ENCODING_ERROR]);
+    }
+}
+
+/**
+ * ide_buffer_has_encoding_error:
+ * @self: a #IdeBuffer
+ *
+ * Gets the "has-encoding-error" property.
+ *
+ * This returns %TRUE if there was an error loading a file due to a failure
+ * to discover the encoding or if character conversions occurred.
+ *
+ * Returns: %FALSE if there were no encoding errors
+ *
+ * Since: 44
+ */
+gboolean
+ide_buffer_has_encoding_error (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return self->has_encoding_error;
 }

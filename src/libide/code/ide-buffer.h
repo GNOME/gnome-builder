@@ -208,5 +208,7 @@ GtkSourceNewlineType    ide_buffer_get_newline_type              (IdeBuffer     
 IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_set_newline_type              (IdeBuffer               *self,
                                                                   GtkSourceNewlineType     newline_type);
+IDE_AVAILABLE_IN_44
+gboolean                ide_buffer_has_encoding_error            (IdeBuffer               *self);
 
 G_END_DECLS
