@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-29 04:12+0000\n"
-"PO-Revision-Date: 2022-10-02 16:20+0200\n"
+"POT-Creation-Date: 2022-10-07 16:54+0000\n"
+"PO-Revision-Date: 2022-10-07 20:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -164,7 +164,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Mogućnost korištenja panela pregleda kako bi vidjeli više datoteka"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:234
 msgid "Build Parallelism"
 msgstr "Paralelizam izgradnje"
 
@@ -537,6 +537,16 @@ msgstr "Zadana licenca"
 msgid "The default license to use for new projects"
 msgstr "Zadana licenca koja se koristi za nove projekte"
 
+#: data/gsettings/org.gnome.builder.gschema.xml:69
+msgid "Inherit Language Server stderr"
+msgstr "Naslijeđeni poslužitelj jezika stderr"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:70
+msgid ""
+"If enabled, stderr of language servers will be redirected to the console."
+msgstr ""
+"Ako je omogućeno, stderr poslužitelja jezika biti će preusmjeren u konzolu."
+
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
 msgstr "Priključak je omogućen"
@@ -685,7 +695,7 @@ msgstr "Novi radni prostor uređivača"
 msgid "D-Bus Inspector"
 msgstr "D-Bus inspektor"
 
-#: src/libide/code/ide-buffer.c:3685
+#: src/libide/code/ide-buffer.c:3741
 msgid "The current language lacks a symbol resolver."
 msgstr "Trenutnom jeziku nedostaje razrješitelj simbola."
 
@@ -765,18 +775,16 @@ msgid "Keyboard Shortcuts"
 msgstr "Prečaci tipkovnice"
 
 #: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
-#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
-#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
-#: src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/gui/gtk/menus.ui:42 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Priručnik"
 
 #: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
-#: src/libide/gui/gtk/menus.ui:50
+#: src/libide/gui/gtk/menus.ui:49
 msgid "About Builder"
 msgstr "O Graditelju"
 
-#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:59
 msgid "_Quit"
 msgstr "_Zatvori"
 
@@ -786,14 +794,13 @@ msgstr "Dokument"
 
 #: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
 #: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
-#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
-#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
-#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
+#: src/libide/gui/gtk/menus.ui:55 src/libide/gui/gtk/menus.ui:68
+#: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
 #: src/plugins/menu-search/gtk/menus.ui:23
 #: src/plugins/menu-search/gtk/menus.ui:52
-#: src/plugins/web-browser/gtk/menus.ui:15
+#: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplikacija"
 
@@ -818,8 +825,8 @@ msgstr "Uređivač teksta"
 msgid "Search & Replace"
 msgstr "Pretraži i zamijeni"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
-#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:69
+#: src/libide/gui/gtk/menus.ui:73 src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "Dokumenti"
 
@@ -839,6 +846,7 @@ msgid "Failed to open file: %s"
 msgstr "Neuspjelo otvaranje datoteke: %s"
 
 #: src/libide/editor/ide-editor-info-bar.c:85
+#: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
 msgstr "_Odbaci promjene i ponovno učitaj"
 
@@ -850,34 +858,17 @@ msgstr "Datoteka je promijenjena na disku"
 msgid "The file has been changed by another program."
 msgstr "Datoteka je promijenjena od strane drugog programa."
 
+#: src/libide/editor/ide-editor-info-bar.c:99
+msgid "File Contains Encoding Errors"
+msgstr "Datoteka sadrži greške kôdiranja"
+
 #: src/libide/editor/ide-editor-info-bar.c:100
-msgid "Save _As…"
-msgstr "Spremi _kao…"
-
-#: src/libide/editor/ide-editor-info-bar.c:102
-msgid "Buffer Restored"
-msgstr "Međuspremnik je obnocljen"
-
-#: src/libide/editor/ide-editor-info-bar.c:103
-msgid "Unsaved buffer has been restored."
-msgstr "Nespremljeni međuspremnik je obnovljen."
-
-#: src/libide/editor/ide-editor-info-bar.c:109
-msgid "_Save…"
-msgstr "_Spremi…"
-
-#: src/libide/editor/ide-editor-info-bar.c:111
-#: src/libide/editor/ide-editor-info-bar.ui:81
-msgid "_Discard…"
-msgstr "_Odbaci…"
-
-#: src/libide/editor/ide-editor-info-bar.c:113
-msgid "Draft Changes Restored"
-msgstr "Promjene skice su obnovljene"
-
-#: src/libide/editor/ide-editor-info-bar.c:114
-msgid "Unsaved changes to the buffer have been restored."
-msgstr "Nespremljene promjene u međuspremniku su obnovljene."
+msgid ""
+"The encoding used to load the file detected errors. You may select an "
+"alternate encoding from the statusbar and reload."
+msgstr ""
+"Kôdiranje koje se koristi za učitavanje datoteke s otkrivenim greškama. "
+"Možete odabrati zamjensko kôdiranje iz trake stanja i ponovno učitati."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -902,6 +893,10 @@ msgstr "Dokument je obnovljen"
 #: src/libide/editor/ide-editor-info-bar.ui:73
 msgid "Unsaved document has been restored."
 msgstr "Nespremljeni dokument je obnovljen."
+
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Odbaci…"
 
 #. translators: %s is the error message
 #: src/libide/editor/ide-editor-page.c:494
@@ -1004,7 +999,7 @@ msgid "Line Ending:"
 msgstr "Završetak retka:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:101
+#: src/plugins/create-project/gbp-create-project-widget.ui:93
 msgid "Language"
 msgstr "Jezik"
 
@@ -1404,6 +1399,11 @@ msgstr "Pritisnite Escape za prekidanje ili Backspace za onemogućavanje."
 msgid "Close Project"
 msgstr "Zatvori projekt"
 
+#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:362
+msgid "General"
+msgstr "Općenito"
+
 #: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
 msgstr "Promijeni osobitosti aplikacije"
@@ -1412,22 +1412,30 @@ msgstr "Promijeni osobitosti aplikacije"
 msgid "Find keyboard shortcuts"
 msgstr "Potraži prečace tipkovnice"
 
-#: src/libide/gui/gtk/menus.ui:52
+#: src/libide/gui/gtk/menus.ui:43
+msgid "Get help with using Builder"
+msgstr "Nabavite pomoć za korištenje Graditelja"
+
+#: src/libide/gui/gtk/menus.ui:51
 msgid "Show information about Builder"
 msgstr "Prikaži informacije o Graditelju"
 
-#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
+#: src/libide/gui/gtk/menus.ui:60
+msgid "Quit without saving changes"
+msgstr "Zatvori bez spremanja promjena"
+
+#: src/libide/gui/gtk/menus.ui:77 src/plugins/web-browser/gtk/menus.ui:17
 msgid "Web Browsing"
 msgstr "Web pregledavanje"
 
-#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/libide/gui/gtk/menus.ui:82
+#: src/libide/gui/gtk/menus.ui:81
 msgid "New Terminals"
 msgstr "Novi terminali"
 
@@ -1536,8 +1544,8 @@ msgstr "Zaustavi pokretanje"
 msgid "Run project"
 msgstr "Pokreni projekt"
 
-#: src/libide/gui/ide-shortcut-window.c:239
-#: src/libide/gui/ide-shortcut-window.c:265
+#: src/libide/gui/ide-shortcut-window.c:250
+#: src/libide/gui/ide-shortcut-window.c:276
 msgid "Other"
 msgstr "Ostalo"
 
@@ -1568,13 +1576,13 @@ msgstr[1] "Instalacija %u paketa"
 msgstr[2] "Instalacija %u paketa"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1522
+#: src/libide/lsp/ide-lsp-client.c:1530
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Neupjelo pokretanje poslužitelja jezika: %s"
 
 #: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/create-project/gbp-create-project-widget.ui:115
+#: src/plugins/create-project/gbp-create-project-widget.ui:107
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Upravljanje inačicom"
@@ -1583,7 +1591,7 @@ msgstr "Upravljanje inačicom"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/plugins/ide-plugin.c:342
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
 msgid "Language Servers"
 msgstr "Poslužitelji jezika"
 
@@ -1782,7 +1790,7 @@ msgid "Code Navigation"
 msgstr "Navigacija kôda"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1555
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1907,7 +1915,7 @@ msgstr "bez inačice"
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
 msgid "None"
-msgstr "NIjedan"
+msgstr "Nijedan"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
@@ -1920,6 +1928,10 @@ msgstr "Postavke"
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr "Dopusti JavaScript"
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Ispis"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -2485,10 +2497,6 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Izgradnja i alati"
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
-msgid "General"
-msgstr "Općenito"
-
 #: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
 msgid "History"
 msgstr "Povijest"
@@ -2509,78 +2517,86 @@ msgstr "Brisanje zapisa izgradnje"
 msgid "Clear the build log history when a new build begins"
 msgstr "Obriši povijest zapisa izgradnje kada se nova izgradnja pokrene"
 
-#: src/plugins/buildui/tweaks.ui:214
+#: src/plugins/buildui/tweaks.ui:217
+msgid "Log to Console"
+msgstr "Zapisuj u konzolu"
+
+#: src/plugins/buildui/tweaks.ui:218
+msgid "Redirect language server error logs to stderr"
+msgstr "Preusmjeri zapisivanje greški poslužitelja jezika u stderr"
+
+#: src/plugins/buildui/tweaks.ui:231
 msgid "Workers"
 msgstr "Radnici"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:235
 msgid "Number of workers to use when performing builds"
 msgstr "Broj radnika koji se koriste pri izgradnji"
 
-#: src/plugins/buildui/tweaks.ui:227
+#: src/plugins/buildui/tweaks.ui:244
 msgid "Default"
 msgstr "Zadano"
 
-#: src/plugins/buildui/tweaks.ui:233
+#: src/plugins/buildui/tweaks.ui:250
 msgid "1 per CPU"
 msgstr "1 po CPU"
 
-#: src/plugins/buildui/tweaks.ui:239
+#: src/plugins/buildui/tweaks.ui:256
 msgid "1"
 msgstr "1"
 
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/buildui/tweaks.ui:262 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
 msgstr "2"
 
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/buildui/tweaks.ui:268 src/plugins/editorui/gtk/menus.ui:25
 #: src/plugins/editorui/gtk/menus.ui:61
 msgid "4"
 msgstr "4"
 
-#: src/plugins/buildui/tweaks.ui:257
+#: src/plugins/buildui/tweaks.ui:274
 msgid "6"
 msgstr "6"
 
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/buildui/tweaks.ui:280 src/plugins/editorui/gtk/menus.ui:35
 #: src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
 msgstr "8"
 
-#: src/plugins/buildui/tweaks.ui:269
+#: src/plugins/buildui/tweaks.ui:286
 msgid "16"
 msgstr "16"
 
-#: src/plugins/buildui/tweaks.ui:275
+#: src/plugins/buildui/tweaks.ui:292
 msgid "32"
 msgstr "32"
 
-#: src/plugins/buildui/tweaks.ui:281
+#: src/plugins/buildui/tweaks.ui:298
 msgid "64"
 msgstr "64"
 
-#: src/plugins/buildui/tweaks.ui:287
+#: src/plugins/buildui/tweaks.ui:304
 msgid "128"
 msgstr "128"
 
-#: src/plugins/buildui/tweaks.ui:293
+#: src/plugins/buildui/tweaks.ui:310
 msgid "256"
 msgstr "256"
 
-#: src/plugins/buildui/tweaks.ui:299
+#: src/plugins/buildui/tweaks.ui:316
 msgid "512"
 msgstr "512"
 
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:330
 msgid "Tooling"
 msgstr "Alati"
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:365
 msgid "Installation Prefix"
 msgstr "Prefiks instalacije"
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:366
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2588,11 +2604,11 @@ msgstr ""
 "Projekt će biti instaliran u ovaj direktorij tijekom faze instalacije "
 "slivnika izgradnje."
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:384
 msgid "Configure Options"
 msgstr "Mogućnosti podešavanja"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:397
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2600,11 +2616,11 @@ msgstr ""
 "Ove mogućnosti koristi sustav izgradnje za podešavanje projekta tijekom faze "
 "podešavanja slivnika izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:404
 msgid "Build Environment"
 msgstr "Okruženje izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:420
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2617,6 +2633,7 @@ msgid "Fetch dependencies"
 msgstr "Preuzmi zavisnosti"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/dub/gbp-dub-pipeline-addin.c:150
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:237
 msgid "Build project"
 msgstr "Izgradi projekt"
@@ -2867,15 +2884,15 @@ msgstr "Odaberi lokaciju"
 msgid "Failed to Create Project"
 msgstr "Neuspjelo stvaranje projekta"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:18
+#: src/plugins/create-project/gbp-create-project-widget.ui:10
 msgid "Project Name"
 msgstr "Naziv projekta"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:24
+#: src/plugins/create-project/gbp-create-project-widget.ui:16
 msgid "A subdirectory with this name already exists"
 msgstr "Poddirektorij tog naziva već postoji"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:31
+#: src/plugins/create-project/gbp-create-project-widget.ui:23
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -2884,11 +2901,11 @@ msgstr ""
 "Jedinstveni naziv koji se koristi za mapu projekta i druge resurse. Naziv "
 "mora sadržavati mala slova bez razmaka i ne smije započeti brojem."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:47
+#: src/plugins/create-project/gbp-create-project-widget.ui:39
 msgid "Application ID…"
 msgstr "ID aplikacije…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:53
+#: src/plugins/create-project/gbp-create-project-widget.ui:45
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -2896,7 +2913,7 @@ msgstr ""
 "Obrnuti identifikator naziva domene korišten za identifikaciju aplikacije, "
 "poput \"org.gnome.Builder\". Ne smije sadržavati crtice."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:69
+#: src/plugins/create-project/gbp-create-project-widget.ui:61
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
 #: src/plugins/grep/gbp-grep-panel.c:744
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
@@ -2905,20 +2922,20 @@ msgstr ""
 msgid "Location"
 msgstr "Lokacija"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:85
+#: src/plugins/create-project/gbp-create-project-widget.ui:77
 msgid "The project will be created in a new subdirectory."
 msgstr "Projekt će biti stvoren u novom poddirektoriju."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/create-project/gbp-create-project-widget.ui:100
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Licenca"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:127
+#: src/plugins/create-project/gbp-create-project-widget.ui:119
 msgid "Template"
 msgstr "Predložak"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:183
+#: src/plugins/create-project/gbp-create-project-widget.ui:178
 msgid "Create Project"
 msgstr "Stvori projekt"
 
@@ -3208,10 +3225,10 @@ msgstr "Vrati izvorno"
 msgid "Reverts language preferences to application defaults"
 msgstr "Vraća izvorne osobitosti jezika aplikacije"
 
-#. translators: "Text" means plaintext or text/plain
+#. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
-msgid "Text"
-msgstr "Tekst"
+msgid "Plain Text"
+msgstr "Običan tekst"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
@@ -3793,6 +3810,10 @@ msgstr "Obnovi položaj pokazivača"
 msgid "Jump to the last position when re-opening a file"
 msgstr "Idi na posljednji položaj pri ponovnom otvaranju datoteke"
 
+#: src/plugins/file-search/gbp-file-search-index.c:401
+msgid "Open file or folder"
+msgstr "Otvori datoteku ili mapu"
+
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Slične datoteke (Ctrl+Shift+O)"
@@ -3846,7 +3867,7 @@ msgstr "Naziv"
 msgid "Architecture"
 msgstr "Arhitektura"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4560,12 +4581,12 @@ msgid "Drop Down"
 msgstr "Padajuća"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:685
+#: src/plugins/podman/gbp-podman-runtime.c:656
 msgid "Containers/Toolbox"
 msgstr "Spremnici/Alati"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:691
+#: src/plugins/podman/gbp-podman-runtime.c:662
 msgid "Containers/Podman"
 msgstr "Spremnici/Podman"
 
@@ -5680,24 +5701,28 @@ msgstr "Vim"
 msgid "New _Browser Page"
 msgstr "Nova _stranica preglednika"
 
-#: src/plugins/web-browser/gtk/menus.ui:18
-#: src/plugins/web-browser/gtk/menus.ui:24
+#: src/plugins/web-browser/gtk/menus.ui:9
+msgid "Open a web browser in a new page"
+msgstr "Otvori web preglednika u novoj stranici"
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+#: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload Page"
 msgstr "Ponovno učitaj stranicu"
 
-#: src/plugins/web-browser/gtk/menus.ui:19
+#: src/plugins/web-browser/gtk/menus.ui:20
 msgid "Reload the current page"
 msgstr "Ponovno učitaj trenutnu stranicu"
 
-#: src/plugins/web-browser/gtk/menus.ui:25
+#: src/plugins/web-browser/gtk/menus.ui:26
 msgid "Reload the current page ignoring cache"
 msgstr "Ponovno učitaj trenutnu stranicu zanemarujući predmemoriju"
 
-#: src/plugins/web-browser/gtk/menus.ui:30
+#: src/plugins/web-browser/gtk/menus.ui:31
 msgid "Focus Location"
 msgstr "Fokusiraj lokaciju"
 
-#: src/plugins/web-browser/gtk/menus.ui:31
+#: src/plugins/web-browser/gtk/menus.ui:32
 msgid "Focus the current page's location"
 msgstr "Fokusiraj lokaciju trenutne stranice"
 
@@ -5709,6 +5734,27 @@ msgstr "Nemoguće stvaranje XML stabla."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Datoteka mora biti spremljena lokalno kako bi se mogla obraditi."
+
+#~ msgid "Save _As…"
+#~ msgstr "Spremi _kao…"
+
+#~ msgid "Buffer Restored"
+#~ msgstr "Međuspremnik je obnocljen"
+
+#~ msgid "Unsaved buffer has been restored."
+#~ msgstr "Nespremljeni međuspremnik je obnovljen."
+
+#~ msgid "_Save…"
+#~ msgstr "_Spremi…"
+
+#~ msgid "Draft Changes Restored"
+#~ msgstr "Promjene skice su obnovljene"
+
+#~ msgid "Unsaved changes to the buffer have been restored."
+#~ msgstr "Nespremljene promjene u međuspremniku su obnovljene."
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
 
 #~ msgid "Restore Previous Files"
 #~ msgstr "Vrati prijašnje datoteke"
