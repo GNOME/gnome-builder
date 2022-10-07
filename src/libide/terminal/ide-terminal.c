@@ -146,37 +146,6 @@ ide_terminal_update_clipboard_actions (IdeTerminal *self)
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.paste", can_paste);
 }
 
-static char *
-ide_terminal_get_pattern_at_coords (IdeTerminal *self,
-                                    double       x,
-                                    double       y)
-{
-  g_autofree gchar *pattern = NULL;
-  glong cell_width;
-  glong cell_height;
-  glong column, row;
-  int tag = 0;
-
-  g_assert (IDE_IS_TERMINAL (self));
-
-  cell_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
-  cell_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
-
-  /* crappy way to do this, but i dont see another option right
-   * now given we have to go through deprecated APIs in Vte
-   * until it gets things together for GTK 4.
-   */
-  column = x / cell_width;
-  row = y / cell_height;
-
-  /* no other option in VTE for GTK 4 right now */
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  pattern = vte_terminal_match_check (VTE_TERMINAL (self), column, row, &tag);
-  G_GNUC_END_IGNORE_DEPRECATIONS
-
-  return g_steal_pointer (&pattern);
-}
-
 static void
 ide_terminal_update_url_actions (IdeTerminal *self,
                                  double       x,
@@ -184,12 +153,13 @@ ide_terminal_update_url_actions (IdeTerminal *self,
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   g_autofree char *pattern = NULL;
+  int tag = 0;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TERMINAL (self));
 
-  pattern = ide_terminal_get_pattern_at_coords (self, x, y);
+  pattern = vte_terminal_check_match_at (VTE_TERMINAL (self), x, y, &tag);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy-link", pattern != NULL);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", pattern != NULL);
