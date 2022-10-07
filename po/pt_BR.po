@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
-"PO-Revision-Date: 2022-09-27 10:03-0300\n"
+"POT-Creation-Date: 2022-10-06 03:14+0000\n"
+"PO-Revision-Date: 2022-10-07 13:52-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1798,7 +1798,7 @@ msgid "Code Navigation"
 msgstr "Navegação de código"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1556
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1937,6 +1937,10 @@ msgstr "Configurações"
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr "Permitir JavaScript"
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Imprimir"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -3871,7 +3875,7 @@ msgstr "Nome"
 msgid "Architecture"
 msgstr "Arquitetura"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4278,7 +4282,7 @@ msgstr "Exibe erros e avisos encontrados durante a compilação"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:624
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "Carregar introspecção do Meson"
 
@@ -4580,12 +4584,12 @@ msgid "Drop Down"
 msgstr "Menu suspenso"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Contêineres/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Contêineres/Podman"
 
