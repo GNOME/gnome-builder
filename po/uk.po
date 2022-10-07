@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
-"PO-Revision-Date: 2022-09-27 08:44+0300\n"
+"POT-Creation-Date: 2022-10-06 03:14+0000\n"
+"PO-Revision-Date: 2022-10-07 18:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -522,12 +522,10 @@ msgid "Directory for all Builder projects."
 msgstr "Каталог для всіх ваших проєктів «Будівника»."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#| msgid "Restore Previous Session"
 msgid "Restore Session"
 msgstr "Відновити сеанс"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-#| msgid "Restore previously opened files when loading a project."
 msgid "Restores the projects previous session when loading."
 msgstr "Відновлювати попередній сеанс проєктів після запуску програми."
 
@@ -1801,7 +1799,7 @@ msgid "Code Navigation"
 msgstr "Навігація кодом"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1556
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1943,6 +1941,11 @@ msgstr "Параметри"
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr "Дозволити JavaScript"
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+#| msgid "Printing"
+msgid "Print"
+msgstr "Надрукувати"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -3874,7 +3877,7 @@ msgstr "Назва"
 msgid "Architecture"
 msgstr "Архітектура"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4282,7 +4285,7 @@ msgstr "Показати помилки і попередження, які бу
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:624
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "Завантажити інтроспекцію Meson"
 
@@ -4585,12 +4588,12 @@ msgid "Drop Down"
 msgstr "Спадний список"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Контейнери/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
