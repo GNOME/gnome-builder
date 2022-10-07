@@ -282,6 +282,8 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
 
+  IDE_TRACE_MSG ("n_presses=%d x=%lf y=%lf button=%d", n_presses, x, y, button);
+
   if (button == 1)
     {
       if (priv->url != NULL)
