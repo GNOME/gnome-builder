@@ -444,181 +444,32 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
 }
 
 static gboolean
-ide_source_view_maybe_delete_match (IdeSourceView *self)
-{
-  GtkTextBuffer *buffer;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-  GtkTextIter prev;
-  gunichar ch;
-  gunichar match;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  insert = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
-  prev = iter;
-  if (!gtk_text_iter_backward_char (&prev))
-    return FALSE;
-
-  ch = gtk_text_iter_get_char (&prev);
-
-  switch (ch)
-    {
-    case '[':  match = ']';  break;
-    case '{':  match = '}';  break;
-    case '(':  match = ')';  break;
-    case '"':  match = '"';  break;
-    case '\'': match = '\''; break;
-    default:   match = 0;    break;
-    }
-
-  if (match && (gtk_text_iter_get_char (&iter) == match))
-    {
-      gtk_text_iter_forward_char (&iter);
-      gtk_text_buffer_delete (buffer, &prev, &iter);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 ide_source_view_key_pressed_cb (IdeSourceView         *self,
                                 guint                  keyval,
                                 guint                  keycode,
                                 GdkModifierType        state,
                                 GtkEventControllerKey *key)
 {
-  GtkTextBuffer *buffer;
-
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
 
-  buffer = GTK_TEXT_BUFFER (self->buffer);
+  self->in_backspace = keyval == GDK_KEY_BackSpace;
+  self->in_key_press = TRUE;
 
-  if (self->overwrite_braces &&
-      !gtk_text_buffer_get_has_selection (buffer))
-    {
-      GtkTextIter iter;
-      gunichar ch;
-      gboolean overwrite;
+  return FALSE;
+}
 
-      gtk_text_buffer_get_selection_bounds (buffer, &iter, NULL);
-      ch = gtk_text_iter_get_char (&iter);
+static gboolean
+ide_source_view_key_released_cb (IdeSourceView         *self,
+                                 guint                  keyval,
+                                 guint                  keycode,
+                                 GdkModifierType        state,
+                                 GtkEventControllerKey *key)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
 
-      switch (keyval)
-        {
-        case GDK_KEY_quotedbl:
-          overwrite = ch == '"';
-          break;
-
-        case GDK_KEY_parenright:
-          overwrite = ch == ')';
-          break;
-
-        case GDK_KEY_apostrophe:
-          overwrite = ch == '\'';
-          break;
-
-        case GDK_KEY_greater:
-          overwrite = ch == '>';
-          break;
-
-        case GDK_KEY_bracketright:
-          overwrite = ch == ']';
-          break;
-
-        case GDK_KEY_braceright:
-          overwrite = ch == '}';
-          break;
-
-        default:
-          overwrite = FALSE;
-          break;
-        }
-
-      if (overwrite)
-        {
-          GtkTextIter next = iter;
-          g_autofree char *text = NULL;
-
-          gtk_text_iter_forward_char (&next);
-          gtk_text_buffer_begin_user_action (buffer);
-          gtk_text_buffer_select_range (buffer, &iter, &next);
-          text = gtk_text_iter_get_slice (&iter, &next);
-          gtk_text_buffer_delete (buffer, &iter, &next);
-          gtk_text_buffer_insert (buffer, &iter, text, -1);
-          gtk_text_buffer_end_user_action (buffer);
-
-          return TRUE;
-        }
-    }
-
-  if (self->insert_matching_brace &&
-      !gtk_text_buffer_get_has_selection (buffer))
-    {
-      const char *insert = NULL;
-      GtkTextIter iter;
-
-      if (keyval == GDK_KEY_BackSpace)
-        {
-          if (ide_source_view_maybe_delete_match (self))
-            return TRUE;
-        }
-
-      gtk_text_buffer_get_selection_bounds (buffer, &iter, NULL);
-
-      switch (keyval)
-        {
-        case GDK_KEY_bracketleft:
-          insert = "[]";
-          break;
-
-        case GDK_KEY_braceleft:
-          insert = "{}";
-          break;
-
-        case GDK_KEY_apostrophe:
-          insert = "''";
-          break;
-
-        case GDK_KEY_parenleft:
-          insert = "()";
-          break;
-
-        case GDK_KEY_quotedbl:
-          insert = "\"\"";
-          break;
-
-#if 0
-        /* We don't do this because it makes it very annoying to do things
-         * like << in any language, without much benefit for Foo<T>.
-         *
-         * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1824
-         */
-        case GDK_KEY_less:
-          insert = "<>";
-          break;
-#endif
-
-        default:
-          break;
-        }
-
-      if (insert)
-        {
-          gtk_text_buffer_begin_user_action (buffer);
-          gtk_text_buffer_insert (buffer, &iter, insert, -1);
-          gtk_text_iter_backward_char (&iter);
-          gtk_text_buffer_select_range (buffer, &iter, &iter);
-          gtk_text_buffer_end_user_action (buffer);
-
-          return TRUE;
-        }
-    }
+  self->in_key_press = FALSE;
 
   return FALSE;
 }
@@ -660,6 +511,115 @@ ide_source_view_buffer_notify_language_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view_insert_text_cb (IdeSourceView *self,
+                                GtkTextIter   *location,
+                                const char    *text,
+                                int            length,
+                                IdeBuffer     *buffer)
+{
+  const char *match = NULL;
+  GtkTextIter insert;
+  gunichar overwrite = 0;
+  gunichar ch;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (text != NULL);
+  g_assert (location != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (length != 1 || !self->in_key_press)
+    return;
+
+  ide_buffer_get_selection_bounds (buffer, &insert, NULL);
+
+  /* Do we want to allow selection overwrite to "" instead of "? */
+  if (gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer)))
+    return;
+
+  if (!gtk_text_iter_equal (&insert, location))
+    return;
+
+  ch = g_utf8_get_char (text);
+
+  switch (ch)
+    {
+    case '{': match = "}"; break;
+    case '[': match = "]"; break;
+    case '(': match = ")"; break;
+    case '"': match = "\""; overwrite = ch; break;
+    case '\'': match = "'"; overwrite = ch; break;
+    case '}': case ']': case ')': overwrite = ch; break;
+    default: break;
+    }
+
+  /* "Overwrite" the next character if necessary */
+  if (overwrite != 0 &&
+      self->overwrite_braces &&
+      gtk_text_iter_get_char (location) == overwrite)
+    {
+      gtk_text_iter_forward_char (location);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer),
+                                    location, location);
+      g_signal_stop_emission_by_name (buffer, "insert-text");
+      return;
+    }
+
+  /* Insert a match if necessary */
+  if (match != NULL &&
+      self->insert_matching_brace &&
+      gtk_text_iter_get_char (location) != match[0])
+    {
+      guint offset = gtk_text_iter_get_offset (location);
+
+      self->in_key_press = FALSE;
+      gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), location, match, 1);
+      gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), location, offset);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), location, location);
+      self->in_key_press = TRUE;
+    }
+}
+
+static void
+ide_source_view_delete_range_cb (IdeSourceView *self,
+                                 GtkTextIter   *begin,
+                                 GtkTextIter   *end,
+                                 IdeBuffer     *buffer)
+{
+  GtkTextIter prev;
+  gunichar match = 0;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!self->in_key_press ||
+      !self->in_backspace ||
+      !self->insert_matching_brace)
+    return;
+
+  gtk_text_iter_order (begin, end);
+  prev = *end;
+  gtk_text_iter_backward_char (&prev);
+
+  switch (gtk_text_iter_get_char (&prev))
+    {
+    case '{': match = '}'; break;
+    case '[': match = ']'; break;
+    case '(': match = ')'; break;
+    case '"': match = '"'; break;
+    case '\'': match = '\''; break;
+    default: break;
+    }
+
+  /* Remove matching }])"' */
+  if (match && gtk_text_iter_get_char (end) == match)
+    gtk_text_iter_forward_char (end);
+}
+
+static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
@@ -694,6 +654,18 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   g_signal_connect_object (buffer,
                            "notify::style-scheme",
                            G_CALLBACK (ide_source_view_update_css),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Insert matching braces features */
+  g_signal_connect_object (buffer,
+                           "insert-text",
+                           G_CALLBACK (ide_source_view_insert_text_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (buffer,
+                           "delete-range",
+                           G_CALLBACK (ide_source_view_delete_range_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -1464,6 +1436,10 @@ ide_source_view_init (IdeSourceView *self)
   g_signal_connect_swapped (key,
                             "key-pressed",
                             G_CALLBACK (ide_source_view_key_pressed_cb),
+                            self);
+  g_signal_connect_swapped (key,
+                            "key-released",
+                            G_CALLBACK (ide_source_view_key_released_cb),
                             self);
   ide_source_view_add_controller (self, 0, key);
 
