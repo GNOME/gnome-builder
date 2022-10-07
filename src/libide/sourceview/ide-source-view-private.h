@@ -80,6 +80,8 @@ struct _IdeSourceView
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;
   guint overwrite_braces : 1;
+  guint in_key_press : 1;
+  guint in_backspace : 1;
 };
 
 
