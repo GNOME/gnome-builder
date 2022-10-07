@@ -174,20 +174,6 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
 }
 
 static void
-gbp_rust_analyzer_service_configure_launcher (IdeLspService         *service,
-                                              IdePipeline           *pipeline,
-                                              IdeSubprocessLauncher *launcher)
-{
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_RUST_ANALYZER_SERVICE (service));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
-
-  IDE_EXIT;
-}
-
-static void
 gbp_rust_analyzer_service_dispose (GObject *object)
 {
   GbpRustAnalyzerService *self = (GbpRustAnalyzerService *)object;
@@ -207,7 +193,6 @@ gbp_rust_analyzer_service_class_init (GbpRustAnalyzerServiceClass *klass)
   object_class->dispose = gbp_rust_analyzer_service_dispose;
 
   lsp_service_class->configure_client = gbp_rust_analyzer_service_configure_client;
-  lsp_service_class->configure_launcher = gbp_rust_analyzer_service_configure_launcher;
 }
 
 static void

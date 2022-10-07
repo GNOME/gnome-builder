@@ -48,15 +48,15 @@ gbp_lua_service_configure_client (IdeLspService *service,
 }
 
 static void
-gbp_lua_service_configure_launcher (IdeLspService         *service,
-                                    IdePipeline           *pipeline,
-                                    IdeSubprocessLauncher *launcher)
+gbp_lua_service_prepare_run_context (IdeLspService *service,
+                                     IdePipeline   *pipeline,
+                                     IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_LUA_SERVICE (service));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   /* Options:
    *
@@ -79,7 +79,7 @@ gbp_lua_service_class_init (GbpLuaServiceClass *klass)
   IdeLspServiceClass *lsp_service_class = IDE_LSP_SERVICE_CLASS (klass);
 
   lsp_service_class->configure_client = gbp_lua_service_configure_client;
-  lsp_service_class->configure_launcher = gbp_lua_service_configure_launcher;
+  lsp_service_class->prepare_run_context = gbp_lua_service_prepare_run_context;
 }
 
 static void

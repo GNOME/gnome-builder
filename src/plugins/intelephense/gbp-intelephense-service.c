@@ -140,18 +140,17 @@ gbp_intelephense_service_configure_client (IdeLspService *service,
 }
 
 static void
-gbp_intelephense_service_configure_launcher (IdeLspService         *service,
-                                             IdePipeline           *pipeline,
-                                             IdeSubprocessLauncher *launcher)
+gbp_intelephense_service_prepare_run_context (IdeLspService *service,
+                                              IdePipeline   *pipeline,
+                                              IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_SERVICE (service));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  ide_subprocess_launcher_push_argv (launcher, "--stdio");
-  ide_subprocess_launcher_append_path (launcher, "/app/bin");
+  ide_run_context_append_argv (run_context, "--stdio");
 
   IDE_EXIT;
 }
@@ -175,7 +174,7 @@ gbp_intelephense_service_class_init (GbpIntelephenseServiceClass *klass)
   object_class->dispose = gbp_intelephense_service_dispose;
 
   lsp_service_class->configure_client = gbp_intelephense_service_configure_client;
-  lsp_service_class->configure_launcher = gbp_intelephense_service_configure_launcher;
+  lsp_service_class->prepare_run_context = gbp_intelephense_service_prepare_run_context;
 }
 
 static void

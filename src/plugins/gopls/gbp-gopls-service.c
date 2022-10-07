@@ -51,47 +51,17 @@ gbp_gopls_service_configure_client (IdeLspService *service,
 }
 
 static void
-gbp_gopls_service_configure_launcher (IdeLspService         *service,
-                                      IdePipeline           *pipeline,
-                                      IdeSubprocessLauncher *launcher)
+gbp_gopls_service_prepare_run_context (IdeLspService *service,
+                                       IdePipeline   *pipeline,
+                                       IdeRunContext *run_context)
 {
-  const char *user_shell;
-
   IDE_ENTRY;
 
   g_assert (GBP_IS_GOPLS_SERVICE (service));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  /* First add our necessary "serve" argument */
-  ide_subprocess_launcher_push_argv (launcher, "serve");
-
-  /* Bash will load the host $PATH and $GOPATH (and optionally $GOROOT)
-   * for us.  This does mean there will be a possible .bashrc vs
-   * .bash_profile discrepancy. Possibly there is a better native way to
-   * make sure that builder running in flatpak can run processes in the
-   * host context with the host's $PATH.
-   */
-
-  /* Now we need to convert the arguments into something we can pass to
-   * $SHELL --login -c if the shell supports that.
-   */
-  if ((user_shell = ide_get_user_shell ()) &&
-      ide_shell_supports_dash_c (user_shell) &&
-      ide_shell_supports_dash_login (user_shell))
-    {
-      const char * const *argv = ide_subprocess_launcher_get_argv (launcher);
-      g_autoptr(GPtrArray) ar = g_ptr_array_new_with_free_func (g_free);
-      g_autofree char *quoted = NULL;
-
-      for (guint i = 0; argv[i]; i++)
-        g_ptr_array_add (ar, g_shell_quote (argv[i]));
-      g_ptr_array_add (ar, NULL);
-
-      quoted = g_strjoinv (" ", (char **)(gpointer)ar->pdata);
-      ide_subprocess_launcher_set_argv (launcher,
-                                        IDE_STRV_INIT (user_shell, "-l", "-c", quoted));
-    }
+  ide_run_context_append_argv (run_context, "serve");
 
   IDE_EXIT;
 }
@@ -102,7 +72,7 @@ gbp_gopls_service_class_init (GbpGoplsServiceClass *klass)
   IdeLspServiceClass *lsp_service_class = IDE_LSP_SERVICE_CLASS (klass);
 
   lsp_service_class->configure_client = gbp_gopls_service_configure_client;
-  lsp_service_class->configure_launcher = gbp_gopls_service_configure_launcher;
+  lsp_service_class->prepare_run_context = gbp_gopls_service_prepare_run_context;
 }
 
 static void
