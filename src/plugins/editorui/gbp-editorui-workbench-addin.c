@@ -295,6 +295,7 @@ gbp_editorui_workbench_addin_class_init (GbpEditoruiWorkbenchAddinClass *klass)
 {
   overrides = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_add (overrides, (char *)".dts"); /* #1572 */
+  g_hash_table_add (overrides, (char *)".mod"); /* #1863 */
 }
 
 static void
