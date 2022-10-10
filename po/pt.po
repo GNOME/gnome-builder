@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
-"PO-Revision-Date: 2022-09-28 14:15+0100\n"
+"POT-Creation-Date: 2022-10-06 03:14+0000\n"
+"PO-Revision-Date: 2022-10-10 14:21+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1785,7 +1785,7 @@ msgid "Code Navigation"
 msgstr "Navegação de código"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1556
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1924,6 +1924,10 @@ msgstr "Definições"
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr "Permitir JavaScript"
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Imprimir"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -3850,7 +3854,7 @@ msgstr "Nome"
 msgid "Architecture"
 msgstr "Arquitetura"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4257,7 +4261,7 @@ msgstr "Mostrar erros e alertas encontrados durante a compilação"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:624
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "Carregar introspecção do Meson"
 
@@ -4559,12 +4563,12 @@ msgid "Drop Down"
 msgstr "Suspenso"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Contentores/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Contentores/Podman"
 
@@ -4836,7 +4840,7 @@ msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the Proc Macros feature of rust-analyzer"
-msgstr "ativa a funcionalidade de Macros Proc do analisador rust"
+msgstr "Ativa a funcionalidade de Macros Proc do analisador rust"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
 msgid "Cargo Build Scripts"
