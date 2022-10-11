@@ -185,16 +185,12 @@ gbp_editorui_application_addin_handle_command_line (IdeApplicationAddin     *add
   g_assert (IDE_IS_APPLICATION (app));
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
-  g_print ("handle command line\n");
-
   argv = g_application_command_line_get_arguments (cmdline, &argc);
 
   if ((options = g_application_command_line_get_options_dict (cmdline)) &&
       g_variant_dict_contains (options, "editor"))
     {
       ide_application_set_workspace_type (application, IDE_TYPE_EDITOR_WORKSPACE);
-
-      g_print ("argc: %d\n", argc);
 
       /* Just open the editor workspace if no files were specified */
       if (argc < 2)
