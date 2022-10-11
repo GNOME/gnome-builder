@@ -277,19 +277,16 @@ get_unchecked_start_cb (gsize                   offset,
 {
   GetUncheckedRange *range = user_data;
 
-  if (range->offset == G_MAXSIZE)
-    {
-      if (run->data == RUN_UNCHECKED)
-        {
-          range->offset = offset;
-          range->length = run->length;
-        }
+  g_assert (run != NULL);
+  g_assert (run->length > 0);
 
-      return FALSE;
-    }
-  else if (run->data == RUN_UNCHECKED &&
-           range->offset + range->length == offset)
+  if (range->offset == G_MAXSIZE && run->data == RUN_CHECKED)
+    return FALSE;
+
+  if (run->data == RUN_UNCHECKED)
     {
+      if (range->offset == G_MAXSIZE)
+        range->offset = offset;
       range->length += run->length;
       return FALSE;
     }
@@ -303,17 +300,17 @@ get_next_range (CjhTextRegion *region,
                 GtkTextIter   *begin,
                 GtkTextIter   *end)
 {
-  GetUncheckedRange range = {G_MAXSIZE, G_MAXSIZE};
+  GetUncheckedRange range = {G_MAXSIZE, 0};
 
   _cjh_text_region_foreach (region, get_unchecked_start_cb, &range);
 
-  if (range.offset == G_MAXSIZE)
+  if (range.length == 0 || range.offset == G_MAXSIZE)
     return FALSE;
 
   gtk_text_buffer_get_iter_at_offset (buffer, begin, range.offset);
   gtk_text_buffer_get_iter_at_offset (buffer, end, range.offset + range.length);
 
-  return TRUE;
+  return !gtk_text_iter_equal (begin, end);
 }
 
 static gboolean
@@ -407,9 +404,10 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
 {
   g_autoptr(GtkTextBuffer) buffer = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->work_scheduled != 0 || self->highlighter == NULL)
+  if (!self->enabled || self->work_scheduled != 0 || self->highlighter == NULL)
     return;
 
   if (!(buffer = g_weak_ref_get (&self->buffer_wref)))
@@ -609,8 +607,7 @@ ide_highlight_engine_insert_before_cb (IdeBuffer *buffer,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->enabled)
-    _cjh_text_region_insert (self->region, offset, length, RUN_UNCHECKED);
+  _cjh_text_region_insert (self->region, offset, length, RUN_UNCHECKED);
 }
 
 static void
@@ -623,8 +620,7 @@ ide_highlight_engine_insert_after_cb (IdeBuffer *buffer,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->enabled)
-    mark_unchecked (self, buffer, offset, length);
+  mark_unchecked (self, buffer, offset, length);
 }
 
 static void
@@ -637,8 +633,7 @@ ide_highlight_engine_delete_before_cb (IdeBuffer *buffer,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->enabled)
-    _cjh_text_region_remove (self->region, offset, length);
+  _cjh_text_region_remove (self->region, offset, length);
 }
 
 static void
@@ -651,8 +646,7 @@ ide_highlight_engine_delete_after_cb (IdeBuffer *buffer,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->enabled)
-    mark_unchecked (self, buffer, offset, 0);
+  mark_unchecked (self, buffer, offset, 0);
 }
 
 static void
