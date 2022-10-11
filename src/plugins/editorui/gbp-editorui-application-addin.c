@@ -124,7 +124,7 @@ get_common_ancestor_array (GFile **files,
 
 static void
 gbp_editorui_application_addin_add_option_entries (IdeApplicationAddin *addin,
-                                                 IdeApplication      *app)
+                                                   IdeApplication      *app)
 {
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (G_IS_APPLICATION (app));
@@ -373,6 +373,9 @@ update_menus (IdeApplication *app)
 
 static GActionEntry actions[] = {
   { "workbench.new", new_editor_workspace_action },
+
+  /* Used by org.gnome.Builder.desktop */
+  { "new-editor", new_editor_workspace_action },
 };
 
 static void
