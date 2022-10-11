@@ -533,7 +533,10 @@ ide_vcs_clone_request_validate (IdeVcsCloneRequest *self)
   g_autoptr(IdeVcsUri) uri = NULL;
 
   g_return_val_if_fail (IDE_IS_VCS_CLONE_REQUEST (self), 0);
-  g_return_val_if_fail (IDE_IS_VCS_CLONER (self->cloner), 0);
+  g_return_val_if_fail (!self->cloner || IDE_IS_VCS_CLONER (self->cloner), 0);
+
+  if (self->cloner == NULL)
+    return IDE_VCS_CLONE_REQUEST_INVAL_URI;
 
   if (ide_str_empty0 (self->uri) || !ide_vcs_uri_is_valid (self->uri))
     flags |= IDE_VCS_CLONE_REQUEST_INVAL_URI;
