@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gtk.h>
 
 #include "gbp-buildui-environment-editor.h"
@@ -134,6 +136,7 @@ static void
 on_entry_changed_cb (GbpBuilduiEnvironmentEditor *self,
                      IdeEntryPopover             *popover)
 {
+  const char *errstr = NULL;
   gboolean valid = FALSE;
   const char *text;
   const char *eq;
@@ -144,14 +147,26 @@ on_entry_changed_cb (GbpBuilduiEnvironmentEditor *self,
   text = ide_entry_popover_get_text (popover);
   eq = strchr (text, '=');
 
+  if (!ide_str_empty0 (text) && eq == NULL)
+    errstr = _("Use KEY=VALUE to set an environment variable");
+
   if (eq != NULL && eq != text)
     {
+      if (g_unichar_isdigit (g_utf8_get_char (text)))
+        {
+          errstr = _("Keys may not start with a number");
+          goto failure;
+
+        }
       for (const char *iter = text; iter < eq; iter = g_utf8_next_char (iter))
         {
           gunichar ch = g_utf8_get_char (iter);
 
           if (!g_unichar_isalnum (ch) && ch != '_')
-            goto failure;
+            {
+              errstr = _("Keys may only contain alpha-numerics or underline.");
+              goto failure;
+            }
         }
 
       if (g_ascii_isalpha (*text))
@@ -160,6 +175,7 @@ on_entry_changed_cb (GbpBuilduiEnvironmentEditor *self,
 
 failure:
   ide_entry_popover_set_ready (popover, valid);
+  ide_entry_popover_set_message (popover, errstr);
 }
 
 static void
