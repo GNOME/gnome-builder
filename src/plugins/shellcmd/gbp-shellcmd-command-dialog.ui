@@ -209,6 +209,7 @@
                       <object class="IdeEntryPopover">
                         <property name="title" translatable="yes">Add Variable</property>
                         <property name="button-text" translatable="yes">_Add</property>
+                        <property name="width-request">400</property>
                         <signal name="changed" handler="on_env_entry_changed_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
                         <signal name="activate" handler="on_env_entry_activate_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
                       </object>
