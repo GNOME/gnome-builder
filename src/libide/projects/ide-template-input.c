@@ -325,7 +325,7 @@ ide_template_input_get_property (GObject    *object,
       break;
 
     case PROP_USE_VERSION_CONTROL:
-      g_value_set_boolean (value, self->use_version_control);
+      g_value_set_boolean (value, ide_template_input_get_use_version_control (self));
       break;
 
     default:
@@ -545,8 +545,16 @@ ide_template_input_get_template (IdeTemplateInput *self)
 gboolean
 ide_template_input_get_use_version_control (IdeTemplateInput *self)
 {
+  PeasPluginInfo *plugin_info;
+
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), FALSE);
-  return self->use_version_control;
+
+  plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (),
+                                             DEFAULT_VCS_MODULE_NAME);
+
+  return self->use_version_control &&
+         plugin_info != NULL &&
+         peas_plugin_info_is_loaded (plugin_info);
 }
 
 void
@@ -940,7 +948,7 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   tmpl_scope_set_string (scope, "author", self->author);
   tmpl_scope_set_string (scope, "project_version", self->project_version);
   scope_take_string (scope, "language", g_utf8_strdown (self->language, -1));
-  tmpl_scope_set_boolean (scope, "versioning", self->use_version_control);
+  tmpl_scope_set_boolean (scope, "versioning", ide_template_input_get_use_version_control (self));
   scope_take_string (scope, "project_path", g_file_get_path (self->directory));
 
   /* Name variants for use as classes, functions, etc */
@@ -1174,19 +1182,11 @@ ide_template_input_expand_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  if (self->use_version_control == FALSE)
-    {
-      ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
-      IDE_EXIT;
-    }
-
   engine = peas_engine_get_default ();
 
-  if (!(plugin_info = peas_engine_get_plugin_info (engine, DEFAULT_VCS_MODULE_NAME)))
+  if (!ide_template_input_get_use_version_control (self) ||
+      !(plugin_info = peas_engine_get_plugin_info (engine, DEFAULT_VCS_MODULE_NAME)))
     {
-      /* Just continue without creating the VCS backend. Not like this can really
-       * hit in production use anyway.
-       */
       ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
       IDE_EXIT;
     }
