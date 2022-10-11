@@ -718,19 +718,20 @@ gbp_flatpak_pipeline_addin_load (IdePipelineAddin *addin,
 {
   GbpFlatpakPipelineAddin *self = (GbpFlatpakPipelineAddin *)addin;
   g_autoptr(GError) error = NULL;
-  IdeConfig *config;
+  const char *runtime_id;
   IdeContext *context;
+  IdeConfig *config;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
   config = ide_pipeline_get_config (pipeline);
+  runtime_id = ide_config_get_runtime_id (config);
 
-  if (!GBP_IS_FLATPAK_MANIFEST (config))
-    {
-      g_message ("Not using flatpak manifest, refusing to add flatpak build pipeline stages");
-      return;
-    }
+  /* We must at least be using a flatpak runtime */
+  if (runtime_id == NULL || !g_str_has_prefix (runtime_id, "flatpak:"))
+    return;
 
   sniff_flatpak_builder_version (self);
 
@@ -752,17 +753,20 @@ gbp_flatpak_pipeline_addin_load (IdePipelineAddin *addin,
                                           NULL);
     }
 
-  /*
-   * TODO: We should add the ability to mark a pipeline as broken, if we
-   *       detect something that is alarming. That will prevent builds from
-   *       occuring altogether and allow us to present issues within the UI.
-   */
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
   if (!register_mkdirs_stage (self, pipeline, context, &error) ||
-      !register_build_init_stage (self, pipeline, context, &error) ||
-      !register_downloads_stage (self, pipeline, context, &error) ||
+      !register_build_init_stage (self, pipeline, context, &error))
+    {
+      ide_object_warning (pipeline,
+                          "Failed to configure flatpak pipeline: %s",
+                          error->message);
+      return;
+    }
+
+  /* We can't do anything more unless we have a flatpak manifest */
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
+    return;
+
+  if (!register_downloads_stage (self, pipeline, context, &error) ||
       !register_dependencies_stage (self, pipeline, context, &error) ||
       !register_build_finish_stage (self, pipeline, context, &error) ||
       !register_build_export_stage (self, pipeline, context, &error) ||
