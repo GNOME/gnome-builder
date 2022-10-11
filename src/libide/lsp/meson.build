@@ -19,6 +19,7 @@ libide_lsp_public_headers = [
   'ide-lsp-formatter.h',
   'ide-lsp-highlighter.h',
   'ide-lsp-hover-provider.h',
+  'ide-lsp-plugin.h',
   'ide-lsp-rename-provider.h',
   'ide-lsp-search-provider.h',
   'ide-lsp-service.h',
@@ -31,6 +32,7 @@ libide_lsp_public_headers = [
 ]
 
 libide_lsp_private_headers = [
+  'ide-lsp-plugin-private.h',
   'ide-lsp-symbol-node-private.h',
   'ide-lsp-symbol-tree-private.h',
 ]
@@ -53,6 +55,15 @@ libide_lsp_public_sources = [
   'ide-lsp-formatter.c',
   'ide-lsp-highlighter.c',
   'ide-lsp-hover-provider.c',
+  'ide-lsp-plugin.c',
+  'ide-lsp-plugin-code-action-provider.c',
+  'ide-lsp-plugin-completion-provider.c',
+  'ide-lsp-plugin-diagnostic-provider.c',
+  'ide-lsp-plugin-formatter.c',
+  'ide-lsp-plugin-highlighter.c',
+  'ide-lsp-plugin-hover-provider.c',
+  'ide-lsp-plugin-rename-provider.c',
+  'ide-lsp-plugin-symbol-resolver.c',
   'ide-lsp-rename-provider.c',
   'ide-lsp-search-provider.c',
   'ide-lsp-search-result.c',
