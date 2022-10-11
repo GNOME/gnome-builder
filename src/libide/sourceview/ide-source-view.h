@@ -96,4 +96,10 @@ IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_set_overwrite_braces        (IdeSourceView              *self,
                                                                          gboolean                    overwrite_braces);
 
+IDE_AVAILABLE_IN_ALL
+gboolean                    ide_source_view_get_rounded_find_bubbles    (IdeSourceView              *self);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_set_rounded_find_bubbles    (IdeSourceView              *self,
+                                                                         gboolean                    rounded_find_bubbles);
+
 G_END_DECLS

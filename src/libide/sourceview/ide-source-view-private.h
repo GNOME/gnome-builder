@@ -47,6 +47,7 @@ struct _IdeSourceView
   PangoFontDescription *font_desc;
   double line_height;
   int font_scale;
+  bool rounded_find_bubbles;
 
   /* Search context used to draw bubbles */
   GtkSourceSearchContext *search_context;
@@ -93,7 +94,8 @@ void  _ide_source_view_addins_set_language (IdeSourceView              *self,
 char *_ide_source_view_generate_css        (GtkSourceView              *view,
                                             const PangoFontDescription *font_desc,
                                             int                         font_scale,
-                                            double                      line_height);
+                                            double                      line_height,
+                                            bool                        rounded_find_bubbles);
 void  _ide_source_view_set_search_context  (IdeSourceView              *self,
                                             GtkSourceSearchContext     *search_context);
 

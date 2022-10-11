@@ -294,6 +294,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   g_settings_bind (editor_settings, "smart-backspace",
                    self->view, "smart-backspace",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "rounded-find-bubbles",
+                   self->view, "rounded-find-bubbles",
+                   G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings,
                    "completion-n-rows",
                    gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view)),

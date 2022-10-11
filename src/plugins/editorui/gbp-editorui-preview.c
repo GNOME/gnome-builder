@@ -131,12 +131,14 @@ gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
       g_autofree char *font_name = NULL;
       PangoFontDescription *font_desc;
       double line_height;
+      bool rounded_find_bubbles;
 
       line_height = g_settings_get_double (settings, "line-height");
       font_name = g_settings_get_string (settings, "font-name");
       font_desc = pango_font_description_from_string (font_name);
+      rounded_find_bubbles = g_settings_get_boolean (settings, "rounded-find-bubbles");
 
-      if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), font_desc, 1, line_height)))
+      if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), font_desc, 1, line_height, rounded_find_bubbles)))
         gtk_css_provider_load_from_data (self->css_provider, css, -1);
 
       g_clear_pointer (&font_desc, pango_font_description_free);
