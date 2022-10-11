@@ -106,15 +106,14 @@ static gpointer
 cpack_completion_results_get_item (GListModel *model,
                                    guint       position)
 {
-  CpackCompletionResults *self = (CpackCompletionResults *)model;
-  const Item *item;
+  CpackCompletionResults *self = CPACK_COMPLETION_RESULTS (model);
 
   g_assert (CPACK_IS_COMPLETION_RESULTS (self));
-  g_assert (position < self->items->len);
 
-  item = &g_array_index (self->items, Item, position);
+  if (position >= self->items->len)
+    return NULL;
 
-  return cpack_completion_item_new (item->word);
+  return cpack_completion_item_new (g_array_index (self->items, Item, position).word);
 }
 
 static void
