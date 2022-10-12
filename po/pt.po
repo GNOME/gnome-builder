@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-06 03:14+0000\n"
-"PO-Revision-Date: 2022-10-10 14:21+0100\n"
+"POT-Creation-Date: 2022-10-11 23:40+0000\n"
+"PO-Revision-Date: 2022-10-12 16:37+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -936,7 +936,7 @@ msgstr "Guardar"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1184,7 +1184,7 @@ msgstr "A implantar no dispositivo…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Sistema Anfitrião"
 
@@ -1326,7 +1326,7 @@ msgstr "Abrir"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "_Selecionar"
@@ -1785,7 +1785,7 @@ msgid "Code Navigation"
 msgstr "Navegação de código"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1535
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2064,7 +2064,7 @@ msgstr "Avisos"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Pipeline de compilação"
 
@@ -4879,38 +4879,50 @@ msgstr "Transferências"
 
 #: src/plugins/sdkui/tweaks.ui:15
 msgid "Download on Metered Connections"
-msgstr "Baixar em conexões limitadas"
+msgstr "Transferir em ligações limitadas"
 
 #: src/plugins/sdkui/tweaks.ui:16
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
 msgstr ""
-"Permite o download de SDKs e dependências quando em conexões de internet "
-"limitadas"
+"Permite a transferência de SDKs e dependências quando em ligações de "
+"Internet limitadas"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
 msgstr "SDKs disponíveis"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Usar KEY=VALUE para definir uma variável de ambiente"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "As teclas podem não começar com um número"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr "As teclas apenas podem conter alfanuméricos ou sublinhados."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Comando sem título"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Definir atalho"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Selecionar diretório de trabalho"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Criar comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "Cri_ar"
 
@@ -4974,31 +4986,31 @@ msgstr ""
 "O Builder pode executar seu comando de várias locais, incluindo o sistema "
 "hospedeiro ou contentores de compilação."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "_Eliminar comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Subprocesso"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Executa o comando como um subprocesso do Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "Executa o comando no sistema hospedeiro."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Executa o comando dentro do pipeline de compilação."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Como aplicação de destino"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Executa o comando como se fosse a aplicação alvo."
 
@@ -5516,7 +5528,7 @@ msgstr "Atualizar dependências…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr "Baixa atualizações das dependências do projeto"
+msgstr "Descarrega atualizações das dependências do projeto"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
