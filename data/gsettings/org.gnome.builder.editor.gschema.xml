@@ -145,10 +145,10 @@
       <summary>Select First Completion</summary>
       <description>Automatically select the first auto-completion entry.</description>
     </key>
-    <key name="rounded-find-bubbles" type="b">
+    <key name="enable-search-bubbles" type="b">
       <default>true</default>
-      <summary>Rounded Find Bubbles</summary>
-      <description>Display Search Results with Rounded Edges</description>
+      <summary>Enable Search Bubbles</summary>
+      <description>Display search results with additional styling to stand out</description>
     </key>
   </schema>
 </schemalist>

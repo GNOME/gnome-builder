@@ -48,7 +48,7 @@ enum {
   PROP_LINE_HEIGHT,
   PROP_OVERWRITE_BRACES,
   PROP_ZOOM_LEVEL,
-  PROP_ROUNDED_FIND_BUBBLES,
+  PROP_ENABLE_SEARCH_BUBBLES,
   N_PROPS,
 
   /* Property Overrides */
@@ -75,7 +75,7 @@ _ide_source_view_generate_css (GtkSourceView              *view,
                                const PangoFontDescription *font_desc,
                                int                         font_scale,
                                double                      line_height,
-                               bool                        rounded_find_bubbles)
+                               gboolean                    enable_search_bubbles)
 {
   g_autofree char *font_css = NULL;
   PangoFontDescription *scaled = NULL;
@@ -93,7 +93,7 @@ _ide_source_view_generate_css (GtkSourceView              *view,
 
   /* Get information for search bubbles */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  if (rounded_find_bubbles &&
+  if (enable_search_bubbles &&
       (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
       (style = gtk_source_style_scheme_get_style (scheme, "search-match")))
     {
@@ -171,7 +171,7 @@ ide_source_view_update_css (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale,
-                                            self->line_height, self->rounded_find_bubbles)))
+                                            self->line_height, self->enable_search_bubbles)))
     gtk_css_provider_load_from_data (self->css_provider, css, -1);
 }
 
@@ -657,11 +657,6 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   /* Update CSS when style changes */
   g_signal_connect_object (buffer,
                            "notify::style-scheme",
-                           G_CALLBACK (ide_source_view_update_css),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self,
-                           "notify::rounded-find-bubbles",
                            G_CALLBACK (ide_source_view_update_css),
                            self,
                            G_CONNECT_SWAPPED);
@@ -1273,8 +1268,8 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_double (value, ide_source_view_get_zoom_level (self));
       break;
 
-    case PROP_ROUNDED_FIND_BUBBLES:
-      g_value_set_boolean (value, ide_source_view_get_rounded_find_bubbles (self));
+    case PROP_ENABLE_SEARCH_BUBBLES:
+      g_value_set_boolean (value, ide_source_view_get_enable_search_bubbles (self));
       break;
 
     default:
@@ -1318,8 +1313,8 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ROUNDED_FIND_BUBBLES:
-      ide_source_view_set_rounded_find_bubbles (self, g_value_get_boolean (value));
+    case PROP_ENABLE_SEARCH_BUBBLES:
+      ide_source_view_set_enable_search_bubbles (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -1392,10 +1387,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          -G_MAXDOUBLE, G_MAXDOUBLE, 1.0,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ROUNDED_FIND_BUBBLES] =
-    g_param_spec_boolean ("rounded-find-bubbles",
-                          "Rounded Find Bubbles",
-                          "Display find bubbles rounded",
+  properties [PROP_ENABLE_SEARCH_BUBBLES] =
+    g_param_spec_boolean ("enable-search-bubbles", NULL, NULL,
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -1445,6 +1438,8 @@ ide_source_view_init (IdeSourceView *self)
   GtkEventController *focus;
   GtkEventController *scroll;
   GtkEventController *key;
+
+  self->enable_search_bubbles = TRUE;
 
   self->controllers = g_array_new (FALSE, FALSE, sizeof (Controller));
   g_array_set_clear_func (self->controllers, controller_clear);
@@ -1913,26 +1908,40 @@ ide_source_view_set_overwrite_braces (IdeSourceView *self,
     }
 }
 
+/**
+ * ide_source_view_get_enable_search_bubbles:
+ * @self: a #IdeSourceView
+ *
+ * Since: 44
+ */
 gboolean
-ide_source_view_get_rounded_find_bubbles (IdeSourceView *self)
+ide_source_view_get_enable_search_bubbles (IdeSourceView *self)
 {
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return self->rounded_find_bubbles;
+  return self->enable_search_bubbles;
 }
 
+/**
+ * ide_source_view_set_enable_search_bubbles:
+ * @self: a #IdeSourceView
+ * @enable_search_bubbles: if search bubbles should be drawn
+ *
+ * Since: 44
+ */
 void
-ide_source_view_set_rounded_find_bubbles (IdeSourceView *self,
-                                          gboolean       rounded_find_bubbles)
+ide_source_view_set_enable_search_bubbles (IdeSourceView *self,
+                                           gboolean       enable_search_bubbles)
 {
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  rounded_find_bubbles = !!rounded_find_bubbles;
+  enable_search_bubbles = !!enable_search_bubbles;
 
-  if (rounded_find_bubbles != self->rounded_find_bubbles)
+  if (enable_search_bubbles != self->enable_search_bubbles)
     {
-      self->rounded_find_bubbles = rounded_find_bubbles;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROUNDED_FIND_BUBBLES]);
+      self->enable_search_bubbles = enable_search_bubbles;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_SEARCH_BUBBLES]);
+      ide_source_view_update_css (self);
     }
 }
 

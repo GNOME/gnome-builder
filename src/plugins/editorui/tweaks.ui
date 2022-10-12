@@ -353,13 +353,13 @@
                       <object class="IdeTweaksGroup">
                         <property name="title" translatable="yes">Misc</property>
                         <child>
-                          <object class="IdeTweaksSwitch" id="editor_rounded_find_bubbles">
-                            <property name="title" translatable="yes">Rounded Find Bubbles</property>
-                            <property name="subtitle" translatable="yes">Display text search matched with rounded corners</property>
+                          <object class="IdeTweaksSwitch" id="editor_enable_search_bubbles">
+                            <property name="title" translatable="yes">Search Shadows</property>
+                            <property name="subtitle" translatable="yes">Display search results with additional styling to stand out</property>
                             <property name="binding">
                               <object class="IdeTweaksSetting">
                                 <property name="schema-id">org.gnome.builder.editor</property>
-                                <property name="schema-key">rounded-find-bubbles</property>
+                                <property name="schema-key">enable-search-bubbles</property>
                               </object>
                             </property>
                           </object>

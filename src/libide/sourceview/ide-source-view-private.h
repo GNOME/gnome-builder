@@ -47,7 +47,6 @@ struct _IdeSourceView
   PangoFontDescription *font_desc;
   double line_height;
   int font_scale;
-  bool rounded_find_bubbles;
 
   /* Search context used to draw bubbles */
   GtkSourceSearchContext *search_context;
@@ -78,6 +77,7 @@ struct _IdeSourceView
   double click_y;
 
   /* Bitfield values go here */
+  guint enable_search_bubbles : 1;
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;
   guint overwrite_braces : 1;
@@ -95,7 +95,7 @@ char *_ide_source_view_generate_css        (GtkSourceView              *view,
                                             const PangoFontDescription *font_desc,
                                             int                         font_scale,
                                             double                      line_height,
-                                            bool                        rounded_find_bubbles);
+                                            gboolean                    enable_search_bubbles);
 void  _ide_source_view_set_search_context  (IdeSourceView              *self,
                                             GtkSourceSearchContext     *search_context);
 
