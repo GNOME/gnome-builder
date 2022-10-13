@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-06 18:38+0000\n"
-"PO-Revision-Date: 2022-10-06 23:23+0200\n"
+"POT-Creation-Date: 2022-10-13 15:11+0000\n"
+"PO-Revision-Date: 2022-10-13 17:28+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -340,7 +340,7 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
-msgstr ""
+msgstr "ტექსტის გადატანა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
@@ -884,7 +884,7 @@ msgstr "შენახვა"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1016,7 +1016,7 @@ msgstr ""
 #: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
 msgid "Build (%s)"
-msgstr ""
+msgstr "აგება (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1137
@@ -1129,7 +1129,7 @@ msgstr ""
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "ჰოსტს სისტემა"
 
@@ -1210,7 +1210,7 @@ msgstr "აირჩიეთ პროექტის ფაილი"
 #: src/libide/greeter/ide-greeter-workspace.c:683
 #: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
-msgstr ""
+msgstr "_გახსნა"
 
 #: src/libide/greeter/ide-greeter-workspace.c:694
 msgid "All Project Types"
@@ -1264,15 +1264,15 @@ msgstr ""
 #: src/libide/gtk/ide-file-chooser-entry.c:157
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
-msgstr ""
+msgstr "გახსნა"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
-msgstr ""
+msgstr "აირჩიეთ"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:448
 msgid "Browse…"
@@ -1484,7 +1484,7 @@ msgstr ""
 #: src/libide/gui/ide-shortcut-window.c:239
 #: src/libide/gui/ide-shortcut-window.c:265
 msgid "Other"
-msgstr ""
+msgstr "სხვა"
 
 #: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
@@ -1721,7 +1721,7 @@ msgid "Code Navigation"
 msgstr "დოკუმენტის ნავიგაცია"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1559
+#: src/libide/sourceview/ide-source-view.c:1535
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1844,7 +1844,7 @@ msgstr "ვერსიის გარეშე"
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
@@ -1997,7 +1997,7 @@ msgstr "გაფრთხილებები"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr ""
 
@@ -2451,7 +2451,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:239
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
@@ -2798,7 +2798,7 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
-msgstr ""
+msgstr "აპლიკაციის ID…"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:53
 msgid ""
@@ -2834,7 +2834,7 @@ msgstr "პროექტის შექმნა"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
-msgstr ""
+msgstr "ახალი _პროექტის შექმნა…"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
 msgid "Create New Project"
@@ -2844,7 +2844,7 @@ msgstr "ახალი პროექტის შექმნა"
 #: src/plugins/create-project/gtk/menus.ui:18
 #: src/plugins/create-project/gtk/menus.ui:30
 msgid "Create New Project…"
-msgstr ""
+msgstr "ახალი პროექტის შექმნა…"
 
 #: src/plugins/create-project/gtk/menus.ui:22
 msgid "Create a new project from template"
@@ -4757,34 +4757,46 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "ხელმისაწვდომი SDK-ები"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
-msgid "Untitled Command"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "გარემოს ცვლადის დასაყენებლად გამოიყენეთ სახელი=მნიშვნელობა"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
+msgid "Untitled Command"
+msgstr "უსახელო ბრძანება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "მალსახმობის დაყენება"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
-msgstr ""
+msgstr "აირჩიეთ სამუშაო საქაღალდე"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
-msgstr ""
+msgstr "შექმნის ბრძანება"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "_შექმნა"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
 msgid "Edit Command"
-msgstr ""
+msgstr "ჩასწორების ბრძანება"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
 msgid "S_ave"
-msgstr ""
+msgstr "_შენახვა"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
 msgid "Keyboard Shortcut"
@@ -4834,31 +4846,31 @@ msgid ""
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "ბრძანების წაშლა"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -5007,7 +5019,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:39
 msgid "Memory Allocations"
-msgstr ""
+msgstr "მეხსიერების გამოყოფები"
 
 #: src/plugins/sysprof/gtk/menus.ui:44
 msgid "Sample JavaScript Stacks"
