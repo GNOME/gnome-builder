@@ -74,8 +74,7 @@ char *
 _ide_source_view_generate_css (GtkSourceView              *view,
                                const PangoFontDescription *font_desc,
                                int                         font_scale,
-                               double                      line_height,
-                               gboolean                    enable_search_bubbles)
+                               double                      line_height)
 {
   g_autofree char *font_css = NULL;
   PangoFontDescription *scaled = NULL;
@@ -93,8 +92,7 @@ _ide_source_view_generate_css (GtkSourceView              *view,
 
   /* Get information for search bubbles */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  if (enable_search_bubbles &&
-      (scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
+  if ((scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
       (style = gtk_source_style_scheme_get_style (scheme, "search-match")))
     {
       g_autofree char *background = NULL;
@@ -170,8 +168,7 @@ ide_source_view_update_css (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale,
-                                            self->line_height, self->enable_search_bubbles)))
+  if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale, self->line_height)))
     gtk_css_provider_load_from_data (self->css_provider, css, -1);
 }
 
@@ -1941,7 +1938,7 @@ ide_source_view_set_enable_search_bubbles (IdeSourceView *self,
     {
       self->enable_search_bubbles = enable_search_bubbles;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_SEARCH_BUBBLES]);
-      ide_source_view_update_css (self);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
 

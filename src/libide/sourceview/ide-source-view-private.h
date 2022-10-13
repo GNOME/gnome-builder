@@ -94,8 +94,7 @@ void  _ide_source_view_addins_set_language (IdeSourceView              *self,
 char *_ide_source_view_generate_css        (GtkSourceView              *view,
                                             const PangoFontDescription *font_desc,
                                             int                         font_scale,
-                                            double                      line_height,
-                                            gboolean                    enable_search_bubbles);
+                                            double                      line_height);
 void  _ide_source_view_set_search_context  (IdeSourceView              *self,
                                             GtkSourceSearchContext     *search_context);
 
