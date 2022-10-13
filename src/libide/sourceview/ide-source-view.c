@@ -334,7 +334,7 @@ ide_source_view_snapshot_layer (GtkTextView      *text_view,
 
   GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->snapshot_layer (text_view, layer, snapshot);
 
-  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
+  if (self->enable_search_bubbles && layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
     ide_source_view_draw_search_bubbles (self, snapshot);
 }
 
