@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-06 03:14+0000\n"
-"PO-Revision-Date: 2022-10-07 18:36+0300\n"
+"POT-Creation-Date: 2022-10-11 23:40+0000\n"
+"PO-Revision-Date: 2022-10-13 13:15+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -947,7 +947,7 @@ msgstr "Зберегти"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1196,7 +1196,7 @@ msgstr "Розгортаємо на пристрої…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Основна система"
 
@@ -1338,7 +1338,7 @@ msgstr "Відкрити"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Вибрати"
@@ -1799,7 +1799,7 @@ msgid "Code Navigation"
 msgstr "Навігація кодом"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1535
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1943,7 +1943,6 @@ msgid "Allow JavaScript"
 msgstr "Дозволити JavaScript"
 
 #: src/libide/webkit/ide-webkit-page.ui:104
-#| msgid "Printing"
 msgid "Print"
 msgstr "Надрукувати"
 
@@ -2084,7 +2083,7 @@ msgstr "Попередження"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Конвеєр збирання"
 
@@ -4918,24 +4917,40 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "Доступні набори засобів розробки"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+#| msgid "Remove environment variable"
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr ""
+"Скористайтеся синтаксичною конструкцією КЛЮЧ=ЗНАЧЕННЯ, щоб встановити змінну"
+" середовища"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Ключі не повинні починатися з цифри"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
+"Ключі можуть містити лише літерно-цифрові символи і символи підкреслювання."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Команда без назви"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Встановити скорочення"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Виберіть робочий каталог"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Створити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "С_творити"
 
@@ -5000,31 +5015,31 @@ msgstr ""
 "«Будівник» може запускати вашу команду із різних середовищ, зокрема основної "
 "системи або контейнерів збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "Ви_лучити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Підпроцес"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Запустити команду як підпроцес «Будівника»"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "Запускає команду в основній системі."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Запускає команду у конвеєрі збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Як програму-ціль"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Запускає команду так, наче вона є цільовою програмою."
 
