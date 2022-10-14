@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/serve-d">
     <file>serve-d.plugin</file>
+    <file>settings.json</file>
   </gresource>
 </gresources>
