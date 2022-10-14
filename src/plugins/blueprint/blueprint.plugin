@@ -12,3 +12,4 @@ X-Diagnostic-Provider-Languages=blueprint
 X-Hover-Provider-Languages=blueprint
 X-LSP-Command=blueprint-compiler lsp
 X-LSP-Languages=blueprint
+X-LSP-Settings=settings.json
