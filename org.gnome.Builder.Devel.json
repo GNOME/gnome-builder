@@ -4,8 +4,7 @@
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm14",
-        "org.freedesktop.Sdk.Extension.node18"
+        "org.freedesktop.Sdk.Extension.llvm14"
     ],
     "command" : "gnome-builder",
     "tags" : [
@@ -87,7 +86,6 @@
     ],
     "modules" : [
         "build-aux/flatpak/python-deps.json",
-        "build-aux/flatpak/python3-python-lsp-server.json",
         {
             "name" : "gperftools",
             "cleanup" : [
@@ -611,8 +609,6 @@
                 }
             ]
         },
-        "build-aux/flatpak/typescript-language-server.json",
-        "build-aux/flatpak/intelephense-language-server.json",
         {
             "name" : "libpanel",
             "buildsystem" : "meson",
