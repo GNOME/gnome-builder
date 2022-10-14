@@ -146,6 +146,7 @@ subdir('waf')
 subdir('web-browser')
 subdir('words')
 subdir('xml-pack')
+subdir('zls')
 
 plugins = static_library('plugins', plugins_sources,
          dependencies: plugins_deps,
@@ -232,6 +233,7 @@ status += [
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vala_language_server')),
+  'zls ........................ (Ziglang) : @0@'.format(get_option('plugin_zls')),
   '',
   ' ** Denotes plugins not recommended for distribution',
   '',

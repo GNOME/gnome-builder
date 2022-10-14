@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/zls">
+    <file>zls.plugin</file>
+    <file>settings.json</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">
+    <file>zig.lang</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,19 @@
+[Plugin]
+Authors=Christian Hergert
+Copyright=Copyright 2022 Christian Hergert
+Description=Zig code intelligence provided by zls
+Embedded=ide_lsp_plugin_register_types
+Module=zls
+Name=Zig Language Server
+X-Category=lsps
+X-Code-Action-Languages=zig
+X-Completion-Provider-Languages=zig
+X-Diagnostic-Provider-Languages=zig
+X-Formatter-Languages=zig
+X-Highlighter-Languages=zig
+X-Hover-Provider-Languages=zig
+X-LSP-Command=zls
+X-LSP-Languages=zig
+X-LSP-Settings=settings.json
+X-Rename-Provider-Languages=zig
+X-Symbol-Resolver-Languages=zig
