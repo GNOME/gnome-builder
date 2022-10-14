@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/jedi-language-server">
     <file>jedi-language-server.plugin</file>
+    <file>settings.json</file>
   </gresource>
 </gresources>

@@ -1,8 +1,8 @@
 [Plugin]
 Builtin=true
-Copyright=Copyright © 2021 Günther Wagner, Copyright © 2022 Christian Hergert
+Copyright=Copyright © 2022 Christian Hergert
 Description=Provides integration with the jedi language server for Python
-Embedded=_gbp_jedi_register_types
+Embedded=ide_lsp_plugin_register_types
 Module=jedi-language-server
 Name=Python Language Server (Jedi)
 X-Category=lsps
@@ -11,6 +11,9 @@ X-Symbol-Resolver-Languages=python,python3
 X-Diagnostic-Provider-Languages=python,python3
 X-Highlighter-Languages=python,python3
 X-Hover-Provider-Languages=python,python3
+X-LSP-Command=jedi-language-server
+X-LSP-Languages=python
+X-LSP-Settings=settings.json
 X-Rename-Provider-Languages=python,python3
 X-Formatter-Languages=python,python3
 X-Code-Action-Languages=python,python3

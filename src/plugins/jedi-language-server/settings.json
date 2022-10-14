@@ -1,0 +1,7 @@
+{
+  "jedi-language-server" : {
+    "initializationOptions" : {
+      "autoImportModules" : [ "gi" ]
+    }
+  }
+}
