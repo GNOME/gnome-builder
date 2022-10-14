@@ -225,7 +225,8 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
                                          self->interface_type,
                                          NULL);
 
-              add_extension (self, plugin_info, exten);
+              if (exten != NULL)
+                add_extension (self, plugin_info, exten);
             }
         }
       else
