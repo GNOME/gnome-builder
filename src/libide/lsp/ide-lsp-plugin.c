@@ -120,7 +120,12 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
   if (klass->info->languages != NULL)
     {
       for (guint i = 0; klass->info->languages[i]; i++)
-        ide_lsp_client_add_language (client, klass->info->languages[i]);
+        {
+          const char *language = klass->info->languages[i];
+
+          if (!ide_str_empty0 (language))
+            ide_lsp_client_add_language (client, language);
+        }
     }
 
   if (!(context = ide_object_get_context (IDE_OBJECT (service))))
