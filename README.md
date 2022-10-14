@@ -49,3 +49,29 @@ Free Software Foundation, either version 3 of the License, or (at your option)
 any later version. Some files are individually licensed under alternative
 licenses such as LGPL-2.1+ and LGPL-3.0.
 
+## Supported Language Servers
+
+Builder comes with support for a number of language servers builtin. It
+automatically locates the language server within your build environment and
+runs it there (possibly in a container). If it can find it elsewhere (such
+as on the host) that will be used as a fallback.
+
+ * bash-language-server (bash)
+ * blueprint (Blueprint)
+ * clangd (C, C++, Objective-C, Objective-C++)
+ * glsl-language-server (GLSL)
+ * gopls (Go)
+ * intelephense (PHP)
+ * jdtls (Java)
+ * jedi-language-server (Python)
+ * lua-language-server (Lua)
+ * serve-d (D)
+ * python-lsp-server (Python)
+ * rust-analyzer (Rust)
+ * ts-language-server (Javascript, Tyepscript)
+ * zls (Zig)
+
+More are being added all the time and do not require writing code if you'd
+like to add support. See `src/plugins/` for examples of language server
+integration.
+
