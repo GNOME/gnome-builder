@@ -26,17 +26,9 @@
 
 struct _IdeStyleVariantPreview
 {
-  GtkWidget parent_instance;
-
-  AdwColorScheme color_scheme;
-
-  GtkPicture *wallpaper;
-
-  AdwBin *front;
-  AdwBin *front_header;
-
-  AdwBin *back;
-  AdwBin *back_header;
+  GtkWidget       parent_instance;
+  AdwColorScheme  color_scheme;
+  GtkPicture     *wallpaper;
 };
 
 G_DEFINE_FINAL_TYPE (IdeStyleVariantPreview, ide_style_variant_preview, GTK_TYPE_WIDGET)
@@ -62,8 +54,6 @@ ide_style_variant_preview_set_color_scheme (IdeStyleVariantPreview *self,
                                             AdwColorScheme          color_scheme)
 {
   const char *wallpaper;
-  const char *front;
-  const char *back;
 
   g_assert (IDE_IS_STYLE_VARIANT_PREVIEW (self));
 
@@ -73,48 +63,21 @@ ide_style_variant_preview_set_color_scheme (IdeStyleVariantPreview *self,
     {
     case ADW_COLOR_SCHEME_PREFER_LIGHT:
     case ADW_COLOR_SCHEME_FORCE_LIGHT:
-      front = back = "light";
-      wallpaper = "/org/gnome/libide-gui/images/style-preview-light.png";
+      wallpaper = "/org/gnome/libide-gui/images/preview-light.svg";
       break;
 
     case ADW_COLOR_SCHEME_PREFER_DARK:
     case ADW_COLOR_SCHEME_FORCE_DARK:
-      front = back = "dark";
-      wallpaper = "/org/gnome/libide-gui/images/style-preview-dark.png";
+      wallpaper = "/org/gnome/libide-gui/images/preview-dark.svg";
       break;
 
     case ADW_COLOR_SCHEME_DEFAULT:
     default:
-      front = "light";
-      back = "dark";
-      wallpaper = "/org/gnome/libide-gui/images/style-preview-default.png";
+      wallpaper = "/org/gnome/libide-gui/images/preview-system.svg";
       break;
     }
 
-  gtk_widget_remove_css_class (GTK_WIDGET (self->front), "dark");
-  gtk_widget_remove_css_class (GTK_WIDGET (self->front), "light");
-  gtk_widget_add_css_class (GTK_WIDGET (self->front), front);
-
-  gtk_widget_remove_css_class (GTK_WIDGET (self->front_header), "dark");
-  gtk_widget_remove_css_class (GTK_WIDGET (self->front_header), "light");
-  gtk_widget_add_css_class (GTK_WIDGET (self->front_header), front);
-
-  gtk_widget_remove_css_class (GTK_WIDGET (self->back), "dark");
-  gtk_widget_remove_css_class (GTK_WIDGET (self->back), "light");
-  gtk_widget_add_css_class (GTK_WIDGET (self->back), back);
-
-  gtk_widget_remove_css_class (GTK_WIDGET (self->back_header), "dark");
-  gtk_widget_remove_css_class (GTK_WIDGET (self->back_header), "light");
-  gtk_widget_add_css_class (GTK_WIDGET (self->back_header), back);
-
   gtk_picture_set_resource (self->wallpaper, wallpaper);
-}
-
-static void
-ide_style_variant_preview_snapshot (GtkWidget   *widget,
-                                    GtkSnapshot *snapshot)
-{
-  GTK_WIDGET_CLASS (ide_style_variant_preview_parent_class)->snapshot (widget, snapshot);
 }
 
 static void
@@ -196,7 +159,6 @@ ide_style_variant_preview_class_init (IdeStyleVariantPreviewClass *klass)
   object_class->get_property = ide_style_variant_preview_get_property;
   object_class->set_property = ide_style_variant_preview_set_property;
 
-  widget_class->snapshot = ide_style_variant_preview_snapshot;
   widget_class->measure = ide_style_variant_preview_measure;
 
   properties [PROP_COLOR_SCHEME] =
@@ -213,10 +175,6 @@ ide_style_variant_preview_class_init (IdeStyleVariantPreviewClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_FIXED_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-style-variant-preview.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeStyleVariantPreview, wallpaper);
-  gtk_widget_class_bind_template_child (widget_class, IdeStyleVariantPreview, back);
-  gtk_widget_class_bind_template_child (widget_class, IdeStyleVariantPreview, back_header);
-  gtk_widget_class_bind_template_child (widget_class, IdeStyleVariantPreview, front);
-  gtk_widget_class_bind_template_child (widget_class, IdeStyleVariantPreview, front_header);
 }
 
 static void

@@ -4,9 +4,9 @@
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file>gtk/keybindings.gsl</file>
     <file>gtk/keybindings.json</file>
-    <file>images/style-preview-dark.png</file>
-    <file>images/style-preview-default.png</file>
-    <file>images/style-preview-light.png</file>
+    <file>images/preview-dark.svg</file>
+    <file>images/preview-system.svg</file>
+    <file>images/preview-light.svg</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>

@@ -26,56 +26,5 @@
         </child>
       </object>
     </child>
-
-    <child>
-      <object class="AdwBin" id="back">
-        <style>
-          <class name="window"/>
-        </style>
-        <property name="width-request">75</property>
-        <property name="height-request">50</property>
-        <layout>
-          <property name="transform">translate(60, 15)</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="AdwBin" id="back_header">
-        <style>
-          <class name="header"/>
-        </style>
-        <property name="width-request">75</property>
-        <property name="height-request">10</property>
-        <layout>
-          <property name="transform">translate(60, 15)</property>
-        </layout>
-      </object>
-    </child>
-
-    <child>
-      <object class="AdwBin" id="front">
-        <style>
-          <class name="window"/>
-        </style>
-        <property name="width-request">75</property>
-        <property name="height-request">50</property>
-        <layout>
-          <property name="transform">translate(20, 30)</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="AdwBin" id="front_header">
-        <style>
-          <class name="header"/>
-        </style>
-        <property name="width-request">75</property>
-        <property name="height-request">10</property>
-        <layout>
-          <property name="transform">translate(20, 30)</property>
-        </layout>
-      </object>
-    </child>
-
   </template>
 </interface>
