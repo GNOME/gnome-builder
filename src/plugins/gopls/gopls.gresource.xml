@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/gopls">
     <file>gopls.plugin</file>
+    <file>settings.json</file>
   </gresource>
 </gresources>
