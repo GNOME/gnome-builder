@@ -56,7 +56,7 @@ automatically locates the language server within your build environment and
 runs it there (possibly in a container). If it can find it elsewhere (such
 as on the host) that will be used as a fallback.
 
- * bash-language-server (bash)
+ * bash-language-server (Bash)
  * blueprint (Blueprint)
  * clangd (C, C++, Objective-C, Objective-C++)
  * glsl-language-server (GLSL)
@@ -68,7 +68,8 @@ as on the host) that will be used as a fallback.
  * serve-d (D)
  * python-lsp-server (Python)
  * rust-analyzer (Rust)
- * ts-language-server (Javascript, Tyepscript)
+ * ts-language-server (Javascript, Typescript)
+ * vala-language-server (Vala)
  * zls (Zig)
 
 More are being added all the time and do not require writing code if you'd
