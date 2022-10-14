@@ -1,0 +1,17 @@
+{
+    "intelephense" : {
+        "files" : {
+            "associations" : ["*.php", "*.phtml"],
+            "exclude" : []
+        },
+        "completion" : {
+            "insertUseDeclaration" : true,
+            "fullyQualifyGlobalConstantsAndFunctions" : false,
+            "triggerParameterHints" : true,
+            "maxItems" : 100
+        },
+        "format" : {
+            "enable" : true
+        }
+    }
+}

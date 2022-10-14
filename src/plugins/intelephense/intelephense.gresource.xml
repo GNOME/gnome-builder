@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/intelephense">
     <file>intelephense.plugin</file>
+    <file>settings.json</file>
   </gresource>
 </gresources>
