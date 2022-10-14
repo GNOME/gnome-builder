@@ -1,0 +1,21 @@
+{
+    "rust-analyzer" : {
+        "checkOnSave" : {
+            "enable" : true,
+            "command" : "check"
+        },
+        "cargo" : {
+            "buildScripts" : {
+                "enable" : true
+            }
+        },
+        "procMacro" : {
+            "enable" : true
+        },
+        "rustfmt" : {
+            "rangeFormatting" : {
+                "enable" : true
+            }
+        }
+    }
+}

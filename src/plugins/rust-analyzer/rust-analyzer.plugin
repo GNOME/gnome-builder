@@ -1,12 +1,12 @@
 [Plugin]
-Authors=Günther Wagner <info@gunibert.de>
+Authors=Günther Wagner <info@gunibert.de>, Christian Hergert <chergert@redhat.com>
 Builtin=true
-Copyright=Copyright © 2020 Günther Wagner
+Copyright=Copyright © 2020 Günther Wagner, Copyright © 2022 Christian Hergert
 Depends=buildui;
 Description=Provides integration with the rust-analyzer language server
+Embedded=ide_lsp_plugin_register_types
 Module=rust-analyzer
-Embedded=_gbp_rust_analyzer_register_types
-Name=Rust Language Server
+Name=Rust Analyzer
 X-Category=lsps
 X-Code-Action-Languages=rust
 X-Completion-Provider-Languages=rust
@@ -14,5 +14,8 @@ X-Diagnostic-Provider-Languages=rust
 X-Formatter-Languages=rust
 X-Highlighter-Languages=rust
 X-Hover-Provider-Languages=rust
+X-LSP-Command=rust-analyzer
+X-LSP-Languages=rust
+X-LSP-Settings=settings.json
 X-Rename-Provider-Languages=rust
 X-Symbol-Resolver-Languages=rust
