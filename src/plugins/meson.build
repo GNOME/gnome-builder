@@ -138,10 +138,10 @@ subdir('update-dependencies')
 subdir('update-manager')
 subdir('valac')
 subdir('vala-indenter')
+subdir('vala-language-server')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
-subdir('vls')
 subdir('waf')
 subdir('web-browser')
 subdir('words')
@@ -231,7 +231,7 @@ status += [
   'serve-d .......................... (D) : @0@'.format(get_option('plugin_serve_d')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
-  'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vls')),
+  'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vala_language_server')),
   '',
   ' ** Denotes plugins not recommended for distribution',
   '',

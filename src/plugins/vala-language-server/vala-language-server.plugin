@@ -1,0 +1,24 @@
+[Plugin]
+Authors=Princeton Ferro, Ben Iofel, Christian Hergert
+Copyright=Copyright © 2020 Princeton Ferro, Ben Iofel, Copyright © 2022 Christian Hergert
+Description=Vala code intelligence provided by vala-language-server
+Embedded=ide_lsp_plugin_register_types
+Module=vala-language-server
+Name=Vala Language Server
+Website=https://github.com/vala-lang/vala-language-server
+X-Category=lsps
+X-Code-Action-Languages=vala
+X-Completion-Provider-Languages=vala
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=vala
+X-Formatter-Languages-Priority=100
+X-Formatter-Languages=vala
+X-Highlighter-Languages-Priority=100
+X-Highlighter-Languages=vala
+X-Hover-Provider-Languages=vala
+X-LSP-Command=vala-language-server
+X-LSP-Languages=vala;genie;
+X-LSP-Settings=settings.json
+X-Rename-Provider-Languages=vala
+X-Symbol-Resolver-Languages-Priority=100
+X-Symbol-Resolver-Languages=vala
