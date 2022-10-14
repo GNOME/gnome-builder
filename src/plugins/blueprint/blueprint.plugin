@@ -1,7 +1,7 @@
 [Plugin]
 Builtin=true
 Description=Provides integration with the blueprint language server
-Embedded=_gbp_blueprint_register_types
+Embedded=ide_lsp_plugin_register_types
 Module=blueprint
 Name=Blueprint Language Server
 X-Category=lsps
@@ -10,3 +10,5 @@ X-Completion-Provider-Languages=blueprint
 X-Diagnostic-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=blueprint
 X-Hover-Provider-Languages=blueprint
+X-LSP-Command=blueprint-compiler lsp
+X-LSP-Languages=blueprint
