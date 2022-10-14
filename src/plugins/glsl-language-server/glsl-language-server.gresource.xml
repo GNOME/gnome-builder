@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/glsl-language-server">
     <file>glsl-language-server.plugin</file>
+    <file>settings.json</file>
   </gresource>
 </gresources>
