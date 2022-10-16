@@ -54,6 +54,11 @@ IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_get_visual_position         (IdeSourceView              *self,
                                                                          guint                      *line,
                                                                          guint                      *line_column);
+IDE_AVAILABLE_IN_44
+void                        ide_source_view_get_visual_position_range   (IdeSourceView              *self,
+                                                                         guint                      *line,
+                                                                         guint                      *line_column,
+                                                                         guint                      *range);
 IDE_AVAILABLE_IN_ALL
 gboolean                    ide_source_view_get_highlight_current_line  (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL

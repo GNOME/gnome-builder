@@ -1552,21 +1552,57 @@ ide_source_view_get_visual_position (IdeSourceView *self,
                                      guint         *line,
                                      guint         *line_column)
 {
-  GtkTextBuffer *buffer;
-  GtkTextIter iter;
-  GtkTextMark *mark;
+  GtkTextIter insert;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  ide_buffer_get_selection_bounds (self->buffer, &insert, NULL);
 
   if (line)
-    *line = gtk_text_iter_get_line (&iter);
+    *line = gtk_text_iter_get_line (&insert);
 
   if (line_column)
-    *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &iter);
+    *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &insert);
+}
+
+void
+ide_source_view_get_visual_position_range (IdeSourceView *self,
+                                           guint         *line,
+                                           guint         *line_column,
+                                           guint         *range)
+{
+  GtkTextIter insert;
+  GtkTextIter selection;
+  int insert_line;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  ide_buffer_get_selection_bounds (self->buffer, &insert, &selection);
+
+  insert_line = gtk_text_iter_get_line (&insert);
+
+  if (line)
+    *line = insert_line;
+
+  if (line_column)
+    *line_column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (self), &insert);
+
+  if (range != NULL)
+    {
+      int selection_line = gtk_text_iter_get_line (&selection);
+
+      if (insert_line != selection_line)
+        {
+          *range = ABS (selection_line - insert_line);
+        }
+      else
+        {
+          int insert_offset = gtk_text_iter_get_offset (&insert);
+          int selection_offset = gtk_text_iter_get_offset (&selection);
+
+          *range = ABS (selection_offset - insert_offset);
+        }
+    }
 }
 
 char *
@@ -1574,12 +1610,16 @@ ide_source_view_dup_position_label (IdeSourceView *self)
 {
   guint line;
   guint column;
+  guint range;
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
-  ide_source_view_get_visual_position (self, &line, &column);
+  ide_source_view_get_visual_position_range (self, &line, &column, &range);
 
-  return g_strdup_printf (_("Ln %u, Col %u"), line + 1, column + 1);
+  if (range == 0)
+    return g_strdup_printf (_("Ln %u, Col %u"), line + 1, column + 1);
+  else
+    return g_strdup_printf (_("Ln %u, Col %u (Sel: %u)"), line + 1, column + 1, range);
 }
 
 const PangoFontDescription *
