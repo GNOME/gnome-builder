@@ -101,6 +101,7 @@ src/plugins/autotools/ide-autotools-pipeline-addin.c
 src/plugins/blueprint/blueprint.lang
 src/plugins/buildconfig/ide-buildconfig-config-provider.c
 src/plugins/buildstream/gbp-buildstream-pipeline-addin.c
+src/plugins/buildui/gbp-buildui-environment-editor.c
 src/plugins/buildui/gbp-buildui-environment-editor.ui
 src/plugins/buildui/gbp-buildui-environment-row.ui
 src/plugins/buildui/gbp-buildui-log-pane.c
