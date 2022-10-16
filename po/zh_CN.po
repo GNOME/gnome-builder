@@ -5,23 +5,23 @@
 # Mingye Wang (Arthur2e5) <arthur200126@gmail.com>, 2015.
 # Bin Li <binli@gnome.org>, 2015-2016.
 # Tong Hui <tonghuix@gmail.com>, 2017.
-# lumingzh <lumingzh@qq.com>, 2016-2022.
 # Boyuan Yang <073plan@gmail.com>, 2022.
+# lumingzh <lumingzh@qq.com>, 2016-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-22 03:21+0000\n"
-"PO-Revision-Date: 2022-09-22 12:25+0800\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"POT-Creation-Date: 2022-10-11 23:40+0000\n"
+"PO-Revision-Date: 2022-10-16 07:20+0800\n"
+"Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -482,12 +482,12 @@ msgid "Directory for all Builder projects."
 msgstr "所有构建器工程的存放目录。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-msgid "Restore Previous Files"
-msgstr "恢复之前的文件"
+msgid "Restore Session"
+msgstr "恢复会话"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-msgid "Restore previously opened files when loading a project."
-msgstr "加载一个工程时恢复之前打开的文件。"
+msgid "Restores the projects previous session when loading."
+msgstr "加载时恢复该工程的上次会话。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -649,7 +649,7 @@ msgstr "新建编辑器工作区"
 msgid "D-Bus Inspector"
 msgstr "D-Bus 检测"
 
-#: src/libide/code/ide-buffer.c:3674
+#: src/libide/code/ide-buffer.c:3685
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -692,7 +692,7 @@ msgstr "无标题"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1500
+#: src/libide/gui/ide-workbench.c:1517
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -707,8 +707,8 @@ msgstr "取消(_C)"
 msgid "A suitable debugger could not be found."
 msgstr "未发现适合的调试器。"
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1496
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
+#: src/libide/gui/ide-workbench.c:1513
 msgid "Open File…"
 msgstr "打开文件…"
 
@@ -897,9 +897,9 @@ msgstr "保存"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "取消"
 
@@ -1017,96 +1017,97 @@ msgstr "我的电脑 (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "我的电脑 (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:834
+#: src/libide/foundry/ide-pipeline.c:835
 msgid "The build pipeline is in a failed state"
 msgstr "构建管道处于失败状态"
 
-#: src/libide/foundry/ide-pipeline.c:844
+#: src/libide/foundry/ide-pipeline.c:845
 msgid "The build configuration has errors"
 msgstr "构建配置存在错误"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1095
+#: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
 msgid "Build (%s)"
 msgstr "构建（%s）"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1136
+#: src/libide/foundry/ide-pipeline.c:1137
 #, c-format
 msgid "Post-install (%s)"
 msgstr "安装后（%s）"
 
-#: src/libide/foundry/ide-pipeline.c:3071
+#: src/libide/foundry/ide-pipeline.c:3077
+#: src/libide/foundry/ide-pipeline.c:3116
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "伪终端创建失败。终端特性将会被限制。"
 
-#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Cleaning…"
 msgstr "正在清理…"
 
-#: src/libide/foundry/ide-pipeline.c:3272
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3374
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "失败"
 
-#: src/libide/foundry/ide-pipeline.c:3274
-#: src/libide/foundry/ide-pipeline.c:3337
+#: src/libide/foundry/ide-pipeline.c:3319
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Ready"
 msgstr "就绪"
 
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3334
 msgid "Downloading…"
 msgstr "正在下载…"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3338
 msgid "Building dependencies…"
 msgstr "正在构建依赖…"
 
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Bootstrapping…"
 msgstr "正在自举…"
 
-#: src/libide/foundry/ide-pipeline.c:3301
+#: src/libide/foundry/ide-pipeline.c:3346
 msgid "Configuring…"
 msgstr "正在配置…"
 
-#: src/libide/foundry/ide-pipeline.c:3305
+#: src/libide/foundry/ide-pipeline.c:3350
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "正在构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3309
+#: src/libide/foundry/ide-pipeline.c:3354
 msgid "Installing…"
 msgstr "正在安装…"
 
-#: src/libide/foundry/ide-pipeline.c:3313
+#: src/libide/foundry/ide-pipeline.c:3358
 msgid "Committing…"
 msgstr "正在提交…"
 
-#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3362
 msgid "Exporting…"
 msgstr "正在导出…"
 
-#: src/libide/foundry/ide-pipeline.c:3321
-#: src/libide/foundry/ide-pipeline.c:3325
+#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3370
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "成功"
 
-#: src/libide/foundry/ide-pipeline.c:3333
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Preparing…"
 msgstr "正在准备…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3689
+#: src/libide/foundry/ide-pipeline.c:3734
 #, c-format
 msgid "Removing %s"
 msgstr "正在移除 %s"
 
-#: src/libide/foundry/ide-pipeline.c:3748
+#: src/libide/foundry/ide-pipeline.c:3793
 msgid "Removing build directories…"
 msgstr "正在移除构建目录…"
 
@@ -1141,7 +1142,7 @@ msgstr "正在部署至设备…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "主机系统"
 
@@ -1183,7 +1184,7 @@ msgid "Directory"
 msgstr "目录"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
+#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
 #, c-format
 msgid "Builder — %s"
 msgstr "构建器 — %s"
@@ -1220,7 +1221,7 @@ msgid "Select Project File"
 msgstr "选择工程文件"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1499
+#: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
 msgstr "打开(_O)"
 
@@ -1281,8 +1282,8 @@ msgstr "打开"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "选择"
 
@@ -1446,33 +1447,17 @@ msgstr "打开文件或终端"
 msgid "Use the page switcher above or use one of the following:"
 msgstr "使用上边的页面切换器或下列的一种："
 
-#: src/libide/gui/ide-frame.ui:26
-msgid "Ctrl+Enter"
-msgstr "Ctrl+Enter"
-
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
 msgstr "工程侧边栏"
-
-#: src/libide/gui/ide-frame.ui:46
-msgid "F9"
-msgstr "F9"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
 msgstr "打开文件"
 
-#: src/libide/gui/ide-frame.ui:66
-msgid "Ctrl+O"
-msgstr "Ctrl+O"
-
-#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
+#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:114
 msgid "New Terminal"
 msgstr "新建终端"
-
-#: src/libide/gui/ide-frame.ui:86
-msgid "Ctrl+Shift+T"
-msgstr "Ctrl+Shift+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
@@ -1755,7 +1740,7 @@ msgid "Code Navigation"
 msgstr "代码导航"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1535
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1892,6 +1877,10 @@ msgstr "设置"
 msgid "Allow JavaScript"
 msgstr "允许 JavaScript"
 
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "打印"
+
 #: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "运行构建器的新实例"
@@ -2027,7 +2016,7 @@ msgstr "警告"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "构建管道"
 
@@ -2561,12 +2550,12 @@ msgid ""
 "runtime."
 msgstr "用来构建您应用程序的 SDK 会自动由运行时决定。"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 msgid "Fetch dependencies"
 msgstr "获取依赖"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:199
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
 msgid "Build project"
 msgstr "构建工程"
 
@@ -2621,7 +2610,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
 msgid "Configure project"
 msgstr "配置工程"
 
@@ -2669,7 +2658,7 @@ msgstr "加载工程失败：%s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:996
+#: src/plugins/ctags/ide-ctags-service.c:1023
 msgid "Indexing Source Code"
 msgstr "索引源代码"
 
@@ -2685,10 +2674,15 @@ msgstr "搜索、诊断和自动补全可能会被限制直到完成。"
 msgid "Declaration"
 msgstr "声明"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "在“%s”中可能有拼写错误。是否为“%s”？"
+
+#: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
+#, c-format
+msgid "Failed to format while saving document: %s"
+msgstr "保存文档时格式化失败：%s"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
 msgid "Symbol Not Selected"
@@ -2700,12 +2694,10 @@ msgstr "必须选中要重命名的符号"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
-#| msgid "_Find References"
 msgid "Find References"
 msgstr "查找引用"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
-#| msgid "No references were found"
 msgid "No references found"
 msgstr "没有发现引用"
 
@@ -2715,12 +2707,10 @@ msgstr "编程语言工具可能不支持查找引用"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
-#| msgid "Failed to open file: %s"
 msgid "Failed to rename symbol: %s"
 msgstr "重命名符号失败：%s"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
-#| msgid "Rename symbol"
 msgid "Rename Symbol"
 msgstr "重命名符号"
 
@@ -2731,7 +2721,6 @@ msgid "_Rename"
 msgstr "重命名(_R)"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
-#| msgid "Current line"
 msgid "Current Symbol name"
 msgstr "当前符号名"
 
@@ -2740,29 +2729,26 @@ msgid "New Symbol name"
 msgstr "新符号名"
 
 #: src/plugins/codeui/gtk/menus.ui:7
-#| msgid "Rename symbol"
 msgid "R_ename Symbol…"
 msgstr "重命名符号(_E)…"
 
 #: src/plugins/codeui/gtk/menus.ui:13
-#| msgid "Declaration"
 msgid "_Go to Declaration"
 msgstr "跳转至声明(_G)"
 
 #: src/plugins/codeui/gtk/menus.ui:14
-#| msgid "Jump to file and location where item is defined"
 msgid "Jump to file and location where item is declared"
 msgstr "跳转至项目声明的文件和位置"
 
-#: src/plugins/codeui/gtk/menus.ui:18
+#: src/plugins/codeui/gtk/menus.ui:19
 msgid "_Go to Definition"
 msgstr "跳转至定义(_G)"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "Jump to file and location where item is defined"
 msgstr "跳转至项目定义的文件和位置"
 
-#: src/plugins/codeui/gtk/menus.ui:24
+#: src/plugins/codeui/gtk/menus.ui:25
 msgid "_Find References"
 msgstr "查找引用(_F)"
 
@@ -2807,7 +2793,7 @@ msgid "Display the project creation guide"
 msgstr "显示工程创建向导"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
 msgid "Select Location"
 msgstr "选择位置"
 
@@ -2894,7 +2880,7 @@ msgid ""
 "indexing is complete."
 msgstr "搜索、自动补全和符号信息可能会被限制直到 Ctags 完成索引。"
 
-#: src/plugins/ctags/ide-ctags-service.c:953
+#: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
 msgstr "索引源代码（已暂停）"
 
@@ -3390,7 +3376,7 @@ msgid "Prefer a space before commas"
 msgstr "偏好在逗号前加空格"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-msgid "Prefer a space before simicolons"
+msgid "Prefer a space before semicolons"
 msgstr "偏好在分号前加空格"
 
 #: src/plugins/editorui/tweaks.ui:10
@@ -3773,7 +3759,7 @@ msgstr "名称"
 msgid "Architecture"
 msgstr "架构"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -3881,7 +3867,7 @@ msgstr "无法设置 AMEND 和 GPG_SIGN 标记"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "无法在没有 GPG_KEY_ID 情况下对提交签名"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:402
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "无法监控在工作目录外的文件"
@@ -3894,13 +3880,13 @@ msgstr "未使用 Git 版本控制系统"
 msgid "Updating Git Submodules"
 msgstr "正在更新 Git 子模块"
 
-#: src/plugins/git/gbp-git-submodule-stage.c:136
-msgid "Network is not available, skipping submodule update"
-msgstr "网络不可用，跳过子模块更新"
-
-#: src/plugins/git/gbp-git-submodule-stage.c:208
+#: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
 msgstr "初始化 git 子模块"
+
+#: src/plugins/git/gbp-git-submodule-stage.c:133
+msgid "Network is not available, skipping submodule update"
+msgstr "网络不可用，跳过子模块更新"
 
 #: src/plugins/git/gbp-git-vcs.c:206
 msgid "Pushed."
@@ -4164,12 +4150,10 @@ msgid "Change style-scheme to light variant"
 msgstr "更改样式方案为亮色方案"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
-#| msgid "Use Clang for Diagnostics"
 msgid "Display Build Diagnostics"
 msgstr "显示构建诊断"
 
 #: src/plugins/menu-search/gtk/menus.ui:73
-#| msgid "Show errors and warnings provided by Vala"
 msgid "Display errors and warnings found during build"
 msgstr "显示构建期间发现的错误和警告"
 
@@ -4177,11 +4161,11 @@ msgstr "显示构建期间发现的错误和警告"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:584
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr "加载 Meson 检查"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:274
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
 msgid "Install project"
 msgstr "安装工程"
 
@@ -4479,12 +4463,12 @@ msgid "Drop Down"
 msgstr "下拉"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:681
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:687
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
@@ -4722,7 +4706,6 @@ msgid "Recent Projects"
 msgstr "最近的工程"
 
 #: src/plugins/retab/gtk/menus.ui:5
-#| msgid "_Reformat tabs"
 msgid "_Reformat Tabs"
 msgstr "重新格式化制表符(_R)"
 
@@ -4751,11 +4734,10 @@ msgid "Proc Macros"
 msgstr "过程宏"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-msgstr "启用 rust-analyzer 的实验性过程宏特性"
+msgid "Enables the Proc Macros feature of rust-analyzer"
+msgstr "启用 rust-analyzer 的过程宏特性"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
-#| msgid "Clear Build Logs"
 msgid "Cargo Build Scripts"
 msgstr "Cargo 构建脚本"
 
@@ -4764,7 +4746,6 @@ msgid "Run build scripts (build.rs) for more precise code analysis"
 msgstr "运行构建脚本（build.rs）以进行更精确的代码分析"
 
 #: src/plugins/rust-analyzer/tweaks.ui:74
-#| msgid "Editing & Formatting"
 msgid "Rustfmt Range Formatting"
 msgstr "Rustfmt 范围格式化"
 
@@ -4802,24 +4783,36 @@ msgstr "允许在使用流量计费互联网连接时下载 SDK 和依赖"
 msgid "Available SDKs"
 msgstr "可用 SDK"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "使用 KEY=VALUE 设定环境变量"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "设定键可不以数字开始"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr "设定键仅可包含字母数字或下划线。"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "无标题命令"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "设置快捷键"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "选择工作目录"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "创建命令"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "创建(_A)"
 
@@ -4857,8 +4850,8 @@ msgstr "工作目录"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "命令将从该位置运行。使用 <tt>$BUILDDIR</tt>、<tt>$SRCDIR</tt> 或 <tt>$HOME</"
 "tt> 来定义关联路径。"
@@ -4881,31 +4874,31 @@ msgid ""
 "system or build containers."
 msgstr "构建器可以运行您来自包括主机系统或构建容器等一些位置的命令。"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "删除命令(_D)"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "子进程"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "作为构建器的子进程运行命令。"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "在主机系统上运行命令。"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "在构建管道内运行命令。"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "作为目标应用程序"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "将其当作目标应用程序来运行命令。"
 
@@ -5008,6 +5001,14 @@ msgstr "选择符号（Ctrl+Shift+K）"
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
 msgstr "导航到当前页面内的符号"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:307
+msgid "Profiling Application…"
+msgstr "分析应用程序…"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:308
+msgid "Symbol decoding will begin after application exits"
+msgstr "符号解码将在应用程序退出后开始"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5244,7 +5245,6 @@ msgid "Application Output"
 msgstr "应用程序输出"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
-#| msgid "Unit tests completed"
 msgid "Process completed"
 msgstr "进程已完成"
 
@@ -5507,7 +5507,7 @@ msgstr "退出时搜索内存泄漏"
 msgid "Begin cloning project from URI"
 msgstr "开始从网址克隆工程"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "克隆该仓库失败。"
 
@@ -5598,6 +5598,21 @@ msgstr "无法创建 XML 树。"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
+
+#~ msgid "Restore Previous Files"
+#~ msgstr "恢复之前的文件"
+
+#~ msgid "Ctrl+Enter"
+#~ msgstr "Ctrl+Enter"
+
+#~ msgid "F9"
+#~ msgstr "F9"
+
+#~ msgid "Ctrl+O"
+#~ msgstr "Ctrl+O"
+
+#~ msgid "Ctrl+Shift+T"
+#~ msgstr "Ctrl+Shift+T"
 
 #, c-format
 #~ msgid ""
