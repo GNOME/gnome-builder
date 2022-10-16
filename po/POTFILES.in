@@ -102,6 +102,7 @@ src/plugins/autotools/ide-autotools-pipeline-addin.c
 src/plugins/blueprint/blueprint.lang
 src/plugins/buildconfig/ide-buildconfig-config-provider.c
 src/plugins/buildstream/gbp-buildstream-pipeline-addin.c
+src/plugins/buildui/gbp-buildui-environment-editor.c
 src/plugins/buildui/gbp-buildui-environment-editor.ui
 src/plugins/buildui/gbp-buildui-environment-row.ui
 src/plugins/buildui/gbp-buildui-log-pane.c
@@ -208,7 +209,6 @@ src/plugins/grep/gbp-grep-popover.ui
 src/plugins/grep/gtk/menus.ui
 src/plugins/host/gbp-host-runtime-provider.c
 src/plugins/html-preview/gtk/menus.ui
-src/plugins/intelephense/gbp-intelephense-service.c
 src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c
 src/plugins/ls/gbp-ls-page.c
 src/plugins/ls/gbp-ls-page.ui
@@ -253,8 +253,6 @@ src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/recent/gbp-recent-section.c
 src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gtk/menus.ui
-src/plugins/rust-analyzer/org.gnome.builder.rust-analyzer.gschema.xml
-src/plugins/rust-analyzer/tweaks.ui
 src/plugins/sdkui/gbp-sdkui-tweaks-addin.c
 src/plugins/sdkui/gtk/menus.ui
 src/plugins/sdkui/tweaks.ui
@@ -311,3 +309,4 @@ src/plugins/web-browser/gtk/menus.ui
 src/plugins/xml-pack/ide-xml-parser.c
 src/plugins/xml-pack/ide-xml-service.c
 src/plugins/xml-pack/ide-xml-tree-builder.c
+src/plugins/zls/zig.lang
