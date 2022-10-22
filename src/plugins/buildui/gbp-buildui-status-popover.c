@@ -260,6 +260,11 @@ gbp_buildui_status_popover_init (GbpBuilduiStatusPopover *self)
                                    G_CALLBACK (gbp_buildui_status_popover_add_diagnsotic),
                                    self,
                                    G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->pipeline_signals,
+                                   "started",
+                                   G_CALLBACK (gbp_buildui_status_popover_clear),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   g_object_bind_property_full (self->warnings_model, "n-items",
                                self->warnings, "title",
