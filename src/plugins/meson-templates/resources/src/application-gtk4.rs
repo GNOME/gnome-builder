@@ -1,6 +1,5 @@
 {{include "license.rs"}}
 
-use glib::clone;
 use gtk::prelude::*;
 {{if is_adwaita}}
 use adw::subclass::prelude::*;
@@ -26,9 +25,9 @@ mod imp {
     }
 
     impl ObjectImpl for {{PreFix}}Application {
-        fn constructed(&self, obj: &Self::Type) {
-            self.parent_constructed(obj);
-
+        fn constructed(&self) {
+            self.parent_constructed();
+            let obj = self.instance();
             obj.setup_gactions();
             obj.set_accels_for_action("app.quit", &["<primary>q"]);
         }
@@ -39,12 +38,13 @@ mod imp {
         // has been launched. Additionally, this callback notifies us when the user
         // tries to launch a "second instance" of the application. When they try
         // to do that, we'll just present any existing window.
-        fn activate(&self, application: &Self::Type) {
+        fn activate(&self) {
+            let application = self.instance();
             // Get the current window or create one if necessary
             let window = if let Some(window) = application.active_window() {
                 window
             } else {
-                let window = {{PreFix}}Window::new(application);
+                let window = {{PreFix}}Window::new(&*application);
                 window.upcast()
             };
 
@@ -69,21 +69,16 @@ glib::wrapper! {
 impl {{PreFix}}Application {
     pub fn new(application_id: &str, flags: &gio::ApplicationFlags) -> Self {
         glib::Object::new(&[("application-id", &application_id), ("flags", flags)])
-            .expect("Failed to create {{PreFix}}Application")
     }
 
     fn setup_gactions(&self) {
-        let quit_action = gio::SimpleAction::new("quit", None);
-        quit_action.connect_activate(clone!(@weak self as app => move |_, _| {
-            app.quit();
-        }));
-        self.add_action(&quit_action);
-
-        let about_action = gio::SimpleAction::new("about", None);
-        about_action.connect_activate(clone!(@weak self as app => move |_, _| {
-            app.show_about();
-        }));
-        self.add_action(&about_action);
+        let quit_action = gio::ActionEntry::builder("quit")
+            .activate(move |app: &Self, _, _| app.quit())
+            .build();
+        let about_action = gio::ActionEntry::builder("about")
+            .activate(move |app: &Self, _, _| app.show_about())
+            .build();
+        self.add_action_entries([quit_action, about_action]).unwrap();
     }
 
     fn show_about(&self) {

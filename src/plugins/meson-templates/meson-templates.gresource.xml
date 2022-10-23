@@ -40,7 +40,6 @@
     <file compressed="true">resources/src/main-cli.py</file>
     <file compressed="true">resources/src/main-gtk4.rs</file>
     <file compressed="true">resources/src/main-cli.rs</file>
-    <file compressed="true">resources/src/Cargo.lock</file>
     <file compressed="true">resources/src/Cargo-gtk4.toml</file>
     <file compressed="true">resources/src/Cargo-cli.toml</file>
     <file compressed="true">resources/meson.build</file>

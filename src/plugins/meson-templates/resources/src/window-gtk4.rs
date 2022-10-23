@@ -6,12 +6,12 @@ use adw::subclass::prelude::*;
 {{else}}
 use gtk::subclass::prelude::*;
 {{end}}
-use gtk::{gio, glib, CompositeTemplate};
+use gtk::{gio, glib};
 
 mod imp {
     use super::*;
 
-    #[derive(Debug, Default, CompositeTemplate)]
+    #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "{{appid_path}}/{{ui_file}}")]
     pub struct {{PreFix}}Window {
         // Template widgets
@@ -28,7 +28,7 @@ mod imp {
         type ParentType = {{if is_adwaita}}adw{{else}}gtk{{end}}::ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
-            Self::bind_template(klass);
+            klass.bind_template();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
@@ -54,6 +54,5 @@ glib::wrapper! {
 impl {{PreFix}}Window {
     pub fn new<P: glib::IsA<gtk::Application>>(application: &P) -> Self {
         glib::Object::new(&[("application", application)])
-            .expect("Failed to create {{PreFix}}Window")
     }
 }
