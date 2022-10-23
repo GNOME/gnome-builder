@@ -94,7 +94,6 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
 
   /* Rust */
   { "src/Cargo-gtk4.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
-  { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
   { "src/application-gtk4.rs", "src/application.rs", IDE_STRV_INIT ("Rust") },
   { "src/config-gtk4.rs.in", "src/config.rs.in", IDE_STRV_INIT ("Rust") },
   { "src/hello.gresource.xml", "src/{{prefix}}.gresource.xml", IDE_STRV_INIT ("Rust") },
@@ -145,7 +144,6 @@ static GbpMesonTemplateExpansion cli_expansions[] = {
 
   /* Rust */
   { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("Rust") },
-  { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
   { "src/Cargo-cli.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
   { "src/main-cli.rs", "src/main.rs", IDE_STRV_INIT ("Rust") },
 
@@ -160,7 +158,6 @@ static GbpMesonTemplateExpansion empty_expansions[] = {
   { "src/meson-empty.build", "src/meson.build" },
 
   /* Rust */
-  { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
   { "src/Cargo-cli.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
 };
 
