@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-07 18:24+0000\n"
-"PO-Revision-Date: 2022-10-09 19:36+1000\n"
+"POT-Creation-Date: 2022-10-13 15:11+0000\n"
+"PO-Revision-Date: 2022-10-14 09:09+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -939,7 +939,7 @@ msgstr "Сохранить"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1186,7 +1186,7 @@ msgstr "Развёртывание на устройство…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Операционная система хоста"
 
@@ -1328,7 +1328,7 @@ msgstr "Открыть"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Выбрать"
@@ -2071,7 +2071,7 @@ msgstr "Предупреждения"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Собрать Pipeline"
 
@@ -4889,24 +4889,39 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "Доступные SDK"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr ""
+"Используйте конструкцию KEY=VALUE, чтобы установить переменную окружения"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Ключи не могут начинаться с цифры"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
+"Ключи могут содержать только буквенно-цифровые символы или символы "
+"подчеркивания."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Безымянная команда"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Установить комбинацию клавиш"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Выберите каталог проекта"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Создать команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "Соз_дать"
 
@@ -4971,31 +4986,31 @@ msgstr ""
 "Builder может запускать вашу команду из нескольких мест, включая система "
 "хоста или контейнеры."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "_Удалить команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Субпроцесс"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Запускает команду как субпроцесс Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "Запускает команду на основной системе."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Запускает команду в конвейере сборки."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Как целевое приложение"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Запускает команду как если бы это было целевое приложение."
 
