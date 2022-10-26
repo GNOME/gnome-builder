@@ -42,9 +42,9 @@ struct _IdeLspSearchProviderClass
 };
 
 IDE_AVAILABLE_IN_ALL
-IdeLspClient               *ide_lsp_search_provider_get_client (IdeLspSearchProvider *self);
+IdeLspClient *ide_lsp_search_provider_get_client (IdeLspSearchProvider *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_lsp_search_provider_set_client (IdeLspSearchProvider *self,
-                                                                      IdeLspClient               *client);
+void          ide_lsp_search_provider_set_client (IdeLspSearchProvider *self,
+                                                  IdeLspClient         *client);
 
 G_END_DECLS
