@@ -56,14 +56,6 @@ libide_lsp_public_sources = [
   'ide-lsp-highlighter.c',
   'ide-lsp-hover-provider.c',
   'ide-lsp-plugin.c',
-  'ide-lsp-plugin-code-action-provider.c',
-  'ide-lsp-plugin-completion-provider.c',
-  'ide-lsp-plugin-diagnostic-provider.c',
-  'ide-lsp-plugin-formatter.c',
-  'ide-lsp-plugin-highlighter.c',
-  'ide-lsp-plugin-hover-provider.c',
-  'ide-lsp-plugin-rename-provider.c',
-  'ide-lsp-plugin-symbol-resolver.c',
   'ide-lsp-rename-provider.c',
   'ide-lsp-search-provider.c',
   'ide-lsp-search-result.c',
@@ -76,6 +68,14 @@ libide_lsp_public_sources = [
 ]
 
 libide_lsp_private_sources = [
+  'ide-lsp-plugin-code-action-provider.c',
+  'ide-lsp-plugin-completion-provider.c',
+  'ide-lsp-plugin-diagnostic-provider.c',
+  'ide-lsp-plugin-formatter.c',
+  'ide-lsp-plugin-highlighter.c',
+  'ide-lsp-plugin-hover-provider.c',
+  'ide-lsp-plugin-rename-provider.c',
+  'ide-lsp-plugin-symbol-resolver.c',
 ]
 
 libide_lsp_enum_headers = [
