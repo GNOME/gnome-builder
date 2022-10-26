@@ -35,8 +35,6 @@ typedef struct
   WebKitSettings     *web_settings;
   WebKitWebView      *web_view;
 
-  GSimpleActionGroup *actions;
-
   IdeHtmlGenerator   *generator;
 
   guint               dirty : 1;
@@ -46,6 +44,7 @@ typedef struct
 
 enum {
   PROP_0,
+  PROP_ENABLE_JAVASCRIPT,
   PROP_SHOW_TOOLBAR,
   N_PROPS
 };
@@ -187,50 +186,35 @@ on_web_view_decide_policy_cb (IdeWebkitPage            *self,
 }
 
 static void
-go_forward_action (GSimpleAction *action,
-                   GVariant      *param,
-                   gpointer       user_data)
+go_forward_action (GtkWidget  *widget,
+                   const char *action_name,
+                   GVariant   *param)
 {
-  IdeWebkitPage *self = user_data;
-
   IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (IDE_IS_WEBKIT_PAGE (self));
-
-  ide_webkit_page_go_forward (self);
-
+  ide_webkit_page_go_forward (IDE_WEBKIT_PAGE (widget));
   IDE_EXIT;
 }
 
 static void
-go_back_action (GSimpleAction *action,
-                GVariant      *param,
-                gpointer       user_data)
+go_back_action (GtkWidget  *widget,
+                const char *action_name,
+                GVariant   *param)
 {
-  IdeWebkitPage *self = user_data;
-
   IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (IDE_IS_WEBKIT_PAGE (self));
-
-  ide_webkit_page_go_back (self);
-
+  ide_webkit_page_go_back (IDE_WEBKIT_PAGE (widget));
   IDE_EXIT;
 }
 
 static void
-reload_action (GSimpleAction *action,
-               GVariant      *param,
-               gpointer       user_data)
+reload_action (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *param)
 {
-  IdeWebkitPage *self = user_data;
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_WEBKIT_PAGE (self));
 
   webkit_web_view_reload (priv->web_view);
@@ -239,55 +223,20 @@ reload_action (GSimpleAction *action,
 }
 
 static void
-stop_action (GSimpleAction *action,
-             GVariant      *param,
-             gpointer       user_data)
+stop_action (GtkWidget  *widget,
+             const char *action_name,
+             GVariant   *param)
 {
-  IdeWebkitPage *self = user_data;
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_WEBKIT_PAGE (self));
 
   webkit_web_view_stop_loading (priv->web_view);
 
   IDE_EXIT;
-}
-
-static const GActionEntry actions[] = {
-  { "go-forward", go_forward_action },
-  { "go-back", go_back_action },
-  { "reload", reload_action },
-  { "stop", stop_action },
-};
-
-static void
-set_action_enabled (IdeWebkitPage *self,
-                    const char    *action_name,
-                    gboolean       enabled)
-{
-  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
-  GAction *action;
-
-  g_assert (IDE_IS_WEBKIT_PAGE (self));
-  g_assert (action_name != NULL);
-
-  if (!(action = g_action_map_lookup_action (G_ACTION_MAP (priv->actions), action_name)))
-    {
-      g_critical ("Failed to locate action %s", action_name);
-      return;
-    }
-
-  if (!G_IS_SIMPLE_ACTION (action))
-    {
-      g_critical ("Implausible, %s is not a GSimpleAction",
-                  G_OBJECT_TYPE_NAME (action));
-      return;
-    }
-
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
 }
 
 static void
@@ -303,10 +252,12 @@ on_back_forward_list_changed_cb (IdeWebkitPage             *self,
   g_assert (IDE_IS_WEBKIT_PAGE (self));
   g_assert (WEBKIT_IS_BACK_FORWARD_LIST (list));
 
-  set_action_enabled (self, "go-forward",
-                      webkit_web_view_can_go_forward (priv->web_view));
-  set_action_enabled (self, "go-back",
-                      webkit_web_view_can_go_back (priv->web_view));
+  panel_widget_action_set_enabled (PANEL_WIDGET (self),
+                                   "web.go-forward",
+                                   webkit_web_view_can_go_forward (priv->web_view));
+  panel_widget_action_set_enabled (PANEL_WIDGET (self),
+                                   "web.go-back",
+                                   webkit_web_view_can_go_back (priv->web_view));
 
   IDE_EXIT;
 }
@@ -325,8 +276,8 @@ ide_webkit_page_update_reload (IdeWebkitPage *self)
   loading = webkit_web_view_is_loading (priv->web_view);
   uri = webkit_web_view_get_uri (priv->web_view);
 
-  set_action_enabled (self, "reload", !loading && !ide_str_empty0 (uri));
-  set_action_enabled (self, "stop", loading);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.reload", !loading && !ide_str_empty0 (uri));
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.stop", loading);
 
   if (loading)
     gtk_stack_set_visible_child_name (priv->reload_stack, "stop");
@@ -337,28 +288,26 @@ ide_webkit_page_update_reload (IdeWebkitPage *self)
 }
 
 static void
-add_property_action (gpointer    object,
-                     const char *property_name,
-                     GActionMap *action_map)
-{
-  g_autoptr(GPropertyAction) action = NULL;
-
-  g_assert (G_IS_OBJECT (object));
-  g_assert (property_name != NULL);
-  g_assert (G_IS_ACTION_MAP (action_map));
-
-  action = g_property_action_new (property_name, object, property_name);
-
-  if (action != NULL)
-    g_action_map_add_action (action_map, G_ACTION (action));
-}
-
-static void
 ide_webkit_page_print_action (GtkWidget  *widget,
                               const char *action_name,
                               GVariant   *param)
 {
   ide_webkit_page_print (IDE_WEBKIT_PAGE (widget));
+}
+
+static void
+enable_javascript_changed_cb (IdeWebkitPage  *self,
+                              GParamSpec     *pspec,
+                              WebKitSettings *web_settings)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_SETTINGS (web_settings));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_JAVASCRIPT]);
+
+  IDE_EXIT;
 }
 
 static void
@@ -385,7 +334,6 @@ ide_webkit_page_dispose (GObject *object)
   priv->disposed = TRUE;
 
   g_clear_object (&priv->generator);
-  g_clear_object (&priv->actions);
 
   G_OBJECT_CLASS (ide_webkit_page_parent_class)->dispose (object);
 }
@@ -397,9 +345,14 @@ ide_webkit_page_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   IdeWebkitPage *self = IDE_WEBKIT_PAGE (object);
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
   switch (prop_id)
     {
+    case PROP_ENABLE_JAVASCRIPT:
+      g_value_set_boolean (value, webkit_settings_get_enable_javascript (priv->web_settings));
+      break;
+
     case PROP_SHOW_TOOLBAR:
       g_value_set_boolean (value, ide_webkit_page_get_show_toolbar (self));
       break;
@@ -416,9 +369,14 @@ ide_webkit_page_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   IdeWebkitPage *self = IDE_WEBKIT_PAGE (object);
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
   switch (prop_id)
     {
+    case PROP_ENABLE_JAVASCRIPT:
+      webkit_settings_set_enable_javascript (priv->web_settings, g_value_get_boolean (value));
+      break;
+
     case PROP_SHOW_TOOLBAR:
       ide_webkit_page_set_show_toolbar (self, g_value_get_boolean (value));
       break;
@@ -442,6 +400,20 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
 
   widget_class->grab_focus = ide_webkit_page_grab_focus;
 
+  /**
+   * IdeWebkitPage:enable-javascript:
+   *
+   * The "enable-javascript" allows disabling javascript within the webview.
+   * It is also exported via the "web.enable-javascript" action (although
+   * should generally be used with the "page." prefix to that action.
+   *
+   * Since: 44
+   */
+  properties [PROP_ENABLE_JAVASCRIPT] =
+    g_param_spec_boolean ("enable-javascript", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SHOW_TOOLBAR] =
     g_param_spec_boolean ("show-toolbar",
                           "Show Toolbar",
@@ -463,6 +435,11 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_web_view_decide_policy_cb);
 
   panel_widget_class_install_action (p_widget_class, "web.print", NULL, ide_webkit_page_print_action);
+  panel_widget_class_install_action (p_widget_class, "web.go-forward", NULL, go_forward_action);
+  panel_widget_class_install_action (p_widget_class, "web.go-back", NULL, go_back_action);
+  panel_widget_class_install_action (p_widget_class, "web.reload", NULL, reload_action);
+  panel_widget_class_install_action (p_widget_class, "web.stop", NULL, stop_action);
+  panel_widget_class_install_property_action (p_widget_class, "web.enable-javascript", "enable-javascript");
 
   g_type_ensure (WEBKIT_TYPE_SETTINGS);
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
@@ -486,19 +463,6 @@ ide_webkit_page_init (IdeWebkitPage *self)
                                transform_cairo_surface_to_gicon,
                                NULL, self, NULL);
 
-  priv->actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (priv->actions),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "web",
-                                  G_ACTION_GROUP (priv->actions));
-
-  add_property_action (priv->web_settings,
-                       "enable-javascript",
-                       G_ACTION_MAP (priv->actions));
-
   list = webkit_web_view_get_back_forward_list (priv->web_view);
   g_signal_connect_object (list,
                            "changed",
@@ -506,10 +470,16 @@ ide_webkit_page_init (IdeWebkitPage *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  set_action_enabled (self, "go-forward", FALSE);
-  set_action_enabled (self, "go-back", FALSE);
-  set_action_enabled (self, "reload", FALSE);
-  set_action_enabled (self, "stop", FALSE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.go-forward", FALSE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.go-back", FALSE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.reload", FALSE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "web.stop", FALSE);
+
+  g_signal_connect_object (priv->web_settings,
+                           "notify::enable-javascript",
+                           G_CALLBACK (enable_javascript_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 IdeWebkitPage *
