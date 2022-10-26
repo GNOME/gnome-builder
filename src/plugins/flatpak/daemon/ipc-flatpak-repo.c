@@ -42,6 +42,42 @@ static const char *remotes[] = { "flathub", "flathub-beta", "gnome-nightly" };
 static char *repo_data_dir;
 static IpcFlatpakRepo *instance;
 
+typedef struct
+{
+  FlatpakInstallation *installation;
+  GPtrArray *remotes;
+} UpdateState;
+
+static gpointer
+list_remote_refs_worker (gpointer data)
+{
+  UpdateState *state = data;
+
+  g_assert (state != NULL);
+  g_assert (state->remotes  != NULL);
+  g_assert (FLATPAK_IS_INSTALLATION (state->installation));
+
+  for (guint i = 0; i < state->remotes->len; i++)
+    {
+      const char *remote = g_ptr_array_index (state->remotes, i);
+      g_autoptr(GPtrArray) refs = NULL;
+      g_autoptr(GError) error = NULL;
+
+      g_debug ("Updating remote %s", remote);
+
+      if (!(refs = flatpak_installation_list_remote_refs_sync (state->installation, remote, NULL, &error)))
+        g_warning ("Failed to update remote '%s': %s", remote, error->message);
+      else
+        g_debug ("Remote '%s' contained %u refs", remote, refs->len);
+    }
+
+  g_clear_object (&state->installation);
+  g_ptr_array_unref (state->remotes);
+  g_free (state);
+
+  return NULL;
+}
+
 static void
 ipc_flatpak_repo_constructed (GObject *object)
 {
@@ -54,6 +90,8 @@ ipc_flatpak_repo_constructed (GObject *object)
   g_autoptr(GFile) flatpak = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GKeyFile) keyfile = NULL;
+  UpdateState *state;
+  GThread *thread;
 
   g_assert (IPC_IS_FLATPAK_REPO (self));
 
@@ -82,13 +120,16 @@ ipc_flatpak_repo_constructed (GObject *object)
 
   g_assert (FLATPAK_IS_INSTALLATION (self->installation));
 
+  state = g_new0 (UpdateState, 1);
+  state->installation = g_object_ref (self->installation);
+  state->remotes = g_ptr_array_new ();
+
   /* Add repos we need for development to private installation, but filtered to
    * only include runtimes.
    */
   for (guint i = 0; i < G_N_ELEMENTS (remotes); i++)
     {
       g_autoptr(FlatpakRemote) remote = NULL;
-      g_autoptr(GPtrArray) refs = NULL;
 
       if (!(remote = flatpak_installation_get_remote_by_name (self->installation, remotes[i], NULL, NULL)))
         {
@@ -114,15 +155,11 @@ ipc_flatpak_repo_constructed (GObject *object)
                          remotes[i], error->message);
               g_clear_error (&error);
             }
+          else
+            {
+              g_ptr_array_add (state->remotes, (char *)remotes[i]);
+            }
         }
-
-      g_debug ("Updating remote %s", remotes[i]);
-      refs = flatpak_installation_list_remote_refs_sync (self->installation, remotes[i], NULL, &error);
-      if (error != NULL)
-        g_warning ("Failed to update remote %s: %s", remotes[i], error->message);
-      else
-        g_debug ("Found %u refs", refs->len);
-      g_clear_error (&error);
     }
 
 #define INSTALLATION_NAME "Installation \"gnome-builder-private\""
@@ -145,6 +182,11 @@ ipc_flatpak_repo_constructed (GObject *object)
       g_warning ("Failed to create flatpak site configuration: %s", error->message);
       return;
     }
+
+  thread = g_thread_new ("list-remote-refs",
+                         list_remote_refs_worker,
+                         g_steal_pointer (&state));
+  g_thread_unref (thread);
 }
 
 static void
