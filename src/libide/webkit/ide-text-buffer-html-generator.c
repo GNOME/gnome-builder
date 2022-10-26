@@ -201,5 +201,5 @@ ide_text_buffer_html_generator_init (IdeTextBufferHtmlGenerator *self)
                                  "changed",
                                  G_CALLBACK (ide_html_generator_invalidate),
                                  self,
-                                 G_CONNECT_SWAPPED);
+                                 G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 }
