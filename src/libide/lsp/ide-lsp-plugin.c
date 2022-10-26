@@ -275,6 +275,14 @@ ide_lsp_plugin_register (PeasObjectModule     *object_module,
                                                    (GDestroyNotify)ide_lsp_plugin_info_unref);
 }
 
+static inline gboolean
+has_metadata (PeasPluginInfo *plugin_info,
+              const char     *key)
+{
+  const char *str = peas_plugin_info_get_external_data (plugin_info, key);
+  return !ide_str_empty0 (str);
+}
+
 void
 ide_lsp_plugin_register_types (PeasObjectModule *object_module)
 {
@@ -284,6 +292,7 @@ ide_lsp_plugin_register_types (PeasObjectModule *object_module)
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) argv = NULL;
   g_auto(GStrv) languages = NULL;
+  IdeLspPluginFeatures features = 0;
   PeasPluginInfo *plugin_info;
   PeasEngine *engine;
   const char *data_dir;
@@ -329,8 +338,34 @@ ide_lsp_plugin_register_types (PeasObjectModule *object_module)
   settings_path = g_build_filename (data_dir, x_lsp_settings, NULL);
   default_settings = load_bytes (settings_path);
 
+  /* Figure out what features this LSP supports based on the X-* metadata
+   * values. We require that they are set in the .plugin or they will not
+   * have dynamic subtypes created.
+   */
+  if (has_metadata (plugin_info, "Code-Action-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_CODE_ACTION;
+  if (has_metadata (plugin_info, "Completion-Provider-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_COMPLETION;
+  if (has_metadata (plugin_info, "Diagnostic-Provider-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_DIAGNOSTICS;
+  if (has_metadata (plugin_info, "Formatter-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_FORMATTER;
+  if (has_metadata (plugin_info, "Highlighter-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_HIGHLIGHTER;
+  if (has_metadata (plugin_info, "Hover-Provider-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_HOVER;
+  if (has_metadata (plugin_info, "Rename-Provider-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_RENAME;
+  if (has_metadata (plugin_info, "Symbol-Resolver-Languages"))
+    features |= IDE_LSP_PLUGIN_FEATURES_SYMBOL_RESOLVER;
+
+  if (features == 0)
+    g_warning ("LSP plugin %s contains no requested LSP features. "
+               "Make sure you've set X-Diagnostic-Provider-Lanaguages and other metadata.",
+               module_name);
+
   ide_lsp_plugin_register (object_module,
-                           IDE_LSP_PLUGIN_FEATURES_ALL,
+                           features,
                            (const char * const *)argv,
                            (const char * const *)languages,
                            default_settings);
