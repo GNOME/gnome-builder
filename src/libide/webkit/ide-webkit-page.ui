@@ -34,13 +34,13 @@
                 <child>
                   <object class="GtkButton">
                     <property name="icon-name">go-previous-symbolic</property>
-                    <property name="action-name">web.go-back</property>
+                    <property name="action-name">page.web.go-back</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
                     <property name="icon-name">go-next-symbolic</property>
-                    <property name="action-name">web.go-forward</property>
+                    <property name="action-name">page.web.go-forward</property>
                   </object>
                 </child>
                 <child>
@@ -51,7 +51,7 @@
                         <property name="child">
                           <object class="GtkButton">
                             <property name="icon-name">view-refresh-symbolic</property>
-                            <property name="action-name">web.reload</property>
+                            <property name="action-name">page.web.reload</property>
                           </object>
                         </property>
                       </object>
@@ -62,7 +62,7 @@
                         <property name="child">
                           <object class="GtkButton">
                             <property name="icon-name">stop-sign-symbolic</property>
-                            <property name="action-name">web.stop</property>
+                            <property name="action-name">page.web.stop</property>
                           </object>
                         </property>
                       </object>
@@ -96,7 +96,7 @@
       <attribute name="label" translatable="yes">Settings</attribute>
       <item>
         <attribute name="label" translatable="yes">Allow JavaScript</attribute>
-        <attribute name="action">web.enable-javascript</attribute>
+        <attribute name="action">page.web.enable-javascript</attribute>
       </item>
     </section>
     <section>
