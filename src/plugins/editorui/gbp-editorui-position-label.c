@@ -67,13 +67,18 @@ gbp_editorui_position_label_init (GbpEditoruiPositionLabel *self)
 void
 gbp_editorui_position_label_update (GbpEditoruiPositionLabel *self,
                                     guint                     line,
-                                    guint                     column)
+                                    guint                     column,
+                                    guint                     range)
 {
   char str[64];
 
   g_return_if_fail (GBP_IS_EDITORUI_POSITION_LABEL (self));
 
-  /* translators: the first %u is replaced with the line number and the second with the column. */
-  g_snprintf (str, sizeof str, _("Ln %u, Col %u"), line + 1, column + 1);
+  if (range == 0)
+    /* translators: the first %u is replaced with the line number and the second with the column. */
+    g_snprintf (str, sizeof str, _("Ln %u, Col %u"), line + 1, column + 1);
+  else
+    /* translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters. */
+    g_snprintf (str, sizeof str, _("Ln %u, Col %u (Sel: %u)"), line + 1, column + 1, range);
   gtk_label_set_label (self->label, str);
 }

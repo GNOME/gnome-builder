@@ -213,10 +213,10 @@ update_position (GbpEditoruiWorkspaceAddin *self)
 
   if ((view = ide_signal_group_get_target (self->view_signals)))
     {
-      guint line, column;
+      guint line, column, range;
 
-      ide_source_view_get_visual_position (view, &line, &column);
-      gbp_editorui_position_label_update (self->position_label, line, column);
+      ide_source_view_get_visual_position_range (view, &line, &column, &range);
+      gbp_editorui_position_label_update (self->position_label, line, column, range);
     }
 }
 

@@ -30,6 +30,7 @@ G_DECLARE_FINAL_TYPE (GbpEditoruiPositionLabel, gbp_editorui_position_label, GBP
 
 void gbp_editorui_position_label_update (GbpEditoruiPositionLabel *self,
                                          guint                     line,
-                                         guint                     column);
+                                         guint                     column,
+                                         guint                     range);
 
 G_END_DECLS
