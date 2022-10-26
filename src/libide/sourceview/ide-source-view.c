@@ -475,8 +475,8 @@ ide_source_view_key_released_cb (IdeSourceView         *self,
 }
 
 static void
-ide_source_view_buffer_request_scroll_to_insert_cb (IdeSourceView *self,
-                                                    IdeBuffer     *buffer)
+ide_source_view_buffer_request_jump_to_insert_cb (IdeSourceView *self,
+                                                  IdeBuffer     *buffer)
 {
   GtkTextMark *mark;
   GtkTextIter iter;
@@ -637,7 +637,7 @@ ide_source_view_connect_buffer (IdeSourceView *self,
    */
   g_signal_connect_object (buffer,
                            "request-scroll-to-insert",
-                           G_CALLBACK (ide_source_view_buffer_request_scroll_to_insert_cb),
+                           G_CALLBACK (ide_source_view_buffer_request_jump_to_insert_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -712,7 +712,7 @@ ide_source_view_notify_buffer_cb (IdeSourceView *self,
 }
 
 static gboolean
-ide_source_view_scroll_to_insert_in_idle_cb (gpointer user_data)
+ide_source_view_jump_to_insert_in_idle_cb (gpointer user_data)
 {
   IdeSourceView *self = user_data;
   GtkTextBuffer *buffer;
@@ -744,7 +744,7 @@ ide_source_view_root (GtkWidget *widget)
   GTK_WIDGET_CLASS (ide_source_view_parent_class)->root (widget);
 
   g_idle_add_full (G_PRIORITY_LOW,
-                   ide_source_view_scroll_to_insert_in_idle_cb,
+                   ide_source_view_jump_to_insert_in_idle_cb,
                    g_object_ref (self),
                    g_object_unref);
 
@@ -1486,7 +1486,7 @@ ide_source_view_init (IdeSourceView *self)
 }
 
 void
-ide_source_view_scroll_to_insert (IdeSourceView *self)
+ide_source_view_jump_to_insert (IdeSourceView *self)
 {
   GtkTextBuffer *buffer;
   GtkTextMark *mark;
@@ -1498,6 +1498,17 @@ ide_source_view_scroll_to_insert (IdeSourceView *self)
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
   ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self), &iter, .25, TRUE, 1.0, 0.5);
+}
+
+void
+ide_source_view_scroll_to_insert (IdeSourceView *self)
+{
+  GtkTextMark *insert;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->buffer));
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self), insert);
 }
 
 void

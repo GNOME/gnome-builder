@@ -44,6 +44,8 @@ void                        ide_source_view_add_controller              (IdeSour
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_remove_controller           (IdeSourceView              *self,
                                                                          GtkEventController         *controller);
+G_GNUC_INTERNAL
+void                        ide_source_view_jump_to_insert              (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_to_insert            (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
