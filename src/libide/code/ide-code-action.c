@@ -27,10 +27,12 @@
 
 G_DEFINE_INTERFACE (IdeCodeAction, ide_code_action, G_TYPE_OBJECT)
 
-static const gchar *
-ide_code_action_real_get_title (IdeCodeAction        *self)
+static char *
+ide_code_action_real_get_title (IdeCodeAction *self)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_ACTION (self));
+
   return NULL;
 }
 
@@ -75,7 +77,7 @@ ide_code_action_default_init (IdeCodeActionInterface *iface)
                                                             (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 }
 
-const gchar*
+char *
 ide_code_action_get_title (IdeCodeAction *self)
 {
   g_return_val_if_fail (IDE_IS_CODE_ACTION (self), NULL);

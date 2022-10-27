@@ -71,7 +71,7 @@ gbp_codeui_code_action_dialog_create_row_cb (gpointer item,
 {
   IdeCodeAction *code_action = item;
   g_autofree char *markup = NULL;
-  const char *title;
+  g_autofree char *title = NULL;
   GtkWidget *row;
 
   g_assert (IDE_IS_MAIN_THREAD ());

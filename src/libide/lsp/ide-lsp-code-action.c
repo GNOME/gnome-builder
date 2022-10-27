@@ -54,14 +54,14 @@ G_DEFINE_TYPE_WITH_CODE (IdeLspCodeAction, ide_lsp_code_action, IDE_TYPE_OBJECT,
 static GParamSpec *properties [N_PROPS];
 
 
-static const char *
+static char *
 ide_lsp_code_action_get_title (IdeCodeAction *self)
 {
   IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (IDE_LSP_CODE_ACTION (self));
 
   g_return_val_if_fail (IDE_IS_CODE_ACTION (self), NULL);
 
-  return priv->title;
+  return g_strdup (priv->title);
 }
 
 static void
@@ -132,7 +132,7 @@ ide_lsp_code_action_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_TITLE:
-      g_value_set_string (value, ide_lsp_code_action_get_title (IDE_CODE_ACTION (self)));
+      g_value_take_string (value, ide_lsp_code_action_get_title (IDE_CODE_ACTION (self)));
       break;
 
     case PROP_CLIENT:

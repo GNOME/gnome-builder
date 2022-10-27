@@ -40,26 +40,26 @@ struct _IdeCodeActionInterface
 {
   GTypeInterface parent;
 
-  const gchar* (*get_title)      (IdeCodeAction        *self);
-  void         (*execute_async)  (IdeCodeAction        *self,
-                                  GCancellable         *cancellable,
-                                  GAsyncReadyCallback   callback,
-                                  gpointer              user_data);
-  gboolean     (*execute_finish) (IdeCodeAction        *self,
-                                  GAsyncResult         *result,
-                                  GError              **error);
+  char     *(*get_title)      (IdeCodeAction        *self);
+  void      (*execute_async)  (IdeCodeAction        *self,
+                               GCancellable         *cancellable,
+                               GAsyncReadyCallback   callback,
+                               gpointer              user_data);
+  gboolean  (*execute_finish) (IdeCodeAction        *self,
+                               GAsyncResult         *result,
+                               GError              **error);
 };
 
+IDE_AVAILABLE_IN_44
+char     *ide_code_action_get_title      (IdeCodeAction        *self);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_code_action_get_title      (IdeCodeAction        *self);
+void      ide_code_action_execute_async  (IdeCodeAction        *self,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-void         ide_code_action_execute_async  (IdeCodeAction        *self,
-                                             GCancellable         *cancellable,
-                                             GAsyncReadyCallback   callback,
-                                             gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-gboolean     ide_code_action_execute_finish (IdeCodeAction        *self,
-                                             GAsyncResult          *result,
-                                             GError               **error);
+gboolean  ide_code_action_execute_finish (IdeCodeAction        *self,
+                                          GAsyncResult          *result,
+                                          GError               **error);
 
 G_END_DECLS
