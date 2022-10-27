@@ -40,6 +40,7 @@ typedef struct _IdeLspPluginInfo
   GType highlighter_type;
   GType hover_provider_type;
   GType rename_provider_type;
+  GType search_provider_type;
   GType symbol_resolver_type;
 } IdeLspPluginInfo;
 
@@ -68,6 +69,9 @@ GObject          *ide_lsp_plugin_create_hover_provider       (guint             
                                                               GParameter       *parameters,
                                                               IdeLspPluginInfo *info);
 GObject          *ide_lsp_plugin_create_rename_provider      (guint             n_parameters,
+                                                              GParameter       *parameters,
+                                                              IdeLspPluginInfo *info);
+GObject          *ide_lsp_plugin_create_search_provider      (guint             n_parameters,
                                                               GParameter       *parameters,
                                                               IdeLspPluginInfo *info);
 GObject          *ide_lsp_plugin_create_symbol_resolver      (guint             n_parameters,

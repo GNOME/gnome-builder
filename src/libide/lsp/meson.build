@@ -75,6 +75,7 @@ libide_lsp_private_sources = [
   'ide-lsp-plugin-highlighter.c',
   'ide-lsp-plugin-hover-provider.c',
   'ide-lsp-plugin-rename-provider.c',
+  'ide-lsp-plugin-search-provider.c',
   'ide-lsp-plugin-symbol-resolver.c',
 ]
 

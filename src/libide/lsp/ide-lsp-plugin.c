@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-search.h>
+
 #include "ide-lsp-diagnostic-provider.h"
 #include "ide-lsp-symbol-resolver.h"
 #include "ide-lsp-highlighter.h"
@@ -42,7 +44,8 @@ typedef enum _IdeLspPluginFeatures
   IDE_LSP_PLUGIN_FEATURES_HOVER           = 1 << 5,
   IDE_LSP_PLUGIN_FEATURES_RENAME          = 1 << 6,
   IDE_LSP_PLUGIN_FEATURES_CODE_ACTION     = 1 << 7,
-  IDE_LSP_PLUGIN_FEATURES_ALL = ~0,
+  IDE_LSP_PLUGIN_FEATURES_SEARCH          = 1 << 8,
+  IDE_LSP_PLUGIN_FEATURES_ALL             = ~0,
 } IdeLspPluginFeatures;
 
 IdeLspPluginInfo *
@@ -273,6 +276,13 @@ ide_lsp_plugin_register (PeasObjectModule     *object_module,
                                                    (PeasFactoryFunc)ide_lsp_plugin_create_code_action_provider,
                                                    ide_lsp_plugin_info_ref (info),
                                                    (GDestroyNotify)ide_lsp_plugin_info_unref);
+
+  if ((features & IDE_LSP_PLUGIN_FEATURES_SEARCH) != 0)
+    peas_object_module_register_extension_factory (object_module,
+                                                   IDE_TYPE_SEARCH_PROVIDER,
+                                                   (PeasFactoryFunc)ide_lsp_plugin_create_search_provider,
+                                                   ide_lsp_plugin_info_ref (info),
+                                                   (GDestroyNotify)ide_lsp_plugin_info_unref);
 }
 
 static inline gboolean
@@ -358,6 +368,13 @@ ide_lsp_plugin_register_types (PeasObjectModule *object_module)
     features |= IDE_LSP_PLUGIN_FEATURES_RENAME;
   if (has_metadata (plugin_info, "Symbol-Resolver-Languages"))
     features |= IDE_LSP_PLUGIN_FEATURES_SYMBOL_RESOLVER;
+
+  /* Always turn on search, and we should dynamically disable it if the client
+   * does not support it's capabilities (workspace/symbol currently). This is
+   * lazy bound to client creation, so it only has a client if the LSP client
+   * is created through some other means.
+   */
+  features |= IDE_LSP_PLUGIN_FEATURES_SEARCH;
 
   if (features == 0)
     g_warning ("LSP plugin %s contains no requested LSP features. "
