@@ -38,6 +38,7 @@ typedef struct
   char **search_path;
   guint has_started : 1;
   guint inherit_stderr : 1;
+  guint has_seen_autostart : 1;
 } IdeLspServicePrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeLspService, ide_lsp_service, IDE_TYPE_OBJECT)
@@ -644,12 +645,21 @@ on_notify_pipeline_cb (IdeLspService   *self,
                        GParamSpec      *pspec,
                        IdeBuildManager *build_manager)
 {
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
   IdePipeline *pipeline;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /* If the service has not yet started, and there have been no
+   * requests for providers which force starting of the service,
+   * then just silently ignore this so we don't auto-spawn services
+   * unnecessarily.
+   */
+  if (!priv->has_started && !priv->has_seen_autostart)
+    IDE_EXIT;
 
   g_debug ("Pipeline changed, requesting LSP service %s restart",
            G_OBJECT_TYPE_NAME (self));
@@ -689,6 +699,7 @@ ide_lsp_service_class_bind_client_internal (IdeLspServiceClass *klass,
   g_return_if_fail (pspec != NULL && g_type_is_a (pspec->value_type, IDE_TYPE_LSP_CLIENT));
 
   context = ide_object_get_context (provider);
+  g_return_if_fail (context != NULL);
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
   /* If the context has a project (ie: not editor mode), then we
@@ -714,6 +725,7 @@ ide_lsp_service_class_bind_client_internal (IdeLspServiceClass *klass,
         }
 
       priv = ide_lsp_service_get_instance_private (service);
+      priv->has_seen_autostart |= autostart;
       do_notify |= (autostart && !priv->has_started);
 
       if (do_notify)
