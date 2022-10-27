@@ -132,7 +132,7 @@ ide_editor_search_bar_move_next_forward_cb (GObject      *object,
   ide_editor_search_bar_scroll_to_insert (self, GTK_DIR_TAB_FORWARD);
 
   if (self->hide_after_move)
-    gtk_widget_activate_action (GTK_WIDGET (self), "search.hide", NULL);
+    gtk_widget_activate_action (GTK_WIDGET (self), "page.search.hide", NULL);
 }
 
 void
@@ -191,7 +191,7 @@ ide_editor_search_bar_move_previous_backward_cb (GObject      *object,
   ide_editor_search_bar_scroll_to_insert (self, GTK_DIR_TAB_BACKWARD);
 
   if (self->hide_after_move)
-    gtk_widget_activate_action (GTK_WIDGET (self), "search.hide", NULL);
+    gtk_widget_activate_action (GTK_WIDGET (self), "page.search.hide", NULL);
 }
 
 void
