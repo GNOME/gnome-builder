@@ -307,8 +307,8 @@ ide_lsp_code_action_execute_async(IdeCodeAction       *code_action,
 
       edits = ide_lsp_workspace_edit_get_edits(priv->workspace_edit);
 
-      context = ide_object_ref_context(IDE_OBJECT(self));
-      buffer_manager = ide_buffer_manager_from_context(context);
+      context = ide_object_ref_context (IDE_OBJECT (priv->client));
+      buffer_manager = ide_buffer_manager_from_context (context);
 
       ide_buffer_manager_apply_edits_async(buffer_manager,
                                            IDE_PTR_ARRAY_STEAL_FULL(&edits),
