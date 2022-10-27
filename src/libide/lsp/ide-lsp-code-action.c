@@ -109,7 +109,7 @@ ide_lsp_code_action_set_client (IdeLspCodeAction *self,
 }
 
 static void
-ide_lsp_code_action_finalize (GObject *object)
+ide_lsp_code_action_dispose (GObject *object)
 {
   IdeLspCodeAction *self = (IdeLspCodeAction *)object;
   IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (self);
@@ -120,7 +120,7 @@ ide_lsp_code_action_finalize (GObject *object)
   g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->workspace_edit);
 
-  G_OBJECT_CLASS (ide_lsp_code_action_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_lsp_code_action_parent_class)->dispose (object);
 }
 
 static void
@@ -172,7 +172,7 @@ ide_lsp_code_action_class_init (IdeLspCodeActionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_lsp_code_action_finalize;
+  object_class->dispose = ide_lsp_code_action_dispose;
   object_class->get_property = ide_lsp_code_action_get_property;
   object_class->set_property = ide_lsp_code_action_set_property;
 
