@@ -74,12 +74,8 @@ ide_lsp_code_action_set_title (IdeLspCodeAction *self,
 
   g_return_if_fail (IDE_IS_CODE_ACTION (self));
 
-  if (!ide_str_equal0 (priv->title, title))
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
-    }
+  if (ide_set_string (&priv->title, title))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 
 /**
