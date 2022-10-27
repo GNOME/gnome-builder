@@ -162,7 +162,7 @@ focus_complete (Focus        *focus,
 
       ide_buffer_get_iter_at_location (focus->buffer, &iter, focus->location);
       gtk_text_buffer_select_range (GTK_TEXT_BUFFER (focus->buffer), &iter, &iter);
-      ide_source_view_scroll_to_insert (view);
+      ide_source_view_scroll_to_insert (view, GTK_DIR_TAB_BACKWARD);
     }
 
   if (frame != NULL)

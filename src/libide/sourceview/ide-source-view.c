@@ -1537,14 +1537,31 @@ ide_source_view_jump_to_insert (IdeSourceView *self)
 }
 
 void
-ide_source_view_scroll_to_insert (IdeSourceView *self)
+ide_source_view_scroll_to_insert (IdeSourceView    *self,
+                                  GtkDirectionType  dir)
 {
   GtkTextMark *insert;
+  GdkRectangle visible_rect;
+  GtkTextIter search_result_iter, last_line_iter;
+  int search_result_line, last_visible_line;
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->buffer));
-  gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (self), insert, 0.15, FALSE, .0, .0);
+
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self->buffer), &search_result_iter, insert);
+
+  gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &visible_rect);
+  gtk_text_view_get_line_at_y (GTK_TEXT_VIEW (self), &last_line_iter,
+                               visible_rect.y + visible_rect.height, NULL);
+
+  search_result_line = gtk_text_iter_get_line (&search_result_iter);
+  last_visible_line = gtk_text_iter_get_line (&last_line_iter);
+
+  if (dir == GTK_DIR_TAB_FORWARD && search_result_line > last_visible_line)
+    gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self), &search_result_iter, 0.0, TRUE, 0.5, 0.15);
+  else
+    gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self), &search_result_iter, 0.15, FALSE, .0, .0);
 }
 
 void

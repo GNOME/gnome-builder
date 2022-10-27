@@ -1203,9 +1203,10 @@ ide_editor_page_scroll_to_visual_position (IdeEditorPage *self,
 }
 
 void
-ide_editor_page_scroll_to_insert (IdeEditorPage *self)
+ide_editor_page_scroll_to_insert (IdeEditorPage    *self,
+                                  GtkDirectionType  dir)
 {
   g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
 
-  ide_source_view_scroll_to_insert (self->view);
+  ide_source_view_scroll_to_insert (self->view, dir);
 }
