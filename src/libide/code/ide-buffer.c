@@ -3113,26 +3113,30 @@ ide_buffer_format_selection_finish (IdeBuffer     *self,
 }
 
 static void
-ide_buffer_query_code_action_cb(GObject      *object,
-                                GAsyncResult *result,
-                                gpointer user_data)
+ide_buffer_query_code_action_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   IdeCodeActionProvider *code_action_provider = (IdeCodeActionProvider *)object;
-
-  g_autoptr(GError) error = NULL;
-  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) code_actions = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
 
-  g_assert(IDE_IS_CODE_ACTION_PROVIDER(object));
-  g_assert(G_IS_ASYNC_RESULT(result));
-  g_assert(IDE_IS_TASK(task));
+  IDE_ENTRY;
 
-  code_actions = ide_code_action_provider_query_finish(code_action_provider, result, &error);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_ACTION_PROVIDER (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  code_actions = ide_code_action_provider_query_finish (code_action_provider, result, &error);
 
   if (!code_actions)
-    ide_task_return_error(task, g_steal_pointer(&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer(task, g_steal_pointer(&code_actions), g_ptr_array_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&code_actions), g_ptr_array_unref);
+
+  IDE_EXIT;
 }
 
 /**
@@ -3145,44 +3149,44 @@ ide_buffer_query_code_action_cb(GObject      *object,
  * Queries for code actions in the current buffer.
  */
 void
-ide_buffer_code_action_query_async(IdeBuffer           *self,
-                                   GCancellable        *cancellable,
-                                   GAsyncReadyCallback callback,
-                                   gpointer user_data)
+ide_buffer_code_action_query_async (IdeBuffer           *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
-  g_autoptr(IdeTask)     task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeCodeActionProvider *code_action_provider;
 
   IDE_ENTRY;
 
-  g_return_if_fail(IDE_IS_MAIN_THREAD());
-  g_return_if_fail(IDE_IS_BUFFER(self));
-  g_return_if_fail(!cancellable || G_IS_CANCELLABLE(cancellable));
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new(self, cancellable, callback, user_data);
-  ide_task_set_source_tag(task, ide_buffer_code_action_query_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_code_action_query_async);
 
-  if (!(code_action_provider = ide_extension_adapter_get_extension(self->code_action_provider)))
+  if (!(code_action_provider = ide_extension_adapter_get_extension (self->code_action_provider)))
     {
-      const gchar *language_id = ide_buffer_get_language_id(self);
+      const gchar *language_id = ide_buffer_get_language_id (self);
 
       if (language_id == NULL)
         language_id = "none";
 
-      ide_task_return_new_error(task,
-                                G_IO_ERROR,
-                                G_IO_ERROR_NOT_SUPPORTED,
-                                "No code action provider registered for language %s",
-                                language_id);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "No code action provider registered for language %s",
+                                 language_id);
 
       IDE_EXIT;
     }
 
-  ide_code_action_provider_query_async(code_action_provider,
-                                       self,
-                                       cancellable,
-                                       ide_buffer_query_code_action_cb,
-                                       g_steal_pointer(&task));
+  ide_code_action_provider_query_async (code_action_provider,
+                                        self,
+                                        cancellable,
+                                        ide_buffer_query_code_action_cb,
+                                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -3198,21 +3202,21 @@ ide_buffer_code_action_query_async(IdeBuffer           *self,
  * Returns: (transfer full) (element-type IdeCodeAction): a #GPtrArray of #IdeCodeAction.
  */
 GPtrArray*
-ide_buffer_code_action_query_finish(IdeBuffer     *self,
-                                    GAsyncResult  *result,
-                                    GError       **error)
+ide_buffer_code_action_query_finish (IdeBuffer     *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
 {
   GPtrArray* ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail(IDE_IS_MAIN_THREAD(), NULL);
-  g_return_val_if_fail(IDE_IS_BUFFER(self), NULL);
-  g_return_val_if_fail(IDE_IS_TASK(result), NULL);
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = ide_task_propagate_pointer(IDE_TASK(result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
-  IDE_RETURN(ret);
+  IDE_RETURN (ret);
 }
 
 /**
