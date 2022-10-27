@@ -27,7 +27,7 @@
 
 G_DEFINE_INTERFACE (IdeCodeAction, ide_code_action, G_TYPE_OBJECT)
 
-static const gchar*
+static const gchar *
 ide_code_action_real_get_title (IdeCodeAction        *self)
 {
   g_assert (IDE_IS_CODE_ACTION (self));
