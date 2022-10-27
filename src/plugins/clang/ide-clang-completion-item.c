@@ -231,7 +231,12 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
         }
     }
 
-  self->params = g_string_free (g_steal_pointer (&markup), FALSE);
+  /* If typed text already has () in it, then just ignore what
+   * we generated for params as it could cause problems with
+   * macro completion (like g_autoptr()).
+   */
+  if (self->typed_text && strchr (self->typed_text, '(') == NULL)
+    self->params = g_string_free (g_steal_pointer (&markup), FALSE);
 }
 
 static IdeSpacesStyle
