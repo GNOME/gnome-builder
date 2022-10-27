@@ -46,7 +46,7 @@ void                        ide_source_view_remove_controller           (IdeSour
                                                                          GtkEventController         *controller);
 IDE_AVAILABLE_IN_44
 void                        ide_source_view_jump_to_insert              (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_44
 void                        ide_source_view_scroll_to_insert            (IdeSourceView              *self,
                                                                          GtkDirectionType            dir);
 IDE_AVAILABLE_IN_ALL
