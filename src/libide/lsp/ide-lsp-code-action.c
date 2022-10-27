@@ -114,7 +114,11 @@ ide_lsp_code_action_finalize (GObject *object)
   IdeLspCodeAction *self = (IdeLspCodeAction *)object;
   IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (self);
 
+  g_clear_pointer (&priv->arguments, g_variant_unref);
   g_clear_object (&priv->client);
+  g_clear_pointer (&priv->command, g_free);
+  g_clear_pointer (&priv->title, g_free);
+  g_clear_object (&priv->workspace_edit);
 
   G_OBJECT_CLASS (ide_lsp_code_action_parent_class)->finalize (object);
 }
