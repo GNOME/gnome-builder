@@ -291,6 +291,16 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_lsp_code_action_provider_query_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
+
+  if (priv->client == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "No LSP client connection is available");
+      IDE_EXIT;
+    }
+
   uri = ide_buffer_dup_uri (buffer);
   selection = ide_buffer_get_selection_range (buffer);
   start = ide_range_get_begin (selection);
