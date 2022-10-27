@@ -92,14 +92,15 @@ update_properties (IdeEditorSearchBar *self)
 }
 
 static void
-ide_editor_search_bar_scroll_to_insert (IdeEditorSearchBar *self)
+ide_editor_search_bar_scroll_to_insert (IdeEditorSearchBar *self,
+                                        GtkDirectionType    dir)
 {
   GtkWidget *page;
 
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
 
   if ((page = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_EDITOR_PAGE)))
-    ide_editor_page_scroll_to_insert (IDE_EDITOR_PAGE (page));
+    ide_editor_page_scroll_to_insert (IDE_EDITOR_PAGE (page), dir);
 }
 
 static void
@@ -128,10 +129,10 @@ ide_editor_search_bar_move_next_forward_cb (GObject      *object,
 
   buffer = gtk_source_search_context_get_buffer (context);
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &begin, &end);
-  ide_editor_search_bar_scroll_to_insert (self);
+  ide_editor_search_bar_scroll_to_insert (self, GTK_DIR_TAB_FORWARD);
 
   if (self->hide_after_move)
-    gtk_widget_activate_action (GTK_WIDGET (self), "search.hide", NULL);
+    gtk_widget_activate_action (GTK_WIDGET (self), "page.search.hide", NULL);
 }
 
 void
@@ -161,6 +162,38 @@ _ide_editor_search_bar_move_next (IdeEditorSearchBar *self,
                                            g_object_ref (self));
 }
 
+static void
+ide_editor_search_bar_move_previous_backward_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  GtkSourceSearchContext *context = (GtkSourceSearchContext *)object;
+  g_autoptr(IdeEditorSearchBar) self = user_data;
+  g_autoptr(GError) error = NULL;
+  GtkSourceBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean has_wrapped = FALSE;
+
+  g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
+
+  if (!gtk_source_search_context_backward_finish (context, result, &begin, &end, &has_wrapped, &error))
+    {
+      if (error != NULL)
+        g_debug ("Search backward error: %s", error->message);
+      return;
+    }
+
+  buffer = gtk_source_search_context_get_buffer (context);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  ide_editor_search_bar_scroll_to_insert (self, GTK_DIR_TAB_BACKWARD);
+
+  if (self->hide_after_move)
+    gtk_widget_activate_action (GTK_WIDGET (self), "page.search.hide", NULL);
+}
+
 void
 _ide_editor_search_bar_move_previous (IdeEditorSearchBar *self,
                                       gboolean            hide_after_move)
@@ -184,8 +217,7 @@ _ide_editor_search_bar_move_previous (IdeEditorSearchBar *self,
   gtk_source_search_context_backward_async (self->context,
                                             &begin,
                                             NULL,
-                                            /* XXX: fixme */
-                                            ide_editor_search_bar_move_next_forward_cb,
+                                            ide_editor_search_bar_move_previous_backward_cb,
                                             g_object_ref (self));
 }
 
@@ -638,8 +670,28 @@ scroll_to_first_match (IdeEditorSearchBar        *self,
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, self->offset_when_shown);
   if (gtk_source_search_context_forward (context, &iter, &match_begin, &match_end, &wrapped))
     {
-      gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view),
-                                    &match_begin, 0.25, TRUE, 1.0, 0.5);
+      GdkRectangle visible_rect;
+      GtkTextIter last_line_iter;
+      int search_result_line, last_visible_line;
+
+      gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view), &visible_rect);
+      gtk_text_view_get_line_at_y (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view), &last_line_iter,
+                                   visible_rect.y + visible_rect.height, NULL);
+
+      search_result_line = gtk_text_iter_get_line (&match_begin);
+      last_visible_line = gtk_text_iter_get_line (&last_line_iter);
+
+      if (search_result_line > last_visible_line)
+        {
+          gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view),
+                                        &match_begin, 0.0, TRUE, 0.5, 0.15);
+        }
+      else
+        {
+          gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view),
+                                        &match_begin, 0.15, FALSE, .0, .0);
+        }
+
       self->jump_back_on_hide = TRUE;
     }
 
@@ -725,7 +777,7 @@ _ide_editor_search_bar_detach (IdeEditorSearchBar *self)
       IdeBuffer *buffer = IDE_BUFFER (gtk_source_search_context_get_buffer (self->context));
 
       if (self->jump_back_on_hide)
-        ide_editor_search_bar_scroll_to_insert (self);
+        ide_editor_search_bar_scroll_to_insert (self, GTK_DIR_TAB_BACKWARD);
 
       g_signal_handlers_disconnect_by_func (self->context,
                                             G_CALLBACK (ide_editor_search_bar_notify_occurrences_count_cb),

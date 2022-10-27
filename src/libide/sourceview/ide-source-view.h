@@ -47,7 +47,8 @@ void                        ide_source_view_remove_controller           (IdeSour
 IDE_AVAILABLE_IN_44
 void                        ide_source_view_jump_to_insert              (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_source_view_scroll_to_insert            (IdeSourceView              *self);
+void                        ide_source_view_scroll_to_insert            (IdeSourceView              *self,
+                                                                         GtkDirectionType            dir);
 IDE_AVAILABLE_IN_ALL
 char                       *ide_source_view_dup_position_label          (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
