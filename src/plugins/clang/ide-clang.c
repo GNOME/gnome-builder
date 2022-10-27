@@ -65,6 +65,7 @@ typedef struct
 G_DEFINE_FINAL_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
 
 static GHashTable *unsupported_by_clang;
+static GHashTable *auto_suffixes;
 
 static void
 unsaved_files_free (UnsavedFiles *uf)
@@ -538,6 +539,13 @@ ide_clang_class_init (IdeClangClass *klass)
 
   unsupported_by_clang = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_add (unsupported_by_clang, (char *)"-Wstrict-null-sentinel");
+
+  auto_suffixes = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_add (auto_suffixes, (char *)"_auto");
+  g_hash_table_add (auto_suffixes, (char *)"_autolist");
+  g_hash_table_add (auto_suffixes, (char *)"_autoptr");
+  g_hash_table_add (auto_suffixes, (char *)"_autoqueue");
+  g_hash_table_add (auto_suffixes, (char *)"_autoslist");
 }
 
 static void
@@ -1340,9 +1348,13 @@ ide_clang_build_completion (GVariantBuilder    *builder,
 
           typed_text = g_utf8_casefold (text, -1);
 
-          /* Convert Foo_autoptr into g_autoptr(Foo) */
-          if (bar &&
-              (g_str_equal (bar, "_autoptr") || g_str_equal (bar, "_auto")))
+          /* Convert Foo_autoptr into g_autoptr(Foo) but don't touch
+           * things like "g_autoptr (TypeName)" where we have "g_autotptr"
+           * as the typed text.
+           */
+          if (!g_str_has_prefix (text, "g_auto") &&
+              (bar = strrchr (text, '_')) &&
+              g_hash_table_contains (auto_suffixes, bar))
             {
               GString *string = g_string_new ("g");
               g_string_append (string, bar);
