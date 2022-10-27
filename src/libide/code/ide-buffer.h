@@ -28,6 +28,7 @@
 #include <libide-core.h>
 
 #include "ide-buffer-change-monitor.h"
+#include "ide-code-action-provider.h"
 #include "ide-diagnostics.h"
 #include "ide-file-settings.h"
 #include "ide-formatter.h"
@@ -70,6 +71,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean                ide_buffer_format_selection_finish       (IdeBuffer               *self,
                                                                   GAsyncResult            *result,
                                                                   GError                 **error);
+IDE_AVAILABLE_IN_44
+IdeCodeActionProvider  *ide_buffer_get_code_action_provider      (IdeBuffer               *self);
 IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_code_action_query_async       (IdeBuffer               *self,
                                                                   GCancellable            *cancellable,

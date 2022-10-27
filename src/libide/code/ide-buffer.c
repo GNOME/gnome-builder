@@ -3140,6 +3140,25 @@ ide_buffer_query_code_action_cb (GObject      *object,
 }
 
 /**
+ * ide_buffer_get_code_action_provider:
+ * @self: a #IdeBuffer
+ *
+ * Gets the code action provider, if any.
+ *
+ * Returns: (transfer none) (nullable): an #IdeCodeActionProvider or %NULL
+ *
+ * Since: 44
+ */
+IdeCodeActionProvider *
+ide_buffer_get_code_action_provider (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return IDE_CODE_ACTION_PROVIDER (ide_extension_adapter_get_extension (self->code_action_provider));
+}
+
+/**
  * ide_buffer_code_action_query_async:
  * @self: an #IdeBuffer
  * @cancellable: (nullable): a #GCancellable, or %NULL
