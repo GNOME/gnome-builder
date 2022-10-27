@@ -31,12 +31,10 @@
 
 typedef struct
 {
-  IdeLspClient        *client;
-  gchar               *title;
-
-  gchar               *command;
   GVariant            *arguments;
-
+  IdeLspClient        *client;
+  char                *command;
+  char                *title;
   IdeLspWorkspaceEdit *workspace_edit;
 } IdeLspCodeActionPrivate;
 
@@ -56,10 +54,10 @@ G_DEFINE_TYPE_WITH_CODE (IdeLspCodeAction, ide_lsp_code_action, IDE_TYPE_OBJECT,
 static GParamSpec *properties [N_PROPS];
 
 
-static const gchar *
+static const char *
 ide_lsp_code_action_get_title (IdeCodeAction *self)
 {
-  IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (IDE_LSP_CODE_ACTION(self));
+  IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (IDE_LSP_CODE_ACTION (self));
 
   g_return_val_if_fail (IDE_IS_CODE_ACTION (self), NULL);
 
@@ -68,7 +66,7 @@ ide_lsp_code_action_get_title (IdeCodeAction *self)
 
 static void
 ide_lsp_code_action_set_title (IdeLspCodeAction *self,
-                               const gchar      *title)
+                               const char       *title)
 {
   IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (self);
 
@@ -134,8 +132,9 @@ ide_lsp_code_action_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_TITLE:
-      g_value_set_string (value, ide_lsp_code_action_get_title (IDE_CODE_ACTION(self)));
+      g_value_set_string (value, ide_lsp_code_action_get_title (IDE_CODE_ACTION (self)));
       break;
+
     case PROP_CLIENT:
       g_value_set_object (value, ide_lsp_code_action_get_client (self));
       break;
@@ -158,6 +157,7 @@ ide_lsp_code_action_set_property (GObject      *object,
     case PROP_TITLE:
       ide_lsp_code_action_set_title (self, g_value_get_string (value));
       break;
+
     case PROP_CLIENT:
       ide_lsp_code_action_set_client (self, g_value_get_object (value));
       break;
@@ -204,31 +204,27 @@ ide_lsp_code_action_execute_call_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
+  g_autoptr(GVariant) reply = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GVariant) reply = NULL;
-  IdeLspCodeAction *self;
 
-  g_return_if_fail (IDE_IS_LSP_CLIENT (client));
-  g_return_if_fail (G_IS_ASYNC_RESULT (result));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_lsp_client_call_finish (client, result, &reply, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
 
-  self = ide_task_get_source_object (task);
-
-  g_assert (IDE_IS_LSP_CODE_ACTION (self));
-
-  ide_task_return_boolean(task, TRUE);
+  IDE_EXIT;
 }
 
 static void
-ide_lsp_code_action_edits_applied(GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer user_data)
+ide_lsp_code_action_edits_applied (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
   IdeBufferManager *manager = (IdeBufferManager *)object;
 
@@ -240,81 +236,82 @@ ide_lsp_code_action_edits_applied(GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert(IDE_IS_BUFFER_MANAGER(object));
-  g_assert(G_IS_ASYNC_RESULT(result));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_MANAGER (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
-
-  if (!ide_buffer_manager_apply_edits_finish(manager, result, &error))
+  if (!ide_buffer_manager_apply_edits_finish (manager, result, &error))
     {
-      ide_task_return_error(task, g_steal_pointer(&error));
-      return;
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
-  self = ide_task_get_source_object(task);
-  cancellable = ide_task_get_cancellable(task);
 
-  priv = ide_lsp_code_action_get_instance_private(self);
+  self = ide_task_get_source_object (task);
+  priv = ide_lsp_code_action_get_instance_private (self);
+  cancellable = ide_task_get_cancellable (task);
 
-  // execute command if there is one
+  /* execute command if there is one */
   if (priv->command)
     {
       g_autoptr(GVariant) params = NULL;
 
-      params = JSONRPC_MESSAGE_NEW(
-        "command", JSONRPC_MESSAGE_PUT_STRING(priv->command),
-        "arguments", "{", JSONRPC_MESSAGE_PUT_VARIANT(priv->arguments), "}"
+      params = JSONRPC_MESSAGE_NEW (
+        "command", JSONRPC_MESSAGE_PUT_STRING (priv->command),
+        "arguments", "{", JSONRPC_MESSAGE_PUT_VARIANT (priv->arguments), "}"
       );
 
-      ide_lsp_client_call_async(priv->client,
-                                "workspace/executeCommand",
-                                params,
-                                cancellable,
-                                ide_lsp_code_action_execute_call_cb,
-                                g_steal_pointer(&task));
+      ide_lsp_client_call_async (priv->client,
+                                 "workspace/executeCommand",
+                                 params,
+                                 cancellable,
+                                 ide_lsp_code_action_execute_call_cb,
+                                 g_steal_pointer (&task));
+
+      IDE_EXIT;
     }
-  else
-    {
-      ide_task_return_boolean(task, TRUE);
-    }
+
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
 
 static void
-ide_lsp_code_action_execute_async(IdeCodeAction       *code_action,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
+ide_lsp_code_action_execute_async (IdeCodeAction       *code_action,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
 {
   IdeLspCodeAction *self = (IdeLspCodeAction *)code_action;
-  IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private(self);
-
+  IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
-  IdeContext* context;
-  IdeBufferManager* buffer_manager;
 
-  g_assert(IDE_IS_LSP_CODE_ACTION(self));
-  g_assert(!cancellable || G_IS_CANCELLABLE(cancellable));
+  IDE_ENTRY;
 
-  task = ide_task_new(self, cancellable, callback, user_data);
-  ide_task_set_source_tag(task, ide_lsp_code_action_execute_async);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CODE_ACTION (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_lsp_code_action_execute_async);
 
   /* If a code action provides an edit and a command,
    * first the edit is executed and then the command.
    */
-  if (priv->workspace_edit)
+  if (priv->workspace_edit != NULL)
     {
       g_autoptr(GPtrArray) edits = NULL;
+      IdeBufferManager* buffer_manager;
+      IdeContext* context;
 
-      edits = ide_lsp_workspace_edit_get_edits(priv->workspace_edit);
-
+      edits = ide_lsp_workspace_edit_get_edits (priv->workspace_edit);
       context = ide_object_ref_context (IDE_OBJECT (priv->client));
       buffer_manager = ide_buffer_manager_from_context (context);
 
-      ide_buffer_manager_apply_edits_async(buffer_manager,
-                                           IDE_PTR_ARRAY_STEAL_FULL(&edits),
+      ide_buffer_manager_apply_edits_async (buffer_manager,
+                                           IDE_PTR_ARRAY_STEAL_FULL (&edits),
                                            cancellable,
                                            ide_lsp_code_action_edits_applied,
-                                           g_steal_pointer(&task));
+                                           g_steal_pointer (&task));
     }
   else
     {
@@ -324,24 +321,32 @@ ide_lsp_code_action_execute_async(IdeCodeAction       *code_action,
       g_variant_dict_insert_value (&dict, "arguments", priv->arguments);
       g_variant_dict_insert (&dict, "command", "s", priv->command);
       params =  g_variant_take_ref (g_variant_dict_end (&dict));
-      ide_lsp_client_call_async(priv->client,
-                                "workspace/executeCommand",
-                                params,
-                                cancellable,
-                                ide_lsp_code_action_execute_call_cb,
-                                g_steal_pointer(&task));
+      ide_lsp_client_call_async (priv->client,
+                                 "workspace/executeCommand",
+                                 params,
+                                 cancellable,
+                                 ide_lsp_code_action_execute_call_cb,
+                                 g_steal_pointer (&task));
     }
+
+  IDE_EXIT;
 }
 
 static gboolean
 ide_lsp_code_action_execute_finish (IdeCodeAction  *self,
-                                 GAsyncResult  *result,
-                                 GError       **error)
+                                    GAsyncResult   *result,
+                                    GError        **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CODE_ACTION (self));
   g_assert (IDE_IS_TASK (result));
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -353,21 +358,28 @@ code_action_iface_init (IdeCodeActionInterface *iface)
 }
 
 IdeLspCodeAction *
-ide_lsp_code_action_new(IdeLspClient        *client,
-                        const gchar         *title,
-                        const gchar         *command,
-                        GVariant            *arguments,
-                        IdeLspWorkspaceEdit *workspace_edit)
+ide_lsp_code_action_new (IdeLspClient        *client,
+                         const char          *title,
+                         const char          *command,
+                         GVariant            *arguments,
+                         IdeLspWorkspaceEdit *workspace_edit)
 {
-  IdeLspCodeAction* code_action = g_object_new(IDE_TYPE_LSP_CODE_ACTION,
-                                               "client", client,
-                                               "title", title,
-                                               NULL);
-  IdeLspCodeActionPrivate *priv = ide_lsp_code_action_get_instance_private(code_action);
+  IdeLspCodeActionPrivate *priv;
+  IdeLspCodeAction *self;
 
-  priv->command = g_strdup(command);
-  priv->arguments = g_variant_ref(arguments);
-  priv->workspace_edit = g_object_ref(workspace_edit);
-  return code_action;
+  g_return_val_if_fail (!client || IDE_IS_LSP_CLIENT (client), NULL);
+  g_return_val_if_fail (!workspace_edit || IDE_IS_LSP_WORKSPACE_EDIT (workspace_edit), NULL);
+
+  self = g_object_new (IDE_TYPE_LSP_CODE_ACTION,
+                       "client", client,
+                       "title", title,
+                       NULL);
+  priv = ide_lsp_code_action_get_instance_private (self);
+
+  priv->command = g_strdup (command);
+  priv->arguments = arguments ? g_variant_ref_sink (arguments) : NULL;
+  g_set_object (&priv->workspace_edit, workspace_edit);
+
+  return self;
 }
 

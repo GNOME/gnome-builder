@@ -34,9 +34,8 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE(IdeLspWorkspaceEdit, ide_lsp_workspace_edit, IDE, LSP_WORKSPACE_EDIT, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeLspWorkspaceEdit *ide_lsp_workspace_edit_new      (GVariant * variant);
-
+IdeLspWorkspaceEdit *ide_lsp_workspace_edit_new        (GVariant            *variant);
 IDE_AVAILABLE_IN_ALL
-GPtrArray*           ide_lsp_workspace_edit_get_edits(IdeLspWorkspaceEdit *self);
+GPtrArray           *ide_lsp_workspace_edit_get_edits  (IdeLspWorkspaceEdit *self);
 
 G_END_DECLS
