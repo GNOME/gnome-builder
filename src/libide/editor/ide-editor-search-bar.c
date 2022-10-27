@@ -639,7 +639,8 @@ scroll_to_first_match (IdeEditorSearchBar        *self,
   if (gtk_source_search_context_forward (context, &iter, &match_begin, &match_end, &wrapped))
     {
       gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (IDE_EDITOR_PAGE (page)->view),
-                                    &match_begin, 0.25, TRUE, 1.0, 0.5);
+                                    &match_begin, 0.15, FALSE, .0, .0);
+
       self->jump_back_on_hide = TRUE;
     }
 
