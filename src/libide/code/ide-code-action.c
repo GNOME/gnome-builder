@@ -69,6 +69,10 @@ ide_code_action_default_init (IdeCodeActionInterface *iface)
   iface->get_title = ide_code_action_real_get_title;
   iface->execute_async = ide_code_action_real_execute_async;
   iface->execute_finish = ide_code_action_real_execute_finish;
+
+  g_object_interface_install_property (iface,
+                                       g_param_spec_string ("title", NULL, NULL, NULL,
+                                                            (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 }
 
 const gchar*
@@ -101,4 +105,3 @@ ide_code_action_execute_finish (IdeCodeAction  *self,
 
   return IDE_CODE_ACTION_GET_IFACE (self)->execute_finish (self, result, error);
 }
-
