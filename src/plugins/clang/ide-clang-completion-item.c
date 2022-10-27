@@ -425,8 +425,13 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
           g_clear_object (&chunk);
           break;
 
-        case CXCompletionChunk_Informative:
         case CXCompletionChunk_Optional:
+          /* TODO: There are sub-chunks we can lose for these
+           * using clang_getCompletionChunkCompletionString().
+           */
+          break;
+
+        case CXCompletionChunk_Informative:
         case CXCompletionChunk_ResultType:
         default:
           break;
