@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpCodeuiCodeActionDialog" parent="AdwMessageDialog">
+    <property name="heading" translatable="yes">Code Actions</property>
+    <property name="default-response">apply</property>
+    <property name="close-response">close</property>
+    <signal name="response::apply" handler="gbp_codeui_code_action_dialog_apply_cb"/>
+    <responses>
+      <response id="close" translatable="yes">_Cancel</response>
+      <response id="apply" translatable="yes" appearance="suggested">_Apply</response>
+    </responses>
+    <property name="extra-child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="margin-top">18</property>
+        <property name="width-request">375</property>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="hhomogeneous">true</property>
+            <property name="vhomogeneous">false</property>
+            <child>
+              <object class="GtkStackPage" id="loading">
+                <property name="child">
+                  <object class="GtkListBox">
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Loading…</property>
+                        <property name="activatable">false</property>
+                        <child type="suffix">
+                          <object class="GtkSpinner">
+                            <property name="spinning">true</property>
+                            <property name="valign">center</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage" id="empty">
+                <property name="child">
+                  <object class="AdwStatusPage">
+                    <property name="icon-name">computer-fail</property>
+                    <property name="description" translatable="yes">No code actions available</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage" id="failed">
+                <property name="child">
+                  <object class="AdwStatusPage" id="failed_page">
+                    <property name="icon-name">computer-fail</property>
+                    <property name="title" translatable="yes">Code Action Failure</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage" id="list">
+                <property name="child">
+                  <object class="AdwPreferencesGroup" id="list_group">
+                    <child>
+                      <object class="GtkListBox" id="list_box">
+                        <signal name="row-selected" handler="gbp_codeui_code_action_dialog_row_selected_cb" swapped="true" object="GbpCodeuiCodeActionDialog"/>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

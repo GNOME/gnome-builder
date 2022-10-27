@@ -26,6 +26,7 @@
 
 #include <libide-editor.h>
 
+#include "gbp-codeui-code-action-dialog.h"
 #include "gbp-codeui-editor-page-addin.h"
 #include "gbp-codeui-range-dialog.h"
 #include "gbp-codeui-rename-dialog.h"
@@ -41,6 +42,8 @@ struct _GbpCodeuiEditorPageAddin
   gulong         notify_has_selection;
 };
 
+static void code_actions_action     (GbpCodeuiEditorPageAddin *self,
+                                     GVariant                 *params);
 static void find_references_action  (GbpCodeuiEditorPageAddin *self,
                                      GVariant                 *params);
 static void goto_declaration_action (GbpCodeuiEditorPageAddin *self,
@@ -52,6 +55,7 @@ static void rename_symbol_action    (GbpCodeuiEditorPageAddin *self,
 
 IDE_DEFINE_ACTION_GROUP (GbpCodeuiEditorPageAddin, gbp_codeui_editor_page_addin, {
   { "rename-symbol", rename_symbol_action },
+  { "code-actions", code_actions_action },
   { "goto-declaration", goto_declaration_action },
   { "goto-definition", goto_definition_action },
   { "find-references", find_references_action },
@@ -60,7 +64,8 @@ IDE_DEFINE_ACTION_GROUP (GbpCodeuiEditorPageAddin, gbp_codeui_editor_page_addin,
 static void
 gbp_codeui_editor_page_addin_update_state (GbpCodeuiEditorPageAddin *self)
 {
-  IdeRenameProvider *provider;
+  IdeCodeActionProvider *code_action_provider;
+  IdeRenameProvider *rename_provider;
   gboolean has_selection;
   gboolean has_resolvers;
 
@@ -71,10 +76,14 @@ gbp_codeui_editor_page_addin_update_state (GbpCodeuiEditorPageAddin *self)
   g_assert (IDE_IS_BUFFER (self->buffer));
 
   has_resolvers = ide_buffer_has_symbol_resolvers (self->buffer);
-  provider = ide_buffer_get_rename_provider (self->buffer);
+  code_action_provider = ide_buffer_get_code_action_provider (self->buffer);
+  rename_provider = ide_buffer_get_rename_provider (self->buffer);
   has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (self->buffer));
 
-  gbp_codeui_editor_page_addin_set_action_enabled (self, "rename-symbol", has_selection && provider);
+  gbp_codeui_editor_page_addin_set_action_enabled (self, "rename-symbol",
+                                                   has_selection && rename_provider != NULL);
+  gbp_codeui_editor_page_addin_set_action_enabled (self, "code-actions",
+                                                   code_action_provider != NULL);
   gbp_codeui_editor_page_addin_set_action_enabled (self, "goto-declaration", has_resolvers);
   gbp_codeui_editor_page_addin_set_action_enabled (self, "goto-definition", has_resolvers);
   gbp_codeui_editor_page_addin_set_action_enabled (self, "find-references", has_resolvers);
@@ -141,6 +150,28 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
   iface->load = gbp_codeui_editor_page_addin_load;
   iface->unload = gbp_codeui_editor_page_addin_unload;
+}
+
+static void
+code_actions_action (GbpCodeuiEditorPageAddin *self,
+                     GVariant                 *param)
+{
+  GtkWidget *dialog;
+  GtkRoot *toplevel;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODEUI_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (self->buffer));
+
+  toplevel = gtk_widget_get_root (GTK_WIDGET (self->page));
+  dialog = gbp_codeui_code_action_dialog_new (self->buffer);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (toplevel));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
 }
 
 static void

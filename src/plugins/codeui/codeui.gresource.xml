@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/plugins/codeui">
     <file>codeui.plugin</file>
+    <file preprocess="xml-stripblanks">gbp-codeui-code-action-dialog.ui</file>
     <file preprocess="xml-stripblanks">gbp-codeui-range-dialog.ui</file>
     <file preprocess="xml-stripblanks">gbp-codeui-rename-dialog.ui</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>

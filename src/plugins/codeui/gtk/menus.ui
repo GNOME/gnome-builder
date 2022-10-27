@@ -7,6 +7,12 @@
         <attribute name="label" translatable="yes">R_ename Symbol…</attribute>
         <attribute name="action">page.codeui.rename-symbol</attribute>
       </item>
+      <item>
+        <attribute name="id">codeui-code-actions</attribute>
+        <attribute name="label" translatable="yes">Code Actions…</attribute>
+        <attribute name="action">page.codeui.code-actions</attribute>
+        <attribute name="description" translatable="yes">Display a list of possible code actions from the cursor position</attribute>
+      </item>
     </section>
     <section id="ide-source-view-popup-menu-jump-section">
       <item>
