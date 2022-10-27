@@ -3,7 +3,7 @@
 namespace {{PreFix}} {
     public class Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application {
         public Application () {
-            Object (application_id: "{{appid}}", flags: ApplicationFlags.FLAGS_NONE);
+            Object (application_id: "{{appid}}", flags: ApplicationFlags.DEFAULT_FLAGS);
         }
 
         construct {

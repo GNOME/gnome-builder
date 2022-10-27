@@ -17,7 +17,7 @@ main (int   argc,
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	app = {{prefix_}}_application_new ("{{appid}}", G_APPLICATION_FLAGS_NONE);
+	app = {{prefix_}}_application_new ("{{appid}}", G_APPLICATION_DEFAULT_FLAGS);
 	ret = g_application_run (G_APPLICATION (app), argc, argv);
 
 	return ret;
