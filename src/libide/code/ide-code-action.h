@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_CODE_ACTION (ide_code_action_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (IdeCodeAction, ide_code_action, IDE, CODE_ACTION, IdeObject)
+G_DECLARE_INTERFACE (IdeCodeAction, ide_code_action, IDE, CODE_ACTION, GObject)
 
 struct _IdeCodeActionInterface
 {
