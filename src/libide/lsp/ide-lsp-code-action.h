@@ -34,11 +34,11 @@ G_BEGIN_DECLS
 #define IDE_TYPE_LSP_CODE_ACTION (ide_lsp_code_action_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (IdeLspCodeAction, ide_lsp_code_action, IDE, LSP_CODE_ACTION, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeLspCodeAction, ide_lsp_code_action, IDE, LSP_CODE_ACTION, GObject)
 
 struct _IdeLspCodeActionClass
 {
-  IdeObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 IDE_AVAILABLE_IN_ALL

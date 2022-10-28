@@ -47,7 +47,7 @@ enum {
 
 static void code_action_iface_init (IdeCodeActionInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeLspCodeAction, ide_lsp_code_action, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (IdeLspCodeAction, ide_lsp_code_action, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeLspCodeAction)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CODE_ACTION, code_action_iface_init))
 
