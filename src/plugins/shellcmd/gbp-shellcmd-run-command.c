@@ -413,7 +413,7 @@ gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
 {
   g_return_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self));
 
-  if (ide_set_string (&self->accelerator, accelerator))
+  if (g_set_str (&self->accelerator, accelerator))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR]);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR_LABEL]);

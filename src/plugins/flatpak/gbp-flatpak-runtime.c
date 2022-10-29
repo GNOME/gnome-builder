@@ -514,7 +514,7 @@ gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  if (ide_set_string (&self->branch, branch))
+  if (g_set_str (&self->branch, branch))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH]);
 }
 
@@ -532,7 +532,7 @@ gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  if (ide_set_string (&self->platform, platform))
+  if (g_set_str (&self->platform, platform))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
 }
 

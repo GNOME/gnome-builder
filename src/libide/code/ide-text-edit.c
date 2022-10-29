@@ -319,7 +319,7 @@ ide_text_edit_set_text (IdeTextEdit *self,
 
   g_return_if_fail (IDE_IS_TEXT_EDIT (self));
 
-  if (ide_set_string (&priv->text, text))
+  if (g_set_str (&priv->text, text))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
 }
 

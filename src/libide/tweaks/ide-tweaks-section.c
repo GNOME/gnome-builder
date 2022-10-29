@@ -155,7 +155,7 @@ ide_tweaks_section_set_title (IdeTweaksSection *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_SECTION (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 

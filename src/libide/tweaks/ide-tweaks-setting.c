@@ -455,7 +455,7 @@ ide_tweaks_setting_set_path_suffix (IdeTweaksSetting *self,
 
   path_suffix = g_intern_string (path_suffix);
 
-  if (ide_set_string (&self->path_suffix, path_suffix))
+  if (g_set_str (&self->path_suffix, path_suffix))
     {
       ide_tweaks_setting_release (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PATH_SUFFIX]);

@@ -549,6 +549,6 @@ ide_search_result_set_accelerator (IdeSearchResult *self,
 
   g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
 
-  if (ide_set_string (&priv->accelerator, accelerator))
+  if (g_set_str (&priv->accelerator, accelerator))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
 }

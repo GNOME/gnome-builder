@@ -501,7 +501,7 @@ gbp_meson_introspection_load_stream_cb (GObject      *object,
   g_assert (etag != NULL);
 
   /* Clear all of our previously loaded state */
-  ide_set_string (&self->etag, etag);
+  g_set_str (&self->etag, etag);
   g_list_store_remove_all (self->run_commands);
 
   if ((root = json_parser_get_root (parser)) &&

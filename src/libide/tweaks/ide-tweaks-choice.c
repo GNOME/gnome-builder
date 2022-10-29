@@ -196,7 +196,7 @@ ide_tweaks_choice_set_title (IdeTweaksChoice *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_CHOICE (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 
@@ -206,6 +206,6 @@ ide_tweaks_choice_set_subtitle (IdeTweaksChoice *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_CHOICE (self));
 
-  if (ide_set_string (&self->subtitle, subtitle))
+  if (g_set_str (&self->subtitle, subtitle))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
 }

@@ -327,7 +327,7 @@ on_search_changed_cb (IdeTweaksPanelList *self,
       self->filtered = gtk_filter_list_model_new (g_object_ref (self->model), GTK_FILTER (filter));
     }
 
-  ide_set_string (&self->last_search, text);
+  g_set_str (&self->last_search, text);
 
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->filtered),

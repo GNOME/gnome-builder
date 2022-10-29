@@ -164,7 +164,7 @@ ide_terminal_update_url_actions (IdeTerminal *self,
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy-link", pattern != NULL);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", pattern != NULL);
 
-  ide_set_string (&priv->url, pattern);
+  g_set_str (&priv->url, pattern);
 
   IDE_TRACE_MSG ("URL pattern set to %s", pattern);
 

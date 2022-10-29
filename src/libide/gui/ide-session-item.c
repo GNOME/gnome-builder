@@ -214,7 +214,7 @@ ide_session_item_set_id (IdeSessionItem *self,
 {
   g_return_if_fail (IDE_IS_SESSION_ITEM (self));
 
-  if (ide_set_string (&self->id, id))
+  if (g_set_str (&self->id, id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
 }
 
@@ -250,7 +250,7 @@ ide_session_item_set_module_name (IdeSessionItem *self,
 {
   g_return_if_fail (IDE_IS_SESSION_ITEM (self));
 
-  if (ide_set_string (&self->module_name, module_name))
+  if (g_set_str (&self->module_name, module_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODULE_NAME]);
 }
 
@@ -286,7 +286,7 @@ ide_session_item_set_type_hint (IdeSessionItem *self,
 {
   g_return_if_fail (IDE_IS_SESSION_ITEM (self));
 
-  if (ide_set_string (&self->type_hint, type_hint))
+  if (g_set_str (&self->type_hint, type_hint))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TYPE_HINT]);
 }
 
@@ -321,7 +321,7 @@ ide_session_item_set_workspace (IdeSessionItem *self,
 {
   g_return_if_fail (IDE_IS_SESSION_ITEM (self));
 
-  if (ide_set_string (&self->workspace, workspace))
+  if (g_set_str (&self->workspace, workspace))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WORKSPACE]);
 }
 

@@ -72,7 +72,7 @@ ide_lsp_code_action_set_title (IdeLspCodeAction *self,
 
   g_return_if_fail (IDE_IS_CODE_ACTION (self));
 
-  if (ide_set_string (&priv->title, title))
+  if (g_set_str (&priv->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 

@@ -392,7 +392,7 @@ ide_tweaks_radio_set_subtitle (IdeTweaksRadio *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_RADIO (self));
 
-  if (ide_set_string (&self->subtitle, subtitle))
+  if (g_set_str (&self->subtitle, subtitle))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
 }
 
@@ -402,6 +402,6 @@ ide_tweaks_radio_set_title (IdeTweaksRadio *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_RADIO (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }

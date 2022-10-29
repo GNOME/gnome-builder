@@ -223,7 +223,7 @@ ide_tweaks_page_set_icon_name (IdeTweaksPage *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
 
-  if (ide_set_string (&self->icon_name, icon_name))
+  if (g_set_str (&self->icon_name, icon_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
 }
 
@@ -287,7 +287,7 @@ ide_tweaks_page_set_title (IdeTweaksPage *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 

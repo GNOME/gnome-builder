@@ -204,7 +204,7 @@ gbp_top_match_completion_filter_set_typed_text (GbpTopMatchCompletionFilter *sel
 {
   g_return_if_fail (GBP_IS_TOP_MATCH_COMPLETION_FILTER (self));
 
-  if (ide_set_string (&self->typed_text, typed_text))
+  if (g_set_str (&self->typed_text, typed_text))
     gbp_top_match_completion_filter_update (self, FALSE);
 }
 
@@ -215,3 +215,4 @@ gbp_top_match_completion_filter_get_provider (GbpTopMatchCompletionFilter *self)
 
   return self->provider;
 }
+

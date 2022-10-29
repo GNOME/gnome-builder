@@ -80,7 +80,7 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   ide_run_context_take_fd (run_context, source_fd, dest_fd);
 
   /* Save the filename so we can open it after exiting */
-  ide_set_string (&self->log_name, name);
+  g_set_str (&self->log_name, name);
   g_debug ("Using %s for valgrind log", name);
 
   track_origins = ide_settings_get_boolean (settings, "track-origins");

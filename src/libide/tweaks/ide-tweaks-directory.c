@@ -360,7 +360,7 @@ ide_tweaks_directory_set_title (IdeTweaksDirectory *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_DIRECTORY (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
 
@@ -378,6 +378,6 @@ ide_tweaks_directory_set_subtitle (IdeTweaksDirectory *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_DIRECTORY (self));
 
-  if (ide_set_string (&self->subtitle, subtitle))
+  if (g_set_str (&self->subtitle, subtitle))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
 }

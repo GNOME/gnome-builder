@@ -247,6 +247,6 @@ ide_run_tool_set_icon_name (IdeRunTool *self,
 
   g_return_if_fail (IDE_IS_RUN_TOOL (self));
 
-  if (!ide_set_string (&priv->icon_name, icon_name))
+  if (!g_set_str (&priv->icon_name, icon_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
 }

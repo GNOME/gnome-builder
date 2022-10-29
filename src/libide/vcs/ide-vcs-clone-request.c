@@ -352,7 +352,7 @@ ide_vcs_clone_request_set_author_email (IdeVcsCloneRequest *self,
 {
   g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
 
-  if (ide_set_string (&self->author_email, author_email))
+  if (g_set_str (&self->author_email, author_email))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTHOR_EMAIL]);
 }
 
@@ -362,7 +362,7 @@ ide_vcs_clone_request_set_author_name (IdeVcsCloneRequest *self,
 {
   g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
 
-  if (ide_set_string (&self->author_name, author_name))
+  if (g_set_str (&self->author_name, author_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTHOR_NAME]);
 }
 
@@ -372,7 +372,7 @@ ide_vcs_clone_request_set_branch_name (IdeVcsCloneRequest *self,
 {
   g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
 
-  if (ide_set_string (&self->branch_name, branch_name))
+  if (g_set_str (&self->branch_name, branch_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_NAME]);
 }
 
@@ -382,7 +382,7 @@ ide_vcs_clone_request_set_module_name (IdeVcsCloneRequest *self,
 {
   g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
 
-  if (ide_set_string (&self->module_name, module_name))
+  if (g_set_str (&self->module_name, module_name))
     {
       g_autoptr(PeasExtension) exten = NULL;
 
@@ -432,7 +432,7 @@ ide_vcs_clone_request_set_uri (IdeVcsCloneRequest *self,
 {
   g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
 
-  if (ide_set_string (&self->uri, uri))
+  if (g_set_str (&self->uri, uri))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_SELECT_BRANCH]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_URI]);

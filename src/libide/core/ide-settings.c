@@ -97,7 +97,7 @@ ide_settings_set_schema_id (IdeSettings *self,
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (schema_id != NULL);
 
-  if (ide_set_string (&self->schema_id, schema_id))
+  if (g_set_str (&self->schema_id, schema_id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCHEMA_ID]);
 }
 

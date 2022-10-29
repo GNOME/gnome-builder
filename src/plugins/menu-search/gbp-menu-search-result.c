@@ -116,7 +116,7 @@ gbp_menu_search_result_set_action (GbpMenuSearchResult *self,
 {
   g_return_if_fail (GBP_IS_MENU_SEARCH_RESULT (self));
 
-  ide_set_string (&self->action, action);
+  g_set_str (&self->action, action);
   g_clear_pointer (&self->target, g_variant_unref);
   self->target = target ? g_variant_ref_sink (target) : NULL;
 }

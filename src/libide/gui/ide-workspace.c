@@ -1727,7 +1727,7 @@ ide_workspace_set_id (IdeWorkspace *self,
 
   g_return_if_fail (IDE_IS_WORKSPACE (self));
 
-  if (ide_set_string (&priv->id, id))
+  if (g_set_str (&priv->id, id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
 }
 

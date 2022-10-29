@@ -87,22 +87,6 @@ _g_object_unref0 (gpointer instance)
     g_object_unref (instance);
 }
 
-static inline gboolean
-ide_set_string (char       **ptr,
-                const char  *str)
-{
-  char *copy;
-
-  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
-    return FALSE;
-
-  copy = g_strdup (str);
-  g_clear_pointer (ptr, g_free);
-  *ptr = copy;
-
-  return TRUE;
-}
-
 static inline void
 ide_take_string (char **ptr,
                  char  *str)
@@ -424,7 +408,7 @@ const char *symbol##_get_##name (Symbol *self)                              \
 void symbol##_set_##name (Symbol *self, const char *name)                   \
 {                                                                           \
   g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (self, TYPE));               \
-  if (ide_set_string (&self->name, name))                                   \
+  if (g_set_str (&self->name, name))                                   \
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##PROP]);   \
 }
 #define IDE_DEFINE_STRING_GETTER_PRIVATE(symbol, Symbol, TYPE, name)        \
@@ -439,7 +423,7 @@ void symbol##_set_##name (Symbol *self, const char *name)                   \
 {                                                                           \
   Symbol##Private *priv = symbol##_get_instance_private(self);              \
   g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (self, TYPE));               \
-  if (ide_set_string (&priv->name, name))                                   \
+  if (g_set_str (&priv->name, name))                                   \
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_##PROP]);   \
 }
 #define IDE_GET_PROPERTY_STRING(symbol, name, PROP)                         \

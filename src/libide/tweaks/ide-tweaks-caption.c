@@ -163,6 +163,6 @@ ide_tweaks_caption_set_text (IdeTweaksCaption *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_CAPTION (self));
 
-  if (ide_set_string (&self->text, text))
+  if (g_set_str (&self->text, text))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
 }

@@ -263,7 +263,7 @@ ide_tweaks_set_project_id (IdeTweaks  *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS (self));
 
-  if (ide_set_string (&self->project_id, project_id))
+  if (g_set_str (&self->project_id, project_id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_ID]);
 }
 

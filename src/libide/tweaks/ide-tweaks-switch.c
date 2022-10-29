@@ -173,7 +173,7 @@ ide_tweaks_switch_set_subtitle (IdeTweaksSwitch *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_SWITCH (self));
 
-  if (ide_set_string (&self->subtitle, subtitle))
+  if (g_set_str (&self->subtitle, subtitle))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
 }
 
@@ -191,6 +191,6 @@ ide_tweaks_switch_set_title (IdeTweaksSwitch *self,
 {
   g_return_if_fail (IDE_IS_TWEAKS_SWITCH (self));
 
-  if (ide_set_string (&self->title, title))
+  if (g_set_str (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }

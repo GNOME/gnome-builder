@@ -678,7 +678,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    */
   if (!g_queue_is_empty (&self->queued_tasks))
     {
-      ide_set_string (&self->filter, word);
+      g_set_str (&self->filter, word);
       g_queue_push_tail (&self->queued_tasks, g_steal_pointer (&task));
       IDE_EXIT;
     }
@@ -697,7 +697,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    */
   if (self->filter == NULL || (word && g_str_has_prefix (word, self->filter)))
     {
-      ide_set_string (&self->filter, word);
+      g_set_str (&self->filter, word);
       ide_clang_proposals_do_refilter (self, TRUE);
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
@@ -707,7 +707,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    * So we can reuse the results, but since the user backspaced we have to
    * clear the linked list and update by walking the whole array.
    */
-  ide_set_string (&self->filter, word);
+  g_set_str (&self->filter, word);
   ide_clang_proposals_do_refilter (self, FALSE);
   ide_task_return_boolean (task, TRUE);
 
@@ -727,7 +727,7 @@ query_client:
 
   g_queue_push_tail (&self->queued_tasks, g_steal_pointer (&task));
 
-  ide_set_string (&self->filter, word);
+  g_set_str (&self->filter, word);
 
   /* If we have previous results, refilter them immediately so that if we're
    * attached as intermediate results, we have something useful to display.
@@ -776,7 +776,7 @@ ide_clang_proposals_refilter (IdeClangProposals *self,
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
   fast_refilter = self->filter && word && g_str_has_prefix (word, self->filter);
-  ide_set_string (&self->filter, word);
+  g_set_str (&self->filter, word);
   ide_clang_proposals_do_refilter (self, fast_refilter);
 
   IDE_EXIT;
