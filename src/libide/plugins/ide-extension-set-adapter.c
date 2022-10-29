@@ -585,10 +585,8 @@ ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->key, key))
+  if (g_set_str (&self->key, key))
     {
-      g_free (self->key);
-      self->key = g_strdup (key);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
       ide_extension_set_adapter_queue_reload (self);
     }
@@ -614,10 +612,8 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
                  g_type_name (self->interface_type),
                  value ?: "");
 
-  if (!ide_str_equal0 (self->value, value))
+  if (g_set_str (&self->value, value))
     {
-      g_free (self->value);
-      self->value = g_strdup (value);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
       ide_extension_set_adapter_queue_reload (self);
     }

@@ -222,13 +222,10 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
 
   g_return_if_fail (IDE_IS_HEADER_BAR (self));
 
-  if (!ide_str_equal0 (menu_id, priv->menu_id))
+  if (g_set_str (&priv->menu_id, menu_id))
     {
       GtkPopover *popover;
       GMenu *menu = NULL;
-
-      g_free (priv->menu_id);
-      priv->menu_id = g_strdup (menu_id);
 
       if (menu_id != NULL)
         menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);

@@ -692,10 +692,8 @@ ide_subprocess_launcher_set_cwd (IdeSubprocessLauncher *self,
   if (ide_str_empty0 (cwd))
     cwd = ".";
 
-  if (!ide_str_equal0 (priv->cwd, cwd))
+  if (g_set_str (&priv->cwd, cwd))
     {
-      g_free (priv->cwd);
-      priv->cwd = g_strdup (cwd);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CWD]);
     }
 }

@@ -226,10 +226,8 @@ ide_project_info_set_build_system_hint (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->build_system_hint, build_system_hint))
+  if (g_set_str (&self->build_system_hint, build_system_hint))
     {
-      g_free (self->build_system_hint);
-      self->build_system_hint = g_strdup (build_system_hint);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_SYSTEM_HINT]);
     }
 }
@@ -248,10 +246,8 @@ ide_project_info_set_build_system_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->build_system_name, build_system_name))
+  if (g_set_str (&self->build_system_name, build_system_name))
     {
-      g_free (self->build_system_name);
-      self->build_system_name = g_strdup (build_system_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_SYSTEM_NAME]);
     }
 }
@@ -270,10 +266,8 @@ ide_project_info_set_description (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->description, description))
+  if (g_set_str (&self->description, description))
     {
-      g_free (self->description);
-      self->description = g_strdup (description);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DESCRIPTION]);
     }
 }
@@ -292,10 +286,8 @@ ide_project_info_set_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->name, name))
+  if (g_set_str (&self->name, name))
     {
-      g_free (self->name);
-      self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -726,10 +718,8 @@ ide_project_info_set_vcs_uri (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->vcs_uri, vcs_uri))
+  if (g_set_str (&self->vcs_uri, vcs_uri))
     {
-      g_free (self->vcs_uri);
-      self->vcs_uri = g_strdup (vcs_uri);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS_URI]);
     }
 }
@@ -829,10 +819,8 @@ ide_project_info_set_id (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (id, self->id))
+  if (g_set_str (&self->id, id))
     {
-      g_free (self->id);
-      self->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
 }

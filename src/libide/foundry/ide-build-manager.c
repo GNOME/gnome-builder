@@ -744,10 +744,8 @@ ide_build_manager_vcs_changed (IdeBuildManager *self,
 
   branch_name = ide_vcs_get_branch_name (vcs);
 
-  if (!ide_str_equal0 (branch_name, self->branch_name))
+  if (g_set_str (&self->branch_name, branch_name))
     {
-      g_free (self->branch_name);
-      self->branch_name = g_strdup (branch_name);
       ide_build_manager_invalidate_pipeline (self);
     }
 }

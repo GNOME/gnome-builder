@@ -1691,11 +1691,7 @@ ide_tree_node_set_tag (IdeTreeNode *self,
 {
   g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  if (!ide_str_equal0 (self->tag, tag))
-    {
-      g_free (self->tag);
-      self->tag = g_strdup (tag);
-    }
+  g_set_str (&self->tag, tag);
 }
 
 gboolean

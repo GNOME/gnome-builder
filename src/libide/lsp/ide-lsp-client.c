@@ -2194,10 +2194,8 @@ ide_lsp_client_set_root_uri (IdeLspClient *self,
 
   g_return_if_fail (IDE_IS_LSP_CLIENT (self));
 
-  if (!ide_str_equal0 (priv->root_uri, root_uri))
+  if (g_set_str (&priv->root_uri, root_uri))
     {
-      g_free (priv->root_uri);
-      priv->root_uri = g_strdup (root_uri);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT_URI]);
     }
 }

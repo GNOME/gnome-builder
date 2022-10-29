@@ -3921,10 +3921,8 @@ _ide_pipeline_set_message (IdePipeline *self,
         message += strlen ("jhbuild:");
     }
 
-  if (!ide_str_equal0 (message, self->message))
+  if (g_set_str (&self->message, message))
     {
-      g_free (self->message);
-      self->message = g_strdup (message);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
     }
 }

@@ -355,10 +355,8 @@ ide_runtime_set_id (IdeRuntime  *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (id != NULL);
 
-  if (!ide_str_equal0 (id, priv->id))
+  if (g_set_str (&priv->id, id))
     {
-      g_free (priv->id);
-      priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
 }
@@ -382,10 +380,8 @@ ide_runtime_set_short_id (IdeRuntime  *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (short_id != NULL);
 
-  if (!ide_str_equal0 (short_id, priv->short_id))
+  if (g_set_str (&priv->short_id, short_id))
     {
-      g_free (priv->short_id);
-      priv->short_id = g_strdup (short_id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORT_ID]);
     }
 }
@@ -412,10 +408,8 @@ ide_runtime_set_category (IdeRuntime  *self,
   if (category == NULL)
     category = _("Host System");
 
-  if (!ide_str_equal0 (category, priv->category))
+  if (g_set_str (&priv->category, category))
     {
-      g_free (priv->category);
-      priv->category = g_strdup (category);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CATEGORY]);
     }
 }

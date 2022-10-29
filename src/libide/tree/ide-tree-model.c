@@ -841,11 +841,8 @@ ide_tree_model_set_kind (IdeTreeModel *self,
 {
   g_return_if_fail (IDE_IS_TREE_MODEL (self));
 
-  if (!ide_str_equal0 (kind, self->kind))
+  if (g_set_str (&self->kind, kind))
     {
-      g_free (self->kind);
-      self->kind = g_strdup (kind);
-
       if (self->addins != NULL)
         ide_extension_set_adapter_set_value (self->addins, kind);
 
@@ -1597,3 +1594,4 @@ tree_drag_dest_iface_init (GtkTreeDragDestIface *iface)
   iface->drag_data_received = ide_tree_model_drag_data_received;
   iface->row_drop_possible = ide_tree_model_row_drop_possible;
 }
+

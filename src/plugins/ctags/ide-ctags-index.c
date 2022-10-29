@@ -286,10 +286,8 @@ ide_ctags_index_set_path_root (IdeCtagsIndex *self,
 {
   g_return_if_fail (IDE_IS_CTAGS_INDEX (self));
 
-  if (!ide_str_equal0 (self->path_root, path_root))
+  if (g_set_str (&self->path_root, path_root))
     {
-      g_free (self->path_root);
-      self->path_root = g_strdup (path_root);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PATH_ROOT]);
     }
 }

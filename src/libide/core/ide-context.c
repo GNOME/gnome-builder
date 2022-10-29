@@ -501,10 +501,8 @@ ide_context_set_project_id (IdeContext *self,
     project_id = "empty";
 
   ide_object_lock (IDE_OBJECT (self));
-  if (!ide_str_equal0 (self->project_id, project_id))
+  if (g_set_str (&self->project_id, project_id))
     {
-      g_free (self->project_id);
-      self->project_id = g_strdup (project_id);
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_PROJECT_ID]);
       register_settings = TRUE;
     }
@@ -843,10 +841,8 @@ ide_context_set_title (IdeContext  *self,
     title = _("Untitled");
 
   ide_object_lock (IDE_OBJECT (self));
-  if (!ide_str_equal0 (self->title, title))
+  if (g_set_str (&self->title, title))
     {
-      g_free (self->title);
-      self->title = g_strdup (title);
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_TITLE]);
     }
   ide_object_unlock (IDE_OBJECT (self));

@@ -220,10 +220,8 @@ ide_simple_build_system_discovery_set_glob (IdeSimpleBuildSystemDiscovery *self,
   g_return_if_fail (IDE_IS_SIMPLE_BUILD_SYSTEM_DISCOVERY (self));
   g_return_if_fail (glob != NULL);
 
-  if (!ide_str_equal0 (glob, priv->glob))
+  if (g_set_str (&priv->glob, glob))
     {
-      g_free (priv->glob);
-      priv->glob = g_strdup (glob);
       priv->is_exact = TRUE;
       for (; priv->is_exact && *glob; glob = g_utf8_next_char (glob))
         {
@@ -251,10 +249,8 @@ ide_simple_build_system_discovery_set_hint (IdeSimpleBuildSystemDiscovery *self,
 
   g_return_if_fail (IDE_IS_SIMPLE_BUILD_SYSTEM_DISCOVERY (self));
 
-  if (!ide_str_equal0 (hint, priv->hint))
+  if (g_set_str (&priv->hint, hint))
     {
-      g_free (priv->hint);
-      priv->hint = g_strdup (hint);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HINT]);
     }
 }

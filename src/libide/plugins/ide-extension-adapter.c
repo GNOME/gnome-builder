@@ -493,10 +493,8 @@ ide_extension_adapter_set_key (IdeExtensionAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->key, key))
+  if (g_set_str (&self->key, key))
     {
-      g_free (self->key);
-      self->key = g_strdup (key);
       ide_extension_adapter_queue_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
     }
@@ -518,10 +516,8 @@ ide_extension_adapter_set_value (IdeExtensionAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->value, value))
+  if (g_set_str (&self->value, value))
     {
-      g_free (self->value);
-      self->value = g_strdup (value);
       if (self->interface_type != G_TYPE_INVALID)
         ide_extension_adapter_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);

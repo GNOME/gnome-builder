@@ -454,10 +454,8 @@ ide_notification_set_id (IdeNotification *self,
   g_return_if_fail (IDE_IS_NOTIFICATION (self));
 
   ide_object_lock (IDE_OBJECT (self));
-  if (!ide_str_equal0 (priv->id, id))
+  if (g_set_str (&priv->id, id))
     {
-      g_free (priv->id);
-      priv->id = g_strdup (id);
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_ID]);
     }
   ide_object_unlock (IDE_OBJECT (self));
@@ -500,10 +498,8 @@ ide_notification_set_title (IdeNotification *self,
   g_return_if_fail (IDE_IS_NOTIFICATION (self));
 
   ide_object_lock (IDE_OBJECT (self));
-  if (!ide_str_equal0 (priv->title, title))
+  if (g_set_str (&priv->title, title))
     {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_TITLE]);
     }
   ide_object_unlock (IDE_OBJECT (self));
@@ -546,10 +542,8 @@ ide_notification_set_body (IdeNotification *self,
   g_return_if_fail (IDE_IS_NOTIFICATION (self));
 
   ide_object_lock (IDE_OBJECT (self));
-  if (!ide_str_equal0 (priv->body, body))
+  if (g_set_str (&priv->body, body))
     {
-      g_free (priv->body);
-      priv->body = g_strdup (body);
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_BODY]);
     }
   ide_object_unlock (IDE_OBJECT (self));
@@ -874,11 +868,7 @@ ide_notification_set_default_action_and_target_value (IdeNotification *self,
 
   ide_object_lock (IDE_OBJECT (self));
 
-  if (!ide_str_equal0 (priv->default_action, action))
-    {
-      g_free (priv->default_action);
-      priv->default_action = g_strdup (action);
-    }
+  g_set_str (&priv->default_action, action);
 
   if (priv->default_target != NULL &&
       target != NULL &&
