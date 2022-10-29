@@ -65,10 +65,8 @@ ide_doap_person_set_name (IdeDoapPerson *self,
 {
   g_return_if_fail (IDE_IS_DOAP_PERSON (self));
 
-  if (g_strcmp0 (self->name, name) != 0)
+  if (g_set_str (&self->name, name))
     {
-      g_free (self->name);
-      self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -87,10 +85,8 @@ ide_doap_person_set_email (IdeDoapPerson *self,
 {
   g_return_if_fail (IDE_IS_DOAP_PERSON (self));
 
-  if (g_strcmp0 (self->email, email) != 0)
+  if (g_set_str (&self->email, email))
     {
-      g_free (self->email);
-      self->email = g_strdup (email);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EMAIL]);
     }
 }

@@ -148,10 +148,8 @@ ipc_git_remote_callbacks_progress (GgitRemoteCallbacks *callbacks,
 
   g_assert (IPC_IS_GIT_REMOTE_CALLBACKS (self));
 
-  if (g_strcmp0 (self->message, message) != 0)
+  if (g_set_str (&self->message, message))
     {
-      g_free (self->message);
-      self->message = g_strdup (message);
       self->message_changed = TRUE;
       ipc_git_remote_callbacks_queue_progress (self);
     }

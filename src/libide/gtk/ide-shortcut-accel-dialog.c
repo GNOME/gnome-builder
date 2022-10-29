@@ -382,23 +382,20 @@ void
 ide_shortcut_accel_dialog_set_shortcut_title (IdeShortcutAccelDialog *self,
                                               const gchar            *shortcut_title)
 {
+  g_autofree gchar *label = NULL;
+
   g_return_if_fail (IDE_IS_SHORTCUT_ACCEL_DIALOG (self));
 
-  if (g_strcmp0 (shortcut_title, self->shortcut_title) != 0)
+  if (shortcut_title != NULL)
     {
-      g_autofree gchar *label = NULL;
+      /* Translators: <b>%s</b> is used to show the provided text in bold */
+      label = g_strdup_printf (_("Enter new shortcut to change <b>%s</b>."), shortcut_title);
+    }
 
-      if (shortcut_title != NULL)
-        {
-          /* Translators: <b>%s</b> is used to show the provided text in bold */
-          label = g_strdup_printf (_("Enter new shortcut to change <b>%s</b>."), shortcut_title);
-        }
-
+  if (g_set_str (&self->shortcut_title, shortcut_title))
+    {
       gtk_label_set_label (self->selection_label, label);
       gtk_label_set_label (self->display_label, label);
-
-      g_free (self->shortcut_title);
-      self->shortcut_title = g_strdup (shortcut_title);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORTCUT_TITLE]);
     }

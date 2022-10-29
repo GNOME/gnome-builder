@@ -173,10 +173,8 @@ ide_template_locator_set_license_text (IdeTemplateLocator *self,
 
   g_return_if_fail (IDE_IS_TEMPLATE_LOCATOR (self));
 
-  if (g_strcmp0 (license_text, priv->license_text) != 0)
+  if (g_set_str (&priv->license_text, license_text))
     {
-      g_free (priv->license_text);
-      priv->license_text = g_strdup (license_text);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LICENSE_TEXT]);
     }
 }

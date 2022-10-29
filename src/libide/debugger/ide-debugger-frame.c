@@ -294,10 +294,8 @@ ide_debugger_frame_set_file (IdeDebuggerFrame *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_FRAME (self));
 
-  if (g_strcmp0 (priv->file, file) != 0)
+  if (g_set_str(&priv->file, file))
     {
-      g_free (priv->file);
-      priv->file = g_strdup (file);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
     }
 }
@@ -320,10 +318,8 @@ ide_debugger_frame_set_function (IdeDebuggerFrame *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_FRAME (self));
 
-  if (g_strcmp0 (priv->function, function) != 0)
+  if (g_set_str (&priv->function, function))
     {
-      g_free (priv->function);
-      priv->function = g_strdup (function);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FUNCTION]);
     }
 }
@@ -346,10 +342,8 @@ ide_debugger_frame_set_library (IdeDebuggerFrame *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_FRAME (self));
 
-  if (g_strcmp0 (priv->library, library) != 0)
+  if (g_set_str (&priv->library, library))
     {
-      g_free (priv->library);
-      priv->library = g_strdup (library);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LIBRARY]);
     }
 }

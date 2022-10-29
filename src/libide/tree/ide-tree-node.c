@@ -580,10 +580,8 @@ ide_tree_node_set_display_name (IdeTreeNode *self,
 {
   g_return_if_fail (IDE_IS_TREE_NODE (self));
 
-  if (g_strcmp0 (display_name, self->display_name) != 0)
+  if (g_set_str (&self->display_name, display_name))
     {
-      g_free (self->display_name);
-      self->display_name = g_strdup (display_name);
       ide_tree_node_emit_changed (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
     }
@@ -1904,3 +1902,4 @@ ide_tree_node_set_flags (IdeTreeNode      *self,
       ide_tree_node_emit_changed (self);
     }
 }
+

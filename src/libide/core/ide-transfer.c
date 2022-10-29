@@ -369,10 +369,8 @@ ide_transfer_set_icon_name (IdeTransfer *self,
 
   g_return_if_fail (IDE_IS_TRANSFER (self));
 
-  if (g_strcmp0 (priv->icon_name, icon_name) != 0)
+  if (g_set_str (&priv->icon_name, icon_name))
     {
-      g_free (priv->icon_name);
-      priv->icon_name = g_strdup (icon_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }
@@ -420,10 +418,8 @@ ide_transfer_set_status (IdeTransfer *self,
 
   g_return_if_fail (IDE_IS_TRANSFER (self));
 
-  if (g_strcmp0 (priv->status, status) != 0)
+  if (g_set_str (&priv->status, status))
     {
-      g_free (priv->status);
-      priv->status = g_strdup (status);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATUS]);
     }
 }
@@ -446,10 +442,8 @@ ide_transfer_set_title (IdeTransfer *self,
 
   g_return_if_fail (IDE_IS_TRANSFER (self));
 
-  if (g_strcmp0 (priv->title, title) != 0)
+  if (g_set_str (&priv->title, title))
     {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
 }

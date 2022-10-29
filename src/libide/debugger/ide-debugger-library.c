@@ -190,10 +190,8 @@ ide_debugger_library_set_host_name (IdeDebuggerLibrary *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_LIBRARY (self));
 
-  if (g_strcmp0 (priv->host_name, host_name) != 0)
+  if (g_set_str (&priv->host_name, host_name))
     {
-      g_free (priv->host_name);
-      priv->host_name = g_strdup (host_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOST_NAME]);
     }
 }
@@ -216,10 +214,8 @@ ide_debugger_library_set_target_name (IdeDebuggerLibrary *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_LIBRARY (self));
 
-  if (g_strcmp0 (priv->target_name, target_name) != 0)
+  if (g_set_str (&priv->target_name, target_name))
     {
-      g_free (priv->target_name);
-      priv->target_name = g_strdup (target_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TARGET_NAME]);
     }
 }

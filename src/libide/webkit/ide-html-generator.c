@@ -288,10 +288,8 @@ ide_html_generator_set_base_uri (IdeHtmlGenerator *self,
 
   g_return_if_fail (IDE_IS_HTML_GENERATOR (self));
 
-  if (g_strcmp0 (priv->base_uri, base_uri) != 0)
+  if (g_set_str (&priv->base_uri, base_uri))
     {
-      g_free (priv->base_uri);
-      priv->base_uri = g_strdup (base_uri);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BASE_URI]);
     }
 }

@@ -355,10 +355,8 @@ ide_radio_box_set_active_id (IdeRadioBox *self,
   if (id == NULL)
     id = "";
 
-  if (g_strcmp0 (id, self->active_id) != 0)
+  if (g_set_str (&self->active_id, id))
     {
-      g_free (self->active_id);
-      self->active_id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE_ID]);
       g_signal_emit (self, signals [CHANGED], 0);
     }

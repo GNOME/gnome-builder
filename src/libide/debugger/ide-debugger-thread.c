@@ -167,10 +167,8 @@ ide_debugger_thread_set_group (IdeDebuggerThread *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_THREAD (self));
 
-  if (g_strcmp0 (priv->group, group) != 0)
+  if (g_set_str (&priv->group, group))
     {
-      g_free (priv->group);
-      priv->group = g_strdup (group);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GROUP]);
     }
 }

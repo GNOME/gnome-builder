@@ -185,10 +185,8 @@ ide_debugger_thread_group_set_pid (IdeDebuggerThreadGroup *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_THREAD_GROUP (self));
 
-  if (g_strcmp0 (priv->pid, pid) != 0)
+  if (g_set_str (&priv->pid, pid))
     {
-      g_free (priv->pid);
-      priv->pid = g_strdup (pid);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PID]);
     }
 }
@@ -201,10 +199,8 @@ ide_debugger_thread_group_set_exit_code (IdeDebuggerThreadGroup *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_THREAD_GROUP (self));
 
-  if (g_strcmp0 (priv->exit_code, exit_code) != 0)
+  if (g_set_str (&priv->exit_code, exit_code))
     {
-      g_free (priv->exit_code);
-      priv->exit_code = g_strdup (exit_code);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXIT_CODE]);
     }
 }

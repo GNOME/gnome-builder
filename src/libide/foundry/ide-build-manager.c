@@ -194,10 +194,8 @@ ide_build_manager_action_default_build_target (IdeBuildManager *self,
   if (ide_str_empty0 (str))
     str = NULL;
 
-  if (g_strcmp0 (str, self->default_build_target) != 0)
+  if (g_set_str (&self->default_build_target, str))
     {
-      g_free (self->default_build_target);
-      self->default_build_target = g_strdup (str);
       ide_build_manager_set_action_state (self,
                                           "default-build-target",
                                           g_variant_new_string (str ? str : ""));

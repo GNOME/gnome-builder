@@ -438,10 +438,8 @@ ide_runtime_set_name (IdeRuntime  *self,
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
 
-  if (g_strcmp0 (name, priv->name) != 0)
+  if (g_set_str(&priv->name, name))
     {
-      g_free (priv->name);
-      priv->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -471,10 +469,8 @@ ide_runtime_set_display_name (IdeRuntime  *self,
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
 
-  if (g_strcmp0 (display_name, priv->display_name) != 0)
+  if (g_set_str (&priv->display_name, display_name))
     {
-      g_free (priv->display_name);
-      priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
     }
 }

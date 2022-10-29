@@ -779,10 +779,8 @@ ide_lsp_service_set_program (IdeLspService *self,
 
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
 
-  if (g_strcmp0 (program, priv->program) != 0)
+  if (g_set_str (&priv->program, program))
     {
-      g_free (priv->program);
-      priv->program = g_strdup (program);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM]);
     }
 }

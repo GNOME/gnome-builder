@@ -807,11 +807,7 @@ ide_run_context_set_cwd (IdeRunContext *self,
 
   layer = ide_run_context_current_layer (self);
 
-  if (g_strcmp0 (cwd, layer->cwd) != 0)
-    {
-      g_free (layer->cwd);
-      layer->cwd = g_strdup (cwd);
-    }
+  g_set_str (&layer->cwd, cwd);
 }
 
 void
@@ -1418,3 +1414,4 @@ ide_run_context_create_stdio_stream (IdeRunContext  *self,
                                         STDOUT_FILENO,
                                         error);
 }
+

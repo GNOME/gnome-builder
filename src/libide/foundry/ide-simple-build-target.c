@@ -100,11 +100,7 @@ ide_simple_build_target_set_name (IdeSimpleBuildTarget *self,
 
   g_return_if_fail (IDE_IS_SIMPLE_BUILD_TARGET (self));
 
-  if (g_strcmp0 (priv->name, name) != 0)
-    {
-      g_free (priv->name);
-      priv->name = g_strdup (name);
-    }
+  g_set_str (&priv->name, name);
 }
 
 void
@@ -141,11 +137,7 @@ ide_simple_build_target_set_cwd (IdeSimpleBuildTarget *self,
 
   g_return_if_fail (IDE_IS_SIMPLE_BUILD_TARGET (self));
 
-  if (g_strcmp0 (priv->cwd, cwd) != 0)
-    {
-      g_free (priv->cwd);
-      priv->cwd = g_strdup (cwd);
-    }
+  g_set_str (&priv->cwd, cwd);
 }
 
 void
@@ -156,11 +148,7 @@ ide_simple_build_target_set_language (IdeSimpleBuildTarget *self,
 
   g_return_if_fail (IDE_IS_SIMPLE_BUILD_TARGET (self));
 
-  if (g_strcmp0 (priv->language, language) != 0)
-    {
-      g_free (priv->language);
-      priv->language = g_strdup (language);
-    }
+  g_set_str (&priv->language, language);
 }
 
 static GFile *

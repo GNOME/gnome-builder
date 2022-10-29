@@ -120,10 +120,8 @@ ide_device_set_icon_name (IdeDevice   *self,
 
   g_return_if_fail (IDE_IS_DEVICE (self));
 
-  if (g_strcmp0 (icon_name, priv->icon_name) != 0)
+  if (g_set_str (&priv->icon_name, icon_name))
     {
-      g_free (priv->icon_name);
-      priv->icon_name = g_strdup (icon_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }

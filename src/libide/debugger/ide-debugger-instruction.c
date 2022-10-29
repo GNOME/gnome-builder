@@ -174,10 +174,8 @@ ide_debugger_instruction_set_display (IdeDebuggerInstruction *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_INSTRUCTION (self));
 
-  if (g_strcmp0 (priv->display, display) != 0)
+  if (g_set_str (&priv->display, display))
     {
-      g_free (priv->display);
-      priv->display = g_strdup (display);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY]);
     }
 }
@@ -200,10 +198,8 @@ ide_debugger_instruction_set_function (IdeDebuggerInstruction *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_INSTRUCTION (self));
 
-  if (g_strcmp0 (priv->function, function) != 0)
+  if (g_set_str (&priv->function, function))
     {
-      g_free (priv->function);
-      priv->function = g_strdup (function);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FUNCTION]);
     }
 }

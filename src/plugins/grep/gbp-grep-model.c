@@ -430,10 +430,8 @@ gbp_grep_model_set_query (GbpGrepModel *self,
 {
   g_return_if_fail (GBP_IS_GREP_MODEL (self));
 
-  if (g_strcmp0 (query, self->query) != 0)
+  if (g_set_str (&self->query, query))
     {
-      g_free (self->query);
-      self->query = g_strdup (query);
       gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_QUERY]);
     }

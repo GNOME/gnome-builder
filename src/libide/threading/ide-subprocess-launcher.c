@@ -978,11 +978,7 @@ ide_subprocess_launcher_set_stdout_file_path (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (g_strcmp0 (priv->stdout_file_path, stdout_file_path) != 0)
-    {
-      g_free (priv->stdout_file_path);
-      priv->stdout_file_path = g_strdup (stdout_file_path);
-    }
+  g_set_str (&priv->stdout_file_path, stdout_file_path);
 }
 
 void

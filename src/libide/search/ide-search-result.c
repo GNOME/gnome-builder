@@ -416,10 +416,8 @@ ide_search_result_set_subtitle (IdeSearchResult *self,
 
   g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
 
-  if (g_strcmp0 (priv->subtitle, subtitle) != 0)
+  if (g_set_str (&priv->subtitle, subtitle))
     {
-      g_free (priv->subtitle);
-      priv->subtitle = g_strdup (subtitle);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
     }
 }
@@ -442,10 +440,8 @@ ide_search_result_set_title (IdeSearchResult *self,
 
   g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
 
-  if (g_strcmp0 (priv->title, title) != 0)
+  if (g_set_str (&priv->title, title))
     {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
 }

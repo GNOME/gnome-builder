@@ -568,10 +568,8 @@ gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  if (g_strcmp0 (sdk, self->sdk) != 0)
+  if (g_set_str (&self->sdk, sdk))
     {
-      g_free (self->sdk);
-      self->sdk = g_strdup (sdk);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SDK]);
     }
 }

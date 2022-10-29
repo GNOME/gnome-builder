@@ -814,10 +814,8 @@ ide_debugger_set_display_name (IdeDebugger *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER (self));
 
-  if (g_strcmp0 (priv->display_name, display_name) != 0)
+  if (g_set_str (&priv->display_name, display_name))
     {
-      g_free (priv->display_name);
-      priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
     }
 }

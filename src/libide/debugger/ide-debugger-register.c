@@ -185,10 +185,8 @@ ide_debugger_register_set_name (IdeDebuggerRegister *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_REGISTER (self));
 
-  if (g_strcmp0 (priv->name, name) != 0)
+  if (g_set_str (&priv->name, name))
     {
-      g_free (priv->name);
-      priv->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -211,10 +209,8 @@ ide_debugger_register_set_value (IdeDebuggerRegister *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_REGISTER (self));
 
-  if (g_strcmp0 (priv->value, value) != 0)
+  if (g_set_str (&priv->value, value))
     {
-      g_free (priv->value);
-      priv->value = g_strdup (value);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
     }
 }

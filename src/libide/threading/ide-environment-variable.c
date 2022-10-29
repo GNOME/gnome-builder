@@ -144,10 +144,8 @@ ide_environment_variable_set_key (IdeEnvironmentVariable *self,
 {
   g_return_if_fail (IDE_IS_ENVIRONMENT_VARIABLE (self));
 
-  if (g_strcmp0 (key, self->key) != 0)
+  if (g_set_str (&self->key, key))
     {
-      g_free (self->key);
-      self->key = g_strdup (key);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
     }
 }
@@ -166,10 +164,8 @@ ide_environment_variable_set_value (IdeEnvironmentVariable *self,
 {
   g_return_if_fail (IDE_IS_ENVIRONMENT_VARIABLE (self));
 
-  if (g_strcmp0 (value, self->value) != 0)
+  if (g_set_str (&self->value, value))
     {
-      g_free (self->value);
-      self->value = g_strdup (value);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
     }
 }

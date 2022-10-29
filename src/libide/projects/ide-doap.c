@@ -147,10 +147,8 @@ ide_doap_set_bug_database (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->bug_database, bug_database) != 0)
+  if (g_set_str (&self->bug_database, bug_database))
     {
-      g_free (self->bug_database);
-      self->bug_database = g_strdup (bug_database);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUG_DATABASE]);
     }
 }
@@ -161,10 +159,8 @@ ide_doap_set_category (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->category, category) != 0)
+  if (g_set_str (&self->category, category))
     {
-      g_free (self->category);
-      self->category = g_strdup (category);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CATEGORY]);
     }
 }
@@ -175,10 +171,8 @@ ide_doap_set_description (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->description, description) != 0)
+  if (g_set_str (&self->description, description))
     {
-      g_free (self->description);
-      self->description = g_strdup (description);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DESCRIPTION]);
     }
 }
@@ -189,10 +183,8 @@ ide_doap_set_download_page (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->download_page, download_page) != 0)
+  if (g_set_str (&self->download_page, download_page))
     {
-      g_free (self->download_page);
-      self->download_page = g_strdup (download_page);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DOWNLOAD_PAGE]);
     }
 }
@@ -203,10 +195,8 @@ ide_doap_set_homepage (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->homepage, homepage) != 0)
+  if (g_set_str (&self->homepage, homepage))
     {
-      g_free (self->homepage);
-      self->homepage = g_strdup (homepage);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOMEPAGE]);
     }
 }
@@ -217,10 +207,8 @@ ide_doap_set_name (IdeDoap     *self,
 {
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->name, name) != 0)
+  if (g_set_str (&self->name, name))
     {
-      g_free (self->name);
-      self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -229,12 +217,13 @@ static void
 ide_doap_set_shortdesc (IdeDoap     *self,
                         const gchar *shortdesc)
 {
+  g_autofree gchar *tmp_str = NULL;
+
   g_return_if_fail (IDE_IS_DOAP (self));
 
-  if (g_strcmp0 (self->shortdesc, shortdesc) != 0)
+  tmp_str = g_strdelimit (g_strdup (shortdesc), "\n", ' ');
+  if (g_set_str (&self->shortdesc, tmp_str))
     {
-      g_free (self->shortdesc);
-      self->shortdesc = g_strdelimit (g_strdup (shortdesc), "\n", ' ');
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORTDESC]);
     }
 }

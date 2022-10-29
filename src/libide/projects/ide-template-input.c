@@ -563,10 +563,8 @@ ide_template_input_set_author (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (author, self->author) != 0)
+  if (g_set_str (&self->author, author))
     {
-      g_free (self->author);
-      self->author = g_strdup (author);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTHOR]);
     }
 }
@@ -627,11 +625,8 @@ ide_template_input_set_language (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (language, self->language) != 0)
+  if (g_set_str (&self->language, language))
     {
-      g_free (self->language);
-      self->language = g_strdup (language);
-
       gtk_custom_filter_set_filter_func (self->template_filter,
                                          template_filter_func,
                                          g_strdup (language),
@@ -648,10 +643,8 @@ ide_template_input_set_name (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (name, self->name) != 0)
+  if (g_set_str (&self->name, name))
     {
-      g_free (self->name);
-      self->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }
@@ -662,10 +655,8 @@ ide_template_input_set_app_id (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (app_id, self->app_id) != 0)
+  if (g_set_str (&self->app_id, app_id))
     {
-      g_free (self->app_id);
-      self->app_id = g_strdup (app_id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APP_ID]);
     }
 }
@@ -676,10 +667,8 @@ ide_template_input_set_project_version (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (project_version, self->project_version) != 0)
+  if (g_set_str (&self->project_version, project_version))
     {
-      g_free (self->project_version);
-      self->project_version = g_strdup (project_version);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_VERSION]);
     }
 }
@@ -690,10 +679,8 @@ ide_template_input_set_license_name (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (license_name, self->license_name) != 0)
+  if (g_set_str (&self->license_name, license_name))
     {
-      g_free (self->license_name);
-      self->license_name = g_strdup (license_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LICENSE_NAME]);
     }
 }
@@ -704,10 +691,8 @@ ide_template_input_set_template (IdeTemplateInput *self,
 {
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
 
-  if (g_strcmp0 (template, self->template) != 0)
+  if (g_set_str (&self->template, template))
     {
-      g_free (self->template);
-      self->template = g_strdup (template);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEMPLATE]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEMPLATE_NAME]);
     }

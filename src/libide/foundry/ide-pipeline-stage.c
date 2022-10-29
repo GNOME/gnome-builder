@@ -205,10 +205,8 @@ ide_pipeline_stage_set_name (IdePipelineStage *self,
 
   g_return_if_fail (IDE_IS_PIPELINE_STAGE (self));
 
-  if (g_strcmp0 (name, priv->name) != 0)
+  if (g_set_str (&priv->name, name))
     {
-      g_free (priv->name);
-      priv->name = g_strdup (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NAME]);
     }
 }
@@ -998,10 +996,8 @@ ide_pipeline_stage_set_stdout_path (IdePipelineStage *self,
 
   g_return_if_fail (IDE_IS_PIPELINE_STAGE (self));
 
-  if (g_strcmp0 (stdout_path, priv->stdout_path) != 0)
+  if (g_set_str (&priv->stdout_path, stdout_path))
     {
-      g_free (priv->stdout_path);
-      priv->stdout_path = g_strdup (stdout_path);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STDOUT_PATH]);
     }
 }

@@ -517,10 +517,8 @@ ide_debugger_breakpoint_set_file (IdeDebuggerBreakpoint *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_BREAKPOINT (self));
 
-  if (g_strcmp0 (file, priv->file) != 0)
+  if (g_set_str (&priv->file, file))
     {
-      g_free (priv->file);
-      priv->file = g_strdup (file);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
     }
 }
@@ -563,10 +561,8 @@ ide_debugger_breakpoint_set_spec (IdeDebuggerBreakpoint *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_BREAKPOINT (self));
 
-  if (g_strcmp0 (spec, priv->spec) != 0)
+  if (g_set_str (&priv->spec, spec))
     {
-      g_free (priv->spec);
-      priv->spec = g_strdup (spec);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SPEC]);
     }
 }
@@ -783,10 +779,8 @@ ide_debugger_breakpoint_set_function (IdeDebuggerBreakpoint *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_BREAKPOINT (self));
 
-  if (g_strcmp0 (function, priv->function) != 0)
+  if (g_set_str (&priv->function, function))
     {
-      g_free (priv->function);
-      priv->function = g_strdup (function);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FUNCTION]);
     }
 }
@@ -867,10 +861,8 @@ ide_debugger_breakpoint_set_thread (IdeDebuggerBreakpoint *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_BREAKPOINT (self));
 
-  if (g_strcmp0 (priv->thread, thread) != 0)
+  if (g_set_str (&priv->thread, thread))
     {
-      g_free (priv->thread);
-      priv->thread = g_strdup (thread);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_THREAD]);
     }
 }

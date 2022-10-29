@@ -203,10 +203,8 @@ ide_debugger_variable_set_type_name (IdeDebuggerVariable *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_VARIABLE (self));
 
-  if (g_strcmp0 (priv->type_name, type_name) != 0)
+  if (g_set_str (&priv->type_name, type_name))
     {
-      g_free (priv->type_name);
-      priv->type_name = g_strdup (type_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TYPE_NAME]);
     }
 }
@@ -229,10 +227,8 @@ ide_debugger_variable_set_value (IdeDebuggerVariable *self,
 
   g_return_if_fail (IDE_IS_DEBUGGER_VARIABLE (self));
 
-  if (g_strcmp0 (priv->value, value) != 0)
+  if (g_set_str (&priv->value, value))
     {
-      g_free (priv->value);
-      priv->value = g_strdup (value);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
     }
 }

@@ -559,10 +559,8 @@ ide_diagnostic_tool_set_program_name (IdeDiagnosticTool *self,
 
   g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
 
-  if (g_strcmp0 (program_name, priv->program_name) != 0)
+  if (g_set_str (&priv->program_name, program_name))
     {
-      g_free (priv->program_name);
-      priv->program_name = g_strdup (program_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM_NAME]);
     }
 }
@@ -585,10 +583,8 @@ ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
 
   g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
 
-  if (g_strcmp0 (priv->bundled_program_path, path) != 0)
+  if (g_set_str (&priv->bundled_program_path, path))
     {
-      g_free (priv->bundled_program_path);
-      priv->bundled_program_path = g_strdup (path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUNDLED_PROGRAM_PATH]);
     }
 }
@@ -611,10 +607,8 @@ ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self,
 
   g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
 
-  if (g_strcmp0 (priv->local_program_path, path) != 0)
+  if (g_set_str (&priv->local_program_path, path))
     {
-      g_free (priv->local_program_path);
-      priv->local_program_path = g_strdup (path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCAL_PROGRAM_PATH]);
     }
 }

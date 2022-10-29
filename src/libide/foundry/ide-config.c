@@ -218,10 +218,8 @@ ide_config_set_id (IdeConfig   *self,
   g_return_if_fail (IDE_IS_CONFIG (self));
   g_return_if_fail (id != NULL);
 
-  if (g_strcmp0 (id, priv->id) != 0)
+  if (g_set_str (&priv->id, id))
     {
-      g_free (priv->id);
-      priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
 }
@@ -854,11 +852,9 @@ ide_config_set_runtime_id (IdeConfig   *self,
   if (runtime_id == NULL)
     runtime_id = "host";
 
-  if (g_strcmp0 (runtime_id, priv->runtime_id) != 0)
+  if (g_set_str (&priv->runtime_id, runtime_id))
     {
       priv->runtime_ready = FALSE;
-      g_free (priv->runtime_id);
-      priv->runtime_id = g_strdup (runtime_id);
 
       ide_config_set_dirty (self, TRUE);
 
@@ -917,11 +913,8 @@ ide_config_set_toolchain_id (IdeConfig   *self,
   if (toolchain_id == NULL)
     toolchain_id = "default";
 
-  if (g_strcmp0 (toolchain_id, priv->toolchain_id) != 0)
+  if (g_set_str (&priv->toolchain_id,toolchain_id))
     {
-      g_free (priv->toolchain_id);
-      priv->toolchain_id = g_strdup (toolchain_id);
-
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TOOLCHAIN_ID]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TOOLCHAIN]);
 
@@ -1077,10 +1070,8 @@ ide_config_set_prefix (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (prefix, priv->prefix) != 0)
+  if (g_set_str (&priv->prefix, prefix))
     {
-      g_free (priv->prefix);
-      priv->prefix = g_strdup (prefix);
       priv->prefix_set = TRUE;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREFIX_SET]);
@@ -1167,10 +1158,8 @@ ide_config_set_display_name (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (display_name, priv->display_name) != 0)
+  if (g_set_str (&priv->display_name, display_name))
     {
-      g_free (priv->display_name);
-      priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
       ide_config_emit_changed (self);
     }
@@ -1334,10 +1323,8 @@ ide_config_set_config_opts (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (config_opts, priv->config_opts) != 0)
+  if (g_set_str (&priv->config_opts, config_opts))
     {
-      g_free (priv->config_opts);
-      priv->config_opts = g_strdup (config_opts);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG_OPTS]);
       ide_config_set_dirty (self, TRUE);
     }
@@ -1734,10 +1721,8 @@ ide_config_set_run_opts (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (run_opts, priv->run_opts) != 0)
+  if (g_set_str (&priv->run_opts, run_opts))
     {
-      g_free (priv->run_opts);
-      priv->run_opts = g_strdup (run_opts);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_OPTS]);
       ide_config_set_dirty (self, TRUE);
     }
@@ -1761,10 +1746,8 @@ ide_config_set_prepend_path (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (priv->prepend_path, prepend_path) != 0)
+  if (g_set_str (&priv->prepend_path, prepend_path))
     {
-      g_free (priv->prepend_path);
-      priv->prepend_path = g_strdup (prepend_path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PREPEND_PATH]);
     }
 }
@@ -1787,10 +1770,8 @@ ide_config_set_append_path (IdeConfig   *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (g_strcmp0 (priv->append_path, append_path) != 0)
+  if (g_set_str (&priv->append_path, append_path))
     {
-      g_free (priv->append_path);
-      priv->append_path = g_strdup (append_path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APPEND_PATH]);
     }
 }
