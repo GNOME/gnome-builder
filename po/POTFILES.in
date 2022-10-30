@@ -132,6 +132,7 @@ src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/codespell/ide-codespell-diagnostic-provider.c
 src/plugins/codeui/gbp-codeui-buffer-addin.c
+src/plugins/codeui/gbp-codeui-code-action-dialog.ui
 src/plugins/codeui/gbp-codeui-editor-page-addin.c
 src/plugins/codeui/gbp-codeui-hover-provider.c
 src/plugins/codeui/gbp-codeui-range-dialog.c
