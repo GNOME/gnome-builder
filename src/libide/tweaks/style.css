@@ -16,3 +16,8 @@
   padding: 0;
   margin: 0;
 }
+
+.IdeTweaksWindow:backdrop IdeTweaksPanelList,
+.IdeTweaksWindow:backdrop IdeTweaksPanel {
+  color: alpha(currentColor, .5);
+}

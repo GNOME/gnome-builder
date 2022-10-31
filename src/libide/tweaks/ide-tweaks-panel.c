@@ -259,6 +259,7 @@ ide_tweaks_panel_class_init (IdeTweaksPanelClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_set_css_name (widget_class, "IdeTweaksPanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanel, prefs_page);
 }
