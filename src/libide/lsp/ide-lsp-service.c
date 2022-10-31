@@ -53,13 +53,7 @@ enum {
   N_PROPS
 };
 
-enum {
-  CREATE_LAUNCHER,
-  N_SIGNALS
-};
-
 static GParamSpec *properties [N_PROPS];
-static guint signals [N_SIGNALS];
 
 static void
 ide_lsp_service_stop (IdeLspService *self)
@@ -187,9 +181,9 @@ ide_lsp_service_destroy (IdeObject *object)
 }
 
 static IdeSubprocessLauncher *
-ide_lsp_service_real_create_launcher (IdeLspService    *self,
-                                      IdePipeline      *pipeline,
-                                      GSubprocessFlags  flags)
+ide_lsp_service_create_launcher (IdeLspService    *self,
+                                 IdePipeline      *pipeline,
+                                 GSubprocessFlags  flags)
 {
   IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -331,24 +325,14 @@ ide_lsp_service_real_prepare_run_context (IdeLspService *self,
 }
 
 static void
-ide_lsp_service_real_configure_launcher (IdeLspService         *self,
-                                         IdePipeline           *pipeline,
-                                         IdeSubprocessLauncher *launcher)
+ide_lsp_service_real_configure_supervisor (IdeLspService           *self,
+                                           IdeSubprocessSupervisor *supervisor)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_SERVICE (self));
-  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
-  IDE_EXIT;
-}
-
-static void
-ide_lsp_service_real_configure_supervisor (IdeLspService           *self,
-                                           IdeSubprocessSupervisor *client)
-{
-  IDE_ENTRY;
   IDE_EXIT;
 }
 
@@ -364,9 +348,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
 
   ide_object_class->destroy = ide_lsp_service_destroy;
 
-  service_class->create_launcher = ide_lsp_service_real_create_launcher;
   service_class->configure_client = ide_lsp_service_real_configure_client;
-  service_class->configure_launcher = ide_lsp_service_real_configure_launcher;
   service_class->configure_supervisor = ide_lsp_service_real_configure_supervisor;
   service_class->prepare_run_context = ide_lsp_service_real_prepare_run_context;
 
@@ -389,7 +371,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
    * launch. If this is set, the create-launcher signal will use it
    * to locate and execute the program if found.
    */
-  properties [PROP_PROGRAM] =
+  properties[PROP_PROGRAM] =
     g_param_spec_string ("program",
                          "Program",
                          "The program executable name",
@@ -401,7 +383,7 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
    *
    * An alternate search path to locate the program on the host.
    */
-  properties [PROP_SEARCH_PATH] =
+  properties[PROP_SEARCH_PATH] =
     g_param_spec_boxed ("search-path",
                         "Search Path",
                         "Search Path",
@@ -434,31 +416,6 @@ ide_lsp_service_class_init (IdeLspServiceClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
-
-  /**
-   * IdeLspService::create-launcher:
-   * @self: an [class@LspService]
-   * @pipeline: a loaded [class@Pipeline]
-   * @flags: [flags@Gio.SubprocessFlags] to use for the launcher
-   *
-   * Creates the launcher to be used for the LSP.
-   *
-   * If you want to use a launcher on the host, this would be a good
-   * place to determine that.
-   *
-   * Returns: (transfer full) (nullable): a [class@SubprocessLauncher] or %NULL
-   */
-  signals [CREATE_LAUNCHER] =
-    g_signal_new ("create-launcher",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeLspServiceClass, create_launcher),
-                  g_signal_accumulator_first_wins, NULL,
-                  NULL,
-                  IDE_TYPE_SUBPROCESS_LAUNCHER,
-                  2,
-                  IDE_TYPE_PIPELINE,
-                  G_TYPE_SUBPROCESS_FLAGS);
 }
 
 static void
@@ -596,12 +553,9 @@ ensure_started (IdeLspService *self,
   if (!priv->inherit_stderr && !g_settings_get_boolean (settings, "lsp-inherit-stderr"))
     flags |= G_SUBPROCESS_FLAGS_STDERR_SILENCE;
 
-  /* Allow subclasses to control launcher creation */
-  g_signal_emit (self, signals [CREATE_LAUNCHER], 0, pipeline, flags, &launcher);
-  if (launcher == NULL)
+  /* Create launcher by applying run context */
+  if (!(launcher = ide_lsp_service_create_launcher (self, pipeline, flags)))
     IDE_EXIT;
-
-  klass->configure_launcher (self, pipeline, launcher);
 
   supervisor = ide_subprocess_supervisor_new ();
   ide_subprocess_supervisor_set_launcher (supervisor, launcher);

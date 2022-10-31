@@ -40,12 +40,6 @@ struct _IdeLspServiceClass
 {
   IdeObjectClass parent_class;
 
-  IdeSubprocessLauncher *(*create_launcher)      (IdeLspService           *self,
-                                                  IdePipeline             *pipeline,
-                                                  GSubprocessFlags         flags);
-  void                   (*configure_launcher)   (IdeLspService           *self,
-                                                  IdePipeline             *pipeline,
-                                                  IdeSubprocessLauncher   *launcher);
   void                   (*configure_supervisor) (IdeLspService           *self,
                                                   IdeSubprocessSupervisor *supervisor);
   void                   (*configure_client)     (IdeLspService           *self,
