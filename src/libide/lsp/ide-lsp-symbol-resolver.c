@@ -32,6 +32,44 @@
 #include "ide-lsp-symbol-resolver.h"
 #include "ide-lsp-symbol-tree.h"
 #include "ide-lsp-symbol-tree-private.h"
+#include "ide-lsp-util.h"
+
+typedef struct
+{
+  gint64 line;
+  gint64 column;
+} SymbolLoc;
+
+typedef struct
+{
+  SymbolLoc begin;
+  SymbolLoc end;
+} SymbolLocRange;
+
+/**
+ * Raw document symbol data extracted from textDocument/documentSymbol
+ * responses.
+ */
+typedef struct
+{
+  const gchar *uri;
+  const gchar *name;
+  const gchar *container_name;
+  gboolean deprecated;
+  gint64 kind;
+  SymbolLocRange location;
+} SymbolData;
+
+typedef gboolean (*SymbolDataIterator) (GFile      *file,
+                                        SymbolData *symbol_data,
+                                        gpointer    user_data);
+
+typedef struct
+{
+  SymbolLoc target;
+  SymbolLocRange best_location;
+  IdeSymbol *best;
+} FindNearestScopeData;
 
 typedef struct
 {
@@ -52,6 +90,82 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static int
+symbol_loc_cmp(SymbolLoc *l1,
+               SymbolLoc *l2)
+{
+  g_assert (l1 != NULL);
+  g_assert (l2 != NULL);
+
+  if (l1->line < l2->line)
+    return -1;
+  else if (l1->line > l2->line)
+    return 1;
+  else
+    return l1->column - l2->column;
+}
+
+static gboolean
+symbol_loc_range_inclues_range(SymbolLocRange *r1,
+                               SymbolLocRange *r2)
+{
+  g_assert (r1 != NULL);
+  g_assert (r2 != NULL);
+
+  return symbol_loc_cmp(&r1->begin, &r2->begin) <= 0 && symbol_loc_cmp(&r1->end, &r2->end) >= 0;
+}
+
+static gboolean
+symbol_loc_range_inclues_point(SymbolLoc      *point,
+                               SymbolLocRange *range)
+{
+  g_assert (point != NULL);
+  g_assert (range != NULL);
+
+  return symbol_loc_cmp(&range->begin, point) <= 0 && symbol_loc_cmp(&range->end, point) >= 0;
+}
+
+static inline void
+symbol_data_init(SymbolData *data)
+{
+  g_assert (data != NULL);
+
+  data->uri = NULL;
+  data->name = NULL;
+  data->container_name = NULL;
+  data->deprecated = FALSE;
+  data->kind = -1;
+}
+
+static IdeLspSymbolNode*
+symbol_data_to_new_lsp_symbol_node(GFile *file, SymbolData *data)
+{
+  g_assert (G_IS_FILE (file));
+  g_assert (data != NULL);
+
+  return ide_lsp_symbol_node_new (file, data->name, data->container_name, data->kind,
+                                  data->location.begin.line, data->location.begin.column,
+                                  data->location.end.line, data->location.end.column,
+                                  data->deprecated);
+}
+
+static IdeSymbol*
+symbol_data_to_new_symbol(GFile *file, SymbolData *data)
+{
+  IdeLocation *location;
+  IdeSymbolKind kind;
+  IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (data != NULL);
+
+  kind = ide_lsp_decode_symbol_kind (data->kind);
+  location = ide_location_new(file, data->location.begin.line, data->location.begin.column);
+  if (data->deprecated)
+    flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
+  return ide_symbol_new(data->name, kind, flags, location, NULL);
+}
+
 static gboolean
 is_symbol_information (GVariant *v)
 {
@@ -66,6 +180,118 @@ is_document_symbol (GVariant *v)
   g_auto(GVariantDict) dict = G_VARIANT_DICT_INIT (v);
 
   return g_variant_dict_contains (&dict, "range");
+}
+
+static gboolean
+process_document_symbols (IdeLspClient      *client,
+                          GAsyncResult      *result,
+                          IdeTask           *task,
+                          GFile             *file,
+                          SymbolDataIterator iter_fun,
+                          gpointer           iter_fun_data)
+{
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) return_value = NULL;
+  GVariantIter iter;
+  GVariant *node;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+  g_assert (iter_fun != NULL);
+
+  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_RETURN (FALSE);
+    }
+
+  if (!g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Invalid result for textDocument/documentSymbol");
+      IDE_RETURN (FALSE);
+    }
+
+  g_variant_iter_init (&iter, return_value);
+
+  while (g_variant_iter_loop (&iter, "v", &node))
+    {
+      gboolean success;
+      SymbolData sym;
+
+      symbol_data_init (&sym);
+      if (is_symbol_information (node))
+        {
+          success = JSONRPC_MESSAGE_PARSE (node,
+            "name", JSONRPC_MESSAGE_GET_STRING (&sym.name),
+            "kind", JSONRPC_MESSAGE_GET_INT64 (&sym.kind),
+            "location", "{",
+              "uri", JSONRPC_MESSAGE_GET_STRING (&sym.uri),
+              "range", "{",
+                "start", "{",
+                  "line", JSONRPC_MESSAGE_GET_INT64 (&sym.location.begin.line),
+                  "character", JSONRPC_MESSAGE_GET_INT64 (&sym.location.begin.column),
+                "}",
+                "end", "{",
+                  "line", JSONRPC_MESSAGE_GET_INT64 (&sym.location.end.line),
+                  "character", JSONRPC_MESSAGE_GET_INT64 (&sym.location.end.column),
+                "}",
+              "}",
+            "}"
+          );
+        }
+      else if (is_document_symbol (node))
+        {
+          success = JSONRPC_MESSAGE_PARSE (node,
+            "name", JSONRPC_MESSAGE_GET_STRING (&sym.name),
+            "kind", JSONRPC_MESSAGE_GET_INT64 (&sym.kind),
+            "range", "{",
+              "start", "{",
+                "line", JSONRPC_MESSAGE_GET_INT64 (&sym.location.begin.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&sym.location.begin.column),
+              "}",
+              "end", "{",
+                "line", JSONRPC_MESSAGE_GET_INT64 (&sym.location.end.line),
+                "character", JSONRPC_MESSAGE_GET_INT64 (&sym.location.end.column),
+              "}",
+            "}"
+          );
+        }
+      else
+        {
+          g_autofree gchar *vstr = g_variant_print (node, TRUE);
+          g_debug ("Unknown element in textDocument/documentSymbol reply: %s", vstr);
+          continue;
+        }
+
+      if (!success)
+        {
+#ifdef IDE_ENABLE_TRACE
+          g_autofree gchar *replystr = g_variant_print (node, TRUE);
+          IDE_TRACE_MSG ("Failed to parse reply from language server: %s", replystr);
+#endif
+          continue;
+        }
+
+      /* Optional fields */
+      JSONRPC_MESSAGE_PARSE (node, "containerName",
+                             JSONRPC_MESSAGE_GET_STRING (&sym.container_name));
+      JSONRPC_MESSAGE_PARSE (node, "deprecated",
+                             JSONRPC_MESSAGE_GET_BOOLEAN (&sym.deprecated));
+
+      if (!iter_fun(file, &sym, iter_fun_data))
+        {
+          IDE_RETURN (TRUE);
+        }
+    }
+
+  iter_fun(file, NULL, iter_fun_data);
+  IDE_RETURN (TRUE);
 }
 
 static void
@@ -349,128 +575,49 @@ ide_lsp_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
   IDE_RETURN (ret);
 }
 
+static gboolean
+collect_document_symbols_cb (GFile      *file,
+                             SymbolData *data,
+                             gpointer    user_data)
+{
+  g_autoptr(IdeLspSymbolNode) symbol = NULL;
+  GPtrArray* symbols = (GPtrArray *)user_data;
+
+  if (data == NULL)
+    return FALSE;
+
+  symbol = symbol_data_to_new_lsp_symbol_node (file, data);
+  g_ptr_array_add (symbols, g_steal_pointer (&symbol));
+  return TRUE;
+}
+
 static void
-ide_lsp_symbol_resolver_document_symbol_cb (GObject      *object,
+ide_lsp_symbol_resolver_get_symbol_tree_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeLspSymbolTree) tree = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GPtrArray) symbols = NULL;
-  GVariantIter iter;
-  GVariant *node;
   GFile *file;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-
-  if (!ide_lsp_client_call_finish (client, result, &return_value, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  if (!g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVALID_DATA,
-                                 "Invalid result for textDocument/documentSymbol");
-      IDE_EXIT;
-    }
-
-  symbols = g_ptr_array_new_with_free_func (g_object_unref);
 
   file = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (file));
 
-  g_variant_iter_init (&iter, return_value);
-
-  while (g_variant_iter_loop (&iter, "v", &node))
+  symbols = g_ptr_array_new_with_free_func (g_object_unref);
+  if (!process_document_symbols(client, result, task, file, collect_document_symbols_cb, symbols))
     {
-      g_autoptr(IdeLspSymbolNode) symbol = NULL;
-      const gchar *uri = NULL;
-      const gchar *name = NULL;
-      const gchar *container_name = NULL;
-      gboolean deprecated = FALSE;
-      gboolean success;
-      gint64 kind = -1;
-      struct {
-        gint64 line;
-        gint64 column;
-      } begin, end;
-
-      if (is_symbol_information (node))
-        {
-          success = JSONRPC_MESSAGE_PARSE (node,
-            "name", JSONRPC_MESSAGE_GET_STRING (&name),
-            "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
-            "location", "{",
-              "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
-              "range", "{",
-                "start", "{",
-                  "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-                  "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-                "}",
-                "end", "{",
-                  "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-                  "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-                "}",
-              "}",
-            "}"
-          );
-        }
-      else if (is_document_symbol (node))
-        {
-          success = JSONRPC_MESSAGE_PARSE (node,
-            "name", JSONRPC_MESSAGE_GET_STRING (&name),
-            "kind", JSONRPC_MESSAGE_GET_INT64 (&kind),
-            "range", "{",
-              "start", "{",
-                "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
-                "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
-              "}",
-              "end", "{",
-                "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
-                "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
-              "}",
-            "}"
-          );
-        }
-      else
-        {
-          g_autofree gchar *vstr = g_variant_print (node, TRUE);
-          g_debug ("Unknown element in textDocument/documentSymbol reply: %s", vstr);
-          continue;
-        }
-
-      if (!success)
-        {
-#ifdef IDE_ENABLE_TRACE
-          g_autofree gchar *replystr = g_variant_print (node, TRUE);
-          IDE_TRACE_MSG ("Failed to parse reply from language server: %s", replystr);
-#endif
-          continue;
-        }
-
-      /* Optional fields */
-      JSONRPC_MESSAGE_PARSE (node, "containerName", JSONRPC_MESSAGE_GET_STRING (&container_name));
-      JSONRPC_MESSAGE_PARSE (node, "deprecated", JSONRPC_MESSAGE_GET_BOOLEAN (&deprecated));
-
-      symbol = ide_lsp_symbol_node_new (file, name, container_name, kind,
-                                        begin.line, begin.column,
-                                        end.line, end.column, deprecated);
-
-      g_ptr_array_add (symbols, g_steal_pointer (&symbol));
+      IDE_EXIT;
     }
 
   tree = ide_lsp_symbol_tree_new (IDE_PTR_ARRAY_STEAL_FULL (&symbols));
-
   ide_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
 
   IDE_EXIT;
@@ -521,7 +668,7 @@ ide_lsp_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                              "textDocument/documentSymbol",
                              params,
                              cancellable,
-                             ide_lsp_symbol_resolver_document_symbol_cb,
+                             ide_lsp_symbol_resolver_get_symbol_tree_cb,
                              g_steal_pointer (&task));
 
   IDE_EXIT;
@@ -540,7 +687,6 @@ ide_lsp_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
-
   IDE_RETURN (ret);
 }
 
@@ -711,6 +857,140 @@ ide_lsp_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
   IDE_RETURN (ret);
 }
 
+static gboolean
+find_nearest_document_symbol_cb (GFile      *file,
+                                 SymbolData *data,
+                                 gpointer    user_data)
+{
+  FindNearestScopeData *find_data = (FindNearestScopeData *)user_data;
+
+  if (data == NULL)
+    return FALSE;
+
+  if (symbol_loc_range_inclues_point (&find_data->target, &data->location))
+    {
+      if (find_data->best == NULL || symbol_loc_range_inclues_range (&find_data->best_location, &data->location))
+        {
+            if (find_data->best != NULL)
+                g_object_unref (find_data->best);
+            find_data->best = symbol_data_to_new_symbol (file, data);
+            find_data->best_location = data->location;
+        }
+    }
+
+  return TRUE;
+}
+
+static void
+ide_lsp_symbol_resolver_find_nearest_scope_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  IdeLspClient *client = (IdeLspClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  FindNearestScopeData find_data;
+  IdeLocation *location;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  location = ide_task_get_task_data (task);
+  g_assert (IDE_IS_LOCATION (location));
+
+  memset (&find_data, 0, sizeof find_data);
+  find_data.target.line = ide_location_get_line (location);
+  find_data.target.column = ide_location_get_line_offset (location);
+
+  if (!process_document_symbols(client, result, task, ide_location_get_file (location), find_nearest_document_symbol_cb, &find_data))
+    {
+      IDE_EXIT;
+    }
+
+  ide_task_return_pointer (task, g_steal_pointer (&find_data.best), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
+ide_lsp_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *resolver,
+                                                  IdeLocation         *location,
+                                                  GCancellable        *cancellable,
+                                                  GAsyncReadyCallback  callback,
+                                                  gpointer             user_data)
+{
+  IdeLspSymbolResolver *self = (IdeLspSymbolResolver *)resolver;
+  IdeLspSymbolResolverPrivate *priv = ide_lsp_symbol_resolver_get_instance_private (self);
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *uri = NULL;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_LSP_SYMBOL_RESOLVER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_lsp_symbol_resolver_find_nearest_scope_async);
+
+  if (!(file = ide_location_get_file (location)))
+  {
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Cannot find nearest symbol, invalid source location");
+    IDE_EXIT;
+  }
+
+  g_assert (G_IS_FILE (file));
+  uri = g_file_get_uri (file);
+
+  ide_task_set_task_data (task, ide_location_dup (location), g_object_unref);
+
+  if (priv->client == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "Cannot query language server, not connected");
+      IDE_EXIT;
+    }
+
+  params = JSONRPC_MESSAGE_NEW (
+    "textDocument", "{",
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+    "}"
+  );
+
+  ide_lsp_client_call_async (priv->client,
+                             "textDocument/documentSymbol",
+                             params,
+                             cancellable,
+                             ide_lsp_symbol_resolver_find_nearest_scope_cb,
+                             g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static IdeSymbol *
+ide_lsp_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver  *self,
+                                                   GAsyncResult       *result,
+                                                   GError            **error)
+{
+  IdeSymbol* ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+  IDE_RETURN (ret);
+}
+
 static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
@@ -720,4 +1000,7 @@ symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
   iface->get_symbol_tree_finish = ide_lsp_symbol_resolver_get_symbol_tree_finish;
   iface->find_references_async = ide_lsp_symbol_resolver_find_references_async;
   iface->find_references_finish = ide_lsp_symbol_resolver_find_references_finish;
+  iface->find_nearest_scope_async = ide_lsp_symbol_resolver_find_nearest_scope_async;
+  iface->find_nearest_scope_finish = ide_lsp_symbol_resolver_find_nearest_scope_finish;
 }
+
