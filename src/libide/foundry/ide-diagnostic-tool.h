@@ -56,27 +56,27 @@ struct _IdeDiagnosticToolClass
                                                   GBytes                 *contents,
                                                   const char             *language_id,
                                                   GError                **error);
-  void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
-                                                  IdeSubprocessLauncher  *launcher,
-                                                  GFile                  *file,
-                                                  GBytes                 *contents,
-                                                  const char             *language_id);
 };
 
 IDE_AVAILABLE_IN_ALL
-const char *ide_diagnostic_tool_get_program_name         (IdeDiagnosticTool *self);
+const char       *ide_diagnostic_tool_get_program_name         (IdeDiagnosticTool *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_diagnostic_tool_set_program_name         (IdeDiagnosticTool *self,
-                                                          const char        *program_name);
+void              ide_diagnostic_tool_set_program_name         (IdeDiagnosticTool *self,
+                                                                const char        *program_name);
 IDE_AVAILABLE_IN_ALL
-const char *ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self);
+const char       *ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
-                                                          const char        *path);
+void              ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
+                                                                const char        *path);
 IDE_AVAILABLE_IN_ALL
-const char *ide_diagnostic_tool_get_local_program_path   (IdeDiagnosticTool *self);
+const char       *ide_diagnostic_tool_get_local_program_path   (IdeDiagnosticTool *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_diagnostic_tool_set_local_program_path   (IdeDiagnosticTool *self,
-                                                          const char        *path);
+void              ide_diagnostic_tool_set_local_program_path   (IdeDiagnosticTool *self,
+                                                                const char        *path);
+IDE_AVAILABLE_IN_44
+GSubprocessFlags  ide_diagnostic_tool_get_subprocess_flags     (IdeDiagnosticTool *self);
+IDE_AVAILABLE_IN_44
+void              ide_diagnostic_tool_set_subprocess_flags     (IdeDiagnosticTool *self,
+                                                                GSubprocessFlags   subprocess_flags);
 
 G_END_DECLS

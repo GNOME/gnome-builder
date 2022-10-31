@@ -31,11 +31,14 @@
 #include "ide-runtime.h"
 #include "ide-runtime-manager.h"
 
+#define DEFAULT_FLAGS (G_SUBPROCESS_FLAGS_STDIN_PIPE|G_SUBPROCESS_FLAGS_STDOUT_PIPE|G_SUBPROCESS_FLAGS_STDERR_PIPE)
+
 typedef struct
 {
   char *program_name;
   char *bundled_program_path;
   char *local_program_path;
+  GSubprocessFlags flags;
 } IdeDiagnosticToolPrivate;
 
 typedef struct
@@ -56,6 +59,7 @@ enum {
   PROP_PROGRAM_NAME,
   PROP_BUNDLED_PROGRAM_PATH,
   PROP_LOCAL_PROGRAM_PATH,
+  PROP_SUBPROCESS_FLAGS,
   N_PROPS
 };
 
@@ -91,23 +95,6 @@ ide_diagnostic_tool_real_get_stdin_bytes (IdeDiagnosticTool *self,
     IDE_RETURN (g_bytes_ref (contents));
 
   IDE_RETURN (NULL);
-}
-
-static void
-ide_diagnostic_tool_real_configure_launcher (IdeDiagnosticTool     *self,
-                                             IdeSubprocessLauncher *launcher,
-                                             GFile                 *file,
-                                             GBytes                *contents,
-                                             const char            *language_id)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
-  g_assert (!file || G_IS_FILE (file));
-  g_assert (file != NULL || contents != NULL);
-
-  IDE_EXIT;
 }
 
 static gboolean
@@ -299,6 +286,10 @@ ide_diagnostic_tool_get_property (GObject    *object,
       g_value_set_string (value, ide_diagnostic_tool_get_local_program_path (self));
       break;
 
+    case PROP_SUBPROCESS_FLAGS:
+      g_value_set_flags (value, ide_diagnostic_tool_get_subprocess_flags (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -326,6 +317,10 @@ ide_diagnostic_tool_set_property (GObject      *object,
       ide_diagnostic_tool_set_local_program_path (self, g_value_get_string (value));
       break;
 
+    case PROP_SUBPROCESS_FLAGS:
+      ide_diagnostic_tool_set_subprocess_flags (self, g_value_get_flags (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -341,7 +336,6 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
   object_class->get_property = ide_diagnostic_tool_get_property;
   object_class->set_property = ide_diagnostic_tool_set_property;
 
-  klass->configure_launcher = ide_diagnostic_tool_real_configure_launcher;
   klass->get_stdin_bytes = ide_diagnostic_tool_real_get_stdin_bytes;
   klass->can_diagnose = ide_diagnostic_tool_real_can_diagnose;
   klass->prepare_run_context = ide_diagnostic_tool_real_prepare_run_context;
@@ -374,12 +368,21 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_SUBPROCESS_FLAGS] =
+    g_param_spec_flags ("subprocess-flags", NULL, NULL,
+                        G_TYPE_SUBPROCESS_FLAGS,
+                        DEFAULT_FLAGS,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_diagnostic_tool_init (IdeDiagnosticTool *self)
 {
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  priv->flags = DEFAULT_FLAGS;
 }
 
 static void
@@ -492,12 +495,7 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
       IDE_EXIT;
     }
 
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
-
-  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents, lang_id);
+  ide_subprocess_launcher_set_flags (launcher, priv->flags);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
@@ -621,3 +619,27 @@ ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self,
     }
 }
 
+GSubprocessFlags
+ide_diagnostic_tool_get_subprocess_flags (IdeDiagnosticTool *self)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self), 0);
+
+  return priv->flags;
+}
+
+void
+ide_diagnostic_tool_set_subprocess_flags (IdeDiagnosticTool *self,
+                                          GSubprocessFlags   subprocess_flags)
+{
+  IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_DIAGNOSTIC_TOOL (self));
+
+  if (priv->flags != subprocess_flags)
+    {
+      priv->flags = subprocess_flags;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBPROCESS_FLAGS]);
+    }
+}

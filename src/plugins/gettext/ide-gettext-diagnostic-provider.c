@@ -185,27 +185,12 @@ ide_gettext_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
 }
 
 static void
-ide_gettext_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *self,
-                                                    IdeSubprocessLauncher *launcher,
-                                                    GFile                 *file,
-                                                    GBytes                *contents,
-                                                    const char            *language_id)
-{
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
-                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
-
-}
-
-static void
 ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *klass)
 {
   IdeDiagnosticToolClass *tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
   tool_class->can_diagnose = ide_gettext_diagnostic_provider_can_diagnose;
   tool_class->prepare_run_context = ide_gettext_diagnostic_provider_prepare_run_context;
-  tool_class->configure_launcher = ide_gettext_diagnostic_provider_configure_launcher;
   tool_class->populate_diagnostics = ide_gettext_diagnostic_provider_populate_diagnostics;
 }
 
@@ -213,4 +198,8 @@ static void
 ide_gettext_diagnostic_provider_init (IdeGettextDiagnosticProvider *self)
 {
   ide_diagnostic_tool_set_program_name (IDE_DIAGNOSTIC_TOOL (self), "xgettext");
+  ide_diagnostic_tool_set_subprocess_flags (IDE_DIAGNOSTIC_TOOL (self),
+                                            (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                             G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
+                                             G_SUBPROCESS_FLAGS_STDERR_PIPE));
 }
