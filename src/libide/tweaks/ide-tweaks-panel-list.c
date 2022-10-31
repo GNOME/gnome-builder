@@ -370,6 +370,10 @@ ide_tweaks_panel_list_get_property (GObject    *object,
       g_value_set_boolean (value, ide_tweaks_panel_list_get_search_mode (self));
       break;
 
+    case PROP_SELECTION_MODE:
+      g_value_set_enum (value, ide_tweaks_panel_list_get_selection_mode (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -391,6 +395,10 @@ ide_tweaks_panel_list_set_property (GObject      *object,
 
     case PROP_SEARCH_MODE:
       ide_tweaks_panel_list_set_search_mode (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SELECTION_MODE:
+      ide_tweaks_panel_list_set_selection_mode (self, g_value_get_enum (value));
       break;
 
     default:
