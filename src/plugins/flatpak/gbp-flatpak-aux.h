@@ -26,8 +26,6 @@
 G_BEGIN_DECLS
 
 void gbp_flatpak_aux_init                  (void);
-int  gbp_flatpak_aux_apply                 (IdeSubprocessLauncher *launcher,
-                                            int                    position);
 void gbp_flatpak_aux_append_to_run_context (IdeRunContext         *run_context);
 
 G_END_DECLS

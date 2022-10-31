@@ -157,32 +157,6 @@ gbp_flatpak_aux_init (void)
                                     g_file_peek_path (mapped)));
 }
 
-int
-gbp_flatpak_aux_apply (IdeSubprocessLauncher *launcher,
-                       int                    position)
-{
-  static const char *arg;
-  int count = 0;
-
-  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher), 0);
-  g_return_val_if_fail (initialized, 0);
-
-  if (arg == NULL)
-    arg = g_strdup_printf ("--bind-mount=/run/host/font-dirs.xml=%s",
-                           g_file_peek_path (mapped));
-
-  for (guint i = 0; i < maps->len; i++)
-    {
-      ide_subprocess_launcher_insert_argv (launcher, position++, (const char *)g_ptr_array_index (maps, i));
-      count++;
-    }
-
-  ide_subprocess_launcher_insert_argv (launcher, position++, arg);
-  count++;
-
-  return count;
-}
-
 void
 gbp_flatpak_aux_append_to_run_context (IdeRunContext *run_context)
 {
