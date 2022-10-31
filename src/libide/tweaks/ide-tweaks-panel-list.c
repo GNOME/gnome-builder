@@ -435,6 +435,7 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
+  gtk_widget_class_set_css_name (widget_class, "IdeTweaksPanelList");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, ide_tweaks_panel_list_row_activated_cb);
