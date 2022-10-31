@@ -45,20 +45,32 @@ gbp_snippet_completion_provider_populate (GtkSourceCompletionProvider  *provider
                                           GError                      **error)
 {
   GbpSnippetCompletionProvider *self = (GbpSnippetCompletionProvider *)provider;
+  GtkTextIter begin, end;
 
   g_assert (GBP_IS_SNIPPET_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
   if (!self->enabled)
+    goto failure;
+
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
     {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_NOT_SUPPORTED,
-                   "Provider is disabled");
-      return NULL;
+      GtkSourceBuffer *buffer = gtk_source_completion_context_get_buffer (context);
+
+      /* Don't suggest snippets while in strings or comments */
+      if (gtk_source_buffer_iter_has_context_class (buffer, &begin, "comment") ||
+          gtk_source_buffer_iter_has_context_class (buffer, &begin, "string"))
+        goto failure;
     }
 
   return parent_iface->populate (provider, context, error);
+
+failure:
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_NOT_SUPPORTED,
+               "Provider is disabled");
+  return NULL;
 }
 
 static int
