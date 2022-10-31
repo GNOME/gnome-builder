@@ -91,8 +91,8 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static int
-symbol_loc_cmp(SymbolLoc *l1,
-               SymbolLoc *l2)
+symbol_loc_cmp (SymbolLoc *l1,
+                SymbolLoc *l2)
 {
   g_assert (l1 != NULL);
   g_assert (l2 != NULL);
@@ -106,27 +106,29 @@ symbol_loc_cmp(SymbolLoc *l1,
 }
 
 static gboolean
-symbol_loc_range_inclues_range(SymbolLocRange *r1,
-                               SymbolLocRange *r2)
+symbol_loc_range_inclues_range (SymbolLocRange *r1,
+                                SymbolLocRange *r2)
 {
   g_assert (r1 != NULL);
   g_assert (r2 != NULL);
 
-  return symbol_loc_cmp(&r1->begin, &r2->begin) <= 0 && symbol_loc_cmp(&r1->end, &r2->end) >= 0;
+  return symbol_loc_cmp (&r1->begin, &r2->begin) <= 0 &&
+         symbol_loc_cmp (&r1->end, &r2->end) >= 0;
 }
 
 static gboolean
-symbol_loc_range_inclues_point(SymbolLoc      *point,
-                               SymbolLocRange *range)
+symbol_loc_range_inclues_point (SymbolLoc      *point,
+                                SymbolLocRange *range)
 {
   g_assert (point != NULL);
   g_assert (range != NULL);
 
-  return symbol_loc_cmp(&range->begin, point) <= 0 && symbol_loc_cmp(&range->end, point) >= 0;
+  return symbol_loc_cmp (&range->begin, point) <= 0 &&
+         symbol_loc_cmp (&range->end, point) >= 0;
 }
 
 static inline void
-symbol_data_init(SymbolData *data)
+symbol_data_init (SymbolData *data)
 {
   g_assert (data != NULL);
 
@@ -138,19 +140,26 @@ symbol_data_init(SymbolData *data)
 }
 
 static IdeLspSymbolNode*
-symbol_data_to_new_lsp_symbol_node(GFile *file, SymbolData *data)
+symbol_data_to_new_lsp_symbol_node (GFile      *file,
+                                    SymbolData *data)
 {
   g_assert (G_IS_FILE (file));
   g_assert (data != NULL);
 
-  return ide_lsp_symbol_node_new (file, data->name, data->container_name, data->kind,
-                                  data->location.begin.line, data->location.begin.column,
-                                  data->location.end.line, data->location.end.column,
+  return ide_lsp_symbol_node_new (file,
+                                  data->name,
+                                  data->container_name,
+                                  data->kind,
+                                  data->location.begin.line,
+                                  data->location.begin.column,
+                                  data->location.end.line,
+                                  data->location.end.column,
                                   data->deprecated);
 }
 
-static IdeSymbol*
-symbol_data_to_new_symbol(GFile *file, SymbolData *data)
+static IdeSymbol *
+symbol_data_to_new_symbol (GFile      *file,
+                           SymbolData *data)
 {
   IdeLocation *location;
   IdeSymbolKind kind;
@@ -160,17 +169,18 @@ symbol_data_to_new_symbol(GFile *file, SymbolData *data)
   g_assert (data != NULL);
 
   kind = ide_lsp_decode_symbol_kind (data->kind);
-  location = ide_location_new(file, data->location.begin.line, data->location.begin.column);
+  location = ide_location_new (file, data->location.begin.line, data->location.begin.column);
+
   if (data->deprecated)
     flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
-  return ide_symbol_new(data->name, kind, flags, location, NULL);
+
+  return ide_symbol_new (data->name, kind, flags, location, NULL);
 }
 
 static gboolean
 is_symbol_information (GVariant *v)
 {
   g_auto(GVariantDict) dict = G_VARIANT_DICT_INIT (v);
-
   return g_variant_dict_contains (&dict, "location");
 }
 
@@ -178,17 +188,16 @@ static gboolean
 is_document_symbol (GVariant *v)
 {
   g_auto(GVariantDict) dict = G_VARIANT_DICT_INIT (v);
-
   return g_variant_dict_contains (&dict, "range");
 }
 
 static gboolean
-process_document_symbols (IdeLspClient      *client,
-                          GAsyncResult      *result,
-                          IdeTask           *task,
-                          GFile             *file,
-                          SymbolDataIterator iter_fun,
-                          gpointer           iter_fun_data)
+process_document_symbols (IdeLspClient       *client,
+                          GAsyncResult       *result,
+                          IdeTask            *task,
+                          GFile              *file,
+                          SymbolDataIterator  iter_fun,
+                          gpointer            iter_fun_data)
 {
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) return_value = NULL;
@@ -225,6 +234,7 @@ process_document_symbols (IdeLspClient      *client,
       SymbolData sym;
 
       symbol_data_init (&sym);
+
       if (is_symbol_information (node))
         {
           success = JSONRPC_MESSAGE_PARSE (node,
@@ -284,13 +294,12 @@ process_document_symbols (IdeLspClient      *client,
       JSONRPC_MESSAGE_PARSE (node, "deprecated",
                              JSONRPC_MESSAGE_GET_BOOLEAN (&sym.deprecated));
 
-      if (!iter_fun(file, &sym, iter_fun_data))
-        {
-          IDE_RETURN (TRUE);
-        }
+      if (!iter_fun (file, &sym, iter_fun_data))
+        IDE_RETURN (TRUE);
     }
 
-  iter_fun(file, NULL, iter_fun_data);
+  iter_fun (file, NULL, iter_fun_data);
+
   IDE_RETURN (TRUE);
 }
 
@@ -612,10 +621,14 @@ ide_lsp_symbol_resolver_get_symbol_tree_cb (GObject      *object,
   g_assert (G_IS_FILE (file));
 
   symbols = g_ptr_array_new_with_free_func (g_object_unref);
-  if (!process_document_symbols(client, result, task, file, collect_document_symbols_cb, symbols))
-    {
-      IDE_EXIT;
-    }
+
+  if (!process_document_symbols (client,
+                                 result,
+                                 task,
+                                 file,
+                                 collect_document_symbols_cb,
+                                 symbols))
+    IDE_EXIT;
 
   tree = ide_lsp_symbol_tree_new (IDE_PTR_ARRAY_STEAL_FULL (&symbols));
   ide_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
@@ -687,6 +700,7 @@ ide_lsp_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
   IDE_RETURN (ret);
 }
 
@@ -864,17 +878,20 @@ find_nearest_document_symbol_cb (GFile      *file,
 {
   FindNearestScopeData *find_data = (FindNearestScopeData *)user_data;
 
+  g_assert (G_IS_FILE (file));
+  g_assert (find_data != NULL);
+
   if (data == NULL)
     return FALSE;
 
   if (symbol_loc_range_inclues_point (&find_data->target, &data->location))
     {
-      if (find_data->best == NULL || symbol_loc_range_inclues_range (&find_data->best_location, &data->location))
+      if (find_data->best == NULL ||
+          symbol_loc_range_inclues_range (&find_data->best_location, &data->location))
         {
-            if (find_data->best != NULL)
-                g_object_unref (find_data->best);
-            find_data->best = symbol_data_to_new_symbol (file, data);
-            find_data->best_location = data->location;
+          g_clear_object (&find_data->best);
+          find_data->best = symbol_data_to_new_symbol (file, data);
+          find_data->best_location = data->location;
         }
     }
 
@@ -904,12 +921,25 @@ ide_lsp_symbol_resolver_find_nearest_scope_cb (GObject      *object,
   find_data.target.line = ide_location_get_line (location);
   find_data.target.column = ide_location_get_line_offset (location);
 
-  if (!process_document_symbols(client, result, task, ide_location_get_file (location), find_nearest_document_symbol_cb, &find_data))
-    {
-      IDE_EXIT;
-    }
+  if (!process_document_symbols (client,
+                                 result,
+                                 task,
+                                 ide_location_get_file (location),
+                                 find_nearest_document_symbol_cb,
+                                 &find_data))
+    IDE_EXIT;
 
-  ide_task_return_pointer (task, g_steal_pointer (&find_data.best), g_object_unref);
+  g_assert (find_data.best == NULL || IDE_IS_SYMBOL (find_data.best));
+
+  if (find_data.best == NULL)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No symbols could be found");
+  else
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&find_data.best),
+                             g_object_unref);
 
   IDE_EXIT;
 }
