@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 05:25+0000\n"
+"POT-Creation-Date: 2022-10-27 20:09+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -9,6 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -148,199 +149,9 @@ msgstr ""
 msgid "Use the minimap to see more of the file"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:217
-msgid "Build Parallelism"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:7
-msgid ""
-"Number of workers to use when performing builds. -1 for sensible default. 0 "
-"for number of CPU."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:11
-msgid "Clear build logs"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:12
-msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:16
-msgid "Allow network when metered"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
-msgid ""
-"Enable automated transfers upon building such as SDK downloads and "
-"dependencies when connection is metered."
-msgstr ""
-
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
 msgstr "Автоматикла ахарҭәаара Ctags шьаҭас измоу"
-
-#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
-msgid "Use Ctags for autocompletion."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
-msgid "Enable semantic highlighting"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
-msgid ""
-"If enabled, additional highlighting will be provided in supported languages "
-"based on information extracted from the source code."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
-msgid "Path to ctags executable"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
-msgid "The path to the ctags executable on the system."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:5
-msgid "Debugger Breakpoint at Main"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:6
-msgid "Debugger should automatically insert breakpoint at main() function."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-msgid ""
-"Debugger should automatically insert breakpoint at g_critical() function."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
-msgid "Restore last position"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
-msgid "Jump to the last position when reopening a file"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
-msgid "Show modified lines"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
-msgid ""
-"If enabled, the editor will show line additions and changes next to the "
-"source code."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
-msgid "Show diagnostics next to line number"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
-msgid ""
-"If enabled, the editor will show diagnostics to the left to the line numbers."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-msgid "Highlight current line"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
-msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
-msgid "Highlight matching brackets"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
-msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
-msgid "Show line numbers"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
-msgid "If enabled, the editor will show line numbers."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
-msgid "Show relative line numbers"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
-msgid "If enabled, the editor will show relative line numbers."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:494
-msgid "Smart Backspace"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
-msgid ""
-"Backspace will remove additional spaces to keep you aligned to the "
-"indentation size."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:506
-msgid "Smart Home/End"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
-msgid "Modifies the behavior of Home/End keys."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
-msgid "Show grid lines"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
-msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
-msgid "Overview Map Policy"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
-msgid "When the overview map should be displayed."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:254
-msgid "Draw Spaces"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
-msgid "The various types of space to draw in the editor."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
-#: src/plugins/editorui/tweaks.ui:77
-msgid "Wrap Text"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
-msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
@@ -350,82 +161,9 @@ msgstr "Аҽеикәырхара аҿакуп"
 msgid "Enable or disable autosave feature."
 msgstr " Автоматикла аиқәырхара  аҿакра, мамзар аҿыхра"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
-msgid "Autosave Frequency"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
-msgid "The number of seconds after modification before auto saving."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-msgid "Completion Row Count"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-msgid "The number of completion rows to display to the user."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#: src/plugins/editorui/tweaks.ui:60
-msgid "Line Height"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-msgid "The line height to use for the selected font."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-msgid "Interactive Completion"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
-msgid ""
-"If enabled, Builder will automatically display completion proposals as you "
-"type."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-msgid "Minimum characters for matching selection."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
-msgid "Specify the minimum number of characters for selection matching."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
-msgid "Enable Snippets"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
-msgid ""
-"Allow expanding snippets from the editor by pressing tab after the snippet "
-"trigger."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
-msgid "Select First Completion"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
-msgid "Automatically select the first auto-completion entry."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
-msgid "Spaces Style"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformatting text."
-msgstr ""
-
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
 msgstr "Иаҿакуп"
-
-#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
-msgid "If the type within the extension is enabled."
-msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
@@ -435,10 +173,6 @@ msgstr "Аԥенџьыр ашәагаа"
 msgid "Window size (width and height)."
 msgstr "Аԥенџьыр ашәагаа (аҭбаареи аҳаракыреи)"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:10
-msgid "Window maximized"
-msgstr ""
-
 #: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window maximized state"
 msgstr "Аԥенџьыр иамоуп иреиҳау ашәагаа"
@@ -447,158 +181,11 @@ msgstr "Аԥенџьыр иамоуп иреиҳау ашәагаа"
 msgid "Style Variant"
 msgstr "Астиль авариант"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:21
-msgid ""
-"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
-"scheme."
-msgstr ""
-
-#. Translators: This is the default directory name for user’s
-#. projects. Do NOT change the ASCII double quotes ("") to your
-#. language’s convention, e.g. do not use “” or »«.
-#: data/gsettings/org.gnome.builder.gschema.xml:27
-msgid "\"Projects\""
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:28
-msgid "Projects directory"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:29
-msgid "Directory for all Builder projects."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:33
-msgid "Restore Session"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:34
-msgid "Restores the projects previous session when loading."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:38
-msgid "Clear build caches at startup"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:39
-msgid "If enabled, Builder will clear build caches upon startup."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:50
-msgid "The interface style to change pages"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:64
-msgid "Default License"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.gschema.xml:65
-msgid "The default license to use for new projects"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
-msgid "Plugin enabled"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
-msgid "If the plugin should be enabled"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:7
-msgid "Selected configuration for building"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:8
-msgid ""
-"The configuration that has been selected and will be restored the next time "
-"the project loads."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:13
-msgid "Install Project Before Running"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:14
-msgid ""
-"Run the pipelines install phase before running the project. Only use this if "
-"you know what you're doing with your project."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:19
-msgid "Default Run Command"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:20
-msgid "The id of the default run command"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:34
-msgid "The signal to send the app to stop"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:35
-msgid ""
-"This allows sending something other than sigkill to stop the target "
-"application. That might be useful when you want to gracefully shutdown a "
-"server process."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:44
-msgid "Unit Test Locality"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:45
-msgid "What environment to use when running unit tests"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
-msgid "Verbose Logging"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:51
-msgid ""
-"If G_MESSAGES_DEBUG=all should be used when running the target application"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:13
-msgid "Show Icons"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "This setting is deprecated and no longer in use."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:25
-msgid "Show Ignored Files"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-msgid ""
-"If enabled, the project tree will display files that are ignored by the VCS."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:37
-msgid "Sort Directories First"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
-msgstr ""
-
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Аиашаҩыра агәаҭара"
-
-#: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
-msgid "Automatically check spelling within documents"
-msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -799,7 +386,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid "Save _As…"
-msgstr ""
+msgstr "Аиқәырхара_аба еиԥш..."
 
 #: src/libide/editor/ide-editor-info-bar.c:102
 msgid "Buffer Restored"
@@ -866,21 +453,21 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
-msgstr ""
+msgstr "Афаил аиқәырхара"
 
 #: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
-msgstr ""
+msgstr "Аиқәырхара"
 
 #: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -912,7 +499,7 @@ msgstr "_Аҧсахра"
 
 #: src/libide/editor/ide-editor-search-bar.ui:132
 msgid "Replace _All"
-msgstr ""
+msgstr "Зегьы аԥса_хра"
 
 #: src/libide/editor/ide-editor-search-bar.ui:146
 msgid "Use Re_gular Expressions"
@@ -953,7 +540,7 @@ msgstr ""
 #: src/libide/editor/ide-editor-utils.c:270
 #: src/plugins/create-project/gbp-create-project-widget.ui:101
 msgid "Language"
-msgstr ""
+msgstr "Абызшәа"
 
 #: src/libide/foundry/ide-build-manager.c:470
 #, c-format
@@ -1125,7 +712,7 @@ msgstr ""
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr ""
 
@@ -1265,7 +852,7 @@ msgstr "Аартра"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Алхра"
@@ -1655,7 +1242,7 @@ msgstr "_Алкаара"
 
 #: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
-msgstr ""
+msgstr "З_егьы алхра"
 
 #: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
@@ -1698,8 +1285,6 @@ msgid "Select _Line"
 msgstr ""
 
 #: src/libide/sourceview/gtk/menus.ui:117
-#, fuzzy
-#| msgid "Delete"
 msgid "_Delete Line"
 msgstr "Delete"
 
@@ -1721,7 +1306,7 @@ msgid "Code Navigation"
 msgstr ""
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
+#: src/libide/sourceview/ide-source-view.c:1546
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1858,6 +1443,10 @@ msgstr ""
 msgid "Allow JavaScript"
 msgstr ""
 
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Print"
+
 #: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr ""
@@ -1899,6 +1488,21 @@ msgstr ""
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
@@ -1965,7 +1569,7 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:107
 msgid "Device"
-msgstr ""
+msgstr "Аиҿартәыра"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
@@ -1993,7 +1597,7 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr ""
 
@@ -2551,10 +2155,6 @@ msgstr "Игьежьу ахыцқәа автоматикла рхарҭәаар�
 msgid "If parentheses should be included when completing."
 msgstr "Аҽхарҭәаараан ахыцгежьқәа рҿакра"
 
-#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-msgid "Complete parameters"
-msgstr ""
-
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
@@ -2687,8 +2287,6 @@ msgid "Failed to rename symbol: %s"
 msgstr ""
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
-#, fuzzy
-#| msgid "Unnamed Symbol"
 msgid "Rename Symbol"
 msgstr "Ихьӡыдоу асимвол"
 
@@ -2707,8 +2305,6 @@ msgid "New Symbol name"
 msgstr ""
 
 #: src/plugins/codeui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Unnamed Symbol"
 msgid "R_ename Symbol…"
 msgstr "Ихьӡыдоу асимвол"
 
@@ -2750,14 +2346,6 @@ msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
-
-#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
-msgid "Update Copyright before Saving"
-msgstr ""
-
-#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
-msgid "Updates the copyright for the user before saving to disk."
 msgstr ""
 
 #: src/plugins/copyright/tweaks.ui:16
@@ -2826,7 +2414,7 @@ msgstr "Алицензия"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:127
 msgid "Template"
-msgstr ""
+msgstr "Ацәабла"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:183
 msgid "Create Project"
@@ -2945,7 +2533,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
-msgstr ""
+msgstr "Аҳәахьа"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
@@ -3119,7 +2707,7 @@ msgstr ""
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Text"
-msgstr ""
+msgstr "Атекст"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
@@ -3247,7 +2835,6 @@ msgid "The character to be inserted for Tab"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:59
-#, fuzzy
 msgid "Tab"
 msgstr "Агәылаҵа"
 
@@ -3370,7 +2957,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
 msgid "Font"
-msgstr ""
+msgstr "Ашрифт"
 
 #: src/plugins/editorui/tweaks.ui:49
 msgid "The font used within the source code editor"
@@ -3737,9 +3324,9 @@ msgstr "Ахьӡ"
 msgid "Architecture"
 msgstr "Архитектура"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
-msgstr ""
+msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
 msgid "Creating flatpak workspace"
@@ -4139,7 +3726,7 @@ msgstr ""
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:624
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr ""
 
@@ -4245,43 +3832,43 @@ msgstr ""
 msgid "Delete Tool"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr ""
 
@@ -4441,12 +4028,12 @@ msgid "Drop Down"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr ""
 
@@ -4476,7 +4063,7 @@ msgstr ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:208
 msgid "Files"
-msgstr ""
+msgstr "Афаилқәа"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:682
 #, c-format
@@ -4616,7 +4203,7 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:109
 msgid "Overview"
-msgstr ""
+msgstr "Алаԥшхагара"
 
 #: src/plugins/projectui/tweaks.ui:115
 msgid "Project Identifier"
@@ -4760,24 +4347,24 @@ msgstr ""
 msgid "Available SDKs"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr ""
 
@@ -4829,7 +4416,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
-msgstr ""
+msgstr "Аҭыҧ"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
@@ -4837,31 +4424,31 @@ msgid ""
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "_Адҵа аныхра"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -4875,42 +4462,6 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
-msgid "Display Name"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
-msgid "Keyboard Accelerator"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
-msgid "Current Working Directory"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-msgid "Command Arguments"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-msgid "Command Environment"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
-msgid "Command Locality"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
-msgid "Use Shell"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
-msgid "Run Commands"
-msgstr ""
-
-#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
-msgid "A list of run-command ids to load for the application or project."
 msgstr ""
 
 #: src/plugins/shellcmd/tweaks.ui:14
@@ -4930,7 +4481,7 @@ msgstr ""
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
 msgid "Ignore"
-msgstr ""
+msgstr "Азхьамԥшра"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:259
 msgid "Languages"
@@ -5158,7 +4709,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:172
 msgid "JavaScript"
-msgstr ""
+msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:173
 msgid "Collect information from GJS-based applications"
@@ -5504,7 +5055,7 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
-msgstr ""
+msgstr "Аҭагылазаашьа"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
 msgid "_Branches"
@@ -5560,18 +5111,9 @@ msgstr ""
 msgid "File must be saved locally to parse."
 msgstr ""
 
-msgid "Automatically Hide Overview Map"
-msgstr "Автоматикла Алаԥшхагаратә Хсаала Аҵәахра"
 
-msgid "Automatically hide map when editor loses focus"
-msgstr "Автоматикла ахсаала аҵәахра аредактор афокус анацәыӡуа"
 
-msgid "Enable or disable autosave feature"
-msgstr " Автоматикла аиқәырхара  аҿакра, мамзар аҿыхра"
 
-msgid ""
-"Automatically stop execution at the start of the applications main function"
-msgstr "Автоматикла анагӡара аанкылара аԥшьы ихадоу афункциа аҿакраан"
 
 
 
@@ -5829,7 +5371,6 @@ msgstr "Автоматикла анагӡара аанкылара аԥшьы и
 
 
 
-#, fuzzy
 
 
 
@@ -5852,7 +5393,6 @@ msgstr "Автоматикла анагӡара аанкылара аԥшьы и
 
 
 
-#, fuzzy
 
 
 
@@ -5931,7 +5471,6 @@ msgstr "Автоматикла анагӡара аанкылара аԥшьы и
 
 
 
-#, fuzzy
 
 
 
@@ -6254,3000 +5793,6 @@ msgstr "Автоматикла анагӡара аанкылара аԥшьы и
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
-
-
-
-#, fuzzy
-
-#, fuzzy
-
-
-
-
-
-
-#, fuzzy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
 
 
 
