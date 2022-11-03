@@ -428,6 +428,16 @@ ide_greeter_workspace_open_project (IdeGreeterWorkspace *self,
   if (ret)
     IDE_GOTO (not_ready);
 
+  /* If this project is already open, then just switch to that project instead
+   * of trying to load the project a second time.
+   */
+  if ((workbench = ide_application_find_project_workbench (IDE_APPLICATION_DEFAULT, project_info)))
+    {
+      ide_workbench_activate (workbench);
+      gtk_window_destroy (GTK_WINDOW (self));
+      IDE_EXIT;
+    }
+
   workbench = ide_workspace_get_workbench (IDE_WORKSPACE (self));
 
   ide_greeter_workspace_begin (self);
