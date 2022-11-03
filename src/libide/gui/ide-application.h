@@ -80,6 +80,9 @@ void           ide_application_foreach_workbench        (IdeApplication         
 IDE_AVAILABLE_IN_ALL
 IdeWorkbench  *ide_application_find_workbench_for_file  (IdeApplication           *self,
                                                          GFile                    *file);
+IDE_AVAILABLE_IN_44
+IdeWorkbench  *ide_application_find_project_workbench   (IdeApplication           *self,
+                                                         IdeProjectInfo           *project_info);
 IDE_AVAILABLE_IN_ALL
 gpointer       ide_application_find_addin_by_module_name (IdeApplication           *self,
                                                           const gchar              *module_name);

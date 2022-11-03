@@ -1053,3 +1053,36 @@ ide_application_install_schemes_finish (IdeApplication  *self,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+/**
+ * ide_application_find_project_workbench:
+ * @self: a #IdeApplication
+ * @project_info: an #IdeProjectInfo
+ *
+ * Finds a workbench that has @project_info loaded.
+ *
+ * If no workbench could be found, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
+ *
+ * Since: 44
+ */
+IdeWorkbench *
+ide_application_find_project_workbench (IdeApplication *self,
+                                        IdeProjectInfo *project_info)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (project_info), NULL);
+
+  for (guint i = 0; i < self->workbenches->len; i++)
+    {
+      IdeWorkbench *workbench = g_ptr_array_index (self->workbenches, i);
+      IdeProjectInfo *workbench_project_info = ide_workbench_get_project_info (workbench);
+
+      if (workbench_project_info != NULL &&
+          ide_project_info_equal (workbench_project_info, project_info))
+        return workbench;
+    }
+
+  return NULL;
+}
