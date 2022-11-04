@@ -77,6 +77,22 @@ gbp_rst_html_generator_communicate_cb (GObject      *object,
                            g_bytes_unref);
 }
 
+static const char *
+find_python (void)
+{
+  static const char *python;
+
+  if (python == NULL)
+    {
+      if (g_find_program_in_path ("python3"))
+        python = "python3";
+      else
+        python = "python";
+    }
+
+  return python;
+}
+
 static void
 gbp_rst_html_generator_generate_async (IdeHtmlGenerator    *generator,
                                        GCancellable        *cancellable,
@@ -90,6 +106,7 @@ gbp_rst_html_generator_generate_async (IdeHtmlGenerator    *generator,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GBytes) content = NULL;
+  const char *python;
   const char *source_path;
   GFile *file;
   int fd;
@@ -124,10 +141,11 @@ gbp_rst_html_generator_generate_async (IdeHtmlGenerator    *generator,
       return;
     }
 
+  python = find_python ();
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                           G_SUBPROCESS_FLAGS_STDERR_SILENCE |
                                           G_SUBPROCESS_FLAGS_STDIN_PIPE);
-  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("python3", "-", source_path));
+  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT (python, "-", source_path));
   ide_subprocess_launcher_take_fd (launcher, fd, 3);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
