@@ -43,32 +43,35 @@ init_cb (GObject      *object,
   ret = g_async_initable_init_finish (initable, result, &error);
   g_assert_no_error (error);
   g_assert_true (ret);
-  g_assert (index != NULL);
-  g_assert (IDE_IS_CTAGS_INDEX (index));
+  g_assert_nonnull (index);
+  g_assert_true (IDE_IS_CTAGS_INDEX (index));
 
   g_assert_cmpint (28, ==, ide_ctags_index_get_size (index));
 
   entries = ide_ctags_index_lookup (index, "__NOTHING_SHOULD_MATCH_THIS__", &n_entries);
   g_assert_cmpint (n_entries, ==, 0);
-  g_assert (entries == NULL);
+  g_assert_null (entries);
 
   entries = ide_ctags_index_lookup (index, "G_LOG_DOMAIN", &n_entries);
   g_assert_cmpint (n_entries, ==, 1);
-  g_assert (entries != NULL);
+  g_assert_nonnull (entries);
   for (i = 0; i < 1; i++)
     g_assert_cmpstr (entries [i].name, ==, "G_LOG_DOMAIN");
 
   entries = ide_ctags_index_lookup (index, "bug_buddy_init", &n_entries);
   g_assert_cmpint (n_entries, ==, 2);
-  g_assert (entries != NULL);
+  g_assert_nonnull (entries);
   for (i = 0; i < 1; i++)
     g_assert_cmpstr (entries [i].name, ==, "bug_buddy_init");
 
   entries = ide_ctags_index_lookup_prefix (index, "G_DEFINE_", &n_entries);
   g_assert_cmpint (n_entries, ==, 16);
-  g_assert (entries != NULL);
+  g_assert_nonnull (entries);
   for (i = 0; i < 16; i++)
-    g_assert (g_str_has_prefix (entries [i].name, "G_DEFINE_"));
+    {
+      gboolean r = g_str_has_prefix (entries [i].name, "G_DEFINE_");
+      g_assert_true (r);
+    }
 
   g_main_loop_quit (main_loop);
 }
