@@ -106,6 +106,7 @@ gbp_rst_html_generator_generate_async (IdeHtmlGenerator    *generator,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GBytes) content = NULL;
+  GSubprocessFlags flags;
   const char *python;
   const char *source_path;
   GFile *file;
@@ -142,9 +143,12 @@ gbp_rst_html_generator_generate_async (IdeHtmlGenerator    *generator,
     }
 
   python = find_python ();
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE |
-                                          G_SUBPROCESS_FLAGS_STDIN_PIPE);
+  flags = G_SUBPROCESS_FLAGS_STDOUT_PIPE|G_SUBPROCESS_FLAGS_STDIN_PIPE;
+
+  if (!g_getenv ("RST_DEBUG"))
+    flags |= G_SUBPROCESS_FLAGS_STDERR_SILENCE;
+
+  launcher = ide_subprocess_launcher_new (flags);
   ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT (python, "-", source_path));
   ide_subprocess_launcher_take_fd (launcher, fd, 3);
 
