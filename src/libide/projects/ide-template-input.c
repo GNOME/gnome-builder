@@ -96,6 +96,7 @@ static const struct {
   { "LGPL-2.1-or-later", "lgpl_2_1_short", "lgpl_2_1_full" },
   { "LGPL-3.0-or-later", "lgpl_3_full", "lgpl_3_short" },
   { "MIT", "mit_x11_short", "mit_x11_full" },
+  { "MPL-2.0", "mpl_2_short", "mpl_2_full" },
   { "No License", NULL, NULL },
 };
 
