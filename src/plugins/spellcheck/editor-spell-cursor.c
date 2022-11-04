@@ -202,28 +202,38 @@ gboolean
 editor_spell_iter_backward_word_start (GtkTextIter *iter,
                                        const char  *extra_word_chars)
 {
-  GtkTextIter tmp = *iter;
+  if (extra_word_chars == NULL)
+    return gtk_text_iter_backward_word_start (iter);
 
-  if (gtk_text_iter_backward_word_start (iter))
+  /* If we get extra_word_chars, then expect those to be
+   * comprehensive of what we expect to find as valid characters
+   * for words (which seems to be the case for enchant?)
+   */
+
+  if (!gtk_text_iter_backward_char (iter))
+    return FALSE;
+
+  while (g_unichar_isspace (gtk_text_iter_get_char (iter)) ||
+         !is_extra_word_char (iter, extra_word_chars))
     {
-      tmp = *iter;
-
-      if (gtk_text_iter_backward_char (&tmp) &&
-          is_extra_word_char (&tmp, extra_word_chars))
-        {
-          if (editor_spell_iter_backward_word_start (&tmp, extra_word_chars))
-            *iter = tmp;
-        }
-
-      return TRUE;
+      if (!gtk_text_iter_backward_char (iter))
+        return FALSE;
     }
 
-  if (gtk_text_iter_is_start (iter) &&
-      gtk_text_iter_starts_word (iter) &&
-      !gtk_text_iter_equal (&tmp, iter))
-    return TRUE;
+  while (is_extra_word_char (iter, extra_word_chars))
+    {
+      /* Move backward another character. If we fail to move it's because
+       * we're at the beginning of the file (which is successful since
+       * we're already on a extra_word_char).
+       */
+      if (!gtk_text_iter_backward_char (iter))
+        return TRUE;
+    }
 
-  return FALSE;
+  /* We moved one character too far, move forward */
+  gtk_text_iter_forward_char (iter);
+
+  return TRUE;
 }
 
 static void
