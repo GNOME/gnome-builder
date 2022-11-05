@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-29 15:15+0000\n"
-"PO-Revision-Date: 2022-09-29 18:35+0200\n"
+"POT-Creation-Date: 2022-11-03 18:07+0000\n"
+"PO-Revision-Date: 2022-11-05 19:05+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -513,12 +513,10 @@ msgid "Directory for all Builder projects."
 msgstr "Az összes Építő projekt könyvtára."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#| msgid "Restore Previous Session"
 msgid "Restore Session"
 msgstr "Munkamenet helyreállítása"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-#| msgid "Restore previously opened files when loading a project."
 msgid "Restores the projects previous session when loading."
 msgstr "Helyreállítja a projektek korábbi munkamenetét a betöltéskor."
 
@@ -940,7 +938,7 @@ msgstr "Mentés"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1189,7 +1187,7 @@ msgstr "Telepítés az eszközre…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Gazdarendszer"
 
@@ -1329,7 +1327,7 @@ msgstr "Megnyitás"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Kijelölés"
@@ -1787,7 +1785,7 @@ msgid "Code Navigation"
 msgstr "Kódnavigáció"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1546
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1928,6 +1926,11 @@ msgstr "Beállítások"
 msgid "Allow JavaScript"
 msgstr "JavaScript engedélyezése"
 
+#: src/libide/webkit/ide-webkit-page.ui:104
+#| msgid "Printing"
+msgid "Print"
+msgstr "Nyomtatás"
+
 #: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "Az Építő új példányának futtatása"
@@ -1971,6 +1974,23 @@ msgstr "%s (másolat)"
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "BuildStream projekt van használatban, de a „bst” program nem található."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+#| msgid "Remove environment variable"
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Használjon KULCS=ÉRTÉK párt egy környezeti változó beállításához"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "A kulcsok nem kezdődhetnek számmal"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
+"A kulcsok csak alfanumerikus karaktereket vagy aláhúzást tartalmazhatnak."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2064,7 +2084,7 @@ msgstr "Figyelmeztetések"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Összeállítási futószalag"
 
@@ -2754,7 +2774,6 @@ msgstr "Lehetséges elírás a következőben: „%s”. Erre gondolt: „%s”?
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
-#| msgid "Failed to format selection: %s"
 msgid "Failed to format while saving document: %s"
 msgstr "A formázás sikertelen a dokumentum mentése során: %s"
 
@@ -3462,7 +3481,6 @@ msgid "Prefer a space before commas"
 msgstr "Szóközök előnyben részesítése a vesszők előtt"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#| msgid "Prefer a space before simicolons"
 msgid "Prefer a space before semicolons"
 msgstr "Szóközök előnyben részesítése a pontosvesszők előtt"
 
@@ -3858,7 +3876,7 @@ msgstr "Név"
 msgid "Architecture"
 msgstr "Architektúra"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4371,43 +4389,43 @@ msgstr "Eszközlánc törlése"
 msgid "Delete Tool"
 msgstr "Eszköz törlése"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr "GNOME alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Egy Meson-alapú projekt a GNOME-hoz GTK 4 és libadwaita használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr "GTK 4-es alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr "Egy Meson-alapú projekt GTK 4 használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr "Megosztott programkönyvtár"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr "Egy Meson-alapú projekt egy megosztott programkönyvtárhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr "Parancssoros eszköz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr "Egy Meson-alapú projekt egy parancssori programhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr "Üres Meson projekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr "Egy üres Meson projektváz"
 
@@ -4567,12 +4585,12 @@ msgid "Drop Down"
 msgstr "Legördülő"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Konténerek/Eszköztár"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
@@ -4844,7 +4862,6 @@ msgid "Proc Macros"
 msgstr "Procedurális makrók"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-#| msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgid "Enables the Proc Macros feature of rust-analyzer"
 msgstr "Engedélyezi a rust-analyzer Procedurális makrók funkcióját"
 
@@ -4898,24 +4915,24 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "Elérhető SDK-k"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Névtelen parancs"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Gyorsbillentyű beállítása"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Munkakönyvtár kiválasztása"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Parancs létrehozása"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "_Létrehozás"
 
@@ -4982,31 +4999,31 @@ msgstr ""
 "Az Építő számos helyen tudja futtatni a parancsot, köztük a gazdarendszeren "
 "vagy összeállítási konténerekben."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "Parancs _törlése"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Részfolyamat"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Az Építő részfolyamataként futtatja a parancsot."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "A gazdarendszeren futtatja a parancsot."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Az összeállítási futószalagon futtatja a parancsot."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Célalkalmazásként"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Úgy futtatja a parancsot, mintha a célalkalmazás lenne."
 
@@ -5117,7 +5134,6 @@ msgid "Navigate to a symbol within the current page"
 msgstr "Ugrás egy szimbólumhoz a jelenlegi lapon"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
-#| msgid "Application ID…"
 msgid "Profiling Application…"
 msgstr "Alkalmazás profilozása…"
 
