@@ -878,9 +878,9 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
 }
 
 static void
-gbp_omni_gutter_renderer_notify_font_desc (GbpOmniGutterRenderer *self,
-                                           GParamSpec            *pspec,
-                                           IdeSourceView         *view)
+gbp_omni_gutter_renderer_notify_font (GbpOmniGutterRenderer *self,
+                                      GParamSpec            *pspec,
+                                      IdeSourceView         *view)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (IDE_IS_SOURCE_VIEW (view));
@@ -1816,7 +1816,11 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
-                                    G_CALLBACK (gbp_omni_gutter_renderer_notify_font_desc),
+                                    G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
+                                    self);
+  ide_signal_group_connect_swapped (self->view_signals,
+                                    "notify::font-scale",
+                                    G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
                                     self);
   ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::highlight-current-line",
