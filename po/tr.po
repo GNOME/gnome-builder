@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-01 10:12+0000\n"
-"PO-Revision-Date: 2022-10-01 18:04+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2022-10-26 17:45+0000\n"
+"PO-Revision-Date: 2022-11-02 13:40+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -517,7 +517,7 @@ msgstr "Oturumu Geri Yükle"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr ""
+msgstr "Yüklerken projeleri önceki oturumdan geri yükler."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -600,7 +600,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Birim sınamaları çalıştırırken hangi ortamın kullanılacağı"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:177 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Ayrıntılı Günlük Kaydı"
 
@@ -804,8 +804,8 @@ msgstr "Sayfalar"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:142
-#: src/libide/sourceview/gtk/menus.ui:150
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
@@ -902,36 +902,36 @@ msgid "Unsaved document has been restored."
 msgstr "Kaydedilmemiş belge geri yüklendi."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Yazdırılamadı: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Biçim seçimi başarısız: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:948
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1174,10 +1174,9 @@ msgid "Deploying to device…"
 msgstr "Aygıta konuşlandırılıyor…"
 
 #: src/libide/foundry/ide-runtime.c:413
-#: src/plugins/host/gbp-host-runtime-provider.c:55
-#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Ev Sahibi Sistem"
 
@@ -1318,7 +1317,7 @@ msgstr "Aç"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Seç"
@@ -1366,7 +1365,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Yaklaşık %u yıl önce"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:56
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:49
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Kur"
@@ -1544,7 +1543,7 @@ msgstr "Diğer"
 msgid "There are unsaved documents"
 msgstr "Kaydedilmemiş belgeler var"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:132
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1713,7 +1712,7 @@ msgstr "_Seçim"
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
 msgstr "Biçimlendirme"
 
@@ -1769,19 +1768,13 @@ msgstr "Satırları S_ırala"
 msgid "D_uplicate Line"
 msgstr "S_atırı Çoğalt"
 
-#: src/libide/sourceview/gtk/menus.ui:140
-#, fuzzy
-#| msgid "Formatting"
-msgid "_Formatting"
-msgstr "Biçimlendirme"
-
-#: src/libide/sourceview/gtk/menus.ui:151
+#: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Kod Gezinme"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1546
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1911,13 +1904,17 @@ msgstr "Hiçbiri"
 msgid "Blank page"
 msgstr "Boş sayfa"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:130
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
 msgstr "Ayarlar"
 
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
 msgstr "JavaScriptʼe İzin ver"
+
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Yazdır"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
@@ -1962,6 +1959,22 @@ msgstr "%s (Kopya)"
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "BuildStream projesi kullanılıyor ancak “bst” yürütülebiliri bulunamadı."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Ortam değişkeni ayarlamak için ANAHTAR=DEĞER kullan"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Anahtarlar rakam ile başlayamaz"
+
+# Alfa-numeric çevirilerinde standart oluşmadığı için harf, rakam diye çevrildi.
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr "Anahtarlar yalnızca harf, rakam veya alt çizgi içerebilir."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2055,7 +2068,7 @@ msgstr "Uyarılar"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "İnşa Boru Hattı"
 
@@ -2179,10 +2192,10 @@ msgid "Configure settings related to the project"
 msgstr "Projeyle ilgili ayarları yapılandır"
 
 #: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
-#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:53
-#: src/plugins/buildui/gtk/menus.ui:80 src/plugins/buildui/gtk/menus.ui:90
-#: src/plugins/buildui/gtk/menus.ui:104 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:73 src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
 msgstr "Kod Dökümhanesi"
 
@@ -2199,8 +2212,8 @@ msgstr "İnşa Hedefi Seç…"
 msgid "Change default build target"
 msgstr "Öntanımlı inşa hedefini değiştir"
 
-#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:81
-#: src/plugins/buildui/gtk/menus.ui:91
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:84
 msgid "Building"
 msgstr "İnşa"
 
@@ -2228,31 +2241,19 @@ msgstr "_Temizle"
 msgid "Clean the project"
 msgstr "Projeyi temizle"
 
-#: src/plugins/buildui/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Stop Build"
-msgid "Stop Building"
-msgstr "İnşayı Durdur"
-
-#: src/plugins/buildui/gtk/menus.ui:46
-#, fuzzy
-#| msgid "Focus the current page's location"
-msgid "Cancel the current build operation"
-msgstr "Geçerli sayfanın konumuna odaklan"
-
-#: src/plugins/buildui/gtk/menus.ui:54
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
 msgstr "Kurulum ve Dağıtım"
 
-#: src/plugins/buildui/gtk/menus.ui:58
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
 msgstr "Projeyi kur"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
 msgstr "Aygıta Konuşlandır…"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
 msgstr "Projeyi geçerli aygıta konuşlandır"
 
@@ -2260,85 +2261,85 @@ msgstr "Projeyi geçerli aygıta konuşlandır"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:66
 msgid "_Export"
 msgstr "_Dışa Aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Export project"
 msgstr "Projeyi dışa aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
 msgstr "İnşayı Durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
 msgstr "Proje inşasını durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:93
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
 msgstr "İnşa _Günlüğünü Göster"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
 msgstr "İnşa günlüğünü içeren paneli göster"
 
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
 msgstr "Çalıştırma"
 
-#: src/plugins/buildui/gtk/menus.ui:107
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
 msgstr "Çalıştır Komutu Seç…"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
 msgstr "Çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
 msgstr "Projeyi çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Birim Sınamaları"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
 msgstr "Sistem Biçemini İzle"
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
 msgstr "Aydınlığa Zorla"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
 msgstr "Karanlığa Zorla"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
 msgstr "Erişilebilirlik"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:148
 msgid "High Contrast"
 msgstr "Yüksek Karşıtlık"
 
-#: src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Text Direction"
 msgstr "Metin Yönü"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Left-to-Right"
 msgstr "Soldan Sağa"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Right-to-Left"
 msgstr "Sağdan Sola"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Tools"
 msgstr "Araçlar"
 
@@ -3311,10 +3312,6 @@ msgid "Print…"
 msgstr "Yazdır…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
-msgid "Format Document"
-msgstr "Belgeyi Biçimlendir"
-
-#: src/plugins/editorui/gtk/menus.ui:193
 msgid "Format Selection"
 msgstr "Biçim Seçimi"
 
@@ -3455,7 +3452,7 @@ msgstr "Virgül öncesinde boşluk yeğle"
 
 #: src/plugins/editorui/tweaks-language.ui:297
 msgid "Prefer a space before semicolons"
-msgstr "Noktalı virgül öncesinde boşluk yeğle"
+msgstr "Noktalı virgüllerden önce boşluk yeğle"
 
 #: src/plugins/editorui/tweaks.ui:10
 msgid "Color"
@@ -4129,16 +4126,9 @@ msgstr "Düzenli ifadeler_e izin ver"
 msgid "_Find in Files"
 msgstr "Dosyalarda _Bul"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:52
 msgid "Host Operating System"
 msgstr "Ev Sahibi İşletim Sistemi"
-
-#. translators: Bundled means a runtime "bundled" with Builder
-#: src/plugins/host/gbp-host-runtime-provider.c:68
-#, fuzzy
-#| msgid "Run with Profiler"
-msgid "Bundled with Builder"
-msgstr "Profilleyici ile Çalıştır"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4375,43 +4365,43 @@ msgstr "Araç Takımını Sil"
 msgid "Delete Tool"
 msgstr "Aracı Sil"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr "GNOME Uygulaması"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "GNOME için GTK 4 ve libadwaita kullanan Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr "GTK 4 Uygulaması"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr "GTK 4 kullanan Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr "Paylaşılan Kütüphane"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr "Paylaşılan kütüphane için Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr "Komut Satırı Aracı"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr "Komut satırı programı için Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr "Boş Meson Projesi"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr "Boş Meson proje iskeleti"
 
@@ -4571,12 +4561,12 @@ msgid "Drop Down"
 msgstr "Açılır"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:685
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Konteynerler/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:691
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Konteynerler/Podman"
 
@@ -4847,7 +4837,7 @@ msgstr "Proc Makroları"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the Proc Macros feature of rust-analyzer"
-msgstr "Rust-analyzer’ın Proc Makroları özelliğini etkinleştirir"
+msgstr "Rust-analyzer Proc Makroları özelliğini etkinleştirir"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
 msgid "Cargo Build Scripts"
@@ -4897,24 +4887,24 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "Kullanılabilir SDK’ler"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Başlıksız Komut"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Kısayol Belirle"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Çalışma Dizini Seç"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Komut Oluştur"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "_Oluştur"
 
@@ -4952,11 +4942,11 @@ msgstr "Çalışma Dizini"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için "
-"<tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
+"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için <tt>"
+"$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -4978,31 +4968,31 @@ msgstr ""
 "Builder, komutunuzu ev sahibi sistemde veya inşa konteynerı gibi birçok "
 "konumdan çalıştırabilir."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "Komut _Sil"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Alt süreç"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Komutu Builder alt süreci olarak çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "Komutu ev sahibi sistemde çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Komutu inşa boru hattı içinde çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Hedef Uygulama Olarak"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Komutu hedef uygulamaymış gibi çalıştırır."
 
@@ -5113,11 +5103,11 @@ msgstr "Geçerli sayfadaki simgeye git"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
 msgid "Profiling Application…"
-msgstr ""
+msgstr "Uygulama Profilleniyor…"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:308
 msgid "Symbol decoding will begin after application exits"
-msgstr ""
+msgstr "Uygulama çıktıktan sonra simge çözümlemesi başlayacak"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5714,6 +5704,70 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Enable Search Bubbles"
+#~ msgstr "Arama Balonlarını Etkinleştir"
+
+#~ msgid "Display search results with additional styling to stand out"
+#~ msgstr "Öne çıkan ek biçemler ile arama sonuçlarını görüntüle"
+
+#~ msgid "Inherit Language Server stderr"
+#~ msgstr "Dil Sunucusu stderr miras al"
+
+#~ msgid ""
+#~ "If enabled, stderr of language servers will be redirected to the console."
+#~ msgstr ""
+#~ "Etkinleştirilirse, dil sunucularının stderr hataları uçbirime "
+#~ "yönlendirilir."
+
+#~ msgid "File Contains Encoding Errors"
+#~ msgstr "Dosya Kodlama Hataları İçeriyor"
+
+#~ msgid ""
+#~ "The encoding used to load the file detected errors. You may select an "
+#~ "alternate encoding from the statusbar and reload."
+#~ msgstr ""
+#~ "Dosyayı yüklemek için kullanılan kodlamada hatalar saptandı. Durum "
+#~ "çubuğundan alternatif kodlama seçip yeniden yükleyebilirsiniz."
+
+#~ msgid "Get help with using Builder"
+#~ msgstr "Builder kullanımı hakkında yardım al"
+
+#~ msgid "Quit without saving changes"
+#~ msgstr "Değişiklikleri kaydetmeden çık"
+
+#~ msgid "_Formatting"
+#~ msgstr "_Biçimlendirme"
+
+#~ msgid "Stop Building"
+#~ msgstr "İnşayı Durdur"
+
+#~ msgid "Cancel the current build operation"
+#~ msgstr "Geçerli inşa işlemini iptal et"
+
+#~ msgid "Log to Console"
+#~ msgstr "Uçbirimʼe Günlükle"
+
+#~ msgid "Redirect language server error logs to stderr"
+#~ msgstr "Dil sunucusu hata günlüklerini stderrʼe yönlendir"
+
+#~ msgid "Plain Text"
+#~ msgstr "Düz Metin"
+
+#~ msgid "Format Document"
+#~ msgstr "Belgeyi Biçimlendir"
+
+#~ msgid "Highlighting"
+#~ msgstr "Vurgulama"
+
+#~ msgid "Search Shadows"
+#~ msgstr "Gölgeleri Ara"
+
+#~ msgid "Open file or folder"
+#~ msgstr "Dosya veya klasörü aç"
+
+#~ msgid "Bundled with Builder"
+#~ msgstr "Builder ile birlikte gelir"
 
 #~ msgid "Restore Previous Files"
 #~ msgstr "Önceki Dosyaları Geri Yükle"
