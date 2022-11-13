@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-16 12:22+0000\n"
-"PO-Revision-Date: 2022-10-17 00:25+1000\n"
+"POT-Creation-Date: 2022-11-07 23:53+0000\n"
+"PO-Revision-Date: 2022-11-13 09:49+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -120,11 +120,12 @@ msgstr "Возможность редактирования в стиле Vim, E
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "An integrated software profiler for native applications"
 msgstr ""
-"Интегрированное программное обеспечение профайлера для собственных приложений"
+"Интегрированное программное обеспечение для профилирования собственных "
+"приложений"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "An integrated debugger for native applications"
-msgstr "Интегрированный отладчик для приложений"
+msgstr "Интегрированный отладчик для собственных приложений"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
@@ -554,7 +555,6 @@ msgid "The default license to use for new projects"
 msgstr "Лицензия по умолчанию для использования в новых проектах"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
-#| msgid "Language Servers"
 msgid "Inherit Language Server stderr"
 msgstr "Перенаправлять stderr языкового сервера"
 
@@ -713,7 +713,7 @@ msgstr "Новое рабочее пространство редактора"
 msgid "D-Bus Inspector"
 msgstr "Инспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3741
+#: src/libide/code/ide-buffer.c:3764
 msgid "The current language lacks a symbol resolver."
 msgstr "В текущем языке отсутствует распознаватель символов."
 
@@ -747,17 +747,18 @@ msgstr "Не удалось инициализировать значения п
 msgid "Failed to save draft: %s"
 msgstr "Не удалось сохранить черновик: %s"
 
-#: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:843
+#: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:841
 msgid "Untitled"
 msgstr "Безымянный"
 
-#: src/libide/core/ide-transfer.c:547
-#: src/libide/greeter/ide-greeter-workspace.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/core/ide-transfer.c:541
+#: src/libide/greeter/ide-greeter-workspace.c:555
+#: src/libide/greeter/ide-greeter-workspace.c:692
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1517
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
@@ -1021,12 +1022,12 @@ msgstr "Окончание строки:"
 msgid "Language"
 msgstr "Язык"
 
-#: src/libide/foundry/ide-build-manager.c:470
+#: src/libide/foundry/ide-build-manager.c:468
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Не удалось инициализировать конвейер сборки: %s"
 
-#: src/libide/foundry/ide-build-manager.c:611
+#: src/libide/foundry/ide-build-manager.c:609
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Не удалось получить информацию об устройстве: %s"
@@ -1190,7 +1191,7 @@ msgstr "Выполнение %s…"
 msgid "Deploying to device…"
 msgstr "Развёртывание на устройство…"
 
-#: src/libide/foundry/ide-runtime.c:413
+#: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
@@ -1209,8 +1210,8 @@ msgid "_Clone Repository…"
 msgstr "_Клонировать репозиторий…"
 
 #: src/libide/greeter/gtk/menus.ui:20
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
 #: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Закрыть"
@@ -1251,35 +1252,35 @@ msgstr "Не удалось загрузить проект"
 msgid "_Close"
 msgstr "_Закрыть"
 
-#: src/libide/greeter/ide-greeter-workspace.c:542
+#: src/libide/greeter/ide-greeter-workspace.c:552
 msgid "Delete Project Sources?"
 msgstr "Удалить исходные файлы проектов?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:543
+#: src/libide/greeter/ide-greeter-workspace.c:553
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 "Удаление исходного кода проекта удалит его с вашего компьютера. Эту операцию "
 "нельзя отменить."
 
-#: src/libide/greeter/ide-greeter-workspace.c:546
+#: src/libide/greeter/ide-greeter-workspace.c:556
 msgid "_Delete Project Sources"
 msgstr "Удалить исходные файлы проектов"
 
-#: src/libide/greeter/ide-greeter-workspace.c:641
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:651
+#: src/libide/greeter/ide-greeter-workspace.c:688
 msgid "Select Project Folder"
 msgstr "Выбрать папку проекта"
 
-#: src/libide/greeter/ide-greeter-workspace.c:646
+#: src/libide/greeter/ide-greeter-workspace.c:656
 msgid "Select Project File"
 msgstr "Выбрать файл проекта"
 
-#: src/libide/greeter/ide-greeter-workspace.c:683
+#: src/libide/greeter/ide-greeter-workspace.c:693
 #: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
 msgstr "_Открыть"
 
-#: src/libide/greeter/ide-greeter-workspace.c:694
+#: src/libide/greeter/ide-greeter-workspace.c:704
 msgid "All Project Types"
 msgstr "Все типы проектов"
 
@@ -1403,7 +1404,7 @@ msgid "Search"
 msgstr "Поиск"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
-#: src/libide/gtk/ide-shortcut-accel-dialog.c:394
+#: src/libide/gtk/ide-shortcut-accel-dialog.c:392
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
 msgstr "Введите новую комбинацию клавиш для замены <b>%s</b>."
@@ -1813,11 +1814,18 @@ msgid "Code Navigation"
 msgstr "Навигация по коду"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1571
-#: src/plugins/editorui/gbp-editorui-position-label.c:77
+#: src/libide/sourceview/ide-source-view.c:1637
+#: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Строка %u, Стлб %u"
+
+#. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
+#: src/libide/sourceview/ide-source-view.c:1639
+#: src/plugins/editorui/gbp-editorui-position-label.c:82
+#, c-format
+msgid "Ln %u, Col %u (Sel: %u)"
+msgstr "Стр %u, Стлб %u (Выд: %u)"
 
 #: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
@@ -1899,12 +1907,13 @@ msgstr "По слову целиком"
 msgid "Wrap around"
 msgstr "Обратный поиск"
 
-#: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
-#: src/libide/tree/ide-tree-node.c:1499
+#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
+#: src/libide/tree/ide-tree-node.c:1497
 msgid "(Empty)"
 msgstr "(Пусто)"
 
-#: src/libide/tree/ide-tree-node.c:1468
+#: src/libide/tree/ide-tree-node.c:1466
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "Загрузка…"
@@ -2364,7 +2373,7 @@ msgstr "Модульные тесты"
 
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Follow System Style"
-msgstr "Следовать системному стилю"
+msgstr "Использовать системный стиль"
 
 #: src/plugins/buildui/gtk/menus.ui:140
 msgid "Force Light"
@@ -2806,15 +2815,31 @@ msgstr "Возможна опечатка в «%s». Вы, вероятно, и�
 msgid "Failed to format while saving document: %s"
 msgstr "Не удалось выполнить форматирование при сохранении документа: %s"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
+msgid "Code Actions"
+msgstr "Коды операций"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
+msgid "_Apply"
+msgstr "_Применить"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+msgid "No code actions available"
+msgstr "Нет доступных кодов операций"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+msgid "Code Action Failure"
+msgstr "Код ошибки операции"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
 msgid "Symbol Not Selected"
 msgstr "Символ не выбран"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
 msgid "A symbol to rename must be selected"
 msgstr "Необходимо выбрать символ для переименования"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
 msgstr "Найти ссылки"
@@ -2854,23 +2879,31 @@ msgstr "Название нового символа"
 msgid "R_ename Symbol…"
 msgstr "П_ереименовать символ…"
 
-#: src/plugins/codeui/gtk/menus.ui:13
+#: src/plugins/codeui/gtk/menus.ui:12
+msgid "Code Actions…"
+msgstr "Коды операций…"
+
+#: src/plugins/codeui/gtk/menus.ui:14
+msgid "Display a list of possible code actions from the cursor position"
+msgstr "Отображение списка возможных кодов операций с позиции курсора"
+
+#: src/plugins/codeui/gtk/menus.ui:19
 msgid "_Go to Declaration"
 msgstr "_Перейти к объявлению"
 
-#: src/plugins/codeui/gtk/menus.ui:14
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "Jump to file and location where item is declared"
 msgstr "Перейти к файлу и месту, где объявлен элемент"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:25
 msgid "_Go to Definition"
 msgstr "_Перейти к описанию"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:26
 msgid "Jump to file and location where item is defined"
 msgstr "Перейти к файлу и месту, где определён элемент"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:31
 msgid "_Find References"
 msgstr "_Найти упоминания"
 
@@ -4434,43 +4467,43 @@ msgstr "Удалить набор инструментов"
 msgid "Delete Tool"
 msgstr "Удалить инструмент"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr "Приложение GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Проект на базе Meson для GNOME с использованием GTK4 и libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr "Приложение GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr "Проект на базе Meson с использованием GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr "Разделяемая библиотека"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr "Проект на базе Meson для библиотеки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr "Инструмент командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr "Проект на базе Meson для программы командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr "Пустой проект Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr "Пустой скелет проекта на Meson"
 
@@ -5134,7 +5167,7 @@ msgstr "Декодирование символов начнется после 
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
-msgstr "Открыть захват профайлера…"
+msgstr "Открыть захват Sysprof…"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Sysprof Capture (*.syscap)"
@@ -5147,19 +5180,19 @@ msgstr "Все файлы"
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
-msgstr "Открыть Захват _Sysprof…"
+msgstr "Открыть захват _Sysprof…"
 
 #: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Run with Profiler"
-msgstr "Запустить с помощью профайлера"
+msgstr "Запустить с помощью профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:22
 msgid "Run the project with profiler"
-msgstr "Запустить проект с помощью профайлера"
+msgstr "Запустить проект с помощью профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
-msgstr "Профайлер"
+msgstr "Профилировщик"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
 msgid "Thread Sampling"
@@ -5227,7 +5260,7 @@ msgstr "Разрешить «троттлинг» ЦП"
 
 #: src/plugins/sysprof/gtk/menus.ui:112
 msgid "Run with _Profiler"
-msgstr "Запустить с помощью _профайлера"
+msgstr "Запустить с помощью _профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:130
 msgid "Record Again…"
@@ -5932,10 +5965,6 @@ msgstr "Файл должен быть сохранен локально для 
 #, c-format
 #~ msgid "No beautifier available for “%s”"
 #~ msgstr "Нет доступных украшений для «%s»"
-
-#, c-format
-#~ msgid "No beautifier available"
-#~ msgstr "Нет доступных украшений"
 
 #, c-format
 #~ msgid "Beautifier plugin: no valid entries, disabling: %s"
