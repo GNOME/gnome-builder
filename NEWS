@@ -1,3 +1,25 @@
+# GNOME Builder 43.3
+
+Changes since 43.2
+
+ * Update GTK Rust template to recent gtk4-rs release.
+ * Spellcheck fixes.
+ * UI improvements to various panels including GAction fixes.
+ * Preference dialog widgetry fixes.
+ * Clear diagnostics when starting a new build.
+ * New "shellcheck" plugin providing diagnostics for shell scripts
+ * Add print support for web pages.
+ * Addition of various default snippet variables.
+ * Vim integration improvements when interacting with some internal
+   features such as bracket/brace overwrite.
+ * Ensure sourceview scrolls when moving between search results instead
+   of jumping, while maintaining jump support when file is opened.
+ * Fix various action activation for web page menus.
+ * CSS style fixes for :backdrop pseudo selector.
+ * Fix measurements for gutter when font is scaled.
+ * Fix console interaction for debugger UI.
+ * Translation updates.
+
 # GNOME Builder 43.2
 
 I'm trying harder to get minor releases out to users this cycle so that
