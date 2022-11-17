@@ -166,7 +166,9 @@ ide_scrubber_revealer_snapshot (GtkWidget   *widget,
 
   if (self->content)
     gtk_widget_snapshot_child (widget, self->content, snapshot);
-  gtk_widget_snapshot_child (widget, self->revealer, snapshot);
+
+  if (self->policy != IDE_SCRUBBER_REVEAL_POLICY_NEVER)
+    gtk_widget_snapshot_child (widget, self->revealer, snapshot);
 }
 
 static void
