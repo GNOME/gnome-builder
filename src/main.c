@@ -56,9 +56,6 @@
 #include "bug-buddy.h"
 
 #ifdef ENABLE_TRACING_SYSCAP
-static SysprofCaptureWriter *trace_writer;
-static G_LOCK_DEFINE (tracer);
-
 static inline int
 current_cpu (void)
 {
@@ -73,17 +70,12 @@ static void
 trace_load (void)
 {
   sysprof_clock_init ();
-  trace_writer = sysprof_capture_writer_new_from_env (0);
+  sysprof_collector_init ();
 }
 
 static void
 trace_unload (void)
 {
-  if (trace_writer)
-    {
-      sysprof_capture_writer_flush (trace_writer);
-      g_clear_pointer (&trace_writer, sysprof_capture_writer_unref);
-    }
 }
 
 static void
@@ -91,19 +83,11 @@ trace_function (const gchar    *func,
                 gint64          begin_time_usec,
                 gint64          end_time_usec)
 {
-  if (trace_writer != NULL)
-    {
-      G_LOCK (tracer);
-      sysprof_capture_writer_add_mark (trace_writer,
-                                       begin_time_usec * 1000L,
-                                       current_cpu (),
-                                       getpid (),
-                                       (end_time_usec - begin_time_usec) * 1000L,
-                                       "tracing",
-                                       "function",
-                                       func);
-      G_UNLOCK (tracer);
-    }
+  sysprof_collector_mark (begin_time_usec * 1000L,
+                          (end_time_usec - begin_time_usec) * 1000L,
+                          "tracing",
+                          "call",
+                          func);
 }
 
 static void
@@ -111,18 +95,7 @@ trace_log (GLogLevelFlags  log_level,
            const gchar    *domain,
            const gchar    *message)
 {
-  if (trace_writer != NULL)
-    {
-      G_LOCK (tracer);
-      sysprof_capture_writer_add_log (trace_writer,
-                                      SYSPROF_CAPTURE_CURRENT_TIME,
-                                      current_cpu (),
-                                      getpid (),
-                                      log_level,
-                                      domain,
-                                      message);
-      G_UNLOCK (tracer);
-    }
+  sysprof_collector_log (log_level, domain, message);
 }
 
 static IdeTraceVTable trace_vtable = {
