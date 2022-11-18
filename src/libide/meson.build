@@ -9,6 +9,8 @@ if get_option('webkit').enabled()
             input: 'libide-webkit-api.h.in',
            output: 'libide-webkit-api.h',
     configuration: libide_webkit_api_conf,
+      install_dir: libide_header_dir,
+          install: true,
   )
 endif
 
