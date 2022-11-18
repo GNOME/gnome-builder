@@ -113,8 +113,6 @@ status += [
   'Help Docs ............. : @0@'.format(get_option('help')),
   'API Docs .............. : @0@'.format(get_option('docs')),
   '',
-  'WebKit ................ : @0@'.format(get_option('webkit').enabled()),
-  '', ''
 ]
 
 config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
@@ -309,8 +307,30 @@ libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.70.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
-  libwebkit_dep = dependency('webkitgtk-6.0', 'webkit2gtk-5.0')
-  config_h.set10('HAVE_WEBKIT', true)
+  libwebkit_dep = dependency('webkitgtk-6.0', required: false)
+  if libwebkit_dep.found()
+    webkit_api = 'webkitgtk-6.0'
+    webkit_gir = 'WebKit-6.0'
+    webkit_include = '#include <webkit/webkit.h>'
+  else
+    libwebkit_dep = dependency('webkit2gtk-5.0', required: false)
+    if not libwebkit_dep.found()
+      error('Package webkitgtk-6.0 is required to build with -Dwebkit=enabled, or optionally, webkit2gtk-5.0 which may have security implications')
+    endif
+    webkit_api = 'webkit2gtk-5.0'
+    webkit_gir = 'WebKit2-5.0'
+    webkit_include = '#include <webkit2/webkit2.h>'
+  endif
+  status += [
+    'WebKit ................ : @0@ (@1@)'.format(get_option('webkit').enabled(), webkit_api),
+    '',
+  ]
+  config_h.set_quoted('HAVE_WEBKIT', webkit_api)
+else
+  status += [
+    'WebKit ................ : Disabled',
+    '',
+  ]
 endif
 
 check_functions = [
@@ -349,6 +369,8 @@ gnome = import('gnome')
 i18n = import('i18n')
 pkgconfig = import('pkgconfig')
 pymod = import('python')
+
+status += ['']
 
 subdir('data')
 subdir('src')

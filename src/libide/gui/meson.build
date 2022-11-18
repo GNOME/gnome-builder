@@ -163,8 +163,9 @@ endif
 #
 
 libide_gui = static_library('ide-gui-' + libide_api_version, libide_gui_sources,
-   dependencies: libide_gui_deps,
-         c_args: libide_args + release_args + ['-DIDE_GUI_COMPILATION'],
+         dependencies: libide_gui_deps,
+               c_args: libide_args + release_args + ['-DIDE_GUI_COMPILATION'],
+  include_directories: [include_directories('..')]
 )
 
 libide_gui_dep = declare_dependency(
