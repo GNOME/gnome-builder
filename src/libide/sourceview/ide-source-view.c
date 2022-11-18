@@ -511,6 +511,35 @@ ide_source_view_buffer_notify_language_cb (IdeSourceView *self,
   IDE_EXIT;
 }
 
+static gboolean
+can_insert_match (const GtkTextIter *location,
+                  gunichar           match)
+{
+  GtkSourceBuffer *buffer;
+  gunichar next;
+
+  g_assert (location != NULL);
+  g_assert (match != 0);
+
+  next = gtk_text_iter_get_char (location);
+
+  if (next == match)
+    return FALSE;
+
+  /* If the next character is not space/EOL/EOB, then do nothing */
+  if (next && !g_unichar_isspace (next))
+    return FALSE;
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (location));
+
+  if (gtk_source_buffer_iter_has_context_class (buffer, location, "comment") ||
+      gtk_source_buffer_iter_has_context_class (buffer, location, "string") ||
+      gtk_source_buffer_iter_has_context_class (buffer, location, "path"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 ide_source_view_insert_text_cb (IdeSourceView *self,
                                 GtkTextIter   *location,
@@ -566,10 +595,10 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
       return;
     }
 
-  /* Insert a match if necessary */
   if (match != NULL &&
+      match[0] != 0 &&
       self->insert_matching_brace &&
-      gtk_text_iter_get_char (location) != match[0])
+      can_insert_match (location, match[0]))
     {
       guint offset = gtk_text_iter_get_offset (location);
 
