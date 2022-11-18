@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 
 #ifdef HAVE_WEBKIT
-# include <webkit2/webkit2.h>
+# include <webkit/webkit.h>
 #endif
 
 #include <cmark.h>

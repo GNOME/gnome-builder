@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <webkit2/webkit2.h>
+#include <webkit/webkit.h>
 
 #include "ide-webkit-page.h"
 #include "ide-url-bar.h"

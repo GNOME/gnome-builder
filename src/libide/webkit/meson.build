@@ -1,4 +1,4 @@
-libwebkit_dep = dependency('webkit2gtk-5.0', required: false)
+libwebkit_dep = dependency('webkitgtk-6.0', required: false)
 
 if libwebkit_dep.found()
 
@@ -55,8 +55,8 @@ libide_webkit_deps = [
   libide_gui_dep,
 ]
 
-gnome_builder_pkg_requires += ['webkit2gtk-5.0']
-gnome_builder_gir_includes += ['WebKit2-5.0']
+gnome_builder_pkg_requires += ['webkitgtk-6.0']
+gnome_builder_gir_includes += ['WebKit-6.0']
 
 #
 # Library Definitions
