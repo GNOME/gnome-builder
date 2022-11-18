@@ -1,4 +1,4 @@
-/* ide-url-bar.h
+/* libide-webkit-api.h.in
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,19 +20,4 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include <libide-webkit-api.h>
-
-G_BEGIN_DECLS
-
-#define IDE_TYPE_URL_BAR (ide_url_bar_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeUrlBar, ide_url_bar, IDE, URL_BAR, GtkWidget)
-
-IdeUrlBar     *ide_url_bar_new          (void);
-WebKitWebView *ide_url_bar_get_web_view (IdeUrlBar *self);
-void           ide_url_bar_set_web_view (IdeUrlBar     *self,
-                                         WebKitWebView *web_view);
-
-G_END_DECLS
+@WEBKIT_INCLUDE@

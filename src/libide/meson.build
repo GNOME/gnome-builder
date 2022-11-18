@@ -2,6 +2,16 @@ libide_header_subdir = join_paths('gnome-builder-@0@'.format(MAJOR_VERSION), 'li
 libide_header_dir = join_paths(get_option('includedir'), libide_header_subdir)
 libide_include_directories = []
 
+if get_option('webkit').enabled()
+  libide_webkit_api_conf = configuration_data()
+  libide_webkit_api_conf.set('WEBKIT_INCLUDE', webkit_include)
+  configure_file(
+            input: 'libide-webkit-api.h.in',
+           output: 'libide-webkit-api.h',
+    configuration: libide_webkit_api_conf,
+  )
+endif
+
 subdir('core')
 subdir('plugins')
 subdir('threading')

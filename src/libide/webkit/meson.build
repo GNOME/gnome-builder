@@ -1,5 +1,3 @@
-libwebkit_dep = dependency('webkit2gtk-5.0', required: false)
-
 if libwebkit_dep.found()
 
 libide_webkit_header_dir = join_paths(libide_header_dir, 'webkit')
@@ -55,22 +53,23 @@ libide_webkit_deps = [
   libide_gui_dep,
 ]
 
-gnome_builder_pkg_requires += ['webkit2gtk-5.0']
-gnome_builder_gir_includes += ['WebKit2-5.0']
+gnome_builder_pkg_requires += [webkit_api]
+gnome_builder_gir_includes += [webkit_gir]
 
 #
 # Library Definitions
 #
 
 libide_webkit = static_library('ide-webkit-' + libide_api_version, libide_webkit_sources,
-   dependencies: libide_webkit_deps,
-         c_args: libide_args + release_args + ['-DIDE_WEBKIT_COMPILATION'],
+         dependencies: libide_webkit_deps,
+               c_args: libide_args + release_args + ['-DIDE_WEBKIT_COMPILATION'],
+  include_directories: include_directories('..'),
 )
 
 libide_webkit_dep = declare_dependency(
          dependencies: libide_webkit_deps,
             link_with: libide_webkit,
-  include_directories: include_directories('.'),
+  include_directories: [include_directories('.'), include_directories('..')],
               sources: libide_webkit_generated_headers,
 )
 

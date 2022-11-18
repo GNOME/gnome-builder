@@ -23,10 +23,10 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <webkit2/webkit2.h>
 #include <girepository.h>
 
 #include <libide-core.h>
+#include <libide-webkit-api.h>
 
 #include "ide-webkit-page.h"
 

@@ -21,7 +21,10 @@
 #pragma once
 
 #include <libide-gui.h>
+#include <libide-webkit-api.h>
 
 #define IDE_WEBKIT_INSIDE
+# include "ide-html-generator.h"
+# include "ide-text-buffer-html-generator.h"
 # include "ide-webkit-page.h"
 #undef IDE_WEBKIT_INSIDE
