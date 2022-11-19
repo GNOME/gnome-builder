@@ -161,9 +161,27 @@ gbp_dub_pipeline_addin_load (IdePipelineAddin *addin,
 }
 
 static void
+gbp_dub_pipeline_addin_unload (IdePipelineAddin *addin,
+                               IdePipeline      *pipeline)
+{
+  GbpDubPipelineAddin *self = (GbpDubPipelineAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_DUB_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  ide_pipeline_remove_error_format (pipeline, self->error_format_id);
+  self->error_format_id = 0;
+
+  IDE_EXIT;
+}
+
+static void
 pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = gbp_dub_pipeline_addin_load;
+  iface->unload = gbp_dub_pipeline_addin_unload;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpDubPipelineAddin, gbp_dub_pipeline_addin, IDE_TYPE_OBJECT,
