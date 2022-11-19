@@ -747,17 +747,6 @@ ide_application_has_network (IdeApplication *self)
                                G_CONNECT_SWAPPED);
 
       self->has_network = g_network_monitor_get_network_available (self->network_monitor);
-
-      /*
-       * FIXME: Ignore the network portal initially for now.
-       *
-       * See https://gitlab.gnome.org/GNOME/glib/merge_requests/227 for more
-       * information about when this is fixed.
-       *
-       * See Also: https://gitlab.gnome.org/GNOME/glib/-/issues/1718
-       */
-      if (!self->has_network && ide_is_flatpak ())
-        self->has_network = TRUE;
     }
 
   return self->has_network;
