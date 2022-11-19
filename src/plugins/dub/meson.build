@@ -5,6 +5,7 @@ plugins_sources += files([
   'gbp-dub-build-system.c',
   'gbp-dub-build-system-discovery.c',
   'gbp-dub-pipeline-addin.c',
+  'gbp-dub-run-command-provider.c',
 ])
 
 plugin_dub_resources = gnome.compile_resources(
