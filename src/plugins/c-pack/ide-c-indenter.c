@@ -892,7 +892,6 @@ maybe_unindent_opening_brace (IdeCIndenter    *c,
                               GtkTextIter     *iter)
 {
   GtkTextIter copy;
-  gboolean insert_matching_brace;
 
   g_assert (IDE_IS_C_INDENTER (c));
   g_assert (GTK_IS_TEXT_VIEW (view));
@@ -910,8 +909,6 @@ maybe_unindent_opening_brace (IdeCIndenter    *c,
       ('{' != gtk_text_iter_get_char (&copy)) ||
       !gtk_text_iter_backward_char (&copy))
     return;
-
-  insert_matching_brace = ide_file_settings_get_insert_matching_brace (file_settings);
 
   /*
    * Find the opening of the parent scope.
@@ -931,23 +928,11 @@ maybe_unindent_opening_brace (IdeCIndenter    *c,
       build_indent (c, offset + get_post_scope_indent(c) + get_pre_scope_indent (c), &copy, str);
       g_string_append_c (str, '{');
 
-      if (insert_matching_brace)
-        g_string_append_c (str, '}');
-
       line_start = *iter;
       gtk_text_iter_set_line_offset (&line_start, 0);
       gtk_text_buffer_delete (buffer, &line_start, iter);
       gtk_text_buffer_insert (buffer, iter, str->str, str->len);
 
-      if (insert_matching_brace)
-        gtk_text_iter_backward_chars (iter, 1);
-
-      gtk_text_buffer_place_cursor (buffer, iter);
-    }
-  else if (insert_matching_brace)
-    {
-      gtk_text_buffer_insert (buffer, iter, "}", 1);
-      gtk_text_iter_backward_chars (iter, 1);
       gtk_text_buffer_place_cursor (buffer, iter);
     }
 }
