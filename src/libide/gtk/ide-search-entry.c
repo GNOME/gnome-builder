@@ -61,7 +61,7 @@ on_text_activate_cb (IdeSearchEntry *self,
   g_assert (IDE_IS_SEARCH_ENTRY (self));
   g_assert (GTK_IS_TEXT (text));
 
-  gtk_widget_activate_action (GTK_WIDGET (self), "search.move-next", "b", FALSE);
+  gtk_widget_activate_action (GTK_WIDGET (self), "search.move-next", "b", TRUE);
 }
 
 static void
@@ -147,14 +147,6 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_g, GDK_CONTROL_MASK, "search.move-next", "b", FALSE);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Down, 0, "search.move-next", "b", FALSE);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Up, 0, "search.move-previous", "b", FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, 0, "search.move-next", "b", FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, 0, "search.move-next", "b", FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_SHIFT_MASK, "search.move-previous", "b", FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, GDK_SHIFT_MASK, "search.move-previous", "b", FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "search.move-next", "b", TRUE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, GDK_CONTROL_MASK, "search.move-next", "b", TRUE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "search.move-previous", "b", TRUE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "search.move-previous", "b", TRUE);
 }
 
 static void
