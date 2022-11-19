@@ -167,6 +167,7 @@ src/plugins/dspy/gbp-dspy-application-addin.c
 src/plugins/dspy/gbp-dspy-workspace.ui
 src/plugins/dspy/gtk/menus.ui
 src/plugins/dub/gbp-dub-pipeline-addin.c
+src/plugins/dub/gbp-dub-run-command-provider.c
 src/plugins/editorconfig/gbp-editorconfig-file-settings.c
 src/plugins/editorui/gbp-editorui-application-addin.c
 src/plugins/editorui/gbp-editorui-position-label.c
