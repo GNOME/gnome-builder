@@ -838,7 +838,7 @@ cleanup:
 
   if (str->len > 0)
     {
-      gtk_text_iter_assign (iter, &cur);
+      *iter = original_iter;
       gtk_text_buffer_insert (buffer, iter, str->str, str->len);
       gtk_text_iter_forward_chars (iter, cursor_offset);
       gtk_text_buffer_place_cursor (buffer, iter);
