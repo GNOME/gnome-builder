@@ -588,10 +588,14 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
       self->overwrite_braces &&
       gtk_text_iter_get_char (location) == overwrite)
     {
-      gtk_text_iter_forward_char (location);
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer),
-                                    location, location);
-      g_signal_stop_emission_by_name (buffer, "insert-text");
+      GtkTextIter next = *location;
+
+      /* We can't just step over this character because we need to ensure
+       * that indenters are queried. For example, ) in the C indenter can
+       * perform auto-indentation and overwrite would skip that.
+       */
+      gtk_text_iter_forward_char (&next);
+      gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), location, &next);
       return;
     }
 
