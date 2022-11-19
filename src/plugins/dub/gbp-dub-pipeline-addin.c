@@ -32,6 +32,7 @@
 struct _GbpDubPipelineAddin
 {
   IdeObject parent_instance;
+  guint     error_format_id;
 };
 
 G_GNUC_NULL_TERMINATED
@@ -119,6 +120,12 @@ gbp_dub_pipeline_addin_load (IdePipelineAddin *addin,
 
   g_assert (GBP_IS_DUB_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
+
+  self->error_format_id = ide_pipeline_add_error_format (pipeline,
+                                                         "(?<filename>[a-zA-Z0-9\\-\\.\\/_]+.d)"
+                                                         "(?<line>\\(\\d+),(?<column>\\d+)\\)"
+                                                         ": (?<level>.+(?=:))(?<message>.*)",
+                                                         G_REGEX_OPTIMIZE);
 
   context = ide_object_get_context (IDE_OBJECT (addin));
   build_system = ide_build_system_from_context (context);
