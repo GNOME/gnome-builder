@@ -589,13 +589,22 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
       gtk_text_iter_get_char (location) == overwrite)
     {
       GtkTextIter next = *location;
+      GtkTextMark *mark;
 
       /* We can't just step over this character because we need to ensure
        * that indenters are queried. For example, ) in the C indenter can
        * perform auto-indentation and overwrite would skip that.
        */
+      mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer), NULL, &next, TRUE);
       gtk_text_iter_forward_char (&next);
       gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), location, &next);
+      /* gtk_text_iter_delete() should update the value of location/next
+       * to a valid iterator, but other code may respond to it and further
+       * mutate it and we do not get notified of that. So instead, just
+       * update our iter manually to be sure we leave a valid iter.
+       */
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), location, mark);
+      gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer), mark);
       return;
     }
 
