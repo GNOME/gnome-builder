@@ -1119,6 +1119,9 @@ format_parameters (GSList        *params,
 
   gtk_text_buffer_delete (buffer, begin, end);
   gtk_text_buffer_insert (buffer, begin, str->str, str->len);
+
+  *end = *begin;
+  gtk_text_iter_backward_chars (end, g_utf8_strlen (str->str, str->len));
 }
 
 static void
@@ -1153,7 +1156,10 @@ maybe_align_parameters (IdeCIndenter  *c,
       (text = gtk_text_iter_get_slice (&start, &end)) &&
       (params = parse_parameters (text)) &&
       (params->next != NULL))
-    format_parameters (params, buffer, &start, &end);
+    {
+      format_parameters (params, buffer, &start, &end);
+      *iter = end;
+    }
 
   g_slist_foreach (params, (GFunc)parameter_free, NULL);
   g_slist_free (params);
