@@ -58,6 +58,17 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeTweaksItem, ide_tweaks_item, G_TYPE_OBJECT,
 
 static GParamSpec *properties [N_PROPS];
 
+static const char *
+get_buildable_id (GtkBuildable *buildable)
+{
+  const char *id = gtk_buildable_get_buildable_id (buildable);
+
+  if (id != NULL)
+    return id;
+
+  return g_object_get_data (G_OBJECT (buildable), "gtk-builder-id");
+}
+
 static void
 clear_value (gpointer data)
 {
@@ -561,7 +572,7 @@ ide_tweaks_item_get_internal_child (GtkBuildable *buildable,
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      const char *buildable_id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (child));
+      const char *buildable_id = get_buildable_id (GTK_BUILDABLE (child));
 
       if (ide_str_equal0 (buildable_id, child_name))
         return G_OBJECT (child);
@@ -629,7 +640,7 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
     g_string_append (string, "  ");
   g_string_append_printf (string, "<%s id=\"%s\"",
                           G_OBJECT_TYPE_NAME (self),
-                          gtk_buildable_get_buildable_id (GTK_BUILDABLE (self)));
+                          get_buildable_id (GTK_BUILDABLE (self)));
 
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (self), &n_pspecs);
 
@@ -670,7 +681,7 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
                 continue;
 
               if (GTK_IS_BUILDABLE (obj))
-                name = g_strdup_printf ("#%s", gtk_buildable_get_buildable_id (GTK_BUILDABLE (obj)));
+                name = g_strdup_printf ("#%s", get_buildable_id (GTK_BUILDABLE (obj)));
               else if (G_IS_LIST_MODEL (obj))
                 name = g_strdup_printf ("%s<%s>",
                                         G_OBJECT_TYPE_NAME (obj),
