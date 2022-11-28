@@ -589,6 +589,9 @@ ide_tweaks_item_get_buildable_id (GtkBuildable *buildable)
 
   g_assert (IDE_IS_TWEAKS_ITEM (self));
 
+  if (priv->id == NULL)
+    return g_object_get_data (G_OBJECT (self), "gtk-builder-id");
+
   return priv->id;
 }
 
