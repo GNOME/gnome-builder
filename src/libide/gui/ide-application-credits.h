@@ -35,6 +35,7 @@ static const gchar *ide_application_credits_designers[] = {
 static const gchar *ide_application_credits_developers[] = {
   "Akshaya Kakkilaya",
   "Alberto Fanjul",
+  "Alex Gábor Ispánovics",
   "Alex285",
   "Alexander Larsson",
   "Alexandre Franke",

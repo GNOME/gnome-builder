@@ -39,6 +39,9 @@ struct _IdeBuildconfigConfigProvider
 {
   IdeObject  parent_instance;
 
+  GFileMonitor *file_monitor;
+  gulong file_change_sig_id;
+
   /*
    * A GPtrArray of IdeBuildconfigConfiguration that have been registered.
    * We append/remove to/from this array in our default signal handler for
@@ -51,6 +54,11 @@ struct _IdeBuildconfigConfigProvider
    * we can persist the changes back without destroying comments.
    */
   GKeyFile *key_file;
+
+  /*
+   * Last known modification time of the .buildconfig file loaded.
+   */
+  GDateTime *mtime;
 
   /*
    * If we removed items from the keyfile, we need to know that so that
@@ -211,8 +219,45 @@ load_environ (IdeConfig      *config,
     }
 }
 
+static gboolean
+ide_buildconfig_config_build_file (IdeBuildconfigConfigProvider *self,
+                                   GFile                       **file,
+                                   GDateTime                   **mtime)
+{
+  g_autofree gchar *path = NULL;
+  gboolean file_exists;
+  IdeContext *context;
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+  g_assert (file != NULL && *file == NULL);
+  g_assert (mtime == NULL || *mtime == NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  path = ide_context_build_filename (context, DOT_BUILDCONFIG, NULL);
+  file_exists = g_file_test (path, G_FILE_TEST_IS_REGULAR);
+
+  *file = g_file_new_for_path (path);
+
+  if (file_exists && mtime)
+    {
+      g_autoptr(GFileInfo) info = NULL;
+
+      info = g_file_query_info (*file,
+                                G_FILE_ATTRIBUTE_TIME_MODIFIED","
+                                G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC,
+                                G_FILE_QUERY_INFO_NONE,
+                                NULL,
+                                NULL);
+      if (info != NULL)
+        *mtime = g_file_info_get_modification_date_time (info);
+    }
+
+  return file_exists;
+}
+
 static IdeConfig *
 ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
+                                        GKeyFile                     *key_file,
                                         const gchar                  *config_id)
 {
   g_autoptr(IdeConfig) config = NULL;
@@ -222,7 +267,7 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
   IdeEnvironment   *rt_environment;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
-  g_assert (self->key_file != NULL);
+  g_assert (key_file != NULL);
   g_assert (config_id != NULL);
 
   config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIG,
@@ -230,86 +275,118 @@ ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
                          "parent", self,
                          NULL);
 
-  load_string (config, self->key_file, config_id, "config-opts", "config-opts");
-  load_string (config, self->key_file, config_id, "name", "display-name");
-  load_string (config, self->key_file, config_id, "run-opts", "run-opts");
-  load_string (config, self->key_file, config_id, "runtime", "runtime-id");
-  load_string (config, self->key_file, config_id, "toolchain", "toolchain-id");
-  load_string (config, self->key_file, config_id, "prefix", "prefix");
-  load_string (config, self->key_file, config_id, "app-id", "app-id");
-  load_strv (config, self->key_file, config_id, "prebuild", "prebuild");
-  load_strv (config, self->key_file, config_id, "postbuild", "postbuild");
-  load_argv (config, self->key_file, config_id, "run-command", "run-command");
+  load_string (config, key_file, config_id, "config-opts", "config-opts");
+  load_string (config, key_file, config_id, "name", "display-name");
+  load_string (config, key_file, config_id, "run-opts", "run-opts");
+  load_string (config, key_file, config_id, "runtime", "runtime-id");
+  load_string (config, key_file, config_id, "toolchain", "toolchain-id");
+  load_string (config, key_file, config_id, "prefix", "prefix");
+  load_string (config, key_file, config_id, "app-id", "app-id");
+  load_strv (config, key_file, config_id, "prebuild", "prebuild");
+  load_strv (config, key_file, config_id, "postbuild", "postbuild");
+  load_argv (config, key_file, config_id, "run-command", "run-command");
 
-  if (g_key_file_has_key (self->key_file, config_id, "builddir", NULL))
+  if (g_key_file_has_key (key_file, config_id, "builddir", NULL))
     {
-      if (g_key_file_get_boolean (self->key_file, config_id, "builddir", NULL))
+      if (g_key_file_get_boolean (key_file, config_id, "builddir", NULL))
         ide_config_set_locality (config, IDE_BUILD_LOCALITY_OUT_OF_TREE);
       else
         ide_config_set_locality (config, IDE_BUILD_LOCALITY_IN_TREE);
     }
 
   env_group = g_strdup_printf ("%s.environment", config_id);
-  if (g_key_file_has_group (self->key_file, env_group))
+  if (g_key_file_has_group (key_file, env_group))
     {
       environment = ide_config_get_environment (config);
-      load_environ (config, environment, self->key_file, env_group);
+      load_environ (config, environment, key_file, env_group);
     }
 
   rt_env_group = g_strdup_printf ("%s.runtime_environment", config_id);
-  if (g_key_file_has_group (self->key_file, rt_env_group))
+  if (g_key_file_has_group (key_file, rt_env_group))
     {
       rt_environment = ide_config_get_runtime_environment (config);
-      load_environ (config, rt_environment, self->key_file, rt_env_group);
+      load_environ (config, rt_environment, key_file, rt_env_group);
     }
 
   return g_steal_pointer (&config);
 }
 
 static void
-ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
-                                            GCancellable        *cancellable,
-                                            GAsyncReadyCallback  callback,
-                                            gpointer             user_data)
+replace_existing_configs_using_keyfile (IdeConfigProvider *provider,
+                                        GKeyFile          *new_key_file)
+{
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
+  IdeConfigManager *manager;
+  IdeConfig *current;
+  IdeContext *context;
+  g_autoptr(GPtrArray) old_configs = NULL;
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+
+  if (self->configs->len <= 0)
+    return;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  manager = ide_config_manager_from_context (context);
+  current = ide_config_manager_get_current (manager);
+
+  old_configs = _g_ptr_array_copy_objects (self->configs);
+  for (guint i = 0; i < old_configs->len; i++)
+    {
+      IdeConfig *old_config;
+      const gchar *old_config_id;
+      g_autoptr(IdeConfig) new_config = NULL;
+
+      old_config = g_ptr_array_index (old_configs, i);
+      old_config_id = ide_config_get_id (old_config);
+      if (!g_key_file_has_group (new_key_file, old_config_id))
+        {
+          ide_config_provider_emit_removed (provider, old_config);
+          continue;
+        }
+
+      new_config = ide_buildconfig_config_provider_create (self, new_key_file, old_config_id);
+      ide_config_set_dirty (new_config, FALSE);
+      ide_config_provider_emit_added (provider, new_config);
+
+      if (current == old_config)
+        ide_config_manager_set_current (manager, new_config);
+
+      ide_config_provider_emit_removed (provider, old_config);
+    }
+}
+
+static void
+reload_keyfile (IdeConfigProvider *provider,
+                GFile             *file,
+                GDateTime         *mtime)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) fallback = NULL;
-  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
   g_auto(GStrv) groups = NULL;
-  IdeContext *context;
   gsize len;
+  g_autoptr(GKeyFile) key_file = NULL;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
-  g_assert (self->key_file == NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (file == NULL || mtime != NULL);
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_buildconfig_config_provider_load_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
+  key_file = g_key_file_new ();
 
-  self->key_file = g_key_file_new ();
-
-  /*
-   * We could do this in a thread, but it's not really worth it. We want these
-   * configs loaded ASAP, and nothing can really progress until it's loaded
-   * anyway.
-   */
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  path = ide_context_build_filename (context, DOT_BUILDCONFIG, NULL);
-  if (!g_file_test (path, G_FILE_TEST_IS_REGULAR))
+  if (!file)
     goto add_default;
 
-  if (!g_key_file_load_from_file (self->key_file, path, G_KEY_FILE_KEEP_COMMENTS, &error))
+  path = g_file_get_path (file);
+  if (!g_key_file_load_from_file (key_file, path, G_KEY_FILE_KEEP_COMMENTS, &error))
     {
       g_warning ("Failed to load .buildconfig: %s", error->message);
       goto add_default;
     }
 
-  groups = g_key_file_get_groups (self->key_file, &len);
+  replace_existing_configs_using_keyfile (provider, key_file);
 
+  groups = g_key_file_get_groups (key_file, &len);
   for (gsize i = 0; i < len; i++)
     {
       g_autoptr(IdeConfig) config = NULL;
@@ -318,7 +395,10 @@ ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
       if (strchr (group, '.') != NULL)
         continue;
 
-      config = ide_buildconfig_config_provider_create (self, group);
+      if (g_key_file_has_group (self->key_file, group))
+        continue;
+
+      config = ide_buildconfig_config_provider_create (self, key_file, group);
       ide_config_set_dirty (config, FALSE);
       ide_config_provider_emit_added (provider, config);
     }
@@ -339,6 +419,110 @@ add_default:
   ide_config_provider_emit_added (provider, fallback);
 
 complete:
+  g_clear_pointer (&self->mtime, g_date_time_unref);
+  g_clear_pointer (&self->key_file, g_key_file_free);
+  self->key_file = g_steal_pointer (&key_file);
+  self->key_file_dirty = FALSE;
+  self->mtime = mtime;
+  g_date_time_ref (self->mtime);
+}
+
+static void
+ide_buildconfig_config_provider_file_changed_cb (IdeBuildconfigConfigProvider *self,
+                                                 GFile                        *file,
+                                                 GFile                        *other_file,
+                                                 GFileMonitorEvent             event,
+                                                 GFileMonitor                 *file_monitor)
+{
+  g_autoptr(GFile) cfg_file = NULL;
+  g_autoptr(GDateTime) cfg_mtime = NULL;
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+  g_assert (G_IS_FILE_MONITOR (file_monitor));
+
+  if (event != G_FILE_MONITOR_EVENT_CHANGED && event != G_FILE_MONITOR_EVENT_CREATED)
+    return;
+
+  if (!ide_buildconfig_config_build_file (self, &cfg_file, &cfg_mtime))
+    return;
+
+  /*
+   * Only reload file when mtime available. Otherwise it might drop the config edited in the
+   * project config editor GUI.
+   */
+  if (self->mtime && cfg_mtime && g_date_time_compare (self->mtime, cfg_mtime) < 0)
+    reload_keyfile (IDE_CONFIG_PROVIDER (self), cfg_file, cfg_mtime);
+}
+
+static void
+ide_buildconfig_config_provider_block_monitor (IdeBuildconfigConfigProvider *self)
+{
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+
+    g_signal_handler_block (self->file_monitor,
+                            self->file_change_sig_id);
+}
+
+static void
+ide_buildconfig_config_provider_unblock_monitor (IdeBuildconfigConfigProvider *self)
+{
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+
+  g_signal_handler_unblock (self->file_monitor,
+                            self->file_change_sig_id);
+}
+
+static void
+ide_buildconfig_config_provider_start_monitor (IdeBuildconfigConfigProvider *self,
+                                               GFile                        *file)
+{
+  gulong sig_id;
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+  g_assert (self->file_monitor == NULL);
+  g_assert (self->file_change_sig_id == 0);
+
+  self->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, NULL);
+  g_file_monitor_set_rate_limit (self->file_monitor, 1000);
+  sig_id = g_signal_connect_object (self->file_monitor,
+                                    "changed",
+                                    G_CALLBACK (ide_buildconfig_config_provider_file_changed_cb),
+                                    self,
+                                    G_CONNECT_SWAPPED);
+  self->file_change_sig_id = sig_id;
+}
+
+static void
+ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
+{
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GDateTime) mtime = NULL;
+
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+  g_assert (self->key_file == NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buildconfig_config_provider_load_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+
+  self->key_file = g_key_file_new ()  ;
+
+  /*
+   * We could do this in a thread, but it's not really worth it. We want these
+   * configs loaded ASAP, and nothing can really progress until it's loaded
+   * anyway.
+   */
+
+  ide_buildconfig_config_build_file (self, &file, &mtime);
+  reload_keyfile (provider, file, mtime);
+  ide_buildconfig_config_provider_start_monitor (self, file);
+
   ide_task_return_boolean (task, TRUE);
 }
 
@@ -402,7 +586,10 @@ ide_buildconfig_config_provider_save_cb (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
 {
+  IdeBuildconfigConfigProvider *self;
   GFile *file = (GFile *)object;
+  g_autoptr(GFile) cfg_file = NULL;
+  g_autoptr(GDateTime) cfg_mtime = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -410,10 +597,26 @@ ide_buildconfig_config_provider_save_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  self = ide_task_get_source_object (task);
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  if (ide_buildconfig_config_build_file (self, &cfg_file, &cfg_mtime))
+    {
+      g_return_if_fail (g_file_equal (file, cfg_file));
+
+      g_clear_pointer (&self->mtime, g_date_time_unref);
+      self->mtime = g_steal_pointer (&cfg_mtime);
+
+      /*
+       * Only unblock when the file exist, otherwise wait until a successful save.
+       */
+      ide_buildconfig_config_provider_unblock_monitor (self);
+    }
 }
 
 static void
@@ -429,7 +632,6 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) groups = NULL;
-  g_autofree gchar *path = NULL;
   g_autofree gchar *data = NULL;
   IdeConfigManager *manager;
   IdeContext *context;
@@ -461,8 +663,8 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   manager = ide_config_manager_from_context (context);
-  path = ide_context_build_filename (context, DOT_BUILDCONFIG, NULL);
-  file = g_file_new_for_path (path);
+
+  ide_buildconfig_config_build_file (self, &file, NULL);
 
   /*
    * We keep the GKeyFile around from when we parsed .buildconfig, so that we
@@ -580,6 +782,7 @@ ide_buildconfig_config_provider_save_async (IdeConfigProvider   *provider,
 
   bytes = g_bytes_new_take (g_steal_pointer (&data), length);
 
+  ide_buildconfig_config_provider_block_monitor (self);
   g_file_replace_contents_bytes_async (file,
                                        bytes,
                                        NULL,
@@ -750,6 +953,8 @@ ide_buildconfig_config_provider_unload (IdeConfigProvider *provider)
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->configs != NULL);
 
+  ide_buildconfig_config_provider_block_monitor (self);
+
   configs = g_steal_pointer (&self->configs);
   self->configs = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -810,10 +1015,22 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeBuildconfigConfigProvider,
                                                 configuration_provider_iface_init))
 
 static void
+ide_buildconfig_config_provider_dispose (GObject *object)
+{
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)object;
+
+  g_clear_signal_handler (&self->file_change_sig_id, self->file_monitor);
+  g_clear_object (&self->file_monitor);
+
+  G_OBJECT_CLASS (ide_buildconfig_config_provider_parent_class)->dispose (object);
+}
+
+static void
 ide_buildconfig_config_provider_finalize (GObject *object)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)object;
 
+  g_clear_pointer (&self->mtime, g_date_time_unref);
   g_clear_pointer (&self->configs, g_ptr_array_unref);
   g_clear_pointer (&self->key_file, g_key_file_free);
 
@@ -825,6 +1042,7 @@ ide_buildconfig_config_provider_class_init (IdeBuildconfigConfigProviderClass *k
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = ide_buildconfig_config_provider_dispose;
   object_class->finalize = ide_buildconfig_config_provider_finalize;
 }
 
