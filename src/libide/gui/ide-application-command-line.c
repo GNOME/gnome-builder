@@ -22,11 +22,11 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <libide-core.h>
 #include <stdlib.h>
 
-#include "ide-build-ident.h"
+#include <glib/gi18n.h>
+
+#include <libide-core.h>
 
 #include "ide-application-addin.h"
 #include "ide-application-private.h"
@@ -61,8 +61,11 @@ _ide_application_add_option_entries (IdeApplication *self)
   static const GOptionEntry main_entries[] = {
     { "preferences", 0, 0, G_OPTION_ARG_NONE, NULL, N_("Show the application preferences") },
     { "project", 'p', 0, G_OPTION_ARG_FILENAME, NULL, N_("Open project in new workbench"), N_("FILE")  },
+
+    /* The following are handled in main(), but needed here so that --help
+     * will display them to the user (which is handled later on).
+     */
     { "version", 'V', 0, G_OPTION_ARG_NONE, NULL, N_("Print version information and exit") },
-    /* Verbose is handled in main(), but we need to add to --help here */
     { "verbose", 'v', 0, G_OPTION_ARG_NONE, NULL, N_("Increase log verbosity (may be repeated)") },
     { NULL }
   };
@@ -140,20 +143,6 @@ _ide_application_command_line (IdeApplication          *self,
   g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
 
   dict = g_application_command_line_get_options_dict (cmdline);
-
-  /* Short-circuit with version info if we can */
-  if (g_variant_dict_contains (dict, "version"))
-    {
-#ifdef DEVELOPMENT_BUILD
-      g_application_command_line_print (cmdline, "GNOME Builder %s (%s)\n",
-                                        PACKAGE_VERSION,
-                                        IDE_BUILD_IDENTIFIER);
-#else
-      g_application_command_line_print (cmdline, "GNOME Builder "PACKAGE_VERSION"\n");
-#endif
-      g_application_command_line_set_exit_status (cmdline, 0);
-      return;
-    }
 
   /* Short-circuit with --preferences if we can */
   if (g_variant_dict_contains (dict, "preferences"))

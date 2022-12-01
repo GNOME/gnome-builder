@@ -119,13 +119,15 @@ verbose_cb (const gchar  *option_name,
 static void
 early_params_check (gint       *argc,
                     gchar    ***argv,
-                    gboolean   *standalone)
+                    gboolean   *standalone,
+                    gboolean   *version)
 {
   g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GOptionGroup) gir_group = NULL;
   GOptionEntry entries[] = {
     { "standalone", 's', 0, G_OPTION_ARG_NONE, standalone, N_("Run a new instance of Builder") },
     { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, verbose_cb },
+    { "version", 'V', 0, G_OPTION_ARG_NONE, version },
     { NULL }
   };
 
@@ -189,6 +191,7 @@ main (gint   argc,
   IdeApplication *app;
   const gchar *desktop;
   gboolean standalone = FALSE;
+  gboolean version = FALSE;
   int ret;
 
   /* Get environment variable early and clear it from GLib. We want to be
@@ -225,11 +228,21 @@ main (gint   argc,
   ide_log_init (TRUE, NULL, messages_debug);
 
   /* Extract options like -vvvv */
-  early_params_check (&argc, &argv, &standalone);
+  early_params_check (&argc, &argv, &standalone, &version);
 
   /* Log some info so it shows up in logs */
   g_message ("GNOME Builder %s (%s) from channel \"%s\" starting with ABI %s",
              PACKAGE_VERSION, IDE_BUILD_IDENTIFIER, IDE_BUILD_CHANNEL, PACKAGE_ABI_S);
+
+  if (version)
+    {
+#ifdef DEVELOPMENT_BUILD
+      g_print ("GNOME Builder %s (%s)\n", PACKAGE_VERSION, IDE_BUILD_IDENTIFIER);
+#else
+      g_print  ("GNOME Builder "PACKAGE_VERSION"\n");
+#endif
+      return EXIT_SUCCESS;
+    }
 
   /* Make sure $HOME is not a symlink, as that can cause issues with
    * various subsystems. Just warn super loud so that users find it
