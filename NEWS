@@ -1,3 +1,15 @@
+# GNOME Builder 43.4
+
+Changes since 43.3
+
+ * Build system support for both webkit2gtk-5.0 and webkitgtk-6.0
+   to allow for various platforms to support the version that will
+   get long term support maintaining ABI.
+ * Fix some C-indenter peculiarities from the GTK 4 port including
+   indentation after comments and overwrite ) triggering parameter
+   alignments.
+ * Fix a keyboard shortcut in overview
+
 # GNOME Builder 43.3
 
 Changes since 43.2
