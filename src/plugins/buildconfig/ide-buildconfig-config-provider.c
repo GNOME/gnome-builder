@@ -238,7 +238,7 @@ ide_buildconfig_config_build_file (IdeBuildconfigConfigProvider *self,
 
   *file = g_file_new_for_path (path);
 
-  if (file_exists && mtime)
+  if (file_exists && mtime != NULL)
     {
       g_autoptr(GFileInfo) info = NULL;
 
@@ -369,19 +369,22 @@ reload_keyfile (IdeConfigProvider *provider,
   gsize len;
   g_autoptr(GKeyFile) key_file = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
-  g_assert (file == NULL || mtime != NULL);
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (!file || mtime != NULL);
 
   key_file = g_key_file_new ();
 
-  if (!file)
-    goto add_default;
+  if (file == NULL)
+    IDE_GOTO (add_default);
 
   path = g_file_get_path (file);
   if (!g_key_file_load_from_file (key_file, path, G_KEY_FILE_KEEP_COMMENTS, &error))
     {
       g_warning ("Failed to load .buildconfig: %s", error->message);
-      goto add_default;
+      IDE_GOTO (add_default);
     }
 
   replace_existing_configs_using_keyfile (provider, key_file);
@@ -404,7 +407,7 @@ reload_keyfile (IdeConfigProvider *provider,
     }
 
   if (self->configs->len > 0)
-    goto complete;
+    IDE_GOTO (complete);
 
 add_default:
   /* "Default" is not translated because .buildconfig can be checked in */
@@ -423,8 +426,9 @@ complete:
   g_clear_pointer (&self->key_file, g_key_file_free);
   self->key_file = g_steal_pointer (&key_file);
   self->key_file_dirty = FALSE;
-  self->mtime = mtime;
-  g_date_time_ref (self->mtime);
+  self->mtime = mtime ? g_date_time_ref (mtime) : NULL;
+
+  IDE_EXIT;
 }
 
 static void
@@ -450,7 +454,9 @@ ide_buildconfig_config_provider_file_changed_cb (IdeBuildconfigConfigProvider *s
    * Only reload file when mtime available. Otherwise it might drop the config edited in the
    * project config editor GUI.
    */
-  if (self->mtime && cfg_mtime && g_date_time_compare (self->mtime, cfg_mtime) < 0)
+  if (self->mtime != NULL &&
+      cfg_mtime != NULL &&
+      g_date_time_compare (self->mtime, cfg_mtime) < 0)
     reload_keyfile (IDE_CONFIG_PROVIDER (self), cfg_file, cfg_mtime);
 }
 
@@ -503,6 +509,8 @@ ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
   g_autoptr(GFile) file = NULL;
   g_autoptr(GDateTime) mtime = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->key_file == NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -511,7 +519,7 @@ ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
   ide_task_set_source_tag (task, ide_buildconfig_config_provider_load_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  self->key_file = g_key_file_new ()  ;
+  self->key_file = g_key_file_new ();
 
   /*
    * We could do this in a thread, but it's not really worth it. We want these
@@ -519,11 +527,16 @@ ide_buildconfig_config_provider_load_async (IdeConfigProvider   *provider,
    * anyway.
    */
 
-  ide_buildconfig_config_build_file (self, &file, &mtime);
-  reload_keyfile (provider, file, mtime);
+  if (!ide_buildconfig_config_build_file (self, &file, &mtime))
+    reload_keyfile (provider, NULL, NULL);
+  else
+    reload_keyfile (provider, file, mtime);
+
   ide_buildconfig_config_provider_start_monitor (self, file);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -531,11 +544,17 @@ ide_buildconfig_config_provider_load_finish (IdeConfigProvider  *provider,
                                              GAsyncResult       *result,
                                              GError            **error)
 {
+  gboolean ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
   g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
