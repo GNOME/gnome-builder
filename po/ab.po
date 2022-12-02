@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-27 20:09+0000\n"
+"POT-Creation-Date: 2022-11-24 21:47+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -149,9 +149,201 @@ msgstr ""
 msgid "Use the minimap to see more of the file"
 msgstr ""
 
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#: src/plugins/buildui/tweaks.ui:217
+msgid "Build Parallelism"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Clear build logs"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid "If enabled, build log pane will be cleared on rebuild."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Allow network when metered"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Алимиттә еиԥшьрақәа рҟны SDK  еиԥш иҟоу ахьыԥшрақәеи  рҭагалараан втоматикла "
+"аҭагалара аҿакра аиқәыршәараан, "
+
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
 msgstr "Автоматикла ахарҭәаара Ctags шьаҭас измоу"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Use Ctags for autocompletion."
+msgstr "Автоматикла ахарҭәаара Ctags шьаҭас измоу"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Enable semantic highlighting"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Path to ctags executable"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "The path to the ctags executable on the system."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:5
+msgid "Debugger Breakpoint at Main"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:6
+msgid "Debugger should automatically insert breakpoint at main() function."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:10
+msgid "Debugger Breakpoint at g_critical()"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:11
+msgid ""
+"Debugger should automatically insert breakpoint at g_critical() function."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:15
+msgid "Debugger Breakpoint at g_warning()"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+msgid ""
+"Debugger should automatically insert breakpoint at g_warning() function."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
+msgid "Restore last position"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
+msgid "Jump to the last position when reopening a file"
+msgstr "Афаил ҽазныктәи аартраан аҵыхәтәантәи аҭыҧ ахь аиасра"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Show modified lines"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show diagnostics next to line number"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+msgid "Highlight current line"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+msgid "Show relative line numbers"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid "If enabled, the editor will show relative line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: src/plugins/editorui/tweaks.ui:494
+msgid "Smart Backspace"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:506
+msgid "Smart Home/End"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+msgid "Show grid lines"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+msgid "Overview Map Policy"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+msgid "When the overview map should be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: src/plugins/editorui/tweaks.ui:254
+msgid "Draw Spaces"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+msgid "The various types of space to draw in the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:77
+msgid "Wrap Text"
+msgstr "Атекст"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+msgid "The way to wrap a long line of text for a better visibility."
+msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
@@ -161,9 +353,82 @@ msgstr "Аҽеикәырхара аҿакуп"
 msgid "Enable or disable autosave feature."
 msgstr " Автоматикла аиқәырхара  аҿакра, мамзар аҿыхра"
 
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+msgid "Autosave Frequency"
+msgstr "Аҽеикәырхара"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+msgid "The number of seconds after modification before auto saving."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+msgid "Completion Row Count"
+msgstr "Автоматикла ахарҭәаара"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+msgid "The number of completion rows to display to the user."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: src/plugins/editorui/tweaks.ui:60
+msgid "Line Height"
+msgstr "Илашоу"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+msgid "The line height to use for the selected font."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+msgid "Interactive Completion"
+msgstr "Автоматикла ахарҭәаара"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+msgid "Minimum characters for matching selection."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+msgid "Specify the minimum number of characters for selection matching."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+msgid "Enable Snippets"
+msgstr "Ахәҭақәа"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+msgid ""
+"Allow expanding snippets from the editor by pressing tab after the snippet "
+"trigger."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+msgid "Select First Completion"
+msgstr "Автоматикла ахарҭәаара"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+msgid "Automatically select the first auto-completion entry."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
+msgid "Spaces Style"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
+msgid "How to apply spaces when reformatting text."
+msgstr ""
+
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
 msgstr "Иаҿакуп"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
@@ -173,6 +438,10 @@ msgstr "Аԥенџьыр ашәагаа"
 msgid "Window size (width and height)."
 msgstr "Аԥенџьыр ашәагаа (аҭбаареи аҳаракыреи)"
 
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window maximized"
+msgstr "Аԥенџьыр иамоуп иреиҳау ашәагаа"
+
 #: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window maximized state"
 msgstr "Аԥенџьыр иамоуп иреиҳау ашәагаа"
@@ -181,11 +450,160 @@ msgstr "Аԥенџьыр иамоуп иреиҳау ашәагаа"
 msgid "Style Variant"
 msgstr "Астиль авариант"
 
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid ""
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
+"scheme."
+msgstr ""
+
+#. Translators: This is the default directory name for user’s
+#. projects. Do NOT change the ASCII double quotes ("") to your
+#. language’s convention, e.g. do not use “” or »«.
+#: data/gsettings/org.gnome.builder.gschema.xml:27
+#, fuzzy
+#| msgid "_Remove Projects"
+msgid "\"Projects\""
+msgstr "_Апроектқәа рныхра"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:28
+msgid "Projects directory"
+msgstr "Адиректориа аизгара аҽазыҟаҵара"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:29
+msgid "Directory for all Builder projects."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:33
+msgid "Restore Session"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:34
+msgid "Restores the projects previous session when loading."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:38
+msgid "Clear build caches at startup"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:39
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:50
+msgid "The interface style to change pages"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:64
+msgid "Default License"
+msgstr "default:mm"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:65
+msgid "The default license to use for new projects"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Plugin enabled"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:7
+msgid "Selected configuration for building"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:8
+msgid ""
+"The configuration that has been selected and will be restored the next time "
+"the project loads."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:13
+msgid "Install Project Before Running"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:14
+msgid ""
+"Run the pipelines install phase before running the project. Only use this if "
+"you know what you're doing with your project."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:19
+msgid "Default Run Command"
+msgstr "_Адҵа аныхра"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:20
+msgid "The id of the default run command"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:34
+msgid "The signal to send the app to stop"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:35
+msgid ""
+"This allows sending something other than sigkill to stop the target "
+"application. That might be useful when you want to gracefully shutdown a "
+"server process."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:44
+msgid "Unit Test Locality"
+msgstr "Аҭыҧ"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:45
+msgid "What environment to use when running unit tests"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50
+#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
+msgid "Verbose Logging"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:51
+msgid ""
+"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
+msgid "Show Icons"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
+msgid "Show Ignored Files"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
+msgid "Sort Directories First"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Аиашаҩыра агәаҭара"
+
+#: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
+msgid "Automatically check spelling within documents"
+msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -329,7 +747,7 @@ msgstr ""
 #: src/plugins/menu-search/gtk/menus.ui:52
 #: src/plugins/web-browser/gtk/menus.ui:15
 msgid "Application"
-msgstr ""
+msgstr "Аҧшьы"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
 msgid "Pages"
@@ -491,7 +909,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-search-bar.ui:103
 msgid "Close search"
-msgstr ""
+msgstr "Аԥшаара аркра"
 
 #: src/libide/editor/ide-editor-search-bar.ui:120
 msgid "_Replace"
@@ -956,7 +1374,7 @@ msgstr ""
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
-msgstr ""
+msgstr "Атерминал"
 
 #: src/libide/gui/gtk/menus.ui:82
 msgid "New Terminals"
@@ -1113,37 +1531,37 @@ msgstr "SDKs"
 
 #: src/libide/plugins/ide-plugin.c:342
 msgid "Language Servers"
-msgstr ""
+msgstr "Абызшәатә сервер"
 
 #: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
-msgstr ""
+msgstr "Аиҿартәырақәеи асимулиаторқәеи"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 #: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
-msgstr ""
+msgstr "Адиагностика"
 
 #: src/libide/plugins/ide-plugin.c:345
 msgid "Build Systems"
-msgstr ""
+msgstr "Аибыҭара асистема"
 
 #: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
-msgstr ""
+msgstr "Акомпилиаторқәа"
 
 #: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
-msgstr ""
+msgstr "Арҽеиҩы"
 
 #: src/libide/plugins/ide-plugin.c:348
 msgid "Templates"
-msgstr ""
+msgstr "Ахсаалаақәа"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
-msgstr ""
+msgstr "Аредакциа азуреи, аформатркреи"
 
 #: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
@@ -1151,15 +1569,15 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
-msgstr ""
+msgstr "Абызшәа алшара"
 
 #: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Аусуратә ишәа аидцалара"
 
 #: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
-msgstr ""
+msgstr "Иацҵаны"
 
 #: src/libide/plugins/ide-plugin-view.ui:35
 msgid "Authors"
@@ -1179,12 +1597,12 @@ msgstr ""
 
 #: src/libide/projects/ide-project.c:435
 msgid "File must be within the project tree."
-msgstr ""
+msgstr "Афаил апрект аҵлаҟны иҟазароуп"
 
 #: src/libide/projects/ide-projects-global.c:103
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
-msgstr ""
+msgstr "Апроектқәа"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
@@ -1198,7 +1616,7 @@ msgstr "Аԥсахра абуфер"
 
 #: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut"
-msgstr ""
+msgstr "А_гәылԥҟара"
 
 #: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
 msgid "_Copy"
@@ -1214,7 +1632,7 @@ msgstr "Архынҳәра"
 
 #: src/libide/sourceview/gtk/menus.ui:31
 msgid "Undo & Redo"
-msgstr ""
+msgstr "Иаԥыхны архынҳәра"
 
 #: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
@@ -1226,15 +1644,15 @@ msgstr "Zoom"
 
 #: src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom Out"
-msgstr ""
+msgstr "амасштаб архәҷра"
 
 #: src/libide/sourceview/gtk/menus.ui:55
 msgid "Reset Zoom"
-msgstr ""
+msgstr "Амасштаб аныхра"
 
 #: src/libide/sourceview/gtk/menus.ui:61
 msgid "Zoom In"
-msgstr ""
+msgstr "Амасштаб ардура"
 
 #: src/libide/sourceview/gtk/menus.ui:69
 msgid "_Selection"
@@ -1246,7 +1664,7 @@ msgstr "З_егьы алхра"
 
 #: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
-msgstr ""
+msgstr "Аформатркра"
 
 #: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
@@ -1294,23 +1712,23 @@ msgstr "_Ацәаҳәақәа реидҵара"
 
 #: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
-msgstr ""
+msgstr "Ацәаҳәақәа реилыԥшаара"
 
 #: src/libide/sourceview/gtk/menus.ui:133
 msgid "D_uplicate Line"
-msgstr ""
+msgstr "Ацәаҳәа_ ахкьыԥхьаара аԥҵара"
 
 #: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
-msgstr ""
+msgstr "Ахырхарҭарбара акод ала"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1546
+#: src/libide/sourceview/ide-source-view.c:1579
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
-msgstr ""
+msgstr "Ацәаҳәа%u, аиҵагыла %u"
 
 #: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
@@ -1326,7 +1744,7 @@ msgstr "_Азхьарԥш ахкьыҧхьаара"
 
 #: src/libide/terminal/gtk/menus.ui:28
 msgid "Paste from clipboard into the terminal"
-msgstr ""
+msgstr "Аиҭныԥсахларатә буфер аҟынтә атерминал ахь аҭагалара"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
@@ -1334,7 +1752,7 @@ msgstr ""
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
-msgstr ""
+msgstr "А_лхра аԥыхра"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:272
 msgid "Save Terminal Content As"
@@ -1377,15 +1795,15 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-search.ui:115
 msgid "Case sensitive"
-msgstr ""
+msgstr "Арегистр аҳасаб азура"
 
 #: src/libide/terminal/ide-terminal-search.ui:124
 msgid "Match whole word"
-msgstr ""
+msgstr "ишеибгоу жәак ала"
 
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
-msgstr ""
+msgstr "Иаарҳәу аԥшаара"
 
 #: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
 #: src/libide/tree/ide-tree-node.c:1499
@@ -1399,11 +1817,11 @@ msgstr "Аҭагалара..."
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
-msgstr ""
+msgstr "Апроектқәа рыхьӡынҵа"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
-msgstr ""
+msgstr "Ашрифт алхра"
 
 #: src/libide/tweaks/ide-tweaks-window.c:134
 #, c-format
@@ -1412,15 +1830,15 @@ msgstr "Builder — %s"
 
 #: src/libide/tweaks/ide-tweaks-window.c:138
 msgid "Builder — Preferences"
-msgstr ""
+msgstr "Builder — Ахышәарақәа"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:35
 msgid "All Preferences"
-msgstr ""
+msgstr "Ахышәарақәа зегьы"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
-msgstr ""
+msgstr "Ихадоу амениу"
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
@@ -1429,7 +1847,7 @@ msgstr "версиада"
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
 msgid "None"
-msgstr ""
+msgstr "Мап"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
@@ -1437,11 +1855,11 @@ msgstr ""
 
 #: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
-msgstr ""
+msgstr "Архиарақәа"
 
 #: src/libide/webkit/ide-webkit-page.ui:98
 msgid "Allow JavaScript"
-msgstr ""
+msgstr "Азин аҭара JavaScript"
 
 #: src/libide/webkit/ide-webkit-page.ui:104
 msgid "Print"
@@ -1449,21 +1867,21 @@ msgstr "Print"
 
 #: src/main.c:154
 msgid "Run a new instance of Builder"
-msgstr ""
+msgstr "Builder аекземплиар ҿыц аҿакра"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:204
 msgid "Building cache…"
-msgstr ""
+msgstr "Кеш аиқәыршәара"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
-msgstr ""
+msgstr "Ахост аоперциатә система"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
-msgstr ""
+msgstr "Апроект арихиарақәа "
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
@@ -1474,7 +1892,7 @@ msgstr ""
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr ""
+msgstr "Апроект аҿеизнагоит"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
@@ -1522,7 +1940,7 @@ msgstr "_Ацҵара"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
 msgid "Copy"
-msgstr ""
+msgstr "Ахкьыҧхьаара"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:42
 msgid "Remove"
@@ -1539,19 +1957,19 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
-msgstr ""
+msgstr "Аизгара ажурнал арыцқьара"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:56
 msgid "Cancel build"
-msgstr ""
+msgstr "Аизгара аԥыхра"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:72
 msgid "Save build log"
-msgstr ""
+msgstr "Аизгара ажурнал аиқәырхара"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
-msgstr ""
+msgstr "Иҟаӡам"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
@@ -1560,7 +1978,7 @@ msgstr "Амахә"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:60
 msgid "Build Profile"
-msgstr ""
+msgstr "Аизгара апрофиль"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
@@ -1577,37 +1995,37 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
-msgstr ""
+msgstr "Аизгара аҭагылазаашьа"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:186
 msgid "Last build"
-msgstr ""
+msgstr "Аҵыхәтәантәи аизгара"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
 msgid "Build result"
-msgstr ""
+msgstr "Аизгара алҵшәа"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
 msgid "Errors"
-msgstr ""
+msgstr "Агхақәа"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:262
 msgid "Warnings"
-msgstr ""
+msgstr "Агәҽанҵарақәа"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
-msgstr ""
+msgstr "Pipeline аизгара"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:4
 msgid "Build Issues"
-msgstr ""
+msgstr "Аизагара ауадаҩрақәа"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:21
 msgid "Build status:"
-msgstr ""
+msgstr "Аизгара аҭагылаәаашьа:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
@@ -1622,44 +2040,44 @@ msgstr "—"
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
 #, c-format
 msgid "Warnings (%u)"
-msgstr ""
+msgstr "Агәҽанҵарақәа (%u)"
 
 #. translators: %u is replaced with the number of errors
 #: src/plugins/buildui/gbp-buildui-status-popover.c:76
 #, c-format
 msgid "Errors (%u)"
-msgstr ""
+msgstr "Агхақәа (%u)"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
 msgid "Shared"
-msgstr ""
+msgstr "Еиҩшахо"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 msgid "Static"
-msgstr ""
+msgstr "Астатикатә"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
-msgstr ""
+msgstr "Инагӡахо афаил"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr ""
+msgstr "Аизгара ахықәкқәа реиқәыпхьаӡара залымшахеит: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr ""
+msgstr "Аизгара ахықәкы алхра"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid "Available Build Targets"
-msgstr ""
+msgstr "Анеира ахьауа аизагара ахықәкқәа"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
 "Some targets may not be available until the project has been configured."
-msgstr ""
+msgstr "Хықәкқәак рахь анеира залымшар ҟалоит апроект рхиахаанӡа"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -1676,7 +2094,7 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
-msgstr ""
+msgstr "Ахкьыԥхьаара аԥҵара"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
 msgid "Duplicate into new configuration"
@@ -1702,23 +2120,23 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
-msgstr ""
+msgstr "Апроект аизгара аанкылара"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr ""
+msgstr "Апроект аизгара (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
-msgstr ""
+msgstr "Аизгара адиагностика арбара (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
-msgstr ""
+msgstr "Апрект архиара...."
 
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Configure settings related to the project"
-msgstr ""
+msgstr "Апрект иадҳәалоу ахышәарақәа рырхиара"
 
 #: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
@@ -1726,7 +2144,7 @@ msgstr ""
 #: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
 #: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
-msgstr ""
+msgstr "Акод аус адулара"
 
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
@@ -1735,11 +2153,11 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:17
 msgid "Select Build Target…"
-msgstr ""
+msgstr "Аизгара ахықәкы алхра..."
 
 #: src/plugins/buildui/gtk/menus.ui:19
 msgid "Change default build target"
-msgstr ""
+msgstr "Аизгара ахықәкы аԥсахра ишыҟоу еипш"
 
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
 #: src/plugins/buildui/gtk/menus.ui:84
@@ -1748,19 +2166,19 @@ msgstr "Builder"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "_Build"
-msgstr ""
+msgstr "_Аизгара"
 
 #: src/plugins/buildui/gtk/menus.ui:27
 msgid "Build the project"
-msgstr ""
+msgstr "Апрект аизгара"
 
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "_Rebuild"
-msgstr ""
+msgstr "_Ҿыц аԥҵара"
 
 #: src/plugins/buildui/gtk/menus.ui:34
 msgid "Rebuild the project"
-msgstr ""
+msgstr "Апроект ҿыц аԥҵара"
 
 #: src/plugins/buildui/gtk/menus.ui:39
 msgid "_Clean"
@@ -1768,7 +2186,7 @@ msgstr "_Арыцқьара"
 
 #: src/plugins/buildui/gtk/menus.ui:40
 msgid "Clean the project"
-msgstr ""
+msgstr "Апроект арыцқьара"
 
 #: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
@@ -1776,15 +2194,15 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
-msgstr ""
+msgstr "Апроект ашьақәыргылара"
 
 #: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "Аиҿартәыра ахь аиҵыхра..."
 
 #: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
-msgstr ""
+msgstr "Апроект уажәтәи аиҿартәыра ахь аиҵыхра..."
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -1792,27 +2210,27 @@ msgstr ""
 #. the output is the same as using flatpak-builder from Flathub, etc.
 #: src/plugins/buildui/gtk/menus.ui:66
 msgid "_Export"
-msgstr ""
+msgstr "_Аекспорт азура"
 
 #: src/plugins/buildui/gtk/menus.ui:68
 msgid "Export project"
-msgstr ""
+msgstr "Иҭацәу апроект"
 
 #: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
-msgstr ""
+msgstr "Аизгара аанкылара"
 
 #: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
-msgstr ""
+msgstr "Апроект аизгара аанкылара"
 
 #: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
-msgstr ""
+msgstr "_Аизгара ажурнал арбара"
 
 #: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Аизгара ажурнал змоу апанель арбара"
 
 #: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
@@ -1820,25 +2238,25 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
-msgstr ""
+msgstr "Аус аруразы адҵа алхра"
 
 #: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
-msgstr ""
+msgstr "Аус арура "
 
 #: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
-msgstr ""
+msgstr "Апроект аус арура"
 
 #: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
-msgstr ""
+msgstr "амодульт тестқәа"
 
 #: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
-msgstr ""
+msgstr "Асистематә стиль ақәныҟәара"
 
 #: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
@@ -1846,11 +2264,11 @@ msgstr "Илашоу"
 
 #: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
-msgstr ""
+msgstr "Мчылатәи алашьца"
 
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
-msgstr ""
+msgstr "Ахархәара аманшәалара"
 
 #: src/plugins/buildui/gtk/menus.ui:148
 msgid "High Contrast"
@@ -1858,19 +2276,19 @@ msgstr "Иҳараку аконтрастра"
 
 #: src/plugins/buildui/gtk/menus.ui:153
 msgid "Text Direction"
-msgstr ""
+msgstr "Атекст ахырхарҭа"
 
 #: src/plugins/buildui/gtk/menus.ui:155
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Арымарахьтә арӷьарахь"
 
 #: src/plugins/buildui/gtk/menus.ui:161
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Арӷьарахьтә арымарахь"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Tools"
-msgstr ""
+msgstr "Амаругақәа"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
@@ -1880,11 +2298,11 @@ msgstr ""
 #: src/plugins/buildui/gtk/preferences.ui:40
 #: src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
-msgstr ""
+msgstr "Аинтерфеис"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
 msgid "Editor Font"
-msgstr ""
+msgstr "Аредактор ашрифт"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
@@ -1892,7 +2310,7 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
-msgstr ""
+msgstr "Атерминал ашрифт"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
 msgid "The font used in the terminal"
@@ -1900,7 +2318,7 @@ msgstr "Ихьӡыдоу атерминал"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr ""
+msgstr "Аихыршь ахсаала арбара"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
@@ -1908,7 +2326,7 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
-msgstr ""
+msgstr "Ахаан"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
@@ -2155,6 +2573,10 @@ msgstr "Игьежьу ахыцқәа автоматикла рхарҭәаар�
 msgid "If parentheses should be included when completing."
 msgstr "Аҽхарҭәаараан ахыцгежьқәа рҿакра"
 
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
+msgid "Complete parameters"
+msgstr "Аргументқәа автоматикла рхарҭәаара"
+
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
@@ -2346,6 +2768,14 @@ msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
+msgstr ""
+
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
+msgid "Update Copyright before Saving"
+msgstr ""
+
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
+msgid "Updates the copyright for the user before saving to disk."
 msgstr ""
 
 #: src/plugins/copyright/tweaks.ui:16
@@ -2594,7 +3024,7 @@ msgstr ""
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
 msgid "Value"
-msgstr ""
+msgstr "Аҵакы"
 
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
@@ -2794,11 +3224,11 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
-msgstr ""
+msgstr "Аиқәырхара абас еиԥш:"
 
 #: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
-msgstr ""
+msgstr "Аҧшаара…"
 
 #: src/plugins/editorui/gtk/menus.ui:173
 msgid "Find/Replace…"
@@ -2806,7 +3236,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
-msgstr ""
+msgstr "Акьыҧхьра…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
@@ -2953,7 +3383,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:36
 msgid "Preview"
-msgstr ""
+msgstr "Акьыԥхьра ахәаԥшра"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
 msgid "Font"
@@ -3025,7 +3455,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:175
 msgid "Show Line Numbers"
-msgstr ""
+msgstr "_ Ацәаҳәақәа рномер"
 
 #: src/plugins/editorui/tweaks.ui:176
 msgid "Display line numbers next to each line of code"
@@ -4464,6 +4894,42 @@ msgstr ""
 msgid "These commands are shared across all projects."
 msgstr ""
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
+msgid "Display Name"
+msgstr ""
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
+msgid "Keyboard Accelerator"
+msgstr ""
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
+msgid "Current Working Directory"
+msgstr "Адиректориа аизгара аҽазыҟаҵара"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
+msgid "Command Arguments"
+msgstr "Аҵаҵӷәқәа"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
+msgid "Command Environment"
+msgstr ""
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
+msgid "Command Locality"
+msgstr "Аҭыҧ"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr ""
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
+msgid "Run Commands"
+msgstr ""
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
+msgid "A list of run-command ids to load for the application or project."
+msgstr ""
+
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
 "Use commands to run build tooling, applications, or shell scripts and map "
@@ -4485,7 +4951,7 @@ msgstr "Азхьамԥшра"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:259
 msgid "Languages"
-msgstr ""
+msgstr "Абызшәақәа"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -4810,7 +5276,7 @@ msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
-msgstr ""
+msgstr "Аҭаргьежьга"
 
 #: src/plugins/terminal/tweaks.ui:58
 msgid "Scroll On Output"
@@ -5110,831 +5576,3 @@ msgstr ""
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, fuzzy
