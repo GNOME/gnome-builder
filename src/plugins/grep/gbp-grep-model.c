@@ -659,7 +659,7 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
        */
       ide_subprocess_launcher_push_argv (launcher, "--and");
       ide_subprocess_launcher_push_argv (launcher, "-e");
-      ide_subprocess_launcher_push_argv (launcher, "^.{0,256}$");
+      ide_subprocess_launcher_push_argv (launcher, "^.{0,1024}$");
     }
 
   if (g_file_test (path, G_FILE_TEST_IS_DIR))
