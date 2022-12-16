@@ -1,7 +1,7 @@
 project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} ['cpp', 'c'],{{else if language == "vala"}} ['c', 'vala'],{{else if language == "c♯"}} 'cs',{{else if language == "rust"}} 'rust', {{end}}
 
           version: '{{project_version}}',
-    meson_version: '>= 0.59.0',
+    meson_version: '>= 0.62.0',
   default_options: [ 'warning_level=2', 'werror=false',{{if language == "c"}} 'c_std=gnu11',{{else if language == "c++"}} 'cpp_std=gnu++2a',{{end}} ],
 )
 
