@@ -218,7 +218,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
     }
 
   /* Setup our configure stage */
-  config_command = create_run_command (meson, srcdir, ".", "--prefix", prefix, NULL);
+  config_command = create_run_command (meson, "setup", ".", srcdir, "--prefix", prefix, NULL);
   if (crossbuild_file != NULL)
     ide_run_command_append_formatted (config_command, "--cross-file=%s", crossbuild_file);
   if (!ide_str_empty0 (config_opts))
