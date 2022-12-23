@@ -75,7 +75,7 @@
 
   <!-- Global Settings -->
   <style name="text"                        foreground="aluminium3" background="dark1"/>
-  <style name="selection"                   foreground="transparent" background="#rgba(136,138,133,.3)"/>
+  <style name="selection"                   background="#rgba(136,138,133,1)" foreground="white"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark2"/>
   <style name="current-line-number"         background="dark2"/>

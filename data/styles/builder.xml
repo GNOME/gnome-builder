@@ -86,13 +86,13 @@
   <style name="draw-spaces"               foreground="aluminium3"/>
   <style name="line-numbers"              background="#FAFAFA" foreground="aluminium3"/>
   <style name="map-overlay"               background="#rgba(193,203,210,0.55)"/>
-  <style name="misspelled-match"          background="selection1" foreground="#000000"/>
+  <style name="misspelled-match"          background="selection1" foreground="aluminium5"/>
   <style name="quick-highlight"           background="#rgba(221,74,104,0.15)"/>
   <style name="quick-highlight-match"     background="#rgba(221,74,104,0.15)"/>
   <style name="right-margin"              background="bg2" foreground="aluminium3"/>
   <style name="search-match"              background="pink1" foreground="white"/>
   <style name="search-shadow"             background="#rgba(0,0,0,0.2)"/>
-  <style name="selection"                 background="selection1"/>
+  <style name="selection"                 background="selection1" foreground="aluminium5"/>
   <style name="snippet-focus"             background="orange1" foreground="text1"/>
   <style name="text"                      background="#FAFAFA" foreground="text1"/>
 
