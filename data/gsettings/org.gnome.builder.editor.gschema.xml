@@ -145,10 +145,5 @@
       <summary>Select First Completion</summary>
       <description>Automatically select the first auto-completion entry.</description>
     </key>
-    <key name="enable-search-bubbles" type="b">
-      <default>true</default>
-      <summary>Enable Search Bubbles</summary>
-      <description>Display search results with additional styling to stand out</description>
-    </key>
   </schema>
 </schemalist>

@@ -77,7 +77,6 @@ struct _IdeSourceView
   double click_y;
 
   /* Bitfield values go here */
-  guint enable_search_bubbles : 1;
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;
   guint overwrite_braces : 1;

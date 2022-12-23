@@ -48,7 +48,6 @@ enum {
   PROP_LINE_HEIGHT,
   PROP_OVERWRITE_BRACES,
   PROP_ZOOM_LEVEL,
-  PROP_ENABLE_SEARCH_BUBBLES,
   N_PROPS,
 
   /* Property Overrides */
@@ -79,9 +78,6 @@ _ide_source_view_generate_css (GtkSourceView              *view,
   g_autofree char *font_css = NULL;
   PangoFontDescription *scaled = NULL;
   PangoFontDescription *system_font = NULL;
-  GtkSourceStyleScheme *scheme;
-  GtkSourceStyle *style;
-  GtkTextBuffer *buffer;
   GString *str;
   int size = 11; /* 11pt */
   char line_height_str[G_ASCII_DTOSTR_BUF_SIZE];
@@ -89,29 +85,6 @@ _ide_source_view_generate_css (GtkSourceView              *view,
   g_return_val_if_fail (GTK_SOURCE_IS_VIEW (view), NULL);
 
   str = g_string_new (NULL);
-
-  /* Get information for search bubbles */
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  if ((scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
-      (style = gtk_source_style_scheme_get_style (scheme, "search-match")))
-    {
-      g_autofree char *background = NULL;
-      gboolean background_set = FALSE;
-
-      g_object_get (style,
-                    "background", &background,
-                    "background-set", &background_set,
-                    NULL);
-
-      if (background != NULL && background_set)
-        g_string_append_printf (str,
-                                ".search-match {"
-                                " background:mix(%s,currentColor,0.0125);"
-                                " border-radius:7px;"
-                                " box-shadow: 0 1px 3px mix(%s,currentColor,.2);"
-                                "}\n",
-                                background, background);
-    }
 
   g_string_append (str, "textview {\n");
 
@@ -170,169 +143,6 @@ ide_source_view_update_css (IdeSourceView *self)
 
   if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale, self->line_height)))
     gtk_css_provider_load_from_data (self->css_provider, css, -1);
-}
-
-static inline void
-add_match (GtkTextView       *text_view,
-           cairo_region_t    *region,
-           const GtkTextIter *begin,
-           const GtkTextIter *end)
-{
-  GdkRectangle begin_rect;
-  GdkRectangle end_rect;
-  cairo_rectangle_int_t rect;
-
-  /* NOTE: @end is not inclusive of the match. */
-  if (gtk_text_iter_get_line (begin) == gtk_text_iter_get_line (end))
-    {
-      gtk_text_view_get_iter_location (text_view, begin, &begin_rect);
-      gtk_text_view_get_iter_location (text_view, end, &end_rect);
-      rect.x = begin_rect.x;
-      rect.y = begin_rect.y;
-      rect.width = end_rect.x - begin_rect.x;
-      rect.height = MAX (begin_rect.height, end_rect.height);
-
-      cairo_region_union_rectangle (region, &rect);
-
-      return;
-    }
-
-  /*
-   * TODO: Add support for multi-line matches. When @begin and @end are not
-   *       on the same line, we need to add the match region to @region so
-   *       ide_source_view_draw_search_bubbles() can draw search bubbles
-   *       around it.
-   */
-}
-
-static guint
-add_matches (GtkTextView            *text_view,
-             cairo_region_t         *region,
-             GtkSourceSearchContext *search_context,
-             const GtkTextIter      *begin,
-             const GtkTextIter      *end)
-{
-  GtkTextIter first_begin;
-  GtkTextIter new_begin;
-  GtkTextIter match_begin;
-  GtkTextIter match_end;
-  gboolean has_wrapped;
-  guint count = 1;
-
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (region != NULL);
-  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
-
-  if (!gtk_source_search_context_forward (search_context,
-                                          begin,
-                                          &first_begin,
-                                          &match_end,
-                                          &has_wrapped))
-    return 0;
-
-  add_match (text_view, region, &first_begin, &match_end);
-
-  for (;;)
-    {
-      new_begin = match_end;
-
-      if (gtk_source_search_context_forward (search_context,
-                                             &new_begin,
-                                             &match_begin,
-                                             &match_end,
-                                             &has_wrapped) &&
-          (gtk_text_iter_compare (&match_begin, end) < 0) &&
-          (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
-        {
-          add_match (text_view, region, &match_begin, &match_end);
-          count++;
-          continue;
-        }
-
-      break;
-    }
-
-  return count;
-}
-
-static void
-ide_source_view_draw_search_bubbles (IdeSourceView *self,
-                                     GtkSnapshot   *snapshot)
-{
-  GtkStyleContext *style_context;
-  cairo_region_t *clip_region;
-  cairo_region_t *match_region;
-  GtkSourceSearchContext *context;
-  GdkRectangle area;
-  GtkTextIter begin, end;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (GTK_IS_SNAPSHOT (snapshot));
-
-  if (self->font_scale < MIN_BUBBLE_SCALE ||
-      self->font_scale > MAX_BUBBLE_SCALE ||
-      !(context = self->search_context))
-    return;
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-
-  gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &area);
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &begin,
-                                      area.x, area.y);
-  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &end,
-                                      area.x + area.width,
-                                      area.y + area.height);
-
-  clip_region = cairo_region_create_rectangle (&area);
-  match_region = cairo_region_create ();
-
-  if (add_matches (GTK_TEXT_VIEW (self), match_region, context, &begin, &end))
-    {
-      int n_rects;
-
-      cairo_region_subtract (clip_region, match_region);
-
-      n_rects = cairo_region_num_rectangles (match_region);
-
-      gtk_style_context_save (style_context);
-      gtk_style_context_add_class (style_context, "search-match");
-      for (guint i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t r;
-
-          cairo_region_get_rectangle (match_region, i, &r);
-
-          r.x -= X_PAD;
-          r.width += 2*X_PAD;
-          r.y -= Y_PAD;
-          r.height += 2*Y_PAD;
-
-          gtk_snapshot_render_background (snapshot, style_context, r.x, r.y, r.width, r.height);
-          gtk_snapshot_render_frame (snapshot, style_context, r.x, r.y, r.width, r.height);
-        }
-      gtk_style_context_restore (style_context);
-    }
-
-  cairo_region_destroy (clip_region);
-  cairo_region_destroy (match_region);
-}
-
-static void
-ide_source_view_snapshot_layer (GtkTextView      *text_view,
-                                GtkTextViewLayer  layer,
-                                GtkSnapshot      *snapshot)
-{
-  IdeSourceView *self = (IdeSourceView *)text_view;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (GTK_IS_SNAPSHOT (snapshot));
-
-  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->snapshot_layer (text_view, layer, snapshot);
-
-  if (self->enable_search_bubbles && layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
-    ide_source_view_draw_search_bubbles (self, snapshot);
 }
 
 static void
@@ -1307,10 +1117,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_double (value, ide_source_view_get_zoom_level (self));
       break;
 
-    case PROP_ENABLE_SEARCH_BUBBLES:
-      g_value_set_boolean (value, ide_source_view_get_enable_search_bubbles (self));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1352,10 +1158,6 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ENABLE_SEARCH_BUBBLES:
-      ide_source_view_set_enable_search_bubbles (self, g_value_get_boolean (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1366,7 +1168,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
@@ -1375,8 +1176,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->root = ide_source_view_root;
   widget_class->size_allocate = ide_source_view_size_allocate;
-
-  text_view_class->snapshot_layer = ide_source_view_snapshot_layer;
 
   source_view_class->push_snippet = ide_source_view_push_snippet;
 
@@ -1426,11 +1225,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          -G_MAXDOUBLE, G_MAXDOUBLE, 1.0,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ENABLE_SEARCH_BUBBLES] =
-    g_param_spec_boolean ("enable-search-bubbles", NULL, NULL,
-                          TRUE,
-                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
@@ -1477,8 +1271,6 @@ ide_source_view_init (IdeSourceView *self)
   GtkEventController *focus;
   GtkEventController *scroll;
   GtkEventController *key;
-
-  self->enable_search_bubbles = TRUE;
 
   self->controllers = g_array_new (FALSE, FALSE, sizeof (Controller));
   g_array_set_clear_func (self->controllers, controller_clear);
@@ -2012,43 +1804,6 @@ ide_source_view_set_overwrite_braces (IdeSourceView *self,
     {
       self->overwrite_braces = overwrite_braces;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OVERWRITE_BRACES]);
-    }
-}
-
-/**
- * ide_source_view_get_enable_search_bubbles:
- * @self: a #IdeSourceView
- *
- * Since: 44
- */
-gboolean
-ide_source_view_get_enable_search_bubbles (IdeSourceView *self)
-{
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return self->enable_search_bubbles;
-}
-
-/**
- * ide_source_view_set_enable_search_bubbles:
- * @self: a #IdeSourceView
- * @enable_search_bubbles: if search bubbles should be drawn
- *
- * Since: 44
- */
-void
-ide_source_view_set_enable_search_bubbles (IdeSourceView *self,
-                                           gboolean       enable_search_bubbles)
-{
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  enable_search_bubbles = !!enable_search_bubbles;
-
-  if (enable_search_bubbles != self->enable_search_bubbles)
-    {
-      self->enable_search_bubbles = enable_search_bubbles;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_SEARCH_BUBBLES]);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
 
