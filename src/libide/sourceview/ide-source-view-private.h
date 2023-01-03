@@ -81,6 +81,7 @@ struct _IdeSourceView
   guint insert_matching_brace : 1;
   guint overwrite_braces : 1;
   guint in_key_press : 1;
+  guint waiting_for_paste : 1;
   guint in_backspace : 1;
 };
 

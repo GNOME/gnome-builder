@@ -368,6 +368,18 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
+  /* Paste happens asynchronously, so do our best to handle that upon the
+   * next insertion of text so that we don't try to process it for things
+   * like matching braces.
+   *
+   * See GNOME/gnome-builder#1870.
+   */
+  if (self->waiting_for_paste)
+    {
+      self->waiting_for_paste = FALSE;
+      return;
+    }
+
   if (length != 1 || !self->in_key_press)
     return;
 
@@ -1053,6 +1065,19 @@ ide_source_view_action_duplicate_line (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_paste_clipboard (GtkTextView *text_view)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  self->waiting_for_paste = TRUE;
+
+  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->paste_clipboard (text_view);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -1168,6 +1193,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
@@ -1176,6 +1202,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->root = ide_source_view_root;
   widget_class->size_allocate = ide_source_view_size_allocate;
+
+  text_view_class->paste_clipboard = ide_source_view_paste_clipboard;
 
   source_view_class->push_snippet = ide_source_view_push_snippet;
 
