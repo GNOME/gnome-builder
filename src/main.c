@@ -1,6 +1,6 @@
 /* main.c
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -255,7 +255,7 @@ main (gint   argc,
    */
   if (home_contains_symlink ())
     g_critical ("User home directory uses a symlink. "
-                "This is not supported and may result in unforseen issues.");
+                "This is not supported and may result in unforeseen issues.");
 
   /* Log what desktop is being used to simplify tracking down
    * quirks in the future.
