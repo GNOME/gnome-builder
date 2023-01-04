@@ -1,1 +1,2 @@
 { "trigger" : "<Control><Shift><Alt>d", "action" : "context.run-manager.run-with-handler", "args" : "'debuggerui'", "when" : "canBuild()", "phase" : "capture" },
+{ "trigger" : "F5", "action" : "debugger.continue", "args" : "", "when" : "isDebugging()", "phase" : "bubble" },
