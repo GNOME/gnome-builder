@@ -4,3 +4,4 @@
 { "trigger" : "F7", "action" : "debugger.step-over", "args" : "", "when" : "isDebugging()", "phase" : "capture" },
 { "trigger" : "F8", "action" : "debugger.step-in", "args" : "", "when" : "isDebugging()", "phase" : "bubble" },
 { "trigger" : "<Shift>F8", "action" : "debugger.finish", "args" : "", "when" : "isDebugging()", "phase" : "bubble" },
+{ "trigger" : "<Control><Shift><Alt>j", "action" : "workspace.debuggerui.toggle-breakpoint", "args" : "", "when" : "canBuild()", "phase" : "bubble" },

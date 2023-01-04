@@ -34,6 +34,7 @@
 #include <libide-io.h>
 
 #include "ide-debug-manager-private.h"
+#include "ide-debugger-private.h"
 
 #include "ide-debugger-breakpoints-view.h"
 #include "ide-debugger-controls.h"
@@ -356,14 +357,94 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
 }
 
 static void
+toggle_breakpoint_action (IdeDebuggerWorkspaceAddin *self,
+                          GVariant                  *param)
+{
+  IdePage *page;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
+
+  if ((page = ide_workspace_get_most_recent_page (self->workspace)) &&
+      IDE_IS_EDITOR_PAGE (page))
+    {
+      g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
+      IdeDebuggerBreakpoint *breakpoint;
+      IdeDebuggerBreakMode break_type = IDE_DEBUGGER_BREAK_NONE;
+      IdeDebugManager *debug_manager;
+      IdeContext *context;
+      const char *path;
+      GtkTextIter begin;
+      GtkTextIter end;
+      IdeBuffer *buffer;
+      GFile *file;
+      guint line;
+
+      buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+      file = ide_buffer_get_file (buffer);
+      path = g_file_peek_path (file);
+
+      if (!(context = ide_workspace_get_context (self->workspace)) ||
+          !(debug_manager = ide_debug_manager_from_context (context)) ||
+          !(breakpoints = ide_debug_manager_get_breakpoints_for_file (debug_manager, file)))
+        return;
+
+      gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
+      gtk_text_iter_order (&begin, &end);
+
+      line = gtk_text_iter_get_line (&begin) + 1;
+
+      IDE_TRACE_MSG ("Toggle breakpoint on line %u %s [breakpoints=%p]",
+                     line, path, breakpoints);
+
+      breakpoint = ide_debugger_breakpoints_get_line (breakpoints, line);
+      if (breakpoint != NULL)
+        break_type = ide_debugger_breakpoint_get_mode (breakpoint);
+
+      switch (break_type)
+        {
+        case IDE_DEBUGGER_BREAK_NONE:
+          {
+            g_autoptr(IdeDebuggerBreakpoint) to_insert = NULL;
+
+            to_insert = ide_debugger_breakpoint_new (NULL);
+
+            ide_debugger_breakpoint_set_line (to_insert, line);
+            ide_debugger_breakpoint_set_file (to_insert, path);
+            ide_debugger_breakpoint_set_mode (to_insert, IDE_DEBUGGER_BREAK_BREAKPOINT);
+            ide_debugger_breakpoint_set_enabled (to_insert, TRUE);
+
+            _ide_debug_manager_add_breakpoint (debug_manager, to_insert);
+          }
+          break;
+
+        case IDE_DEBUGGER_BREAK_BREAKPOINT:
+        case IDE_DEBUGGER_BREAK_COUNTPOINT:
+        case IDE_DEBUGGER_BREAK_WATCHPOINT:
+          if (breakpoint != NULL)
+            _ide_debug_manager_remove_breakpoint (debug_manager, breakpoint);
+          break;
+
+        default:
+          g_return_if_reached ();
+        }
+    }
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = ide_debugger_workspace_addin_load;
   iface->unload = ide_debugger_workspace_addin_unload;
 }
 
+IDE_DEFINE_ACTION_GROUP (IdeDebuggerWorkspaceAddin, ide_debugger_workspace_addin, {
+  { "toggle-breakpoint", toggle_breakpoint_action },
+})
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDebuggerWorkspaceAddin, ide_debugger_workspace_addin, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init)
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_debugger_workspace_addin_init_action_group))
 
 static void
 ide_debugger_workspace_addin_class_init (IdeDebuggerWorkspaceAddinClass *klass)

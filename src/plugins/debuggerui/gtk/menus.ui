@@ -17,6 +17,15 @@
   </menu>
   <menu id="run-menu">
     <section id="run-menu-running-section">
+      <item>
+        <attribute name="id">debug-insert-breakpoint</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">workspace.debuggerui.toggle-breakpoint</attribute>
+        <attribute name="label" translatable="yes">Insert Breakpoint</attribute>
+        <attribute name="verb-icon">debug-breakpoint-symbolic</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;alt&gt;&lt;shift&gt;j</attribute>
+        <attribute name="description" translatable="yes">Insert breakpoint at current line</attribute>
+      </item>
       <section id="run-menu-debug-section">
         <attribute name="page" translatable="yes">Code Foundry</attribute>
         <attribute name="group" translatable="yes">Debugging</attribute>
