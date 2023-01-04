@@ -6,6 +6,7 @@
         <attribute name="id">valgrind-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'valgrind'</attribute>
         <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
         <attribute name="verb-icon">system-run-symbolic</attribute>

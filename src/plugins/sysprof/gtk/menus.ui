@@ -16,6 +16,7 @@
         <attribute name="id">sysprof-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">context.workbench.sysprof.run</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
         <attribute name="verb-icon">builder-profiler-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;p</attribute>

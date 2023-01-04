@@ -115,6 +115,7 @@
       <item>
         <attribute name="id">default-run-handler</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'run'</attribute>
         <attribute name="label" translatable="yes">Run</attribute>
         <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;space</attribute>

@@ -6,6 +6,7 @@
         <attribute name="id">debugger-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'debuggerui'</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
         <attribute name="verb-icon">builder-debugger-symbolic</attribute>
