@@ -1,1 +1,1 @@
-{ "trigger" : "<Control><Shift><Alt>v", "action" : "run-manager.run-with-handler", "args" : "'valgrind'", "when" : "canBuild()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift><Alt>v", "action" : "context.run-manager.run-with-handler", "args" : "'valgrind'", "when" : "canBuild()", "phase" : "capture" },
