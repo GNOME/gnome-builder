@@ -25,7 +25,7 @@
     </section>
   </menu>
   <menu id="run-menu">
-    <section id="run-menu-tools-section">
+    <section id="run-menu-settings-section">
       <submenu id="run-menu-sysprof-submenu">
         <attribute name="before">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Profiler</attribute>

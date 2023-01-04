@@ -193,8 +193,5 @@
         <attribute name="role">check</attribute>
       </item>
     </section>
-    <section id="run-menu-tools-section">
-      <attribute name="label" translatable="yes">Tools</attribute>
-    </section>
   </menu>
 </interface>
