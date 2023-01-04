@@ -5,6 +5,7 @@
 
 /* Run Actions */
 { "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Shift>F5", "action" : "context.run-manager.stop", "when" : "isRunning()", "phase" : "capture" },
 
 /* Errors and Warnings Popover */
 { "trigger" : "<Control><Alt>question", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasProject()", "phase" : "capture" },
