@@ -122,10 +122,6 @@
         <attribute name="verb-icon">builder-run-start-symbolic</attribute>
         <attribute name="description" translatable="yes">Run the project</attribute>
       </item>
-    </section>
-    <section id="run-menu-running-section">
-      <attribute name="page" translatable="yes">Code Foundry</attribute>
-      <attribute name="group" translatable="yes">Running</attribute>
       <item>
         <attribute name="id">stop-running</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
@@ -135,6 +131,10 @@
         <attribute name="verb-icon">builder-run-stop-symbolic</attribute>
         <attribute name="description" translatable="yes">Stop running the project</attribute>
       </item>
+    </section>
+    <section id="run-menu-debug-section">
+      <attribute name="page" translatable="yes">Code Foundry</attribute>
+      <attribute name="group" translatable="yes">Debugging</attribute>
     </section>
     <section id="run-menu-tests-section">
       <attribute name="page" translatable="yes">Code Foundry</attribute>

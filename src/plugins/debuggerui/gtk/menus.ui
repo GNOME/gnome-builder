@@ -16,66 +16,62 @@
     </section>
   </menu>
   <menu id="run-menu">
-    <section id="run-menu-running-section">
+    <section id="run-menu-debug-section">
+      <attribute name="label" translatable="yes">Debugger</attribute>
       <item>
-        <attribute name="id">debug-insert-breakpoint</attribute>
+        <attribute name="id">debug-toggle-breakpoint</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">workspace.debuggerui.toggle-breakpoint</attribute>
-        <attribute name="label" translatable="yes">Insert Breakpoint</attribute>
+        <attribute name="label" translatable="yes">Toggle Breakpoint</attribute>
         <attribute name="verb-icon">debug-breakpoint-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;alt&gt;&lt;shift&gt;j</attribute>
-        <attribute name="description" translatable="yes">Insert breakpoint at current line</attribute>
+        <attribute name="description" translatable="yes">Toggle breakpoint at current line</attribute>
       </item>
-      <section id="run-menu-debug-section">
-        <attribute name="page" translatable="yes">Code Foundry</attribute>
-        <attribute name="group" translatable="yes">Debugging</attribute>
-        <attribute name="label" translatable="yes">Debugger</attribute>
-        <item>
-          <attribute name="id">debug-continue</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="action">debugger.continue</attribute>
-          <attribute name="label" translatable="yes">Continue</attribute>
-          <attribute name="verb-icon">debug-continue-symbolic</attribute>
-          <attribute name="accel">F5</attribute>
-          <attribute name="description" translatable="yes">Continue debugging to next breakpoint</attribute>
-        </item>
-        <item>
-          <attribute name="id">debug-pause</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="action">debugger.stop</attribute>
-          <attribute name="label" translatable="yes">Pause</attribute>
-          <attribute name="verb-icon">media-playback-pause-symbolic</attribute>
-          <attribute name="accel">F6</attribute>
-          <attribute name="description" translatable="yes">Pause debugger until continued</attribute>
-        </item>
-        <item>
-          <attribute name="id">debug-step-over</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="action">debugger.step-over</attribute>
-          <attribute name="label" translatable="yes">Step Over</attribute>
-          <attribute name="verb-icon">debug-step-over-symbolic</attribute>
-          <attribute name="accel">F7</attribute>
-          <attribute name="description" translatable="yes">Execute the current line, stepping over any function calls</attribute>
-        </item>
-        <item>
-          <attribute name="id">debug-step-into</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="action">debugger.step-in</attribute>
-          <attribute name="label" translatable="yes">Step Into</attribute>
-          <attribute name="verb-icon">debug-step-in-symbolic</attribute>
-          <attribute name="accel">F8</attribute>
-          <attribute name="description" translatable="yes">Execute the current line, stepping into any function calls</attribute>
-        </item>
-        <item>
-          <attribute name="id">debug-step-out</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="action">debugger.finish</attribute>
-          <attribute name="label" translatable="yes">Step Out</attribute>
-          <attribute name="verb-icon">debug-step-out-symbolic</attribute>
-          <attribute name="accel">&lt;Shift&gt;F8</attribute>
-          <attribute name="description" translatable="yes">Run until the end of the function</attribute>
-        </item>
-      </section>
+      <item>
+        <attribute name="id">debug-continue</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">debugger.continue</attribute>
+        <attribute name="label" translatable="yes">Continue</attribute>
+        <attribute name="verb-icon">debug-continue-symbolic</attribute>
+        <attribute name="accel">F5</attribute>
+        <attribute name="description" translatable="yes">Continue debugging to next breakpoint</attribute>
+      </item>
+      <item>
+        <attribute name="id">debug-pause</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">debugger.stop</attribute>
+        <attribute name="label" translatable="yes">Pause</attribute>
+        <attribute name="verb-icon">media-playback-pause-symbolic</attribute>
+        <attribute name="accel">F6</attribute>
+        <attribute name="description" translatable="yes">Pause debugger until continued</attribute>
+      </item>
+      <item>
+        <attribute name="id">debug-step-over</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">debugger.step-over</attribute>
+        <attribute name="label" translatable="yes">Step Over</attribute>
+        <attribute name="verb-icon">debug-step-over-symbolic</attribute>
+        <attribute name="accel">F7</attribute>
+        <attribute name="description" translatable="yes">Execute the current line, stepping over any function calls</attribute>
+      </item>
+      <item>
+        <attribute name="id">debug-step-into</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">debugger.step-in</attribute>
+        <attribute name="label" translatable="yes">Step Into</attribute>
+        <attribute name="verb-icon">debug-step-in-symbolic</attribute>
+        <attribute name="accel">F8</attribute>
+        <attribute name="description" translatable="yes">Execute the current line, stepping into any function calls</attribute>
+      </item>
+      <item>
+        <attribute name="id">debug-step-out</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">debugger.finish</attribute>
+        <attribute name="label" translatable="yes">Step Out</attribute>
+        <attribute name="verb-icon">debug-step-out-symbolic</attribute>
+        <attribute name="accel">&lt;Shift&gt;F8</attribute>
+        <attribute name="description" translatable="yes">Run until the end of the function</attribute>
+      </item>
     </section>
   </menu>
   <menu id="run-menu">
