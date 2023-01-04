@@ -122,6 +122,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                             NULL);
       self->branch_label = g_object_new (GTK_TYPE_LABEL,
                                          "xalign", .0f,
+                                         "ellipsize", PANGO_ELLIPSIZE_START,
                                          NULL);
       gtk_box_append (box, GTK_WIDGET (image));
       gtk_box_append (box, GTK_WIDGET (self->branch_label));
