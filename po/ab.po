@@ -57,7 +57,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Multi-monitor support"
-msgstr "Ԥыҭк амониторқәа рыдкылара "
+msgstr "Ԥыҭк амониторқәа рыдкылара"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
 msgid "Code overview mini-map"
@@ -1402,7 +1402,7 @@ msgstr "АФАИЛ"
 
 #: src/libide/gui/ide-application-command-line.c:64
 msgid "Print version information and exit"
-msgstr ""
+msgstr "Аверисиа иазкны аинформациа аарԥшны аҭыҵра"
 
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:66
@@ -1808,7 +1808,7 @@ msgstr "Иаарҳәу аԥшаара"
 #: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
 #: src/libide/tree/ide-tree-node.c:1499
 msgid "(Empty)"
-msgstr ""
+msgstr "(Иҭацәуп)"
 
 #: src/libide/tree/ide-tree-node.c:1468
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
@@ -2149,7 +2149,7 @@ msgstr "Акод аус адулара"
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
-msgstr ""
+msgstr "Архиара"
 
 #: src/plugins/buildui/gtk/menus.ui:17
 msgid "Select Build Target…"
@@ -2190,7 +2190,7 @@ msgstr "Апроект арыцқьара"
 
 #: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
-msgstr ""
+msgstr "Ашьақәыргылареи аиҵыхреи"
 
 #: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
@@ -2198,7 +2198,7 @@ msgstr "Апроект ашьақәыргылара"
 
 #: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
-msgstr "Аиҿартәыра ахь аиҵыхра..."
+msgstr "Аиҿартәыра ахь аиҵыхра"
 
 #: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
@@ -2218,11 +2218,11 @@ msgstr "Иҭацәу апроект"
 
 #: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
-msgstr "Аизгара аанкылара"
+msgstr "Аибыҭара аанкылара"
 
 #: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
-msgstr "Апроект аизгара аанкылара"
+msgstr "Апроект аибыҭыра аанкылара"
 
 #: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
@@ -2230,7 +2230,7 @@ msgstr "_Аизгара ажурнал арбара"
 
 #: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
-msgstr "Аизгара ажурнал змоу апанель арбара"
+msgstr "Аибыҭара ажурнал змоу апанель арбара"
 
 #: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
@@ -2242,7 +2242,7 @@ msgstr "Аус аруразы адҵа алхра"
 
 #: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
-msgstr "Аус арура "
+msgstr "Аус арура"
 
 #: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
@@ -2264,7 +2264,7 @@ msgstr "Илашоу"
 
 #: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
-msgstr "Мчылатәи алашьца"
+msgstr "Мчыла илашьцоу"
 
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
@@ -2318,11 +2318,11 @@ msgstr "Ихьӡыдоу атерминал"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr "Аихыршь ахсаала арбара"
+msgstr "Аихыршь асхема арбара"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
-msgstr ""
+msgstr "Ахалагаратә код ала аихыршь асхема арбара"
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
@@ -2330,7 +2330,7 @@ msgstr "Ахаан"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "Ақәыпшыларатә хсаала ахаан ианыԥшӡом"
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
@@ -2338,11 +2338,11 @@ msgstr "Еснагь"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "Ақәыпшыларатә хсаала еснагь ианыԥшоит"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
 msgid "Auto"
-msgstr "Аҽеикәырхара"
+msgstr "Авто"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
@@ -2367,11 +2367,11 @@ msgstr ""
 #: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
 #: src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
-msgstr ""
+msgstr "Адҵақәа"
 
 #: src/plugins/buildui/tweaks.ui:16
 msgid "Run Command"
-msgstr ""
+msgstr "Адҵа аус арура"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
@@ -2379,7 +2379,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr ""
+msgstr "Аус аруреи аангылареи"
 
 #: src/plugins/buildui/tweaks.ui:58
 msgid "Install Before Running"
@@ -4896,7 +4896,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
-msgstr ""
+msgstr "Ианԥшылахо ахьӡ"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 msgid "Keyboard Accelerator"
