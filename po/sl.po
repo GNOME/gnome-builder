@@ -3,24 +3,24 @@
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Matej Urbančič <mateju@src.gnome.org>, 2015–2022.
-# Martin Srebotnjak <miles@filmsi.net>, 2022.
+# Martin Srebotnjak <miles@filmsi.net>, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-10-01 19:28+0000\n"
-"PO-Revision-Date: 2022-10-02 08:38+0200\n"
+"PO-Revision-Date: 2023-01-06 08:52+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -1772,8 +1772,9 @@ msgid "In_vert Case"
 msgstr "Preo_brne velikost črk"
 
 #: src/libide/sourceview/gtk/menus.ui:96
+#, fuzzy
 msgid "Invert case of the text selection"
-msgstr ""
+msgstr "Preobrni velikost črk v izbranem besedilu"
 
 #: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
@@ -2170,12 +2171,14 @@ msgid "Automatically Discover"
 msgstr "Samodejno odkrij"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
+#, fuzzy
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Ta izbira omogoča Builderju, da izbere najboljšega kandidata."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
+#, fuzzy
 msgid "The container used to build and run your application"
-msgstr ""
+msgstr "Posoda, ki se uporablja za izgradnjo in zagon programa"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2212,8 +2215,9 @@ msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Izgradi projekt (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#, fuzzy
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
-msgstr ""
+msgstr "Prikaži diagnostiko gradnje (krmilka+izmenjalka+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
@@ -2320,8 +2324,9 @@ msgid "Show Build _Log"
 msgstr "Pokaži _dnevnik izgradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:89
+#, fuzzy
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Prikaži ploščo, ki vsebuje zapisnik gradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
@@ -5052,8 +5057,8 @@ msgstr "Delovna mapa"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
@@ -5164,8 +5169,9 @@ msgid ""
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
+#, fuzzy
 msgid "Enchant 2"
-msgstr ""
+msgstr "Enchant 2"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:248
 msgid "Add to Dictionary"
@@ -5216,8 +5222,9 @@ msgid "Profiling Application…"
 msgstr "ID programa …"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:308
+#, fuzzy
 msgid "Symbol decoding will begin after application exits"
-msgstr ""
+msgstr "Dekodiranje simbolov se bo začelo po izhodu programa"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5263,8 +5270,9 @@ msgid "Memory Allocations"
 msgstr "Dodelitev pomnilnika"
 
 #: src/plugins/sysprof/gtk/menus.ui:44
+#, fuzzy
 msgid "Sample JavaScript Stacks"
-msgstr ""
+msgstr "Vzorčne kopice JavaScript"
 
 #: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Graphics"
@@ -5322,40 +5330,47 @@ msgid "Run with _Profiler"
 msgstr "Zaženi s programom _Profiler"
 
 #: src/plugins/sysprof/gtk/menus.ui:130
+#, fuzzy
 msgid "Record Again…"
-msgstr ""
+msgstr "Znova beleži ..."
 
 #: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
 msgstr "Orodja"
 
 #: src/plugins/sysprof/tweaks.ui:20
+#, fuzzy
 msgid "Records CPU usage and CPU frequency statistics"
-msgstr ""
+msgstr "Beleži rabo CPE in statistiko frekvenc CPE"
 
 #: src/plugins/sysprof/tweaks.ui:31
+#, fuzzy
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "Vzorčne kopice klicev"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
+#, fuzzy
 msgid "CPU Governor"
-msgstr ""
+msgstr "Vladar CPE"
 
 #: src/plugins/sysprof/tweaks.ui:44
+#, fuzzy
 msgid "Force performance mode while profiling"
-msgstr ""
+msgstr "Zmogljivostni način med profiliranjem"
 
 #: src/plugins/sysprof/tweaks.ui:53
+#, fuzzy
 msgid "Don't Change Governor"
-msgstr ""
+msgstr "Ne spreminjaj vladarja"
 
 #: src/plugins/sysprof/tweaks.ui:59
+#, fuzzy
 msgid "Force Performance Mode"
-msgstr ""
+msgstr "Vsili zmogljivostni način"
 
 #: src/plugins/sysprof/tweaks.ui:72
 msgid "Simple memory statistics about the process such as total memory used"
