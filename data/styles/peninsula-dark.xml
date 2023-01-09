@@ -47,7 +47,7 @@
   <style name="def:keyword"                 foreground="#ff78b2" bold="true"/>
   <style name="def:variable"                foreground="#75c2b3"/>
   <style name="def:special-constant"        foreground="#ffa245" bold="true"/>
-  <style name="def:emphasis"                bold="true"/>
+  <style name="def:emphasis"                italic="true"/>
   <style name="def:strong-emphasis"         italic="true" bold="true"/>
   <style name="def:net-address"             foreground="#3e8ee3"/>
   <style name="def:link-destination"        foreground="#3e8ee3"/>

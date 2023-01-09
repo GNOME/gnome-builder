@@ -69,7 +69,7 @@
   <style name="def:keyword"                 foreground="magenta" bold="true"/>
   <style name="def:variable"                foreground="blue1"/>
   <style name="def:special-constant"        foreground="magenta" bold="true"/>
-  <style name="def:emphasis"                bold="true"/>
+  <style name="def:emphasis"                italic="true"/>
   <style name="def:strong-emphasis"         italic="true" bold="true"/>
   <style name="def:net-address"             foreground="blue2"/>
   <style name="def:link-destination"        foreground="blue2"/>
