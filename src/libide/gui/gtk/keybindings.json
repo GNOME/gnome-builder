@@ -25,6 +25,7 @@
 { "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
 { "trigger" : "<Control>q", "action" : "app.quit", "phase" : "bubble" },
 { "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inPage()", "phase" : "bubble" },
+{ "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inTab()", "phase" : "bubble" },
 { "trigger" : "<Control>question", "action" : "workspace.show-help-overlay" },
 
 /* Toggle Panels */
