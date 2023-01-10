@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/greeter">
     <file>greeter.plugin</file>
+    <file>gtk/keybindings.json</file>
   </gresource>
 </gresources>

@@ -57,6 +57,7 @@
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
         <attribute name="description" translatable="yes">Open a new or existing project</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;o</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-clone</attribute>
@@ -76,6 +77,7 @@
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;o</attribute>
       </item>
       <item>
         <attribute name="id">ide-editor-workspace-menu-clone</attribute>

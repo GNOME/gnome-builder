@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Alt>o", "action" : "app.present-greeter-with-page", "args" : "''", "when" : "canEdit()", "phase" : "bubble" },
