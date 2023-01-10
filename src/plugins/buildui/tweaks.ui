@@ -253,79 +253,79 @@
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">1</property>
+                                <property name="title">1</property>
                                 <property name="value">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">2</property>
+                                <property name="title">2</property>
                                 <property name="value">2</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">4</property>
+                                <property name="title">4</property>
                                 <property name="value">4</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">6</property>
+                                <property name="title">6</property>
                                 <property name="value">6</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">8</property>
+                                <property name="title">8</property>
                                 <property name="value">8</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">16</property>
+                                <property name="title">16</property>
                                 <property name="value">16</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">24</property>
+                                <property name="title">24</property>
                                 <property name="value">24</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">32</property>
+                                <property name="title">32</property>
                                 <property name="value">32</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">48</property>
+                                <property name="title">48</property>
                                 <property name="value">48</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">64</property>
+                                <property name="title">64</property>
                                 <property name="value">64</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">128</property>
+                                <property name="title">128</property>
                                 <property name="value">128</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">256</property>
+                                <property name="title">256</property>
                                 <property name="value">256</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
-                                <property name="title" translatable="yes">512</property>
+                                <property name="title">512</property>
                                 <property name="value">512</property>
                               </object>
                             </child>
