@@ -156,7 +156,9 @@ gbp_menu_search_provider_search_async (IdeSearchProvider   *provider,
     }
 
   if (query != NULL)
-    ide_task_set_task_data (task, g_strdup (query), g_free);
+    ide_task_set_task_data (task,
+                            g_utf8_casefold (query, -1),
+                            g_free);
 
   ide_task_run_in_thread (task, gbp_menu_search_provider_search_worker);
 
