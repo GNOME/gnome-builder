@@ -326,6 +326,8 @@ if get_option('webkit').enabled()
     '',
   ]
   config_h.set_quoted('HAVE_WEBKIT', webkit_api)
+  config_h.set_quoted('PACKAGE_WEBKIT_GIR_NAME', webkit_gir.split('-')[0])
+  config_h.set_quoted('PACKAGE_WEBKIT_GIR_VERSION', webkit_gir.split('-')[1])
 else
   status += [
     'WebKit ................ : Disabled',

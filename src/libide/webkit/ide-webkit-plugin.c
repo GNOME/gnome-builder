@@ -41,7 +41,10 @@ _ide_webkit_register_types (PeasObjectModule *module)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
   g_type_ensure (IDE_TYPE_WEBKIT_PAGE);
 
-  if (!g_irepository_require (NULL, "WebKit2", "5.0", 0, &error))
+  if (!g_irepository_require (NULL,
+                              PACKAGE_WEBKIT_GIR_NAME,
+                              PACKAGE_WEBKIT_GIR_VERSION,
+                              0, &error))
     g_warning ("%s", error->message);
 
   context = webkit_web_context_get_default ();
