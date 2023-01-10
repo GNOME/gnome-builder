@@ -29,6 +29,10 @@ def inPage()
   (focus != null) && (focus.get_ancestor(typeof(Ide.Page)) != null)
 end
 
+def inTab()
+  (focus != null) && (focus.get_ancestor(typeof(Adw.TabBar)) != null)
+end
+
 def hasProject()
   workbench.has_project()
 end
