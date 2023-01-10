@@ -20,6 +20,7 @@
         <attribute name="target" type="s">'create-project'</attribute>
         <attribute name="after">ide-primary-workspace-menu-open</attribute>
         <attribute name="description" translatable="yes">Create a new project from template</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;n</attribute>
       </item>
     </section>
   </menu>
@@ -31,6 +32,7 @@
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
         <attribute name="after">ide-editor-workspace-menu-open</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;n</attribute>
       </item>
     </section>
   </menu>

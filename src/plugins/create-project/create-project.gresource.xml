@@ -4,5 +4,6 @@
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file preprocess="xml-stripblanks">gbp-create-project-widget.ui</file>
     <file>create-project.plugin</file>
+    <file>gtk/keybindings.json</file>
   </gresource>
 </gresources>
