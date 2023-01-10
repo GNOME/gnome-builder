@@ -289,8 +289,20 @@
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">24</property>
+                                <property name="value">24</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">32</property>
                                 <property name="value">32</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">48</property>
+                                <property name="value">48</property>
                               </object>
                             </child>
                             <child>
