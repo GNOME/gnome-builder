@@ -179,7 +179,7 @@ ide_application_load_typelibs (IdeApplication *self)
                                           "Template", "1.0",
                                           "Vte", "3.91",
 #ifdef HAVE_WEBKIT
-                                          "WebKit2", "5.0",
+                                          PACKAGE_WEBKIT_GIR_NAME, PACKAGE_WEBKIT_GIR_VERSION,
 #endif
                                           "Ide", PACKAGE_ABI_S,
                                           NULL))
