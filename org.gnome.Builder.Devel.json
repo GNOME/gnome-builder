@@ -660,6 +660,25 @@
             ]
         },
         {
+            "name" : "libdex",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "--libdir=lib",
+                "--buildtype=debugoptimized",
+                "-Ddocs=false",
+                "-Dexamples=false",
+                "-Dtests=false",
+                "-Dsysprof=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/libdex.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
