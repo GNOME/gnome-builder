@@ -123,6 +123,15 @@
         <attribute name="description" translatable="yes">Run the project</attribute>
       </item>
       <item>
+        <attribute name="id">restart-program</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="action">context.run-manager.restart</attribute>
+        <attribute name="label" translatable="yes">Restart Program</attribute>
+        <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;space</attribute>
+        <attribute name="verb-icon">builder-run-start-symbolic</attribute>
+        <attribute name="description" translatable="yes">Restart the running program</attribute>
+      </item>
+      <item>
         <attribute name="id">stop-running</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">context.run-manager.stop</attribute>

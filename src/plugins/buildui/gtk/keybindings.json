@@ -4,6 +4,7 @@
 { "trigger" : "<Control><Alt><Shift>c", "action" : "context.build-manager.cancel", "when" : "hasProject()", "phase" : "capture" },
 
 /* Run Actions */
+{ "trigger" : "<Control><Shift>space", "action" : "context.run-manager.restart", "when" : "isRunning()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
 { "trigger" : "<Shift>F5", "action" : "context.run-manager.stop", "when" : "isRunning()", "phase" : "capture" },
 
