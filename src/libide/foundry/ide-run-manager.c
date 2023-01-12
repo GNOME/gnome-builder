@@ -79,6 +79,8 @@ struct _IdeRunManager
 };
 
 static void initable_iface_init                         (GInitableIface *iface);
+static void ide_run_manager_actions_restart             (IdeRunManager  *self,
+                                                         GVariant       *param);
 static void ide_run_manager_actions_run                 (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_run_with_handler    (IdeRunManager  *self,
@@ -93,6 +95,7 @@ static void ide_run_manager_actions_text_direction      (IdeRunManager  *self,
                                                          GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
+  { "restart", ide_run_manager_actions_restart },
   { "run", ide_run_manager_actions_run },
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
@@ -240,11 +243,13 @@ ide_run_manager_update_action_enabled (IdeRunManager *self)
   build_manager = ide_build_manager_from_context (context);
   can_build = ide_build_manager_get_can_build (build_manager);
 
+  ide_run_manager_set_action_enabled (self, "restart",
+                                      self->busy && can_build);
   ide_run_manager_set_action_enabled (self, "run",
-                                      self->busy == 0 && can_build == TRUE);
+                                      !self->busy && can_build);
   ide_run_manager_set_action_enabled (self, "run-with-handler",
-                                      self->busy == 0 && can_build == TRUE);
-  ide_run_manager_set_action_enabled (self, "stop", self->busy > 0);
+                                      !self->busy && can_build);
+  ide_run_manager_set_action_enabled (self, "stop", !!self->busy);
 }
 
 
@@ -1225,6 +1230,38 @@ ide_run_manager_actions_run (IdeRunManager *self,
                              NULL,
                              ide_run_manager_run_action_cb,
                              NULL);
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_run_manager_actions_restart_from_timeout (IdeRunManager *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  ide_run_manager_actions_run (self, NULL);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_run_manager_actions_restart (IdeRunManager *self,
+                                 GVariant      *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  ide_run_manager_actions_stop (self, NULL);
+
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      100,
+                      (GSourceFunc) ide_run_manager_actions_restart_from_timeout,
+                      g_object_ref (self),
+                      g_object_unref);
 
   IDE_EXIT;
 }
