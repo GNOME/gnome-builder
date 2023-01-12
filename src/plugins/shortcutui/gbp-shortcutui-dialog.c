@@ -271,8 +271,8 @@ gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
           if (list_box == NULL)
             list_box = GTK_LIST_BOX (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_LIST_BOX));
 
-          ide_set_string (&last_group, group);
-          ide_set_string (&last_page, page);
+          g_set_str (&last_group, group);
+          g_set_str (&last_page, page);
 
           last_group_row = row;
         }
