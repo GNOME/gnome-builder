@@ -71,7 +71,7 @@
               <object class="GtkBox">
                 <property name="orientation">horizontal</property>
                 <property name="homogeneous">true</property>
-                <property name="spacing">18</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">_Reset All</property>
