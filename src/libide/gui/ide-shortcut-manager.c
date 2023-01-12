@@ -39,6 +39,9 @@ struct _IdeShortcutManager
    */
   GListStore *toplevel;
 
+  /* Holds the bundle for user shortcut overrides. */
+  IdeShortcutBundle *user_bundle;
+
   /* Holds bundles loaded from plugins, more recently loaded plugins
    * towards the head of the list.
    *
@@ -258,8 +261,9 @@ ide_shortcut_manager_dispose (GObject *object)
 
   g_clear_object (&self->providers);
   g_clear_object (&self->providers_models);
-  g_clear_object (&self->toplevel);
   g_clear_object (&self->plugin_models);
+  g_clear_object (&self->user_bundle);
+  g_clear_object (&self->toplevel);
   g_clear_object (&self->flatten);
 
   G_OBJECT_CLASS (ide_shortcut_manager_parent_class)->dispose (object);
@@ -282,24 +286,47 @@ static void
 ide_shortcut_manager_init (IdeShortcutManager *self)
 {
   GtkFlattenListModel *flatten;
+  g_autoptr(GFile) user_file = NULL;
 
   if (plugin_models == NULL)
     plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
 
   self->toplevel = g_list_store_new (G_TYPE_LIST_MODEL);
-  self->plugin_models = g_object_ref (plugin_models);
-  self->providers_models = g_list_store_new (G_TYPE_LIST_MODEL);
 
+  /* Setup user shortcuts at highest priority */
+  user_file = g_file_new_build_filename (g_get_user_config_dir (),
+                                         "gnome-builder",
+                                         "keybindings.json",
+                                         NULL);
+  self->user_bundle = ide_shortcut_bundle_new ();
+  g_list_store_append (self->toplevel, self->user_bundle);
+  g_debug ("Looking for user shortcuts at \"%s\"\n",
+           g_file_peek_path (user_file));
+  if (g_file_query_exists (user_file, NULL))
+    {
+      g_autoptr(GError) error = NULL;
+
+      if (!ide_shortcut_bundle_parse (self->user_bundle, user_file, &error))
+        g_warning ("Failed to parse user keybindings: %s: %s",
+                   g_file_peek_path (user_file), error->message);
+    }
+
+  /* Then add providers implemented by plugins */
+  self->providers_models = g_list_store_new (G_TYPE_LIST_MODEL);
   flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->providers_models)));
   g_list_store_append (self->toplevel, flatten);
   g_object_unref (flatten);
 
+  /* Then add keybindings.json found within plugin resources */
+  self->plugin_models = g_object_ref (plugin_models);
   flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->plugin_models)));
   g_list_store_append (self->toplevel, flatten);
   g_object_unref (flatten);
 
+  /* Then attach our internal plugins */
   g_list_store_append (self->toplevel, get_internal_shortcuts ());
 
+  /* And finally flatten the whole thing into a shortcut list */
   self->flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->toplevel)));
   g_signal_connect_object (self->flatten,
                            "items-changed",
