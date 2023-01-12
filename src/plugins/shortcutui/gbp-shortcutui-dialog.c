@@ -303,6 +303,14 @@ gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
 }
 
 static void
+reset_all_shortcuts (GtkWidget  *widget,
+                     const char *action_name,
+                     GVariant   *param)
+{
+  g_print ("TODO: Reset shortcuts!\n");
+}
+
+static void
 gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -319,6 +327,8 @@ gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, search);
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, string_filter);
   gtk_widget_class_bind_template_callback (widget_class, gbp_shortcutui_dialog_queue_update);
+
+  gtk_widget_class_install_action (widget_class, "shortcuts.reset-all", NULL, reset_all_shortcuts);
 }
 
 static void
