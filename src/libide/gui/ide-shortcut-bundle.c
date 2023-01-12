@@ -36,6 +36,7 @@ struct _IdeShortcutBundle
 {
   GObject    parent_instance;
   GPtrArray *items;
+  GError    *error;
 };
 
 static TmplScope *imports_scope;
@@ -187,6 +188,7 @@ ide_shortcut_bundle_dispose (GObject *object)
   IdeShortcutBundle *self = (IdeShortcutBundle *)object;
 
   g_clear_pointer (&self->items, g_ptr_array_unref);
+  g_clear_error (&self->error);
 
   G_OBJECT_CLASS (ide_shortcut_bundle_parent_class)->dispose (object);
 }
@@ -443,10 +445,10 @@ populate_from_array (IdeShortcutBundle  *self,
   return TRUE;
 }
 
-gboolean
-ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
-                           GFile              *file,
-                           GError            **error)
+static gboolean
+ide_shortcut_bundle_parse_internal (IdeShortcutBundle  *self,
+                                    GFile              *file,
+                                    GError            **error)
 {
   g_autoptr(JsonParser) parser = NULL;
   g_autofree char *data = NULL;
@@ -454,8 +456,8 @@ ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
   JsonNode *root;
   gsize len = 0;
 
-  g_return_val_if_fail (IDE_IS_SHORTCUT_BUNDLE (self), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
+  g_assert (G_IS_FILE (file));
 
   /* @data is always \0 terminated by g_file_load_contents() */
   if (!g_file_load_contents (file, NULL, &data, &len, NULL, error))
@@ -492,4 +494,29 @@ ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
                "Got something other than an array or object");
 
   return FALSE;
+}
+
+gboolean
+ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
+                           GFile              *file,
+                           GError            **error)
+{
+  gboolean ret;
+
+  g_return_val_if_fail (IDE_IS_SHORTCUT_BUNDLE (self), FALSE);
+  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  g_clear_error (&self->error);
+  ret = ide_shortcut_bundle_parse_internal (self, file, &self->error);
+  if (self->error && error != NULL)
+    g_propagate_error (error, g_error_copy (self->error));
+  return ret;
+}
+
+const GError *
+ide_shortcut_bundle_error (IdeShortcutBundle *self)
+{
+  g_return_val_if_fail (IDE_IS_SHORTCUT_BUNDLE (self), NULL);
+
+  return self->error;
 }
