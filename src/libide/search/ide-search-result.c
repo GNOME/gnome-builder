@@ -552,3 +552,25 @@ ide_search_result_set_accelerator (IdeSearchResult *self,
   if (g_set_str (&priv->accelerator, accelerator))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
 }
+
+/**
+ * ide_search_result_load_preview:
+ * @self: a #IdeSearchResult
+ * @context: an #IdeContext
+ *
+ * Gets a preview widget for the search result, if any.
+ *
+ * Returns: (transfer full) (nullable): an #IdeSearchPreview, or %NULL
+ */
+IdeSearchPreview *
+ide_search_result_load_preview (IdeSearchResult *self,
+                                IdeContext      *context)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  if (IDE_SEARCH_RESULT_GET_CLASS (self)->load_preview)
+    return IDE_SEARCH_RESULT_GET_CLASS (self)->load_preview (self, context);
+
+  return NULL;
+}

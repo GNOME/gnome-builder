@@ -28,6 +28,8 @@
 
 #include <libide-core.h>
 
+#include "ide-search-preview.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
@@ -39,64 +41,69 @@ struct _IdeSearchResultClass
 {
   GObjectClass parent_class;
 
-  gboolean (*matches)  (IdeSearchResult *self,
-                        const char      *query);
-  void     (*activate) (IdeSearchResult *self,
-                        GtkWidget       *last_focus);
+  gboolean          (*matches)      (IdeSearchResult *self,
+                                     const char      *query);
+  void              (*activate)     (IdeSearchResult *self,
+                                     GtkWidget       *last_focus);
+  IdeSearchPreview *(*load_preview) (IdeSearchResult *self,
+                                     IdeContext      *context);
 };
 
 IDE_AVAILABLE_IN_ALL
-IdeSearchResult *ide_search_result_new               (void);
+IdeSearchResult  *ide_search_result_new               (void);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_activate          (IdeSearchResult *self,
-                                                      GtkWidget       *last_focus);
+void              ide_search_result_activate          (IdeSearchResult *self,
+                                                       GtkWidget       *last_focus);
 IDE_AVAILABLE_IN_ALL
-int              ide_search_result_compare           (gconstpointer    a,
-                                                      gconstpointer    b);
+int               ide_search_result_compare           (gconstpointer    a,
+                                                       gconstpointer    b);
 IDE_AVAILABLE_IN_ALL
-int              ide_search_result_get_priority      (IdeSearchResult *self);
+int               ide_search_result_get_priority      (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_priority      (IdeSearchResult *self,
-                                                      int              priority);
+void              ide_search_result_set_priority      (IdeSearchResult *self,
+                                                       int              priority);
 IDE_AVAILABLE_IN_ALL
-float            ide_search_result_get_score         (IdeSearchResult *self);
+float             ide_search_result_get_score         (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_score         (IdeSearchResult *self,
-                                                      gfloat           score);
+void              ide_search_result_set_score         (IdeSearchResult *self,
+                                                       gfloat           score);
 IDE_AVAILABLE_IN_ALL
-GdkPaintable    *ide_search_result_get_paintable     (IdeSearchResult *self);
+GdkPaintable     *ide_search_result_get_paintable     (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_paintable     (IdeSearchResult *self,
-                                                      GdkPaintable    *paintable);
+void              ide_search_result_set_paintable     (IdeSearchResult *self,
+                                                       GdkPaintable    *paintable);
 IDE_AVAILABLE_IN_ALL
-GIcon           *ide_search_result_get_gicon         (IdeSearchResult *self);
+GIcon            *ide_search_result_get_gicon         (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_gicon         (IdeSearchResult *self,
-                                                      GIcon           *gicon);
+void              ide_search_result_set_gicon         (IdeSearchResult *self,
+                                                       GIcon           *gicon);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_search_result_get_title         (IdeSearchResult *self);
+const char       *ide_search_result_get_title         (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_title         (IdeSearchResult *self,
-                                                      const char      *title);
+void              ide_search_result_set_title         (IdeSearchResult *self,
+                                                       const char      *title);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_search_result_get_subtitle      (IdeSearchResult *self);
+const char       *ide_search_result_get_subtitle      (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_subtitle      (IdeSearchResult *self,
-                                                      const char      *subtitle);
+void              ide_search_result_set_subtitle      (IdeSearchResult *self,
+                                                       const char      *subtitle);
 IDE_AVAILABLE_IN_ALL
-gboolean         ide_search_result_get_use_markup    (IdeSearchResult *self);
+gboolean          ide_search_result_get_use_markup    (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_use_markup    (IdeSearchResult *self,
-                                                      gboolean         use_markup);
+void              ide_search_result_set_use_markup    (IdeSearchResult *self,
+                                                       gboolean         use_markup);
 IDE_AVAILABLE_IN_ALL
-gboolean         ide_search_result_get_use_underline (IdeSearchResult *self);
+gboolean          ide_search_result_get_use_underline (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_search_result_set_use_underline (IdeSearchResult *self,
-                                                      gboolean         use_underline);
+void              ide_search_result_set_use_underline (IdeSearchResult *self,
+                                                       gboolean         use_underline);
 IDE_AVAILABLE_IN_44
-const char      *ide_search_result_get_accelerator   (IdeSearchResult *self);
+const char       *ide_search_result_get_accelerator   (IdeSearchResult *self);
 IDE_AVAILABLE_IN_44
-void             ide_search_result_set_accelerator   (IdeSearchResult *self,
-                                                      const char      *accelerator);
+void              ide_search_result_set_accelerator   (IdeSearchResult *self,
+                                                       const char      *accelerator);
+IDE_AVAILABLE_IN_44
+IdeSearchPreview *ide_search_result_load_preview      (IdeSearchResult *self,
+                                                       IdeContext      *context);
 
 G_END_DECLS

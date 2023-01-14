@@ -14,6 +14,7 @@ libide_search_public_headers = [
   'ide-fuzzy-mutable-index.h',
   'ide-pattern-spec.h',
   'ide-search-engine.h',
+  'ide-search-preview.h',
   'ide-search-provider.h',
   'ide-search-reducer.h',
   'ide-search-result.h',
@@ -35,6 +36,7 @@ libide_search_public_sources = [
   'ide-fuzzy-mutable-index.c',
   'ide-pattern-spec.c',
   'ide-search-engine.c',
+  'ide-search-preview.c',
   'ide-search-provider.c',
   'ide-search-reducer.c',
   'ide-search-result.c',
@@ -63,11 +65,13 @@ libide_search_sources += libide_search_resources
 #
 
 libide_search_deps = [
+  libadwaita_dep,
   libgio_dep,
   libgtksource_dep,
   libpeas_dep,
 
   libide_core_dep,
+  libide_gtk_dep,
   libide_threading_dep,
   libide_plugins_dep
 ]
