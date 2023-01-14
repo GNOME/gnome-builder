@@ -39,6 +39,8 @@ struct _IdeSearchPopover
   GtkSearchEntry     *entry;
   GtkSingleSelection *selection;
   GtkListView        *list_view;
+  GtkWidget          *left;
+  GtkWidget          *right;
 
   guint               queued_search;
 
@@ -462,7 +464,9 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-search-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, left);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
@@ -478,6 +482,8 @@ static void
 ide_search_popover_init (IdeSearchPopover *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_popover_set_offset (GTK_POPOVER (self), 180, 0);
 }
 
 GtkWidget *
@@ -495,9 +501,22 @@ ide_search_popover_present (IdeSearchPopover *self,
                             int               parent_width,
                             int               parent_height)
 {
+  GtkRequisition left, right;
+
   g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
 
-  gtk_popover_set_pointing_to (GTK_POPOVER (self),
-                               &(GdkRectangle) { parent_width / 2, 100, 1, 1 });
+  gtk_widget_get_preferred_size (GTK_WIDGET (self->left), &left, NULL);
+
+  if (gtk_widget_get_child_visible (GTK_WIDGET (self->right)))
+    {
+      gtk_widget_get_preferred_size (GTK_WIDGET (self->right), &right, NULL);
+      gtk_popover_set_offset (GTK_POPOVER (self), (right.width-left.width)/2, 0);
+    }
+  else
+    {
+      gtk_popover_set_offset (GTK_POPOVER (self), -left.width/2, 0);
+    }
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (self), &(GdkRectangle) { parent_width/2, 100, 1, 1 });
   gtk_popover_present (GTK_POPOVER (self));
 }
