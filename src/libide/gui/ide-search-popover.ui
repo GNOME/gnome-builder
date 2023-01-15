@@ -58,6 +58,12 @@
                     <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
                   </object>
                 </child>
+                <child type="end">
+                  <object class="GtkToggleButton">
+                    <property name="icon-name">panel-right-symbolic</property>
+                    <property name="active" bind-source="preview_revealer" bind-property="reveal-child" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

@@ -41,6 +41,7 @@ struct _IdeSearchPopover
   GtkListView        *list_view;
   GtkWidget          *left;
   GtkWidget          *right;
+  GtkRevealer        *preview_revealer;
 
   guint               queued_search;
 
@@ -466,6 +467,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, left);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
@@ -509,7 +511,7 @@ ide_search_popover_present (IdeSearchPopover *self,
 
   if (gtk_widget_get_child_visible (GTK_WIDGET (self->right)))
     {
-      gtk_widget_get_preferred_size (GTK_WIDGET (self->right), &right, NULL);
+      gtk_widget_get_preferred_size (GTK_WIDGET (self->preview_revealer), &right, NULL);
       gtk_popover_set_offset (GTK_POPOVER (self), (right.width-left.width)/2, 0);
     }
   else
