@@ -51,7 +51,7 @@
                 <property name="show-end-title-buttons">false</property>
                 <child type="title">
                   <object class="GtkSearchEntry" id="entry">
-                    <property name="width-chars">40</property>
+                    <property name="width-chars">30</property>
                     <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
                     <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
                     <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
