@@ -302,16 +302,21 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
   g_assert (IDE_IS_BUFFER (buffer));
 
   capabilities = ide_lsp_client_get_server_capabilities (self);
-  if (capabilities != NULL) {
-    gint64 tds = 0;
+  if (capabilities != NULL)
+    {
+      gint64 tds = 0;
 
-    // for backwards compatibility reasons LS can stick to a number instead of the structure
-    if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
-        | JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", "{", "change", JSONRPC_MESSAGE_GET_INT64 (&tds), "}"))
-      {
-        text_document_sync = tds;
-      }
-  }
+      // for backwards compatibility reasons LS can stick to a number instead of the structure
+      if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
+          || JSONRPC_MESSAGE_PARSE (capabilities,
+                                    "textDocumentSync", "{",
+                                      "change", JSONRPC_MESSAGE_GET_INT64 (&tds),
+                                    "}")
+          )
+        {
+          text_document_sync = tds;
+        }
+    }
 
   uri = ide_buffer_dup_uri (buffer);
 
@@ -392,14 +397,9 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
 
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
-  GtkTextIter copy_begin;
-  GtkTextIter copy_end;
-  struct {
-    gint line;
-    gint column;
-  } begin, end;
   gint version;
-  gint length;
+  GVariant *capabilities = NULL;
+  gint64 text_document_sync = TEXT_DOCUMENT_SYNC_NONE;
 
   IDE_ENTRY;
 
@@ -409,44 +409,96 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
   g_assert (end_iter != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
+  capabilities = ide_lsp_client_get_server_capabilities (self);
+  if (capabilities != NULL)
+    {
+    gint64 tds = 0;
+
+    // for backwards compatibility reasons LS can stick to a number instead of the structure
+    if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
+          || JSONRPC_MESSAGE_PARSE (capabilities,
+                                    "textDocumentSync", "{",
+                                      "change", JSONRPC_MESSAGE_GET_INT64 (&tds),
+                                    "}")
+          )
+        {
+          text_document_sync = tds;
+        }
+    }
+
   uri = ide_buffer_dup_uri (buffer);
 
   /* We get called before this change is registered */
   version = (gint)ide_buffer_get_change_count (buffer) + 1;
 
-  copy_begin = *begin_iter;
-  copy_end = *end_iter;
-  gtk_text_iter_order (&copy_begin, &copy_end);
+  if (text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
+    {
+      GtkTextIter copy_begin;
+      GtkTextIter copy_end;
+      struct {
+        gint line;
+        gint column;
+      } begin, end;
+      gint length;
 
-  begin.line = gtk_text_iter_get_line (&copy_begin);
-  begin.column = gtk_text_iter_get_line_offset (&copy_begin);
+      copy_begin = *begin_iter;
+      copy_end = *end_iter;
+      gtk_text_iter_order (&copy_begin, &copy_end);
 
-  end.line = gtk_text_iter_get_line (&copy_end);
-  end.column = gtk_text_iter_get_line_offset (&copy_end);
+      begin.line = gtk_text_iter_get_line (&copy_begin);
+      begin.column = gtk_text_iter_get_line_offset (&copy_begin);
 
-  length = gtk_text_iter_get_offset (&copy_end) - gtk_text_iter_get_offset (&copy_begin);
+      end.line = gtk_text_iter_get_line (&copy_end);
+      end.column = gtk_text_iter_get_line_offset (&copy_end);
 
-  params = JSONRPC_MESSAGE_NEW (
-    "textDocument", "{",
-      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-    "}",
-    "contentChanges", "[",
-      "{",
-        "range", "{",
-          "start", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT64 (begin.line),
-            "character", JSONRPC_MESSAGE_PUT_INT64 (begin.column),
-          "}",
-          "end", "{",
-            "line", JSONRPC_MESSAGE_PUT_INT64 (end.line),
-            "character", JSONRPC_MESSAGE_PUT_INT64 (end.column),
-          "}",
+      length = gtk_text_iter_get_offset (&copy_end) - gtk_text_iter_get_offset (&copy_begin);
+
+      params = JSONRPC_MESSAGE_NEW (
+        "textDocument", "{",
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
         "}",
-        "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
-        "text", JSONRPC_MESSAGE_PUT_STRING (""),
-      "}",
-    "]");
+        "contentChanges", "[",
+          "{",
+            "range", "{",
+              "start", "{",
+                "line", JSONRPC_MESSAGE_PUT_INT64 (begin.line),
+                "character", JSONRPC_MESSAGE_PUT_INT64 (begin.column),
+              "}",
+              "end", "{",
+                "line", JSONRPC_MESSAGE_PUT_INT64 (end.line),
+                "character", JSONRPC_MESSAGE_PUT_INT64 (end.column),
+              "}",
+            "}",
+            "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
+            "text", JSONRPC_MESSAGE_PUT_STRING (""),
+          "}",
+        "]");
+    }
+  else if (text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+    {
+      g_autoptr(GBytes) content = NULL;
+      const gchar *text;
+      g_autoptr(GString) str = NULL;
+      guint len;
+
+      content = ide_buffer_dup_content (buffer);
+      text = (const gchar *)g_bytes_get_data (content, NULL);
+      str = g_string_new (text);
+      len = gtk_text_iter_get_offset (end_iter) - gtk_text_iter_get_offset (begin_iter);
+      g_string_erase (str, gtk_text_iter_get_offset (begin_iter), len);
+
+      params = JSONRPC_MESSAGE_NEW (
+        "textDocument", "{",
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+        "}",
+        "contentChanges", "[",
+          "{",
+            "text", JSONRPC_MESSAGE_PUT_STRING (str->str),
+          "}",
+        "]");
+    }
 
   ide_lsp_client_send_notification_async (self,
                                           "textDocument/didChange",
