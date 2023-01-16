@@ -115,6 +115,7 @@ enum {
   PROP_0,
   PROP_CONTEXT,
   PROP_ID,
+  PROP_SEARCH_POPOVER,
   N_PROPS
 };
 
@@ -640,6 +641,7 @@ ide_workspace_get_property (GObject    *object,
                             GParamSpec *pspec)
 {
   IdeWorkspace *self = IDE_WORKSPACE (object);
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -649,6 +651,10 @@ ide_workspace_get_property (GObject    *object,
 
     case PROP_ID:
       g_value_set_string (value, ide_workspace_get_id (self));
+      break;
+
+    case PROP_SEARCH_POPOVER:
+      g_value_set_object (value, priv->search_popover);
       break;
 
     default:
@@ -728,6 +734,11 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                          "Identifier for the workspace window",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SEARCH_POPOVER] =
+    g_param_spec_object ("search-popover", NULL, NULL,
+                         IDE_TYPE_SEARCH_POPOVER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
