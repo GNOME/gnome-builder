@@ -130,6 +130,7 @@ src/plugins/cmake/gbp-cmake-toolchain.c
 src/plugins/code-index/gbp-code-index-application-addin.c
 src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
+src/plugins/code-index/ide-code-index-search-provider.c
 src/plugins/codespell/ide-codespell-diagnostic-provider.c
 src/plugins/codeui/gbp-codeui-buffer-addin.c
 src/plugins/codeui/gbp-codeui-code-action-dialog.ui
@@ -177,6 +178,7 @@ src/plugins/editorui/gtk/menus.ui
 src/plugins/editorui/tweaks-language.ui
 src/plugins/editorui/tweaks.ui
 src/plugins/file-search/gbp-file-search-index.c
+src/plugins/file-search/gbp-file-search-provider.c
 src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c
 src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c
 src/plugins/flatpak/gbp-flatpak-client.c
@@ -222,6 +224,7 @@ src/plugins/make-templates/gbp-make-template-provider.c
 src/plugins/markdown-preview/gtk/menus.ui
 src/plugins/maven/gbp-maven-pipeline-addin.c
 src/plugins/maven/gbp-maven-run-command-provider.c
+src/plugins/menu-search/gbp-menu-search-provider.c
 src/plugins/menu-search/gtk/menus.ui
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-introspection.c
@@ -260,6 +263,7 @@ src/plugins/sdkui/gtk/menus.ui
 src/plugins/sdkui/tweaks.ui
 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c
 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui
+src/plugins/shellcmd/gbp-shellcmd-search-provider.c
 src/plugins/shellcmd/gbp-shellcmd-search-result.c
 src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c
 src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c
@@ -271,6 +275,7 @@ src/plugins/spellcheck/editor-spell-menu.c
 src/plugins/sphinx-preview/gtk/menus.ui
 src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-popover.ui
+src/plugins/symbol-tree/gbp-symbol-search-provider.c
 src/plugins/symbol-tree/gbp-symbol-search-result.c
 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
 src/plugins/symbol-tree/gtk/menus.ui

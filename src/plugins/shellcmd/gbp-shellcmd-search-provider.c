@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 #include <libide-search.h>
 #include <libide-sourceview.h>
@@ -176,6 +178,18 @@ gbp_shellcmd_search_provider_unload (IdeSearchProvider *provider)
   IDE_EXIT;
 }
 
+static char *
+gbp_shellcmd_search_provider_dup_title (IdeSearchProvider *provider)
+{
+  return g_strdup (_("Commands"));
+}
+
+static GIcon *
+gbp_shellcmd_search_provider_dup_icon (IdeSearchProvider *provider)
+{
+  return g_themed_icon_new ("text-x-script-symbolic");
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
@@ -183,6 +197,8 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->unload = gbp_shellcmd_search_provider_unload;
   iface->search_async = gbp_shellcmd_search_provider_search_async;
   iface->search_finish = gbp_shellcmd_search_provider_search_finish;
+  iface->dup_title = gbp_shellcmd_search_provider_dup_title;
+  iface->dup_icon = gbp_shellcmd_search_provider_dup_icon;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdSearchProvider, gbp_shellcmd_search_provider, IDE_TYPE_OBJECT,

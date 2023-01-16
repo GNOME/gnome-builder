@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 #include <libide-search.h>
 #include <libide-sourceview.h>
@@ -184,11 +186,25 @@ gbp_menu_search_provider_search_finish (IdeSearchProvider  *provider,
   IDE_RETURN (ret);
 }
 
+static char *
+gbp_menu_search_provider_dup_title (IdeSearchProvider *provider)
+{
+  return g_strdup (_("Actions"));
+}
+
+static GIcon *
+gbp_menu_search_provider_dup_icon (IdeSearchProvider *provider)
+{
+  return g_themed_icon_new ("preferences-desktop-keyboard-shortcuts-symbolic");
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
   iface->search_async = gbp_menu_search_provider_search_async;
   iface->search_finish = gbp_menu_search_provider_search_finish;
+  iface->dup_title = gbp_menu_search_provider_dup_title;
+  iface->dup_icon = gbp_menu_search_provider_dup_icon;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMenuSearchProvider, gbp_menu_search_provider, IDE_TYPE_OBJECT,
