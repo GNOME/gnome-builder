@@ -26,6 +26,9 @@
 
 #include <libide-core.h>
 
+#include "ide-search-preview.h"
+#include "ide-search-result.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
@@ -37,41 +40,46 @@ struct _IdeSearchProviderInterface
 {
   GTypeInterface parent_interface;
 
-  void        (*load)          (IdeSearchProvider    *self);
-  void        (*unload)        (IdeSearchProvider    *self);
-  void        (*search_async)  (IdeSearchProvider    *self,
-                                const gchar          *query,
-                                guint                 max_results,
-                                GCancellable         *cancellable,
-                                GAsyncReadyCallback   callback,
-                                gpointer              user_data);
-  GListModel *(*search_finish) (IdeSearchProvider    *self,
-                                GAsyncResult         *result,
-                                gboolean             *truncated,
-                                GError              **error);
-  char       *(*dup_title)     (IdeSearchProvider    *self);
-  GIcon      *(*dup_icon)      (IdeSearchProvider    *self);
+  void              (*load)          (IdeSearchProvider    *self);
+  void              (*unload)        (IdeSearchProvider    *self);
+  void              (*search_async)  (IdeSearchProvider    *self,
+                                      const gchar          *query,
+                                      guint                 max_results,
+                                      GCancellable         *cancellable,
+                                      GAsyncReadyCallback   callback,
+                                      gpointer              user_data);
+  GListModel       *(*search_finish) (IdeSearchProvider    *self,
+                                      GAsyncResult         *result,
+                                      gboolean             *truncated,
+                                      GError              **error);
+  char             *(*dup_title)     (IdeSearchProvider    *self);
+  GIcon            *(*dup_icon)      (IdeSearchProvider    *self);
+  IdeSearchPreview *(*load_preview)  (IdeSearchProvider    *self,
+                                      IdeSearchResult      *result);
 };
 
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_load           (IdeSearchProvider *self);
+void             ide_search_provider_load           (IdeSearchProvider    *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_unload         (IdeSearchProvider *self);
+void             ide_search_provider_unload         (IdeSearchProvider    *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_search_async   (IdeSearchProvider    *self,
-                                               const gchar          *query,
-                                               guint                 max_results,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data);
+void             ide_search_provider_search_async   (IdeSearchProvider    *self,
+                                                     const gchar          *query,
+                                                     guint                 max_results,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-GListModel *ide_search_provider_search_finish (IdeSearchProvider    *self,
-                                               GAsyncResult         *result,
-                                               gboolean             *truncated,
-                                               GError              **error);
+GListModel       *ide_search_provider_search_finish (IdeSearchProvider    *self,
+                                                     GAsyncResult         *result,
+                                                     gboolean             *truncated,
+                                                     GError              **error);
 IDE_AVAILABLE_IN_44
-char       *ide_search_provider_dup_title     (IdeSearchProvider    *self);
+char             *ide_search_provider_dup_title    (IdeSearchProvider     *self);
 IDE_AVAILABLE_IN_44
-GIcon      *ide_search_provider_dup_icon      (IdeSearchProvider    *self);
+GIcon            *ide_search_provider_dup_icon     (IdeSearchProvider     *self);
+IDE_AVAILABLE_IN_44
+IdeSearchPreview *ide_search_provider_load_preview (IdeSearchProvider     *self,
+                                                    IdeSearchResult       *result);
 
 G_END_DECLS

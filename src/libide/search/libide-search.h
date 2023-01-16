@@ -31,6 +31,7 @@
 # include "ide-fuzzy-mutable-index.h"
 # include "ide-pattern-spec.h"
 # include "ide-search-engine.h"
+# include "ide-search-preview.h"
 # include "ide-search-provider.h"
 # include "ide-search-reducer.h"
 # include "ide-search-result.h"
