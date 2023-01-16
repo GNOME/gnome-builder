@@ -36,4 +36,10 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
 
+IDE_AVAILABLE_IN_44
+gboolean ide_search_popover_get_show_preview (IdeSearchPopover *self);
+IDE_AVAILABLE_IN_44
+void     ide_search_popover_set_show_preview (IdeSearchPopover *self,
+                                              gboolean          show_preview);
+
 G_END_DECLS

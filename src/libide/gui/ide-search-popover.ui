@@ -62,7 +62,7 @@
                 <child type="end">
                   <object class="GtkToggleButton" id="preview_toggle">
                     <property name="icon-name">panel-right-symbolic</property>
-                    <property name="active" bind-source="preview_revealer" bind-property="reveal-child" bind-flags="bidirectional|sync-create"/>
+                    <property name="active" bind-source="IdeSearchPopover" bind-property="show-preview" bind-flags="bidirectional|sync-create"/>
                   </object>
                 </child>
               </object>
@@ -82,6 +82,7 @@
                         <property name="orientation">vertical</property>
                         <property name="model">
                           <object class="GtkSingleSelection" id="selection">
+                            <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
                           </object>
                         </property>
                         <property name="factory">
@@ -183,7 +184,6 @@
         <child>
           <object class="GtkRevealer" id="preview_revealer">
             <property name="transition-type">slide-left</property>
-            <property name="reveal-child">false</property>
             <property name="halign">start</property>
             <property name="hexpand">false</property>
             <child>
@@ -208,7 +208,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkStack" id="preview_stack">
+                      <object class="AdwBin" id="preview_bin">
                         <property name="width-request">350</property>
                       </object>
                     </child>
