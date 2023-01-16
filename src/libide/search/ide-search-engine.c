@@ -40,6 +40,7 @@ struct _IdeSearchEngine
   IdeExtensionSetAdapter *extensions;
   GPtrArray              *custom_provider;
   guint                   active_count;
+  GListStore             *list;
 };
 
 typedef struct
@@ -108,12 +109,16 @@ on_extension_added_cb (IdeExtensionSetAdapter *set,
                        gpointer                user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
+  IdeSearchEngine *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_SEARCH_ENGINE (self));
 
   ide_search_provider_load (provider);
+
+  g_list_store_append (self->list, provider);
 }
 
 static void
@@ -123,12 +128,30 @@ on_extension_removed_cb (IdeExtensionSetAdapter *set,
                          gpointer                user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
+  IdeSearchEngine *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_SEARCH_ENGINE (self));
 
   ide_search_provider_unload (provider);
+
+  if (self->list != NULL)
+    {
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self->list));
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeSearchProvider) item = g_list_model_get_item (G_LIST_MODEL (self->list), i);
+
+          if (item == provider)
+            {
+              g_list_store_remove (self->list, i);
+              break;
+            }
+        }
+    }
 }
 
 static void
@@ -170,6 +193,7 @@ ide_search_engine_dispose (GObject *object)
 
   g_clear_object (&self->extensions);
   g_clear_pointer (&self->custom_provider, g_ptr_array_unref);
+  g_clear_object (&self->list);
 
   G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
 }
@@ -218,6 +242,7 @@ static void
 ide_search_engine_init (IdeSearchEngine *self)
 {
   self->custom_provider = g_ptr_array_new_with_free_func (g_object_unref);
+  self->list = g_list_store_new (IDE_TYPE_SEARCH_PROVIDER);
 }
 
 IdeSearchEngine *
@@ -465,6 +490,7 @@ ide_search_engine_add_provider (IdeSearchEngine   *self,
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
 
   g_ptr_array_add (self->custom_provider, g_object_ref (provider));
+  g_list_store_append (self->list, provider);
 }
 
 /**
@@ -482,5 +508,38 @@ ide_search_engine_remove_provider (IdeSearchEngine   *self,
   g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (provider));
 
-  g_ptr_array_remove (self->custom_provider, provider);
+  if (self->custom_provider != NULL)
+    g_ptr_array_remove (self->custom_provider, provider);
+
+  if (self->list != NULL)
+    {
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self->list));
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeSearchProvider) item = g_list_model_get_item (G_LIST_MODEL (self->list), i);
+
+          if (item == provider)
+            {
+              g_list_store_remove (self->list, i);
+              break;
+            }
+        }
+    }
+}
+
+/**
+ * ide_search_engine_list_providers:
+ * @self: a #IdeSearchEngine
+ *
+ * Gets a #GListModel that is updated as providers are added or removed.
+ *
+ * Returns:
+ */
+GListModel *
+ide_search_engine_list_providers (IdeSearchEngine *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
+
+  return g_object_ref (G_LIST_MODEL (self->list));
 }
