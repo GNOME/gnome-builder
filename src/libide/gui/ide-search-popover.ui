@@ -14,6 +14,8 @@
           <object class="GtkBox" id="left">
             <property name="orientation">vertical</property>
             <property name="width-request">180</property>
+            <property name="halign">end</property>
+            <property name="hexpand">false</property>
             <child>
               <object class="AdwHeaderBar">
                 <property name="show-start-title-buttons">false</property>
@@ -182,6 +184,8 @@
           <object class="GtkRevealer" id="preview_revealer">
             <property name="transition-type">slide-left</property>
             <property name="reveal-child">false</property>
+            <property name="halign">start</property>
+            <property name="hexpand">false</property>
             <child>
               <object class="GtkBox" id="right">
                 <property name="orientation">horizontal</property>
