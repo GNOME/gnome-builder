@@ -49,6 +49,8 @@ struct _IdeSearchProviderInterface
                                 GAsyncResult         *result,
                                 gboolean             *truncated,
                                 GError              **error);
+  char       *(*dup_title)     (IdeSearchProvider    *self);
+  GIcon      *(*dup_icon)      (IdeSearchProvider    *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -67,5 +69,9 @@ GListModel *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                                GAsyncResult         *result,
                                                gboolean             *truncated,
                                                GError              **error);
+IDE_AVAILABLE_IN_44
+char       *ide_search_provider_dup_title     (IdeSearchProvider    *self);
+IDE_AVAILABLE_IN_44
+GIcon      *ide_search_provider_dup_icon      (IdeSearchProvider    *self);
 
 G_END_DECLS

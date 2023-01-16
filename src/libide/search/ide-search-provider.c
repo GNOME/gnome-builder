@@ -63,11 +63,25 @@ ide_search_provider_real_search_finish (IdeSearchProvider  *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+static char *
+ide_search_provider_real_dup_title (IdeSearchProvider *self)
+{
+  return g_strdup (G_OBJECT_TYPE_NAME (self));
+}
+
+static GIcon *
+ide_search_provider_real_dup_icon (IdeSearchProvider *self)
+{
+  return g_themed_icon_new ("gtk-missing");
+}
+
 static void
 ide_search_provider_default_init (IdeSearchProviderInterface *iface)
 {
   iface->search_async = ide_search_provider_real_search_async;
   iface->search_finish = ide_search_provider_real_search_finish;
+  iface->dup_title = ide_search_provider_real_dup_title;
+  iface->dup_icon = ide_search_provider_real_dup_icon;
 }
 
 void
@@ -150,4 +164,20 @@ ide_search_provider_search_finish (IdeSearchProvider  *self,
   g_return_val_if_fail (*truncated == TRUE || *truncated == FALSE, NULL);
 
   IDE_RETURN (ret);
+}
+
+char *
+ide_search_provider_dup_title (IdeSearchProvider *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
+
+  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->dup_title (self);
+}
+
+GIcon *
+ide_search_provider_dup_icon (IdeSearchProvider *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
+
+  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->dup_icon (self);
 }
