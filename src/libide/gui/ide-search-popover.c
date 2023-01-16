@@ -107,7 +107,8 @@ ide_search_popover_hide_action (GtkWidget  *widget,
 
   gtk_popover_popdown (GTK_POPOVER (widget));
 
-  gtk_widget_grab_focus (GTK_WIDGET (page));
+  if (page != NULL)
+    gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
 static void
