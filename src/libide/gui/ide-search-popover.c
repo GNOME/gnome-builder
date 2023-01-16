@@ -39,6 +39,7 @@ struct _IdeSearchPopover
   GtkSearchEntry     *entry;
   GtkSingleSelection *selection;
   GtkListView        *list_view;
+  GtkListBox         *providers_list_box;
   GtkWidget          *left;
   GtkWidget          *right;
   GtkRevealer        *preview_revealer;
@@ -115,6 +116,44 @@ ide_search_popover_hide_action (GtkWidget  *widget,
     gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
+static GtkWidget *
+create_provider_row_cb (gpointer item,
+                        gpointer user_data)
+{
+  IdeSearchProvider *provider = item;
+  g_autofree char *title = NULL;
+  g_autoptr(GIcon) icon = NULL;
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+
+  title = ide_search_provider_dup_title (provider);
+  icon = ide_search_provider_dup_icon (provider);
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "spacing", 9,
+                      NULL);
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "gicon", icon,
+                        NULL);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", title,
+                        "xalign", .0f,
+                        "ellipsize", PANGO_ELLIPSIZE_END,
+                        NULL);
+  gtk_box_append (GTK_BOX (box), image);
+  gtk_box_append (GTK_BOX (box), label);
+
+  return g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                       "css-classes", IDE_STRV_INIT ("sidebar-row"),
+                       "child", box,
+                       NULL);
+}
+
 static void
 ide_search_popover_set_search_engine (IdeSearchPopover *self,
                                       IdeSearchEngine  *search_engine)
@@ -122,7 +161,19 @@ ide_search_popover_set_search_engine (IdeSearchPopover *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
 
-  g_set_object (&self->search_engine, search_engine);
+  if (g_set_object (&self->search_engine, search_engine))
+    {
+      g_autoptr(GListModel) model = NULL;
+
+      if (search_engine != NULL)
+        model = ide_search_engine_list_providers (search_engine);
+
+      gtk_list_box_bind_model (self->providers_list_box,
+                               model,
+                               create_provider_row_cb,
+                               self,
+                               NULL);
+    }
 }
 
 static void
@@ -470,6 +521,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, left);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, providers_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
