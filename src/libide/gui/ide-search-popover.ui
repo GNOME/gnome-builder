@@ -40,7 +40,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="center">
             <property name="orientation">vertical</property>
             <property name="width-request">500</property>
             <property name="hexpand">true</property>
@@ -58,7 +58,7 @@
                   </object>
                 </child>
                 <child type="end">
-                  <object class="GtkToggleButton">
+                  <object class="GtkToggleButton" id="preview_toggle">
                     <property name="icon-name">panel-right-symbolic</property>
                     <property name="active" bind-source="preview_revealer" bind-property="reveal-child" bind-flags="bidirectional|sync-create"/>
                   </object>
