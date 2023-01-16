@@ -2,7 +2,6 @@
 <interface>
   <template class="IdeSearchPopover" parent="GtkPopover">
     <property name="has-arrow">false</property>
-    <property name="width-request">700</property>
     <property name="height-request">400</property>
     <property name="default-widget">entry</property>
     <style>
