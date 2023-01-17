@@ -210,7 +210,7 @@
                     </child>
                     <child>
                       <object class="AdwBin" id="preview_bin">
-                        <property name="width-request">350</property>
+                        <property name="width-request">375</property>
                       </object>
                     </child>
                   </object>
