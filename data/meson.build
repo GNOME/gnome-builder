@@ -7,6 +7,9 @@ subdir('styles')
 # Desktop launcher and description file.
 desktop_file_config = configuration_data()
 desktop_file_config.set('app_id', app_id)
+if app_id == 'org.gnome.Builder'
+  desktop_file_config.set('X_FLATPAK_RENAMEDFROM', 'X-Flatpak-RenamedFrom=gnome-builder')
+endif
 desktop_file_in = configure_file(
           input: 'org.gnome.Builder.desktop.in.in',
          output: 'org.gnome.Builder.desktop.in',
