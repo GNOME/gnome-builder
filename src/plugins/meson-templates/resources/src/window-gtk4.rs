@@ -41,7 +41,7 @@ mod imp {
     impl WindowImpl for {{PreFix}}Window {}
     impl ApplicationWindowImpl for {{PreFix}}Window {}
 {{if is_adwaita}}
-    impl AdwApplicationWindowImpl for {{Prefix}}Window {}
+    impl AdwApplicationWindowImpl for {{PreFix}}Window {}
 {{end}}
 }
 
