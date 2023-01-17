@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/libide-search">
+    <file preprocess="xml-stripblanks">ide-search-preview.ui</file>
   </gresource>
 </gresources>
