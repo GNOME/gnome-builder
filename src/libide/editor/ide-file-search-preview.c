@@ -175,9 +175,12 @@ ide_file_search_preview_settings_changed_cb (IdeFileSearchPreview *self,
     gtk_source_buffer_set_highlight_matching_brackets (self->buffer,
                                                        g_settings_get_boolean (settings, "highlight-matching-brackets"));
 
+#if 0
+  /* Ignore line numbers for now */
   if (!key || ide_str_equal0 (key, "show-line-numbers"))
     gtk_source_view_set_show_line_numbers (self->view,
                                            g_settings_get_boolean (settings, "show-line-numbers"));
+#endif
 
   if (!key || ide_str_equal0 (key, "line-height"))
     update_css = TRUE;
