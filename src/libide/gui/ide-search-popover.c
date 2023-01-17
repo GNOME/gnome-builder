@@ -489,8 +489,7 @@ ide_search_popover_set_preview (IdeSearchPopover *self,
 {
   const char *title = NULL;
   const char *subtitle = NULL;
-  gboolean old_can_show_preview;
-  gboolean new_can_show_preview;
+  gboolean can_show_preview;
 
   IDE_ENTRY;
 
@@ -498,13 +497,11 @@ ide_search_popover_set_preview (IdeSearchPopover *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (!preview || IDE_IS_SEARCH_PREVIEW (preview));
 
-  old_can_show_preview = self->has_preview && self->show_preview;
   self->has_preview = preview != NULL;
   adw_bin_set_child (self->preview_bin, GTK_WIDGET (preview));
-  new_can_show_preview = self->has_preview && self->show_preview;
+  can_show_preview = self->has_preview && self->show_preview;
 
-  if (old_can_show_preview != new_can_show_preview)
-    gtk_revealer_set_reveal_child (self->preview_revealer, new_can_show_preview);
+  gtk_revealer_set_reveal_child (self->preview_revealer, can_show_preview);
 
   if (preview != NULL)
     {
@@ -757,6 +754,8 @@ ide_search_popover_set_show_preview (IdeSearchPopover *self,
     {
       self->show_preview = show_preview;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_PREVIEW]);
+
+      ide_search_popover_selection_changed_cb (self, NULL, self->selection);
     }
 }
 
