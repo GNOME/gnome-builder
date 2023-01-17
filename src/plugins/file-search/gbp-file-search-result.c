@@ -66,6 +66,24 @@ gbp_file_search_result_activate (IdeSearchResult *result,
   ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL, NULL);
 }
 
+static IdeSearchPreview *
+gbp_file_search_result_load_preview (IdeSearchResult *result,
+                                     IdeContext      *context)
+{
+  GbpFileSearchResult *self = (GbpFileSearchResult *)result;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FILE_SEARCH_RESULT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  workdir = ide_context_ref_workdir (context);
+  file = g_file_get_child (workdir, self->path);
+
+  return ide_file_preview_new (file);
+}
+
 static void
 gbp_file_search_result_finalize (GObject *object)
 {
@@ -125,6 +143,7 @@ gbp_file_search_result_class_init (GbpFileSearchResultClass *klass)
   object_class->set_property = gbp_file_search_result_set_property;
 
   result_class->activate = gbp_file_search_result_activate;
+  result_class->load_preview = gbp_file_search_result_load_preview;
 
   properties [PROP_PATH] =
     g_param_spec_string ("path",
