@@ -343,14 +343,13 @@ gbp_file_search_index_build_finish (GbpFileSearchIndex  *self,
 
 GPtrArray *
 gbp_file_search_index_populate (GbpFileSearchIndex *self,
-                               const gchar       *query,
-                               gsize              max_results)
+                                const gchar        *query,
+                                gsize               max_results)
 {
   g_auto(IdeSearchReducer) reducer = { 0 };
   g_autoptr(GString) delimited = NULL;
   g_autoptr(GArray) ar = NULL;
   const gchar *iter = query;
-  IdeContext *context;
   gsize i;
 
   g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), NULL);
@@ -358,8 +357,6 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
 
   if (self->fuzzy == NULL)
     return g_ptr_array_new_with_free_func (g_object_unref);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
 
   ide_search_reducer_init (&reducer, max_results);
 
@@ -394,7 +391,6 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
             themed_icon = ide_g_content_type_get_symbolic_icon (content_type, filename);
 
           result = g_object_new (GBP_TYPE_FILE_SEARCH_RESULT,
-                                 "context", context,
                                  "score", match->score,
                                  "title", filename,
                                  "path", filename,

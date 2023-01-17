@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-file-search-result"
 
+#include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-file-search-result.h"
@@ -27,30 +28,27 @@
 struct _GbpFileSearchResult
 {
   IdeSearchResult  parent_instance;
-
-  IdeContext      *context;
-  gchar           *path;
+  char            *path;
 };
 
 G_DEFINE_FINAL_TYPE (GbpFileSearchResult, gbp_file_search_result, IDE_TYPE_SEARCH_RESULT)
 
 enum {
   PROP_0,
-  PROP_CONTEXT,
   PROP_PATH,
-  LAST_PROP
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 static void
 gbp_file_search_result_activate (IdeSearchResult *result,
                                  GtkWidget       *last_focus)
 {
   g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) file = NULL;
   IdeWorkbench *workbench;
   IdeContext *context;
-  GFile *file;
 
   g_assert (GBP_IS_FILE_SEARCH_RESULT (result));
   g_assert (!last_focus || GTK_IS_WIDGET (last_focus));
@@ -73,7 +71,6 @@ gbp_file_search_result_finalize (GObject *object)
 {
   GbpFileSearchResult *self = (GbpFileSearchResult *)object;
 
-  g_clear_weak_pointer (&self->context);
   g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (gbp_file_search_result_parent_class)->finalize (object);
@@ -108,10 +105,6 @@ gbp_file_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      g_set_weak_pointer (&self->context, g_value_get_object (value));
-      break;
-
     case PROP_PATH:
       self->path = g_value_dup_string (value);
       break;
@@ -133,13 +126,6 @@ gbp_file_search_result_class_init (GbpFileSearchResultClass *klass)
 
   result_class->activate = gbp_file_search_result_activate;
 
-  properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "The context for the result",
-                         IDE_TYPE_CONTEXT,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_PATH] =
     g_param_spec_string ("path",
                          "Path",
@@ -147,7 +133,7 @@ gbp_file_search_result_class_init (GbpFileSearchResultClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
