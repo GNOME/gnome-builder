@@ -527,6 +527,7 @@ ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
 {
   IdeSearchPreview *preview = NULL;
   IdeSearchResult *result;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -534,8 +535,10 @@ ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (GTK_IS_SINGLE_SELECTION (selection));
 
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
   if ((result = gtk_single_selection_get_selected_item (selection)))
-    preview = ide_search_result_load_preview (result);
+    preview = ide_search_result_load_preview (result, context);
 
   ide_search_popover_set_preview (self, preview);
 

@@ -45,7 +45,8 @@ struct _IdeSearchResultClass
                                      const char      *query);
   void              (*activate)     (IdeSearchResult *self,
                                      GtkWidget       *last_focus);
-  IdeSearchPreview *(*load_preview) (IdeSearchResult *self);
+  IdeSearchPreview *(*load_preview) (IdeSearchResult *self,
+                                     IdeContext      *context);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -102,6 +103,7 @@ IDE_AVAILABLE_IN_44
 void              ide_search_result_set_accelerator   (IdeSearchResult *self,
                                                        const char      *accelerator);
 IDE_AVAILABLE_IN_44
-IdeSearchPreview *ide_search_result_load_preview      (IdeSearchResult *self);
+IdeSearchPreview *ide_search_result_load_preview      (IdeSearchResult *self,
+                                                       IdeContext      *context);
 
 G_END_DECLS
