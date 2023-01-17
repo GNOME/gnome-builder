@@ -980,10 +980,10 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
 
   ide_debugger_prepare_for_run (debugger, pipeline, run_context);
 
-  if (ide_settings_get_boolean (settings, "insert-breakpoint-at-criticals"))
-    ide_run_context_setenv (run_context, "G_DEBUG", "fatal-criticals");
-  else if (ide_settings_get_boolean (settings, "insert-breakpoint-at-warnings"))
+  if (ide_settings_get_boolean (settings, "insert-breakpoint-at-warnings"))
     ide_run_context_setenv (run_context, "G_DEBUG", "fatal-warnings");
+  else if (ide_settings_get_boolean (settings, "insert-breakpoint-at-criticals"))
+    ide_run_context_setenv (run_context, "G_DEBUG", "fatal-criticals");
 
   if (g_set_object (&self->debugger, debugger))
     ide_signal_group_set_target (self->debugger_signals, self->debugger);
