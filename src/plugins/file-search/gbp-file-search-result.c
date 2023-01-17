@@ -81,7 +81,7 @@ gbp_file_search_result_load_preview (IdeSearchResult *result,
   workdir = ide_context_ref_workdir (context);
   file = g_file_get_child (workdir, self->path);
 
-  return ide_file_preview_new (file);
+  return ide_file_search_preview_new (file);
 }
 
 static void

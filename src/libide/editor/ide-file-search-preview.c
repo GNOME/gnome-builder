@@ -1,4 +1,4 @@
-/* ide-file-preview.c
+/* ide-file-search-preview.c
  *
  * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-file-preview"
+#define G_LOG_DOMAIN "ide-file-search-preview"
 
 #include "config.h"
 
@@ -31,9 +31,9 @@
 #include "ide-application-private.h"
 #include "ide-source-view-private.h"
 
-#include "ide-file-preview.h"
+#include "ide-file-search-preview.h"
 
-struct _IdeFilePreview
+struct _IdeFileSearchPreview
 {
   IdeSearchPreview parent_instance;
 
@@ -50,7 +50,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeFilePreview, ide_file_preview, IDE_TYPE_SEARCH_PREVIEW)
+G_DEFINE_FINAL_TYPE (IdeFileSearchPreview, ide_file_search_preview, IDE_TYPE_SEARCH_PREVIEW)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -59,10 +59,10 @@ file_progress_cb (goffset  current_num_bytes,
                   goffset  total_num_bytes,
                   gpointer user_data)
 {
-  IdeFilePreview *self = user_data;
+  IdeFileSearchPreview *self = user_data;
   double progress;
 
-  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
 
   if (total_num_bytes == 0)
     progress = 1.;
@@ -73,17 +73,17 @@ file_progress_cb (goffset  current_num_bytes,
 }
 
 static void
-ide_file_preview_load_cb (GObject      *object,
-                          GAsyncResult *result,
-                          gpointer      user_data)
+ide_file_search_preview_load_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
-  g_autoptr(IdeFilePreview) self = user_data;
+  g_autoptr(IdeFileSearchPreview) self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_SOURCE_IS_FILE_LOADER (loader));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
 
   if (gtk_source_file_loader_load_finish (loader, result, NULL))
     {
@@ -97,7 +97,7 @@ ide_file_preview_load_cb (GObject      *object,
 }
 
 static void
-ide_file_preview_load (IdeFilePreview *self)
+ide_file_search_preview_load (IdeFileSearchPreview *self)
 {
   GtkSourceStyleSchemeManager *schemes;
   GtkSourceStyleScheme *scheme;
@@ -109,7 +109,7 @@ ide_file_preview_load (IdeFilePreview *self)
   g_autofree char *subtitle = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
   g_assert (G_IS_FILE (self->file));
 
   /* TODO: This needs to update when changed */
@@ -147,18 +147,18 @@ ide_file_preview_load (IdeFilePreview *self)
                                      file_progress_cb,
                                      g_object_ref (self),
                                      g_object_unref,
-                                     ide_file_preview_load_cb,
+                                     ide_file_search_preview_load_cb,
                                      g_object_ref (self));
 }
 
 static void
-ide_file_preview_settings_changed_cb (IdeFilePreview *self,
-                                      const char     *key,
-                                      GSettings      *settings)
+ide_file_search_preview_settings_changed_cb (IdeFileSearchPreview *self,
+                                             const char           *key,
+                                             GSettings            *settings)
 {
   gboolean update_css = FALSE;
 
-  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
   g_assert (G_IS_SETTINGS (settings));
 
   if (!key || ide_str_equal0 (key, "show-grid-lines"))
@@ -206,9 +206,9 @@ ide_file_preview_settings_changed_cb (IdeFilePreview *self,
 }
 
 static void
-notify_style_scheme_cb (IdeFilePreview *self,
-                        GParamSpec     *pspec,
-                        IdeApplication *app)
+notify_style_scheme_cb (IdeFileSearchPreview *self,
+                        GParamSpec           *pspec,
+                        IdeApplication       *app)
 {
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *scheme;
@@ -217,7 +217,7 @@ notify_style_scheme_cb (IdeFilePreview *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
   g_assert (IDE_IS_APPLICATION (app));
 
   name = ide_application_get_style_scheme (app);
@@ -230,13 +230,13 @@ notify_style_scheme_cb (IdeFilePreview *self,
 }
 
 static void
-ide_file_preview_constructed (GObject *object)
+ide_file_search_preview_constructed (GObject *object)
 {
-  IdeFilePreview *self = (IdeFilePreview *)object;
+  IdeFileSearchPreview *self = (IdeFileSearchPreview *)object;
 
   IDE_ENTRY;
 
-  G_OBJECT_CLASS (ide_file_preview_parent_class)->constructed (object);
+  G_OBJECT_CLASS (ide_file_search_preview_parent_class)->constructed (object);
 
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
                            "notify::style-scheme",
@@ -246,7 +246,7 @@ ide_file_preview_constructed (GObject *object)
 
   notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
 
-  ide_file_preview_settings_changed_cb (self,
+  ide_file_search_preview_settings_changed_cb (self,
                                         NULL,
                                         IDE_APPLICATION_DEFAULT->editor_settings);
 
@@ -254,23 +254,23 @@ ide_file_preview_constructed (GObject *object)
 }
 
 static void
-ide_file_preview_dispose (GObject *object)
+ide_file_search_preview_dispose (GObject *object)
 {
-  IdeFilePreview *self = (IdeFilePreview *)object;
+  IdeFileSearchPreview *self = (IdeFileSearchPreview *)object;
 
   g_clear_object (&self->file);
   g_clear_object (&self->css_provider);
 
-  G_OBJECT_CLASS (ide_file_preview_parent_class)->dispose (object);
+  G_OBJECT_CLASS (ide_file_search_preview_parent_class)->dispose (object);
 }
 
 static void
-ide_file_preview_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
+ide_file_search_preview_get_property (GObject    *object,
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
-  IdeFilePreview *self = IDE_FILE_PREVIEW (object);
+  IdeFileSearchPreview *self = IDE_FILE_SEARCH_PREVIEW (object);
 
   switch (prop_id)
     {
@@ -284,18 +284,18 @@ ide_file_preview_get_property (GObject    *object,
 }
 
 static void
-ide_file_preview_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
+ide_file_search_preview_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
-  IdeFilePreview *self = IDE_FILE_PREVIEW (object);
+  IdeFileSearchPreview *self = IDE_FILE_SEARCH_PREVIEW (object);
 
   switch (prop_id)
     {
     case PROP_FILE:
       if ((self->file = g_value_dup_object (value)))
-        ide_file_preview_load (self);
+        ide_file_search_preview_load (self);
       break;
 
     default:
@@ -304,15 +304,15 @@ ide_file_preview_set_property (GObject      *object,
 }
 
 static void
-ide_file_preview_class_init (IdeFilePreviewClass *klass)
+ide_file_search_preview_class_init (IdeFileSearchPreviewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = ide_file_preview_constructed;
-  object_class->dispose = ide_file_preview_dispose;
-  object_class->get_property = ide_file_preview_get_property;
-  object_class->set_property = ide_file_preview_set_property;
+  object_class->constructed = ide_file_search_preview_constructed;
+  object_class->dispose = ide_file_search_preview_dispose;
+  object_class->get_property = ide_file_search_preview_get_property;
+  object_class->set_property = ide_file_search_preview_set_property;
 
   properties[PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
@@ -321,13 +321,13 @@ ide_file_preview_class_init (IdeFilePreviewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-file-preview.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeFilePreview, buffer);
-  gtk_widget_class_bind_template_child (widget_class, IdeFilePreview, view);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-file-search-preview.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeFileSearchPreview, buffer);
+  gtk_widget_class_bind_template_child (widget_class, IdeFileSearchPreview, view);
 }
 
 static void
-ide_file_preview_init (IdeFilePreview *self)
+ide_file_search_preview_init (IdeFileSearchPreview *self)
 {
   GSettings *editor_settings = IDE_APPLICATION_DEFAULT->editor_settings;
   static const char *keys[] = {
@@ -349,7 +349,7 @@ ide_file_preview_init (IdeFilePreview *self)
 
   g_signal_connect_object (editor_settings,
                            "changed",
-                           G_CALLBACK (ide_file_preview_settings_changed_cb),
+                           G_CALLBACK (ide_file_search_preview_settings_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -359,11 +359,11 @@ ide_file_preview_init (IdeFilePreview *self)
 }
 
 IdeSearchPreview *
-ide_file_preview_new (GFile *file)
+ide_file_search_preview_new (GFile *file)
 {
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  return g_object_new (IDE_TYPE_FILE_PREVIEW,
+  return g_object_new (IDE_TYPE_FILE_SEARCH_PREVIEW,
                        "file", file,
                        NULL);
 }

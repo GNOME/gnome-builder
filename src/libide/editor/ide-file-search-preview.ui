@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeFilePreview" parent="IdeSearchPreview">
+  <template class="IdeFileSearchPreview" parent="IdeSearchPreview">
     <property name="child">
       <object class="GtkScrolledWindow" id="scroller">
         <property name="vexpand">true</property>

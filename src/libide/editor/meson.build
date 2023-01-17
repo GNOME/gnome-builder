@@ -16,7 +16,7 @@ libide_editor_public_headers = [
   'ide-editor-page-addin.h',
   'ide-editor-utils.h',
   'ide-editor-workspace.h',
-  'ide-file-preview.h',
+  'ide-file-search-preview.h',
   'libide-editor.h',
 ]
 
@@ -39,7 +39,7 @@ libide_editor_public_sources = [
   'ide-editor-page-addin.c',
   'ide-editor-utils.c',
   'ide-editor-workspace.c',
-  'ide-file-preview.c',
+  'ide-file-search-preview.c',
 ]
 
 

@@ -1,4 +1,4 @@
-/* ide-file-preview.h
+/* ide-file-search-preview.h
  *
  * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
@@ -26,13 +26,13 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_FILE_PREVIEW (ide_file_preview_get_type())
+#define IDE_TYPE_FILE_SEARCH_PREVIEW (ide_file_search_preview_get_type())
 
 IDE_AVAILABLE_IN_44
-G_DECLARE_FINAL_TYPE (IdeFilePreview, ide_file_preview, IDE, FILE_PREVIEW, IdeSearchPreview)
+G_DECLARE_FINAL_TYPE (IdeFileSearchPreview, ide_file_search_preview, IDE, FILE_SEARCH_PREVIEW, IdeSearchPreview)
 
 IDE_AVAILABLE_IN_44
-IdeSearchPreview *ide_file_preview_new (GFile *file);
+IdeSearchPreview *ide_file_search_preview_new (GFile *file);
 
 
 G_END_DECLS
