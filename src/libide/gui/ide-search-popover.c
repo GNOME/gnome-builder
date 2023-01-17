@@ -56,6 +56,7 @@ struct _IdeSearchPopover
   guint               queued_search;
 
   guint               activate_after_search : 1;
+  guint               disposed : 1;
   guint               has_preview : 1;
   guint               show_preview : 1;
 };
@@ -326,6 +327,9 @@ ide_search_popover_queue_search (IdeSearchPopover *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SEARCH_POPOVER (self));
 
+  if (self->disposed)
+    return;
+
   g_clear_handle_id (&self->queued_search, g_source_remove);
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
@@ -549,6 +553,8 @@ static void
 ide_search_popover_dispose (GObject *object)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)object;
+
+  self->disposed = TRUE;
 
   g_clear_handle_id (&self->queued_search, g_source_remove);
 
