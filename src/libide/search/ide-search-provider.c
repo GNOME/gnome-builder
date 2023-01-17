@@ -202,3 +202,14 @@ ide_search_provider_load_preview (IdeSearchProvider *self,
 
   return NULL;
 }
+
+IdeSearchCategory
+ide_search_provider_get_category (IdeSearchProvider *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), 0);
+
+  if (IDE_SEARCH_PROVIDER_GET_IFACE (self)->get_category)
+    return IDE_SEARCH_PROVIDER_GET_IFACE (self)->get_category (self);
+
+  return 0;
+}

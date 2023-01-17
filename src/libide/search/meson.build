@@ -61,6 +61,24 @@ libide_search_resources = gnome.compile_resources(
 libide_search_sources += libide_search_resources
 
 #
+# Enum generation
+#
+
+libide_search_enum_headers = [
+  'ide-search-provider.h',
+]
+libide_search_enums = gnome.mkenums_simple('ide-search-enums',
+     body_prefix: '#include "config.h"',
+   header_prefix: '#include <libide-core.h>',
+       decorator: '_IDE_EXTERN',
+         sources: libide_search_enum_headers,
+  install_header: true,
+     install_dir: libide_search_header_dir,
+)
+libide_search_generated_sources = [libide_search_enums[0]]
+libide_search_generated_headers = [libide_search_enums[1]]
+
+#
 # Dependencies
 #
 
@@ -79,7 +97,8 @@ libide_search_deps = [
 # Library Definitions
 #
 
-libide_search = static_library('ide-search-' + libide_api_version, libide_search_sources,
+libide_search = static_library('ide-search-' + libide_api_version,
+  libide_search_sources + libide_search_enums,
    dependencies: libide_search_deps,
          c_args: libide_args + release_args + ['-DIDE_SEARCH_COMPILATION'],
 )
@@ -92,5 +111,7 @@ libide_search_dep = declare_dependency(
 
 gnome_builder_public_sources += files(libide_search_public_sources)
 gnome_builder_public_headers += files(libide_search_public_headers)
+gnome_builder_generated_headers += libide_search_generated_headers
+gnome_builder_generated_sources += libide_search_generated_sources
 gnome_builder_include_subdirs += libide_search_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-search.h', '-DIDE_SEARCH_COMPILATION']
