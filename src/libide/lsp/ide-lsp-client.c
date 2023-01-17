@@ -65,6 +65,7 @@ typedef struct
   gboolean        initialized;
   GQueue          pending_messages;
   guint           use_markdown_in_diagnostics : 1;
+  guint           text_document_sync : 2;
 } IdeLspClientPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLspClient, ide_lsp_client, IDE_TYPE_OBJECT)
@@ -288,11 +289,7 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
                                    gint          len,
                                    IdeBuffer    *buffer)
 {
-  g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
-  GVariant *capabilities = NULL;
-  gint64 version;
-  gint64 text_document_sync = TEXT_DOCUMENT_SYNC_NONE;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   IDE_ENTRY;
 
@@ -301,35 +298,20 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
   g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  capabilities = ide_lsp_client_get_server_capabilities (self);
-  if (capabilities != NULL)
+  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
     {
-      gint64 tds = 0;
-
-      // for backwards compatibility reasons LS can stick to a number instead of the structure
-      if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
-          || JSONRPC_MESSAGE_PARSE (capabilities,
-                                    "textDocumentSync", "{",
-                                      "change", JSONRPC_MESSAGE_GET_INT64 (&tds),
-                                    "}")
-          )
-        {
-          text_document_sync = tds;
-        }
-    }
-
-  uri = ide_buffer_dup_uri (buffer);
-
-  /* We get called before this change is registered */
-  version = (gint64)ide_buffer_get_change_count (buffer) + 1;
-
-  if (text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
-    {
+      g_autoptr(GVariant) params = NULL;
+      g_autofree gchar *uri = NULL;
       g_autofree gchar *copy = NULL;
-      gint line;
-      gint column;
+      gint64 version;
+      guint line;
+      guint column;
 
+      uri = ide_buffer_dup_uri (buffer);
       copy = g_strndup (new_text, len);
+
+      /* We get called before this change is registered */
+      version = (gint64)ide_buffer_get_change_count (buffer) + 1;
 
       line = gtk_text_iter_get_line (location);
       column = gtk_text_iter_get_line_offset (location);
@@ -355,17 +337,45 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
             "text", JSONRPC_MESSAGE_PUT_STRING (copy),
           "}",
         "]");
+
+      ide_lsp_client_send_notification_async (self,
+                                              "textDocument/didChange",
+                                              params,
+                                              NULL, NULL, NULL);
     }
-  else if (text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+
+  IDE_EXIT;
+}
+
+static void
+ide_lsp_client_buffer_after_insert_text (IdeLspClient *self,
+                                         GtkTextIter  *location,
+                                         const gchar  *new_text,
+                                         gint          len,
+                                         IdeBuffer    *buffer)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *uri = NULL;
+  gint64 version;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (location != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  uri = ide_buffer_dup_uri (buffer);
+  version = (gint64)ide_buffer_get_change_count (buffer);
+
+  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
     {
       g_autoptr(GBytes) content = NULL;
-      const gchar *text;
-      g_autoptr(GString) str = NULL;
+      const char *text;
 
       content = ide_buffer_dup_content (buffer);
-      text = (const gchar *)g_bytes_get_data (content, NULL);
-      str = g_string_new (text);
-      g_string_insert_len (str, gtk_text_iter_get_offset (location), new_text, len);
+      text = (const char *)g_bytes_get_data (content, NULL);
 
       params = JSONRPC_MESSAGE_NEW (
         "textDocument", "{",
@@ -374,16 +384,15 @@ ide_lsp_client_buffer_insert_text (IdeLspClient *self,
         "}",
         "contentChanges", "[",
           "{",
-            "text", JSONRPC_MESSAGE_PUT_STRING (str->str),
+            "text", JSONRPC_MESSAGE_PUT_STRING (text),
           "}",
         "]");
+
+      ide_lsp_client_send_notification_async (self,
+                                              "textDocument/didChange",
+                                              params,
+                                              NULL, NULL, NULL);
     }
-
-
-  ide_lsp_client_send_notification_async (self,
-                                          "textDocument/didChange",
-                                          params,
-                                          NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -394,12 +403,7 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
                                     GtkTextIter  *end_iter,
                                     IdeBuffer    *buffer)
 {
-
-  g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
-  gint version;
-  GVariant *capabilities = NULL;
-  gint64 text_document_sync = TEXT_DOCUMENT_SYNC_NONE;
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
 
   IDE_ENTRY;
 
@@ -409,40 +413,27 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
   g_assert (end_iter != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  capabilities = ide_lsp_client_get_server_capabilities (self);
-  if (capabilities != NULL)
+  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
     {
-    gint64 tds = 0;
-
-    // for backwards compatibility reasons LS can stick to a number instead of the structure
-    if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds))
-          || JSONRPC_MESSAGE_PARSE (capabilities,
-                                    "textDocumentSync", "{",
-                                      "change", JSONRPC_MESSAGE_GET_INT64 (&tds),
-                                    "}")
-          )
-        {
-          text_document_sync = tds;
-        }
-    }
-
-  uri = ide_buffer_dup_uri (buffer);
-
-  /* We get called before this change is registered */
-  version = (gint)ide_buffer_get_change_count (buffer) + 1;
-
-  if (text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
-    {
+      g_autoptr(GVariant) params = NULL;
+      g_autofree gchar *uri = NULL;
       GtkTextIter copy_begin;
       GtkTextIter copy_end;
       struct {
-        gint line;
-        gint column;
+        int line;
+        int column;
       } begin, end;
-      gint length;
+      gint64 version;
+      int length;
+
+      uri = ide_buffer_dup_uri (buffer);
+
+      /* We get called before this change is registered */
+      version = (gint)ide_buffer_get_change_count (buffer) + 1;
 
       copy_begin = *begin_iter;
       copy_end = *end_iter;
+
       gtk_text_iter_order (&copy_begin, &copy_end);
 
       begin.line = gtk_text_iter_get_line (&copy_begin);
@@ -474,19 +465,45 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
             "text", JSONRPC_MESSAGE_PUT_STRING (""),
           "}",
         "]");
+
+      ide_lsp_client_send_notification_async (self,
+                                              "textDocument/didChange",
+                                              params,
+                                              NULL, NULL, NULL);
     }
-  else if (text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+
+  IDE_EXIT;
+}
+
+static void
+ide_lsp_client_buffer_after_delete_range (IdeLspClient *self,
+                                          GtkTextIter  *begin_iter,
+                                          GtkTextIter  *end_iter,
+                                          IdeBuffer    *buffer)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (begin_iter != NULL);
+  g_assert (end_iter != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
     {
+      g_autofree char *uri = NULL;
       g_autoptr(GBytes) content = NULL;
-      const gchar *text;
-      g_autoptr(GString) str = NULL;
-      guint len;
+      g_autoptr(GVariant) params = NULL;
+      const char *text;
+      gint64 version;
+
+      uri = ide_buffer_dup_uri (buffer);
+      version = (gint)ide_buffer_get_change_count (buffer);
 
       content = ide_buffer_dup_content (buffer);
       text = (const gchar *)g_bytes_get_data (content, NULL);
-      str = g_string_new (text);
-      len = gtk_text_iter_get_offset (end_iter) - gtk_text_iter_get_offset (begin_iter);
-      g_string_erase (str, gtk_text_iter_get_offset (begin_iter), len);
 
       params = JSONRPC_MESSAGE_NEW (
         "textDocument", "{",
@@ -495,17 +512,17 @@ ide_lsp_client_buffer_delete_range (IdeLspClient *self,
         "}",
         "contentChanges", "[",
           "{",
-            "text", JSONRPC_MESSAGE_PUT_STRING (str->str),
+            "text", JSONRPC_MESSAGE_PUT_STRING (text),
           "}",
         "]");
+
+      ide_lsp_client_send_notification_async (self,
+                                              "textDocument/didChange",
+                                              params,
+                                              NULL, NULL, NULL);
     }
 
-  ide_lsp_client_send_notification_async (self,
-                                          "textDocument/didChange",
-                                          params,
-                                          NULL, NULL, NULL);
-
-  IDE_EXIT;
+ IDE_EXIT;
 }
 
 static void
@@ -539,10 +556,22 @@ ide_lsp_client_buffer_loaded (IdeLspClient     *self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (buffer,
+                           "insert-text",
+                           G_CALLBACK (ide_lsp_client_buffer_after_insert_text),
+                           self,
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buffer,
                            "delete-range",
                            G_CALLBACK (ide_lsp_client_buffer_delete_range),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buffer,
+                           "delete-range",
+                           G_CALLBACK (ide_lsp_client_buffer_after_delete_range),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_SWAPPED);
 
   uri = ide_buffer_dup_uri (buffer);
   version = (gint64)ide_buffer_get_change_count (buffer);
@@ -1558,6 +1587,33 @@ ide_lsp_client_initialized_cb (GObject      *object,
 }
 
 static void
+ide_lsp_client_extract_server_capabilities (IdeLspClient *self)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+  GVariant *capabilities;
+  gint64 tds;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (self));
+
+  priv->text_document_sync = TEXT_DOCUMENT_SYNC_INCREMENTAL;
+
+  if (!(capabilities = priv->server_capabilities))
+    return;
+
+  if (JSONRPC_MESSAGE_PARSE (capabilities, "textDocumentSync", JSONRPC_MESSAGE_GET_INT64 (&tds)) ||
+      JSONRPC_MESSAGE_PARSE (capabilities,
+                             "textDocumentSync", "{",
+                               "change", JSONRPC_MESSAGE_GET_INT64 (&tds),
+                             "}"))
+    priv->text_document_sync = tds & 0x3;
+
+  IDE_EXIT;
+}
+
+static void
 ide_lsp_client_initialize_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
@@ -1588,6 +1644,7 @@ ide_lsp_client_initialize_cb (GObject      *object,
   g_clear_pointer (&priv->server_capabilities, g_variant_unref);
   if (g_variant_is_of_type (reply, G_VARIANT_TYPE_VARDICT))
     priv->server_capabilities = g_variant_lookup_value (reply, "capabilities", G_VARIANT_TYPE_VARDICT);
+  ide_lsp_client_extract_server_capabilities (self);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SERVER_CAPABILITIES]);
 
   initialized_param = JSONRPC_MESSAGE_NEW ("initializedParams", "{", "}");
