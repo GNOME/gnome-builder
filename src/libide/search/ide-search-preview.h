@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <adwaita.h>
+#include <gtk/gtk.h>
 
 #include <libide-core.h>
 
@@ -29,24 +29,34 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SEARCH_PREVIEW (ide_search_preview_get_type())
 
 IDE_AVAILABLE_IN_44
-G_DECLARE_DERIVABLE_TYPE (IdeSearchPreview, ide_search_preview, IDE, SEARCH_PREVIEW, AdwBin)
+G_DECLARE_DERIVABLE_TYPE (IdeSearchPreview, ide_search_preview, IDE, SEARCH_PREVIEW, GtkWidget)
 
 struct _IdeSearchPreviewClass
 {
-  AdwBinClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 IDE_AVAILABLE_IN_44
-GtkWidget *ide_search_preview_new           (void);
+GtkWidget        *ide_search_preview_new          (void);
 IDE_AVAILABLE_IN_44
-const char *ide_search_preview_get_title    (IdeSearchPreview *self);
+const char       *ide_search_preview_get_title    (IdeSearchPreview *self);
 IDE_AVAILABLE_IN_44
-void        ide_search_preview_set_title    (IdeSearchPreview *self,
-                                             const char       *title);
+void              ide_search_preview_set_title    (IdeSearchPreview *self,
+                                                   const char       *title);
 IDE_AVAILABLE_IN_44
-const char *ide_search_preview_get_subtitle (IdeSearchPreview *self);
+const char       *ide_search_preview_get_subtitle (IdeSearchPreview *self);
 IDE_AVAILABLE_IN_44
-void        ide_search_preview_set_subtitle (IdeSearchPreview *self,
-                                             const char       *title);
+void              ide_search_preview_set_subtitle (IdeSearchPreview *self,
+                                                   const char       *title);
+IDE_AVAILABLE_IN_44
+double            ide_search_preview_get_progress (IdeSearchPreview *self);
+IDE_AVAILABLE_IN_44
+void              ide_search_preview_set_progress (IdeSearchPreview *self,
+                                                   double            progress);
+IDE_AVAILABLE_IN_44
+GtkWidget        *ide_search_preview_get_child    (IdeSearchPreview *self);
+IDE_AVAILABLE_IN_44
+void              ide_search_preview_set_child    (IdeSearchPreview *self,
+                                                   GtkWidget        *child);
 
 G_END_DECLS

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeSearchPreview" parent="GtkWidget">
+    <property name="css-classes">search-preview</property>
+    <property name="vexpand">true</property>
+    <child>
+      <object class="GtkOverlay" id="overlay">
+        <child type="overlay">
+          <object class="GtkProgressBar" id="progress_bar">
+            <property name="hexpand">true</property>
+            <property name="valign">start</property>
+            <property name="visible">false</property>
+            <style>
+              <class name="osd"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
