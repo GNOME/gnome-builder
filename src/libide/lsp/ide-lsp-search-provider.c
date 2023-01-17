@@ -291,9 +291,16 @@ ide_lsp_search_provider_search_finish (IdeSearchProvider  *provider,
   IDE_RETURN (ret);
 }
 
+static IdeSearchCategory
+ide_lsp_search_provider_get_category (IdeSearchProvider *provider)
+{
+  return IDE_SEARCH_CATEGORY_SYMBOLS;
+}
+
 static void
 provider_iface_init (IdeSearchProviderInterface *iface)
 {
   iface->search_async = ide_lsp_search_provider_search_async;
   iface->search_finish = ide_lsp_search_provider_search_finish;
+  iface->get_category = ide_lsp_search_provider_get_category;
 }

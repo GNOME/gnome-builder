@@ -156,6 +156,12 @@ ide_code_index_search_provider_dup_icon (IdeSearchProvider *provider)
   return g_themed_icon_new ("lang-function-symbolic");
 }
 
+static IdeSearchCategory
+ide_code_index_search_provider_get_category (IdeSearchProvider *provider)
+{
+  return IDE_SEARCH_CATEGORY_SYMBOLS;
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
@@ -163,6 +169,7 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->search_finish = ide_code_index_search_provider_search_finish;
   iface->dup_title = ide_code_index_search_provider_dup_title;
   iface->dup_icon = ide_code_index_search_provider_dup_icon;
+  iface->get_category = ide_code_index_search_provider_get_category;
 }
 
 struct _IdeCodeIndexSearchProvider { IdeObject parent; };

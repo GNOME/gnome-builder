@@ -147,6 +147,12 @@ gbp_symbol_search_provider_dup_icon (IdeSearchProvider *provider)
   return g_themed_icon_new ("lang-function-symbolic");
 }
 
+static IdeSearchCategory
+gbp_symbol_search_provider_get_category (IdeSearchProvider *provider)
+{
+  return IDE_SEARCH_CATEGORY_SYMBOLS;
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
@@ -154,6 +160,7 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->search_finish = gbp_symbol_search_provider_search_finish;
   iface->dup_title = gbp_symbol_search_provider_dup_title;
   iface->dup_icon = gbp_symbol_search_provider_dup_icon;
+  iface->get_category = gbp_symbol_search_provider_get_category;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolSearchProvider, gbp_symbol_search_provider, IDE_TYPE_OBJECT,
