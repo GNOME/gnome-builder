@@ -89,8 +89,9 @@ libide_search_deps = [
   libpeas_dep,
 
   libide_core_dep,
+  libide_gtk_dep,
   libide_threading_dep,
-  libide_plugins_dep
+  libide_plugins_dep,
 ]
 
 #
