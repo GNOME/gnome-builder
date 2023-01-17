@@ -20,8 +20,3 @@ GtkSourceAssistant.hover-assistant {
   box-shadow: 0 3px 14px 7px @shadow_color,
               0 0 0 1px mix(@popover_bg_color, @popover_fg_color, .15);
 }
-
-.search-preview textview {
-  font-size: 8pt;
-  line-height: 1.1em;
-}

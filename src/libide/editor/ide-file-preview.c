@@ -26,6 +26,10 @@
 
 #include <libide-gui.h>
 #include <libide-io.h>
+#include <libide-sourceview.h>
+
+#include "ide-application-private.h"
+#include "ide-source-view-private.h"
 
 #include "ide-file-preview.h"
 
@@ -34,6 +38,7 @@ struct _IdeFilePreview
   IdeSearchPreview parent_instance;
 
   GFile *file;
+  GtkCssProvider *css_provider;
 
   GtkSourceView *view;
   GtkSourceBuffer *buffer;
@@ -147,11 +152,114 @@ ide_file_preview_load (IdeFilePreview *self)
 }
 
 static void
+ide_file_preview_settings_changed_cb (IdeFilePreview *self,
+                                      const char     *key,
+                                      GSettings      *settings)
+{
+  gboolean update_css = FALSE;
+
+  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  if (!key || ide_str_equal0 (key, "show-grid-lines"))
+    gtk_source_view_set_background_pattern (self->view,
+                                            g_settings_get_boolean (settings, "show-grid-lines") ?
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+
+  if (!key || ide_str_equal0 (key, "highlight-current-line"))
+    gtk_source_view_set_highlight_current_line (self->view,
+                                                g_settings_get_boolean (settings, "highlight-current-line"));
+
+  if (!key || ide_str_equal0 (key, "highlight-matching-brackets"))
+    gtk_source_buffer_set_highlight_matching_brackets (self->buffer,
+                                                       g_settings_get_boolean (settings, "highlight-matching-brackets"));
+
+  if (!key || ide_str_equal0 (key, "show-line-numbers"))
+    gtk_source_view_set_show_line_numbers (self->view,
+                                           g_settings_get_boolean (settings, "show-line-numbers"));
+
+  if (!key || ide_str_equal0 (key, "line-height"))
+    update_css = TRUE;
+
+  if (!key || ide_str_equal0 (key, "font-name"))
+    update_css = TRUE;
+
+  if (update_css)
+    {
+      g_autofree char *css = NULL;
+      g_autofree char *font_name = NULL;
+      PangoFontDescription *font_desc;
+      double line_height;
+
+      line_height = g_settings_get_double (settings, "line-height");
+      font_name = g_settings_get_string (settings, "font-name");
+      font_desc = pango_font_description_from_string (font_name);
+
+      if ((css = _ide_source_view_generate_css (self->view, font_desc, -3, line_height)))
+        gtk_css_provider_load_from_data (self->css_provider, css, -1);
+
+      g_clear_pointer (&font_desc, pango_font_description_free);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+static void
+notify_style_scheme_cb (IdeFilePreview *self,
+                        GParamSpec     *pspec,
+                        IdeApplication *app)
+{
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  const char *name;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_FILE_PREVIEW (self));
+  g_assert (IDE_IS_APPLICATION (app));
+
+  name = ide_application_get_style_scheme (app);
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, name);
+
+  gtk_source_buffer_set_style_scheme (self->buffer, scheme);
+
+  IDE_EXIT;
+}
+
+static void
+ide_file_preview_constructed (GObject *object)
+{
+  IdeFilePreview *self = (IdeFilePreview *)object;
+
+  IDE_ENTRY;
+
+  G_OBJECT_CLASS (ide_file_preview_parent_class)->constructed (object);
+
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (notify_style_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
+
+  ide_file_preview_settings_changed_cb (self,
+                                        NULL,
+                                        IDE_APPLICATION_DEFAULT->editor_settings);
+
+  IDE_EXIT;
+}
+
+static void
 ide_file_preview_dispose (GObject *object)
 {
   IdeFilePreview *self = (IdeFilePreview *)object;
 
   g_clear_object (&self->file);
+  g_clear_object (&self->css_provider);
 
   G_OBJECT_CLASS (ide_file_preview_parent_class)->dispose (object);
 }
@@ -201,6 +309,7 @@ ide_file_preview_class_init (IdeFilePreviewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_file_preview_constructed;
   object_class->dispose = ide_file_preview_dispose;
   object_class->get_property = ide_file_preview_get_property;
   object_class->set_property = ide_file_preview_set_property;
@@ -220,7 +329,33 @@ ide_file_preview_class_init (IdeFilePreviewClass *klass)
 static void
 ide_file_preview_init (IdeFilePreview *self)
 {
+  GSettings *editor_settings = IDE_APPLICATION_DEFAULT->editor_settings;
+  static const char *keys[] = {
+    "font-name",
+    "highlight-current-line",
+    "highlight-matching-brackets",
+    "line-height",
+    "show-grid-lines",
+    "show-line-numbers",
+  };
+
+  self->css_provider = gtk_css_provider_new ();
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self->view)),
+                                  GTK_STYLE_PROVIDER (self->css_provider),
+                                  G_MAXINT);
+
+  g_signal_connect_object (editor_settings,
+                           "changed",
+                           G_CALLBACK (ide_file_preview_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Fetch the key to ensure that changed::key is emitted */
+  for (guint i = 0; i < G_N_ELEMENTS (keys); i++)
+    g_variant_unref (g_settings_get_value (editor_settings, keys[i]));
 }
 
 IdeSearchPreview *
