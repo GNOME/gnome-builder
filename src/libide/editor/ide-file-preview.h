@@ -1,6 +1,6 @@
-/* libide-editor.h
+/* ide-file-preview.h
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,19 @@
 
 #pragma once
 
-#define IDE_EDITOR_INSIDE
-# include "ide-editor.h"
-# include "ide-editor-page.h"
-# include "ide-editor-page-addin.h"
-# include "ide-editor-utils.h"
-# include "ide-editor-workspace.h"
-# include "ide-file-preview.h"
-#undef IDE_EDITOR_INSIDE
+#include <gtk/gtk.h>
+
+#include <libide-search.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_FILE_PREVIEW (ide_file_preview_get_type())
+
+IDE_AVAILABLE_IN_44
+G_DECLARE_FINAL_TYPE (IdeFilePreview, ide_file_preview, IDE, FILE_PREVIEW, IdeSearchPreview)
+
+IDE_AVAILABLE_IN_44
+IdeSearchPreview *ide_file_preview_new (GFile *file);
+
+
+G_END_DECLS

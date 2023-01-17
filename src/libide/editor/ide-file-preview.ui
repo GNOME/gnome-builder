@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeFilePreview" parent="IdeSearchPreview">
+    <property name="child">
+      <object class="GtkScrolledWindow" id="scroller">
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkSourceView" id="view">
+            <property name="left-margin">6</property>
+            <property name="top-margin">6</property>
+            <property name="bottom-margin">6</property>
+            <property name="right-margin">6</property>
+            <property name="buffer">buffer</property>
+            <property name="monospace">true</property>
+            <property name="editable">false</property>
+            <property name="cursor-visible">false</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+  <object class="GtkSourceBuffer" id="buffer">
+  </object>
+</interface>
