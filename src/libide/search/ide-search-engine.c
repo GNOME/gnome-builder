@@ -52,11 +52,12 @@ typedef struct
 
 typedef struct
 {
-  IdeTask    *task;
-  char       *query;
-  GArray     *sorted;
-  guint       outstanding;
-  guint       max_results;
+  IdeTask           *task;
+  char              *query;
+  GArray            *sorted;
+  IdeSearchCategory  category;
+  guint              outstanding;
+  guint              max_results;
 } Request;
 
 enum {
@@ -352,6 +353,10 @@ _provider_search_async (IdeSearchProvider *provider,
   g_assert (r != NULL);
   g_assert (IDE_IS_TASK (r->task));
 
+  if (r->category != IDE_SEARCH_CATEGORY_EVERYTHING &&
+      r->category != ide_search_provider_get_category (provider))
+    return;
+
   r->outstanding++;
 
   sort_info.provider = g_object_ref (provider);
@@ -400,6 +405,7 @@ ide_search_engine_search_foreach_custom_provider (gpointer data,
 
 void
 ide_search_engine_search_async (IdeSearchEngine     *self,
+                                IdeSearchCategory    category,
                                 const char          *query,
                                 guint                max_results,
                                 GCancellable        *cancellable,
@@ -420,6 +426,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   r = request_new ();
+  r->category = category;
   r->query = g_strdup (query);
   r->max_results = max_results;
   r->task = task;

@@ -263,6 +263,7 @@ ide_search_popover_search_cb (GObject      *object,
 static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
+  IdeSearchCategory category = IDE_SEARCH_CATEGORY_EVERYTHING;
   IdeSearchPopover *self = data;
   GListModel *model;
   const char *query;
@@ -284,6 +285,12 @@ ide_search_popover_search_source_func (gpointer data)
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
 
+  /* Get the category for the query */
+  if ((row = gtk_list_box_get_selected_row (self->providers_list_box)) &&
+      (group = g_object_get_data (G_OBJECT (row), "GROUP")) &&
+      IDE_IS_SEARCH_POPOVER_GROUP (group))
+    category = ide_search_popover_group_get_category (group);
+
   /* Fast path to just filter our previous result set */
   if ((model = gtk_single_selection_get_model (self->selection)) &&
       IDE_IS_SEARCH_RESULTS (model) &&
@@ -294,6 +301,7 @@ ide_search_popover_search_source_func (gpointer data)
     }
 
   ide_search_engine_search_async (self->search_engine,
+                                  category,
                                   query,
                                   0,
                                   self->cancellable,

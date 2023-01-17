@@ -40,8 +40,9 @@ IDE_AVAILABLE_IN_ALL
 IdeSearchEngine  *ide_search_engine_new             (void);
 IDE_AVAILABLE_IN_ALL
 gboolean          ide_search_engine_get_busy        (IdeSearchEngine      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_44
 void              ide_search_engine_search_async    (IdeSearchEngine      *self,
+                                                     IdeSearchCategory     category,
                                                      const char           *query,
                                                      guint                 max_results,
                                                      GCancellable         *cancellable,
