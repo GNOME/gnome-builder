@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-search-popover-private.h"
+#include "ide-search-popover-group-private.h"
 #include "ide-search-resources.h"
 #include "ide-gui-global.h"
 
@@ -35,6 +38,8 @@ struct _IdeSearchPopover
 
   GCancellable       *cancellable;
   IdeSearchEngine    *search_engine;
+
+  GListStore         *groups;
 
   GtkWidget          *left;
   GtkWidget          *right;
@@ -62,9 +67,13 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER)
+static void buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static GtkBuildableIface *parent_buildable_iface;
 
 static void
 ide_search_popover_cancel (IdeSearchPopover *self)
@@ -122,42 +131,69 @@ ide_search_popover_hide_action (GtkWidget  *widget,
     gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
-static GtkWidget *
-create_provider_row_cb (gpointer item,
-                        gpointer user_data)
+static void
+group_header_func (GtkListBoxRow *row,
+                   GtkListBoxRow *before,
+                   gpointer       user_data)
 {
-  IdeSearchProvider *provider = item;
-  g_autofree char *title = NULL;
-  g_autoptr(GIcon) icon = NULL;
+  IdeSearchPopoverGroup *before_group;
+
+  if (before == NULL)
+    return;
+
+  if ((before_group = g_object_get_data (G_OBJECT (before), "GROUP")) &&
+      ide_str_equal (("_Everything"), ide_search_popover_group_get_title (before_group)))
+    gtk_list_box_row_set_header (row,
+                                 g_object_new (GTK_TYPE_SEPARATOR,
+                                               "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                               NULL));
+}
+
+static GtkWidget *
+create_group_row (gpointer item,
+                  gpointer user_data)
+{
+  IdeSearchPopoverGroup *group = item;
+  const char *title;
+  const char *icon_name;
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
+  GtkWidget *row;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_SEARCH_POPOVER_GROUP (group));
 
-  title = ide_search_provider_dup_title (provider);
-  icon = ide_search_provider_dup_icon (provider);
+  title = ide_search_popover_group_get_title (group);
+  icon_name = ide_search_popover_group_get_icon_name (group);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                       "spacing", 9,
                       NULL);
   image = g_object_new (GTK_TYPE_IMAGE,
-                        "gicon", icon,
+                        "icon-name", icon_name,
                         NULL);
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", title,
                         "xalign", .0f,
                         "ellipsize", PANGO_ELLIPSIZE_END,
+                        "use-underline", TRUE,
                         NULL);
   gtk_box_append (GTK_BOX (box), image);
   gtk_box_append (GTK_BOX (box), label);
 
-  return g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                       "css-classes", IDE_STRV_INIT ("sidebar-row"),
-                       "child", box,
-                       NULL);
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "css-classes", IDE_STRV_INIT ("sidebar-row"),
+                      "child", box,
+                      NULL);
+
+  g_object_set_data_full (G_OBJECT (row),
+                          "GROUP",
+                          g_object_ref (group),
+                          g_object_unref);
+
+  return GTK_WIDGET (row);
 }
 
 static void
@@ -173,12 +209,6 @@ ide_search_popover_set_search_engine (IdeSearchPopover *self,
 
       if (search_engine != NULL)
         model = ide_search_engine_list_providers (search_engine);
-
-      gtk_list_box_bind_model (self->providers_list_box,
-                               model,
-                               create_provider_row_cb,
-                               self,
-                               NULL);
     }
 }
 
@@ -359,6 +389,16 @@ ide_search_popover_entry_activate_cb (IdeSearchPopover *self,
 }
 
 static void
+ide_search_popover_search_focus (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *param)
+{
+  IdeSearchPopover *self = IDE_SEARCH_POPOVER (widget);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
+static void
 ide_search_popover_move_action (GtkWidget  *widget,
                                 const char *action_name,
                                 GVariant   *param)
@@ -506,6 +546,7 @@ ide_search_popover_dispose (GObject *object)
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->search_engine);
+  g_clear_object (&self->groups);
 
   G_OBJECT_CLASS (ide_search_popover_parent_class)->dispose (object);
 }
@@ -605,16 +646,27 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
   gtk_widget_class_install_action (widget_class, "search.move", "i", ide_search_popover_move_action);
+  gtk_widget_class_install_action (widget_class, "search.focus", NULL, ide_search_popover_search_focus);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_k, GDK_CONTROL_MASK, "search.focus", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "search.focus", NULL);
+
+  g_type_ensure (IDE_TYPE_SEARCH_POPOVER_GROUP);
 }
 
 static void
 ide_search_popover_init (IdeSearchPopover *self)
 {
   self->show_preview = TRUE;
+  self->groups = g_list_store_new (IDE_TYPE_SEARCH_POPOVER_GROUP);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  gtk_popover_set_offset (GTK_POPOVER (self), 180, 0);
+  gtk_list_box_set_header_func (self->providers_list_box,
+                                group_header_func, self, NULL);
+  gtk_list_box_bind_model (self->providers_list_box,
+                           G_LIST_MODEL (self->groups),
+                           create_group_row, self, NULL);
 }
 
 GtkWidget *
@@ -665,4 +717,25 @@ ide_search_popover_set_show_preview (IdeSearchPopover *self,
       self->show_preview = show_preview;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_PREVIEW]);
     }
+}
+
+static void
+ide_search_popover_add_child (GtkBuildable *buildable,
+                              GtkBuilder   *builder,
+                              GObject      *object,
+                              const char   *type)
+{
+  IdeSearchPopover *self = IDE_SEARCH_POPOVER (buildable);
+
+  if (IDE_IS_SEARCH_POPOVER_GROUP (object))
+    g_list_store_append (self->groups, object);
+  else
+    parent_buildable_iface->add_child (buildable, builder, object, type);
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = ide_search_popover_add_child;
 }

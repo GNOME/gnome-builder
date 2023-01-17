@@ -220,5 +220,40 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Everything</property>
+        <property name="icon-name">edit-find-symbolic</property>
+        <property name="category">everything</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Actions</property>
+        <property name="icon-name">search-menus-symbolic</property>
+        <property name="category">actions</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Commands</property>
+        <property name="icon-name">text-x-script-symbolic</property>
+        <property name="category">commands</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Files</property>
+        <property name="icon-name">folder-symbolic</property>
+        <property name="category">files</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Symbols</property>
+        <property name="icon-name">lang-function-symbolic</property>
+        <property name="category">symbols</property>
+      </object>
+    </child>
   </template>
 </interface>
