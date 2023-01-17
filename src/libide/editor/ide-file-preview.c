@@ -25,6 +25,7 @@
 #include <gtksourceview/gtksource.h>
 
 #include <libide-gui.h>
+#include <libide-io.h>
 
 #include "ide-file-preview.h"
 
@@ -119,7 +120,8 @@ ide_file_preview_load (IdeFilePreview *self)
 
   if (g_file_is_native (self->file))
     {
-      subtitle = g_path_get_dirname (path);
+      g_autofree char *dn = g_path_get_dirname (path);
+      subtitle = ide_path_collapse (dn);
     }
   else
     {
