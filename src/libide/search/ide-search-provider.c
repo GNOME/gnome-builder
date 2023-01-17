@@ -182,27 +182,6 @@ ide_search_provider_dup_icon (IdeSearchProvider *self)
   return IDE_SEARCH_PROVIDER_GET_IFACE (self)->dup_icon (self);
 }
 
-/**
- * ide_search_provider_load_preview:
- * @self: a #IdeSearchProvider
- *
- * Gets a preview widget for the search result, if any.
- *
- * Returns: (transfer full) (nullable): an #IdeSearchResult or %NULL
- */
-IdeSearchPreview *
-ide_search_provider_load_preview (IdeSearchProvider *self,
-                                  IdeSearchResult   *result)
-{
-  g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (result), NULL);
-
-  if (IDE_SEARCH_PROVIDER_GET_IFACE (self)->load_preview)
-    return IDE_SEARCH_PROVIDER_GET_IFACE (self)->load_preview (self, result);
-
-  return NULL;
-}
-
 IdeSearchCategory
 ide_search_provider_get_category (IdeSearchProvider *self)
 {

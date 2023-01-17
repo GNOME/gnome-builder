@@ -65,8 +65,6 @@ struct _IdeSearchProviderInterface
   char              *(*dup_title)     (IdeSearchProvider    *self);
   GIcon             *(*dup_icon)      (IdeSearchProvider    *self);
   IdeSearchCategory  (*get_category)  (IdeSearchProvider    *self);
-  IdeSearchPreview  *(*load_preview)  (IdeSearchProvider    *self,
-                                      IdeSearchResult      *result);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -91,8 +89,5 @@ IDE_AVAILABLE_IN_44
 char              *ide_search_provider_dup_title     (IdeSearchProvider     *self);
 IDE_AVAILABLE_IN_44
 GIcon             *ide_search_provider_dup_icon      (IdeSearchProvider     *self);
-IDE_AVAILABLE_IN_44
-IdeSearchPreview  *ide_search_provider_load_preview  (IdeSearchProvider     *self,
-                                                      IdeSearchResult       *result);
 
 G_END_DECLS
