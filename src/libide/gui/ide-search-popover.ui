@@ -35,6 +35,7 @@
                     <style>
                       <class name="navigation-sidebar"/>
                     </style>
+                    <signal name="row-selected" handler="ide_search_popover_category_changed_cb" swapped="true" object="IdeSearchPopover"/>
                   </object>
                 </child>
               </object>

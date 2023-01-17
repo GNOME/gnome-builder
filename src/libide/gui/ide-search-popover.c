@@ -53,6 +53,8 @@ struct _IdeSearchPopover
   GtkListBox         *providers_list_box;
   GtkSingleSelection *selection;
 
+  IdeSearchCategory   last_category;
+
   guint               queued_search;
 
   guint               activate_after_search : 1;
@@ -265,7 +267,9 @@ static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
   IdeSearchCategory category = IDE_SEARCH_CATEGORY_EVERYTHING;
+  IdeSearchPopoverGroup *group;
   IdeSearchPopover *self = data;
+  GtkListBoxRow *row;
   GListModel *model;
   const char *query;
 
@@ -293,13 +297,16 @@ ide_search_popover_search_source_func (gpointer data)
     category = ide_search_popover_group_get_category (group);
 
   /* Fast path to just filter our previous result set */
-  if ((model = gtk_single_selection_get_model (self->selection)) &&
+  if (category == self->last_category &&
+      (model = gtk_single_selection_get_model (self->selection)) &&
       IDE_IS_SEARCH_RESULTS (model) &&
       ide_search_results_refilter (IDE_SEARCH_RESULTS (model), query))
     {
       ide_search_popover_after_search (self);
       IDE_RETURN (G_SOURCE_REMOVE);
     }
+
+  self->last_category = category;
 
   ide_search_engine_search_async (self->search_engine,
                                   category,
@@ -528,6 +535,14 @@ ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
 }
 
 static void
+ide_search_popover_category_changed_cb (IdeSearchPopover *self)
+{
+  IDE_ENTRY;
+  ide_search_popover_queue_search (self);
+  IDE_EXIT;
+}
+
+static void
 ide_search_popover_show (GtkWidget *widget)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)widget;
@@ -652,6 +667,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_category_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_next_match_cb);
