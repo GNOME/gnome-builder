@@ -487,6 +487,8 @@ static void
 ide_search_popover_set_preview (IdeSearchPopover *self,
                                 IdeSearchPreview *preview)
 {
+  const char *title = NULL;
+  const char *subtitle = NULL;
   gboolean old_can_show_preview;
   gboolean new_can_show_preview;
 
@@ -504,6 +506,17 @@ ide_search_popover_set_preview (IdeSearchPopover *self,
   if (old_can_show_preview != new_can_show_preview)
     gtk_revealer_set_reveal_child (self->preview_revealer, new_can_show_preview);
 
+  if (preview != NULL)
+    {
+      title = ide_search_preview_get_title (preview);
+      subtitle = ide_search_preview_get_subtitle (preview);
+    }
+
+  /* TODO: We might want to bind these properties */
+
+  adw_window_title_set_title (self->preview_title, title);
+  adw_window_title_set_subtitle (self->preview_title, subtitle);
+
   IDE_EXIT;
 }
 
@@ -512,8 +525,8 @@ ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
                                          GParamSpec         *pspec,
                                          GtkSingleSelection *selection)
 {
-  IdeSearchResult *result;
   IdeSearchPreview *preview = NULL;
+  IdeSearchResult *result;
 
   IDE_ENTRY;
 
@@ -521,13 +534,8 @@ ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (GTK_IS_SINGLE_SELECTION (selection));
 
-  if (!(result = gtk_single_selection_get_selected_item (selection)))
-    {
-      adw_window_title_set_title (self->preview_title, NULL);
-      adw_window_title_set_subtitle (self->preview_title, NULL);
-    }
-
-  /* TODO: Get provider to generate preview */
+  if ((result = gtk_single_selection_get_selected_item (selection)))
+    preview = ide_search_result_load_preview (result);
 
   ide_search_popover_set_preview (self, preview);
 
