@@ -571,7 +571,7 @@ ide_lsp_client_buffer_loaded (IdeLspClient     *self,
                            "delete-range",
                            G_CALLBACK (ide_lsp_client_buffer_after_delete_range),
                            self,
-                           G_CONNECT_SWAPPED | G_CONNECT_SWAPPED);
+                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   uri = ide_buffer_dup_uri (buffer);
   version = (gint64)ide_buffer_get_change_count (buffer);
