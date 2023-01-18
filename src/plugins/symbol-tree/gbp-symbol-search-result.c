@@ -48,6 +48,53 @@ G_DEFINE_FINAL_TYPE (GbpSymbolSearchResult, gbp_symbol_search_result, IDE_TYPE_S
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_symbol_search_result_preview_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeSymbolNode *node = (IdeSymbolNode *)object;
+  g_autoptr(IdeFileSearchPreview) preview = user_data;
+  g_autoptr(IdeLocation) location = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SYMBOL_NODE (node));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (preview));
+
+  if ((location = ide_symbol_node_get_location_finish (node, result, &error)))
+    ide_file_search_preview_scroll_to (preview, location);
+
+  IDE_EXIT;
+}
+
+static IdeSearchPreview *
+gbp_symbol_search_result_load_preview (IdeSearchResult *result,
+                                       IdeContext      *context)
+{
+  GbpSymbolSearchResult *self = (GbpSymbolSearchResult *)result;
+  IdeSearchPreview *preview;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SEARCH_RESULT (result));
+
+  if (self->file == NULL)
+    IDE_RETURN (NULL);
+
+  preview = ide_file_search_preview_new (self->file);
+
+  ide_symbol_node_get_location_async (self->node,
+                                      NULL,
+                                      gbp_symbol_search_result_preview_cb,
+                                      g_object_ref (preview));
+
+  IDE_RETURN (preview);
+}
+
+static void
 gbp_symbol_search_result_get_location_cb (GObject      *object,
                                           GAsyncResult *result,
                                           gpointer      user_data)
@@ -177,6 +224,7 @@ gbp_symbol_search_result_class_init (GbpSymbolSearchResultClass *klass)
   object_class->set_property = gbp_symbol_search_result_set_property;
 
   search_result_class->activate = gbp_symbol_search_result_activate;
+  search_result_class->load_preview = gbp_symbol_search_result_load_preview;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
