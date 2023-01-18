@@ -20,6 +20,10 @@
 
 #define G_LOG_DOMAIN "ide-code-index-search-provider"
 
+#include "config.h"
+
+#include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-foundry.h>
 
@@ -140,11 +144,32 @@ ide_code_index_search_provider_search_finish (IdeSearchProvider  *provider,
   IDE_RETURN (ret);
 }
 
+static char *
+ide_code_index_search_provider_dup_title (IdeSearchProvider *provider)
+{
+  return g_strdup (_("Project Symbols"));
+}
+
+static GIcon *
+ide_code_index_search_provider_dup_icon (IdeSearchProvider *provider)
+{
+  return g_themed_icon_new ("lang-function-symbolic");
+}
+
+static IdeSearchCategory
+ide_code_index_search_provider_get_category (IdeSearchProvider *provider)
+{
+  return IDE_SEARCH_CATEGORY_SYMBOLS;
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
   iface->search_async = ide_code_index_search_provider_search_async;
   iface->search_finish = ide_code_index_search_provider_search_finish;
+  iface->dup_title = ide_code_index_search_provider_dup_title;
+  iface->dup_icon = ide_code_index_search_provider_dup_icon;
+  iface->get_category = ide_code_index_search_provider_get_category;
 }
 
 struct _IdeCodeIndexSearchProvider { IdeObject parent; };
