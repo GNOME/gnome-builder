@@ -33,10 +33,12 @@ struct _GbpSymbolSearchResult
 {
   IdeSearchResult  parent_instance;
   IdeSymbolNode   *node;
+  GFile           *file;
 };
 
 enum {
   PROP_0,
+  PROP_FILE,
   PROP_NODE,
   N_PROPS
 };
@@ -112,6 +114,7 @@ gbp_symbol_search_result_dispose (GObject *object)
 {
   GbpSymbolSearchResult *self = (GbpSymbolSearchResult *)object;
 
+  g_clear_object (&self->file);
   g_clear_object (&self->node);
 
   G_OBJECT_CLASS (gbp_symbol_search_result_parent_class)->dispose (object);
@@ -127,6 +130,10 @@ gbp_symbol_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      g_value_set_object (value, self->file);
+      break;
+
     case PROP_NODE:
       g_value_set_object (value, gbp_symbol_search_result_get_node (self));
       break;
@@ -146,6 +153,10 @@ gbp_symbol_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FILE:
+      self->file = g_value_dup_object (value);
+      break;
+
     case PROP_NODE:
       gbp_symbol_search_result_set_node (self, g_value_get_object (value));
       break;
@@ -166,6 +177,11 @@ gbp_symbol_search_result_class_init (GbpSymbolSearchResultClass *klass)
   object_class->set_property = gbp_symbol_search_result_set_property;
 
   search_result_class->activate = gbp_symbol_search_result_activate;
+
+  properties [PROP_FILE] =
+    g_param_spec_object ("file", NULL, NULL,
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NODE] =
     g_param_spec_object ("node", NULL, NULL,
@@ -199,6 +215,7 @@ gbp_symbol_search_result_new (IdeSymbolNode *node,
     }
 
   return g_object_new (GBP_TYPE_SYMBOL_SEARCH_RESULT,
+                       "file", file,
                        "node", node,
                        "subtitle", subtitle,
                        NULL);
