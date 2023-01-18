@@ -177,6 +177,7 @@ src/plugins/editorui/gtk/menus.ui
 src/plugins/editorui/tweaks-language.ui
 src/plugins/editorui/tweaks.ui
 src/plugins/file-search/gbp-file-search-index.c
+src/plugins/file-search/gbp-file-search-provider.c
 src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c
 src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c
 src/plugins/flatpak/gbp-flatpak-client.c

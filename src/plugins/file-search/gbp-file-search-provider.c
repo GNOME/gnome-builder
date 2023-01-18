@@ -336,11 +336,32 @@ gbp_file_search_provider_init (GbpFileSearchProvider *self)
 {
 }
 
+static char *
+gbp_file_search_provider_dup_title (IdeSearchProvider *provider)
+{
+  return g_strdup (_("Files"));
+}
+
+static GIcon *
+gbp_file_search_provider_dup_icon (IdeSearchProvider *provider)
+{
+  return g_themed_icon_new ("folder-symbolic");
+}
+
+static IdeSearchCategory
+gbp_file_search_provider_get_category (IdeSearchProvider *provider)
+{
+  return IDE_SEARCH_CATEGORY_FILES;
+}
+
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
   iface->search_async = gbp_file_search_provider_search_async;
   iface->search_finish = gbp_file_search_provider_search_finish;
+  iface->dup_title = gbp_file_search_provider_dup_title;
+  iface->dup_icon = gbp_file_search_provider_dup_icon;
+  iface->get_category = gbp_file_search_provider_get_category;
 }
 
 void
