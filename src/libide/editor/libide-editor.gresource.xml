@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks">ide-editor-page.ui</file>
     <file preprocess="xml-stripblanks">ide-editor-search-bar.ui</file>
     <file preprocess="xml-stripblanks">ide-editor-workspace.ui</file>
+    <file preprocess="xml-stripblanks">ide-file-search-preview.ui</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file>style.css</file>
   </gresource>
