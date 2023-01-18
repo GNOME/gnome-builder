@@ -1,0 +1,2 @@
+{ "trigger" : "<Control>n", "action" : "search.move", "args" : "1", "when" : "inPopoverSearch()", "phase" : "capture" },
+{ "trigger" : "<Control>p", "action" : "search.move", "args" : "-1", "when" : "inPopoverSearch()", "phase" : "capture" },
