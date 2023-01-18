@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 
+#include <libide-code.h>
 #include <libide-search.h>
 
 G_BEGIN_DECLS
@@ -32,7 +33,9 @@ IDE_AVAILABLE_IN_44
 G_DECLARE_FINAL_TYPE (IdeFileSearchPreview, ide_file_search_preview, IDE, FILE_SEARCH_PREVIEW, IdeSearchPreview)
 
 IDE_AVAILABLE_IN_44
-IdeSearchPreview *ide_file_search_preview_new (GFile *file);
-
+IdeSearchPreview *ide_file_search_preview_new       (GFile                *file);
+IDE_AVAILABLE_IN_44
+void              ide_file_search_preview_scroll_to (IdeFileSearchPreview *self,
+                                                     IdeLocation          *location);
 
 G_END_DECLS

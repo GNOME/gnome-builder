@@ -42,6 +42,11 @@ struct _IdeFileSearchPreview
 
   GtkSourceView *view;
   GtkSourceBuffer *buffer;
+
+  int scroll_to_line;
+  int scroll_to_line_offset;
+
+  guint loaded : 1;
 };
 
 enum {
@@ -53,6 +58,24 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeFileSearchPreview, ide_file_search_preview, IDE_TYPE_SEARCH_PREVIEW)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_file_search_preview_apply_scroll (IdeFileSearchPreview *self)
+{
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
+
+  if (self->scroll_to_line >= 0)
+    {
+      GtkTextIter iter;
+
+      gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self->buffer),
+                                               &iter,
+                                               self->scroll_to_line,
+                                               MAX (0, self->scroll_to_line_offset));
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
+      ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self->view), &iter, .25, TRUE, 1.0, 0.5);
+    }
+}
 
 static void
 file_progress_cb (goffset  current_num_bytes,
@@ -85,6 +108,8 @@ ide_file_search_preview_load_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
 
+  self->loaded = TRUE;
+
   if (gtk_source_file_loader_load_finish (loader, result, NULL))
     {
       g_autofree char *name = g_file_get_basename (self->file);
@@ -93,6 +118,8 @@ ide_file_search_preview_load_cb (GObject      *object,
 
       gtk_source_buffer_set_language (self->buffer, l);
       gtk_source_buffer_set_highlight_syntax (self->buffer, TRUE);
+
+      ide_file_search_preview_apply_scroll (self);
     }
 }
 
@@ -239,10 +266,34 @@ ide_file_search_preview_constructed (GObject *object)
   notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
 
   ide_file_search_preview_settings_changed_cb (self,
-                                        NULL,
-                                        IDE_APPLICATION_DEFAULT->editor_settings);
+                                               NULL,
+                                               IDE_APPLICATION_DEFAULT->editor_settings);
 
   IDE_EXIT;
+}
+
+static gboolean
+ide_file_search_preview_apply_scroll_idle_cb (gpointer user_data)
+{
+  IdeFileSearchPreview *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
+
+  ide_file_search_preview_apply_scroll (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_file_search_preview_root (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (ide_file_search_preview_parent_class)->root (widget);
+
+  g_idle_add_full (G_PRIORITY_LOW+100,
+                   ide_file_search_preview_apply_scroll_idle_cb,
+                   g_object_ref (widget),
+                   g_object_unref);
 }
 
 static void
@@ -306,6 +357,8 @@ ide_file_search_preview_class_init (IdeFileSearchPreviewClass *klass)
   object_class->get_property = ide_file_search_preview_get_property;
   object_class->set_property = ide_file_search_preview_set_property;
 
+  widget_class->root = ide_file_search_preview_root;
+
   properties[PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
@@ -332,6 +385,8 @@ ide_file_search_preview_init (IdeFileSearchPreview *self)
   };
 
   self->css_provider = gtk_css_provider_new ();
+  self->scroll_to_line = -1;
+  self->scroll_to_line_offset = -1;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -358,4 +413,27 @@ ide_file_search_preview_new (GFile *file)
   return g_object_new (IDE_TYPE_FILE_SEARCH_PREVIEW,
                        "file", file,
                        NULL);
+}
+
+void
+ide_file_search_preview_scroll_to (IdeFileSearchPreview *self,
+                                   IdeLocation          *location)
+{
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_FILE_SEARCH_PREVIEW (self));
+  g_return_if_fail (IDE_IS_LOCATION (location));
+
+  if (!(file = ide_location_get_file (location)) || !g_file_equal (file, self->file))
+    IDE_EXIT;
+
+  self->scroll_to_line = ide_location_get_line (location);
+  self->scroll_to_line_offset = ide_location_get_line_offset (location);
+
+  if (self->loaded)
+    ide_file_search_preview_apply_scroll (self);
+
+  IDE_EXIT;
 }
