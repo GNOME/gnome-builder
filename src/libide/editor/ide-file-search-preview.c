@@ -99,11 +99,8 @@ ide_file_search_preview_load_cb (GObject      *object,
 static void
 ide_file_search_preview_load (IdeFileSearchPreview *self)
 {
-  GtkSourceStyleSchemeManager *schemes;
-  GtkSourceStyleScheme *scheme;
   g_autoptr(GtkSourceFileLoader) loader = NULL;
   g_autoptr(GtkSourceFile) file = NULL;
-  const char *style_scheme_name;
   g_autofree char *path = NULL;
   g_autofree char *title = NULL;
   g_autofree char *subtitle = NULL;
@@ -111,14 +108,6 @@ ide_file_search_preview_load (IdeFileSearchPreview *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
   g_assert (G_IS_FILE (self->file));
-
-  /* TODO: This needs to update when changed */
-  style_scheme_name = ide_application_get_style_scheme (IDE_APPLICATION_DEFAULT);
-
-  schemes = gtk_source_style_scheme_manager_get_default ();
-  scheme = gtk_source_style_scheme_manager_get_scheme (schemes, style_scheme_name);
-
-  gtk_source_buffer_set_style_scheme (self->buffer, scheme);
 
   path = g_file_get_path (self->file);
   title = g_path_get_basename (path);
