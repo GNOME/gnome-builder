@@ -80,7 +80,6 @@
                     <child>
                       <object class="GtkListView" id="list_view">
                         <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                        <property name="single-click-activate">True</property>
                         <property name="orientation">vertical</property>
                         <property name="model">
                           <object class="GtkSingleSelection" id="selection">
