@@ -33,6 +33,8 @@
 
 #include "ide-file-search-preview.h"
 
+#define SCROLL_DELAY_MSEC 34
+
 struct _IdeFileSearchPreview
 {
   IdeSearchPreview parent_instance;
@@ -290,10 +292,11 @@ ide_file_search_preview_root (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (ide_file_search_preview_parent_class)->root (widget);
 
-  g_idle_add_full (G_PRIORITY_LOW+100,
-                   ide_file_search_preview_apply_scroll_idle_cb,
-                   g_object_ref (widget),
-                   g_object_unref);
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      SCROLL_DELAY_MSEC,
+                      ide_file_search_preview_apply_scroll_idle_cb,
+                      g_object_ref (widget),
+                      g_object_unref);
 }
 
 static void
