@@ -271,6 +271,7 @@ src/plugins/spellcheck/editor-spell-menu.c
 src/plugins/sphinx-preview/gtk/menus.ui
 src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-popover.ui
+src/plugins/symbol-tree/gbp-symbol-search-provider.c
 src/plugins/symbol-tree/gbp-symbol-search-result.c
 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
 src/plugins/symbol-tree/gtk/menus.ui
