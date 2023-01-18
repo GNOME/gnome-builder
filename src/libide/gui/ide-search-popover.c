@@ -561,6 +561,7 @@ ide_search_popover_show (GtkWidget *widget)
   GTK_WIDGET_CLASS (ide_search_popover_parent_class)->show (widget);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+  gtk_editable_select_region (GTK_EDITABLE (self->entry), 0, -1);
 }
 
 static gboolean
