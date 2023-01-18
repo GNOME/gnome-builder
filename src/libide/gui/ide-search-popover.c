@@ -415,6 +415,7 @@ ide_search_popover_search_focus (GtkWidget  *widget,
   IdeSearchPopover *self = IDE_SEARCH_POPOVER (widget);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+  gtk_editable_select_region (GTK_EDITABLE (self->entry), 0, -1);
 }
 
 static void
