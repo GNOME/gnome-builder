@@ -58,6 +58,7 @@
                     <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
                     <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
                     <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
+                    <property name="placeholder-text" translatable="yes">Search for anything</property>
                   </object>
                 </child>
                 <child type="end">
