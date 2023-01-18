@@ -51,6 +51,9 @@ ide_code_index_search_result_activate (IdeSearchResult *result,
   g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
@@ -58,6 +61,31 @@ ide_code_index_search_result_activate (IdeSearchResult *result,
   position = panel_position_new ();
 
   ide_editor_focus_location (workspace, position, self->location);
+
+  IDE_EXIT;
+}
+
+static IdeSearchPreview *
+ide_code_index_search_result_load_preview (IdeSearchResult *result,
+                                           IdeContext      *context)
+{
+  IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)result;
+  IdeSearchPreview *preview = NULL;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_SEARCH_RESULT (self));
+
+  if ((file = ide_location_get_file (self->location)))
+    {
+      preview = ide_file_search_preview_new (file);
+      ide_file_search_preview_scroll_to (IDE_FILE_SEARCH_PREVIEW (preview),
+                                         self->location);
+    }
+
+  IDE_RETURN (preview);
 }
 
 static void
@@ -119,6 +147,7 @@ ide_code_index_search_result_class_init (IdeCodeIndexSearchResultClass *klass)
   object_class->finalize = ide_code_index_search_result_finalize;
 
   result_class->activate = ide_code_index_search_result_activate;
+  result_class->load_preview = ide_code_index_search_result_load_preview;
 
   properties [PROP_LOCATION] =
     g_param_spec_object ("location",
@@ -142,7 +171,7 @@ ide_code_index_search_result_new (const char  *title,
                                   IdeLocation *location,
                                   float        score)
 {
-  g_autofree gchar *etitle = g_markup_escape_text (title, -1);
+  g_autofree char *etitle = g_markup_escape_text (title, -1);
 
   return g_object_new (IDE_TYPE_CODE_INDEX_SEARCH_RESULT,
                        "title", etitle,
