@@ -58,5 +58,7 @@ void              ide_search_engine_add_provider    (IdeSearchEngine      *self,
 IDE_AVAILABLE_IN_ALL
 void              ide_search_engine_remove_provider (IdeSearchEngine      *self,
                                                      IdeSearchProvider    *provider);
+IDE_AVAILABLE_IN_44
+GListModel       *ide_search_engine_list_providers  (IdeSearchEngine      *self);
 
 G_END_DECLS
