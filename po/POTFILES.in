@@ -222,6 +222,7 @@ src/plugins/make-templates/gbp-make-template-provider.c
 src/plugins/markdown-preview/gtk/menus.ui
 src/plugins/maven/gbp-maven-pipeline-addin.c
 src/plugins/maven/gbp-maven-run-command-provider.c
+src/plugins/menu-search/gbp-menu-search-provider.c
 src/plugins/menu-search/gtk/menus.ui
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-introspection.c
