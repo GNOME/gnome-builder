@@ -1,6 +1,6 @@
-/* ide-search-popover.h
+/* ide-search-popover-group-private.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,26 +20,16 @@
 
 #pragma once
 
-#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
-# error "Only <libide-gui.h> can be included directly."
-#endif
-
-#include <gtk/gtk.h>
-
-#include <libide-core.h>
 #include <libide-search.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SEARCH_POPOVER (ide_search_popover_get_type())
+#define IDE_TYPE_SEARCH_POPOVER_GROUP (ide_search_popover_group_get_type())
 
-IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
+G_DECLARE_FINAL_TYPE (IdeSearchPopoverGroup, ide_search_popover_group, IDE, SEARCH_POPOVER_GROUP, GObject)
 
-IDE_AVAILABLE_IN_44
-gboolean ide_search_popover_get_show_preview (IdeSearchPopover *self);
-IDE_AVAILABLE_IN_44
-void     ide_search_popover_set_show_preview (IdeSearchPopover *self,
-                                              gboolean          show_preview);
+const char        *ide_search_popover_group_get_title     (IdeSearchPopoverGroup *self);
+const char        *ide_search_popover_group_get_icon_name (IdeSearchPopoverGroup *self);
+IdeSearchCategory  ide_search_popover_group_get_category  (IdeSearchPopoverGroup *self);
 
 G_END_DECLS

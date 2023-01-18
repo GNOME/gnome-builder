@@ -2,7 +2,6 @@
 <interface>
   <template class="IdeSearchPopover" parent="GtkPopover">
     <property name="has-arrow">false</property>
-    <property name="width-request">700</property>
     <property name="height-request">400</property>
     <property name="default-widget">entry</property>
     <style>
@@ -10,43 +9,87 @@
     </style>
     <child>
       <object class="GtkBox" id="main_box">
-        <property name="orientation">vertical</property>
-        <property name="hexpand">true</property>
+        <property name="orientation">horizontal</property>
         <child>
-          <object class="AdwHeaderBar">
-            <property name="show-start-title-buttons">false</property>
-            <property name="show-end-title-buttons">false</property>
-            <child type="title">
-              <object class="GtkSearchEntry" id="entry">
-                <property name="width-chars">40</property>
-                <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
-                <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
-                <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
+          <object class="GtkBox" id="left">
+            <property name="orientation">vertical</property>
+            <property name="width-request">180</property>
+            <property name="halign">end</property>
+            <property name="hexpand">false</property>
+            <child>
+              <object class="AdwHeaderBar">
+                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">false</property>
+                <child type="title">
+                  <object class="AdwWindowTitle">
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="GtkListBox" id="providers_list_box">
+                    <style>
+                      <class name="navigation-sidebar"/>
+                    </style>
+                    <signal name="row-selected" handler="ide_search_popover_category_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="vexpand">true</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="min-content-height">400</property>
+          <object class="GtkBox" id="center">
+            <property name="orientation">vertical</property>
+            <property name="width-request">500</property>
+            <property name="hexpand">true</property>
             <child>
-              <object class="GtkViewport">
-                <property name="scroll-to-focus">true</property>
+              <object class="AdwHeaderBar">
+                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">false</property>
+                <child type="title">
+                  <object class="GtkSearchEntry" id="entry">
+                    <property name="width-chars">30</property>
+                    <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                    <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                    <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
+                    <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
+                    <property name="placeholder-text" translatable="yes">Search for anything</property>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkToggleButton" id="preview_toggle">
+                    <property name="icon-name">panel-right-symbolic</property>
+                    <property name="active" bind-source="IdeSearchPopover" bind-property="show-preview" bind-flags="bidirectional|sync-create"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">true</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="min-content-height">400</property>
                 <child>
-                  <object class="GtkListView" id="list_view">
-                    <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                    <property name="single-click-activate">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="model">
-                      <object class="GtkSingleSelection" id="selection">
-                      </object>
-                    </property>
-                    <property name="factory">
-                      <object class="GtkBuilderListItemFactory">
-                        <property name="bytes"><![CDATA[
+                  <object class="GtkViewport">
+                    <property name="scroll-to-focus">true</property>
+                    <child>
+                      <object class="GtkListView" id="list_view">
+                        <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                        <property name="single-click-activate">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="model">
+                          <object class="GtkSingleSelection" id="selection">
+                            <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                          </object>
+                        </property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 <template class="GtkListItem">
@@ -129,15 +172,89 @@
 </template>
 </interface>
 ]]>
+                            </property>
+                          </object>
                         </property>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkRevealer" id="preview_revealer">
+            <property name="transition-type">slide-left</property>
+            <property name="halign">start</property>
+            <property name="hexpand">false</property>
+            <child>
+              <object class="GtkBox" id="right">
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="orientation">vertical</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="AdwHeaderBar">
+                        <property name="show-start-title-buttons">false</property>
+                        <property name="show-end-title-buttons">false</property>
+                        <child type="title">
+                          <object class="AdwWindowTitle" id="preview_title">
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwBin" id="preview_bin">
+                        <property name="width-request">375</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Everything</property>
+        <property name="icon-name">edit-find-symbolic</property>
+        <property name="category">everything</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Actions</property>
+        <property name="icon-name">search-menus-symbolic</property>
+        <property name="category">actions</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Commands</property>
+        <property name="icon-name">text-x-script-symbolic</property>
+        <property name="category">commands</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Files</property>
+        <property name="icon-name">folder-symbolic</property>
+        <property name="category">files</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeSearchPopoverGroup">
+        <property name="title" translatable="yes">_Symbols</property>
+        <property name="icon-name">lang-function-symbolic</property>
+        <property name="category">symbols</property>
       </object>
     </child>
   </template>

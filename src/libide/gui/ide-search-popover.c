@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-search-popover-private.h"
+#include "ide-search-popover-group-private.h"
 #include "ide-search-resources.h"
 #include "ide-gui-global.h"
 
@@ -36,24 +39,44 @@ struct _IdeSearchPopover
   GCancellable       *cancellable;
   IdeSearchEngine    *search_engine;
 
+  GListStore         *groups;
+
+  GtkWidget          *left;
+  GtkWidget          *right;
+  GtkWidget          *center;
+
   GtkSearchEntry     *entry;
-  GtkSingleSelection *selection;
   GtkListView        *list_view;
+  AdwBin             *preview_bin;
+  AdwWindowTitle     *preview_title;
+  GtkRevealer        *preview_revealer;
+  GtkListBox         *providers_list_box;
+  GtkSingleSelection *selection;
+
+  IdeSearchCategory   last_category;
 
   guint               queued_search;
 
   guint               activate_after_search : 1;
+  guint               disposed : 1;
+  guint               has_preview : 1;
+  guint               show_preview : 1;
 };
 
 enum {
   PROP_0,
   PROP_SEARCH_ENGINE,
+  PROP_SHOW_PREVIEW,
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER)
+static void buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static GtkBuildableIface *parent_buildable_iface;
 
 static void
 ide_search_popover_cancel (IdeSearchPopover *self)
@@ -112,13 +135,84 @@ ide_search_popover_hide_action (GtkWidget  *widget,
 }
 
 static void
+group_header_func (GtkListBoxRow *row,
+                   GtkListBoxRow *before,
+                   gpointer       user_data)
+{
+  IdeSearchPopoverGroup *before_group;
+
+  if (before == NULL)
+    return;
+
+  if ((before_group = g_object_get_data (G_OBJECT (before), "GROUP")) &&
+      ide_str_equal (("_Everything"), ide_search_popover_group_get_title (before_group)))
+    gtk_list_box_row_set_header (row,
+                                 g_object_new (GTK_TYPE_SEPARATOR,
+                                               "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                               NULL));
+}
+
+static GtkWidget *
+create_group_row (gpointer item,
+                  gpointer user_data)
+{
+  IdeSearchPopoverGroup *group = item;
+  const char *title;
+  const char *icon_name;
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *row;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER_GROUP (group));
+
+  title = ide_search_popover_group_get_title (group);
+  icon_name = ide_search_popover_group_get_icon_name (group);
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "spacing", 9,
+                      NULL);
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", icon_name,
+                        NULL);
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", title,
+                        "xalign", .0f,
+                        "ellipsize", PANGO_ELLIPSIZE_END,
+                        "use-underline", TRUE,
+                        NULL);
+  gtk_box_append (GTK_BOX (box), image);
+  gtk_box_append (GTK_BOX (box), label);
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "css-classes", IDE_STRV_INIT ("sidebar-row"),
+                      "child", box,
+                      NULL);
+
+  g_object_set_data_full (G_OBJECT (row),
+                          "GROUP",
+                          g_object_ref (group),
+                          g_object_unref);
+
+  return GTK_WIDGET (row);
+}
+
+static void
 ide_search_popover_set_search_engine (IdeSearchPopover *self,
                                       IdeSearchEngine  *search_engine)
 {
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
 
-  g_set_object (&self->search_engine, search_engine);
+  if (g_set_object (&self->search_engine, search_engine))
+    {
+      g_autoptr(GListModel) model = NULL;
+
+      if (search_engine != NULL)
+        model = ide_search_engine_list_providers (search_engine);
+    }
 }
 
 static void
@@ -172,7 +266,10 @@ ide_search_popover_search_cb (GObject      *object,
 static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
+  IdeSearchCategory category = IDE_SEARCH_CATEGORY_EVERYTHING;
+  IdeSearchPopoverGroup *group;
   IdeSearchPopover *self = data;
+  GtkListBoxRow *row;
   GListModel *model;
   const char *query;
 
@@ -193,8 +290,15 @@ ide_search_popover_search_source_func (gpointer data)
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
 
+  /* Get the category for the query */
+  if ((row = gtk_list_box_get_selected_row (self->providers_list_box)) &&
+      (group = g_object_get_data (G_OBJECT (row), "GROUP")) &&
+      IDE_IS_SEARCH_POPOVER_GROUP (group))
+    category = ide_search_popover_group_get_category (group);
+
   /* Fast path to just filter our previous result set */
-  if ((model = gtk_single_selection_get_model (self->selection)) &&
+  if (category == self->last_category &&
+      (model = gtk_single_selection_get_model (self->selection)) &&
       IDE_IS_SEARCH_RESULTS (model) &&
       ide_search_results_refilter (IDE_SEARCH_RESULTS (model), query))
     {
@@ -202,7 +306,10 @@ ide_search_popover_search_source_func (gpointer data)
       IDE_RETURN (G_SOURCE_REMOVE);
     }
 
+  self->last_category = category;
+
   ide_search_engine_search_async (self->search_engine,
+                                  category,
                                   query,
                                   0,
                                   self->cancellable,
@@ -226,6 +333,9 @@ ide_search_popover_queue_search (IdeSearchPopover *self)
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  if (self->disposed)
+    return;
 
   g_clear_handle_id (&self->queued_search, g_source_remove);
 
@@ -298,6 +408,16 @@ ide_search_popover_entry_activate_cb (IdeSearchPopover *self,
 }
 
 static void
+ide_search_popover_search_focus (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *param)
+{
+  IdeSearchPopover *self = IDE_SEARCH_POPOVER (widget);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
+static void
 ide_search_popover_move_action (GtkWidget  *widget,
                                 const char *action_name,
                                 GVariant   *param)
@@ -364,6 +484,73 @@ ide_search_popover_previous_match_cb (IdeSearchPopover *self,
 }
 
 static void
+ide_search_popover_set_preview (IdeSearchPopover *self,
+                                IdeSearchPreview *preview)
+{
+  const char *title = NULL;
+  const char *subtitle = NULL;
+  gboolean can_show_preview;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (!preview || IDE_IS_SEARCH_PREVIEW (preview));
+
+  self->has_preview = preview != NULL;
+  adw_bin_set_child (self->preview_bin, GTK_WIDGET (preview));
+  can_show_preview = self->has_preview && self->show_preview;
+
+  gtk_revealer_set_reveal_child (self->preview_revealer, can_show_preview);
+
+  if (preview != NULL)
+    {
+      title = ide_search_preview_get_title (preview);
+      subtitle = ide_search_preview_get_subtitle (preview);
+    }
+
+  /* TODO: We might want to bind these properties */
+
+  adw_window_title_set_title (self->preview_title, title);
+  adw_window_title_set_subtitle (self->preview_title, subtitle);
+
+  IDE_EXIT;
+}
+
+static void
+ide_search_popover_selection_changed_cb (IdeSearchPopover   *self,
+                                         GParamSpec         *pspec,
+                                         GtkSingleSelection *selection)
+{
+  IdeSearchPreview *preview = NULL;
+  IdeSearchResult *result;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_SINGLE_SELECTION (selection));
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
+  if ((result = gtk_single_selection_get_selected_item (selection)))
+    preview = ide_search_result_load_preview (result, context);
+
+  ide_search_popover_set_preview (self, preview);
+
+  IDE_EXIT;
+}
+
+static void
+ide_search_popover_category_changed_cb (IdeSearchPopover *self)
+{
+  IDE_ENTRY;
+  ide_search_popover_queue_search (self);
+  IDE_EXIT;
+}
+
+static void
 ide_search_popover_show (GtkWidget *widget)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)widget;
@@ -390,10 +577,13 @@ ide_search_popover_dispose (GObject *object)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)object;
 
+  self->disposed = TRUE;
+
   g_clear_handle_id (&self->queued_search, g_source_remove);
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->search_engine);
+  g_clear_object (&self->groups);
 
   G_OBJECT_CLASS (ide_search_popover_parent_class)->dispose (object);
 }
@@ -410,6 +600,10 @@ ide_search_popover_get_property (GObject    *object,
     {
     case PROP_SEARCH_ENGINE:
       g_value_set_object (value, self->search_engine);
+      break;
+
+    case PROP_SHOW_PREVIEW:
+      g_value_set_boolean (value, ide_search_popover_get_show_preview (self));
       break;
 
     default:
@@ -431,6 +625,10 @@ ide_search_popover_set_property (GObject      *object,
       ide_search_popover_set_search_engine (self, g_value_get_object (value));
       break;
 
+    case PROP_SHOW_PREVIEW:
+      ide_search_popover_set_show_preview (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -449,6 +647,11 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   widget_class->grab_focus = ide_search_popover_grab_focus;
   widget_class->show = ide_search_popover_show;
 
+  properties [PROP_SHOW_PREVIEW] =
+    g_param_spec_boolean ("show-preview", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
                          "Search Engine",
@@ -461,23 +664,47 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   g_resources_register (ide_search_get_resource ());
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-search-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, center);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, left);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_bin);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_title);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, providers_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_category_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_next_match_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_previous_match_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_selection_changed_cb);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
   gtk_widget_class_install_action (widget_class, "search.move", "i", ide_search_popover_move_action);
+  gtk_widget_class_install_action (widget_class, "search.focus", NULL, ide_search_popover_search_focus);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_k, GDK_CONTROL_MASK, "search.focus", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "search.focus", NULL);
+
+  g_type_ensure (IDE_TYPE_SEARCH_POPOVER_GROUP);
 }
 
 static void
 ide_search_popover_init (IdeSearchPopover *self)
 {
+  self->show_preview = TRUE;
+  self->groups = g_list_store_new (IDE_TYPE_SEARCH_POPOVER_GROUP);
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_list_box_set_header_func (self->providers_list_box,
+                                group_header_func, self, NULL);
+  gtk_list_box_bind_model (self->providers_list_box,
+                           G_LIST_MODEL (self->groups),
+                           create_group_row, self, NULL);
 }
 
 GtkWidget *
@@ -495,9 +722,60 @@ ide_search_popover_present (IdeSearchPopover *self,
                             int               parent_width,
                             int               parent_height)
 {
+  GtkRequisition left, right;
+
   g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
 
-  gtk_popover_set_pointing_to (GTK_POPOVER (self),
-                               &(GdkRectangle) { parent_width / 2, 100, 1, 1 });
+  gtk_widget_get_preferred_size (GTK_WIDGET (self->left), &left, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (self->preview_revealer), &right, NULL);
+
+  gtk_popover_set_offset (GTK_POPOVER (self), -(left.width/2) + (right.width/2), 0);
+  gtk_popover_set_pointing_to (GTK_POPOVER (self), &(GdkRectangle) { parent_width/2, 100, 1, 1 });
   gtk_popover_present (GTK_POPOVER (self));
+}
+
+gboolean
+ide_search_popover_get_show_preview (IdeSearchPopover *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_POPOVER (self), FALSE);
+
+  return self->show_preview;
+}
+
+void
+ide_search_popover_set_show_preview (IdeSearchPopover *self,
+                                     gboolean          show_preview)
+{
+  g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
+
+  show_preview = !!show_preview;
+
+  if (show_preview != self->show_preview)
+    {
+      self->show_preview = show_preview;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_PREVIEW]);
+
+      ide_search_popover_selection_changed_cb (self, NULL, self->selection);
+    }
+}
+
+static void
+ide_search_popover_add_child (GtkBuildable *buildable,
+                              GtkBuilder   *builder,
+                              GObject      *object,
+                              const char   *type)
+{
+  IdeSearchPopover *self = IDE_SEARCH_POPOVER (buildable);
+
+  if (IDE_IS_SEARCH_POPOVER_GROUP (object))
+    g_list_store_append (self->groups, object);
+  else
+    parent_buildable_iface->add_child (buildable, builder, object, type);
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = ide_search_popover_add_child;
 }
