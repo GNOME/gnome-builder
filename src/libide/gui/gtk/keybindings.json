@@ -1,8 +1,6 @@
 /* Global Search */
 { "trigger" : "<Control>Return", "action" : "context.workbench.global-search", "when" : "canSearch()", "phase" : "capture" },
 { "trigger" : "Escape", "action" : "search.hide", "when" : "inPopoverSearch() || inPageSearch()", "phase" : "capture" },
-{ "trigger" : "Down", "action" : "search.move", "args" : "1", "when" : "inPopoverSearch()", "phase" : "capture" },
-{ "trigger" : "Up", "action" : "search.move", "args" : "-1", "when" : "inPopoverSearch()", "phase" : "capture" },
 { "trigger" : "<Control>n", "action" : "search.move", "args" : "1", "when" : "inPopoverSearch()", "phase" : "capture" },
 { "trigger" : "<Control>p", "action" : "search.move", "args" : "-1", "when" : "inPopoverSearch()", "phase" : "capture" },
 
