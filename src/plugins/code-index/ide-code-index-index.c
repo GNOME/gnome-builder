@@ -330,6 +330,8 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   if (NULL != (shortname = strrchr (path, G_DIR_SEPARATOR)))
     g_string_append (subtitle, shortname + 1);
 
+  g_string_append_printf (subtitle, ":%u", line);
+
   if ((kind == IDE_SYMBOL_KIND_FUNCTION) && !(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION))
     {
       /* translators: "Declaration" is describing a function that is defined in a header
