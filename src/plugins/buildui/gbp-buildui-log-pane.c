@@ -357,6 +357,7 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
                            G_CONNECT_SWAPPED);
 
   panel_widget_set_title (PANEL_WIDGET (self), _("Build Output"));
+  panel_widget_set_tooltip (PANEL_WIDGET (self), _("Build Output (Shift+Ctrl+L)"));
 
   gbp_buildui_log_pane_reset_view (self);
 

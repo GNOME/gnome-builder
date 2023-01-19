@@ -90,7 +90,7 @@
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Building</attribute>
       <item>
-        <attribute name="label" translatable="yes">Show Build _Log</attribute>
+        <attribute name="label" translatable="yes">Show Bui_ld Output</attribute>
         <attribute name="action">workspace.buildui.log.show</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;l</attribute>
         <attribute name="description" translatable="yes">Display panel containing the build log</attribute>
