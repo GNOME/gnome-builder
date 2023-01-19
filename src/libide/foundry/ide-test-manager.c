@@ -28,6 +28,8 @@
 #include <libide-io.h>
 #include <libide-threading.h>
 
+#include "ide-marshal.h"
+
 #include "ide-build-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
@@ -276,14 +278,19 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
                          G_TYPE_LIST_MODEL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
   signals [BEGIN_TEST_ALL] =
     g_signal_new ("begin-test-all",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [BEGIN_TEST_ALL],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 
   signals [END_TEST_ALL] =
     g_signal_new ("end-test-all",
@@ -291,10 +298,11 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_signal_set_va_marshaller (signals [END_TEST_ALL],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

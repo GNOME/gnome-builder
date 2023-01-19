@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-toolchain.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain-provider.h"
@@ -110,11 +112,11 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeToolchainProviderInterface, added),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, IDE_TYPE_TOOLCHAIN);
   g_signal_set_va_marshaller (signals [ADDED],
                               G_TYPE_FROM_INTERFACE (iface),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeToolchainProvider:removed:
@@ -130,11 +132,11 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeToolchainProviderInterface, removed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, IDE_TYPE_TOOLCHAIN);
   g_signal_set_va_marshaller (signals [REMOVED],
                               G_TYPE_FROM_INTERFACE (iface),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 
 }
 

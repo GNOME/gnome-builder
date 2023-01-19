@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
 
 #include <libide-core.h>
@@ -30,6 +31,8 @@
 #include <libide-plugins.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
+
+#include "ide-marshal.h"
 
 #include "ide-build-manager.h"
 #include "ide-build-private.h"
@@ -1079,8 +1082,11 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_build_manager_real_build_started),
                                 NULL, NULL,
-                                NULL,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
+  g_signal_set_va_marshaller (signals [BUILD_STARTED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeBuildManager::build-failed:
@@ -1100,8 +1106,11 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_build_manager_real_build_failed),
                                 NULL, NULL,
-                                NULL,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
+  g_signal_set_va_marshaller (signals [BUILD_FAILED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeBuildManager::build-finished:
@@ -1117,8 +1126,11 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_build_manager_real_build_finished),
                                 NULL, NULL,
-                                NULL,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, IDE_TYPE_PIPELINE);
+  g_signal_set_va_marshaller (signals [BUILD_FINISHED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

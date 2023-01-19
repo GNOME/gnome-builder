@@ -22,9 +22,11 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <libpeas/peas.h>
 #include <string.h>
+
+#include <glib/gi18n.h>
+
+#include <libpeas/peas.h>
 #include <vte/vte.h>
 
 #include <libide-core.h>
@@ -33,6 +35,8 @@
 #include <libide-plugins.h>
 #include <libide-projects.h>
 #include <libide-threading.h>
+
+#include "ide-marshal.h"
 
 #include "ide-build-log-private.h"
 #include "ide-config.h"
@@ -1774,8 +1778,12 @@ ide_pipeline_class_init (IdePipelineClass *klass)
     g_signal_new_class_handler ("diagnostic",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
-                                NULL, NULL, NULL, NULL,
+                                NULL, NULL, NULL,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, IDE_TYPE_DIAGNOSTIC);
+  g_signal_set_va_marshaller (signals [DIAGNOSTIC],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdePipeline::started:
@@ -1790,8 +1798,12 @@ ide_pipeline_class_init (IdePipelineClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_pipeline_real_started),
-                                NULL, NULL, NULL,
+                                NULL, NULL,
+                                ide_marshal_VOID__FLAGS,
                                 G_TYPE_NONE, 1, IDE_TYPE_PIPELINE_PHASE);
+  g_signal_set_va_marshaller (signals [STARTED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__FLAGSv);
 
   /**
    * IdePipeline::finished:
@@ -1807,8 +1819,12 @@ ide_pipeline_class_init (IdePipelineClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_pipeline_real_finished),
-                                NULL, NULL, NULL,
+                                NULL, NULL,
+                                ide_marshal_VOID__BOOLEAN,
                                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals [FINISHED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__BOOLEANv);
 
   /**
    * IdePipeline::loaded:
@@ -1838,11 +1854,11 @@ ide_pipeline_class_init (IdePipelineClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 NULL, NULL, NULL,
-                                g_cclosure_marshal_VOID__OBJECT,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS_LAUNCHER);
   g_signal_set_va_marshaller (signals [LAUNCHER_CREATED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

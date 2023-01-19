@@ -34,6 +34,7 @@
 #include <libide-threading.h>
 #include <libide-vcs.h>
 
+#include "ide-marshal.h"
 #include "ide-private.h"
 
 #include "ide-build-manager.h"
@@ -451,10 +452,13 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                                 NULL,
                                 NULL,
                                 NULL,
-                                NULL,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE,
                                 1,
                                 IDE_TYPE_RUN_CONTEXT);
+  g_signal_set_va_marshaller (signals [RUN],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeRunManager::started:
@@ -467,8 +471,11 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [STARTED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeRunManager::stopped:
@@ -482,8 +489,11 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [STOPPED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 gboolean

@@ -22,8 +22,11 @@
 
 #include "config.h"
 
-#include <libide-threading.h>
 #include <string.h>
+
+#include <libide-threading.h>
+
+#include "ide-marshal.h"
 
 #include "ide-pipeline.h"
 #include "ide-pipeline-stage.h"
@@ -495,8 +498,11 @@ ide_pipeline_stage_class_init (IdePipelineStageClass *klass)
                   G_STRUCT_OFFSET (IdePipelineStageClass, chain),
                   g_signal_accumulator_true_handled,
                   NULL,
-                  NULL,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_BOOLEAN, 1, IDE_TYPE_PIPELINE_STAGE);
+  g_signal_set_va_marshaller (signals [CHAIN],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdePipelineStage::query:
@@ -527,12 +533,16 @@ ide_pipeline_stage_class_init (IdePipelineStageClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdePipelineStageClass, query),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT_BOXED_OBJECT,
                   G_TYPE_NONE,
                   3,
                   IDE_TYPE_PIPELINE,
                   G_TYPE_PTR_ARRAY,
                   G_TYPE_CANCELLABLE);
+  g_signal_set_va_marshaller (signals [QUERY],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_BOXED_OBJECTv);
 
   /**
    * IdePipelineStage::reap:
@@ -550,8 +560,12 @@ ide_pipeline_stage_class_init (IdePipelineStageClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdePipelineStageClass, reap),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, IDE_TYPE_DIRECTORY_REAPER);
+  g_signal_set_va_marshaller (signals [REAP],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

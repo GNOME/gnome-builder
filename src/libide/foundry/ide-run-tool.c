@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-pipeline.h"
 #include "ide-run-command.h"
 #include "ide-run-context.h"
@@ -144,8 +146,11 @@ ide_run_tool_class_init (IdeRunToolClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeRunToolClass, started),
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS);
+  g_signal_set_va_marshaller (signals [STARTED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   signals[STOPPED] =
     g_signal_new ("stopped",
@@ -153,8 +158,11 @@ ide_run_tool_class_init (IdeRunToolClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeRunToolClass, stopped),
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [STOPPED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void
