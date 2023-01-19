@@ -1,5 +1,7 @@
 if get_option('plugin_codesearch')
 
+subdir('libcodesearch')
+
 plugins_sources += files([
   'codesearch-plugin.c',
   'gbp-codesearch-search-provider.c',
@@ -12,5 +14,6 @@ plugin_codesearch_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_codesearch_resources
+plugins_deps += [libcodesearch_static_dep]
 
 endif
