@@ -5,6 +5,7 @@ subdir('libcodesearch')
 plugins_sources += files([
   'codesearch-plugin.c',
   'gbp-codesearch-search-provider.c',
+  'gbp-codesearch-workbench-addin.c',
 ])
 
 plugin_codesearch_resources = gnome.compile_resources(
