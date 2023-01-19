@@ -1,14 +1,14 @@
 # Lithuanian translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Aurimas Černius <aurisc4@gmail.com>, 2015-2022.
+# Aurimas Černius <aurisc4@gmail.com>, 2015-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-27 19:25+0000\n"
-"PO-Revision-Date: 2022-09-27 22:49+0300\n"
+"POT-Creation-Date: 2022-10-11 23:40+0000\n"
+"PO-Revision-Date: 2023-01-19 23:14+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 40.0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -503,12 +503,10 @@ msgid "Directory for all Builder projects."
 msgstr "Katalogas visiems kūrėjo projektams."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#| msgid "Restore Previous Session"
 msgid "Restore Session"
 msgstr "Atkurti seansą"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-#| msgid "Restore previously opened files when loading a project."
 msgid "Restores the projects previous session when loading."
 msgstr "Atkurti ankstesnį seansą įkeliat."
 
@@ -924,7 +922,7 @@ msgstr "Įrašyti"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1169,7 +1167,7 @@ msgstr "Įkeliama į įrenginį…"
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Operacinė sistema"
 
@@ -1310,7 +1308,7 @@ msgstr "Atverti"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Pasirinkite"
@@ -1768,7 +1766,7 @@ msgid "Code Navigation"
 msgstr "Kodo naršymas"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1535
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1906,6 +1904,10 @@ msgstr "Nustatymai"
 msgid "Allow JavaScript"
 msgstr "Leisti JavaScript"
 
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Spausdinti"
+
 #: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "Vykdyti naują Kūrėjo vienetą"
@@ -2041,7 +2043,7 @@ msgstr "Įspėjimai"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Kūrimo konvejeris"
 
@@ -2718,12 +2720,10 @@ msgstr "Galima tipografijos klaida „%s“. Ar norėjote „%s“?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
-#| msgid "Failed to format selection: %s"
 msgid "Failed to format while saving document: %s"
 msgstr "Nepavyko formatuoti įrašant dokumentą: %s"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
-#| msgid "Symbol Tree"
 msgid "Symbol Not Selected"
 msgstr "Simbolis nepažymėtas"
 
@@ -2733,12 +2733,10 @@ msgstr "Pervadinimas simbolis turi būti pažymėtas"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
-#| msgid "_Find References"
 msgid "Find References"
 msgstr "Rasti kreipinius"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
-#| msgid "No references were found"
 msgid "No references found"
 msgstr "Kreipinių nerasta"
 
@@ -2748,12 +2746,10 @@ msgstr "Programavimo kalbos įrankiai gali nepalaikyti kreipinių radimo"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
-#| msgid "Failed to open file: %s"
 msgid "Failed to rename symbol: %s"
 msgstr "Nepavyko pervadinti simbolio: %s"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
-#| msgid "Rename symbol"
 msgid "Rename Symbol"
 msgstr "Pervadinti simbolį"
 
@@ -2764,27 +2760,22 @@ msgid "_Rename"
 msgstr "Pe_rvadinti"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
-#| msgid "Current line"
 msgid "Current Symbol name"
 msgstr "Dabartinis simbolio pavadinimas"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
-#| msgid "Symbol Tree"
 msgid "New Symbol name"
 msgstr "Naujas simbolio pavadinimas"
 
 #: src/plugins/codeui/gtk/menus.ui:7
-#| msgid "Rename symbol"
 msgid "R_ename Symbol…"
 msgstr "P_ervadinti simbolį…"
 
 #: src/plugins/codeui/gtk/menus.ui:13
-#| msgid "Declaration"
 msgid "_Go to Declaration"
 msgstr "_Eiti į deklaraciją"
 
 #: src/plugins/codeui/gtk/menus.ui:14
-#| msgid "Jump to file and location where item is defined"
 msgid "Jump to file and location where item is declared"
 msgstr "Peršokti į failą ir vietą, kur apibrėžtas elementas"
 
@@ -3429,7 +3420,6 @@ msgid "Prefer a space before commas"
 msgstr "Teikti pirmenybę tarpams prieš kablelius"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#| msgid "Prefer a space before simicolons"
 msgid "Prefer a space before semicolons"
 msgstr "Teikti pirmenybę tarpams prieš kabliataškius"
 
@@ -3823,7 +3813,7 @@ msgstr "Pavadinimas"
 msgid "Architecture"
 msgstr "Architektūra"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4531,12 +4521,12 @@ msgid "Drop Down"
 msgstr "Iškrentantis sąrašas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:657
 msgid "Containers/Toolbox"
 msgstr "Konteineriai/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Podman"
 msgstr "Konteineriai/Podman"
 
@@ -4808,12 +4798,10 @@ msgid "Proc Macros"
 msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-#| msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgid "Enables the Proc Macros feature of rust-analyzer"
 msgstr "Įjungia eksperimentinę rust-analyzer savybę Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
-#| msgid "Clear Build Logs"
 msgid "Cargo Build Scripts"
 msgstr "Cargo Build scenarijai"
 
@@ -4822,7 +4810,6 @@ msgid "Run build scripts (build.rs) for more precise code analysis"
 msgstr "Vykdyti kūrimo scenarijus (build.rs) detalesnei kodo analizei"
 
 #: src/plugins/rust-analyzer/tweaks.ui:74
-#| msgid "Editing & Formatting"
 msgid "Rustfmt Range Formatting"
 msgstr "Rustfmt rėžių formatavimas"
 
@@ -4861,24 +4848,36 @@ msgstr ""
 msgid "Available SDKs"
 msgstr "Prieinami SDK"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Naudokite RAKTAS=VERTĖ aplinkos kintamajam nustatyti"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Raktai negali prasidėti skaitmeniu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr "Raktuose gali būti tik raidės, skaitmenys ir pabraukimai."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Nepavadinta komanda"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Rodyti trumpinį"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Pasirinkite darbinį katalogą"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Sukurti komandą"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "Su_kurti"
 
@@ -4942,31 +4941,31 @@ msgstr ""
 "Kūrėjas gali vykdyti jūsų komanda įvairiose vietose, tokiose kaip vietinė "
 "sistema arba kūrimo konteineriai."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "Iš_trinti komandą"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Vaikinis procesas"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Vykdo komandą kaip Kūrėjo vaikinį procesą."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr "Vykdo komandą sistemoje."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr "Vykdo komanda kūrimo konvejeryje."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr "Kaip paskirties programą"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr "Vykdo komandą lyg ji būtų paskirties programa."
 
@@ -5072,7 +5071,6 @@ msgid "Navigate to a symbol within the current page"
 msgstr "Eiti link simbolio dabartiniame puslapyje"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
-#| msgid "Application ID…"
 msgid "Profiling Application…"
 msgstr "Programos profiliavimas…"
 
