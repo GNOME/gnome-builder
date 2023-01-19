@@ -49,6 +49,17 @@ libide_debug_h = configure_file(
 libide_core_generated_headers += [libide_debug_h]
 
 #
+# Marshallers for use by plugins
+#
+
+ide_marshal = gnome.genmarshal('ide-marshal',
+            internal: true,
+              prefix: 'ide_marshal',
+             sources: ['ide-marshal.defs'],
+  valist_marshallers: true,
+)
+
+#
 # Public API Headers
 #
 
@@ -116,6 +127,7 @@ libide_core_sources = []
 libide_core_sources += libide_core_generated_headers
 libide_core_sources += libide_core_public_sources
 libide_core_sources += libide_core_private_sources
+libide_core_sources += ide_marshal
 
 #
 # Library Definitions
