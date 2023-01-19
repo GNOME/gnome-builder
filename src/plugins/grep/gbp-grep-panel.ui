@@ -2,7 +2,8 @@
 <interface>
   <template class="GbpGrepPanel" parent="IdePane">
     <property name="icon-name">edit-find-symbolic</property>
-    <property name="title" translatable="yes">Find in Files (Ctrl+Alt+Shift+F)</property>
+    <property name="title" translatable="yes">Find in Files</property>
+    <property name="tooltip" translatable="yes">Find in Files (Shift+Ctrl+Alt+F)</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
