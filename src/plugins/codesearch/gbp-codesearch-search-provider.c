@@ -34,13 +34,23 @@ struct _GbpCodesearchSearchProvider
 static void
 gbp_codesearch_search_provider_load (IdeSearchProvider *provider)
 {
+  IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+
+  IDE_EXIT;
 }
 
 static void
 gbp_codesearch_search_provider_unload (IdeSearchProvider *provider)
 {
+  IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+
+  IDE_EXIT;
 }
 
 static void
