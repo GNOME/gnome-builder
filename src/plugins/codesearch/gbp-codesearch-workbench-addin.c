@@ -29,17 +29,80 @@
 
 struct _GbpCodesearchWorkbenchAddin
 {
-  GObject parent_instance;
+  GObject       parent_instance;
+  GSignalGroup *signals;
+  GSignalGroup *monitor_signals;
 };
+
+static void
+gbp_codesearch_workbench_addin_notify_vcs_cb (GbpCodesearchWorkbenchAddin *self,
+                                              GParamSpec                  *pspec,
+                                              IdeWorkbench                *workbench)
+{
+  IdeVcsMonitor *vcs_monitor;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODESEARCH_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  vcs_monitor = ide_workbench_get_vcs_monitor (workbench);
+  g_signal_group_set_target (self->monitor_signals, vcs_monitor);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_codesearch_workbench_addin_changed_cb (GbpCodesearchWorkbenchAddin *self,
+                                           GFile                       *file,
+                                           GFile                       *other_file,
+                                           GFileMonitorEvent            event,
+                                           IdeVcsMonitor               *vcs_monitor)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODESEARCH_WORKBENCH_ADDIN (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
+  g_assert (IDE_IS_VCS_MONITOR (vcs_monitor));
+
+
+  IDE_EXIT;
+}
 
 static void
 gbp_codesearch_workbench_addin_load (IdeWorkbenchAddin *addin,
                                      IdeWorkbench      *workbench)
 {
+  GbpCodesearchWorkbenchAddin *self = (GbpCodesearchWorkbenchAddin *)addin;
+  IdeVcsMonitor *vcs_monitor;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODESEARCH_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  vcs_monitor = ide_workbench_get_vcs_monitor (workbench);
+
+  self->signals = g_signal_group_new (IDE_TYPE_WORKBENCH);
+  g_signal_group_connect_object (self->signals,
+                                 "notify::vcs",
+                                 G_CALLBACK (gbp_codesearch_workbench_addin_notify_vcs_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+
+  self->monitor_signals = g_signal_group_new (IDE_TYPE_VCS_MONITOR);
+  g_signal_group_connect_object (self->monitor_signals,
+                                 "changed",
+                                 G_CALLBACK (gbp_codesearch_workbench_addin_changed_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+
+  g_signal_group_set_target (self->signals, workbench);
+  g_signal_group_set_target (self->monitor_signals, vcs_monitor);
 
   IDE_EXIT;
 }
@@ -48,10 +111,19 @@ static void
 gbp_codesearch_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                        IdeWorkbench      *workbench)
 {
+  GbpCodesearchWorkbenchAddin *self = (GbpCodesearchWorkbenchAddin *)addin;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODESEARCH_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  g_signal_group_set_target (self->signals, NULL);
+  g_signal_group_set_target (self->monitor_signals, NULL);
+
+  g_clear_object (&self->signals);
+  g_clear_object (&self->monitor_signals);
 
   IDE_EXIT;
 }
