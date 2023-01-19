@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-directory-reaper.h"
 
 typedef enum
@@ -149,11 +151,11 @@ ide_directory_reaper_class_init (IdeDirectoryReaperClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 NULL,
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__OBJECT,
+                                ide_marshal_VOID__OBJECT,
                                 G_TYPE_NONE, 1, G_TYPE_FILE);
   g_signal_set_va_marshaller (signals [REMOVE_FILE],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

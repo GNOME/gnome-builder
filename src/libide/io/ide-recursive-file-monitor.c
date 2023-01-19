@@ -23,6 +23,8 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include "ide-marshal.h"
+
 #include "ide-recursive-file-monitor.h"
 
 #define MONITOR_FLAGS 0
@@ -558,8 +560,16 @@ ide_recursive_file_monitor_class_init (IdeRecursiveFileMonitorClass *klass)
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 3, G_TYPE_FILE, G_TYPE_FILE, G_TYPE_FILE_MONITOR_EVENT);
+                  0, NULL, NULL,
+                  ide_marshal_VOID__OBJECT_OBJECT_ENUM,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_FILE_MONITOR_EVENT);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_OBJECT_ENUMv);
 }
 
 static void
