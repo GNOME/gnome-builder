@@ -38,11 +38,13 @@ glib_req_version = '2.75.0'
 gtk_req_version = '4.8'
 gtksourceview_req_version = '5.5.2'
 libadwaita_req_version = '1.2.0'
+libdex_req_version = '0.1.0'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
 gtksourceview_req = '>= @0@'.format(gtksourceview_req_version)
 libadwaita_req = '>= @0@'.format(libadwaita_req_version)
+libdex_req = '>= @0@'.format(libdex_req_version)
 
 glib_major = glib_req_version.split('.')[0].to_int()
 glib_minor = glib_req_version.split('.')[1].to_int()
@@ -290,6 +292,7 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
+libdex_dep = dependency('libdex-1', version: libdex_req)
 libglib_dep = dependency('glib-2.0', version: glib_req)
 libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
