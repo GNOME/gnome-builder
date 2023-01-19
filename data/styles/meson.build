@@ -1,4 +1,5 @@
 install_data([
+  'arctic-dark.xml',
   'builder.xml',
   'builder-dark.xml',
   'peninsula.xml',
