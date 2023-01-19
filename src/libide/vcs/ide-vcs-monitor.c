@@ -25,6 +25,8 @@
 #include <libide-core.h>
 #include <libide-io.h>
 
+#include "ide-marshal.h"
+
 #include "ide-vcs.h"
 #include "ide-vcs-file-info.h"
 #include "ide-vcs-monitor.h"
@@ -467,12 +469,16 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT_OBJECT_ENUM,
                   G_TYPE_NONE,
                   3,
                   G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
                   G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
                   G_TYPE_FILE_MONITOR_EVENT);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_OBJECT_ENUMv);
 
   /**
    * IdeVcsMonitor::reloaded:
