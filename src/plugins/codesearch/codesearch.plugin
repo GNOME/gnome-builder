@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2023 Christian Hergert
+Description=Indexes your source code to provide robust search
+Embedded=_gbp_codesearch_register_types
+Module=codesearch
+Name=Code Search
+X-Category=search

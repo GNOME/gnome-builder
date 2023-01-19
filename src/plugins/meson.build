@@ -50,6 +50,7 @@ subdir('clang-format')
 subdir('cmake')
 subdir('codespell')
 subdir('code-index')
+subdir('codesearch')
 subdir('codeui')
 subdir('comment-code')
 subdir('copyright')
@@ -167,6 +168,7 @@ status += [
   'CMake ................................ : @0@'.format(get_option('plugin_cmake')),
   'Codespell ............................ : @0@'.format(get_option('plugin_codespell')),
   'Code Index ........................... : @0@'.format(get_option('plugin_code_index')),
+  'Code Search .......................... : @0@'.format(get_option('plugin_codesearch')),
   'CTags ................................ : @0@'.format(get_option('plugin_ctags')),
   'Copyright ............................ : @0@'.format(get_option('plugin_copyright')),
   'Deviced .............................. : @0@'.format(get_option('plugin_deviced')),

@@ -1,0 +1,16 @@
+if get_option('plugin_codesearch')
+
+plugins_sources += files([
+  'codesearch-plugin.c',
+  'gbp-codesearch-search-provider.c',
+])
+
+plugin_codesearch_resources = gnome.compile_resources(
+  'codesearch-resources',
+  'codesearch.gresource.xml',
+  c_name: 'gbp_codesearch',
+)
+
+plugins_sources += plugin_codesearch_resources
+
+endif
