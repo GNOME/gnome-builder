@@ -48,6 +48,8 @@ _ide_webkit_register_types (PeasObjectModule *module)
     g_warning ("%s", error->message);
 
   context = webkit_web_context_get_default ();
+#if !WEBKIT_CHECK_VERSION(2, 39, 5)
   webkit_web_context_set_sandbox_enabled (context, TRUE);
+#endif
   webkit_web_context_set_favicon_database_directory (context, NULL);
 }
