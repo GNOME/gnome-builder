@@ -196,21 +196,27 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="orientation">vertical</property>
+                  <object class="AdwClamp">
+                    <property name="orientation">horizontal</property>
+                    <property name="maximum-size">375</property>
                     <child>
-                      <object class="AdwHeaderBar">
-                        <property name="show-start-title-buttons">false</property>
-                        <property name="show-end-title-buttons">false</property>
-                        <child type="title">
-                          <object class="AdwWindowTitle" id="preview_title">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="AdwHeaderBar">
+                            <property name="show-start-title-buttons">false</property>
+                            <property name="show-end-title-buttons">false</property>
+                            <child type="title">
+                              <object class="AdwWindowTitle" id="preview_title">
+                              </object>
+                            </child>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwBin" id="preview_bin">
-                        <property name="width-request">375</property>
+                        <child>
+                          <object class="AdwBin" id="preview_bin">
+                            <property name="width-request">375</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
