@@ -536,9 +536,9 @@ struct _IdeShortcutInfo
  * @shortcuts by matching action and target.
  */
 void
-ide_shortcut_info_foreach (GListModel                *shortcuts,
-                           const IdeShortcutInfoFunc  func,
-                           gpointer                   func_data)
+ide_shortcut_info_foreach (GListModel          *shortcuts,
+                           IdeShortcutInfoFunc  func,
+                           gpointer             func_data)
 {
   g_autoptr(GHashTable) accel_map = NULL;
   GQueue pages = G_QUEUE_INIT;

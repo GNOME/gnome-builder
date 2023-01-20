@@ -30,24 +30,24 @@ typedef void (*IdeShortcutInfoFunc) (const IdeShortcutInfo *info,
                                      gpointer               user_data);
 
 IDE_AVAILABLE_IN_44
-void        ide_shortcut_info_foreach           (GListModel                *shortcuts,
-                                                 const IdeShortcutInfoFunc  func,
-                                                 gpointer                   func_data);
+void        ide_shortcut_info_foreach           (GListModel            *shortcuts,
+                                                 IdeShortcutInfoFunc    func,
+                                                 gpointer               func_data);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_icon_name     (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_icon_name     (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_accelerator   (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_accelerator   (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_action_name   (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_action_name   (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-GVariant   *ide_shortcut_info_get_action_target (const IdeShortcutInfo     *self);
+GVariant   *ide_shortcut_info_get_action_target (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_page          (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_page          (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_group         (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_group         (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_title         (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_title         (const IdeShortcutInfo *self);
 IDE_AVAILABLE_IN_44
-const char *ide_shortcut_info_get_subtitle      (const IdeShortcutInfo     *self);
+const char *ide_shortcut_info_get_subtitle      (const IdeShortcutInfo *self);
 
 G_END_DECLS
