@@ -1,6 +1,6 @@
 /* ide-lsp-symbol-resolver.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ typedef struct
   SymbolLoc end;
 } SymbolLocRange;
 
-/**
+/*
  * Raw document symbol data extracted from textDocument/documentSymbol
  * responses.
  */
