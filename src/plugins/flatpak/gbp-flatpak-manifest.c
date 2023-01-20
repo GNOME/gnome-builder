@@ -33,6 +33,7 @@
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-sdk.h"
 #include "gbp-flatpak-util.h"
+#include "gbp-flatpak-workbench-addin.h"
 
 #include "daemon/ipc-flatpak-service.h"
 #include "daemon/ipc-flatpak-util.h"
@@ -87,6 +88,37 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+toggle_message (GbpFlatpakManifest *self,
+                gboolean            display)
+{
+  IdeWorkbenchAddin *addin;
+  IdeWorkbench *workbench;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(workbench = ide_workbench_from_context (context)) ||
+      !(addin = ide_workbench_addin_find_by_module_name (workbench, "flatpak")))
+    IDE_EXIT;
+
+  if (display)
+    gbp_flatpak_begin_message (GBP_FLATPAK_WORKBENCH_ADDIN (addin),
+                               "gbp-flatapak-resolving-extension",
+                               _("Resolving SDK Extensions"),
+                               "builder-sdk-symbolic",
+                               _("Builder is locating the appropriate SDK extensions to build your project"));
+  else
+    gbp_flatpak_end_message (GBP_FLATPAK_WORKBENCH_ADDIN (addin),
+                             "gbp-flatapak-resolving-extension");
+
+  IDE_EXIT;
+}
 
 static GbpFlatpakSdk *
 get_sdk (IdeSdkManager *sdk_manager,
@@ -1452,6 +1484,8 @@ gbp_flatpak_manifest_resolve_extensions_async (GbpFlatpakManifest  *self,
   result = dex_async_result_new (self, cancellable, callback, user_data);
   dex_async_result_await (result, gbp_flatpak_manifest_resolve_extensions (self, service));
 
+  toggle_message (self, TRUE);
+
   IDE_EXIT;
 }
 
@@ -1469,6 +1503,8 @@ gbp_flatpak_manifest_resolve_extensions_finish (GbpFlatpakManifest  *self,
   g_assert (DEX_IS_ASYNC_RESULT (result));
 
   ret = dex_async_result_propagate_boolean (DEX_ASYNC_RESULT (result), error);
+
+  toggle_message (self, FALSE);
 
   IDE_RETURN (ret);
 }

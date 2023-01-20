@@ -34,6 +34,7 @@ struct _GbpFlatpakWorkbenchAddin
 {
   GObject        parent_instance;
   IdeWorkbench  *workbench;
+  GHashTable    *messages;
   IdeRunManager *run_manager;
   gulong         run_signal_handler;
 };
@@ -120,6 +121,11 @@ gbp_flatpak_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   self->workbench = workbench;
 
+  self->messages = g_hash_table_new_full (g_str_hash,
+                                          g_str_equal,
+                                          g_free,
+                                          g_object_unref);
+
   IDE_EXIT;
 }
 
@@ -139,6 +145,8 @@ gbp_flatpak_workbench_addin_unload (IdeWorkbenchAddin *addin,
       g_clear_signal_handler (&self->run_signal_handler, self->run_manager);
       g_clear_object (&self->run_manager);
     }
+
+  g_clear_pointer (&self->messages, g_hash_table_unref);
 
   self->workbench = NULL;
 
@@ -164,4 +172,77 @@ gbp_flatpak_workbench_addin_class_init (GbpFlatpakWorkbenchAddinClass *klass)
 static void
 gbp_flatpak_workbench_addin_init (GbpFlatpakWorkbenchAddin *self)
 {
+}
+
+void
+gbp_flatpak_begin_message (GbpFlatpakWorkbenchAddin *self,
+                           const char               *message_id,
+                           const char               *title,
+                           const char               *icon_name,
+                           const char               *message)
+{
+  IdeNotification *notif;
+  guint count;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+  g_return_if_fail (message_id != NULL);
+
+  if (self->workbench == NULL || self->messages == NULL)
+    IDE_EXIT;
+
+  if (!(notif = g_hash_table_lookup (self->messages, message_id)))
+    {
+      IdeContext *context = ide_workbench_get_context (self->workbench);
+
+      notif = ide_notification_new ();
+      ide_notification_set_title (notif, title);
+      ide_notification_set_body (notif, message);
+      ide_notification_set_icon_name (notif, icon_name);
+      ide_notification_attach (notif, IDE_OBJECT (context));
+      g_hash_table_insert (self->messages, g_strdup (message_id), notif);
+    }
+
+  count = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (notif), "COUNT"));
+  count++;
+  g_object_set_data (G_OBJECT (notif), "COUNT", GUINT_TO_POINTER (count));
+
+  IDE_EXIT;
+}
+
+void
+gbp_flatpak_end_message (GbpFlatpakWorkbenchAddin *self,
+                         const char               *message_id)
+{
+  IdeNotification *notif;
+  guint count;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+  g_return_if_fail (message_id != NULL);
+
+  if (self->messages == NULL)
+    IDE_EXIT;
+
+  if (!(notif = g_hash_table_lookup (self->messages, message_id)))
+    IDE_EXIT;
+
+  if (!(count = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (notif), "COUNT"))))
+    IDE_EXIT;
+
+  count--;
+
+  g_object_set_data (G_OBJECT (notif), "COUNT", GUINT_TO_POINTER (count));
+
+  if (count == 0)
+    {
+      ide_notification_withdraw (notif);
+      g_hash_table_remove (self->messages, message_id);
+    }
+
+  IDE_EXIT;
 }

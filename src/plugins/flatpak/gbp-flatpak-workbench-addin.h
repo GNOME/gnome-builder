@@ -28,4 +28,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakWorkbenchAddin, gbp_flatpak_workbench_addin, GBP, FLATPAK_WORKBENCH_ADDIN, GObject)
 
+void gbp_flatpak_begin_message (GbpFlatpakWorkbenchAddin *self,
+                                const char               *message_id,
+                                const char               *title,
+                                const char               *icon_name,
+                                const char               *message);
+void gbp_flatpak_end_message   (GbpFlatpakWorkbenchAddin *self,
+                                const char               *message_id);
+
 G_END_DECLS
