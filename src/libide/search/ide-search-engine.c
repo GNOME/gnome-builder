@@ -1,6 +1,6 @@
 /* ide-search-engine.c
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -541,7 +541,7 @@ ide_search_engine_remove_provider (IdeSearchEngine   *self,
  *
  * Gets a #GListModel that is updated as providers are added or removed.
  *
- * Returns:
+ * Returns: (transfer full): a #GListModel of #IdeSearchProvider
  */
 GListModel *
 ide_search_engine_list_providers (IdeSearchEngine *self)

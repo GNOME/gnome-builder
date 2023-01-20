@@ -1,6 +1,6 @@
 /* ide-search-provider.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,6 +174,14 @@ ide_search_provider_dup_title (IdeSearchProvider *self)
   return IDE_SEARCH_PROVIDER_GET_IFACE (self)->dup_title (self);
 }
 
+/**
+ * ide_search_provider_dup_icon:
+ * @self: an #IdeSearchProvider
+ *
+ * Gets the icon for the provider, if any.
+ *
+ * Returns: (transfer full) (nullable): a #GIcon or %NULL
+ */
 GIcon *
 ide_search_provider_dup_icon (IdeSearchProvider *self)
 {

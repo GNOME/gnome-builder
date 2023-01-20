@@ -175,7 +175,7 @@ ide_search_preview_init (IdeSearchPreview *self)
  *
  * Gets the child widget, if any.
  *
- * Returns: (nullable): a #GtkWidget or %NULL
+ * Returns: (transfer none) (nullable): a #GtkWidget or %NULL
  */
 GtkWidget *
 ide_search_preview_get_child (IdeSearchPreview *self)
