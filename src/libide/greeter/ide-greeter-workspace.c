@@ -23,7 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
+
+#include "ide-marshal.h"
 
 #include "ide-greeter-buttons-section.h"
 #include "ide-greeter-resources.h"
@@ -904,8 +907,13 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_greeter_workspace_real_open_project),
                                 g_signal_accumulator_true_handled, NULL,
-                                NULL,
-                                G_TYPE_BOOLEAN, 1, IDE_TYPE_PROJECT_INFO);
+                                ide_marshal_BOOLEAN__OBJECT,
+                                G_TYPE_BOOLEAN,
+                                1,
+                                IDE_TYPE_PROJECT_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [OPEN_PROJECT],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_BOOLEAN__OBJECTv);
 
   ide_workspace_class_set_kind (workspace_class, "greeter");
 

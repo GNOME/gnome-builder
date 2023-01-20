@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-tweaks-widget-private.h"
 
 typedef struct
@@ -189,10 +191,13 @@ ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeTweaksWidgetClass, create_for_item),
                   g_signal_accumulator_first_wins, NULL,
-                  NULL,
+                  ide_marshal_OBJECT__OBJECT,
                   GTK_TYPE_WIDGET,
                   1,
-                  IDE_TYPE_TWEAKS_ITEM);
+                  IDE_TYPE_TWEAKS_ITEM | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [CREATE_FOR_ITEM],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_OBJECT__OBJECTv);
 }
 
 static void

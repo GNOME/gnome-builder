@@ -24,6 +24,8 @@
 
 #include <libide-search.h>
 
+#include "ide-marshal.h"
+
 #include "ide-tweaks-factory-private.h"
 #include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
@@ -447,8 +449,13 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_TWEAKS_PAGE);
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_TWEAKS_PAGE | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [PAGE_ACTIVATED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

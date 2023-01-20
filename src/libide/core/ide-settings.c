@@ -28,6 +28,7 @@
 
 #include "ide-debug.h"
 #include "ide-macros.h"
+#include "ide-marshal.h"
 #include "ide-settings.h"
 #include "ide-layered-settings-private.h"
 
@@ -371,10 +372,13 @@ ide_settings_class_init (IdeSettingsClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                   0,
                   NULL, NULL,
-                  NULL,
+                  ide_marshal_VOID__STRING,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__STRINGv);
 }
 
 static void

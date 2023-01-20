@@ -25,6 +25,7 @@
 #include "ide-context.h"
 #include "ide-object.h"
 #include "ide-macros.h"
+#include "ide-marshal.h"
 
 /**
  * SECTION:ide-object
@@ -504,11 +505,11 @@ ide_object_class_init (IdeObjectClass *klass)
                   (G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS),
                   G_STRUCT_OFFSET (IdeObjectClass, destroy),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [DESTROY],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

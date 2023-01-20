@@ -23,9 +23,12 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-io.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
+
+#include "ide-marshal.h"
 
 #include "ide-buffer.h"
 #include "ide-buffer-addin.h"
@@ -1029,11 +1032,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [CHANGE_SETTLED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeBuffer::line-flags-changed:
@@ -1049,11 +1052,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 NULL,
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                ide_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [LINE_FLAGS_CHANGED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeBuffer::loaded:
@@ -1070,11 +1073,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_buffer_real_loaded),
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                ide_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [LOADED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeBuffer::request-scroll-to-insert:
@@ -1089,11 +1092,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 NULL,
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                ide_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
   g_signal_set_va_marshaller (signals [REQUEST_SCROLL_TO_INSERT],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-buffer.h"
 #include "ide-diagnostic-provider.h"
 
@@ -47,7 +49,13 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
     g_signal_new ("invalidated",
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [INVALIDATED],
+                              G_TYPE_FROM_INTERFACE (iface),
+                              ide_marshal_VOID__VOIDv);
 }
 
 /**

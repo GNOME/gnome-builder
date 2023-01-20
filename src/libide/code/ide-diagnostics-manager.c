@@ -23,7 +23,10 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
+
 #include <libide-plugins.h>
+
+#include "ide-marshal.h"
 
 #include "ide-buffer.h"
 #include "ide-buffer-manager.h"
@@ -596,7 +599,13 @@ ide_diagnostics_manager_class_init (IdeDiagnosticsManagerClass *klass)
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

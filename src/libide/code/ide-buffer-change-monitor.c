@@ -24,6 +24,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-marshal.h"
+
 #include "ide-buffer.h"
 #include "ide-buffer-change-monitor.h"
 #include "ide-buffer-private.h"
@@ -161,13 +163,18 @@ ide_buffer_change_monitor_class_init (IdeBufferChangeMonitorClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  signals [CHANGED] = g_signal_new ("changed",
-                                    G_TYPE_FROM_CLASS (klass),
-                                    G_SIGNAL_RUN_LAST,
-                                    0,
-                                    NULL, NULL, NULL,
-                                    G_TYPE_NONE,
-                                    0);
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

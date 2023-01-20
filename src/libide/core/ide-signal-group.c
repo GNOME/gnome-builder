@@ -23,6 +23,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-marshal.h"
 #include "ide-signal-group.h"
 
 /**
@@ -598,10 +599,14 @@ ide_signal_group_class_init (IdeSignalGroupClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_OBJECT);
+  g_signal_set_va_marshaller (signals [BIND],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeSignalGroup::unbind:
@@ -618,9 +623,13 @@ ide_signal_group_class_init (IdeSignalGroupClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+  g_signal_set_va_marshaller (signals [UNBIND],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

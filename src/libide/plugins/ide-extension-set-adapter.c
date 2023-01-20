@@ -22,8 +22,11 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
 #include <stdlib.h>
+
+#include <glib/gi18n.h>
+
+#include "ide-marshal.h"
 
 #include "ide-extension-set-adapter.h"
 #include "ide-extension-util-private.h"
@@ -514,30 +517,42 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__BOXED_OBJECT,
                   G_TYPE_NONE,
                   2,
-                  PEAS_TYPE_PLUGIN_INFO,
-                  PEAS_TYPE_EXTENSION);
+                  PEAS_TYPE_PLUGIN_INFO | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  PEAS_TYPE_EXTENSION | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [EXTENSION_ADDED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__BOXED_OBJECTv);
 
   signals [EXTENSION_REMOVED] =
     g_signal_new ("extension-removed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__BOXED_OBJECT,
                   G_TYPE_NONE,
                   2,
-                  PEAS_TYPE_PLUGIN_INFO,
-                  PEAS_TYPE_EXTENSION);
+                  PEAS_TYPE_PLUGIN_INFO | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  PEAS_TYPE_EXTENSION | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [EXTENSION_REMOVED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__BOXED_OBJECTv);
 
   signals [EXTENSIONS_LOADED] =
     g_signal_new ("extensions-loaded",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [EXTENSIONS_LOADED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 }
 
 static void

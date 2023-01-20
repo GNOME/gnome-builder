@@ -23,7 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
+
+#include "ide-marshal.h"
 
 #include <libide-code.h>
 #include <libide-plugins.h>
@@ -77,15 +80,30 @@ ide_project_class_init (IdeProjectClass *klass)
     g_signal_new ("file-renamed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 2, G_TYPE_FILE, G_TYPE_FILE);
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT_OBJECT,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [FILE_RENAMED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_OBJECTv);
 
   signals [FILE_TRASHED] =
     g_signal_new ("file-trashed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_FILE);
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [FILE_TRASHED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

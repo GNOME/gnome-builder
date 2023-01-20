@@ -24,6 +24,8 @@
 
 #include <libide-core.h>
 
+#include "ide-marshal.h"
+
 #include "ide-subprocess.h"
 #include "ide-subprocess-supervisor.h"
 
@@ -145,8 +147,14 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeSubprocessSupervisorClass, spawned),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_SUBPROCESS | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [SPAWNED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   signals [SUPERVISE] =
     g_signal_new_class_handler ("supervise",
@@ -154,8 +162,13 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_subprocess_supervisor_real_supervise),
                                 g_signal_accumulator_true_handled, NULL,
-                                NULL,
-                                G_TYPE_BOOLEAN, 1, IDE_TYPE_SUBPROCESS_LAUNCHER);
+                                ide_marshal_BOOLEAN__OBJECT,
+                                G_TYPE_BOOLEAN,
+                                1,
+                                IDE_TYPE_SUBPROCESS_LAUNCHER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [SUPERVISE],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_BOOLEAN__OBJECTv);
 
   signals [UNSUPERVISE] =
     g_signal_new_class_handler ("unsupervise",
@@ -163,16 +176,26 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_subprocess_supervisor_real_unsupervise),
                                 g_signal_accumulator_true_handled, NULL,
-                                NULL,
-                                G_TYPE_BOOLEAN, 1, IDE_TYPE_SUBPROCESS_LAUNCHER);
+                                ide_marshal_BOOLEAN__OBJECT,
+                                G_TYPE_BOOLEAN,
+                                1,
+                                IDE_TYPE_SUBPROCESS_LAUNCHER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [UNSUPERVISE],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_BOOLEAN__OBJECTv);
 
   signals [EXITED] =
     g_signal_new_class_handler ("exited",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 NULL, NULL, NULL,
-                                g_cclosure_marshal_VOID__OBJECT,
-                                G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS);
+                                ide_marshal_VOID__OBJECT,
+                                G_TYPE_NONE,
+                                1,
+                                IDE_TYPE_SUBPROCESS | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [EXITED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

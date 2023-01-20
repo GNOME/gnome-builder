@@ -31,6 +31,7 @@
 #include "ide-debug.h"
 #include "ide-gsettings-action-group.h"
 #include "ide-macros.h"
+#include "ide-marshal.h"
 #include "ide-notifications.h"
 #include "ide-settings.h"
 
@@ -362,12 +363,16 @@ ide_context_class_init (IdeContextClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
                                 G_CALLBACK (ide_context_real_log),
-                                NULL, NULL, NULL,
+                                NULL, NULL,
+                                ide_marshal_VOID__UINT_STRING_STRING,
                                 G_TYPE_NONE,
                                 3,
                                 G_TYPE_UINT,
                                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                                 G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [LOG],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__UINT_STRING_STRINGv);
 }
 
 static void

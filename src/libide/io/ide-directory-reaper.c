@@ -152,7 +152,9 @@ ide_directory_reaper_class_init (IdeDirectoryReaperClass *klass)
                                 NULL,
                                 NULL, NULL,
                                 ide_marshal_VOID__OBJECT,
-                                G_TYPE_NONE, 1, G_TYPE_FILE);
+                                G_TYPE_NONE,
+                                1,
+                                G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [REMOVE_FILE],
                               G_TYPE_FROM_CLASS (klass),
                               ide_marshal_VOID__OBJECTv);

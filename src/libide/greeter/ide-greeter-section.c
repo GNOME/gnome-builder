@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-marshal.h"
+
 #include "ide-greeter-section.h"
 
 G_DEFINE_INTERFACE (IdeGreeterSection, ide_greeter_section, GTK_TYPE_WIDGET)
@@ -52,8 +54,14 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeGreeterSectionInterface, project_activated),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_PROJECT_INFO);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_PROJECT_INFO | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [PROJECT_ACTIVATED],
+                              G_TYPE_FROM_INTERFACE (iface),
+                              ide_marshal_VOID__OBJECTv);
 }
 
 /**

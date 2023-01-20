@@ -26,6 +26,7 @@
 
 #include "ide-debug.h"
 #include "ide-macros.h"
+#include "ide-marshal.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager-private.h"
 
@@ -237,8 +238,11 @@ ide_transfer_class_init (IdeTransferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller ( signals [CANCELLED],
+                               G_TYPE_FROM_CLASS (klass),
+                               ide_marshal_VOID__VOIDv);
 }
 
 static void

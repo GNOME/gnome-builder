@@ -69,9 +69,8 @@ ide_gutter_default_init (IdeGutterInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeGutterInterface, style_changed),
+                  NULL, NULL,
                   NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 }
 

@@ -26,6 +26,8 @@
 #include <libide-core.h>
 #include <libide-threading.h>
 
+#include "ide-marshal.h"
+
 #include "ide-buffer.h"
 #include "ide-buffer-private.h"
 #include "ide-buffer-manager.h"
@@ -277,10 +279,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_BUFFER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [LOAD_BUFFER],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeBufferManager::buffer-loaded:
@@ -297,11 +303,13 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                   0,
                   NULL,
                   NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_BUFFER | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [BUFFER_LOADED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeBufferManager::buffer-saved:
@@ -316,13 +324,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_BUFFER | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [BUFFER_SAVED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeBufferManager::buffer-unloaded:
@@ -337,13 +346,14 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_BUFFER | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [BUFFER_UNLOADED],
                               G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
+                              ide_marshal_VOID__OBJECTv);
 }
 
 static void

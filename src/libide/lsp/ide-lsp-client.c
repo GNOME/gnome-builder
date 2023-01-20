@@ -22,13 +22,16 @@
 
 #include "config.h"
 
+#include <unistd.h>
+
 #include <glib/gi18n.h>
 #include <jsonrpc-glib.h>
-#include <unistd.h>
 
 #include <libide-code.h>
 #include <libide-projects.h>
 #include <libide-threading.h>
+
+#include "ide-marshal.h"
 
 #include "ide-lsp-client.h"
 #include "ide-lsp-diagnostic.h"
@@ -1402,10 +1405,12 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeLspClientClass, initialized),
-                  NULL,
-                  NULL,
-                  NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [INITIALIZED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeLspClient::load-configuration:
@@ -1423,19 +1428,26 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeLspClientClass, load_configuration),
                   g_signal_accumulator_first_wins, NULL,
-                  NULL,
+                  ide_marshal_BOXED__VOID,
                   G_TYPE_VARIANT, 0);
+  g_signal_set_va_marshaller (signals [LOAD_CONFIGURATION],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_BOXED__VOIDv);
 
   signals [NOTIFICATION] =
     g_signal_new ("notification",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (IdeLspClientClass, notification),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__STRING_BOXED,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                   G_TYPE_VARIANT);
+  g_signal_set_va_marshaller (signals [NOTIFICATION],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__STRING_BOXEDv);
 
   signals [SUPPORTS_LANGUAGE] =
     g_signal_new ("supports-language",
@@ -1443,21 +1455,28 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeLspClientClass, supports_language),
                   g_signal_accumulator_true_handled, NULL,
-                  NULL,
+                  ide_marshal_BOOLEAN__STRING,
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [SUPPORTS_LANGUAGE],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_BOOLEAN__STRINGv);
 
   signals [PUBLISHED_DIAGNOSTICS] =
     g_signal_new ("published-diagnostics",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeLspClientClass, published_diagnostics),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT_OBJECT,
                   G_TYPE_NONE,
                   2,
-                  G_TYPE_FILE,
-                  IDE_TYPE_DIAGNOSTICS);
+                  G_TYPE_FILE | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  IDE_TYPE_DIAGNOSTICS | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [PUBLISHED_DIAGNOSTICS],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_OBJECTv);
 
 }
 

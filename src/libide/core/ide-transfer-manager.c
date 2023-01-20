@@ -25,6 +25,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-macros.h"
+#include "ide-marshal.h"
 
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
@@ -40,7 +41,7 @@ struct _IdeTransferManager
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTransferManager, ide_transfer_manager, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,
@@ -162,7 +163,13 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
     g_signal_new ("all-transfers-completed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+                  0,
+                  NULL, NULL,
+                  ide_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [ALL_TRANSFERS_COMPLETED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__VOIDv);
 
   /**
    * IdeTransferManager::transfer-completed:
@@ -176,8 +183,14 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, IDE_TYPE_TRANSFER);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  IDE_TYPE_TRANSFER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [TRANSFER_COMPLETED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECTv);
 
   /**
    * IdeTransferManager::transfer-failed:
@@ -193,8 +206,15 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 2, IDE_TYPE_TRANSFER, G_TYPE_ERROR);
+                  NULL, NULL,
+                  ide_marshal_VOID__OBJECT_BOXED,
+                  G_TYPE_NONE,
+                  2,
+                  IDE_TYPE_TRANSFER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_ERROR | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals [TRANSFER_FAILED],
+                              G_TYPE_FROM_CLASS (klass),
+                              ide_marshal_VOID__OBJECT_BOXEDv);
 }
 
 static void
