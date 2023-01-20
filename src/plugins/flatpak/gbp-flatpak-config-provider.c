@@ -334,18 +334,6 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
       g_assert (ide_config_get_dirty (IDE_CONFIG (manifest)) == FALSE);
 
-      /* TODO: This call will cause greeter to stall. We should make resolution
-       *   happen out of band so that we can load quickly and delay pipeline
-       *   availability until after the next screen is displayed.
-       */
-      gbp_flatpak_manifest_resolve_extensions (manifest, self->service);
-
-      g_signal_connect_object (manifest,
-                               "needs-reload",
-                               G_CALLBACK (manifest_needs_reload),
-                               self,
-                               G_CONNECT_SWAPPED);
-
       g_ptr_array_add (manifests, g_steal_pointer (&manifest));
     }
 
@@ -583,6 +571,26 @@ guess_best_config (GPtrArray *ar)
   return g_ptr_array_index (ar, 0);
 }
 
+static void
+gbp_flatpak_config_provider_resolve_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)object;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!gbp_flatpak_manifest_resolve_extensions_finish (manifest, result, &error))
+    g_warning ("Failed to resolve SDK extensions: %s", error->message);
+
+  IDE_EXIT;
+}
+
 static gboolean
 gbp_flatpak_config_provider_load_finish (IdeConfigProvider  *provider,
                                          GAsyncResult       *result,
@@ -608,10 +616,22 @@ gbp_flatpak_config_provider_load_finish (IdeConfigProvider  *provider,
     {
       IdeConfig *config = g_ptr_array_index (configs, i);
 
-      g_assert (IDE_IS_CONFIG (config));
+      g_assert (GBP_IS_FLATPAK_MANIFEST (config));
       g_assert (ide_config_get_dirty (config) == FALSE);
 
+      g_signal_connect_object (config,
+                               "needs-reload",
+                               G_CALLBACK (manifest_needs_reload),
+                               self,
+                               G_CONNECT_SWAPPED);
+
       ide_config_provider_emit_added (provider, config);
+
+      gbp_flatpak_manifest_resolve_extensions_async (GBP_FLATPAK_MANIFEST (config),
+                                                     self->service,
+                                                     NULL,
+                                                     gbp_flatpak_config_provider_resolve_cb,
+                                                     NULL);
     }
 
   if (configs->len > 0)

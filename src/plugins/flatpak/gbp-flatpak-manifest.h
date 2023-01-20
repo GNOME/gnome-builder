@@ -31,30 +31,36 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakManifest, gbp_flatpak_manifest, GBP, FLATPAK_MANIFEST, IdeConfig)
 
-GbpFlatpakManifest  *gbp_flatpak_manifest_new                (GFile                *file,
-                                                              const gchar          *id);
-GFile               *gbp_flatpak_manifest_get_file           (GbpFlatpakManifest   *self);
-const gchar         *gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest   *self);
-const gchar         *gbp_flatpak_manifest_get_command        (GbpFlatpakManifest   *self);
-gchar               *gbp_flatpak_manifest_get_path           (GbpFlatpakManifest   *self);
-const gchar * const *gbp_flatpak_manifest_get_x_run_args     (GbpFlatpakManifest   *self);
-const gchar * const *gbp_flatpak_manifest_get_build_args     (GbpFlatpakManifest   *self);
-const gchar * const *gbp_flatpak_manifest_get_finish_args    (GbpFlatpakManifest   *self);
-const gchar * const *gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest   *self);
-const gchar         *gbp_flatpak_manifest_get_sdk            (GbpFlatpakManifest   *self);
-const gchar         *gbp_flatpak_manifest_get_platform       (GbpFlatpakManifest   *self);
-gchar              **gbp_flatpak_manifest_get_runtimes       (GbpFlatpakManifest   *self,
-                                                              const gchar          *for_arch);
-const char          *gbp_flatpak_manifest_get_branch         (GbpFlatpakManifest   *self);
-void                 gbp_flatpak_manifest_save_async         (GbpFlatpakManifest   *self,
-                                                              GCancellable         *cancellable,
-                                                              GAsyncReadyCallback   callback,
-                                                              gpointer              user_data);
-gboolean             gbp_flatpak_manifest_save_finish        (GbpFlatpakManifest   *self,
-                                                              GAsyncResult         *result,
-                                                              GError              **error);
-void                 gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest   *self,
-                                                              IpcFlatpakService    *service);
+GbpFlatpakManifest   *gbp_flatpak_manifest_new                       (GFile                *file,
+                                                                      const gchar          *id);
+GFile                *gbp_flatpak_manifest_get_file                  (GbpFlatpakManifest   *self);
+const gchar          *gbp_flatpak_manifest_get_primary_module        (GbpFlatpakManifest   *self);
+const gchar          *gbp_flatpak_manifest_get_command               (GbpFlatpakManifest   *self);
+gchar                *gbp_flatpak_manifest_get_path                  (GbpFlatpakManifest   *self);
+const gchar * const  *gbp_flatpak_manifest_get_x_run_args            (GbpFlatpakManifest   *self);
+const gchar * const  *gbp_flatpak_manifest_get_build_args            (GbpFlatpakManifest   *self);
+const gchar * const  *gbp_flatpak_manifest_get_finish_args           (GbpFlatpakManifest   *self);
+const gchar * const  *gbp_flatpak_manifest_get_sdk_extensions        (GbpFlatpakManifest   *self);
+const gchar          *gbp_flatpak_manifest_get_sdk                   (GbpFlatpakManifest   *self);
+const gchar          *gbp_flatpak_manifest_get_platform              (GbpFlatpakManifest   *self);
+gchar               **gbp_flatpak_manifest_get_runtimes              (GbpFlatpakManifest   *self,
+                                                                      const gchar          *for_arch);
+const char           *gbp_flatpak_manifest_get_branch                (GbpFlatpakManifest   *self);
+void                  gbp_flatpak_manifest_save_async                (GbpFlatpakManifest   *self,
+                                                                      GCancellable         *cancellable,
+                                                                      GAsyncReadyCallback   callback,
+                                                                      gpointer              user_data);
+gboolean              gbp_flatpak_manifest_save_finish               (GbpFlatpakManifest   *self,
+                                                                      GAsyncResult         *result,
+                                                                      GError              **error);
+void                  gbp_flatpak_manifest_resolve_extensions_async  (GbpFlatpakManifest   *self,
+                                                                      IpcFlatpakService    *service,
+                                                                      GCancellable         *cancellable,
+                                                                      GAsyncReadyCallback   callback,
+                                                                      gpointer              user_data);
+gboolean              gbp_flatpak_manifest_resolve_extensions_finish (GbpFlatpakManifest   *self,
+                                                                      GAsyncResult         *result,
+                                                                      GError              **error);
 
 
 G_END_DECLS

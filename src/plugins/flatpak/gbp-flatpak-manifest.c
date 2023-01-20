@@ -25,6 +25,7 @@
 
 #include <glib/gi18n.h>
 
+#include <libdex.h>
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-client.h"
@@ -1315,17 +1316,88 @@ gbp_flatpak_manifest_get_platform (GbpFlatpakManifest *self)
   return self->runtime;
 }
 
-void
+static void
+gbp_flatpak_manifest_resolve_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IpcFlatpakService *service = (IpcFlatpakService *)object;
+  g_autoptr(DexPromise) promise = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *resolved = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_FLATPAK_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (DEX_IS_PROMISE (promise));
+
+  if (!ipc_flatpak_service_call_resolve_extension_finish (service, &resolved, result, &error))
+    dex_promise_reject (promise, g_steal_pointer (&error));
+  else
+    dex_promise_resolve_string (promise, g_steal_pointer (&resolved));
+
+  IDE_EXIT;
+}
+
+static DexFuture *
+update_resolved_cb (DexFuture *completed,
+                    gpointer   user_data)
+{
+  GbpFlatpakManifest *self = user_data;
+  gboolean changed = FALSE;
+  guint size;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (DEX_IS_FUTURE_SET (completed));
+
+  size = dex_future_set_get_size (DEX_FUTURE_SET (completed));
+
+  if (self->sdk_extensions == NULL || g_strv_length (self->sdk_extensions) != size)
+    IDE_RETURN (NULL);
+
+  for (guint i = 0; i < size; i++)
+    {
+      DexFuture *future = dex_future_set_get_future_at (DEX_FUTURE_SET (completed), i);
+      g_autofree char *str = dex_await_string (dex_ref (future), NULL);
+
+      if (!ide_str_empty0 (str))
+        {
+          g_free (self->sdk_extensions[i]);
+          self->sdk_extensions[i] = g_steal_pointer (&str);
+          changed = TRUE;
+        }
+    }
+
+  if (changed)
+    g_signal_emit_by_name (self, "changed");
+
+  IDE_RETURN (NULL);
+}
+
+static DexFuture *
 gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
                                          IpcFlatpakService  *service)
 {
+  g_autoptr(GPtrArray) all = NULL;
   g_autofree char *sdk = NULL;
+  DexFuture *future;
 
-  g_return_if_fail (GBP_IS_FLATPAK_MANIFEST (self));
-  g_return_if_fail (!service || IPC_IS_FLATPAK_SERVICE (service));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (!service || IPC_IS_FLATPAK_SERVICE (service));
 
-  if (self->sdk_extensions == NULL || service == NULL)
-    return;
+  if (self->sdk_extensions == NULL)
+    return dex_future_new_for_boolean (TRUE);
+
+  if (service == NULL)
+    return dex_future_new_reject (G_IO_ERROR,
+                                  G_IO_ERROR_NOT_INITIALIZED,
+                                  "No gnome-builder-flatpak service to connect to");
 
   /* Technically we could have a situation where the host system
    * does not have the SDK extension but the development platform
@@ -1338,28 +1410,67 @@ gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
                          gbp_flatpak_get_default_arch (IDE_OBJECT (self)),
                          self->runtime_version);
 
+  all = g_ptr_array_new_with_free_func (dex_unref);
+
   for (guint i = 0; self->sdk_extensions[i]; i++)
     {
-      g_autoptr(GError) error = NULL;
-      g_autofree char *resolved = NULL;
+      g_autoptr(DexPromise) promise = dex_promise_new ();
 
-      ipc_flatpak_service_call_resolve_extension_sync (service,
-                                                       sdk,
-                                                       self->sdk_extensions[i],
-                                                       &resolved,
-                                                       NULL,
-                                                       &error);
-
-      if (error != NULL)
-        g_debug ("Failed to resolve extension %s for SDK %s: %s",
-                 self->sdk_extensions[i], sdk, error->message);
-
-      if (!ide_str_empty0 (resolved))
-        {
-          g_free (self->sdk_extensions[i]);
-          self->sdk_extensions[i] = g_steal_pointer (&resolved);
-        }
+      g_ptr_array_add (all, dex_ref (promise));
+      ipc_flatpak_service_call_resolve_extension (service,
+                                                  sdk,
+                                                  self->sdk_extensions[i],
+                                                  NULL,
+                                                  gbp_flatpak_manifest_resolve_cb,
+                                                  g_steal_pointer (&promise));
     }
+
+  future = dex_future_allv ((DexFuture **)all->pdata, all->len);
+  future = dex_future_finally (future,
+                               update_resolved_cb,
+                               g_object_ref (self),
+                               g_object_unref);
+
+  return g_steal_pointer (&future);
+}
+
+void
+gbp_flatpak_manifest_resolve_extensions_async (GbpFlatpakManifest  *self,
+                                               IpcFlatpakService   *service,
+                                               GCancellable        *cancellable,
+                                               GAsyncReadyCallback  callback,
+                                               gpointer             user_data)
+{
+  g_autoptr(DexAsyncResult) result = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (!service || IPC_IS_FLATPAK_SERVICE (service));
+
+  result = dex_async_result_new (self, cancellable, callback, user_data);
+  dex_async_result_await (result, gbp_flatpak_manifest_resolve_extensions (self, service));
+
+  IDE_EXIT;
+}
+
+gboolean
+gbp_flatpak_manifest_resolve_extensions_finish (GbpFlatpakManifest  *self,
+                                                GAsyncResult        *result,
+                                                GError             **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (DEX_IS_ASYNC_RESULT (result));
+
+  ret = dex_async_result_propagate_boolean (DEX_ASYNC_RESULT (result), error);
+
+  IDE_RETURN (ret);
 }
 
 const char *
