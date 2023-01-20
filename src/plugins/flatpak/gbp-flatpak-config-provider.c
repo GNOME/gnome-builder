@@ -302,6 +302,8 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
   g_autoptr(GPtrArray) manifests = NULL;
   GPtrArray *files = task_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_CONFIG_PROVIDER (self));
   g_assert (files != NULL);
@@ -332,6 +334,10 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
       g_assert (ide_config_get_dirty (IDE_CONFIG (manifest)) == FALSE);
 
+      /* TODO: This call will cause greeter to stall. We should make resolution
+       *   happen out of band so that we can load quickly and delay pipeline
+       *   availability until after the next screen is displayed.
+       */
       gbp_flatpak_manifest_resolve_extensions (manifest, self->service);
 
       g_signal_connect_object (manifest,
@@ -346,6 +352,8 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
   ide_task_return_pointer (task,
                            g_steal_pointer (&manifests),
                            g_ptr_array_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -358,6 +366,8 @@ load_find_files_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ret = NULL;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -368,11 +378,13 @@ load_find_files_cb (GObject      *object,
   if (ret == NULL)
     {
       ide_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   ide_task_set_task_data (task, g_steal_pointer (&ret), g_ptr_array_unref);
   ide_task_run_in_thread (task, gbp_flatpak_config_provider_load_worker);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -460,38 +472,40 @@ gbp_flatpak_config_provider_monitor_changed (GbpFlatpakConfigProvider *self,
 }
 
 static void
-gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+gbp_flatpak_config_provider_load_client_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
 {
-  GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
+  GbpFlatpakClient *client = (GbpFlatpakClient *)object;
   g_autoptr(IpcFlatpakService) service = NULL;
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GbpFlatpakConfigProvider *self;
   IdeVcsMonitor *monitor;
   IdeContext *context;
-  GbpFlatpakClient *client;
   IdeVcs *vcs;
   GFile *workdir;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_FLATPAK_CONFIG_PROVIDER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (GBP_IS_FLATPAK_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
+  if (!(service = gbp_flatpak_client_get_service_finish (client, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self = ide_task_get_source_object (task);
   context = ide_object_get_context (IDE_OBJECT (self));
-  client = gbp_flatpak_client_get_default ();
-  service = gbp_flatpak_client_get_service (client, NULL, NULL);
   vcs = ide_vcs_from_context (context);
   workdir = ide_vcs_get_workdir (vcs);
   monitor = ide_context_peek_child_typed (context, IDE_TYPE_VCS_MONITOR);
 
   g_set_object (&self->service, service);
-
-  task = ide_task_new (provider, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_flatpak_config_provider_load_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   g_signal_connect_object (monitor,
                            "changed",
@@ -502,9 +516,36 @@ gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
   ide_g_file_find_with_depth_async (workdir,
                                     "*.json",
                                     DISCOVERY_MAX_DEPTH,
-                                    cancellable,
+                                    ide_task_get_cancellable (task),
                                     load_find_files_cb,
-                                    g_steal_pointer (&task));
+                                    g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_flatpak_config_provider_load_async (IdeConfigProvider   *provider,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  GbpFlatpakConfigProvider *self = (GbpFlatpakConfigProvider *)provider;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_CONFIG_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (provider, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_config_provider_load_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+
+  gbp_flatpak_client_get_service_async (gbp_flatpak_client_get_default (),
+                                        NULL,
+                                        gbp_flatpak_config_provider_load_client_cb,
+                                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
