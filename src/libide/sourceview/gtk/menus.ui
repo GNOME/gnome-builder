@@ -7,19 +7,19 @@
       <attribute name="group" translatable="yes">Clipboard</attribute>
       <item>
         <attribute name="verb-icon" type="s">'edit-cut-symbolic'</attribute>
-        <attribute name="label" translatable="yes">C_ut</attribute>
+        <attribute name="label" translatable="yes">C_ut (Ctrl+X)</attribute>
         <attribute name="action">clipboard.cut</attribute>
         <attribute name="accel">&lt;control&gt;x</attribute>
       </item>
       <item>
         <attribute name="verb-icon" type="s">'edit-copy-symbolic'</attribute>
-        <attribute name="label" translatable="yes">_Copy</attribute>
+        <attribute name="label" translatable="yes">_Copy (Ctrl+C)</attribute>
         <attribute name="action">clipboard.copy</attribute>
         <attribute name="accel">&lt;control&gt;c</attribute>
       </item>
       <item>
         <attribute name="verb-icon" type="s">'edit-paste-symbolic'</attribute>
-        <attribute name="label" translatable="yes">_Paste</attribute>
+        <attribute name="label" translatable="yes">_Paste (Ctrl+V)</attribute>
         <attribute name="action">clipboard.paste</attribute>
         <attribute name="accel">&lt;control&gt;v</attribute>
       </item>
@@ -30,13 +30,13 @@
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Undo &amp; Redo</attribute>
       <item>
-        <attribute name="label" translatable="yes">Undo</attribute>
+        <attribute name="label" translatable="yes">Undo (Ctrl+Z)</attribute>
         <attribute name="action">text.undo</attribute>
         <attribute name="verb-icon">edit-undo-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;z</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Redo</attribute>
+        <attribute name="label" translatable="yes">Redo (Shift+Ctrl+Z)</attribute>
         <attribute name="action">text.redo</attribute>
         <attribute name="verb-icon">edit-redo-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;z</attribute>
@@ -48,19 +48,19 @@
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Zoom</attribute>
       <item>
-        <attribute name="label" translatable="yes">Zoom Out</attribute>
+        <attribute name="label" translatable="yes">Zoom Out (Ctrl+-)</attribute>
         <attribute name="verb-icon">zoom-out-symbolic</attribute>
         <attribute name="action">zoom.out</attribute>
         <attribute name="accel">&lt;control&gt;minus</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Reset Zoom</attribute>
+        <attribute name="label" translatable="yes">Reset Zoom (Ctrl+0)</attribute>
         <attribute name="verb-icon">zoom-original-symbolic</attribute>
         <attribute name="action">zoom.one</attribute>
         <attribute name="accel">&lt;control&gt;0</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Zoom In</attribute>
+        <attribute name="label" translatable="yes">Zoom In (Ctrl++)</attribute>
         <attribute name="verb-icon">zoom-in-symbolic</attribute>
         <attribute name="action">zoom.in</attribute>
         <attribute name="accel">&lt;control&gt;plus</attribute>
