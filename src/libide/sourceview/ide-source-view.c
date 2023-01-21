@@ -1502,7 +1502,8 @@ ide_source_view_init (IdeSourceView *self)
   ide_source_view_add_controller (self, 0, focus);
 
   /* Setup ctrl+scroll zoom */
-  scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                            GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
   gtk_event_controller_set_name (scroll, "ide-source-view-zoom");
   gtk_event_controller_set_propagation_phase (scroll, GTK_PHASE_CAPTURE);
   g_signal_connect (scroll,
