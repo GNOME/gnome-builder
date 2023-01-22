@@ -1440,14 +1440,14 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (IdeLspClientClass, notification),
                   NULL, NULL,
-                  ide_marshal_VOID__STRING_BOXED,
+                  ide_marshal_VOID__STRING_VARIANT,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
                   G_TYPE_VARIANT);
   g_signal_set_va_marshaller (signals [NOTIFICATION],
                               G_TYPE_FROM_CLASS (klass),
-                              ide_marshal_VOID__STRING_BOXEDv);
+                              ide_marshal_VOID__STRING_VARIANTv);
 
   signals [SUPPORTS_LANGUAGE] =
     g_signal_new ("supports-language",
