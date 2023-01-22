@@ -134,6 +134,15 @@ _gbp_host_runtime_prepare_to_run (IdePipeline   *pipeline,
   config = ide_pipeline_get_config (pipeline);
   prefix = ide_config_get_prefix (config);
 
+  /* PATH */
+  {
+    const char *path = ide_get_user_default_path ();
+    g_autofree char *bindir = g_build_filename (prefix, "bin", NULL);
+    g_autofree char *newpath = g_strdup_printf ("%s" G_SEARCHPATH_SEPARATOR_S "%s", bindir, path);
+
+    ide_run_context_setenv (run_context, "PATH", newpath);
+  }
+
   /* LD_LIBRARY_PATH */
   {
     static const gchar *tries[] = { "lib64", "lib", "lib32", };
