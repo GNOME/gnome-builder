@@ -385,6 +385,12 @@ ide_marked_view_new (IdeMarkedContent *content)
   kind = ide_marked_content_get_kind (content);
   markup = ide_marked_content_as_string (content, &markup_len);
 
+  if (markup == NULL)
+    {
+      markup = "";
+      markup_len = 0;
+    }
+
   switch (kind)
     {
     default:
