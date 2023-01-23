@@ -1050,6 +1050,35 @@ on_scroll_scrolled_cb (GtkEventControllerScroll *scroll,
 }
 
 static void
+on_scroll_begin_cb (GtkEventControllerScroll *scroll,
+                    IdeSourceView            *self)
+{
+  GdkModifierType state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GTK_IS_EVENT_CONTROLLER_SCROLL (scroll));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
+
+  if (state & GDK_CONTROL_MASK)
+    gtk_event_controller_scroll_set_flags (scroll,
+                                           GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                           GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+}
+
+static void
+on_scroll_end_cb (GtkEventControllerScroll *scroll,
+                  IdeSourceView            *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GTK_IS_EVENT_CONTROLLER_SCROLL (scroll));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  gtk_event_controller_scroll_set_flags (scroll, GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+}
+
+static void
 ide_source_view_push_snippet (GtkSourceView    *source_view,
                               GtkSourceSnippet *snippet,
                               GtkTextIter      *location)
@@ -1502,13 +1531,20 @@ ide_source_view_init (IdeSourceView *self)
   ide_source_view_add_controller (self, 0, focus);
 
   /* Setup ctrl+scroll zoom */
-  scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
-                                            GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   gtk_event_controller_set_name (scroll, "ide-source-view-zoom");
   gtk_event_controller_set_propagation_phase (scroll, GTK_PHASE_CAPTURE);
   g_signal_connect (scroll,
                     "scroll",
                     G_CALLBACK (on_scroll_scrolled_cb),
+                    self);
+  g_signal_connect (scroll,
+                    "scroll-begin",
+                    G_CALLBACK (on_scroll_begin_cb),
+                    self);
+  g_signal_connect (scroll,
+                    "scroll-end",
+                    G_CALLBACK (on_scroll_end_cb),
                     self);
   ide_source_view_add_controller (self, 0, scroll);
 
