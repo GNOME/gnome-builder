@@ -12,7 +12,7 @@ include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_
     APP_ID: "org.gnome.Builder.Devel"
     BUNDLE: "gnome-builder-git.flatpak"
   before_script:
-    - flatpak --user install -y org.freedesktop.Sdk.Extension.llvm14//22.08
+    - flatpak --user install -y org.freedesktop.Sdk.Extension.llvm15//22.08
     - flatpak --user install -y org.freedesktop.Sdk.Extension.node18//22.08
 
 flatpak@x86_64:
