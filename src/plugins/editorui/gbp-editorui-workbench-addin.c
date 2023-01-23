@@ -119,11 +119,16 @@ gbp_editorui_workbench_addin_can_open (IdeWorkbenchAddin *addin,
   if (content_type != NULL)
     {
       static char *text_plain_type;
+      static char *x_zerosize_type;
 
       if G_UNLIKELY (text_plain_type == NULL)
         text_plain_type = g_content_type_from_mime_type ("text/plain");
 
-      if (g_content_type_is_a (content_type, text_plain_type))
+      if G_UNLIKELY (x_zerosize_type == NULL)
+        x_zerosize_type = g_content_type_from_mime_type ("application/x-zerosize");
+
+      if (g_content_type_is_a (content_type, x_zerosize_type) ||
+          g_content_type_is_a (content_type, text_plain_type))
         return TRUE;
     }
 
