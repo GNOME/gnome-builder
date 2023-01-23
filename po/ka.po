@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-01-23 18:58+0000\n"
-"PO-Revision-Date: 2023-01-23 20:54+0100\n"
-"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"PO-Revision-Date: 2023-01-23 21:01+0100\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
@@ -1207,7 +1207,7 @@ msgstr "აირჩიეთ პროექტის ფაილი"
 #: src/libide/greeter/ide-greeter-workspace.c:696
 #: src/libide/gui/ide-workbench.c:1516
 msgid "_Open"
-msgstr "_გახსნა"
+msgstr ""
 
 #: src/libide/greeter/ide-greeter-workspace.c:707
 msgid "All Project Types"
@@ -1261,7 +1261,7 @@ msgstr "შეცდომა va_list-ის მნიშვნელობი�
 #: src/libide/gtk/ide-file-chooser-entry.c:157
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
-msgstr "გახსნა"
+msgstr ""
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
@@ -1269,7 +1269,7 @@ msgstr "გახსნა"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
-msgstr "აირჩიეთ"
+msgstr ""
 
 #: src/libide/gtk/ide-file-chooser-entry.c:448
 msgid "Browse…"
@@ -1336,7 +1336,7 @@ msgstr "მოძებნეთ, რაც გნებავთ"
 
 #: src/libide/gui/ide-search-popover.ui:232
 msgid "_Everything"
-msgstr "_ყველაფერი"
+msgstr ""
 
 #: src/libide/gui/ide-search-popover.ui:239
 msgid "_Actions"
@@ -1495,7 +1495,7 @@ msgstr ""
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
-msgstr "ძებნა (Ctrl+Enter)"
+msgstr ""
 
 #: src/libide/gui/ide-primary-workspace.ui:105
 msgid "Toggle Bottom Panel (Ctrl+F9)"
@@ -1511,16 +1511,16 @@ msgstr "გაშვებული პროექტის შეჩერე�
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
-msgstr "გაშვების გაჩერება"
+msgstr ""
 
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
-msgstr "პროექტის გაშვება"
+msgstr ""
 
 #: src/libide/gui/ide-shortcut-window.c:250
 #: src/libide/gui/ide-shortcut-window.c:276
 msgid "Other"
-msgstr "სხვა"
+msgstr ""
 
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
@@ -1560,11 +1560,11 @@ msgstr "ვერსიის კონტროლი"
 
 #: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
-msgstr "SDKები"
+msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
 msgid "Language Servers"
-msgstr "ენის სერვერები"
+msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
@@ -1582,7 +1582,7 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
-msgstr "კომპილატორები"
+msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
@@ -1673,7 +1673,7 @@ msgstr ""
 
 #: src/libide/sourceview/gtk/menus.ui:39
 msgid "Redo (Shift+Ctrl+Z)"
-msgstr "გამეორება (Shift+Ctrl+L)"
+msgstr "გამეორება (Shift+Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom"
@@ -1904,7 +1904,7 @@ msgstr "ვერსიის გარეშე"
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
 msgid "None"
-msgstr "არაფერი"
+msgstr ""
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
@@ -4930,9 +4930,8 @@ msgid "Environment"
 msgstr "გარემო"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
-#, fuzzy
 msgid "Working Directory"
-msgstr "სამუშაო საქაღალდე"
+msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
@@ -5046,9 +5045,8 @@ msgid "No keyboard shortcut found"
 msgstr "კლავიატურის მალსახმობები ნაპოვნი არაა"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:57
-#, fuzzy
 msgid "Try a different search"
-msgstr "სცადეთ სხვა ძებნა"
+msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
 msgid "_Reset All"
@@ -5060,7 +5058,7 @@ msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
 msgid "_Edit File"
-msgstr "ფაილის ჩასწორება"
+msgstr "ფაილის _ჩასწორება"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
 msgid "Open keybindings.json in editor"
