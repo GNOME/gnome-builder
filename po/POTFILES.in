@@ -14,6 +14,7 @@ data/gsettings/org.gnome.builder.project-tree.gschema.xml
 data/gsettings/org.gnome.builder.spelling.gschema.xml
 data/gsettings/org.gnome.builder.terminal.gschema.xml
 data/org.gnome.Builder.desktop.in.in
+data/styles/arctic-dark.xml
 data/styles/builder-dark.xml
 data/styles/builder.xml
 data/styles/peninsula-dark.xml
@@ -57,6 +58,7 @@ src/libide/gtk/ide-gtk.c
 src/libide/gtk/ide-install-button.ui
 src/libide/gtk/ide-search-entry.c
 src/libide/gtk/ide-search-entry.ui
+src/libide/gui/ide-search-popover.ui
 src/libide/gtk/ide-shortcut-accel-dialog.c
 src/libide/gtk/ide-shortcut-accel-dialog.ui
 src/libide/gui/gtk/menus.ui
@@ -270,6 +272,10 @@ src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c
 src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml
 src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml
 src/plugins/shellcmd/tweaks.ui
+src/plugins/shortcutui/gbp-shortcutui-dialog.c
+src/plugins/shortcutui/gbp-shortcutui-dialog.ui
+src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c
+src/plugins/shortcutui/tweaks.ui
 src/plugins/spellcheck/editor-enchant-spell-provider.c
 src/plugins/spellcheck/editor-spell-menu.c
 src/plugins/sphinx-preview/gtk/menus.ui
