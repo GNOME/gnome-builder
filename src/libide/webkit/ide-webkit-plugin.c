@@ -32,6 +32,41 @@
 
 _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 
+static void
+ide_webkit_plugin_show_help_cb (IdeApplication *app,
+                                gpointer        user_data)
+{
+  g_autoptr(GFile) file = NULL;
+  GtkWindowGroup *group;
+  IdeWorkbench *workbench;
+  GtkWindow *window;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_APPLICATION (app));
+
+  if (!(window = gtk_application_get_active_window (GTK_APPLICATION (app))))
+    IDE_EXIT;
+
+  if (!(group = gtk_window_get_group (window)))
+    IDE_EXIT;
+
+  if (!IDE_IS_WORKBENCH (group))
+    IDE_EXIT;
+
+  workbench = IDE_WORKBENCH (group);
+  file = g_file_new_for_path (PACKAGE_DOCDIR "/en/index.html");
+
+  ide_workbench_open_async (workbench,
+                            file,
+                            "web-browser",
+                            0,
+                            NULL,
+                            NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
 void
 _ide_webkit_register_types (PeasObjectModule *module)
 {
@@ -52,4 +87,9 @@ _ide_webkit_register_types (PeasObjectModule *module)
   webkit_web_context_set_sandbox_enabled (context, TRUE);
 #endif
   webkit_web_context_set_favicon_database_directory (context, NULL);
+
+  g_signal_connect (IDE_APPLICATION_DEFAULT,
+                    "show-help",
+                    G_CALLBACK (ide_webkit_plugin_show_help_cb),
+                    NULL);
 }

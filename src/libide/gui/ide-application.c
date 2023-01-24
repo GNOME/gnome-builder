@@ -57,7 +57,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  SHOW_HELP,
+  N_SIGNALS
+};
+
 static GParamSpec *properties[N_PROPS];
+static guint signals[N_SIGNALS];
 
 static void
 ide_application_add_platform_data (GApplication    *app,
@@ -542,6 +548,15 @@ ide_application_class_init (IdeApplicationClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [SHOW_HELP] =
+    g_signal_new ("show-help",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void

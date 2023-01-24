@@ -133,93 +133,18 @@ ide_application_actions_about (GSimpleAction *action,
 }
 
 static void
-ide_application_actions_help_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
-{
-  GNetworkMonitor *monitor = (GNetworkMonitor *)object;
-  g_autoptr(IdeApplication) self = user_data;
-  GtkWindow *focused_window;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  focused_window = gtk_application_get_active_window (GTK_APPLICATION (self));
-
-  /*
-   * If we can reach the documentation website, prefer showing up-to-date
-   * documentation from the website.
-   */
-  if (g_network_monitor_can_reach_finish (monitor, result, NULL))
-    {
-      g_autoptr(GError) error = NULL;
-
-      g_debug ("Can reach documentation site, opening online");
-      if (!ide_gtk_show_uri_on_window (focused_window, DOCS_URI, g_get_monotonic_time (), &error))
-        g_warning ("Failed to display documentation: %s", error->message);
-
-      IDE_EXIT;
-    }
-
-  g_debug ("Cannot reach online documentation, trying locally");
-
-  /*
-   * We failed to reach the online site for some reason (offline, transient error, etc),
-   * so instead try to load the local documentation.
-   */
-  if (g_file_test (PACKAGE_DOCDIR"/en/index.html", G_FILE_TEST_IS_REGULAR))
-    {
-      g_autofree gchar *file_base = NULL;
-      g_autofree gchar *uri = NULL;
-      g_autoptr(GError) error = NULL;
-
-      if (ide_is_flatpak ())
-        file_base = ide_get_relocatable_path ("/share/doc/gnome-builder");
-      else
-        file_base = g_strdup (PACKAGE_DOCDIR);
-
-      uri = g_strdup_printf ("file://%s/en/index.html", file_base);
-
-      g_debug ("Documentation URI: %s", uri);
-
-      if (!ide_gtk_show_uri_on_window (focused_window, uri, g_get_monotonic_time (), &error))
-        g_warning ("Failed to load documentation: %s", error->message);
-
-      IDE_EXIT;
-    }
-
-  g_debug ("No locally installed documentation to display");
-
-  IDE_EXIT;
-}
-
-static void
 ide_application_actions_help (GSimpleAction *action,
                               GVariant      *param,
                               gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  g_autoptr(GSocketConnectable) network_address = NULL;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
 
-  /*
-   * Check for access to the internet. Sadly, we cannot use
-   * g_network_monitor_get_network_available() because that does not seem to
-   * act correctly on some systems (Ubuntu appears to be one example). So
-   * instead, we can asynchronously check if we can reach the peer first.
-   */
-  network_address = g_network_address_parse_uri (DOCS_URI, 443, NULL);
-  g_network_monitor_can_reach_async (g_network_monitor_get_default (),
-                                     network_address,
-                                     NULL,
-                                     ide_application_actions_help_cb,
-                                     g_object_ref (self));
+  g_signal_emit_by_name (self, "show-help");
 
   IDE_EXIT;
 }
