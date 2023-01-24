@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeWebkitWorkspace" parent="IdeWorkspace">
+    <child type="titlebar">
+      <object class="IdeHeaderBar" id="header_bar">
+        <property name="visible">false</property>
+      </object>
+    </child>
+    <child>
+      <object class="PanelFrame" id="frame">
+        <property name="vexpand">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

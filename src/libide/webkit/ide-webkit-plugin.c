@@ -29,6 +29,7 @@
 #include <libide-webkit-api.h>
 
 #include "ide-webkit-page.h"
+#include "ide-webkit-workspace.h"
 
 _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 
@@ -36,9 +37,12 @@ static void
 ide_webkit_plugin_show_help_cb (IdeApplication *app,
                                 gpointer        user_data)
 {
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(GFile) file = NULL;
   GtkWindowGroup *group;
+  IdeWebkitPage *page;
   IdeWorkbench *workbench;
+  IdeWorkspace *workspace;
   GtkWindow *window;
 
   IDE_ENTRY;
@@ -55,14 +59,17 @@ ide_webkit_plugin_show_help_cb (IdeApplication *app,
     IDE_EXIT;
 
   workbench = IDE_WORKBENCH (group);
-  file = g_file_new_for_path (PACKAGE_DOCDIR "/en/index.html");
 
-  ide_workbench_open_async (workbench,
-                            file,
-                            "web-browser",
-                            0,
-                            NULL,
-                            NULL, NULL, NULL);
+  workspace = ide_webkit_workspace_new ();
+  ide_workbench_add_workspace (workbench, workspace);
+
+  page = ide_webkit_page_new ();
+  ide_webkit_page_load_uri (page, "file://" PACKAGE_DOCDIR "/en/index.html");
+
+  position = panel_position_new ();
+  ide_workspace_add_page (workspace, IDE_PAGE (page), position);
+
+  gtk_window_present (GTK_WINDOW (workspace));
 
   IDE_EXIT;
 }

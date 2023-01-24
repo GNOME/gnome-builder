@@ -3,6 +3,7 @@
   <gresource prefix="/plugins/webkit">
     <file>webkit.plugin</file>
     <file preprocess="xml-stripblanks">ide-webkit-page.ui</file>
+    <file preprocess="xml-stripblanks">ide-webkit-workspace.ui</file>
     <file preprocess="xml-stripblanks">ide-url-bar.ui</file>
   </gresource>
 </gresources>
