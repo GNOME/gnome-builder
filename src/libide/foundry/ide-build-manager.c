@@ -132,6 +132,8 @@ static void ide_build_manager_action_export               (IdeBuildManager *self
                                                            GVariant        *param);
 static void ide_build_manager_action_install              (IdeBuildManager *self,
                                                            GVariant        *param);
+static void ide_build_manager_action_invalidate           (IdeBuildManager *self,
+                                                           GVariant        *param);
 static void ide_build_manager_action_default_build_target (IdeBuildManager *self,
                                                            GVariant        *param);
 
@@ -143,6 +145,7 @@ IDE_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "install", ide_build_manager_action_install },
   { "rebuild", ide_build_manager_action_rebuild },
   { "default-build-target", ide_build_manager_action_default_build_target, "s", "''" },
+  { "invalidate", ide_build_manager_action_invalidate },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -184,6 +187,16 @@ build_state_free (BuildState *state)
 }
 
 static void
+ide_build_manager_action_invalidate (IdeBuildManager *self,
+                                     GVariant        *param)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  ide_build_manager_invalidate (self);
+}
+
+static void
 ide_build_manager_action_default_build_target (IdeBuildManager *self,
                                                GVariant        *param)
 {
@@ -198,11 +211,9 @@ ide_build_manager_action_default_build_target (IdeBuildManager *self,
     str = NULL;
 
   if (g_set_str (&self->default_build_target, str))
-    {
-      ide_build_manager_set_action_state (self,
-                                          "default-build-target",
-                                          g_variant_new_string (str ? str : ""));
-    }
+    ide_build_manager_set_action_state (self,
+                                        "default-build-target",
+                                        g_variant_new_string (str ? str : ""));
 }
 
 static void
@@ -748,9 +759,7 @@ ide_build_manager_vcs_changed (IdeBuildManager *self,
   branch_name = ide_vcs_get_branch_name (vcs);
 
   if (g_set_str (&self->branch_name, branch_name))
-    {
-      ide_build_manager_invalidate_pipeline (self);
-    }
+    ide_build_manager_invalidate_pipeline (self);
 }
 
 static gboolean
@@ -1948,10 +1957,14 @@ ide_build_manager_set_can_build (IdeBuildManager *self,
 void
 ide_build_manager_invalidate (IdeBuildManager *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
 
   ide_build_manager_invalidate_pipeline (self);
+
+  IDE_EXIT;
 }
 
 guint
