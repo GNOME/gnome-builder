@@ -55,6 +55,12 @@ gbp_web_browser_workbench_addin_can_open (IdeWorkbenchAddin *addin,
       return TRUE;
     }
 
+  if (g_content_type_is_a (content_type, "text/html"))
+    {
+      *priority = 1000;
+      return TRUE;
+    }
+
   return FALSE;
 }
 
