@@ -33,7 +33,7 @@
 
 _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 
-static void
+static gboolean
 ide_webkit_plugin_show_help_cb (IdeApplication *app,
                                 gpointer        user_data)
 {
@@ -50,13 +50,13 @@ ide_webkit_plugin_show_help_cb (IdeApplication *app,
   g_assert (IDE_IS_APPLICATION (app));
 
   if (!(window = gtk_application_get_active_window (GTK_APPLICATION (app))))
-    IDE_EXIT;
+    IDE_RETURN (FALSE);
 
   if (!(group = gtk_window_get_group (window)))
-    IDE_EXIT;
+    IDE_RETURN (FALSE);
 
   if (!IDE_IS_WORKBENCH (group))
-    IDE_EXIT;
+    IDE_RETURN (FALSE);
 
   workbench = IDE_WORKBENCH (group);
 
@@ -71,7 +71,7 @@ ide_webkit_plugin_show_help_cb (IdeApplication *app,
 
   gtk_window_present (GTK_WINDOW (workspace));
 
-  IDE_EXIT;
+  IDE_RETURN (TRUE);
 }
 
 void

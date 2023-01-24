@@ -433,6 +433,21 @@ _ide_application_remove_resources (IdeApplication *self,
   g_warning ("TODO: implement resource unloading for plugins: %s", resource_path);
 }
 
+static gboolean
+ide_application_show_help_external (IdeApplication *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (self));
+
+  gtk_show_uri (NULL,
+                "https://builder.readthedocs.io",
+                GDK_CURRENT_TIME);
+
+  IDE_RETURN (TRUE);
+}
+
 static void
 ide_application_get_property (GObject    *object,
                               guint       prop_id,
@@ -550,13 +565,13 @@ ide_application_class_init (IdeApplicationClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [SHOW_HELP] =
-    g_signal_new ("show-help",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
+    g_signal_new_class_handler ("show-help",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_application_show_help_external),
+                                g_signal_accumulator_true_handled, NULL,
+                                NULL,
+                                G_TYPE_BOOLEAN, 0);
 }
 
 static void

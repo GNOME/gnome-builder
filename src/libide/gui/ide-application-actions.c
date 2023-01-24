@@ -138,13 +138,14 @@ ide_application_actions_help (GSimpleAction *action,
                               gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  gboolean ret = FALSE;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
 
-  g_signal_emit_by_name (self, "show-help");
+  g_signal_emit_by_name (self, "show-help", &ret);
 
   IDE_EXIT;
 }
