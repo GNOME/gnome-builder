@@ -1,6 +1,6 @@
 /* ide-shortcut-bundle.c
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -437,7 +437,7 @@ populate_from_array (IdeShortcutBundle  *self,
           g_set_error (error,
                        G_IO_ERROR,
                        G_IO_ERROR_INVALID_DATA,
-                       "Somthing other than an object found within array");
+                       "Something other than an object found within array");
           return FALSE;
         }
     }
