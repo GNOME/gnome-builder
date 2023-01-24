@@ -1499,7 +1499,7 @@ static gboolean
 shortcut_phase_filter (gpointer item,
                        gpointer user_data)
 {
-  return ide_shortcut_is_phase (item, user_data);
+  return ide_shortcut_is_phase (item, GPOINTER_TO_UINT (user_data));
 }
 
 void

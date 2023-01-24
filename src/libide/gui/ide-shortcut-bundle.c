@@ -520,3 +520,12 @@ ide_shortcut_bundle_error (IdeShortcutBundle *self)
 
   return self->error;
 }
+
+gboolean
+ide_shortcut_is_phase (GtkShortcut         *shortcut,
+                       GtkPropagationPhase  phase)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT (shortcut), FALSE);
+
+  return g_object_get_data (G_OBJECT (shortcut), "PHASE") == GUINT_TO_POINTER (phase);
+}

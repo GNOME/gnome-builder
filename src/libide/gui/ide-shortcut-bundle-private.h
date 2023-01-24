@@ -1,6 +1,6 @@
 /* ide-shortcut-bundle.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,13 +39,15 @@ typedef struct
 
 G_DECLARE_FINAL_TYPE (IdeShortcutBundle, ide_shortcut_bundle, IDE, SHORTCUT_BUNDLE, GObject)
 
-IdeShortcutBundle *ide_shortcut_bundle_new   (void);
-gboolean           ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
-                                              GFile              *file,
-                                              GError            **error);
-const GError      *ide_shortcut_bundle_error (IdeShortcutBundle  *self);
-
-#define ide_shortcut_is_phase(obj,pha) \
-  (g_object_get_data(G_OBJECT(obj), "PHASE") == pha)
+IdeShortcutBundle *ide_shortcut_bundle_new      (void);
+gboolean           ide_shortcut_bundle_parse    (IdeShortcutBundle    *self,
+                                                 GFile                *file,
+                                                 GError              **error);
+const GError      *ide_shortcut_bundle_error    (IdeShortcutBundle    *self);
+void               ide_shortcut_bundle_override (IdeShortcutBundle    *bundle,
+                                                 GtkShortcut          *shortcut,
+                                                 const char           *accelerator);
+gboolean           ide_shortcut_is_phase        (GtkShortcut          *shortcut,
+                                                 GtkPropagationPhase   phase);
 
 G_END_DECLS
