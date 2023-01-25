@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-23 18:58+0000\n"
-"PO-Revision-Date: 2023-01-23 21:01+0100\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"POT-Creation-Date: 2023-01-24 20:58+0000\n"
+"PO-Revision-Date: 2023-01-25 08:00+0100\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
@@ -566,7 +566,7 @@ msgid "What environment to use when running unit tests"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
 
@@ -892,15 +892,15 @@ msgstr "გამოცვლა"
 
 #: src/libide/editor/ide-editor-search-bar.ui:46
 msgid "Move to previous match (Ctrl+Shift+G)"
-msgstr ""
+msgstr "წინა დამთხვევაზე გადასვლა (Ctrl+Shift+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:57
 msgid "Move to next match (Ctrl+G)"
-msgstr ""
+msgstr "შემდეგ დამთხვევაზე გადასვლა (Ctrl+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:72
 msgid "Search & Replace (Ctrl+H)"
-msgstr ""
+msgstr "ძებნა და ჩანაცვლება (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:103
 msgid "Close search"
@@ -955,12 +955,12 @@ msgstr "ხაზის დაბოლოება:"
 msgid "Language"
 msgstr "ენა"
 
-#: src/libide/foundry/ide-build-manager.c:471
+#: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr ""
 
-#: src/libide/foundry/ide-build-manager.c:612
+#: src/libide/foundry/ide-build-manager.c:623
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr ""
@@ -1314,7 +1314,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "დაახლოებით %u წლის წინ"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:56
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_დაყენება"
@@ -1336,7 +1336,7 @@ msgstr "მოძებნეთ, რაც გნებავთ"
 
 #: src/libide/gui/ide-search-popover.ui:232
 msgid "_Everything"
-msgstr ""
+msgstr "_ყველაფერი"
 
 #: src/libide/gui/ide-search-popover.ui:239
 msgid "_Actions"
@@ -1495,7 +1495,7 @@ msgstr ""
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
-msgstr ""
+msgstr "ძებნა (Ctrl+Enter)"
 
 #: src/libide/gui/ide-primary-workspace.ui:105
 msgid "Toggle Bottom Panel (Ctrl+F9)"
@@ -1511,22 +1511,22 @@ msgstr "გაშვებული პროექტის შეჩერე�
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
-msgstr ""
+msgstr "გაშვების გაჩერება"
 
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
-msgstr ""
+msgstr "პროექტის გაშვება"
 
 #: src/libide/gui/ide-shortcut-window.c:250
 #: src/libide/gui/ide-shortcut-window.c:276
 msgid "Other"
-msgstr ""
+msgstr "სხვა"
 
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
 msgstr "არსებობს არ-შენახული დოკუმენტები"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1560,11 +1560,11 @@ msgstr "ვერსიის კონტროლი"
 
 #: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
-msgstr ""
+msgstr "SDKები"
 
 #: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
 msgid "Language Servers"
-msgstr ""
+msgstr "ენის სერვერები"
 
 #: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
@@ -1582,7 +1582,7 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
-msgstr ""
+msgstr "კომპილატორები"
 
 #: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
@@ -1765,14 +1765,14 @@ msgid "Code Navigation"
 msgstr "დოკუმენტის ნავიგაცია"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1503
+#: src/libide/sourceview/ide-source-view.c:1539
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "ხზ %u, სვტ %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1505
+#: src/libide/sourceview/ide-source-view.c:1541
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1910,7 +1910,7 @@ msgstr ""
 msgid "Blank page"
 msgstr "სუფთა გვერდი"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "მორგება"
 
@@ -2180,8 +2180,8 @@ msgid "Delete configuration"
 msgstr "კონფიგურაციის წაშლა"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
-msgid "Stop Building Project"
-msgstr "პროექტის აგების შეჩერება"
+msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
+msgstr "პროექტის აგების შეჩერება (Shift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
@@ -2199,77 +2199,85 @@ msgstr ""
 msgid "Configure settings related to the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
-#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:53
-#: src/plugins/buildui/gtk/menus.ui:80 src/plugins/buildui/gtk/menus.ui:90
-#: src/plugins/buildui/gtk/menus.ui:104 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:145 src/plugins/buildui/gtk/menus.ui:149
+#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
+#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "გამართვა"
 
-#: src/plugins/buildui/gtk/menus.ui:17
+#: src/plugins/buildui/gtk/menus.ui:14
+msgid "Reload Configuration"
+msgstr "კონფიგურაციის თავიდან ჩატვირთვა"
+
+#: src/plugins/buildui/gtk/menus.ui:16
+msgid "Reload project configuration"
+msgstr "პროექტის კონფიგურაციის თავიდან ჩატვირთვა"
+
+#: src/plugins/buildui/gtk/menus.ui:22
 msgid "Select Build Target…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Change default build target"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:81
-#: src/plugins/buildui/gtk/menus.ui:91
+#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Building"
 msgstr "აგება"
 
-#: src/plugins/buildui/gtk/menus.ui:26
+#: src/plugins/buildui/gtk/menus.ui:31
 msgid "_Build"
 msgstr "აგება"
 
-#: src/plugins/buildui/gtk/menus.ui:27
+#: src/plugins/buildui/gtk/menus.ui:32
 msgid "Build the project"
 msgstr "პროექტის აგება"
 
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:38
 msgid "_Rebuild"
 msgstr "თავიდან აგება"
 
-#: src/plugins/buildui/gtk/menus.ui:34
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "Rebuild the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Clean"
 msgstr "გასუფთავება"
 
-#: src/plugins/buildui/gtk/menus.ui:40
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Clean the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Stop Building"
 msgstr "პროექტის აგების შეჩერება"
 
-#: src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Cancel the current build operation"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:54
+#: src/plugins/buildui/gtk/menus.ui:59
 msgid "Install & Deployment"
 msgstr "დაყენება და გაშლა"
 
-#: src/plugins/buildui/gtk/menus.ui:58
+#: src/plugins/buildui/gtk/menus.ui:63
 msgid "Install the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "Deploy to Device…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:69
 msgid "Deploy project to current device"
 msgstr ""
 
@@ -2277,101 +2285,101 @@ msgstr ""
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "_Export"
 msgstr "_გატანა"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:80
 msgid "Export project"
 msgstr "პროექტის გატანა"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Stop Build"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:90
 msgid "Stop building project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:93
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
 msgstr "აგების გამონატანის ჩვენება"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "გაშვებულია"
 
-#: src/plugins/buildui/gtk/menus.ui:107
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:120
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "გაშვება"
 
-#: src/plugins/buildui/gtk/menus.ui:123
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:132
+#: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
 msgstr "პროგრამის შესრულების თავიდან დაწყება"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:141
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
 msgstr "გაშვებული პროექტის შეჩერება"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr "გამმართველი"
 
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "ერთეულის ტესტები"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
-msgstr ""
+msgstr "სისტემის სტილის მიყოლა"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:168
 msgid "Force Light"
 msgstr "ძალით ღია"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Force Dark"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Accessibility"
 msgstr "_დამხმარე საშუალებები"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "High Contrast"
 msgstr "მაღალი კონტრასტი"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:188
 msgid "Text Direction"
 msgstr "ტექსტის მიმართულება"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:190
 msgid "Left-to-Right"
 msgstr "მარცხნიდან-მარჯვნივ"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Right-to-Left"
 msgstr "მარჯვნიდან-მარცხნივ"
 
@@ -4931,7 +4939,7 @@ msgstr "გარემო"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
 msgid "Working Directory"
-msgstr ""
+msgstr "სამუშაო საქაღალდე"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
@@ -5046,7 +5054,7 @@ msgstr "კლავიატურის მალსახმობები �
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:57
 msgid "Try a different search"
-msgstr ""
+msgstr "სცადეთ სხვა ძებნა"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
 msgid "_Reset All"
