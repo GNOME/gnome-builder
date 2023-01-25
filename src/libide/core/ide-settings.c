@@ -741,7 +741,6 @@ ide_settings_get_action_parameter_type (GActionGroup *group,
 {
   IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
-  g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
   const GVariantType *type = g_settings_schema_key_get_value_type (key);
 
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))

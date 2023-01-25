@@ -276,7 +276,6 @@ ide_search_engine_search_cb (GObject      *object,
   IdeSearchProvider *provider = (IdeSearchProvider *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GListModel) ret = NULL;
   Request *r;
 
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));

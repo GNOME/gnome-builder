@@ -600,7 +600,6 @@ ide_shortcut_info_foreach (GListModel          *shortcuts,
           for (const GList *siter = gi->shortcuts.head; siter; siter = siter->next)
             {
               ShortcutInfo *si = siter->data;
-              g_autofree char *accel = g_markup_escape_text (si->accel, -1);
               g_autofree char *shortcut_title = g_markup_escape_text (si->title, -1);
 
               remove_underline_and_ellipsis (shortcut_title);

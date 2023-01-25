@@ -73,7 +73,6 @@ attach_run_command (GbpCargoPipelineAddin *self,
                     const char            *title)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autoptr(GError) error = NULL;
   guint id;
 
   g_assert (GBP_IS_CARGO_PIPELINE_ADDIN (self));

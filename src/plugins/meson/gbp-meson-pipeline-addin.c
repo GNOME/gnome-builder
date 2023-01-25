@@ -138,7 +138,6 @@ attach_run_command (GbpMesonPipelineAddin *self,
                     IdePipelinePhase       phase)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autoptr(GError) error = NULL;
   guint id;
 
   g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));

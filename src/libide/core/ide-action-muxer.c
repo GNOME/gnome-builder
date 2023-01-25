@@ -187,7 +187,7 @@ ide_action_muxer_list_groups (IdeActionMuxer *self)
       g_array_append_val (ar, prefix);
     }
 
-  return (char **)g_array_free (ar, FALSE);
+  return (char **)(gpointer)g_array_free (ar, FALSE);
 }
 
 static void
@@ -467,7 +467,7 @@ ide_action_muxer_list_actions (GActionGroup *group)
         }
     }
 
-  return (char **)g_array_free (ar, FALSE);
+  return (char **)(gpointer)g_array_free (ar, FALSE);
 }
 
 static gboolean

@@ -219,7 +219,6 @@ gbp_dub_build_system_locate_dub (GbpDubBuildSystem *self,
                                  IdePipeline       *pipeline,
                                  IdeConfig         *config)
 {
-  g_autofree char *dub_in_home = NULL;
   const char *envvar;
 
   g_return_val_if_fail (!self || GBP_IS_DUB_BUILD_SYSTEM (self), NULL);

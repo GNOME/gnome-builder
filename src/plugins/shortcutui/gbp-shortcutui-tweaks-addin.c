@@ -72,7 +72,6 @@ shortcutui_create_shortcuts_cb (GbpShortcutuiTweaksAddin *self,
                                 IdeTweaksItem            *instance,
                                 IdeTweaksItem            *original)
 {
-  g_autoptr(GListModel) model = NULL;
   AdwActionRow *row;
   GtkImage *image;
 
