@@ -302,7 +302,7 @@ ide_run_commands_parent_set (IdeObject *object,
 }
 
 static void
-ide_run_commands_dispose (GObject *object)
+ide_run_commands_destroy (IdeObject *object)
 {
   IdeRunCommands *self = (IdeRunCommands *)object;
 
@@ -313,18 +313,16 @@ ide_run_commands_dispose (GObject *object)
   g_clear_object (&self->flatten_model);
   g_clear_pointer (&self->provider_to_model, g_hash_table_unref);
 
-  G_OBJECT_CLASS (ide_run_commands_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_run_commands_parent_class)->destroy (object);
 }
 
 static void
 ide_run_commands_class_init (IdeRunCommandsClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeObjectClass *ide_object_class = IDE_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_run_commands_dispose;
-
-  ide_object_class->parent_set = ide_run_commands_parent_set;
+  i_object_class->destroy = ide_run_commands_destroy;
+  i_object_class->parent_set = ide_run_commands_parent_set;
 }
 
 static void

@@ -406,7 +406,7 @@ gbp_sysprof_tool_stopped (IdeRunTool *run_tool)
 }
 
 static void
-gbp_sysprof_tool_dispose (GObject *object)
+gbp_sysprof_tool_destroy (IdeObject *object)
 {
   GbpSysprofTool *self = (GbpSysprofTool *)object;
 
@@ -417,16 +417,16 @@ gbp_sysprof_tool_dispose (GObject *object)
 
   g_clear_pointer (&self->capture_file, g_free);
 
-  G_OBJECT_CLASS (gbp_sysprof_tool_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_sysprof_tool_parent_class)->destroy (object);
 }
 
 static void
 gbp_sysprof_tool_class_init (GbpSysprofToolClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdeRunToolClass *run_tool_class = IDE_RUN_TOOL_CLASS (klass);
 
-  object_class->dispose = gbp_sysprof_tool_dispose;
+  i_object_class->destroy = gbp_sysprof_tool_destroy;
 
   run_tool_class->prepare_to_run = gbp_sysprof_tool_prepare_to_run;
   run_tool_class->send_signal = gbp_sysprof_tool_send_signal;

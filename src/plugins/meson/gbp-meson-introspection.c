@@ -602,7 +602,7 @@ gbp_meson_introspection_build_finish (IdePipelineStage  *stage,
 }
 
 static void
-gbp_meson_introspection_dispose (GObject *object)
+gbp_meson_introspection_destroy (IdeObject *object)
 {
   GbpMesonIntrospection *self = (GbpMesonIntrospection *)object;
 
@@ -615,16 +615,16 @@ gbp_meson_introspection_dispose (GObject *object)
 
   g_clear_weak_pointer (&self->pipeline);
 
-  G_OBJECT_CLASS (gbp_meson_introspection_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_meson_introspection_parent_class)->destroy (object);
 }
 
 static void
 gbp_meson_introspection_class_init (GbpMesonIntrospectionClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdePipelineStageClass *pipeline_stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
-  object_class->dispose = gbp_meson_introspection_dispose;
+  i_object_class->destroy = gbp_meson_introspection_destroy;
 
   pipeline_stage_class->query = gbp_meson_introspection_query;
   pipeline_stage_class->build_async = gbp_meson_introspection_build_async;

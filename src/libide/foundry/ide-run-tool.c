@@ -79,7 +79,7 @@ ide_run_tool_real_send_signal (IdeRunTool *self,
 }
 
 static void
-ide_run_tool_dispose (GObject *object)
+ide_run_tool_destroy (IdeObject *object)
 {
   IdeRunTool *self = (IdeRunTool *)object;
   IdeRunToolPrivate *priv = ide_run_tool_get_instance_private (self);
@@ -87,7 +87,7 @@ ide_run_tool_dispose (GObject *object)
   g_clear_object (&priv->subprocess);
   g_clear_pointer (&priv->icon_name, g_free);
 
-  G_OBJECT_CLASS (ide_run_tool_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_run_tool_parent_class)->destroy (object);
 }
 
 static void
@@ -132,10 +132,12 @@ static void
 ide_run_tool_class_init (IdeRunToolClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_run_tool_dispose;
   object_class->get_property = ide_run_tool_get_property;
   object_class->set_property = ide_run_tool_set_property;
+
+  i_object_class->destroy = ide_run_tool_destroy;
 
   klass->force_exit = ide_run_tool_real_force_exit;
   klass->send_signal = ide_run_tool_real_send_signal;

@@ -107,13 +107,13 @@ ide_directory_vcs_is_ignored (IdeVcs  *vcs,
 }
 
 static void
-ide_directory_vcs_dispose (GObject *object)
+ide_directory_vcs_destroy (IdeObject *object)
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)object;
 
   g_clear_object (&self->workdir);
 
-  G_OBJECT_CLASS (ide_directory_vcs_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_directory_vcs_parent_class)->destroy (object);
 }
 
 static void
@@ -143,9 +143,11 @@ static void
 ide_directory_vcs_class_init (IdeDirectoryVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_directory_vcs_dispose;
   object_class->get_property = ide_directory_vcs_get_property;
+
+  i_object_class->destroy = ide_directory_vcs_destroy;
 
   g_object_class_override_property (object_class, PROP_BRANCH_NAME, "branch-name");
   g_object_class_override_property (object_class, PROP_WORKDIR, "workdir");

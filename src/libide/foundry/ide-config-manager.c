@@ -39,7 +39,7 @@
 
 struct _IdeConfigManager
 {
-  GObject           parent_instance;
+  IdeObject         parent_instance;
 
   GCancellable     *cancellable;
   GArray           *configs;
@@ -339,7 +339,7 @@ ide_config_manager_notify_ready (IdeConfigManager *self,
 }
 
 static void
-ide_config_manager_dispose (GObject *object)
+ide_config_manager_destroy (IdeObject *object)
 {
   IdeConfigManager *self = (IdeConfigManager *)object;
 
@@ -356,7 +356,7 @@ ide_config_manager_dispose (GObject *object)
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->project_settings);
 
-  G_OBJECT_CLASS (ide_config_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_config_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -474,11 +474,13 @@ static void
 ide_config_manager_class_init (IdeConfigManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_config_manager_dispose;
   object_class->finalize = ide_config_manager_finalize;
   object_class->get_property = ide_config_manager_get_property;
   object_class->set_property = ide_config_manager_set_property;
+
+  i_object_class->destroy = ide_config_manager_destroy;
 
   properties [PROP_CURRENT] =
     g_param_spec_object ("current",

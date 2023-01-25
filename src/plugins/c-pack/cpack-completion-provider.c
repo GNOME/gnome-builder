@@ -42,22 +42,22 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (CpackCompletionProvider, cpack_completion_provide
                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static void
-cpack_completion_provider_dispose (GObject *object)
+cpack_completion_provider_destroy (IdeObject *object)
 {
   CpackCompletionProvider *self = (CpackCompletionProvider *)object;
 
   g_clear_pointer (&self->word, g_free);
   g_clear_pointer (&self->refilter_word, g_free);
 
-  G_OBJECT_CLASS (cpack_completion_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (cpack_completion_provider_parent_class)->destroy (object);
 }
 
 static void
 cpack_completion_provider_class_init (CpackCompletionProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = cpack_completion_provider_dispose;
+  i_object_class->destroy = cpack_completion_provider_destroy;
 }
 
 static void

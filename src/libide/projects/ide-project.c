@@ -60,21 +60,21 @@ G_DEFINE_FINAL_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 static guint signals [N_SIGNALS];
 
 static void
-ide_project_dispose (GObject *object)
+ide_project_destroy (IdeObject *object)
 {
   IdeProject *self = (IdeProject *)object;
 
   ide_clear_and_destroy_object (&self->similar_file_locators);
 
-  G_OBJECT_CLASS (ide_project_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_project_parent_class)->destroy (object);
 }
 
 static void
 ide_project_class_init (IdeProjectClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_project_dispose;
+  i_object_class->destroy = ide_project_destroy;
 
   signals [FILE_RENAMED] =
     g_signal_new ("file-renamed",

@@ -242,21 +242,21 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdShortcutProvider, gbp_shellcmd_shortcu
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SHORTCUT_PROVIDER, shortcut_provider_iface_init))
 
 static void
-gbp_shellcmd_shortcut_provider_dispose (GObject *object)
+gbp_shellcmd_shortcut_provider_destroy (IdeObject *object)
 {
   GbpShellcmdShortcutProvider *self = (GbpShellcmdShortcutProvider *)object;
 
   g_clear_object (&self->model);
 
-  G_OBJECT_CLASS (gbp_shellcmd_shortcut_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_shellcmd_shortcut_provider_parent_class)->destroy (object);
 }
 
 static void
 gbp_shellcmd_shortcut_provider_class_init (GbpShellcmdShortcutProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_shellcmd_shortcut_provider_dispose;
+  i_object_class->destroy = gbp_shellcmd_shortcut_provider_destroy;
 }
 
 static void

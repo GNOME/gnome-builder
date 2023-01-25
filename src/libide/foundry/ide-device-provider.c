@@ -96,22 +96,22 @@ ide_device_provider_real_device_removed (IdeDeviceProvider *self,
 }
 
 static void
-ide_device_provider_dispose (GObject *object)
+ide_device_provider_destroy (IdeObject *object)
 {
   IdeDeviceProvider *self = (IdeDeviceProvider *)object;
   IdeDeviceProviderPrivate *priv = ide_device_provider_get_instance_private (self);
 
   g_clear_pointer (&priv->devices, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (ide_device_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_device_provider_parent_class)->destroy (object);
 }
 
 static void
 ide_device_provider_class_init (IdeDeviceProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_device_provider_dispose;
+  i_object_class->destroy = ide_device_provider_destroy;
 
   klass->device_added = ide_device_provider_real_device_added;
   klass->device_removed = ide_device_provider_real_device_removed;

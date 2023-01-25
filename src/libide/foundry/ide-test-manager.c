@@ -217,7 +217,7 @@ map_run_command_to_test (gpointer item,
 }
 
 static void
-ide_test_manager_dispose (GObject *object)
+ide_test_manager_destroy (IdeObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
   g_auto(IdePtyFd) fd = IDE_PTY_FD_INVALID;
@@ -232,7 +232,7 @@ ide_test_manager_dispose (GObject *object)
   if (IDE_IS_PTY_INTERCEPT (&self->intercept))
     ide_pty_intercept_clear (&self->intercept);
 
-  G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_test_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -258,9 +258,11 @@ static void
 ide_test_manager_class_init (IdeTestManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_test_manager_dispose;
   object_class->get_property = ide_test_manager_get_property;
+
+  i_object_class->destroy = ide_test_manager_destroy;
 
   /**
    * IdeTestManager:model:

@@ -265,21 +265,21 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, 
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_iface_init))
 
 static void
-gbp_meson_pipeline_addin_dispose (GObject *object)
+gbp_meson_pipeline_addin_destroy (IdeObject *object)
 {
   GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)object;
 
   g_clear_object (&self->introspection);
 
-  G_OBJECT_CLASS (gbp_meson_pipeline_addin_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_meson_pipeline_addin_parent_class)->destroy (object);
 }
 
 static void
 gbp_meson_pipeline_addin_class_init (GbpMesonPipelineAddinClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_meson_pipeline_addin_dispose;
+  i_object_class->destroy = gbp_meson_pipeline_addin_destroy;
 }
 
 static void

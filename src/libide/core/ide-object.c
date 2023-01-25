@@ -89,6 +89,34 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeObject, ide_object, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+static GQueue finalizer_queue = G_QUEUE_INIT;
+static GMutex finalizer_mutex;
+static GSource *finalizer_source;
+
+static gboolean
+ide_object_finalizer_source_check (GSource *source)
+{
+  return finalizer_queue.length > 0;
+}
+
+static gboolean
+ide_object_finalizer_source_dispatch (GSource     *source,
+                                      GSourceFunc  callback,
+                                      gpointer     user_data)
+{
+  while (finalizer_queue.length)
+    {
+      g_autoptr(GObject) object = g_queue_pop_head (&finalizer_queue);
+      g_object_run_dispose (object);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static GSourceFuncs finalizer_source_funcs = {
+  .check = ide_object_finalizer_source_check,
+  .dispatch = ide_object_finalizer_source_dispatch,
+};
 
 static inline void
 ide_object_private_lock (IdeObjectPrivate *priv)
@@ -236,6 +264,7 @@ ide_object_real_destroy (IdeObject *self)
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
   IdeObject *hold = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_OBJECT (self));
 
   /* We already hold the instance lock, for destroy */
@@ -273,17 +302,6 @@ ide_object_real_destroy (IdeObject *self)
     g_object_unref (hold);
 }
 
-static gboolean
-ide_object_destroy_in_main_cb (IdeObject *object)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_OBJECT (object));
-
-  ide_object_destroy (object);
-
-  return G_SOURCE_REMOVE;
-}
-
 void
 ide_object_destroy (IdeObject *self)
 {
@@ -294,40 +312,21 @@ ide_object_destroy (IdeObject *self)
   g_object_ref (self);
   ide_object_private_lock (priv);
 
-  /* If we are not on the main thread, we want to detach from the
-   * object tree and then dispatch the rest of the destroy to the
-   * main thread (so no threaded cleanup can occur).
-   */
-
-  if (IDE_IS_MAIN_THREAD ())
+  if (!IDE_IS_MAIN_THREAD ())
     {
-      g_cancellable_cancel (priv->cancellable);
-      if (!priv->in_destruction && !priv->destroyed)
-        g_object_run_dispose (G_OBJECT (self));
-    }
-  else
-    {
-      g_autoptr(IdeObject) parent = NULL;
-
-      if ((parent = ide_object_ref_parent (self)))
-        ide_object_remove (parent, self);
-
-      g_idle_add_full (G_PRIORITY_LOW + 1000,
-                       (GSourceFunc)ide_object_destroy_in_main_cb,
-                       g_object_ref (self),
-                       g_object_unref);
+      g_mutex_lock (&finalizer_mutex);
+      g_queue_push_tail (&finalizer_queue, g_object_ref (self));
+      g_mutex_unlock (&finalizer_mutex);
+      goto cleanup;
     }
 
+  g_cancellable_cancel (priv->cancellable);
+  if (!priv->in_destruction && !priv->destroyed)
+    g_object_run_dispose (G_OBJECT (self));
+
+cleanup:
   ide_object_private_unlock (priv);
   g_object_unref (self);
-}
-
-static gboolean
-ide_object_dispose_from_main_cb (gpointer user_data)
-{
-  IdeObject *self = user_data;
-  g_object_run_dispose (G_OBJECT (self));
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -338,18 +337,15 @@ ide_object_dispose (GObject *object)
 
   if (!IDE_IS_MAIN_THREAD ())
     {
-      /* We are not on the main thread and might lose our last reference count.
-       * Pass this object to the main thread for disposal. This usually only
-       * happens when an object was temporarily created/destroyed on a thread.
-       */
-      g_idle_add_full (G_PRIORITY_LOW + 1000,
-                       ide_object_dispose_from_main_cb,
-                       g_object_ref (self),
-                       g_object_unref);
+      g_mutex_lock (&finalizer_mutex);
+      g_queue_push_tail (&finalizer_queue, g_object_ref (self));
+      g_mutex_unlock (&finalizer_mutex);
+      g_main_context_wakeup (NULL);
       return;
     }
 
   g_assert (IDE_IS_OBJECT (object));
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   ide_object_private_lock (priv);
 
@@ -371,13 +367,6 @@ ide_object_finalize (GObject *object)
   IdeObject *self = (IdeObject *)object;
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
-  if (!IDE_IS_MAIN_THREAD ())
-    {
-      g_critical ("Attempt to finalize %s on a thread which is not allowed. Leaking instead.",
-                  G_OBJECT_TYPE_NAME (object));
-      return;
-    }
-
   g_assert (priv->parent == NULL);
   g_assert (priv->children.length == 0);
   g_assert (priv->children.head == NULL);
@@ -389,6 +378,16 @@ ide_object_finalize (GObject *object)
   g_rec_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_object_parent_class)->finalize (object);
+}
+
+static void
+ide_object_constructed (GObject *object)
+{
+  if G_UNLIKELY (G_OBJECT_GET_CLASS (object)->dispose != ide_object_dispose)
+    g_critical ("%s overrides dispose. This is not allowed, use destroy instead.",
+                G_OBJECT_TYPE_NAME (object));
+
+  G_OBJECT_CLASS (ide_object_parent_class)->constructed (object);
 }
 
 static void
@@ -447,6 +446,7 @@ ide_object_class_init (IdeObjectClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_object_constructed;
   object_class->dispose = ide_object_dispose;
   object_class->finalize = ide_object_finalize;
   object_class->get_property = ide_object_get_property;
@@ -510,6 +510,14 @@ ide_object_class_init (IdeObjectClass *klass)
   g_signal_set_va_marshaller (signals [DESTROY],
                               G_TYPE_FROM_CLASS (klass),
                               ide_marshal_VOID__VOIDv);
+
+  /* Setup finalizer in main thread to allow passing objects for finalization
+   * across to main thread.
+   */
+  finalizer_source = g_source_new (&finalizer_source_funcs, sizeof (GSource));
+  g_source_set_static_name (finalizer_source, "[ide-object-finalizer]");
+  g_source_set_priority (finalizer_source, G_MAXINT);
+  g_source_attach (finalizer_source, NULL);
 }
 
 static void

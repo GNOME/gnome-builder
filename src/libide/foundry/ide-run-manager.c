@@ -291,7 +291,7 @@ ide_run_manager_unmark_busy (IdeRunManager *self)
 }
 
 static void
-ide_run_manager_dispose (GObject *object)
+ide_run_manager_destroy (IdeObject *object)
 {
   IdeRunManager *self = (IdeRunManager *)object;
 
@@ -304,7 +304,7 @@ ide_run_manager_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->run_command_providers);
   ide_clear_and_destroy_object (&self->run_tools);
 
-  G_OBJECT_CLASS (ide_run_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_run_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -412,9 +412,11 @@ static void
 ide_run_manager_class_init (IdeRunManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_run_manager_dispose;
   object_class->get_property = ide_run_manager_get_property;
+
+  i_object_class->destroy = ide_run_manager_destroy;
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy", NULL, NULL,

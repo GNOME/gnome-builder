@@ -529,7 +529,7 @@ ide_debug_manager_real_breakpoint_reached (IdeDebugManager       *self,
 }
 
 static void
-ide_debug_manager_dispose (GObject *object)
+ide_debug_manager_destroy (IdeObject *object)
 {
   IdeDebugManager *self = (IdeDebugManager *)object;
 
@@ -540,7 +540,7 @@ ide_debug_manager_dispose (GObject *object)
   ide_signal_group_set_target (self->debugger_signals, NULL);
   ide_clear_and_destroy_object (&self->debugger);
 
-  G_OBJECT_CLASS (ide_debug_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_debug_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -600,10 +600,10 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_debug_manager_dispose;
   object_class->finalize = ide_debug_manager_finalize;
   object_class->get_property = ide_debug_manager_get_property;
 
+  i_object_class->destroy = ide_debug_manager_destroy;
   i_object_class->parent_set = ide_debug_manager_parent_set;
 
   /**

@@ -284,13 +284,13 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpPhpizeBuildSystem, gbp_phpize_build_system, ID
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_phpize_build_system_dispose (GObject *object)
+gbp_phpize_build_system_destroy (IdeObject *object)
 {
   GbpPhpizeBuildSystem *self = (GbpPhpizeBuildSystem *)object;
 
   g_clear_object (&self->project_file);
 
-  G_OBJECT_CLASS (gbp_phpize_build_system_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_phpize_build_system_parent_class)->destroy (object);
 }
 
 static void
@@ -335,10 +335,12 @@ static void
 gbp_phpize_build_system_class_init (GbpPhpizeBuildSystemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_phpize_build_system_dispose;
   object_class->get_property = gbp_phpize_build_system_get_property;
   object_class->set_property = gbp_phpize_build_system_set_property;
+
+  i_object_class->destroy = gbp_phpize_build_system_destroy;
 
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",

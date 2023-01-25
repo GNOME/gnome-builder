@@ -137,22 +137,22 @@ ide_xml_highlighter_cursor_moved (IdeXmlHighlighter *self,
 }
 
 static void
-ide_xml_highlighter_dispose (GObject *object)
+ide_xml_highlighter_destroy (IdeObject *object)
 {
   IdeXmlHighlighter *self = (IdeXmlHighlighter *)object;
 
   g_clear_handle_id (&self->highlight_timeout, g_source_remove);
   g_clear_object (&self->buffer_signals);
 
-  G_OBJECT_CLASS (ide_xml_highlighter_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_xml_highlighter_parent_class)->destroy (object);
 }
 
 static void
 ide_xml_highlighter_class_init (IdeXmlHighlighterClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_xml_highlighter_dispose;
+  i_object_class->destroy = ide_xml_highlighter_destroy;
 }
 
 static void

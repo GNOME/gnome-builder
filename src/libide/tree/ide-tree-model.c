@@ -223,7 +223,7 @@ ide_tree_model_parent_set (IdeObject *object,
 }
 
 static void
-ide_tree_model_dispose (GObject *object)
+ide_tree_model_destroy (IdeObject *object)
 {
   IdeTreeModel *self = (IdeTreeModel *)object;
 
@@ -239,7 +239,7 @@ ide_tree_model_dispose (GObject *object)
   g_clear_object (&self->root);
   g_clear_pointer (&self->kind, g_free);
 
-  G_OBJECT_CLASS (ide_tree_model_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_tree_model_parent_class)->destroy (object);
 }
 
 static void
@@ -302,10 +302,10 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_tree_model_dispose;
   object_class->get_property = ide_tree_model_get_property;
   object_class->set_property = ide_tree_model_set_property;
 
+  i_object_class->destroy = ide_tree_model_destroy;
   i_object_class->parent_set = ide_tree_model_parent_set;
 
   properties [PROP_TREE] =

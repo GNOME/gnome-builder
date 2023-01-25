@@ -65,7 +65,7 @@ ide_project_file_repr (IdeObject *object)
 }
 
 static void
-ide_project_file_dispose (GObject *object)
+ide_project_file_destroy (IdeObject *object)
 {
   IdeProjectFile *self = (IdeProjectFile *)object;
   IdeProjectFilePrivate *priv = ide_project_file_get_instance_private (self);
@@ -73,7 +73,7 @@ ide_project_file_dispose (GObject *object)
   g_clear_object (&priv->directory);
   g_clear_object (&priv->info);
 
-  G_OBJECT_CLASS (ide_project_file_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_project_file_parent_class)->destroy (object);
 }
 
 static void
@@ -136,10 +136,10 @@ ide_project_file_class_init (IdeProjectFileClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_project_file_dispose;
   object_class->get_property = ide_project_file_get_property;
   object_class->set_property = ide_project_file_set_property;
 
+  i_object_class->destroy = ide_project_file_destroy;
   i_object_class->repr = ide_project_file_repr;
 
   properties [PROP_DIRECTORY] =

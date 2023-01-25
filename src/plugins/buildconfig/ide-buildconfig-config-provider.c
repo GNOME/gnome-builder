@@ -1034,35 +1034,26 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeBuildconfigConfigProvider,
                                                 configuration_provider_iface_init))
 
 static void
-ide_buildconfig_config_provider_dispose (GObject *object)
+ide_buildconfig_config_provider_destroy (IdeObject *object)
 {
   IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)object;
 
   g_clear_signal_handler (&self->file_change_sig_id, self->file_monitor);
   g_clear_object (&self->file_monitor);
 
-  G_OBJECT_CLASS (ide_buildconfig_config_provider_parent_class)->dispose (object);
-}
-
-static void
-ide_buildconfig_config_provider_finalize (GObject *object)
-{
-  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)object;
-
   g_clear_pointer (&self->mtime, g_date_time_unref);
   g_clear_pointer (&self->configs, g_ptr_array_unref);
   g_clear_pointer (&self->key_file, g_key_file_free);
 
-  G_OBJECT_CLASS (ide_buildconfig_config_provider_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_buildconfig_config_provider_parent_class)->destroy (object);
 }
 
 static void
 ide_buildconfig_config_provider_class_init (IdeBuildconfigConfigProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_buildconfig_config_provider_dispose;
-  object_class->finalize = ide_buildconfig_config_provider_finalize;
+  i_object_class->destroy = ide_buildconfig_config_provider_destroy;
 }
 
 static void

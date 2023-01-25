@@ -819,7 +819,7 @@ ide_highlight_engine_parent_set (IdeObject *object,
 }
 
 static void
-ide_highlight_engine_dispose (GObject *object)
+ide_highlight_engine_destroy (IdeObject *object)
 {
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
 
@@ -830,7 +830,7 @@ ide_highlight_engine_dispose (GObject *object)
   g_clear_object (&self->settings);
   g_clear_pointer (&self->region, _cjh_text_region_free);
 
-  G_OBJECT_CLASS (ide_highlight_engine_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_highlight_engine_parent_class)->destroy (object);
 }
 
 static void
@@ -891,11 +891,11 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_highlight_engine_dispose;
   object_class->finalize = ide_highlight_engine_finalize;
   object_class->get_property = ide_highlight_engine_get_property;
   object_class->set_property = ide_highlight_engine_set_property;
 
+  i_object_class->destroy = ide_highlight_engine_destroy;
   i_object_class->parent_set = ide_highlight_engine_parent_set;
 
   properties [PROP_BUFFER] =

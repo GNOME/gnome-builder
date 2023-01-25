@@ -266,13 +266,13 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangRenameProvider, ide_clang_rename_provider
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_RENAME_PROVIDER, rename_provider_iface_init))
 
 static void
-ide_clang_rename_provider_dispose (GObject *object)
+ide_clang_rename_provider_destroy (IdeObject *object)
 {
   IdeClangRenameProvider *self = (IdeClangRenameProvider *)object;
 
   g_clear_object (&self->buffer);
 
-  G_OBJECT_CLASS (ide_clang_rename_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_clang_rename_provider_parent_class)->destroy (object);
 }
 
 static void
@@ -303,9 +303,11 @@ static void
 ide_clang_rename_provider_class_init (IdeClangRenameProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_clang_rename_provider_dispose;
   object_class->set_property = ide_clang_rename_provider_set_property;
+
+  i_object_class->destroy = ide_clang_rename_provider_destroy;
 
   properties [PROP_BUFFER] =
     g_param_spec_object ("buffer",

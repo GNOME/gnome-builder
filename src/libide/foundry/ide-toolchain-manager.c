@@ -375,7 +375,7 @@ async_initable_iface_init (GAsyncInitableIface *iface)
 }
 
 static void
-ide_toolchain_manager_dispose (GObject *object)
+ide_toolchain_manager_destroy (IdeObject *object)
 {
   IdeToolchainManager *self = (IdeToolchainManager *)object;
 
@@ -383,15 +383,15 @@ ide_toolchain_manager_dispose (GObject *object)
   g_clear_pointer (&self->toolchains, g_ptr_array_unref);
   g_clear_object (&self->cancellable);
 
-  G_OBJECT_CLASS (ide_toolchain_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_toolchain_manager_parent_class)->destroy (object);
 }
 
 static void
 ide_toolchain_manager_class_init (IdeToolchainManagerClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_toolchain_manager_dispose;
+  i_object_class->destroy = ide_toolchain_manager_destroy;
 }
 
 static void

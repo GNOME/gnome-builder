@@ -255,7 +255,7 @@ ide_shortcut_manager_parent_set (IdeObject *object,
 }
 
 static void
-ide_shortcut_manager_dispose (GObject *object)
+ide_shortcut_manager_destroy (IdeObject *object)
 {
   IdeShortcutManager *self = (IdeShortcutManager *)object;
 
@@ -266,17 +266,15 @@ ide_shortcut_manager_dispose (GObject *object)
   g_clear_object (&self->toplevel);
   g_clear_object (&self->flatten);
 
-  G_OBJECT_CLASS (ide_shortcut_manager_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_shortcut_manager_parent_class)->destroy (object);
 }
 
 static void
 ide_shortcut_manager_class_init (IdeShortcutManagerClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_shortcut_manager_dispose;
-
+  i_object_class->destroy = ide_shortcut_manager_destroy;
   i_object_class->parent_set = ide_shortcut_manager_parent_set;
 
   g_type_ensure (IDE_TYPE_SHORTCUT_PROVIDER);

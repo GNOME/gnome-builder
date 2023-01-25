@@ -50,21 +50,21 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_pr
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
 
 static void
-gbp_flatpak_runtime_provider_dispose (GObject *object)
+gbp_flatpak_runtime_provider_destroy (IdeObject *object)
 {
   GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
 
   g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (gbp_flatpak_runtime_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_flatpak_runtime_provider_parent_class)->destroy (object);
 }
 
 static void
 gbp_flatpak_runtime_provider_class_init (GbpFlatpakRuntimeProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_flatpak_runtime_provider_dispose;
+  i_object_class->destroy = gbp_flatpak_runtime_provider_destroy;
 }
 
 static void

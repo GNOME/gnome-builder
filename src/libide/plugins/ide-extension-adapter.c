@@ -315,7 +315,7 @@ ide_extension_adapter__changed_disabled (IdeExtensionAdapter *self,
 }
 
 static void
-ide_extension_adapter_dispose (GObject *object)
+ide_extension_adapter_destroy (IdeObject *object)
 {
   IdeExtensionAdapter *self = (IdeExtensionAdapter *)object;
 
@@ -325,7 +325,7 @@ ide_extension_adapter_dispose (GObject *object)
 
   ide_extension_adapter_monitor (self, NULL);
 
-  G_OBJECT_CLASS (ide_extension_adapter_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_extension_adapter_parent_class)->destroy (object);
 }
 
 static void
@@ -419,11 +419,11 @@ ide_extension_adapter_class_init (IdeExtensionAdapterClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_extension_adapter_dispose;
   object_class->finalize = ide_extension_adapter_finalize;
   object_class->get_property = ide_extension_adapter_get_property;
   object_class->set_property = ide_extension_adapter_set_property;
 
+  i_object_class->destroy = ide_extension_adapter_destroy;
   i_object_class->repr = ide_extension_adapter_repr;
 
   properties [PROP_ENGINE] =

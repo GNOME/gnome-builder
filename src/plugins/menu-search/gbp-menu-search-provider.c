@@ -218,21 +218,21 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMenuSearchProvider, gbp_menu_search_provider, 
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
-gbp_menu_search_provider_dispose (GObject *object)
+gbp_menu_search_provider_destroy (IdeObject *object)
 {
   GbpMenuSearchProvider *self = (GbpMenuSearchProvider *)object;
 
   g_clear_pointer (&self->items, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (gbp_menu_search_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_menu_search_provider_parent_class)->destroy (object);
 }
 
 static void
 gbp_menu_search_provider_class_init (GbpMenuSearchProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_menu_search_provider_dispose;
+  i_object_class->destroy = gbp_menu_search_provider_destroy;
 
   default_gicon = g_themed_icon_new ("preferences-desktop-keyboard-shortcuts-symbolic");
 }

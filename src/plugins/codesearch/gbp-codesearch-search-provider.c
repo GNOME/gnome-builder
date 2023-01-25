@@ -64,17 +64,8 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCodesearchSearchProvider, gbp_codesearch_searc
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
-gbp_codesearch_search_provider_dispose (GObject *object)
-{
-  G_OBJECT_CLASS (gbp_codesearch_search_provider_parent_class)->dispose (object);
-}
-
-static void
 gbp_codesearch_search_provider_class_init (GbpCodesearchSearchProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->dispose = gbp_codesearch_search_provider_dispose;
 }
 
 static void

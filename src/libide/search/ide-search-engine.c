@@ -188,7 +188,7 @@ ide_search_engine_parent_set (IdeObject *object,
 }
 
 static void
-ide_search_engine_dispose (GObject *object)
+ide_search_engine_destroy (IdeObject *object)
 {
   IdeSearchEngine *self = (IdeSearchEngine *)object;
 
@@ -196,7 +196,7 @@ ide_search_engine_dispose (GObject *object)
   g_clear_pointer (&self->custom_provider, g_ptr_array_unref);
   g_clear_object (&self->list);
 
-  G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_search_engine_parent_class)->destroy (object);
 }
 
 static void
@@ -224,9 +224,9 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_search_engine_dispose;
   object_class->get_property = ide_search_engine_get_property;
 
+  i_object_class->destroy = ide_search_engine_destroy;
   i_object_class->parent_set = ide_search_engine_parent_set;
 
   properties [PROP_BUSY] =

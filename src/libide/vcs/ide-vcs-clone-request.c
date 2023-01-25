@@ -99,7 +99,7 @@ ide_vcs_clone_request_set_cloner (IdeVcsCloneRequest *self,
 }
 
 static void
-ide_vcs_clone_request_dispose (GObject *object)
+ide_vcs_clone_request_destroy (IdeObject *object)
 {
   IdeVcsCloneRequest *self = (IdeVcsCloneRequest *)object;
 
@@ -115,7 +115,7 @@ ide_vcs_clone_request_dispose (GObject *object)
   ide_clear_string (&self->module_name);
   ide_clear_string (&self->uri);
 
-  G_OBJECT_CLASS (ide_vcs_clone_request_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_vcs_clone_request_parent_class)->destroy (object);
 }
 
 static void
@@ -212,10 +212,12 @@ static void
 ide_vcs_clone_request_class_init (IdeVcsCloneRequestClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_vcs_clone_request_dispose;
   object_class->get_property = ide_vcs_clone_request_get_property;
   object_class->set_property = ide_vcs_clone_request_set_property;
+
+  i_object_class->destroy = ide_vcs_clone_request_destroy;
 
   properties [PROP_AUTHOR_EMAIL] =
     g_param_spec_string ("author-email", NULL, NULL, NULL,
