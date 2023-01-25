@@ -49,5 +49,7 @@ void               ide_shortcut_bundle_override (IdeShortcutBundle    *bundle,
                                                  const char           *accelerator);
 gboolean           ide_shortcut_is_phase        (GtkShortcut          *shortcut,
                                                  GtkPropagationPhase   phase);
+gboolean           ide_shortcut_is_suppress     (GtkShortcut          *shortcut);
+
 
 G_END_DECLS

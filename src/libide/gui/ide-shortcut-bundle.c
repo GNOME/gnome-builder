@@ -61,6 +61,23 @@ ide_shortcut_new (const char          *action,
   return ret;
 }
 
+static IdeShortcut *
+ide_shortcut_new_supress (TmplExpr            *when,
+                          GtkPropagationPhase  phase)
+{
+  IdeShortcut *ret;
+
+  g_assert (phase == GTK_PHASE_CAPTURE || phase == GTK_PHASE_BUBBLE);
+
+  ret = g_slice_new0 (IdeShortcut);
+  ret->action = g_object_ref (gtk_nothing_action_get ());
+  ret->args = NULL;
+  ret->when = when ? tmpl_expr_ref (when) : NULL;
+  ret->phase = phase;
+
+  return ret;
+}
+
 static void
 ide_shortcut_free (IdeShortcut *shortcut)
 {
@@ -138,6 +155,9 @@ ide_shortcut_activate (GtkWidget *widget,
       if (!g_value_get_boolean (&enabled))
         return FALSE;
     }
+
+  if (GTK_IS_NOTHING_ACTION (shortcut->action))
+    return TRUE;
 
   return gtk_shortcut_action_activate (shortcut->action,
                                        GTK_SHORTCUT_ACTION_EXCLUSIVE,
@@ -233,6 +253,36 @@ ide_shortcut_bundle_new (void)
 }
 
 static gboolean
+get_boolean_member (JsonObject  *obj,
+                    const char  *name,
+                    gboolean    *value,
+                    GError     **error)
+{
+  JsonNode *node;
+
+  *value = FALSE;
+
+  if (!json_object_has_member (obj, name))
+    return TRUE;
+
+  node = json_object_get_member (obj, name);
+
+  if (!JSON_NODE_HOLDS_VALUE (node))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "Key \"%s\" contains something other than a string",
+                   name);
+      return FALSE;
+    }
+
+  *value = json_node_get_boolean (node);
+
+  return TRUE;
+}
+
+static gboolean
 get_string_member (JsonObject  *obj,
                    const char  *name,
                    const char **value,
@@ -312,6 +362,7 @@ populate_from_object (IdeShortcutBundle  *self,
   IdeShortcut *state;
   GtkPropagationPhase phase = 0;
   JsonObject *obj;
+  gboolean supress = FALSE;
 
   g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
   g_assert (node != NULL);
@@ -329,7 +380,8 @@ populate_from_object (IdeShortcutBundle  *self,
       !get_string_member (obj, "args", &args_str, error) ||
       !get_string_member (obj, "command", &command, error) ||
       !get_string_member (obj, "action", &action, error) ||
-      !get_string_member (obj, "phase", &phase_str, error))
+      !get_string_member (obj, "phase", &phase_str, error) ||
+      !get_boolean_member (obj, "supress", &supress, error))
     return FALSE;
 
   if (!(trigger = gtk_shortcut_trigger_parse_string (trigger_str)))
@@ -341,6 +393,9 @@ populate_from_object (IdeShortcutBundle  *self,
                    trigger_str);
       return FALSE;
     }
+
+  if (supress)
+    goto do_parse_when;
 
   if (!ide_str_empty0 (command) && !ide_str_empty0 (action))
     {
@@ -375,6 +430,7 @@ populate_from_object (IdeShortcutBundle  *self,
       action = "context.workbench.command";
     }
 
+do_parse_when:
   if (!ide_str_empty0 (when_str))
     {
       if (!(when = tmpl_expr_from_string (when_str, error)))
@@ -391,7 +447,11 @@ populate_from_object (IdeShortcutBundle  *self,
       return FALSE;
     }
 
-  state = ide_shortcut_new (action, args, when, phase);
+  if (supress)
+    state = ide_shortcut_new_supress (when, phase);
+  else
+    state = ide_shortcut_new (action, args, when, phase);
+
   callback = gtk_callback_action_new (ide_shortcut_activate, state,
                                       (GDestroyNotify) ide_shortcut_free);
   shortcut = gtk_shortcut_new (g_steal_pointer (&trigger),
@@ -528,4 +588,17 @@ ide_shortcut_is_phase (GtkShortcut         *shortcut,
   g_return_val_if_fail (GTK_IS_SHORTCUT (shortcut), FALSE);
 
   return g_object_get_data (G_OBJECT (shortcut), "PHASE") == GUINT_TO_POINTER (phase);
+}
+
+gboolean
+ide_shortcut_is_suppress (GtkShortcut *shortcut)
+{
+  IdeShortcut *state;
+
+  g_return_val_if_fail (GTK_IS_SHORTCUT (shortcut), FALSE);
+
+  if ((state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT")))
+    return GTK_IS_NOTHING_ACTION (state->action);
+
+  return FALSE;
 }
