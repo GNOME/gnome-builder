@@ -124,6 +124,7 @@ subdir('shellcheck')
 subdir('shellcmd')
 subdir('shortcutui')
 subdir('snippets')
+subdir('sourcekit-lsp')
 subdir('spellcheck')
 subdir('sphinx-preview')
 subdir('stylelint')
@@ -233,6 +234,7 @@ status += [
   'lua-language-server ............ (Lua) : @0@'.format(get_option('plugin_lua_language_server')),
   'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
   'serve-d .......................... (D) : @0@'.format(get_option('plugin_serve_d')),
+  'SourceKit .................... (Swift) : @0@'.format(get_option('plugin_sourcekit_lsp')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vala_language_server')),
