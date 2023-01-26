@@ -1,7 +1,7 @@
 # Swedish translation for gnome-builder.
-# Copyright © 2015-2022 gnome-builder's COPYRIGHT HOLDER
+# Copyright © 2015-2023 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Sebastian Rasmussen <sebras@gmail.com>, 2016, 2017.
 # Josef Andersson <josef.andersson@fripost.org>, 2018.
 # Luna Jernberg <droidbittin@gmail.com>, 2020, 2021, 2022.
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-11 23:40+0000\n"
-"PO-Revision-Date: 2022-10-23 23:52+0200\n"
+"POT-Creation-Date: 2023-01-25 17:59+0000\n"
+"PO-Revision-Date: 2023-01-25 19:02+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -238,8 +238,8 @@ msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr "Felsökare ska automatiskt infoga brytpunkt vid main()-funktion."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
-msgstr "Felsökningsbrytpunkt vid g_critical()"
+msgid "Debugger Breakpoint at Criticals"
+msgstr "Felsökningsbrytpunkt vid kritiska"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
@@ -247,13 +247,16 @@ msgid ""
 msgstr "Felsökare ska automatiskt infoga brytpunkt vid g_critical()-funktion."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr "Felsökningsbrytpunkt vid g_warning()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
+msgstr "Felsökningsbrytpunkt vid varningar och kritiska"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
-msgstr "Felsökare ska automatiskt infoga brytpunkt vid g_warning()-funktion."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
+msgstr ""
+"Felsökare ska automatiskt infoga brytpunkt vid g_warning()- och g_critical-"
+"funktion."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -1505,7 +1508,7 @@ msgstr "Ny terminal"
 msgid "Open application menu (F10)"
 msgstr "Öppna programmeny (F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Det går inte att läsa in HTML. Saknar WebKit-stöd."
 
@@ -1785,7 +1788,7 @@ msgid "Code Navigation"
 msgstr "Kodnavigering"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1535
+#: src/libide/sourceview/ide-source-view.c:1628
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1975,6 +1978,21 @@ msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "Ett BuildStream-projekt används men den körbara filen ”bst” kunde inte "
 "hittas."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Använd NYCKEL=VÄRDE för att ställa in en miljövariabel"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Nycklar får inte starta med en siffra"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr "Nycklar får endast innehålla alfanumeriska tecken och understreck."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2488,7 +2506,7 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Bygge och verktyg"
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:357
 msgid "General"
 msgstr "Allmänt"
 
@@ -2528,62 +2546,15 @@ msgstr "Standard"
 msgid "1 per CPU"
 msgstr "1 per processor"
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr "16"
-
-#: src/plugins/buildui/tweaks.ui:275
-msgid "32"
-msgstr "32"
-
-#: src/plugins/buildui/tweaks.ui:281
-msgid "64"
-msgstr "64"
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr "128"
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr "256"
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr "512"
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:325
 msgid "Tooling"
 msgstr "Verktyg"
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:360
 msgid "Installation Prefix"
 msgstr "Installationsprefix"
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:361
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2591,11 +2562,11 @@ msgstr ""
 "Projektet kommer installeras till denna katalog under byggrörledningens "
 "installationsfas."
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
 msgstr "Konfigurationsalternativ"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:392
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2603,11 +2574,11 @@ msgstr ""
 "Dessa alternativ används av byggsystemet för att konfigurera projektet under "
 "byggrörledningens konfigurationsfas"
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
 msgstr "Byggmiljö"
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:415
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -3250,13 +3221,25 @@ msgstr "Indentera med blanksteg"
 msgid "Spaces per Tab"
 msgstr "Blanksteg per tabb"
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -4373,43 +4356,43 @@ msgstr "Ta bort verktygskedja"
 msgid "Delete Tool"
 msgstr "Ta bort verktyg"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr "GNOME-program"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Ett Meson-baserat projekt för GNOME som använder GTK 4 och libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr "GTK 4-program"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr "Ett Meson-baserat projekt som använder GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr "Delat bibliotek"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr "Ett Meson-baserat projekt för ett delat bibliotek"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr "Kommandoradsverktyg"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr "Ett Meson-baserat projekt för ett kommandoradsprogram"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr "Tomt Meson-projekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr "Ett tomt Meson-projektskelett"
 
@@ -4897,18 +4880,6 @@ msgstr ""
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
 msgstr "Tillgängliga SDK:er"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-msgid "Use KEY=VALUE to set an environment variable"
-msgstr "Använd NYCKEL=VÄRDE för att ställa in en miljövariabel"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
-msgid "Keys may not start with a number"
-msgstr "Nycklar får inte starta med en siffra"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
-msgid "Keys may only contain alpha-numerics or underline."
-msgstr "Nycklar får endast innehålla alfanumeriska tecken och understreck."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
@@ -5728,6 +5699,33 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Debugger Breakpoint at g_warning()"
+#~ msgstr "Felsökningsbrytpunkt vid g_warning()"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "16"
+#~ msgstr "16"
+
+#~ msgid "32"
+#~ msgstr "32"
+
+#~ msgid "64"
+#~ msgstr "64"
+
+#~ msgid "128"
+#~ msgstr "128"
+
+#~ msgid "256"
+#~ msgstr "256"
+
+#~ msgid "512"
+#~ msgstr "512"
 
 #~ msgid "Restore Previous Files"
 #~ msgstr "Återställ tidigare filer"
