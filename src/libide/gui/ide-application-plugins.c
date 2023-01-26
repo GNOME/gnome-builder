@@ -412,7 +412,7 @@ _ide_application_load_plugins (IdeApplication *self)
   peas_engine_add_search_path (engine, user_plugins_dir, NULL);
 
   if (self->loaded_typelibs)
-    peas_engine_enable_loader (engine, "python");
+    peas_engine_enable_loader (engine, "gjs");
 
   peas_engine_rescan_plugins (engine);
 
