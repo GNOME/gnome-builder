@@ -87,7 +87,6 @@ ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
       GSettingsSchemaSource *source = g_settings_schema_source_get_default ();
       g_autoptr(GSettingsSchema) schema = NULL;
       g_autoptr(GSettingsSchemaKey) schema_key = NULL;
-      g_autofree char *path = NULL;
       g_autofree char *signal_name = NULL;
       g_autoptr(GVariant) value = NULL;
       const char *project_id = NULL;

@@ -114,7 +114,6 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
 {
   IdeLspPluginService *self = (IdeLspPluginService *)service;
   IdeLspPluginServiceClass *klass = (IdeLspPluginServiceClass *)((GTypeInstance *)service)->g_class;
-  g_autoptr(GVariant) options = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_LSP_SERVICE (self));

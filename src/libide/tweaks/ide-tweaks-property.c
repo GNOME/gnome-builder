@@ -174,7 +174,6 @@ static GtkAdjustment *
 ide_tweaks_property_create_adjustment (IdeTweaksBinding *binding)
 {
   IdeTweaksProperty *self = (IdeTweaksProperty *)binding;
-  g_autoptr(GObject) object = NULL;
   double lower = .0;
   double upper = .0;
   double page_increment = 10.;

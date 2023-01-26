@@ -105,7 +105,6 @@ ide_diagnostic_tool_real_prepare_run_context (IdeDiagnosticTool  *self,
                                               const char         *language_id,
                                               GError            **error)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) workdir = NULL;
   const char *srcdir = NULL;
