@@ -4,11 +4,6 @@
     <property name="expression">
       <lookup name="title" type="IdeTweaksChoice"/>
     </property>
-    <binding name="tooltip-text">
-      <lookup name="title" type="IdeTweaksChoice">
-        <lookup name="selected-item">IdeTweaksComboRow</lookup>
-      </lookup>
-    </binding>
     <property name="list-factory">
       <object class="GtkBuilderListItemFactory">
         <property name="bytes"><![CDATA[
