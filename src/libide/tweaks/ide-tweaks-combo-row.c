@@ -53,6 +53,7 @@ ide_tweaks_combo_row_notify_selected (IdeTweaksComboRow *self,
                                       GParamSpec        *pspec)
 {
   IdeTweaksChoice *choice;
+  const char *tooltip_text = NULL;
 
   g_assert (IDE_IS_TWEAKS_COMBO_ROW (self));
 
@@ -65,6 +66,8 @@ ide_tweaks_combo_row_notify_selected (IdeTweaksComboRow *self,
     {
       GVariant *variant = ide_tweaks_choice_get_value (choice);
       GType type;
+
+      tooltip_text = ide_tweaks_choice_get_title (choice);
 
       if (variant == NULL)
         goto cleanup;
@@ -87,6 +90,8 @@ ide_tweaks_combo_row_notify_selected (IdeTweaksComboRow *self,
 
 cleanup:
   self->selecting_item = FALSE;
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self), tooltip_text);
 }
 
 static void
