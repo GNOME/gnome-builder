@@ -334,7 +334,7 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
       project_file = ide_tree_node_get_item (parent);
       selected = parent;
 
-      ide_tree_select_node (self->tree, parent);
+      ide_tree_set_selected_node (self->tree, parent);
     }
 
   /* Now create our async task to keep track of everything during
@@ -350,7 +350,7 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
                           NULL);
 
   state = g_slice_new0 (NewState);
-  state->needs_collapse = !ide_tree_node_expanded (self->tree, selected);
+  state->needs_collapse = !ide_tree_is_node_expanded (self->tree, selected);
   state->file_type = file_type;
   state->node = g_object_ref (selected);
 
@@ -822,25 +822,18 @@ action_map_set (GActionMap *map,
 void
 _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
 {
-  GtkTreeSelection *selection;
+  IdeTreeNode *node;
   gboolean is_file = FALSE;
   gboolean is_dir = FALSE;
 
   g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
-  if ((selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->tree))))
+  if ((node = ide_tree_get_selected_node (self->tree)))
     {
-      GtkTreeIter iter;
+      GObject *item = ide_tree_node_get_item (node);
 
-      if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-        {
-          IdeTreeModel *model = IDE_TREE_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree)));
-          IdeTreeNode *node = ide_tree_model_get_node (model, &iter);
-          GObject *item = ide_tree_node_get_item (node);
-
-          if ((is_file = IDE_IS_PROJECT_FILE (item)))
-            is_dir = ide_project_file_is_directory (IDE_PROJECT_FILE (item));
-        }
+      if ((is_file = IDE_IS_PROJECT_FILE (item)))
+        is_dir = ide_project_file_is_directory (IDE_PROJECT_FILE (item));
     }
 
   action_map_set (G_ACTION_MAP (self->actions), "new-file",

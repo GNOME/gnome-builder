@@ -39,7 +39,6 @@ struct _GbpProjectTreeAddin
   GObject       parent_instance;
 
   IdeTree      *tree;
-  IdeTreeModel *model;
   GSettings    *settings;
 
   guint         sort_directories_first : 1;
@@ -92,7 +91,7 @@ create_file_node (IdeProjectFile *file)
 
   child = ide_tree_node_new ();
   ide_tree_node_set_item (child, G_OBJECT (file));
-  ide_tree_node_set_display_name (child, ide_project_file_get_display_name (file));
+  ide_tree_node_set_title (child, ide_project_file_get_display_name (file));
   ide_tree_node_set_icon (child, ide_project_file_get_symbolic_icon (file));
   g_object_set (child, "destroy-item", TRUE, NULL);
 
@@ -158,9 +157,9 @@ gbp_project_tree_addin_file_list_children_cb (GObject      *object,
       child = create_file_node (file);
 
       if (last == NULL)
-        ide_tree_node_append (node, child);
+        ide_tree_node_insert_before (child, node, NULL);
       else
-        ide_tree_node_insert_after (last, child);
+        ide_tree_node_insert_after (child, node, last);
 
       last = child;
     }
@@ -205,11 +204,11 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       g_file_info_set_is_symlink (info, FALSE);
       root_file = ide_project_file_new (parent, info);
       files = create_file_node (root_file);
-      ide_tree_node_set_display_name (files, _("Files"));
+      ide_tree_node_set_title (files, _("Files"));
       ide_tree_node_set_icon_name (files, "view-list-symbolic");
       ide_tree_node_set_expanded_icon_name (files, "view-list-symbolic");
       ide_tree_node_set_is_header (files, TRUE);
-      ide_tree_node_append (node, files);
+      ide_tree_node_insert_before (files, node, NULL);
     }
   else if (ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
     {
@@ -274,6 +273,9 @@ traverse_cb (IdeTreeNode *node,
 {
   FindFileNode *find = user_data;
 
+  if (ide_tree_node_get_parent (node) == NULL)
+    return IDE_TREE_NODE_VISIT_CHILDREN;
+
   if (ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
     {
       IdeProjectFile *project_file = ide_tree_node_get_item (node);
@@ -296,7 +298,6 @@ static IdeTreeNode *
 find_file_node (IdeTree *tree,
                 GFile   *file)
 {
-  GtkTreeModel *model;
   IdeTreeNode *root;
   FindFileNode find;
 
@@ -304,8 +305,7 @@ find_file_node (IdeTree *tree,
   g_assert (IDE_IS_TREE (tree));
   g_assert (G_IS_FILE (file));
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree));
-  root = ide_tree_model_get_root (IDE_TREE_MODEL (model));
+  root = ide_tree_get_root (tree);
 
   find.file = file;
   find.node = NULL;
@@ -320,24 +320,35 @@ find_file_node (IdeTree *tree,
   return find.node;
 }
 
+static void
+get_parent (GFile **file)
+{
+  GFile *child = *file;
+  *file = g_file_get_parent (child);
+  g_object_unref (child);
+}
+
 static GList *
 collect_files (GFile *file,
                GFile *stop_at)
 {
-  g_autoptr(GFile) copy = g_object_ref (file);
   GList *list = NULL;
 
-  g_assert (g_file_has_prefix (file, stop_at));
+  g_assert (g_file_equal (file, stop_at) ||
+            g_file_has_prefix (file, stop_at));
 
-  while (!g_file_equal (copy, stop_at))
+  for (GFile *iter = g_object_ref (file); iter; get_parent (&iter))
     {
-      GFile *stolen = g_steal_pointer (&copy);
+      list = g_list_prepend (list, g_object_ref (iter));
 
-      list = g_list_prepend (list, stolen);
-      copy = g_file_get_parent (stolen);
+      if (g_file_equal (iter, stop_at))
+        {
+          g_object_unref (iter);
+          break;
+        }
     }
 
-  return g_steal_pointer (&list);
+  return list;
 }
 
 static int
@@ -364,8 +375,8 @@ node_compare_directories_first (IdeTreeNode *node,
       ide_tree_node_get_children_possible (node))
     return 1;
 
-  child_name = ide_tree_node_get_display_name (child);
-  node_name = ide_tree_node_get_display_name (node);
+  child_name = ide_tree_node_get_title (child);
+  node_name = ide_tree_node_get_title (node);
 
   collated_child = g_utf8_collate_key_for_filename (child_name, -1);
   collated_node = g_utf8_collate_key_for_filename (node_name, -1);
@@ -387,8 +398,8 @@ node_compare (IdeTreeNode *node,
   g_assert (IDE_IS_TREE_NODE (node));
   g_assert (IDE_IS_TREE_NODE (child));
 
-  child_name = ide_tree_node_get_display_name (child);
-  node_name = ide_tree_node_get_display_name (node);
+  child_name = ide_tree_node_get_title (child);
+  node_name = ide_tree_node_get_title (node);
 
   collated_child = g_utf8_collate_key_for_filename (child_name, -1);
   collated_node = g_utf8_collate_key_for_filename (node_name, -1);
@@ -398,13 +409,37 @@ node_compare (IdeTreeNode *node,
   return cmp > 0 ? cmp : 0;
 }
 
+static IdeTreeNode *
+find_child (IdeTreeNode *node,
+            GFile       *file)
+{
+  for (IdeTreeNode *child = ide_tree_node_get_first_child (node);
+       child != NULL;
+       child = ide_tree_node_get_next_sibling (child))
+    {
+      g_autoptr(GFile) f = NULL;
+      IdeProjectFile *pf;
+
+      if (!ide_tree_node_holds (child, IDE_TYPE_PROJECT_FILE))
+        continue;
+
+      pf = ide_tree_node_get_item (child);
+      f = ide_project_file_ref_file (pf);
+
+      if (g_file_equal (f, file))
+        return child;
+    }
+
+  return NULL;
+}
+
 static void
 gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
                                  GFile               *file)
 {
   g_autolist(GFile) list = NULL;
   g_autoptr(GFile) workdir = NULL;
-  IdeTreeNode *parent = NULL;
+  IdeTreeNode *parent;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -427,58 +462,46 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
     return;
 
   list = collect_files (file, workdir);
+  parent = ide_tree_get_root (self->tree);
 
   for (const GList *iter = list; iter; iter = iter->next)
     {
-      GFile *item = iter->data;
-      g_autoptr(IdeProjectFile) project_file = NULL;
-      g_autoptr(GFileInfo) info = NULL;
-      g_autoptr(IdeTreeNode) node = NULL;
-      g_autoptr(GFile) directory = NULL;
+      GFile *part = iter->data;
+      IdeTreeNode *node;
 
-      g_assert (G_IS_FILE (item));
-
-      if ((parent = find_file_node (self->tree, item)))
-        {
-          IdeTreeNode *child;
-
-          if (!ide_tree_node_expanded (self->tree, parent))
-            IDE_EXIT;
-
-          /* Remove empty children if necessary */
-          if (ide_tree_node_get_n_children (parent) == 1 &&
-              (child = ide_tree_node_get_nth_child (parent, 0)) &&
-              ide_tree_node_is_empty (child))
-            ide_tree_node_remove (parent, child);
-
-          continue;
-        }
-
-      directory = g_file_get_parent (item);
-      parent = find_file_node (self->tree, directory);
-
-      /* Nothing to do, no ancestor to attach child */
-      if (parent == NULL)
+      /* If node is not expanded (and not the root), then we
+       * can bail immediately.
+       */
+      if (ide_tree_node_get_parent (parent) &&
+          !ide_tree_is_node_expanded (self->tree, parent))
         break;
 
-      info = g_file_query_info (item,
-                                IDE_PROJECT_FILE_ATTRIBUTES,
-                                G_FILE_QUERY_INFO_NONE,
-                                NULL, NULL);
+      if (!(node = find_child (parent, part)))
+        {
+          g_autoptr(IdeProjectFile) project_file = NULL;
+          g_autoptr(GFileInfo) info = NULL;
+          g_autoptr(GFile) directory = NULL;
 
-      if (info == NULL)
-        IDE_EXIT;
+          info = g_file_query_info (part,
+                                    IDE_PROJECT_FILE_ATTRIBUTES,
+                                    G_FILE_QUERY_INFO_NONE,
+                                    NULL, NULL);
 
-      project_file = ide_project_file_new (directory, info);
-      node = create_file_node (project_file);
+          if (iter->prev)
+            directory = g_object_ref (iter->prev->data);
+          else
+            directory = g_file_get_parent (part);
 
-      if (self->sort_directories_first)
-        ide_tree_node_insert_sorted (parent, node, node_compare_directories_first);
-      else
-        ide_tree_node_insert_sorted (parent, node, node_compare);
+          project_file = ide_project_file_new (directory, info);
+          node = create_file_node (project_file);
+          if (self->sort_directories_first)
+            ide_tree_node_insert_sorted (parent, node, node_compare_directories_first);
+          else
+            ide_tree_node_insert_sorted (parent, node, node_compare);
+          g_object_unref (node);
+        }
 
-      if (!ide_tree_node_expanded (self->tree, parent))
-        ide_tree_expand_node (self->tree, parent);
+      parent = node;
     }
 
   IDE_EXIT;
@@ -508,11 +531,6 @@ gbp_project_tree_addin_remove_file (GbpProjectTreeAddin *self,
       IdeTreeNode *parent = ide_tree_node_get_parent (selected);
 
       ide_tree_node_remove (parent, selected);
-
-      /* Force the parent node to re-add the Empty child */
-      if (ide_tree_node_get_children_possible (parent) &&
-          ide_tree_node_get_n_children (parent) == 0)
-        _ide_tree_node_remove_all (parent);
     }
 
   IDE_EXIT;
@@ -545,25 +563,21 @@ gbp_project_tree_addin_reloaded_cb (GbpProjectTreeAddin *self,
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
   g_assert (IDE_IS_VCS_MONITOR (monitor));
 
-  gtk_widget_queue_resize (GTK_WIDGET (self->tree));
+  /* TODO: Need to update visible tree node flags */
 }
 
 static void
 gbp_project_tree_addin_load (IdeTreeAddin *addin,
-                             IdeTree      *tree,
-                             IdeTreeModel *model)
+                             IdeTree      *tree)
 {
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
   IdeVcsMonitor *monitor;
   IdeWorkbench *workbench;
-  g_autoptr(GdkContentFormats) formats = NULL;
-  GdkContentFormatsBuilder *builder;
 
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
-  g_assert (IDE_IS_TREE_MODEL (model));
+  g_assert (IDE_IS_TREE (tree));
 
   self->tree = tree;
-  self->model = model;
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
   monitor = ide_workbench_get_vcs_monitor (workbench);
@@ -579,33 +593,18 @@ gbp_project_tree_addin_load (IdeTreeAddin *addin,
                            G_CALLBACK (gbp_project_tree_addin_reloaded_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
-  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TREE_ROW_DATA);
-  formats = gdk_content_formats_builder_free_to_formats (builder);
-
-  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tree),
-                                          GDK_BUTTON1_MASK,
-                                          formats,
-                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tree),
-                                        formats,
-                                        GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
 static void
 gbp_project_tree_addin_unload (IdeTreeAddin *addin,
-                               IdeTree      *tree,
-                               IdeTreeModel *model)
+                               IdeTree      *tree)
 {
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
 
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
-  g_assert (IDE_IS_TREE_MODEL (model));
+  g_assert (IDE_IS_TREE (tree));
 
   self->tree = NULL;
-  self->model = NULL;
 }
 
 static gboolean
@@ -753,7 +752,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
            * open it up in IdeProject.
            */
 
-          context = ide_object_get_context (IDE_OBJECT (self->model));
+          context = ide_widget_get_context (GTK_WIDGET (self->tree));
           project = ide_project_from_context (context);
 
           for (guint i = 0; i < sources->len; i++)
@@ -880,7 +879,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
                            notif,
                            0);
 
-  context = ide_object_get_context (IDE_OBJECT (self->model));
+  context = ide_widget_get_context (GTK_WIDGET (self->tree));
   buffer_manager = ide_buffer_manager_from_context (context);
 
   for (guint i = 0; i < srcs->len; i++)
@@ -928,7 +927,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   ide_notification_set_title (notif, _("Copying files…"));
   ide_notification_set_body (notif, _("Files will be copied in a moment"));
   ide_notification_set_has_progress (notif, TRUE);
-  ide_notification_attach (notif, IDE_OBJECT (self->model));
+  ide_notification_attach (notif, IDE_OBJECT (context));
   ide_task_set_task_data (task, g_object_ref (notif), g_object_unref);
 
   ide_file_transfer_execute_async (transfer,
@@ -983,12 +982,12 @@ gbp_project_tree_addin_settings_changed (GbpProjectTreeAddin *self,
   self->sort_directories_first = g_settings_get_boolean (self->settings, "sort-directories-first");
   self->show_ignored_files = g_settings_get_boolean (self->settings, "show-ignored-files");
 
-  if (self->model != NULL)
-    ide_tree_model_invalidate (self->model, NULL);
+  if (self->tree != NULL)
+    ide_tree_invalidate_all (self->tree);
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpProjectTreeAddin, gbp_project_tree_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void
 gbp_project_tree_addin_dispose (GObject *object)

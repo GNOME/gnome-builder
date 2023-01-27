@@ -37,15 +37,50 @@ struct _GbpVcsuiTreeAddin
   GObject        parent_instance;
 
   IdeTree       *tree;
-  IdeTreeModel  *model;
   IdeVcs        *vcs;
   IdeVcsMonitor *monitor;
 };
 
 static void
+gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
+                                 IdeTreeNode  *node)
+{
+  GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
+  GObject *item;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
+  g_assert (IDE_IS_TREE_NODE (node));
+
+  item = ide_tree_node_get_item (node);
+
+  if (IDE_IS_PROJECT_FILE (item))
+    {
+      g_autoptr(GFile) file = ide_project_file_ref_file (IDE_PROJECT_FILE (item));
+      g_autoptr(IdeVcsFileInfo) info = ide_vcs_monitor_ref_info (self->monitor, file);
+      IdeTreeNodeFlags flags = ide_tree_node_get_flags (node);
+
+      flags &= ~(IDE_TREE_NODE_FLAGS_ADDED|IDE_TREE_NODE_FLAGS_CHANGED);
+
+      if (info != NULL)
+        {
+          IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
+
+          if (status == IDE_VCS_FILE_STATUS_ADDED)
+            flags |= IDE_TREE_NODE_FLAGS_ADDED;
+          else if (status == IDE_VCS_FILE_STATUS_CHANGED)
+            flags |= IDE_TREE_NODE_FLAGS_CHANGED;
+          else if (status == IDE_VCS_FILE_STATUS_DELETED)
+            flags |= IDE_TREE_NODE_FLAGS_REMOVED;
+        }
+
+      ide_tree_node_set_flags (node, flags);
+    }
+}
+
+static void
 gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
-                           IdeTree      *tree,
-                           IdeTreeModel *model)
+                           IdeTree      *tree)
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
   IdeVcsMonitor *monitor;
@@ -55,9 +90,7 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_MODEL (model));
 
-  self->model = model;
   self->tree = tree;
 
   if ((workbench = ide_widget_get_workbench (GTK_WIDGET (tree))) &&
@@ -66,79 +99,31 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
     {
       self->vcs = g_object_ref (vcs);
       self->monitor = g_object_ref (monitor);
-      g_signal_connect_object (self->monitor,
-                               "changed",
-                               G_CALLBACK (gtk_widget_queue_draw),
-                               tree,
-                               G_CONNECT_SWAPPED);
     }
 }
 
 static void
 gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
-                             IdeTree      *tree,
-                             IdeTreeModel *model)
+                             IdeTree      *tree)
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_MODEL (model));
 
   g_clear_object (&self->monitor);
   g_clear_object (&self->vcs);
 
-  self->model = NULL;
   self->tree = NULL;
-}
-
-static void
-gbp_vcsui_tree_addin_cell_data_func (IdeTreeAddin    *addin,
-                                     IdeTreeNode     *node,
-                                     GtkCellRenderer *cell)
-{
-  GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
-  g_autoptr(IdeVcsFileInfo) info = NULL;
-  g_autoptr(GFile) file = NULL;
-  IdeProjectFile *project_file;
-  IdeTreeNodeFlags flags = 0;
-
-  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
-  g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (GTK_IS_CELL_RENDERER (cell));
-
-  if (self->monitor == NULL)
-    return;
-
-  if (!ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
-    return;
-
-  project_file = ide_tree_node_get_item (node);
-  file = ide_project_file_ref_file (project_file);
-
-  if ((info = ide_vcs_monitor_ref_info (self->monitor, file)))
-    {
-      IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
-
-      if (status == IDE_VCS_FILE_STATUS_ADDED)
-        flags = IDE_TREE_NODE_FLAGS_ADDED;
-      else if (status == IDE_VCS_FILE_STATUS_CHANGED)
-        flags = IDE_TREE_NODE_FLAGS_CHANGED;
-
-      if (flags && ide_tree_node_has_child (node))
-        flags |= IDE_TREE_NODE_FLAGS_DESCENDANT;
-    }
-
-  ide_tree_node_set_flags (node, flags);
 }
 
 static void
 tree_addin_iface_init (IdeTreeAddinInterface *iface)
 {
-  iface->cell_data_func = gbp_vcsui_tree_addin_cell_data_func;
   iface->load = gbp_vcsui_tree_addin_load;
   iface->unload = gbp_vcsui_tree_addin_unload;
+  iface->build_node = gbp_vcsui_tree_addin_build_node;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiTreeAddin, gbp_vcsui_tree_addin, G_TYPE_OBJECT,

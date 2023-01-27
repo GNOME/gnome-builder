@@ -49,7 +49,6 @@ gbp_project_tree_pane_class_init (GbpProjectTreePaneClass *klass)
 static void
 gbp_project_tree_pane_init (GbpProjectTreePane *self)
 {
-  GtkTreeSelection *selection;
   IdeApplication *app;
   GMenu *menu;
 
@@ -57,11 +56,10 @@ gbp_project_tree_pane_init (GbpProjectTreePane *self)
 
   app = IDE_APPLICATION_DEFAULT;
   menu = ide_application_get_menu_by_id (IDE_APPLICATION (app), "project-tree-menu");
-  ide_tree_set_context_menu (self->tree, menu);
+  ide_tree_set_menu_model (self->tree, G_MENU_MODEL (menu));
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->tree));
-  g_signal_connect_object (selection,
-                           "changed",
+  g_signal_connect_object (self->tree,
+                           "notify::selected-node",
                            G_CALLBACK (_gbp_project_tree_pane_update_actions),
                            self,
                            G_CONNECT_SWAPPED);

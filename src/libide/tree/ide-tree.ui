@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTree" parent="GtkWidget">
+    <child>
+      <object class="GtkScrolledWindow" id="scroller">
+        <property name="hscrollbar-policy">never</property>
+        <child>
+          <object class="GtkListView" id="list_view">
+            <signal name="activate" handler="ide_tree_activate_cb" swapped="true" object="IdeTree"/>
+            <property name="orientation">vertical</property>
+            <property name="model">
+              <object class="GtkSingleSelection" id="selection">
+                <signal name="notify::selected" handler="ide_tree_notify_selected_cb" swapped="true" object="IdeTree"/>
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkSignalListItemFactory">
+                <signal name="bind" handler="ide_tree_list_item_bind_cb" swapped="true" object="IdeTree"/>
+                <signal name="setup" handler="ide_tree_list_item_setup_cb" swapped="true" object="IdeTree"/>
+                <signal name="teardown" handler="ide_tree_list_item_teardown_cb" swapped="true" object="IdeTree"/>
+                <signal name="unbind" handler="ide_tree_list_item_unbind_cb" swapped="true" object="IdeTree"/>
+              </object>
+            </property>
+            <style>
+              <class name="navigation-sidebar"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

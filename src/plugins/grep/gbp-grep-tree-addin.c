@@ -70,8 +70,7 @@ find_in_files_action (GSimpleAction *action,
 
 static void
 gbp_grep_tree_addin_load (IdeTreeAddin *addin,
-                          IdeTree      *tree,
-                          IdeTreeModel *model)
+                          IdeTree      *tree)
 {
   static const GActionEntry actions[] = {
     { "find-in-files", find_in_files_action },
@@ -83,7 +82,6 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GREP_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_MODEL (model));
 
   self->tree = tree;
 
@@ -102,15 +100,13 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
 
 static void
 gbp_grep_tree_addin_unload (IdeTreeAddin *addin,
-                            IdeTree      *tree,
-                            IdeTreeModel *model)
+                            IdeTree      *tree)
 {
   GbpGrepTreeAddin *self = (GbpGrepTreeAddin *)addin;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GREP_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
-  g_assert (IDE_IS_TREE_MODEL (model));
 
   gtk_widget_insert_action_group (GTK_WIDGET (tree), "grep", NULL);
   g_clear_object (&self->group);

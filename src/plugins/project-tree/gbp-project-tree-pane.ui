@@ -2,18 +2,9 @@
 <interface>
   <template class="GbpProjectTreePane" parent="IdePane">
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="visible">true</property>
-        <child>
-          <object class="GbpProjectTree" id="tree">
-            <property name="level-indentation">16</property>
-            <property name="visible">true</property>
-            <style>
-              <class name="project-tree"/>
-              <class name="navigation-sidebar"/>
-            </style>
-          </object>
-        </child>
+      <object class="GbpProjectTree" id="tree">
+        <property name="kind">project-tree</property>
+        <property name="vexpand">true</property>
       </object>
     </child>
   </template>

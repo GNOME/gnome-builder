@@ -1,6 +1,6 @@
 /* ide-tree-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,54 +20,30 @@
 
 #pragma once
 
+#include <libide-plugins.h>
+
 #include "ide-tree.h"
 #include "ide-tree-node.h"
-#include "ide-tree-model.h"
 
 G_BEGIN_DECLS
 
-GdkDragAction _ide_tree_get_drop_actions              (IdeTree         *tree);
-IdeTreeModel *_ide_tree_model_new                     (IdeTree         *tree);
-IdeTreeNode  *_ide_tree_get_drop_node                 (IdeTree         *tree);
-void          _ide_tree_model_release_addins          (IdeTreeModel    *self);
-void          _ide_tree_model_selection_changed       (IdeTreeModel    *model,
-                                                       GtkTreeIter     *selection);
-void          _ide_tree_model_build_node              (IdeTreeModel    *self,
-                                                       IdeTreeNode     *node);
-gboolean      _ide_tree_model_row_activated           (IdeTreeModel    *self,
-                                                       IdeTree         *tree,
-                                                       GtkTreePath     *path);
-void          _ide_tree_model_row_expanded            (IdeTreeModel    *self,
-                                                       IdeTree         *tree,
-                                                       GtkTreePath     *path);
-void          _ide_tree_model_row_collapsed           (IdeTreeModel    *self,
-                                                       IdeTree         *tree,
-                                                       GtkTreePath     *path);
-void          _ide_tree_model_cell_data_func          (IdeTreeModel    *self,
-                                                       GtkTreeIter     *iter,
-                                                       GtkCellRenderer *cell);
-gboolean      _ide_tree_model_contains_node           (IdeTreeModel    *self,
-                                                       IdeTreeNode     *node);
-gboolean      _ide_tree_node_get_loading              (IdeTreeNode     *self,
-                                                       gint64          *loading_started_at);
-void          _ide_tree_node_set_loading              (IdeTreeNode     *self,
-                                                       gboolean         loading);
-void          _ide_tree_node_dump                     (IdeTreeNode     *self);
-void          _ide_tree_node_remove_all               (IdeTreeNode     *self);
-void          _ide_tree_node_set_model                (IdeTreeNode     *self,
-                                                       IdeTreeModel    *model);
-gboolean      _ide_tree_node_get_needs_build_children (IdeTreeNode     *self);
-void          _ide_tree_node_set_needs_build_children (IdeTreeNode     *self,
-                                                       gboolean         needs_build_children);
-void          _ide_tree_node_show_popover             (IdeTreeNode     *node,
-                                                       IdeTree         *tree,
-                                                       GtkPopover      *popover);
-GIcon        *_ide_tree_node_apply_emblems            (IdeTreeNode     *self,
-                                                       GIcon           *base);
-void          _ide_tree_node_apply_colors             (IdeTreeNode     *self,
-                                                       GtkCellRenderer *cell);
-void          _ide_tree_node_get_area                 (IdeTreeNode     *self,
-                                                       IdeTree         *tree,
-                                                       GdkRectangle    *area);
+GtkTreeListRow *_ide_tree_get_row_at_node      (IdeTree                 *self,
+                                                IdeTreeNode             *node,
+                                                gboolean                 expand_to_row);
+gboolean        _ide_tree_node_children_built  (IdeTreeNode             *self);
+guint           _ide_tree_node_get_child_index (IdeTreeNode             *parent,
+                                                IdeTreeNode             *child);
+IdeTree        *_ide_tree_node_get_tree        (IdeTreeNode             *self);
+void            _ide_tree_node_collapsed       (IdeTreeNode             *self);
+void            _ide_tree_node_expand_async    (IdeTreeNode             *self,
+                                                IdeExtensionSetAdapter  *addins,
+                                                GCancellable            *cancellable,
+                                                GAsyncReadyCallback      callback,
+                                                gpointer                 user_data);
+gboolean        _ide_tree_node_expand_finish   (IdeTreeNode             *self,
+                                                GAsyncResult            *result,
+                                                GError                 **error);
+gboolean        _ide_tree_node_show_popover    (IdeTreeNode             *self,
+                                                GtkPopover              *popover);
 
 G_END_DECLS

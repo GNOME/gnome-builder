@@ -1,6 +1,6 @@
 /* ide-tree-addin.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -219,28 +219,24 @@ ide_tree_addin_node_activated (IdeTreeAddin *self,
 
 void
 ide_tree_addin_load (IdeTreeAddin *self,
-                     IdeTree      *tree,
-                     IdeTreeModel *model)
+                     IdeTree      *tree)
 {
   g_return_if_fail (IDE_IS_TREE_ADDIN (self));
   g_return_if_fail (IDE_IS_TREE (tree));
-  g_return_if_fail (IDE_IS_TREE_MODEL (model));
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->load)
-    IDE_TREE_ADDIN_GET_IFACE (self)->load (self, tree, model);
+    IDE_TREE_ADDIN_GET_IFACE (self)->load (self, tree);
 }
 
 void
 ide_tree_addin_unload (IdeTreeAddin *self,
-                       IdeTree      *tree,
-                       IdeTreeModel *model)
+                       IdeTree      *tree)
 {
   g_return_if_fail (IDE_IS_TREE_ADDIN (self));
   g_return_if_fail (IDE_IS_TREE (tree));
-  g_return_if_fail (IDE_IS_TREE_MODEL (model));
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->unload)
-    IDE_TREE_ADDIN_GET_IFACE (self)->unload (self, tree, model);
+    IDE_TREE_ADDIN_GET_IFACE (self)->unload (self, tree);
 }
 
 void
@@ -342,17 +338,4 @@ ide_tree_addin_node_dropped_finish (IdeTreeAddin  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_finish (self, result, error);
-}
-
-void
-ide_tree_addin_cell_data_func (IdeTreeAddin    *self,
-                               IdeTreeNode     *node,
-                               GtkCellRenderer *cell)
-{
-  g_return_if_fail (IDE_IS_TREE_ADDIN (self));
-  g_return_if_fail (IDE_IS_TREE_NODE (node));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  if (IDE_TREE_ADDIN_GET_IFACE (self)->cell_data_func)
-    IDE_TREE_ADDIN_GET_IFACE (self)->cell_data_func (self, node, cell);
 }

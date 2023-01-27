@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libide-tree">
+    <file preprocess="xml-stripblanks">ide-tree.ui</file>
+  </gresource>
+</gresources>
