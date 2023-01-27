@@ -54,6 +54,7 @@ enum {
   PROP_MENU_MODEL,
   PROP_SUFFIX,
   PROP_TITLE,
+  PROP_USE_MARKUP,
   N_PROPS
 };
 
@@ -262,6 +263,10 @@ ide_tree_expander_get_property (GObject    *object,
       g_value_set_string (value, ide_tree_expander_get_title (self));
       break;
 
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, ide_tree_expander_get_use_markup (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -307,6 +312,10 @@ ide_tree_expander_set_property (GObject      *object,
 
     case PROP_TITLE:
       ide_tree_expander_set_title (self, g_value_get_string (value));
+      break;
+
+    case PROP_USE_MARKUP:
+      ide_tree_expander_set_use_markup (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -377,6 +386,11 @@ ide_tree_expander_class_init (IdeTreeExpanderClass *klass)
     g_param_spec_string ("title", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -694,4 +708,27 @@ ide_tree_expander_set_list_row (IdeTreeExpander *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPANDED]);
 
   g_object_thaw_notify (G_OBJECT (self));
+}
+
+gboolean
+ide_tree_expander_get_use_markup (IdeTreeExpander *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_EXPANDER (self), FALSE);
+
+  return gtk_label_get_use_markup (GTK_LABEL (self->title));
+}
+
+void
+ide_tree_expander_set_use_markup (IdeTreeExpander *self,
+                                  gboolean         use_markup)
+{
+  g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
+
+  use_markup = !!use_markup;
+
+  if (use_markup != ide_tree_expander_get_use_markup (self))
+    {
+      gtk_label_set_use_markup (GTK_LABEL (self->title), use_markup);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_MARKUP]);
+    }
 }
