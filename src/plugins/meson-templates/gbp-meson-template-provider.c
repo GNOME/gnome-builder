@@ -51,6 +51,7 @@ typedef struct _GbpMesonTemplateInfo
 static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "meson.build",                                         "meson.build" },
   { "flatpak.json",                                        "{{appid}}.json" },
+  { "README.md",                                           "README.md" },
   { "data/hello.desktop.in",                               "data/{{appid}}.desktop.in" },
   { "data/hello.appdata.xml.in",                           "data/{{appid}}.appdata.xml.in" },
   { "data/hello.gschema.xml",                              "data/{{appid}}.gschema.xml" },
@@ -118,6 +119,7 @@ static const GbpMesonTemplateLanguageScope gtk4_language_scope[] = {
 
 static GbpMesonTemplateExpansion library_expansions[] = {
   { "meson.build", "meson.build" },
+  { "README.md", "README.md" },
   { "src/meson-clib.build", "src/meson.build" },
   { "src/hello.c", "src/{{name}}.c" },
   { "src/hello.h", "src/{{name}}.h" },
@@ -127,6 +129,7 @@ static GbpMesonTemplateExpansion library_expansions[] = {
 static GbpMesonTemplateExpansion cli_expansions[] = {
   /* Shared */
   { "meson.build", "meson.build" },
+  { "README.md", "README.md" },
 
   /* C */
   { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("C") },
@@ -155,6 +158,7 @@ static GbpMesonTemplateExpansion cli_expansions[] = {
 static GbpMesonTemplateExpansion empty_expansions[] = {
   /* Shared */
   { "meson.build", "meson.build" },
+  { "README.md", "README.md" },
   { "src/meson-empty.build", "src/meson.build" },
 
   /* Rust */
