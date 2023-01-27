@@ -27,6 +27,7 @@
 #include "ide-content-type.h"
 
 static gchar bundled_lookup_table[256];
+static GIcon *x_zerosize_icon;
 static GHashTable *bundled_by_content_type;
 static GHashTable *bundled_by_full_filename;
 /* This ensures those files get a proper icon when they end with .md
@@ -122,6 +123,8 @@ ide_io_init_ctor (void)
   /* Create faster check than doing full string checks */
   for (guint i = 0; i < G_N_ELEMENTS (bundled_check_by_name_prefix); i++)
     bundled_lookup_table[(guint)bundled_check_by_name_prefix[i].searched_prefix[0]] = 1;
+
+  x_zerosize_icon = g_themed_icon_new ("text-x-generic-symbolic");
 }
 
 /**
@@ -157,6 +160,8 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
    */
   if (strcmp (content_type, "inode/directory") == 0)
     return g_content_type_get_symbolic_icon (content_type);
+  else if (strcmp (content_type, "application/x-zerosize") == 0)
+    return g_object_ref (x_zerosize_icon);
 
   /* Special case some weird content-types in the wild, particularly when Wine is
    * installed and taking over a content-type we would otherwise not expect.
