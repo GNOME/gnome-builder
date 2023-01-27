@@ -76,5 +76,8 @@ gboolean        ide_tree_expander_get_use_markup         (IdeTreeExpander *self)
 IDE_AVAILABLE_IN_44
 void            ide_tree_expander_set_use_markup         (IdeTreeExpander *self,
                                                           gboolean         use_markup);
+IDE_AVAILABLE_IN_44
+void            ide_tree_expander_show_popover           (IdeTreeExpander *self,
+                                                          GtkPopover      *popover);
 
 G_END_DECLS

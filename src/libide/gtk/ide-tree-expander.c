@@ -39,6 +39,8 @@ struct _IdeTreeExpander
   GIcon           *icon;
   GIcon           *expanded_icon;
 
+  GtkPopover      *popover;
+
   gulong           list_row_notify_expanded;
 };
 
@@ -411,6 +413,7 @@ ide_tree_expander_init (IdeTreeExpander *self)
 
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "halign", GTK_ALIGN_START,
+                              "hexpand", TRUE,
                               "ellipsize", PANGO_ELLIPSIZE_END,
                               "margin-start", 3,
                               "margin-end", 3,
@@ -731,4 +734,66 @@ ide_tree_expander_set_use_markup (IdeTreeExpander *self,
       gtk_label_set_use_markup (GTK_LABEL (self->title), use_markup);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_MARKUP]);
     }
+}
+
+static gboolean
+ide_tree_expander_remove_popover_idle (gpointer user_data)
+{
+  GtkPopover *popover = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GTK_IS_POPOVER (popover));
+
+  gtk_widget_unparent (GTK_WIDGET (popover));
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_tree_expander_popover_closed_cb (IdeTreeExpander *self,
+                                     GtkPopover      *popover)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  if (self->popover == popover)
+    {
+      /* We don't want to unparent the widget immediately because it gets
+       * closed _BEFORE_ executing GAction. So removing it will cause the
+       * actions to be unavailable.
+       *
+       * Instead, defer to an idle where we remove the popover.
+       */
+      g_idle_add_full (G_PRIORITY_HIGH,
+                       ide_tree_expander_remove_popover_idle,
+                       g_object_ref (popover),
+                       g_object_unref);
+      self->popover = NULL;
+    }
+}
+
+void
+ide_tree_expander_show_popover (IdeTreeExpander *self,
+                                GtkPopover      *popover)
+{
+  g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  gtk_widget_set_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
+
+  g_signal_connect_object (popover,
+                           "closed",
+                           G_CALLBACK (ide_tree_expander_popover_closed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  if (self->popover != NULL)
+    gtk_popover_popdown (self->popover);
+
+  self->popover = popover;
+
+  gtk_popover_popup (popover);
 }
