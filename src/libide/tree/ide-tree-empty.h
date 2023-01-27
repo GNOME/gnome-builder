@@ -1,6 +1,6 @@
-/* ide-cell-renderer-status.h
+/* ide-tree-empty.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
 #include "ide-tree-node.h"
 
 G_BEGIN_DECLS
 
-GtkCellRenderer *ide_cell_renderer_status_new       (void);
-void             ide_cell_renderer_status_set_flags (GtkCellRenderer  *cell,
-                                                     IdeTreeNodeFlags  flags);
+#define IDE_TYPE_TREE_EMPTY (ide_tree_empty_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeTreeEmpty, ide_tree_empty, IDE, TREE_EMPTY, GObject)
+
+GListModel *ide_tree_empty_new (IdeTreeNode *node);
 
 G_END_DECLS

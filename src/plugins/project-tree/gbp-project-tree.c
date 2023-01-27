@@ -52,53 +52,21 @@ locate_project_files (IdeTreeNode *node,
 }
 
 static void
-project_files_expanded_cb (GObject      *object,
-                           GAsyncResult *result,
-                           gpointer      user_data)
-{
-  IdeTreeModel *model = (IdeTreeModel *)object;
-  g_autoptr(IdeTask) task = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_MODEL (model));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  if (ide_tree_model_expand_finish (model, result, NULL))
-    {
-      g_autoptr(GtkTreePath) path = NULL;
-      GbpProjectTree *self;
-      IdeTreeNode *node;
-
-      self = ide_task_get_source_object (task);
-      node = ide_task_get_task_data (task);
-
-      g_assert (GBP_IS_PROJECT_TREE (self));
-      g_assert (IDE_IS_TREE_NODE (node));
-
-      if ((path = ide_tree_node_get_path (node)))
-        gtk_tree_view_expand_row (GTK_TREE_VIEW (self), path, FALSE);
-    }
-
-  ide_task_return_boolean (task, TRUE);
-}
-
-static void
 gbp_project_tree_expand_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
 {
-  IdeTreeModel *model = (IdeTreeModel *)object;
-  g_autoptr(IdeTask) task = user_data;
+  GbpProjectTree *self = (GbpProjectTree *)object;
+  g_autoptr(IdeTreeNode) root = user_data;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_MODEL (model));
+  g_assert (GBP_IS_PROJECT_TREE (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_TREE_NODE (root));
 
-  if (ide_tree_model_expand_finish (model, result, NULL))
+  if (ide_tree_expand_node_finish (IDE_TREE (self), result, &error))
     {
-      IdeTreeNode *root = ide_tree_model_get_root (model);
       IdeTreeNode *node = NULL;
 
       ide_tree_node_traverse (root,
@@ -108,22 +76,9 @@ gbp_project_tree_expand_cb (GObject      *object,
                               locate_project_files,
                               &node);
 
-      if (node == NULL)
-        goto cleanup;
-
-      ide_task_set_task_data (task, g_object_ref (node), g_object_unref);
-
-      ide_tree_model_expand_async (model,
-                                   node,
-                                   NULL,
-                                   project_files_expanded_cb,
-                                   g_steal_pointer (&task));
-
-      return;
+      if (node != NULL)
+        ide_tree_expand_node (IDE_TREE (self), node);
     }
-
-cleanup:
-  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -132,8 +87,6 @@ gbp_project_tree_context_set (GtkWidget  *widget,
 {
   GbpProjectTree *self = (GbpProjectTree *)widget;
   g_autoptr(IdeTreeNode) root = NULL;
-  g_autoptr(IdeTreeModel) model = NULL;
-  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE (self));
@@ -143,25 +96,14 @@ gbp_project_tree_context_set (GtkWidget  *widget,
     return;
 
   root = ide_tree_node_new ();
-
-  model = g_object_new (IDE_TYPE_TREE_MODEL,
-                        "kind", "project-tree",
-                        "tree", self,
-                        NULL);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (self), GTK_TREE_MODEL (model));
-
   ide_tree_node_set_item (root, context);
-  ide_object_append (IDE_OBJECT (context), IDE_OBJECT (model));
-  ide_tree_model_set_root (model, root);
+  ide_tree_set_root (IDE_TREE (self), root);
 
-  task = ide_task_new (self, NULL, NULL, NULL);
-  ide_task_set_source_tag (task, gbp_project_tree_context_set);
-
-  ide_tree_model_expand_async (model,
-                               root,
-                               NULL,
-                               gbp_project_tree_expand_cb,
-                               g_steal_pointer (&task));
+  ide_tree_expand_node_async (IDE_TREE (self),
+                              root,
+                              NULL,
+                              gbp_project_tree_expand_cb,
+                              g_object_ref (root));
 }
 
 static void
@@ -174,20 +116,16 @@ gbp_project_tree_init (GbpProjectTree *self)
 {
   ide_widget_set_context_handler (GTK_WIDGET (self),
                                   gbp_project_tree_context_set);
-
-  gtk_tree_view_set_show_expanders (GTK_TREE_VIEW (self), FALSE);
 }
 
 static IdeTreeNode *
 gbp_project_tree_get_project_files (GbpProjectTree *self)
 {
-  IdeTreeModel *model;
   IdeTreeNode *project_files = NULL;
 
   g_assert (GBP_IS_PROJECT_TREE (self));
 
-  model = IDE_TREE_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (self)));
-  ide_tree_node_traverse (ide_tree_model_get_root (model),
+  ide_tree_node_traverse (ide_tree_get_root (IDE_TREE (self)),
                           G_PRE_ORDER,
                           G_TRAVERSE_ALL,
                           1,
@@ -220,20 +158,50 @@ reveal_next_cb (GObject      *object,
                 GAsyncResult *result,
                 gpointer      user_data)
 {
-  IdeTreeModel *model = (IdeTreeModel *)object;
+  IdeTree *tree = (IdeTree *)object;
   Reveal *r = user_data;
 
-  g_assert (IDE_IS_TREE_MODEL (model));
+  g_assert (IDE_IS_TREE (tree));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (r != NULL);
   g_assert (GBP_IS_PROJECT_TREE (r->tree));
   g_assert (IDE_IS_TREE_NODE (r->node));
   g_assert (G_IS_FILE (r->file));
 
-  if (!ide_tree_model_expand_finish (model, result, NULL))
-    reveal_free (r);
-  else
-    reveal_next (g_steal_pointer (&r));
+  if (!ide_tree_expand_node_finish (tree, result, NULL))
+    {
+      reveal_free (r);
+      return;
+    }
+
+  for (IdeTreeNode *child = ide_tree_node_get_first_child (r->node);
+       child != NULL;
+       child = ide_tree_node_get_next_sibling (child))
+    {
+      IdeProjectFile *pf;
+      g_autoptr(GFile) file = NULL;
+
+      if (ide_tree_node_holds (child, IDE_TYPE_PROJECT_FILE) &&
+          (pf = ide_tree_node_get_item (child)) &&
+          IDE_IS_PROJECT_FILE (pf) &&
+          (file = ide_project_file_ref_file (pf)))
+      {
+        if (g_file_has_prefix (r->file, file))
+          {
+            g_set_object (&r->node, child);
+            reveal_next (r);
+            return;
+          }
+        else if (g_file_equal (r->file, file))
+          {
+            ide_tree_set_selected_node (IDE_TREE (r->tree), child);
+            gtk_widget_grab_focus (GTK_WIDGET (r->tree));
+            break;
+          }
+      }
+    }
+
+  reveal_free (r);
 }
 
 static void
@@ -255,79 +223,23 @@ reveal_next (Reveal *r)
 
   if (g_file_has_prefix (r->file, file))
     {
-      IdeTreeNode *child;
-
       /* If this node cannot have children, then there is no way we
        * can expect to find the child there.
        */
       if (!ide_tree_node_get_children_possible (r->node))
         goto failure;
 
-      /* If this node needs to be built, then build it before we
-       * continue processing.
-       */
-      if (_ide_tree_node_get_needs_build_children (r->node))
-        {
-          IdeTreeModel *model;
+      ide_tree_expand_node_async (IDE_TREE (r->tree),
+                                  r->node,
+                                  NULL,
+                                  reveal_next_cb,
+                                  r);
 
-          if (!(model = IDE_TREE_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (r->tree)))))
-            goto failure;
-
-          ide_tree_model_expand_async (model,
-                                       r->node,
-                                       NULL,
-                                       reveal_next_cb,
-                                       r);
-          return;
-        }
-
-      /* Tree to find the first child which is equal to or is a prefix
-       * for the target file.
-       */
-      if (!(child = ide_tree_node_get_nth_child (r->node, 0)))
-        goto failure;
-
-      do
-        {
-          IdeProjectFile *cpf;
-          g_autoptr(GFile) cf = NULL;
-
-          if (!ide_tree_node_holds (child, IDE_TYPE_PROJECT_FILE) ||
-              !(cpf = ide_tree_node_get_item (child)) ||
-              !IDE_IS_PROJECT_FILE (cpf) ||
-              !(cf = ide_project_file_ref_file (cpf)) ||
-              !G_IS_FILE (cf))
-            continue;
-
-          if (g_file_has_prefix (r->file, cf) || g_file_equal (r->file, cf))
-            {
-              g_set_object (&r->node, child);
-              reveal_next (r);
-              return;
-            }
-        }
-      while ((child = ide_tree_node_get_next (child)));
+      return;
     }
   else if (g_file_equal (r->file, file))
     {
-      g_autoptr(GtkTreePath) path = ide_tree_node_get_path (r->node);
-      gtk_tree_view_expand_to_path (GTK_TREE_VIEW (r->tree), path);
-      ide_tree_select_node (IDE_TREE (r->tree), r->node);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (r->tree),
-                                    path, NULL, FALSE, 0, 0);
-
-      /* Due to the way tree views work, we need to use this function to
-       * grab keyboard focus on a particular row in the treeview. This allows
-       * pressing the menu key and navigate with the arrow keys in the tree
-       * view without leaving the keyboard :)
-       */
-      gtk_tree_view_set_cursor (GTK_TREE_VIEW (r->tree),
-                                path,
-                                NULL,
-                                FALSE);
-      /* We still need to grab the focus on the tree view widget as suggested
-       * by the documentation.
-       */
+      ide_tree_set_selected_node (IDE_TREE (r->tree), r->node);
       gtk_widget_grab_focus (GTK_WIDGET (r->tree));
     }
 

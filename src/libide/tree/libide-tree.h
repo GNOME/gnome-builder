@@ -25,10 +25,8 @@
 G_BEGIN_DECLS
 
 #define IDE_TREE_INSIDE
-# include "ide-popover-positioner.h"
 # include "ide-tree.h"
 # include "ide-tree-addin.h"
-# include "ide-tree-model.h"
 # include "ide-tree-node.h"
 #undef IDE_TREE_INSIDE
 

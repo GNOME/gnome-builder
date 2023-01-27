@@ -1,6 +1,6 @@
 /* ide-tree-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,13 @@
 
 #pragma once
 
+#if !defined (IDE_TREE_INSIDE) && !defined (IDE_TREE_COMPILATION)
+# error "Only <libide-tree.h> can be included directly."
+#endif
+
 #include <libide-core.h>
 
 #include "ide-tree.h"
-#include "ide-tree-model.h"
 #include "ide-tree-node.h"
 
 G_BEGIN_DECLS
@@ -38,11 +41,9 @@ struct _IdeTreeAddinInterface
   GTypeInterface parent;
 
   void     (*load)                  (IdeTreeAddin         *self,
-                                     IdeTree              *tree,
-                                     IdeTreeModel         *model);
+                                     IdeTree              *tree);
   void     (*unload)                (IdeTreeAddin         *self,
-                                     IdeTree              *tree,
-                                     IdeTreeModel         *model);
+                                     IdeTree              *tree);
   void     (*build_node)            (IdeTreeAddin         *self,
                                      IdeTreeNode          *node);
   void     (*build_children)        (IdeTreeAddin         *self,
@@ -55,9 +56,6 @@ struct _IdeTreeAddinInterface
   gboolean (*build_children_finish) (IdeTreeAddin         *self,
                                      GAsyncResult         *result,
                                      GError              **error);
-  void     (*cell_data_func)        (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node,
-                                     GtkCellRenderer      *cell);
   gboolean (*node_activated)        (IdeTreeAddin         *self,
                                      IdeTree              *tree,
                                      IdeTreeNode          *node);
@@ -88,12 +86,10 @@ struct _IdeTreeAddinInterface
 
 IDE_AVAILABLE_IN_ALL
 void     ide_tree_addin_load                  (IdeTreeAddin         *self,
-                                               IdeTree              *tree,
-                                               IdeTreeModel         *model);
+                                               IdeTree              *tree);
 IDE_AVAILABLE_IN_ALL
 void     ide_tree_addin_unload                (IdeTreeAddin         *self,
-                                               IdeTree              *tree,
-                                               IdeTreeModel         *model);
+                                               IdeTree              *tree);
 IDE_AVAILABLE_IN_ALL
 void     ide_tree_addin_build_node            (IdeTreeAddin         *self,
                                                IdeTreeNode          *node);
@@ -141,9 +137,5 @@ IDE_AVAILABLE_IN_ALL
 gboolean ide_tree_addin_node_dropped_finish   (IdeTreeAddin         *self,
                                                GAsyncResult         *result,
                                                GError              **error);
-IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_cell_data_func        (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node,
-                                               GtkCellRenderer      *cell);
 
 G_END_DECLS

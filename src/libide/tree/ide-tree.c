@@ -1,6 +1,6 @@
 /* ide-tree.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,537 +22,471 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
-#include <libide-core.h>
+#include <libide-gtk.h>
+#include <libide-plugins.h>
 #include <libide-threading.h>
 
-#include "ide-cell-renderer-status.h"
-#include "ide-popover-positioner.h"
 #include "ide-tree.h"
-#include "ide-tree-model.h"
-#include "ide-tree-node.h"
+#include "ide-tree-addin.h"
 #include "ide-tree-private.h"
-
-/* FIXME-GTK4:
- *
- * We still need DnD work here but that has changed so much
- * that it would help to have a plugin using this to ensure
- * we're porting it correctly.
- */
+#include "ide-tree-empty.h"
 
 typedef struct
 {
-  /* This #GCancellable will be automatically cancelled when the widget is
-   * destroyed. That is usefulf or async operations that you want to be
-   * cleaned up as the workspace is destroyed or the widget in question
-   * removed from the widget tree.
-   */
-  GCancellable *cancellable;
+  IdeExtensionSetAdapter *addins;
+  GtkTreeListModel       *tree_model;
+  IdeTreeNode            *root;
+  char                   *kind;
+  GMenuModel             *menu_model;
 
-  /* To keep rendering of common styles fast, we share these PangoAttrList
-   * so that we need not re-create them many times.
-   */
-  PangoAttrList *dim_label_attributes;
-  PangoAttrList *header_attributes;
-
-  /* The context menu to use for popups */
-  GMenu *context_menu;
-
-  /* Our context menu popover */
-  GtkPopover *popover;
-
-  /* Stashed drop information to propagate on drop */
-  GdkDragAction drop_action;
-  GtkTreePath *drop_path;
-  GtkTreeViewDropPosition drop_pos;
+  GtkScrolledWindow      *scroller;
+  GtkListView            *list_view;
+  GtkSingleSelection     *selection;
 } IdeTreePrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeTree, ide_tree, GTK_TYPE_TREE_VIEW)
+enum {
+  PROP_0,
+  PROP_KIND,
+  PROP_MENU_MODEL,
+  PROP_ROOT,
+  PROP_SELECTED_NODE,
+  N_PROPS
+};
 
-static IdeTreeModel *
-ide_tree_get_model (IdeTree *self)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTree, ide_tree, GTK_TYPE_WIDGET)
+
+static GParamSpec *properties [N_PROPS];
+
+typedef struct
 {
-  GtkTreeModel *model;
-
-  g_assert (IDE_IS_TREE (self));
-
-  if (!(model = gtk_tree_view_get_model (GTK_TREE_VIEW (self))) ||
-      !IDE_IS_TREE_MODEL (model))
-    return NULL;
-
-  return IDE_TREE_MODEL (model);
-}
-
-static void
-ide_tree_selection_changed_cb (IdeTree          *self,
-                               GtkTreeSelection *selection)
-{
-  IdeTreeModel *model;
-  GtkTreeIter iter;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (GTK_IS_TREE_SELECTION (selection));
-
-  if (!(model = ide_tree_get_model (self)))
-    return;
-
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-    _ide_tree_model_selection_changed (model, &iter);
-  else
-    _ide_tree_model_selection_changed (model, NULL);
-}
-
-static void
-ide_tree_unselect (IdeTree *self)
-{
-  g_assert (IDE_IS_TREE (self));
-
-  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (self)));
-}
-
-static void
-ide_tree_select (IdeTree     *self,
-                 IdeTreeNode *node)
-{
-  g_autoptr(GtkTreePath) path = NULL;
-  GtkTreeSelection *selection;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (IDE_IS_TREE_NODE (node));
-
-  ide_tree_unselect (self);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
-  path = ide_tree_node_get_path (node);
-  gtk_tree_selection_select_path (selection, path);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (self), path, NULL, FALSE);
-}
-
-static void
-state_cell_func (GtkCellLayout   *layout,
-                 GtkCellRenderer *cell,
-                 GtkTreeModel    *model,
-                 GtkTreeIter     *iter,
-                 gpointer         user_data)
-{
-  IdeTreeNodeFlags flags = 0;
+  IdeTree     *tree;
   IdeTreeNode *node;
-
-  g_assert (IDE_IS_TREE (user_data));
-  g_assert (IDE_IS_TREE_MODEL (model));
-
-  if ((node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
-    flags = ide_tree_node_get_flags (node);
-
-  ide_cell_renderer_status_set_flags (cell, flags);
-}
+  guint        handled : 1;
+} NodeActivated;
 
 static void
-text_cell_func (GtkCellLayout   *layout,
-                GtkCellRenderer *cell,
-                GtkTreeModel    *model,
-                GtkTreeIter     *iter,
-                gpointer         user_data)
+ide_tree_node_activated_cb (IdeExtensionSetAdapter *addins,
+                            PeasPluginInfo         *plugin_info,
+                            PeasExtension          *extension,
+                            gpointer                user_data)
 {
-  IdeTree *self = user_data;
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  const gchar *display_name = NULL;
-  IdeTreeNode *node;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (IDE_IS_TREE_MODEL (model));
-
-  g_object_set (cell,
-                "attributes", NULL,
-                "foreground-set", FALSE,
-                NULL);
-
-  if (!(node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
-    return;
-
-  _ide_tree_model_cell_data_func (IDE_TREE_MODEL (model), iter, cell);
-
-  /* If we're loading the node, avoid showing the "Loading..." text for 250
-   * milliseconds, so that we don't flash the user with information they'll
-   * never be able to read.
-   */
-  if (ide_tree_node_is_empty (node))
-    {
-      IdeTreeNode *parent = ide_tree_node_get_parent (node);
-      gint64 started_loading_at;
-
-      if (_ide_tree_node_get_loading (parent, &started_loading_at))
-        {
-          gint64 now = g_get_monotonic_time ();
-
-          if ((now - started_loading_at) < (G_USEC_PER_SEC / 4L))
-            goto set_props;
-        }
-    }
-
-  if (ide_tree_node_get_has_error (node))
-    {
-      PangoAttrList *attrs = NULL;
-      PangoAttrList *copy = NULL;
-
-      g_object_get (cell,
-                    "attributes", &attrs,
-                    NULL);
-
-      if (attrs != NULL)
-        copy = pango_attr_list_copy (attrs);
-      else
-        copy = pango_attr_list_new ();
-
-      pango_attr_list_insert (copy, pango_attr_underline_new (PANGO_UNDERLINE_ERROR));
-      pango_attr_list_insert (copy, pango_attr_underline_color_new (65535, 0, 0));
-
-      g_object_set (cell,
-                    "attributes", copy,
-                    NULL);
-
-      g_clear_pointer (&attrs, pango_attr_list_unref);
-      g_clear_pointer (&copy, pango_attr_list_unref);
-    }
-
-  if (ide_tree_node_get_is_header (node) ||
-      (ide_tree_node_get_flags (node) & IDE_TREE_NODE_FLAGS_ADDED))
-    g_object_set (cell, "attributes", priv->header_attributes, NULL);
-  else if (ide_tree_node_is_empty (node) && !ide_tree_node_is_selected (node))
-    g_object_set (cell, "attributes", priv->dim_label_attributes, NULL);
-
-  display_name = ide_tree_node_get_display_name (node);
-
-set_props:
-  if (ide_tree_node_get_use_markup (node))
-    g_object_set (cell, "markup", display_name, NULL);
-  else
-    g_object_set (cell, "text", display_name, NULL);
-}
-
-static void
-pixbuf_cell_func (GtkCellLayout   *layout,
-                  GtkCellRenderer *cell,
-                  GtkTreeModel    *model,
-                  GtkTreeIter     *iter,
-                  gpointer         user_data)
-{
-  IdeTree *self = user_data;
-  g_autoptr(GtkTreePath) path = NULL;
-  g_autoptr(GIcon) emblems = NULL;
-  IdeTreeNode *node;
-  GIcon *icon;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (IDE_IS_TREE_MODEL (model));
-
-  if (!(node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
-    return;
-
-  path = gtk_tree_model_get_path (model, iter);
-
-  if (gtk_tree_view_row_expanded (GTK_TREE_VIEW (self), path))
-    icon = ide_tree_node_get_expanded_icon (node);
-  else
-    icon = ide_tree_node_get_icon (node);
-
-  if (icon != NULL)
-    emblems = _ide_tree_node_apply_emblems (node, icon);
-
-  g_object_set (cell, "gicon", emblems, NULL);
-}
-
-static void
-ide_tree_expand_cb (GObject      *object,
-                    GAsyncResult *result,
-                    gpointer      user_data)
-{
-  IdeTreeModel *model = (IdeTreeModel *)object;
-  g_autoptr(GtkTreePath) path = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  IdeTreeNode *node;
-  IdeTree *self;
+  IdeTreeAddin *addin = (IdeTreeAddin *)extension;
+  NodeActivated *state = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_MODEL (model));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (addins));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+  g_assert (state != NULL);
 
-  self = ide_task_get_source_object (task);
-  node = ide_task_get_task_data (task);
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (IDE_IS_TREE_NODE (node));
-
-  if ((path = ide_tree_model_get_path_for_node (model, node)))
-    {
-      if (ide_tree_model_expand_finish (model, result, NULL))
-        {
-          /* If node was detached during our async operation, we'll get NULL
-           * back for the GtkTreePath (in which case, we'll just ignore).
-           */
-          gtk_tree_view_expand_row (GTK_TREE_VIEW (self), path, FALSE);
-        }
-
-      _ide_tree_model_row_expanded (model, self, path);
-    }
-
-  ide_task_return_boolean (task, TRUE);
+  if (!state->handled)
+    state->handled = ide_tree_addin_node_activated (addin, state->tree, state->node);
 }
 
 static void
-ide_tree_row_activated (GtkTreeView       *tree_view,
-                        GtkTreePath       *path,
-                        GtkTreeViewColumn *column)
-{
-  IdeTree *self = (IdeTree *)tree_view;
-  IdeTreeModel *model;
-  IdeTreeNode *node;
-  GtkTreeIter iter;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (path != NULL);
-  g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
-
-  /* Get our model, and the node in question. Ignore everything if this
-   * is a synthesized "Empty" node.
-   */
-  if (!(model = ide_tree_get_model (self)) ||
-      !gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path) ||
-      !(node = ide_tree_model_get_node (model, &iter)) ||
-      ide_tree_node_is_empty (node))
-    return;
-
-  if (!_ide_tree_model_row_activated (model, self, path))
-    {
-      if (gtk_tree_view_row_expanded (tree_view, path))
-        gtk_tree_view_collapse_row (tree_view, path);
-      else
-        gtk_tree_view_expand_row (tree_view, path, FALSE);
-    }
-}
-
-static void
-ide_tree_row_expanded (GtkTreeView *tree_view,
-                       GtkTreeIter *iter,
-                       GtkTreePath *path)
-{
-  IdeTree *self = (IdeTree *)tree_view;
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  g_autoptr(IdeTask) task = NULL;
-  IdeTreeModel *model;
-  IdeTreeNode *node;
-
-  g_assert (IDE_IS_TREE (tree_view));
-  g_assert (iter != NULL);
-  g_assert (IDE_IS_TREE_NODE (iter->user_data));
-  g_assert (path != NULL);
-
-  if (!(model = ide_tree_get_model (self)) ||
-      !(node = ide_tree_model_get_node (model, iter)) ||
-      !ide_tree_node_get_children_possible (node))
-    return;
-
-  task = ide_task_new (self, priv->cancellable, NULL, NULL);
-  ide_task_set_source_tag (task, ide_tree_row_expanded);
-  ide_task_set_task_data (task, g_object_ref (node), g_object_unref);
-
-  /* We want to expand the row if we can, but we need to ensure the
-   * children have been built first (it might only have a fake "empty"
-   * node currently). So we request that the model expand the row and
-   * then expand to the path on the callback. The model will do nothing
-   * more than complete the async request if there is nothing to build.
-   */
-  ide_tree_model_expand_async (IDE_TREE_MODEL (model),
-                               node,
-                               priv->cancellable,
-                               ide_tree_expand_cb,
-                               g_steal_pointer (&task));
-}
-
-static void
-ide_tree_row_collapsed (GtkTreeView *tree_view,
-                        GtkTreeIter *iter,
-                        GtkTreePath *path)
-{
-  IdeTree *self = (IdeTree *)tree_view;
-  IdeTreeModel *model;
-  IdeTreeNode *node;
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (iter != NULL);
-  g_assert (path != NULL);
-
-  if (!(model = ide_tree_get_model (self)) ||
-      !(node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
-    return;
-
-  /*
-   * If we are collapsing a row that requests to have its children removed
-   * and the dummy node re-inserted, go ahead and do so now.
-   */
-  if (ide_tree_node_get_reset_on_collapse (node))
-    _ide_tree_node_remove_all (node);
-
-  _ide_tree_model_row_collapsed (model, self, path);
-}
-
-static void
-ide_tree_popup (IdeTree        *self,
-                IdeTreeNode    *node,
-                double          target_x,
-                double          target_y)
+ide_tree_activate_cb (IdeTree     *self,
+                      guint        position,
+                      GtkListView *list_view)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  GdkRectangle area;
-  GtkTextDirection dir;
-  GtkWidget *positioner;
+  g_autoptr(GtkTreeListRow) row = NULL;
+  g_autoptr(IdeTreeNode) node = NULL;
+  NodeActivated state;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE (self));
-  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
 
-  if (priv->context_menu == NULL)
-    return;
+  if (!(row = g_list_model_get_item (G_LIST_MODEL (priv->selection), position)) ||
+      !(node = gtk_tree_list_row_get_item (row)))
+    IDE_EXIT;
 
-  if (!(positioner = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_POPOVER_POSITIONER)))
-    return;
+  state.tree = self;
+  state.node = node;
+  state.handled = FALSE;
 
-  priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (priv->context_menu)));
-  g_object_ref_sink (priv->popover);
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_tree_node_activated_cb,
+                                     &state);
 
-  dir = gtk_widget_get_direction (GTK_WIDGET (self));
-  gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
-
-  _ide_tree_node_get_area (node, self, &area);
-
-  ide_popover_positioner_present (IDE_POPOVER_POSITIONER (positioner),
-                                  priv->popover,
-                                  GTK_WIDGET (self),
-                                  &area);
+  IDE_EXIT;
 }
 
 static void
-ide_tree_click_pressed_cb (IdeTree         *self,
-                           int              n_presses,
+ide_tree_notify_selected_cb (IdeTree            *self,
+                             GParamSpec         *pspec,
+                             GtkSingleSelection *selection)
+{
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_SINGLE_SELECTION (selection));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTED_NODE]);
+}
+
+static void
+ide_tree_extension_added_cb (IdeExtensionSetAdapter *addins,
+                             PeasPluginInfo         *plugin_info,
+                             PeasExtension          *extension,
+                             gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)extension;
+  IdeTree *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (addins));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+
+  ide_tree_addin_load (addin, self);
+}
+
+static void
+ide_tree_extension_removed_cb (IdeExtensionSetAdapter *addins,
+                               PeasPluginInfo         *plugin_info,
+                               PeasExtension          *extension,
+                               gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)extension;
+  IdeTree *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (addins));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+
+  ide_tree_addin_unload (addin, self);
+}
+
+static void
+ide_tree_root (GtkWidget *widget)
+{
+  IdeTree *self = (IdeTree *)widget;
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+
+  GTK_WIDGET_CLASS (ide_tree_parent_class)->root (widget);
+
+  if (priv->addins != NULL)
+    return;
+
+  priv->addins = ide_extension_set_adapter_new (NULL,
+                                                peas_engine_get_default (),
+                                                IDE_TYPE_TREE_ADDIN,
+                                                "Tree-Kind", priv->kind);
+  g_signal_connect (priv->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_tree_extension_added_cb),
+                    self);
+  g_signal_connect (priv->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_tree_extension_removed_cb),
+                    self);
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_tree_extension_added_cb,
+                                     self);
+
+  if (priv->root != NULL)
+    _ide_tree_node_expand_async (priv->root, priv->addins, NULL, NULL, NULL);
+}
+
+static void
+ide_tree_click_pressed_cb (GtkGestureClick *click,
+                           int              n_press,
                            double           x,
                            double           y,
-                           GtkGestureClick *gesture)
+                           gpointer         user_data)
 {
-  g_autoptr(GtkTreePath) path = NULL;
-  IdeTreeModel *model;
-  int cell_y;
+  g_autoptr(IdeTreeNode) node = NULL;
+  GdkEventSequence *sequence;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+  IdeTreePrivate *priv;
+  GdkEvent *event;
+  IdeTree *tree;
 
-  g_assert (IDE_IS_TREE (self));
-  g_assert (GTK_IS_GESTURE_CLICK (gesture));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
 
-  if (!(model = ide_tree_get_model (self)))
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
+
+  if (n_press != 1)
     return;
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-    gtk_widget_grab_focus (GTK_WIDGET (self));
+  expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (click)));
+  tree = IDE_TREE (gtk_widget_get_ancestor (GTK_WIDGET (expander), IDE_TYPE_TREE));
+  priv = ide_tree_get_instance_private (tree);
+  row = ide_tree_expander_get_list_row (expander);
+  node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
 
-  gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self),
-                                 x,
-                                 y,
-                                 &path,
-                                 NULL,
-                                 NULL,
-                                 &cell_y);
-
-  if (path == NULL)
+  if (gdk_event_triggers_context_menu (event))
     {
-      ide_tree_unselect (self);
+      GtkPopover *popover;
+
+      if (priv->menu_model == NULL)
+        return;
+
+      popover = g_object_new (GTK_TYPE_POPOVER_MENU,
+                              "menu-model", priv->menu_model,
+                              "has-arrow", TRUE,
+                              "position", GTK_POS_RIGHT,
+                              NULL);
+
+      ide_tree_set_selected_node (tree, node);
+      ide_tree_expander_show_popover (expander, popover);
+
+      gtk_gesture_set_sequence_state (GTK_GESTURE (click),
+                                      sequence,
+                                      GTK_EVENT_SEQUENCE_CLAIMED);
     }
   else
     {
-      GtkAllocation alloc;
-      GtkTreeIter iter;
+      NodeActivated state = {0};
 
-      gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+      state.tree = tree;
+      state.node = node;
+      state.handled = FALSE;
 
-      if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-        {
-          IdeTreeNode *node;
+      ide_extension_set_adapter_foreach (priv->addins,
+                                         ide_tree_node_activated_cb,
+                                         &state);
 
-          node = ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
-          ide_tree_select (self, node);
-          ide_tree_popup (self, node, alloc.x + alloc.width, y - cell_y);
-        }
+      if (state.handled)
+        gtk_gesture_set_sequence_state (GTK_GESTURE (click),
+                                        sequence,
+                                        GTK_EVENT_SEQUENCE_CLAIMED);
     }
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture),  GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
-show_context_menu_action (GtkWidget  *widget,
-                          const char *action_name,
-                          GVariant   *param)
+ide_tree_list_item_setup_cb (IdeTree                  *self,
+                             GtkListItem              *item,
+                             GtkSignalListItemFactory *factory)
 {
-  IdeTree *self = (IdeTree *)widget;
-  g_autoptr(GtkTreePath) path = NULL;
-  IdeTreeModel *model;
-  IdeTreeNode *node;
-  GtkAllocation alloc;
-  GdkRectangle cell_area;
+  IdeTreeExpander *expander;
+  GtkGesture *gesture;
+  GtkImage *image;
 
   g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_LIST_ITEM (item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
 
-  if (!(model = ide_tree_get_model (self)))
-    return;
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
+  expander = g_object_new (IDE_TYPE_TREE_EXPANDER,
+                           "suffix", image,
+                           NULL);
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-    gtk_widget_grab_focus (GTK_WIDGET (self));
+  gesture = gtk_gesture_click_new ();
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "ide-tree-click");
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect (gesture,
+                    "pressed",
+                    G_CALLBACK (ide_tree_click_pressed_cb),
+                    NULL);
+  gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (gesture));
 
-  if (!(node = ide_tree_get_selected_node (self)))
-    return;
+  gtk_list_item_set_child (item, GTK_WIDGET (expander));
+}
 
-  if (!(path = ide_tree_node_get_path (node)))
-    return;
+static void
+ide_tree_list_item_teardown_cb (IdeTree                  *self,
+                                GtkListItem              *item,
+                                GtkSignalListItemFactory *factory)
+{
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_LIST_ITEM (item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
 
-  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (self),
-                               path,
-                               NULL,
-                               &cell_area);
+  gtk_list_item_set_child (item, NULL);
+}
 
-  ide_tree_popup (self, node, alloc.x + alloc.width, cell_area.y + (cell_area.height/2));
+static void
+ide_tree_row_notify_expanded_cb (IdeTree        *self,
+                                 GParamSpec     *pspec,
+                                 GtkTreeListRow *row)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_TREE_LIST_ROW (row));
+
+  node = gtk_tree_list_row_get_item (row);
+
+  if (gtk_tree_list_row_get_expanded (row))
+    {
+      if (!_ide_tree_node_children_built (node))
+        _ide_tree_node_expand_async (node, priv->addins, NULL, NULL, NULL);
+    }
+  else
+    {
+      if (node != NULL)
+        _ide_tree_node_collapsed (node);
+    }
+}
+
+static inline GIcon *
+get_icon (GIcon      **icon,
+          const char  *name)
+{
+  if G_UNLIKELY (*icon == NULL)
+    *icon = g_themed_icon_new (name);
+  return *icon;
 }
 
 static gboolean
-ide_tree_query_tooltip (GtkWidget  *widget,
-                        gint        x,
-                        gint        y,
-                        gboolean    keyboard_mode,
-                        GtkTooltip *tooltip)
+flags_to_icon (GBinding     *binding,
+               const GValue *from_value,
+               GValue       *to_value,
+               gpointer      user_data)
 {
-  GtkTreeView *tree_view = (GtkTreeView *)widget;
-  g_autoptr(GtkTreePath) path = NULL;
+  static GIcon *changed_icon;
+  static GIcon *added_icon;
 
-  g_assert (IDE_IS_TREE (tree_view));
-  g_assert (GTK_IS_TOOLTIP (tooltip));
+  IdeTreeNodeFlags flags = g_value_get_flags (from_value);
+  g_autoptr(GObject) suffix = g_binding_dup_target (binding);
+  GIcon *icon;
 
-  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
-    {
-      GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
-      GtkTreeIter iter;
+  if (flags & IDE_TREE_NODE_FLAGS_ADDED)
+    icon = get_icon (&added_icon, "builder-vcs-added-symbolic");
+  else if (flags & IDE_TREE_NODE_FLAGS_CHANGED)
+    icon = get_icon (&changed_icon, "builder-vcs-changed-symbolic");
+  else
+    icon = NULL;
 
-      if (gtk_tree_model_get_iter (model, &iter, path))
-        {
-          IdeTreeNode *node;
+  g_value_set_object (to_value, icon);
+  gtk_widget_set_visible (GTK_WIDGET (suffix), icon != NULL);
 
-          node = ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
+  return TRUE;
+}
 
-          if (node != NULL)
-            {
-              gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
-              gtk_tooltip_set_markup (tooltip,
-                                      ide_tree_node_get_display_name (node));
-              return TRUE;
-            }
-        }
-    }
+static gboolean
+ide_tree_attach_popover_to_row (IdeTreeNode     *node,
+                                GtkPopover      *popover,
+                                IdeTreeExpander *expander)
+{
+  IDE_ENTRY;
 
-  return FALSE;
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (GTK_IS_POPOVER (popover));
+  g_assert (IDE_IS_TREE_EXPANDER (expander));
+
+  ide_tree_expander_show_popover (expander, popover);
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+ide_tree_list_item_bind_cb (IdeTree                  *self,
+                            GtkListItem              *item,
+                            GtkSignalListItemFactory *factory)
+{
+  g_autoptr(IdeTreeNode) node = NULL;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+  GtkWidget *suffix;
+
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_LIST_ITEM (item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
+
+  row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (item));
+  expander = IDE_TREE_EXPANDER (gtk_list_item_get_child (item));
+  node = gtk_tree_list_row_get_item (row);
+  suffix = ide_tree_expander_get_suffix (expander);
+
+  g_assert (GTK_IS_TREE_LIST_ROW (row));
+  g_assert (IDE_IS_TREE_EXPANDER (expander));
+  g_assert (IDE_IS_TREE_NODE (node));
+
+  ide_tree_expander_set_list_row (expander, row);
+
+#define BIND_PROPERTY(name) \
+  G_STMT_START { \
+    GBinding *binding = g_object_bind_property (node, name, expander, name, G_BINDING_SYNC_CREATE); \
+    g_object_set_data (G_OBJECT (expander), "BINDING_" name, binding); \
+  } G_STMT_END
+
+  BIND_PROPERTY ("expanded-icon");
+  BIND_PROPERTY ("icon");
+  BIND_PROPERTY ("title");
+  BIND_PROPERTY ("use-markup");
+
+  g_object_set_data (G_OBJECT (expander),
+                     "BINDING_flags",
+                     g_object_bind_property_full (node, "flags",
+                                                  suffix, "gicon",
+                                                  G_BINDING_SYNC_CREATE,
+                                                  flags_to_icon, NULL, NULL, NULL));
+
+#undef BIND_PROPERTY
+
+  g_signal_connect_object (row,
+                           "notify::expanded",
+                           G_CALLBACK (ide_tree_row_notify_expanded_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (node,
+                           "show-popover",
+                           G_CALLBACK (ide_tree_attach_popover_to_row),
+                           expander,
+                           0);
+}
+
+static void
+ide_tree_list_item_unbind_cb (IdeTree                  *self,
+                              GtkListItem              *item,
+                              GtkSignalListItemFactory *factory)
+{
+  g_autoptr(IdeTreeNode) node = NULL;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_LIST_ITEM (item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
+
+  row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (item));
+  expander = IDE_TREE_EXPANDER (gtk_list_item_get_child (item));
+  node = gtk_tree_list_row_get_item (row);
+
+  if (node != NULL)
+    g_signal_handlers_disconnect_by_func (node,
+                                          G_CALLBACK (ide_tree_attach_popover_to_row),
+                                          expander);
+
+  g_signal_handlers_disconnect_by_func (row,
+                                        G_CALLBACK (ide_tree_row_notify_expanded_cb),
+                                        self);
+
+#define UNBIND_PROPERTY(name) \
+  G_STMT_START { \
+    GBinding *binding = g_object_steal_data (G_OBJECT (expander), "BINDING_" name); \
+    g_binding_unbind (binding); \
+  } G_STMT_END
+
+  UNBIND_PROPERTY ("expanded-icon");
+  UNBIND_PROPERTY ("icon");
+  UNBIND_PROPERTY ("title");
+  UNBIND_PROPERTY ("use-markup");
+  UNBIND_PROPERTY ("flags");
+
+#undef UNBIND_PROPERTY
+
+  g_object_set (expander,
+                "expanded-icon", NULL,
+                "icon", NULL,
+                "title", NULL,
+                "use-markup", FALSE,
+                NULL);
+
+  ide_tree_expander_set_list_row (expander, NULL);
 }
 
 static void
@@ -560,27 +494,86 @@ ide_tree_dispose (GObject *object)
 {
   IdeTree *self = (IdeTree *)object;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  IdeTreeModel *model;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
+  ide_clear_and_destroy_object (&priv->addins);
 
-  if ((model = ide_tree_get_model (self)))
-    _ide_tree_model_release_addins (model);
+  g_clear_pointer ((GtkWidget **)&priv->scroller, gtk_widget_unparent);
 
-  g_clear_object (&priv->popover);
+  ide_tree_set_root (self, NULL);
 
-  gtk_tree_view_set_model (GTK_TREE_VIEW (self), NULL);
+  if (priv->selection != NULL)
+    gtk_single_selection_set_model (priv->selection, NULL);
 
-  g_cancellable_cancel (priv->cancellable);
-  g_clear_object (&priv->cancellable);
+  g_clear_object (&priv->tree_model);
+  g_clear_object (&priv->menu_model);
 
-  g_clear_object (&priv->context_menu);
-
-  g_clear_pointer (&priv->dim_label_attributes, pango_attr_list_unref);
-  g_clear_pointer (&priv->header_attributes, pango_attr_list_unref);
-  g_clear_pointer (&priv->drop_path, gtk_tree_path_free);
+  g_clear_pointer (&priv->kind, g_free);
 
   G_OBJECT_CLASS (ide_tree_parent_class)->dispose (object);
+}
+
+static void
+ide_tree_get_property (GObject    *object,
+                       guint       prop_id,
+                       GValue     *value,
+                       GParamSpec *pspec)
+{
+  IdeTree *self = IDE_TREE (object);
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_KIND:
+      g_value_set_string (value, priv->kind);
+      break;
+
+    case PROP_MENU_MODEL:
+      g_value_set_object (value, ide_tree_get_menu_model (self));
+      break;
+
+    case PROP_ROOT:
+      g_value_set_object (value, ide_tree_get_root (self));
+      break;
+
+    case PROP_SELECTED_NODE:
+      g_value_set_object (value, ide_tree_get_selected_node (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_tree_set_property (GObject      *object,
+                       guint         prop_id,
+                       const GValue *value,
+                       GParamSpec   *pspec)
+{
+  IdeTree *self = IDE_TREE (object);
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_KIND:
+      priv->kind = g_value_dup_string (value);
+      break;
+
+    case PROP_MENU_MODEL:
+      ide_tree_set_menu_model (self, g_value_get_object (value));
+      break;
+
+    case PROP_ROOT:
+      ide_tree_set_root (self, g_value_get_object (value));
+      break;
+
+    case PROP_SELECTED_NODE:
+      ide_tree_set_selected_node (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -588,99 +581,134 @@ ide_tree_class_init (IdeTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkTreeViewClass *tree_view_class = GTK_TREE_VIEW_CLASS (klass);
 
   object_class->dispose = ide_tree_dispose;
+  object_class->get_property = ide_tree_get_property;
+  object_class->set_property = ide_tree_set_property;
 
-  widget_class->query_tooltip = ide_tree_query_tooltip;
+  widget_class->root = ide_tree_root;
 
-  tree_view_class->row_activated = ide_tree_row_activated;
-  tree_view_class->row_expanded = ide_tree_row_expanded;
-  tree_view_class->row_collapsed = ide_tree_row_collapsed;
+  properties[PROP_KIND] =
+    g_param_spec_string ("kind", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
 
-  gtk_widget_class_install_action (widget_class, "tree.popup-context-menu", NULL, show_context_menu_action);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_F10, GDK_SHIFT_MASK, "tree.popup-context-menu", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Menu, 0, "tree.popup-context-menu", NULL);
+  properties [PROP_MENU_MODEL] =
+    g_param_spec_object ("menu-model", NULL, NULL,
+                         G_TYPE_MENU_MODEL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_ROOT] =
+    g_param_spec_object ("root", NULL, NULL,
+                         IDE_TYPE_TREE_NODE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SELECTED_NODE] =
+    g_param_spec_object ("selected-node", NULL, NULL,
+                         IDE_TYPE_TREE_NODE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tree/ide-tree.ui");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeTree, list_view);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeTree, selection);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeTree, scroller);
+
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_notify_selected_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_bind_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_unbind_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_setup_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_teardown_cb);
 }
 
 static void
 ide_tree_init (IdeTree *self)
 {
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  GtkGesture *gesture;
-  GtkCellRenderer *cell;
-  GtkTreeViewColumn *column;
-
-  /* Show popover on right-click */
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 3);
-  g_signal_connect_object (gesture,
-                           "pressed",
-                           G_CALLBACK (ide_tree_click_pressed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-
-  priv->cancellable = g_cancellable_new ();
-
-  gtk_widget_set_has_tooltip (GTK_WIDGET (self), TRUE);
-
-  g_signal_connect_object (gtk_tree_view_get_selection (GTK_TREE_VIEW (self)),
-                           "changed",
-                           G_CALLBACK (ide_tree_selection_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self), FALSE);
-  gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (self), TRUE);
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-  cell = g_object_new (GTK_TYPE_CELL_RENDERER_PIXBUF,
-                       "xpad", 6,
-                       NULL);
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, pixbuf_cell_func, self, NULL);
-
-  cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
-                       "ellipsize", PANGO_ELLIPSIZE_END,
-                       "ypad", 6,
-                       NULL);
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
-
-  cell = ide_cell_renderer_status_new ();
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, state_cell_func, self, NULL);
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self), column);
-
-  priv->dim_label_attributes = pango_attr_list_new ();
-  pango_attr_list_insert (priv->dim_label_attributes,
-                          pango_attr_foreground_alpha_new (65535 * 0.55));
-
-  priv->header_attributes = pango_attr_list_new ();
-  pango_attr_list_insert (priv->header_attributes,
-                          pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-GtkWidget *
-ide_tree_new (void)
+static GListModel *
+ide_tree_create_child_model_cb (gpointer item,
+                                gpointer user_data)
 {
-  return g_object_new (IDE_TYPE_TREE, NULL);
+  IdeTreeNode *node = item;
+
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (user_data == NULL);
+
+  if (ide_tree_node_get_children_possible (node))
+    return ide_tree_empty_new (node);
+
+  return NULL;
+}
+
+/**
+ * ide_tree_get_root:
+ * @self: a #IdeTree
+ *
+ * Gets the root node.
+ *
+ * Returns: (transfer none) (nullable): an IdeTreeNode or %NULL
+ */
+IdeTreeNode *
+ide_tree_get_root (IdeTree *self)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TREE (self), NULL);
+
+  return priv->root;
 }
 
 void
-ide_tree_set_context_menu (IdeTree *self,
-                           GMenu   *menu)
+ide_tree_set_root (IdeTree     *self,
+                   IdeTreeNode *root)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_TREE (self));
-  g_return_if_fail (!menu || G_IS_MENU (menu));
+  g_return_if_fail (!root || IDE_IS_TREE_NODE (root));
 
-  if (g_set_object (&priv->context_menu, menu))
-    g_clear_object (&priv->popover);
+  if (priv->root == root)
+    return;
+
+  gtk_single_selection_set_model (priv->selection, NULL);
+  g_clear_object (&priv->tree_model);
+
+  if (priv->root != NULL)
+    {
+      g_object_set_data (G_OBJECT (priv->root), "IDE_TREE", NULL);
+      g_clear_object (&priv->root);
+    }
+
+  g_set_object (&priv->root, root);
+
+  if (priv->root != NULL)
+    {
+      GListModel *base_model = G_LIST_MODEL (priv->root);
+
+      g_object_set_data (G_OBJECT (priv->root), "IDE_TREE", self);
+
+      priv->tree_model = gtk_tree_list_model_new (g_object_ref (base_model),
+                                                  FALSE, /* Passthrough */
+                                                  FALSE,  /* Autoexpand */
+                                                  ide_tree_create_child_model_cb,
+                                                  NULL, NULL);
+      gtk_single_selection_set_model (priv->selection, G_LIST_MODEL (priv->tree_model));
+
+      if (priv->addins != NULL)
+        _ide_tree_node_expand_async (priv->root, priv->addins, NULL, NULL, NULL);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT]);
 }
 
 void
@@ -688,55 +716,176 @@ ide_tree_show_popover_at_node (IdeTree     *self,
                                IdeTreeNode *node,
                                GtkPopover  *popover)
 {
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  GtkTreeListRow *row;
+
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (popover)) == NULL);
 
-#if 0
-  /* Once this is in GTK, uncomment */
-  gtk_widget_set_action_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
-#endif
+  if ((row = _ide_tree_get_row_at_node (self, node, TRUE)))
+    {
+      guint position = gtk_tree_list_row_get_position (row);
 
-  _ide_tree_node_show_popover (node, self, popover);
+      gtk_widget_activate_action (GTK_WIDGET (priv->list_view), "list.scroll-to-item", "u", position);
+
+      if (!_ide_tree_node_show_popover (node, popover))
+        {
+          g_warning ("Failed to show popover, no signal handler consumed popover!");
+          g_object_ref_sink (popover);
+          g_object_unref (popover);
+        }
+    }
+}
+
+static GtkTreeListRow *
+_ide_tree_get_row_at_node_recurse (IdeTree     *self,
+                                   IdeTreeNode *node,
+                                   gboolean     expand_to_node)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(GtkTreeListRow) row = NULL;
+  IdeTreeNode *parent;
+  guint index;
+
+  g_assert (IDE_IS_TREE (self));
+  g_assert (IDE_IS_TREE_NODE (node));
+
+  /* The root node cannot have a GtkTreeListRow */
+  if (!(parent = ide_tree_node_get_parent (node)))
+    return NULL;
+
+  /* Get our index for offset use within models */
+  index = _ide_tree_node_get_child_index (parent, node);
+
+  /* Handle children of the root specially by getting their
+   * row from the GtkTreeListModel.
+   */
+  if (parent == priv->root)
+    return gtk_tree_list_model_get_child_row (priv->tree_model, index);
+
+  /* Expand the parent row and use the resulting row to locate
+   * the child within that.
+   */
+  if ((row = _ide_tree_get_row_at_node_recurse (self, parent, expand_to_node)))
+    {
+      if (expand_to_node)
+        gtk_tree_list_row_set_expanded (row, TRUE);
+      return gtk_tree_list_row_get_child_row (row, index);
+    }
+
+  /* Failed to get row, probably due to something not expanded */
+  return NULL;
+}
+
+GtkTreeListRow *
+_ide_tree_get_row_at_node (IdeTree     *self,
+                           IdeTreeNode *node,
+                           gboolean     expand_to_node)
+{
+  g_return_val_if_fail (IDE_IS_TREE (self), NULL);
+  g_return_val_if_fail (!node || IDE_IS_TREE_NODE (node), NULL);
+
+  if (node == NULL)
+    return NULL;
+
+  return _ide_tree_get_row_at_node_recurse (self, node, expand_to_node);
+}
+
+gboolean
+ide_tree_is_node_expanded (IdeTree     *self,
+                           IdeTreeNode *node)
+{
+  g_autoptr(GtkTreeListRow) row = NULL;
+
+  g_return_val_if_fail (IDE_IS_TREE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (node), FALSE);
+
+  if ((row = _ide_tree_get_row_at_node (self, node, FALSE)))
+    return gtk_tree_list_row_get_expanded (row);
+
+  return FALSE;
 }
 
 /**
  * ide_tree_get_selected_node:
  * @self: a #IdeTree
  *
- * Gets the currently selected node, or %NULL
+ * Gets the selected item.
  *
  * Returns: (transfer none) (nullable): an #IdeTreeNode or %NULL
  */
 IdeTreeNode *
 ide_tree_get_selected_node (IdeTree *self)
 {
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  GtkTreeListRow *row;
 
   g_return_val_if_fail (IDE_IS_TREE (self), NULL);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self));
+  if ((row = gtk_single_selection_get_selected_item (priv->selection)))
+    {
+      g_autoptr(GObject) item = gtk_tree_list_row_get_item (row);
 
-  if (gtk_tree_selection_get_selected (selection, &model, &iter) && IDE_IS_TREE_MODEL (model))
-    return ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
+      g_assert (IDE_IS_TREE_NODE (item));
+
+      /* Return borrowed instance, which we are sure will stick
+       * around after the unref as it's part of node tree.
+       */
+      return IDE_TREE_NODE (item);
+    }
 
   return NULL;
 }
 
+/**
+ * ide_tree_set_selected_node:
+ * @self: a #IdeTree
+ * @node: (nullable): an #IdeTreeNode or %NULL
+ *
+ * Sets the selected item in the tree.
+ *
+ * If @node is %NULL, the current selection is cleared.
+ */
 void
-ide_tree_select_node (IdeTree     *self,
-                      IdeTreeNode *node)
+ide_tree_set_selected_node (IdeTree     *self,
+                            IdeTreeNode *node)
 {
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(GtkTreeListRow) row = NULL;
+  guint position = GTK_INVALID_LIST_POSITION;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (!node || IDE_IS_TREE_NODE (node));
 
-  if (node == NULL)
-    ide_tree_unselect (self);
-  else
-    ide_tree_select (self, node);
+  if ((row = _ide_tree_get_row_at_node (self, node, TRUE)))
+    position = gtk_tree_list_row_get_position (row);
+
+  gtk_single_selection_set_selected (priv->selection, position);
+
+  gtk_widget_activate_action (GTK_WIDGET (priv->list_view), "list.scroll-to-item", "u", position);
+}
+
+void
+ide_tree_invalidate_all (IdeTree *self)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_TREE (self));
+
+  g_critical ("TODO: implement invalidate all");
+}
+
+void
+ide_tree_expand_to_node (IdeTree     *self,
+                         IdeTreeNode *node)
+{
+  g_autoptr(GtkTreeListRow) row = NULL;
+
+  g_return_if_fail (IDE_IS_TREE (self));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
+
+  row = _ide_tree_get_row_at_node (self, node, TRUE);
 }
 
 static void
@@ -744,135 +893,121 @@ ide_tree_expand_node_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  IdeTreeModel *model = (IdeTreeModel *)object;
+  IdeTreeNode *node = (IdeTreeNode *)object;
+  g_autoptr(GtkTreeListRow) row = NULL;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeTree *self;
 
-  g_assert (IDE_IS_TREE_MODEL (model));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TREE_NODE (node));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (ide_tree_model_expand_finish (model, result, NULL))
+  if (!_ide_tree_node_expand_finish (node, result, &error))
     {
-      g_autoptr(GtkTreePath) path = NULL;
-      IdeTreeNode *node;
-      IdeTree *self;
-
-      self = ide_task_get_source_object (task);
-      node = ide_task_get_task_data (task);
-
-      g_assert (IDE_IS_TREE (self));
-      g_assert (IDE_IS_TREE_NODE (node));
-
-      if ((path = ide_tree_node_get_path (node)))
-        gtk_tree_view_expand_row (GTK_TREE_VIEW (self), path, FALSE);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
+  self = ide_task_get_source_object (task);
+
+  if ((row = _ide_tree_get_row_at_node (self, node, TRUE)))
+    gtk_tree_list_row_set_expanded (row, TRUE);
+
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+void
+ide_tree_expand_node_async (IdeTree             *self,
+                            IdeTreeNode         *node,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_TREE (self));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_tree_expand_node_async);
+
+  _ide_tree_node_expand_async (node,
+                               priv->addins,
+                               cancellable,
+                               ide_tree_expand_node_cb,
+                               g_steal_pointer (&task));
+}
+
+gboolean
+ide_tree_expand_node_finish (IdeTree       *self,
+                             GAsyncResult  *result,
+                             GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_TREE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 void
 ide_tree_expand_node (IdeTree     *self,
                       IdeTreeNode *node)
 {
-  g_autoptr(IdeTask) task = NULL;
-  IdeTreeModel *model;
-
   g_return_if_fail (IDE_IS_TREE (self));
+  g_return_if_fail (IDE_IS_TREE_NODE (node));
 
-  if (!(model = ide_tree_get_model (self)))
-    return;
-
-  task = ide_task_new (self, NULL, NULL, NULL);
-  ide_task_set_source_tag (task, ide_tree_expand_node);
-  ide_task_set_task_data (task, g_object_ref (node), g_object_unref);
-
-  ide_tree_model_expand_async (model,
-                               node,
-                               NULL,
-                               ide_tree_expand_node_cb,
-                               g_steal_pointer (&task));
-}
-
-gboolean
-ide_tree_node_expanded (IdeTree     *self,
-                        IdeTreeNode *node)
-{
-  g_autoptr(GtkTreePath) path = NULL;
-
-  g_return_val_if_fail (IDE_IS_TREE (self), FALSE);
-  g_return_val_if_fail (!node || IDE_IS_TREE_NODE (node), FALSE);
-
-  if (node == NULL)
-    return FALSE;
-
-  if (!(path = ide_tree_node_get_path (node)))
-    return FALSE;
-
-  return gtk_tree_view_row_expanded (GTK_TREE_VIEW (self), path);
+  ide_tree_expand_node_async (self, node, NULL, NULL, NULL);
 }
 
 void
 ide_tree_collapse_node (IdeTree     *self,
                         IdeTreeNode *node)
 {
-  IdeTreeModel *model;
-  g_autoptr(GtkTreePath) path = NULL;
+  g_autoptr(GtkTreeListRow) row = NULL;
 
-  g_return_if_fail (IDE_IS_TREE (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (IDE_IS_TREE_NODE (node));
+  g_assert (node != ide_tree_get_root (self));
 
-  if (!(model = ide_tree_get_model (self)))
-    return;
-
-  if ((path = ide_tree_node_get_path (node)))
-    gtk_tree_view_collapse_row (GTK_TREE_VIEW (self), path);
+  if ((row = _ide_tree_get_row_at_node (self, node, FALSE)))
+    gtk_tree_list_row_set_expanded (row, FALSE);
 }
 
-GdkDragAction
-_ide_tree_get_drop_actions (IdeTree *self)
+/**
+ * ide_tree_get_menu_model:
+ * @self: a #IdeTree
+ *
+ * Gets the menu model for the tree.
+ *
+ * Returns: (transfer none) (nullable): a #GMenuModel or %NULL
+ */
+GMenuModel *
+ide_tree_get_menu_model (IdeTree *self)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TREE (self), 0);
-
-  return priv->drop_action;
-}
-
-IdeTreeNode *
-_ide_tree_get_drop_node (IdeTree *self)
-{
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  g_autoptr(GtkTreePath) copy = NULL;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
 
   g_return_val_if_fail (IDE_IS_TREE (self), NULL);
 
-  if (priv->drop_path == NULL)
-    return NULL;
+  return priv->menu_model;
+}
 
-  copy = gtk_tree_path_copy (priv->drop_path);
+void
+ide_tree_set_menu_model (IdeTree    *self,
+                         GMenuModel *menu_model)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
 
-  if (priv->drop_pos == GTK_TREE_VIEW_DROP_BEFORE ||
-      priv->drop_pos == GTK_TREE_VIEW_DROP_AFTER)
-    {
-      if (gtk_tree_path_get_depth (copy) > 1)
-        gtk_tree_path_up (copy);
-    }
+  g_return_if_fail (IDE_IS_TREE (self));
+  g_return_if_fail (!menu_model || G_IS_MENU_MODEL (menu_model));
 
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self));
-
-  if (gtk_tree_model_get_iter (model, &iter, copy))
-    {
-      IdeTreeNode *node = iter.user_data;
-
-      if (IDE_IS_TREE_NODE (node))
-        {
-          if (ide_tree_node_is_empty (node))
-            node = ide_tree_node_get_parent (node);
-        }
-
-      return node;
-    }
-
-  return NULL;
+  if (g_set_object (&priv->menu_model, menu_model))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_MODEL]);
 }
