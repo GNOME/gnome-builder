@@ -122,14 +122,14 @@
       <attribute name="group">ignore</attribute>
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
-        <attribute name="action">sysprof.save-as</attribute>
+        <attribute name="action">page.save-as</attribute>
         <attribute name="accel">&lt;control&gt;s</attribute>
       </item>
     </section>
     <section id="gbp-sysprof-page-record-section">
       <item>
         <attribute name="label" translatable="yes">Record Again…</attribute>
-        <attribute name="action">sysprof.record-again</attribute>
+        <attribute name="action">page.record-again</attribute>
       </item>
     </section>
     <section id="gbp-sysprof-page-close-section">
