@@ -562,7 +562,7 @@ gbp_project_tree_pane_actions_rename (GSimpleAction *action,
   file = ide_project_file_ref_file (project_file);
 
   popover = g_object_new (GBP_TYPE_RENAME_FILE_POPOVER,
-                          "position", GTK_POS_LEFT,
+                          "position", GTK_POS_RIGHT,
                           "is-directory", is_dir,
                           "file", file,
                           NULL);
