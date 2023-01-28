@@ -610,11 +610,23 @@ gbp_project_tree_addin_unload (IdeTreeAddin *addin,
   self->tree = NULL;
 }
 
-static gboolean
+static GdkContentProvider *
 gbp_project_tree_addin_node_draggable (IdeTreeAddin *addin,
                                        IdeTreeNode  *node)
 {
-  return ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE);
+  if (ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE))
+    {
+      IdeProjectFile *pf = ide_tree_node_get_item (node);
+      g_autoptr(GFile) file = ide_project_file_ref_file (pf);
+      g_auto(GValue) value = G_VALUE_INIT;
+
+      g_value_init (&value, G_TYPE_FILE);
+      g_value_take_object (&value, g_steal_pointer (&file));
+
+      return gdk_content_provider_new_for_value (&value);
+    }
+
+  return NULL;
 }
 
 static gboolean

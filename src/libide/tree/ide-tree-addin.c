@@ -272,17 +272,29 @@ ide_tree_addin_node_collapsed (IdeTreeAddin *self,
     IDE_TREE_ADDIN_GET_IFACE (self)->node_collapsed (self, node);
 }
 
-gboolean
+/**
+ * ide_tree_addin_node_draggable:
+ * @self: a #IdeTreeAddin
+ * @node: an #IdeTreeNode
+ *
+ * Checks if a node is draggable.
+ *
+ * Returns: (transfer full) (nullable): %NULL or a #GdkContentProvider if
+ *   the node is draggable.
+ *
+ * Since: 44
+ */
+GdkContentProvider *
 ide_tree_addin_node_draggable (IdeTreeAddin *self,
                                IdeTreeNode  *node)
 {
-  g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TREE_NODE (node), FALSE);
+  g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), NULL);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (node), NULL);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->node_draggable)
     return IDE_TREE_ADDIN_GET_IFACE (self)->node_draggable (self, node);
 
-  return FALSE;
+  return NULL;
 }
 
 gboolean

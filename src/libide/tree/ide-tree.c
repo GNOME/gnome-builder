@@ -61,6 +61,13 @@ typedef struct
 {
   IdeTree     *tree;
   IdeTreeNode *node;
+  GPtrArray   *providers;
+} DragPrepare;
+
+typedef struct
+{
+  IdeTree     *tree;
+  IdeTreeNode *node;
   guint        handled : 1;
 } NodeActivated;
 
@@ -261,21 +268,61 @@ ide_tree_click_pressed_cb (GtkGestureClick *click,
     }
 }
 
+static void
+ide_tree_drag_source_prepare_addin_cb (IdeExtensionSetAdapter *adapter,
+                                       PeasPluginInfo         *plugin_info,
+                                       PeasExtension          *exten,
+                                       gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)exten;
+  DragPrepare *state = user_data;
+  GdkContentProvider *provider;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+
+  if ((provider = ide_tree_addin_node_draggable (addin, state->node)))
+    g_ptr_array_add (state->providers, g_steal_pointer (&provider));
+}
+
 static GdkContentProvider *
 ide_tree_drag_source_prepare_cb (IdeTree       *self,
                                  double         x,
                                  double         y,
                                  GtkDragSource *source)
 {
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+  g_autoptr(GPtrArray) providers = NULL;
+  GdkContentProvider *provider = NULL;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+  DragPrepare state = {0};
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE (self));
   g_assert (GTK_IS_DRAG_SOURCE (source));
 
-  /* TODO: Check with addins about drag */
+  expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source)));
+  row = ide_tree_expander_get_list_row (expander);
+  node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
+  providers = g_ptr_array_new ();
 
-  IDE_RETURN (NULL);
+  state.tree = self;
+  state.node = node;
+  state.providers = providers;
+
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_tree_drag_source_prepare_addin_cb,
+                                     &state);
+
+  if (providers->len > 0)
+    provider = gdk_content_provider_new_union ((GdkContentProvider **)providers->pdata, providers->len);
+
+  IDE_RETURN (provider);
 }
 
 static void
@@ -283,12 +330,33 @@ ide_tree_drag_source_drag_begin_cb (IdeTree       *self,
                                     GdkDrag       *drag,
                                     GtkDragSource *source)
 {
+  g_autoptr(GdkPaintable) paintable = NULL;
+  GtkWidget *widget;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE (self));
   g_assert (GDK_IS_DRAG (drag));
   g_assert (GTK_IS_DRAG_SOURCE (source));
+
+  /* Get our IdeTreeExpander */
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+
+  /* But snapshot the parent to get row content */
+  widget = gtk_widget_get_parent (widget);
+
+  if ((paintable = gtk_widget_paintable_new (widget)))
+    {
+      GtkSnapshot *snapshot = gtk_snapshot_new ();
+      double width = gdk_paintable_get_intrinsic_width (paintable);
+      double height = gdk_paintable_get_intrinsic_height (paintable);
+
+      gdk_paintable_snapshot (paintable, snapshot, width, height);
+      g_clear_object (&paintable);
+      paintable = gtk_snapshot_free_to_paintable (snapshot, &GRAPHENE_SIZE_INIT (width, height));
+      gtk_drag_source_set_icon (source, paintable, 0, 0);
+    }
 
   IDE_EXIT;
 }
@@ -305,6 +373,9 @@ ide_tree_drag_source_drag_end_cb (IdeTree       *self,
   g_assert (IDE_IS_TREE (self));
   g_assert (GTK_IS_DRAG_SOURCE (source));
   g_assert (GDK_IS_DRAG (drag));
+
+  gtk_drag_source_set_content (source, NULL);
+  gtk_drag_source_set_icon (source, NULL, 0, 0);
 
   IDE_EXIT;
 }

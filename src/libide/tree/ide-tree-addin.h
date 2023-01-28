@@ -65,7 +65,8 @@ struct _IdeTreeAddinInterface
                                      IdeTreeNode          *node);
   void     (*node_collapsed)        (IdeTreeAddin         *self,
                                      IdeTreeNode          *node);
-  gboolean (*node_draggable)        (IdeTreeAddin         *self,
+  GdkContentProvider *
+           (*node_draggable)        (IdeTreeAddin         *self,
                                      IdeTreeNode          *node);
   gboolean (*node_droppable)        (IdeTreeAddin         *self,
                                      IdeTreeNode          *drag_node,
@@ -116,8 +117,9 @@ void     ide_tree_addin_node_expanded         (IdeTreeAddin         *self,
 IDE_AVAILABLE_IN_ALL
 void     ide_tree_addin_node_collapsed        (IdeTreeAddin         *self,
                                                IdeTreeNode          *node);
-IDE_AVAILABLE_IN_ALL
-gboolean ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
+IDE_AVAILABLE_IN_44
+GdkContentProvider *
+         ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
                                                IdeTreeNode          *node);
 IDE_AVAILABLE_IN_ALL
 gboolean ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
