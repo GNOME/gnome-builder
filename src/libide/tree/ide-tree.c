@@ -261,12 +261,61 @@ ide_tree_click_pressed_cb (GtkGestureClick *click,
     }
 }
 
+static GdkContentProvider *
+ide_tree_drag_source_prepare_cb (IdeTree       *self,
+                                 double         x,
+                                 double         y,
+                                 GtkDragSource *source)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DRAG_SOURCE (source));
+
+  /* TODO: Check with addins about drag */
+
+  IDE_RETURN (NULL);
+}
+
+static void
+ide_tree_drag_source_drag_begin_cb (IdeTree       *self,
+                                    GdkDrag       *drag,
+                                    GtkDragSource *source)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GDK_IS_DRAG (drag));
+  g_assert (GTK_IS_DRAG_SOURCE (source));
+
+  IDE_EXIT;
+}
+
+static void
+ide_tree_drag_source_drag_end_cb (IdeTree       *self,
+                                  GdkDrag       *drag,
+                                  gboolean       delete_data,
+                                  GtkDragSource *source)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DRAG_SOURCE (source));
+  g_assert (GDK_IS_DRAG (drag));
+
+  IDE_EXIT;
+}
+
 static void
 ide_tree_list_item_setup_cb (IdeTree                  *self,
                              GtkListItem              *item,
                              GtkSignalListItemFactory *factory)
 {
   IdeTreeExpander *expander;
+  GtkDragSource *drag;
   GtkGesture *gesture;
   GtkImage *image;
 
@@ -278,7 +327,12 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
   expander = g_object_new (IDE_TYPE_TREE_EXPANDER,
                            "suffix", image,
                            NULL);
+  gtk_list_item_set_child (item, GTK_WIDGET (expander));
 
+  /* Handle click events before IdeTreeExpander handles expansion of
+   * rows which have children. We need to deal with right-click context
+   * menus and IdeTreeAddin handling activation before.
+   */
   gesture = gtk_gesture_click_new ();
   gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "ide-tree-click");
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
@@ -290,7 +344,28 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
                     NULL);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (gesture));
 
-  gtk_list_item_set_child (item, GTK_WIDGET (expander));
+  /* Setup Drag gesture for this row */
+  drag = gtk_drag_source_new ();
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (drag), "ide-tree-drag");
+  gtk_drag_source_set_actions (drag, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (drag),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect_object (drag,
+                           "prepare",
+                           G_CALLBACK (ide_tree_drag_source_prepare_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drag,
+                           "drag-begin",
+                           G_CALLBACK (ide_tree_drag_source_drag_begin_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drag,
+                           "drag-end",
+                           G_CALLBACK (ide_tree_drag_source_drag_end_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (drag));
 }
 
 static void
