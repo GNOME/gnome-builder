@@ -1013,13 +1013,56 @@ ide_tree_set_selected_node (IdeTree     *self,
   gtk_widget_activate_action (GTK_WIDGET (priv->list_view), "list.scroll-to-item", "u", position);
 }
 
+static void
+ide_tree_rebuild_node_cb (IdeExtensionSetAdapter *set,
+                          PeasPluginInfo         *plugin_info,
+                          PeasExtension          *exten,
+                          gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)exten;
+  IdeTreeNode *node = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+  g_assert (IDE_IS_TREE_NODE (node));
+
+  ide_tree_addin_build_node (addin, node);
+}
+
 void
 ide_tree_invalidate_all (IdeTree *self)
 {
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  IdeTreeNode *root;
+
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_TREE (self));
 
-  g_critical ("TODO: implement invalidate all");
+  if (!(root = ide_tree_get_root (self)))
+    IDE_EXIT;
+
+  for (IdeTreeNode *child = ide_tree_node_get_first_child (root);
+       child != NULL;
+       child = ide_tree_node_get_next_sibling (child))
+    {
+      gboolean expanded = ide_tree_is_node_expanded (self, child);
+
+      if (expanded)
+        ide_tree_collapse_node (self, child);
+
+      ide_extension_set_adapter_foreach (priv->addins,
+                                         ide_tree_rebuild_node_cb,
+                                         child);
+
+      if (expanded)
+        ide_tree_expand_node (self, child);
+    }
+
+  IDE_EXIT;
 }
 
 void
