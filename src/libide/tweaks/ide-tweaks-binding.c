@@ -209,7 +209,26 @@ ide_tweaks_binding_real_changed (IdeTweaksBinding *self)
 
   g_value_init (&value, priv->pspec->value_type);
   if (ide_tweaks_binding_get_value (self, &value))
-    g_object_set_property (instance, priv->pspec->name, &value);
+    {
+      /* Some objects don't properly check for matching strings
+       * so do it up front to avoid spurious changes. This fixes
+       * an issue with libadwaita AdwEntryRow resetting the insert
+       * position when changing the text with matching text.
+       */
+      if (G_VALUE_HOLDS_STRING (&value))
+        {
+          g_auto(GValue) dest = G_VALUE_INIT;
+
+          g_value_init (&dest, G_TYPE_STRING);
+          g_object_get_property (instance, priv->pspec->name, &dest);
+
+          if (g_strcmp0 (g_value_get_string (&value),
+                         g_value_get_string (&dest)) == 0)
+            return;
+        }
+
+      g_object_set_property (instance, priv->pspec->name, &value);
+    }
 }
 
 static void
