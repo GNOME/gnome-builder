@@ -636,6 +636,14 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
 }
 
 static void
+invalidate_all_action (GtkWidget  *widget,
+                       const char *action_name,
+                       GVariant   *param)
+{
+  ide_tree_invalidate_all (IDE_TREE (widget));
+}
+
+static void
 ide_tree_dispose (GObject *object)
 {
   IdeTree *self = (IdeTree *)object;
@@ -773,6 +781,8 @@ ide_tree_class_init (IdeTreeClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_unbind_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_setup_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_tree_list_item_teardown_cb);
+
+  gtk_widget_class_install_action (widget_class, "tree.invalidate-all", NULL, invalidate_all_action);
 }
 
 static void
