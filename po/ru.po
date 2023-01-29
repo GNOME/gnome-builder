@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-13 15:11+0000\n"
-"PO-Revision-Date: 2022-10-14 09:09+1000\n"
-"Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
+"POT-Creation-Date: 2023-01-25 17:59+0000\n"
+"PO-Revision-Date: 2023-01-25 21:15+0300\n"
+"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -120,11 +120,12 @@ msgstr "Возможность редактирования в стиле Vim, E
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "An integrated software profiler for native applications"
 msgstr ""
-"Интегрированное программное обеспечение профайлера для собственных приложений"
+"Интегрированное программное обеспечение для профилирования собственных "
+"приложений"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "An integrated debugger for native applications"
-msgstr "Интегрированный отладчик для приложений"
+msgstr "Интегрированный отладчик для собственных приложений"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
@@ -238,8 +239,8 @@ msgstr ""
 "Отладчик должен автоматически вставлять точку остановки в функцию main()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
-msgstr "Точка останова отладчика в g_critical()"
+msgid "Debugger Breakpoint at Criticals"
+msgstr "Точка останова отладчика в критических точках"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
@@ -249,15 +250,16 @@ msgstr ""
 "g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr "Точка останова отладчика в функции g_warning()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
+msgstr "Точка останова отладчика при предупреждениях и критических точках"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
-"Отладчик должен автоматически вставлять точку остановки в функцию "
-"g_warning()."
+"Отладчик должен автоматически вставлять точку останова в функции g_warning() "
+"и g_critical."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -780,11 +782,11 @@ msgstr "Справка"
 #: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
 #: src/libide/gui/gtk/menus.ui:50
 msgid "About Builder"
-msgstr "О программе"
+msgstr "О приложении"
 
 #: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
 msgid "_Quit"
-msgstr "_Завершить"
+msgstr "_Закрыть"
 
 #: src/libide/editor/gtk/menus.ui:66
 msgid "Document"
@@ -1509,7 +1511,7 @@ msgstr "Новый терминал"
 msgid "Open application menu (F10)"
 msgstr "Открыть меню приложения (F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Не удается загрузить HTML. Отсутствует поддержка WebKit."
 
@@ -1633,11 +1635,11 @@ msgstr "Сеть"
 
 #: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
-msgstr "Языковая способность"
+msgstr "Поддержка языков"
 
 #: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
-msgstr "Интеграция рабочего стола"
+msgstr "Интеграция с рабочим столом"
 
 #: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
@@ -1696,7 +1698,7 @@ msgstr "Отменить"
 
 #: src/libide/sourceview/gtk/menus.ui:31
 msgid "Undo & Redo"
-msgstr "Отменить и вернуть"
+msgstr "Отменить и повторить"
 
 #: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
@@ -1712,7 +1714,7 @@ msgstr "Уменьшить"
 
 #: src/libide/sourceview/gtk/menus.ui:55
 msgid "Reset Zoom"
-msgstr "Сбросить"
+msgstr "Сбросить масштаб"
 
 #: src/libide/sourceview/gtk/menus.ui:61
 msgid "Zoom In"
@@ -1788,7 +1790,7 @@ msgid "Code Navigation"
 msgstr "Навигация по коду"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1535
+#: src/libide/sourceview/ide-source-view.c:1628
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1978,6 +1980,24 @@ msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "Проект BuildStream в использовании, но исполняемый файл «bst» не удалось "
 "найти."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr ""
+"Используйте конструкцию KEY=VALUE, чтобы установить переменную окружения"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr "Ключи не могут начинаться с цифры"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
+"Ключи могут содержать только буквенно-цифровые символы или символы "
+"подчеркивания."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2313,7 +2333,7 @@ msgstr "Модульные тесты"
 
 #: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
-msgstr "Следовать системному стилю"
+msgstr "Использовать системный стиль"
 
 #: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
@@ -2489,9 +2509,9 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Сборка и инструменты"
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:357
 msgid "General"
-msgstr "Основные"
+msgstr "Общие"
 
 #: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -2529,73 +2549,26 @@ msgstr "По умолчанию"
 msgid "1 per CPU"
 msgstr "1 на ЦП"
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr "16"
-
-#: src/plugins/buildui/tweaks.ui:275
-msgid "32"
-msgstr "32"
-
-#: src/plugins/buildui/tweaks.ui:281
-msgid "64"
-msgstr "64"
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr "128"
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr "256"
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr "512"
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:325
 msgid "Tooling"
 msgstr "Инструменты"
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:360
 msgid "Installation Prefix"
 msgstr "Префикс установки"
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:361
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 "Проект будет установлен в этот каталог на этапе установки конвейера сборки."
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
 msgstr "Параметры конфигурирования"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:392
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2603,11 +2576,11 @@ msgstr ""
 "Эти параметры используются системой сборки для настройки проекта на этапе "
 "настройки конвейера сборки"
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
 msgstr "Окружение сборки"
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:415
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -3251,13 +3224,25 @@ msgstr "Вставка используя пробелы"
 msgid "Spaces per Tab"
 msgstr "Пробелов в табуляции"
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -4064,7 +4049,7 @@ msgstr "_Заменить на %s"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5
 msgid "Find in Files (Ctrl+Alt+Shift+F)"
-msgstr "Найти в файлах (Ctrl+Alt+Shift+F)"
+msgstr "Найти в Файлах (Ctrl+Alt+Shift+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
@@ -4365,43 +4350,43 @@ msgstr "Удалить набор инструментов"
 msgid "Delete Tool"
 msgstr "Удалить инструмент"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
 msgid "GNOME Application"
 msgstr "Приложение GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Проект на базе Meson для GNOME с использованием GTK4 и libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
 msgid "GTK 4 Application"
 msgstr "Приложение GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
 msgid "A Meson-based project using GTK 4"
 msgstr "Проект на базе Meson с использованием GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
 msgid "Shared Library"
 msgstr "Разделяемая библиотека"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
 msgid "A Meson-based project for a shared library"
 msgstr "Проект на базе Meson для библиотеки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "Command Line Tool"
 msgstr "Инструмент командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "An Meson-based project for a command-line program"
 msgstr "Проект на базе Meson для программы командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "Empty Meson Project"
 msgstr "Пустой проект Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "An empty Meson project skeleton"
 msgstr "Пустой скелет проекта на Meson"
 
@@ -4831,7 +4816,7 @@ msgstr "Команда cargo по умолчанию для запуска с п
 
 #: src/plugins/rust-analyzer/tweaks.ui:45
 msgid "Features"
-msgstr "Особенности"
+msgstr "Возможности"
 
 #: src/plugins/rust-analyzer/tweaks.ui:48
 msgid "Proc Macros"
@@ -4888,21 +4873,6 @@ msgstr ""
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
 msgstr "Доступные SDK"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-msgid "Use KEY=VALUE to set an environment variable"
-msgstr ""
-"Используйте конструкцию KEY=VALUE, чтобы установить переменную окружения"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
-msgid "Keys may not start with a number"
-msgstr "Ключи не могут начинаться с цифры"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
-msgid "Keys may only contain alpha-numerics or underline."
-msgstr ""
-"Ключи могут содержать только буквенно-цифровые символы или символы "
-"подчеркивания."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
@@ -5129,7 +5099,7 @@ msgstr "Декодирование символов начнется после 
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
-msgstr "Открыть захват профайлера…"
+msgstr "Открыть захват Sysprof…"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Sysprof Capture (*.syscap)"
@@ -5142,19 +5112,19 @@ msgstr "Все файлы"
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
-msgstr "Открыть Захват _Sysprof…"
+msgstr "Открыть захват _Sysprof…"
 
 #: src/plugins/sysprof/gtk/menus.ui:19
 msgid "Run with Profiler"
-msgstr "Запустить с помощью профайлера"
+msgstr "Запустить с помощью профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:22
 msgid "Run the project with profiler"
-msgstr "Запустить проект с помощью профайлера"
+msgstr "Запустить проект с помощью профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
-msgstr "Профайлер"
+msgstr "Профилировщик"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
 msgid "Thread Sampling"
@@ -5222,11 +5192,11 @@ msgstr "Разрешить «троттлинг» ЦП"
 
 #: src/plugins/sysprof/gtk/menus.ui:112
 msgid "Run with _Profiler"
-msgstr "Запустить с помощью _профайлера"
+msgstr "Запустить с помощью _профилировщика"
 
 #: src/plugins/sysprof/gtk/menus.ui:130
 msgid "Record Again…"
-msgstr "Записать сново…"
+msgstr "Записать ещё раз…"
 
 #: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
@@ -5640,7 +5610,7 @@ msgstr "Начать клонирование проекта из URI"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
-msgstr "Произошёл сбой при клонировании репозитория."
+msgstr "Произошел сбой при клонировании репозитория."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
@@ -5664,7 +5634,7 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
-msgstr "Репозиторий будет клонирован в новую дочернюю папку."
+msgstr "Репозиторий будет клонирован в новый подкаталог."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
 msgid "Author Details"
@@ -5733,6 +5703,273 @@ msgstr "Не удалось создать дерево XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл должен быть сохранен локально для разбора."
+
+#~ msgid "Inherit Language Server stderr"
+#~ msgstr "Перенаправлять stderr языкового сервера"
+
+#~ msgid ""
+#~ "If enabled, stderr of language servers will be redirected to the console."
+#~ msgstr ""
+#~ "Если этот параметр включён, stderr языковых серверов будет перенаправлен "
+#~ "на консоль."
+
+#~ msgid "File Contains Encoding Errors"
+#~ msgstr "Файл содержит ошибки кодирования"
+
+#~ msgid ""
+#~ "The encoding used to load the file detected errors. You may select an "
+#~ "alternate encoding from the statusbar and reload."
+#~ msgstr ""
+#~ "В кодировке, используемой при загрузке файла, обнаружены ошибки. Вы "
+#~ "можете выбрать альтернативную кодировку в строке состояния и "
+#~ "перезагрузить файл."
+
+#~ msgid "Search for anything"
+#~ msgstr "Поиск чего-либо"
+
+#~ msgid "_Everything"
+#~ msgstr "_Все"
+
+#~ msgid "_Actions"
+#~ msgstr "_Действия"
+
+#~ msgid "_Commands"
+#~ msgstr "_Команды"
+
+#~ msgid "_Files"
+#~ msgstr "_Файлы"
+
+#~ msgid "_Symbols"
+#~ msgstr "_Символы"
+
+#~ msgid "Get help with using Builder"
+#~ msgstr "Получить помощь по использованию Builder"
+
+#~ msgid "Quit without saving changes"
+#~ msgstr "Закрыть без сохранения изменений"
+
+#~ msgid "C_ut (Ctrl+X)"
+#~ msgstr "В_ырезать (Ctrl+X)"
+
+#~ msgid "_Copy (Ctrl+C)"
+#~ msgstr "_Копировать (Ctrl+C)"
+
+#~ msgid "_Paste (Ctrl+V)"
+#~ msgstr "_Вставить (Ctrl+V)"
+
+#~ msgid "Undo (Ctrl+Z)"
+#~ msgstr "Отменить (Ctrl+Z)"
+
+#~ msgid "Redo (Shift+Ctrl+Z)"
+#~ msgstr "Повторить (Shift+Ctrl+Z)"
+
+#~ msgid "Zoom Out (Ctrl+-)"
+#~ msgstr "Уменьшить (Ctrl+-)"
+
+#~ msgid "Zoom In (Ctrl++)"
+#~ msgstr "Увеличить (Ctrl++)"
+
+#~ msgid "_Formatting"
+#~ msgstr "_Форматирование"
+
+#, c-format
+#~ msgid "Ln %u, Col %u (Sel: %u)"
+#~ msgstr "Стр %u, Стлб %u (Выд: %u)"
+
+#~ msgid "Build Output (Shift+Ctrl+L)"
+#~ msgstr "Результат сборки (Shift+Ctrl+L)"
+
+#~ msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
+#~ msgstr "Остановить сборку проекта (Shift+Ctrl+Alt+C)"
+
+#~ msgid "Reload Configuration"
+#~ msgstr "Перезагрузка конфигурации"
+
+#~ msgid "Reload project configuration"
+#~ msgstr "Перезагрузка конфигурации проекта"
+
+#~ msgid "Stop Building"
+#~ msgstr "Остановить сборку"
+
+#~ msgid "Cancel the current build operation"
+#~ msgstr "Отменить текущую операцию сборки"
+
+#~ msgid "Show Bui_ld Output"
+#~ msgstr "Показать результаты сб_орки"
+
+#~ msgid "Restart Program"
+#~ msgstr "Перезапустить программу"
+
+#~ msgid "Restart the running program"
+#~ msgstr "Перезапустить запущенную программу"
+
+#~ msgid "Stop Program"
+#~ msgstr "Остановить программу"
+
+#~ msgid "Stop running the project"
+#~ msgstr "Остановить запущенный проект"
+
+#~ msgid "Debugging"
+#~ msgstr "Отладка"
+
+#~ msgid "Log to Console"
+#~ msgstr "Журнал в консоль"
+
+#~ msgid "Redirect language server error logs to stderr"
+#~ msgstr "Перенаправить журналы ошибок языкового сервера в stderr"
+
+#~ msgid "Project Symbols"
+#~ msgstr "Символы проекта"
+
+#~ msgid "Code Actions"
+#~ msgstr "Коды операций"
+
+#~ msgid "_Apply"
+#~ msgstr "_Применить"
+
+#~ msgid "No code actions available"
+#~ msgstr "Нет доступных кодов операций"
+
+#~ msgid "Code Action Failure"
+#~ msgstr "Код ошибки операции"
+
+#~ msgid "Code Actions…"
+#~ msgstr "Коды операций…"
+
+#~ msgid "Display a list of possible code actions from the cursor position"
+#~ msgstr "Отображение списка возможных кодов операций с позиции курсора"
+
+#~ msgid "Toggle Breakpoint"
+#~ msgstr "Переключение точки останова"
+
+#~ msgid "Toggle breakpoint at current line"
+#~ msgstr "Переключить точку останова на текущей строке"
+
+#~ msgid "Continue"
+#~ msgstr "Продолжить"
+
+#~ msgid "Continue debugging to next breakpoint"
+#~ msgstr "Продолжить отладку до следующей точки останова"
+
+#~ msgid "Pause"
+#~ msgstr "Приостановить"
+
+#~ msgid "Pause debugger until continued"
+#~ msgstr "Приостановить отладчик до продолжения"
+
+#~ msgid "Step Over"
+#~ msgstr "Перейти"
+
+#~ msgid "Step Into"
+#~ msgstr "Войти"
+
+#~ msgid "Step Out"
+#~ msgstr "Выйти"
+
+#~ msgid "Pause the program (F6)"
+#~ msgstr "Приостановить программу (F6)"
+
+#~ msgid "Execute the current line, stepping into any function calls (F8)"
+#~ msgstr "Выполнить текущую строку, входя внутрь вызовов функций (F8)"
+
+#~ msgid "Execute the current line, stepping over any function calls (F7)"
+#~ msgstr "Выполнить текущую строку, переходя через вызовы функций (F7)"
+
+#~ msgid "Run until the end of the function (Shift+F8)"
+#~ msgstr "Выполнять до конца функции (Shift+F8)"
+
+#~ msgid "Dub Run"
+#~ msgstr "Запуск Dub"
+
+#~ msgid "Plain Text"
+#~ msgstr "Просто текст"
+
+#~ msgid "Format Document"
+#~ msgstr "Форматировать документ"
+
+#~ msgid "Highlighting"
+#~ msgstr "Подсветка"
+
+#~ msgid "Open file or folder"
+#~ msgstr "Открыть файл или папку"
+
+#~ msgid "Resolving SDK Extensions"
+#~ msgstr "Разрешение расширений SDK"
+
+#~ msgid ""
+#~ "Builder is locating the appropriate SDK extensions to build your project"
+#~ msgstr ""
+#~ "Builder найдет соответствующие расширения SDK для сборки вашего проекта"
+
+#~ msgid "Bundled with Builder"
+#~ msgstr "Связанная c «Builder»"
+
+#~ msgid "Actions"
+#~ msgstr "Действия"
+
+#~ msgid "No keyboard shortcut found"
+#~ msgstr "Комбинация клавиш не найдена"
+
+#~ msgid "Try a different search"
+#~ msgstr "Попробуйте другой поисковый запрос"
+
+#~ msgid "_Reset All"
+#~ msgstr "_Сбросить все"
+
+#~ msgid "Reset all actions to original keyboard shortcut"
+#~ msgstr "Сброс всех действий на исходную комбинацию клавиш"
+
+#~ msgid "_Edit File"
+#~ msgstr "_Редактировать файл"
+
+#~ msgid "Open keybindings.json in editor"
+#~ msgstr "Открыть keybindings.json в редакторе"
+
+#~ msgid "View and Customize Shortcuts…"
+#~ msgstr "Просмотр и изменение комбинаций клавиш…"
+
+#~ msgid "Symbols in File"
+#~ msgstr "Символы в Файлах"
+
+#~ msgid "Open a web browser in a new page"
+#~ msgstr "Открыть веб-браузер на новой странице"
+
+#~ msgid "Debugger Breakpoint at g_warning()"
+#~ msgstr "Точка останова отладчика в функции g_warning()"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "16"
+#~ msgstr "16"
+
+#~ msgid "32"
+#~ msgstr "32"
+
+#~ msgid "64"
+#~ msgstr "64"
+
+#~ msgid "128"
+#~ msgstr "128"
+
+#~ msgid "256"
+#~ msgstr "256"
+
+#~ msgid "512"
+#~ msgstr "512"
+
+#~ msgid "Enable Search Bubbles"
+#~ msgstr "Включить пузыри поиска"
+
+#~ msgid "Display search results with additional styling to stand out"
+#~ msgstr ""
+#~ "Отображать результаты поиска с дополнительным оформлением при выделении"
+
+#~ msgid "Search Shadows"
+#~ msgstr "Тени в поиске"
 
 #~ msgid "Restore Previous Files"
 #~ msgstr "Восстановить предыдущие файлы"
@@ -5857,10 +6094,6 @@ msgstr "Файл должен быть сохранен локально для 
 #, c-format
 #~ msgid "No beautifier available for “%s”"
 #~ msgstr "Нет доступных украшений для «%s»"
-
-#, c-format
-#~ msgid "No beautifier available"
-#~ msgstr "Нет доступных украшений"
 
 #, c-format
 #~ msgid "Beautifier plugin: no valid entries, disabling: %s"
@@ -6321,9 +6554,6 @@ msgstr "Файл должен быть сохранен локально для 
 
 #~ msgid "Code Insight"
 #~ msgstr "Анализ кода"
-
-#~ msgid "Highlighting"
-#~ msgstr "Подсветка"
 
 #~ msgid ""
 #~ "Use code insight to highlight additional information discovered in source "
