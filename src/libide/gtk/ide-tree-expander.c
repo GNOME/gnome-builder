@@ -207,6 +207,7 @@ static void
 ide_tree_expander_dispose (GObject *object)
 {
   IdeTreeExpander *self = (IdeTreeExpander *)object;
+  GtkWidget *child;
 
   ide_tree_expander_set_list_row (self, NULL);
 
@@ -216,6 +217,16 @@ ide_tree_expander_dispose (GObject *object)
 
   g_clear_object (&self->list_row);
   g_clear_object (&self->menu_model);
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (self));
+
+  while (child != NULL)
+    {
+      GtkWidget *cur = child;
+      child = gtk_widget_get_next_sibling (child);
+      if (GTK_IS_POPOVER (cur))
+        gtk_widget_unparent (cur);
+    }
 
   G_OBJECT_CLASS (ide_tree_expander_parent_class)->dispose (object);
 }
@@ -736,14 +747,21 @@ ide_tree_expander_set_use_markup (IdeTreeExpander *self,
 static gboolean
 ide_tree_expander_remove_popover_idle (gpointer user_data)
 {
-  GtkPopover *popover = user_data;
+  gpointer *pair = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GTK_IS_POPOVER (popover));
+  g_assert (pair != NULL);
+  g_assert (IDE_IS_TREE_EXPANDER (pair[0]));
+  g_assert (GTK_IS_POPOVER (pair[1]));
 
-  gtk_widget_unparent (GTK_WIDGET (popover));
+  if (gtk_widget_get_parent (pair[1]) == pair[0])
+    gtk_widget_unparent (pair[1]);
+
+  g_object_unref (pair[0]);
+  g_object_unref (pair[1]);
+  g_free (pair);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -758,16 +776,16 @@ ide_tree_expander_popover_closed_cb (IdeTreeExpander *self,
 
   if (self->popover == popover)
     {
+      gpointer *pair = g_new (gpointer, 2);
+      pair[0] = g_object_ref (self);
+      pair[1] = g_object_ref (popover);
       /* We don't want to unparent the widget immediately because it gets
        * closed _BEFORE_ executing GAction. So removing it will cause the
        * actions to be unavailable.
        *
        * Instead, defer to an idle where we remove the popover.
        */
-      g_idle_add_full (G_PRIORITY_HIGH,
-                       ide_tree_expander_remove_popover_idle,
-                       g_object_ref (popover),
-                       g_object_unref);
+      g_idle_add (ide_tree_expander_remove_popover_idle, pair);
       self->popover = NULL;
     }
 }
