@@ -208,7 +208,7 @@ ide_tree_node_get_property (GObject    *object,
       break;
 
     case PROP_DESTROY_ITEM:
-      g_value_set_boolean (value, self->destroy_item);
+      g_value_set_boolean (value, ide_tree_node_get_destroy_item (self));
       break;
 
     case PROP_EXPANDED_ICON:
@@ -275,7 +275,7 @@ ide_tree_node_set_property (GObject      *object,
       break;
 
     case PROP_DESTROY_ITEM:
-      self->destroy_item = g_value_get_boolean (value);
+      ide_tree_node_set_destroy_item (self, g_value_get_boolean (value));
       break;
 
     case PROP_EXPANDED_ICON:
@@ -351,6 +351,7 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
     g_param_spec_boolean ("destroy-item", NULL, NULL,
                           FALSE,
                           (G_PARAM_READWRITE |
+                           G_PARAM_EXPLICIT_NOTIFY |
                            G_PARAM_STATIC_STRINGS));
 
   properties [PROP_EXPANDED_ICON] =
@@ -1354,4 +1355,27 @@ _ide_tree_node_show_popover (IdeTreeNode *self,
   g_signal_emit (self, signals [SHOW_POPOVER], 0, popover, &ret);
 
   return ret;
+}
+
+gboolean
+ide_tree_node_get_destroy_item (IdeTreeNode *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
+
+  return self->destroy_item;
+}
+
+void
+ide_tree_node_set_destroy_item (IdeTreeNode *self,
+                                gboolean     destroy_item)
+{
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+
+  destroy_item = !!destroy_item;
+
+  if (destroy_item != self->destroy_item)
+    {
+      self->destroy_item = destroy_item;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DESTROY_ITEM]);
+    }
 }

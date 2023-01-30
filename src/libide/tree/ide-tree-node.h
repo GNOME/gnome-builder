@@ -115,6 +115,11 @@ gboolean          ide_tree_node_get_has_error          (IdeTreeNode         *sel
 IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_has_error          (IdeTreeNode         *self,
                                                         gboolean             has_error);
+IDE_AVAILABLE_IN_44
+gboolean          ide_tree_node_get_destroy_item       (IdeTreeNode         *self);
+IDE_AVAILABLE_IN_44
+void              ide_tree_node_set_destroy_item       (IdeTreeNode         *self,
+                                                        gboolean             destroy_item);
 IDE_AVAILABLE_IN_ALL
 gpointer          ide_tree_node_get_item               (IdeTreeNode         *self);
 IDE_AVAILABLE_IN_ALL
