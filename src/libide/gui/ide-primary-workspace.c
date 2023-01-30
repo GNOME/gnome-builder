@@ -318,6 +318,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+  gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
 
   _ide_workspace_class_bind_template_dock (widget_class, G_STRUCT_OFFSET (IdePrimaryWorkspace, dock));
 

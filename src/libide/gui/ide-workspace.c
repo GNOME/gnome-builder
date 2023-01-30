@@ -1781,3 +1781,21 @@ _ide_workspace_get_addins (IdeWorkspace *self)
 
   return priv->addins;
 }
+
+gboolean
+_ide_workspace_adopt_widget (IdeWorkspace *workspace,
+                             PanelWidget  *widget,
+                             PanelDock    *dock)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (PANEL_IS_WIDGET (widget));
+  g_assert (PANEL_IS_DOCK (dock));
+
+  if (ide_widget_get_context (GTK_WIDGET (workspace)) == ide_widget_get_context (GTK_WIDGET (widget)))
+    IDE_RETURN (GDK_EVENT_PROPAGATE);
+
+  IDE_RETURN (GDK_EVENT_STOP);
+}

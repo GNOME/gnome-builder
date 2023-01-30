@@ -298,6 +298,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, project_title);
+  gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
 
   _ide_workspace_class_bind_template_dock (widget_class, G_STRUCT_OFFSET (IdeEditorWorkspace, dock));
 

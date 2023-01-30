@@ -80,5 +80,8 @@ void                    _ide_workspace_restore_session_simple   (IdeWorkspace   
                                                                  IdeWorkspaceDock     *dock);
 void                    _ide_workspace_set_ignore_size_setting  (IdeWorkspace         *self,
                                                                  gboolean              ignore_size_setting);
+gboolean                _ide_workspace_adopt_widget             (IdeWorkspace        *workspace,
+                                                                 PanelWidget         *widget,
+                                                                 PanelDock           *dock);
 
 G_END_DECLS

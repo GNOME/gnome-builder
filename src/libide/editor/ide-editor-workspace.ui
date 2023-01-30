@@ -42,6 +42,7 @@
         <property name="start-width">300</property>
         <property name="reveal-start">true</property>
         <property name="vexpand">true</property>
+        <signal name="adopt-widget" handler="_ide_workspace_adopt_widget" swapped="true"/>
         <child type="center">
           <object class="IdeGrid" id="grid">
           </object>
