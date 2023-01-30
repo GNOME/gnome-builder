@@ -56,7 +56,8 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
 
   if (IDE_IS_PROJECT_FILE (item))
     {
-      g_autoptr(GFile) file = ide_project_file_ref_file (IDE_PROJECT_FILE (item));
+      IdeProjectFile *pf = IDE_PROJECT_FILE (item);
+      g_autoptr(GFile) file = ide_project_file_ref_file (pf);
       g_autoptr(IdeVcsFileInfo) info = ide_vcs_monitor_ref_info (self->monitor, file);
       IdeTreeNodeFlags flags = ide_tree_node_get_flags (node);
 
@@ -65,6 +66,7 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
       if (info != NULL)
         {
           IdeVcsFileStatus status = ide_vcs_file_info_get_status (info);
+          gboolean got_flag = TRUE;
 
           if (status == IDE_VCS_FILE_STATUS_ADDED)
             flags |= IDE_TREE_NODE_FLAGS_ADDED;
@@ -72,6 +74,11 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
             flags |= IDE_TREE_NODE_FLAGS_CHANGED;
           else if (status == IDE_VCS_FILE_STATUS_DELETED)
             flags |= IDE_TREE_NODE_FLAGS_REMOVED;
+          else
+            got_flag = FALSE;
+
+          if (got_flag && ide_project_file_is_directory (pf))
+            flags |= IDE_TREE_NODE_FLAGS_DESCENDANT;
         }
 
       ide_tree_node_set_flags (node, flags);
