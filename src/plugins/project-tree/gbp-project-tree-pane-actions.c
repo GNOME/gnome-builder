@@ -585,16 +585,23 @@ gbp_project_tree_pane_actions_trash_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeTreeNode *parent;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PROJECT_FILE (project_file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TREE_NODE (node));
 
   if (!ide_project_file_trash_finish (project_file, result, &error))
-    return;
+    {
+      g_warning ("Failed to trash file: %s", error->message);
+      IDE_EXIT;
+    }
 
   if ((parent = ide_tree_node_get_parent (node)))
     ide_tree_node_remove (parent, node);
+
+  IDE_EXIT;
 }
 
 static void
@@ -608,13 +615,15 @@ gbp_project_tree_pane_actions_trash (GSimpleAction *action,
   IdeWorkbench *workbench;
   IdeTreeNode *selected;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
       !(project_file = ide_tree_node_get_item (selected)))
-    return;
+    IDE_EXIT;
 
   file = ide_project_file_ref_file (project_file);
   workbench = ide_widget_get_workbench (GTK_WIDGET (self->tree));
@@ -624,6 +633,8 @@ gbp_project_tree_pane_actions_trash (GSimpleAction *action,
                                 NULL,
                                 gbp_project_tree_pane_actions_trash_cb,
                                 g_object_ref (selected));
+
+  IDE_EXIT;
 }
 
 static void
