@@ -39,6 +39,8 @@ struct _GbpVcsuiTreeAddin
   IdeTree       *tree;
   IdeVcs        *vcs;
   IdeVcsMonitor *monitor;
+
+  gulong         monitor_reloaded_handler;
 };
 
 static void
@@ -86,6 +88,46 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
 }
 
 static void
+rebuild_recurse (IdeTreeAddin *addin,
+                 IdeTreeNode  *node,
+                 GType         gtype)
+{
+  if (!ide_tree_node_holds (node, gtype))
+    return;
+
+  gbp_vcsui_tree_addin_build_node (addin, node);
+
+  for (IdeTreeNode *child = ide_tree_node_get_first_child (node);
+       child != NULL;
+       child = ide_tree_node_get_next_sibling (child))
+    rebuild_recurse (addin, child, gtype);
+}
+
+static void
+gbp_vcsui_tree_addin_monitor_reloaded_cb (GbpVcsuiTreeAddin *self,
+                                          IdeVcsMonitor     *monitor)
+{
+  IdeTreeNode *root;
+  GType gtype;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
+
+  root = ide_tree_get_root (self->tree);
+  gtype = IDE_TYPE_PROJECT_FILE;
+
+  for (IdeTreeNode *child = ide_tree_node_get_first_child (root);
+       child != NULL;
+       child = ide_tree_node_get_next_sibling (child))
+    rebuild_recurse (IDE_TREE_ADDIN (self), child, gtype);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
                            IdeTree      *tree)
 {
@@ -106,6 +148,12 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
     {
       self->vcs = g_object_ref (vcs);
       self->monitor = g_object_ref (monitor);
+      self->monitor_reloaded_handler =
+        g_signal_connect_object (self->monitor,
+                                 "reloaded",
+                                 G_CALLBACK (gbp_vcsui_tree_addin_monitor_reloaded_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
     }
 }
 
@@ -119,6 +167,7 @@ gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE (tree));
 
+  g_clear_signal_handler (&self->monitor_reloaded_handler, self->monitor);
   g_clear_object (&self->monitor);
   g_clear_object (&self->vcs);
 
