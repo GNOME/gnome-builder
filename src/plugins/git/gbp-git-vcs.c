@@ -32,9 +32,16 @@
 #include "gbp-git-vcs.h"
 #include "gbp-git-vcs-config.h"
 
+#define FILE_UNKNOWN (0)
+#define FILE_IGNORED (1)
+#define FILE_CACHED  (1 << 1)
+
 struct _GbpGitVcs
 {
   IdeObject         parent;
+
+  GHashTable       *ignored_cache;
+  GRWLock           ignored_rw_lock;
 
   /* read-only, thread-safe access */
   IpcGitRepository *repository;
@@ -60,40 +67,55 @@ gbp_git_vcs_is_ignored (IdeVcs  *vcs,
                         GError **error)
 {
   GbpGitVcs *self = (GbpGitVcs *)vcs;
-  g_autofree gchar *relative_path = NULL;
-  gboolean is_ignored = FALSE;
+  guint ret = 0;
 
   g_assert (GBP_IS_GIT_VCS (self));
   g_assert (G_IS_FILE (file));
 
-  if (g_file_equal (self->workdir, file))
-    return FALSE;
+  g_rw_lock_reader_lock (&self->ignored_rw_lock);
+  ret = GPOINTER_TO_UINT (g_hash_table_lookup (self->ignored_cache, file));
+  g_rw_lock_reader_unlock (&self->ignored_rw_lock);
 
-  /*
-   * This may be called from threads.
-   *
-   * However, we do not change our GbpGitVcs.repository field after the
-   * creation of the GbpGitVcs. Also, the GDBusProxy (IpcGitRepository)
-   * is thread-safe in terms of calling operations on the remote object
-   * from multiple threads.
-   *
-   * Also, GbpGitVcs.workdir is not changed after creation, so we can
-   * use that to for determining the relative path.
-   */
+  if (ret != 0)
+    return (ret & FILE_IGNORED);
 
-  if (!g_file_has_prefix (file, self->workdir))
-    return TRUE;
+  ret = FILE_CACHED;
 
-  relative_path = g_file_get_relative_path (self->workdir, file);
+  if (!g_file_equal (file, self->workdir) && g_file_has_prefix (file, self->workdir))
+    {
+      g_autofree char *relative_path = NULL;
+      gboolean is_ignored = FALSE;
 
-  if (!ipc_git_repository_call_path_is_ignored_sync (self->repository,
-                                                     relative_path,
-                                                     &is_ignored,
-                                                     NULL,
-                                                     error))
-    return FALSE;
+      /*
+       * This may be called from threads.
+       *
+       * However, we do not change our GbpGitVcs.repository field after the
+       * creation of the GbpGitVcs. Also, the GDBusProxy (IpcGitRepository)
+       * is thread-safe in terms of calling operations on the remote object
+       * from multiple threads.
+       *
+       * Also, GbpGitVcs.workdir is not changed after creation, so we can
+       * use that to for determining the relative path.
+       */
+      relative_path = g_file_get_relative_path (self->workdir, file);
 
-  return is_ignored;
+      /* Don't cache result if we failed to RPC */
+      if (!ipc_git_repository_call_path_is_ignored_sync (self->repository,
+                                                         relative_path,
+                                                         &is_ignored,
+                                                         NULL,
+                                                         error))
+        return FALSE;
+
+      if (is_ignored)
+        ret |= FILE_IGNORED;
+
+      g_rw_lock_writer_lock (&self->ignored_rw_lock);
+      g_hash_table_insert (self->ignored_cache, g_file_dup (file), GUINT_TO_POINTER (ret));
+      g_rw_lock_writer_unlock (&self->ignored_rw_lock);
+    }
+
+  return !!(ret & FILE_IGNORED);
 }
 
 static IdeVcsConfig *
@@ -567,6 +589,7 @@ gbp_git_vcs_finalize (GObject *object)
   GbpGitVcs *self = (GbpGitVcs *)object;
 
   g_clear_object (&self->repository);
+  g_rw_lock_clear (&self->ignored_rw_lock);
 
   G_OBJECT_CLASS (gbp_git_vcs_parent_class)->finalize (object);
 }
@@ -622,6 +645,11 @@ gbp_git_vcs_class_init (GbpGitVcsClass *klass)
 static void
 gbp_git_vcs_init (GbpGitVcs *self)
 {
+  self->ignored_cache = g_hash_table_new_full ((GHashFunc)g_file_hash,
+                                               (GEqualFunc)g_file_equal,
+                                               g_free,
+                                               NULL);
+  g_rw_lock_init (&self->ignored_rw_lock);
 }
 
 static void
@@ -636,6 +664,10 @@ static void
 gbp_git_vcs_changed_cb (GbpGitVcs        *self,
                         IpcGitRepository *repository)
 {
+  g_rw_lock_writer_lock (&self->ignored_rw_lock);
+  g_hash_table_remove_all (self->ignored_cache);
+  g_rw_lock_writer_unlock (&self->ignored_rw_lock);
+
   ide_vcs_emit_changed (IDE_VCS (self));
 }
 
