@@ -93,7 +93,7 @@ create_file_node (IdeProjectFile *file)
   ide_tree_node_set_item (child, G_OBJECT (file));
   ide_tree_node_set_title (child, ide_project_file_get_display_name (file));
   ide_tree_node_set_icon (child, ide_project_file_get_symbolic_icon (file));
-  g_object_set (child, "destroy-item", TRUE, NULL);
+  ide_tree_node_set_destroy_item (child, TRUE);
 
   if (ide_project_file_is_directory (file))
     {
@@ -154,6 +154,8 @@ gbp_project_tree_addin_file_list_children_cb (GObject      *object,
             continue;
         }
 
+      ide_object_append (IDE_OBJECT (project_file), IDE_OBJECT (file));
+
       child = create_file_node (file);
 
       if (last == NULL)
@@ -192,8 +194,7 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
       g_autoptr(GFile) parent = g_file_get_parent (workdir);
       g_autoptr(GFileInfo) info = NULL;
-      g_autofree gchar *name = NULL;
-
+      g_autofree char *name = NULL;
 
       info = g_file_info_new ();
       name = g_file_get_basename (workdir);
@@ -202,7 +203,10 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       g_file_info_set_content_type (info, "inode/directory");
       g_file_info_set_file_type (info, G_FILE_TYPE_DIRECTORY);
       g_file_info_set_is_symlink (info, FALSE);
+
       root_file = ide_project_file_new (parent, info);
+      ide_object_append (IDE_OBJECT (context), IDE_OBJECT (root_file));
+
       files = create_file_node (root_file);
       ide_tree_node_set_title (files, _("Files"));
       ide_tree_node_set_icon_name (files, "view-list-symbolic");
@@ -481,6 +485,7 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
           g_autoptr(IdeProjectFile) project_file = NULL;
           g_autoptr(GFileInfo) info = NULL;
           g_autoptr(GFile) directory = NULL;
+          IdeProjectFile *parent_file = NULL;
 
           info = g_file_query_info (part,
                                     IDE_PROJECT_FILE_ATTRIBUTES,
@@ -495,12 +500,21 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
           else
             directory = g_file_get_parent (part);
 
+          parent_file = IDE_PROJECT_FILE (ide_tree_node_get_item (parent));
+          g_assert (IDE_IS_PROJECT_FILE (parent_file));
+
           project_file = ide_project_file_new (directory, info);
+          g_assert (IDE_IS_PROJECT_FILE (project_file));
+
+          ide_object_append (IDE_OBJECT (parent_file), IDE_OBJECT (project_file));
+
           node = create_file_node (project_file);
+
           if (self->sort_directories_first)
             ide_tree_node_insert_sorted (parent, node, node_compare_directories_first);
           else
             ide_tree_node_insert_sorted (parent, node, node_compare);
+
           g_object_unref (node);
         }
 
