@@ -228,6 +228,8 @@ ide_tree_click_pressed_cb (GtkGestureClick *click,
   row = ide_tree_expander_get_list_row (expander);
   node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
 
+  gtk_widget_activate_action (GTK_WIDGET (expander), "listitem.select", "(bb)", FALSE, FALSE);
+
   if (gdk_event_triggers_context_menu (event))
     {
       GtkPopover *popover;
