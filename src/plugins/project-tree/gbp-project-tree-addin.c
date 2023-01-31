@@ -931,10 +931,13 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
     }
 
   if (action == GDK_ACTION_MOVE)
-    g_object_set_data_full (G_OBJECT (task),
-                            "SOURCE_FILES",
-                            g_steal_pointer (&srcs),
-                            (GDestroyNotify)g_ptr_array_unref);
+    {
+      ide_file_transfer_set_flags (transfer, IDE_FILE_TRANSFER_FLAGS_MOVE);
+      g_object_set_data_full (G_OBJECT (task),
+                              "SOURCE_FILES",
+                              g_steal_pointer (&srcs),
+                              (GDestroyNotify)g_ptr_array_unref);
+    }
 
   notif = ide_notification_new ();
   ide_notification_set_title (notif, _("Copying files…"));
