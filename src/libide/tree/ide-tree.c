@@ -217,12 +217,11 @@ ide_tree_click_pressed_cb (GtkGestureClick *click,
 
   g_assert (GTK_IS_GESTURE_CLICK (click));
 
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
-
   if (n_press != 1)
     return;
 
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
   expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (click)));
   tree = IDE_TREE (gtk_widget_get_ancestor (GTK_WIDGET (expander), IDE_TYPE_TREE));
   priv = ide_tree_get_instance_private (tree);
@@ -249,7 +248,35 @@ ide_tree_click_pressed_cb (GtkGestureClick *click,
                                       sequence,
                                       GTK_EVENT_SEQUENCE_CLAIMED);
     }
-  else
+}
+
+static void
+ide_tree_click_released_cb (GtkGestureClick *click,
+                            int              n_press,
+                            double           x,
+                            double           y,
+                            gpointer         user_data)
+{
+  g_autoptr(IdeTreeNode) node = NULL;
+  GdkEventSequence *sequence;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+  IdeTreePrivate *priv;
+  IdeTree *tree;
+
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  if (n_press != 1)
+    return;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
+  expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (click)));
+  tree = IDE_TREE (gtk_widget_get_ancestor (GTK_WIDGET (expander), IDE_TYPE_TREE));
+  priv = ide_tree_get_instance_private (tree);
+  row = ide_tree_expander_get_list_row (expander);
+  node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
+
+  if (gtk_gesture_get_sequence_state (GTK_GESTURE (click), sequence) == GTK_EVENT_SEQUENCE_NONE)
     {
       NodeActivated state = {0};
 
@@ -412,6 +439,10 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
   g_signal_connect (gesture,
                     "pressed",
                     G_CALLBACK (ide_tree_click_pressed_cb),
+                    NULL);
+  g_signal_connect (gesture,
+                    "released",
+                    G_CALLBACK (ide_tree_click_released_cb),
                     NULL);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (gesture));
 
