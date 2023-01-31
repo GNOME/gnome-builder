@@ -645,7 +645,6 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin  *addin,
                                        IdeTreeNode   *drop_node,
                                        GArray        *gtypes)
 {
-  IdeProjectFile *drop_file = NULL;
   GdkContentFormats *formats;
   GType file_list_type = GDK_TYPE_FILE_LIST;
 
@@ -660,11 +659,6 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin  *addin,
   /* Must drop on a file */
   if (drop_node == NULL ||
       !ide_tree_node_holds (drop_node, IDE_TYPE_PROJECT_FILE))
-    return 0;
-
-  /* The drop file must be a directory */
-  drop_file = ide_tree_node_get_item (drop_node);
-  if (!ide_project_file_is_directory (drop_file))
     return 0;
 
   /* Make sure it's a GDK_TYPE_FILE_LIST */
@@ -843,8 +837,8 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   g_autoptr(GFile) dst_dir = NULL;
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(GPtrArray) srcs = NULL;
-  IdeProjectFile *drop_file;
   IdeBufferManager *buffer_manager;
+  IdeProjectFile *drop_file;
   IdeContext *context;
   const GList *files = NULL;
   const GValue *value;
@@ -855,7 +849,8 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
-  g_assert (!drop_node || IDE_IS_TREE_NODE (drop_node));
+  g_assert (IDE_IS_TREE_NODE (drop_node));
+  g_assert (ide_tree_node_holds (drop_node, IDE_TYPE_PROJECT_FILE));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_project_tree_addin_node_dropped_async);
@@ -877,11 +872,13 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
         g_ptr_array_add (srcs, g_object_ref (iter->data));
     }
 
-  drop_file = ide_tree_node_get_item (drop_node);
-  g_assert (drop_file != NULL);
-  g_assert (ide_project_file_is_directory (drop_file));
+  drop_file = IDE_PROJECT_FILE (ide_tree_node_get_item (drop_node));
 
-  dst_dir = ide_project_file_ref_file (drop_file);
+  if (ide_project_file_is_directory (drop_file))
+    dst_dir = ide_project_file_ref_file (drop_file);
+  else
+    dst_dir = g_object_ref (ide_project_file_get_directory (drop_file));
+
   g_assert (G_IS_FILE (dst_dir));
 
   transfer = ide_file_transfer_new ();
