@@ -40,102 +40,98 @@ struct _IdeTreeAddinInterface
 {
   GTypeInterface parent;
 
-  void     (*load)                  (IdeTreeAddin         *self,
-                                     IdeTree              *tree);
-  void     (*unload)                (IdeTreeAddin         *self,
-                                     IdeTree              *tree);
-  void     (*build_node)            (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node);
-  void     (*build_children)        (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node);
-  void     (*build_children_async)  (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data);
-  gboolean (*build_children_finish) (IdeTreeAddin         *self,
-                                     GAsyncResult         *result,
-                                     GError              **error);
-  gboolean (*node_activated)        (IdeTreeAddin         *self,
-                                     IdeTree              *tree,
-                                     IdeTreeNode          *node);
-  void     (*selection_changed)     (IdeTreeAddin         *self,
-                                     IdeTreeNode          *selection);
-  void     (*node_expanded)         (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node);
-  void     (*node_collapsed)        (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node);
-  GdkContentProvider *
-           (*node_draggable)        (IdeTreeAddin         *self,
-                                     IdeTreeNode          *node);
-  GdkDragAction
-           (*node_droppable)        (IdeTreeAddin         *self,
-                                     GtkDropTarget        *drop_target,
-                                     IdeTreeNode          *drop_node,
-                                     GArray               *gtypes);
-  void     (*node_dropped_async)    (IdeTreeAddin         *self,
-                                     GtkDropTarget        *drop_target,
-                                     IdeTreeNode          *drop_node,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data);
-  gboolean (*node_dropped_finish)   (IdeTreeAddin         *self,
-                                     GAsyncResult         *result,
-                                     GError              **error);
+  void                (*load)                  (IdeTreeAddin         *self,
+                                                IdeTree              *tree);
+  void                (*unload)                (IdeTreeAddin         *self,
+                                                IdeTree              *tree);
+  void                (*build_node)            (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node);
+  void                (*build_children)        (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node);
+  void                (*build_children_async)  (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+  gboolean            (*build_children_finish) (IdeTreeAddin         *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
+  gboolean            (*node_activated)        (IdeTreeAddin         *self,
+                                                IdeTree              *tree,
+                                                IdeTreeNode          *node);
+  void                (*selection_changed)     (IdeTreeAddin         *self,
+                                                IdeTreeNode          *selection);
+  void                (*node_expanded)         (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node);
+  void                (*node_collapsed)        (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node);
+  GdkContentProvider *(*node_draggable)        (IdeTreeAddin         *self,
+                                                IdeTreeNode          *node);
+  GdkDragAction       (*node_droppable)        (IdeTreeAddin         *self,
+                                                GtkDropTarget        *drop_target,
+                                                IdeTreeNode          *drop_node,
+                                                GArray               *gtypes);
+  void                (*node_dropped_async)    (IdeTreeAddin         *self,
+                                                GtkDropTarget        *drop_target,
+                                                IdeTreeNode          *drop_node,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+  gboolean            (*node_dropped_finish)   (IdeTreeAddin         *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_load                  (IdeTreeAddin         *self,
-                                               IdeTree              *tree);
+void                ide_tree_addin_load                  (IdeTreeAddin         *self,
+                                                          IdeTree              *tree);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_unload                (IdeTreeAddin         *self,
-                                               IdeTree              *tree);
+void                ide_tree_addin_unload                (IdeTreeAddin         *self,
+                                                          IdeTree              *tree);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_build_node            (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node);
+void                ide_tree_addin_build_node            (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_build_children_async  (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data);
+void                ide_tree_addin_build_children_async  (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_tree_addin_build_children_finish (IdeTreeAddin         *self,
-                                               GAsyncResult         *result,
-                                               GError              **error);
+gboolean            ide_tree_addin_build_children_finish (IdeTreeAddin         *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_tree_addin_node_activated        (IdeTreeAddin         *self,
-                                               IdeTree              *tree,
-                                               IdeTreeNode          *node);
+gboolean            ide_tree_addin_node_activated        (IdeTreeAddin         *self,
+                                                          IdeTree              *tree,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_selection_changed     (IdeTreeAddin         *self,
-                                               IdeTreeNode          *selection);
+void                ide_tree_addin_selection_changed     (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *selection);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_node_expanded         (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node);
+void                ide_tree_addin_node_expanded         (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_ALL
-void     ide_tree_addin_node_collapsed        (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node);
+void                ide_tree_addin_node_collapsed        (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_44
-GdkContentProvider *
-         ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
-                                               IdeTreeNode          *node);
+GdkContentProvider *ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_44
-GdkDragAction
-         ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
-                                               GtkDropTarget        *drop_target,
-                                               IdeTreeNode          *drop_node,
-                                               GArray               *gtypes);
+GdkDragAction       ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
+                                                          GtkDropTarget        *drop_target,
+                                                          IdeTreeNode          *drop_node,
+                                                          GArray               *gtypes);
 IDE_AVAILABLE_IN_44
-void     ide_tree_addin_node_dropped_async    (IdeTreeAddin         *self,
-                                               GtkDropTarget        *drop_target,
-                                               IdeTreeNode          *drop_node,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data);
+void                ide_tree_addin_node_dropped_async    (IdeTreeAddin         *self,
+                                                          GtkDropTarget        *drop_target,
+                                                          IdeTreeNode          *drop_node,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_tree_addin_node_dropped_finish   (IdeTreeAddin         *self,
-                                               GAsyncResult         *result,
-                                               GError              **error);
+gboolean            ide_tree_addin_node_dropped_finish   (IdeTreeAddin         *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 
 G_END_DECLS
