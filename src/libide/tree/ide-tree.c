@@ -346,8 +346,15 @@ ide_tree_drag_source_prepare_cb (IdeTree       *self,
                                      ide_tree_drag_source_prepare_addin_cb,
                                      &state);
 
-  if (providers->len > 0)
+  if (providers->len == 0)
+    IDE_RETURN (NULL);
+  else if (providers->len == 1)
+    provider = g_ptr_array_steal_index (providers, 0);
+  else
     provider = gdk_content_provider_new_union ((GdkContentProvider **)providers->pdata, providers->len);
+
+  gtk_gesture_set_state (GTK_GESTURE (source), GTK_EVENT_SEQUENCE_CLAIMED);
+  gtk_drag_source_set_actions (source, GDK_ACTION_ALL);
 
   IDE_RETURN (provider);
 }
@@ -378,10 +385,11 @@ ide_tree_drag_source_drag_begin_cb (IdeTree       *self,
       GtkSnapshot *snapshot = gtk_snapshot_new ();
       double width = gdk_paintable_get_intrinsic_width (paintable);
       double height = gdk_paintable_get_intrinsic_height (paintable);
+      g_autoptr(GdkPaintable) with_parent = NULL;
 
       gdk_paintable_snapshot (paintable, snapshot, width, height);
-      g_clear_object (&paintable);
-      paintable = gtk_snapshot_free_to_paintable (snapshot, &GRAPHENE_SIZE_INIT (width, height));
+
+      with_parent = gtk_snapshot_free_to_paintable (snapshot, &GRAPHENE_SIZE_INIT (width, height));
       gtk_drag_source_set_icon (source, paintable, 0, 0);
     }
 
@@ -449,7 +457,7 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
   /* Setup Drag gesture for this row */
   drag = gtk_drag_source_new ();
   gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (drag), "ide-tree-drag");
-  gtk_drag_source_set_actions (drag, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_set_actions (drag, GDK_ACTION_ALL);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (drag),
                                               GTK_PHASE_CAPTURE);
   g_signal_connect_object (drag,
