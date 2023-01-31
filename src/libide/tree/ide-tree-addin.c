@@ -299,16 +299,15 @@ ide_tree_addin_node_draggable (IdeTreeAddin *self,
 
 gboolean
 ide_tree_addin_node_droppable (IdeTreeAddin *self,
-                               IdeTreeNode  *drag_node,
                                IdeTreeNode  *drop_node,
-                               const GValue *value)
+                               GdkDrop      *drop)
 {
   g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), FALSE);
-  g_return_val_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node), FALSE);
-  g_return_val_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node), FALSE);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (drop_node), FALSE);
+  g_return_val_if_fail (GDK_IS_DROP (drop), FALSE);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable)
-    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drag_node, drop_node, value);
+    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drop_node, drop);
 
   return FALSE;
 }

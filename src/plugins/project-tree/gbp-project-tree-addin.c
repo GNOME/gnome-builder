@@ -640,16 +640,15 @@ gbp_project_tree_addin_node_draggable (IdeTreeAddin *addin,
 }
 
 static gboolean
-gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
-                                       IdeTreeNode      *drag_node,
-                                       IdeTreeNode      *drop_node,
-                                       const GValue     *value)
+gbp_project_tree_addin_node_droppable (IdeTreeAddin *addin,
+                                       IdeTreeNode  *drop_node,
+                                       GdkDrop      *drop)
 {
   IdeProjectFile *drop_file = NULL;
+  GdkContentFormats *formats;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (addin));
-  g_assert (!drag_node || IDE_IS_TREE_NODE (drag_node));
   g_assert (!drop_node || IDE_IS_TREE_NODE (drop_node));
 
   /* Must drop on a file */
@@ -662,18 +661,9 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
   if (!ide_project_file_is_directory (drop_file))
     return FALSE;
 
-  /* We need a uri list or file node */
-  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
-    {
-      const GList *files = g_value_get_boxed (value);
-
-      if ((files == NULL || !G_IS_FILE (files->data)) && drag_node == NULL)
-        return FALSE;
-    }
-
-  /* If we have a drag node, make sure it's a file */
-  if (drag_node != NULL &&
-      !ide_tree_node_holds (drop_node, IDE_TYPE_PROJECT_FILE))
+  /* Make sure it's a GDK_TYPE_FILE_LIST */
+  if (!(formats = gdk_drop_get_formats (drop)) ||
+      !gdk_content_formats_contain_gtype (formats, GDK_TYPE_FILE_LIST))
     return FALSE;
 
   return TRUE;
@@ -865,11 +855,13 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_project_tree_addin_node_dropped_async);
 
+#if 0
   if (!gbp_project_tree_addin_node_droppable (addin, drag_node, drop_node, value))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
+#endif
 
   srcs = g_ptr_array_new_with_free_func (g_object_unref);
   if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))

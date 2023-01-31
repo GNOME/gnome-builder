@@ -69,9 +69,8 @@ struct _IdeTreeAddinInterface
            (*node_draggable)        (IdeTreeAddin         *self,
                                      IdeTreeNode          *node);
   gboolean (*node_droppable)        (IdeTreeAddin         *self,
-                                     IdeTreeNode          *drag_node,
                                      IdeTreeNode          *drop_node,
-                                     const GValue         *value);
+                                     GdkDrop              *drop);
   void     (*node_dropped_async)    (IdeTreeAddin         *self,
                                      IdeTreeNode          *drag_node,
                                      IdeTreeNode          *drop_node,
@@ -121,11 +120,10 @@ IDE_AVAILABLE_IN_44
 GdkContentProvider *
          ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
                                                IdeTreeNode          *node);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_44
 gboolean ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
-                                               IdeTreeNode          *drag_node,
                                                IdeTreeNode          *drop_node,
-                                               const GValue         *value);
+                                               GdkDrop              *drop);
 IDE_AVAILABLE_IN_ALL
 void     ide_tree_addin_node_dropped_async    (IdeTreeAddin         *self,
                                                IdeTreeNode          *drag_node,

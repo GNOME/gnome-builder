@@ -68,6 +68,14 @@ typedef struct
 {
   IdeTree     *tree;
   IdeTreeNode *node;
+  GdkDrop     *drop;
+  guint        accept : 1;
+} DropAccept;
+
+typedef struct
+{
+  IdeTree     *tree;
+  IdeTreeNode *node;
   guint        handled : 1;
 } NodeActivated;
 
@@ -418,12 +426,63 @@ ide_tree_drag_source_drag_end_cb (IdeTree       *self,
 }
 
 static void
+ide_tree_drop_accept_foreach_cb (IdeExtensionSetAdapter *adapter,
+                                 PeasPluginInfo         *plugin_info,
+                                 PeasExtension          *exten,
+                                 gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)exten;
+  DropAccept *state = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+
+  state->accept |= ide_tree_addin_node_droppable (addin, state->node, state->drop);
+}
+
+static gboolean
+ide_tree_drop_accept_cb (IdeTree       *self,
+                         GdkDrop       *drop,
+                         GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+  IdeTreeExpander *expander;
+  GtkTreeListRow *row;
+  DropAccept state = {0};
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drop_target)));
+  row = ide_tree_expander_get_list_row (expander);
+  node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
+
+  state.tree = self;
+  state.node = node;
+  state.drop = drop;
+  state.accept = FALSE;
+
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_tree_drop_accept_foreach_cb,
+                                     &state);
+
+  IDE_RETURN (state.accept);
+}
+
+static void
 ide_tree_list_item_setup_cb (IdeTree                  *self,
                              GtkListItem              *item,
                              GtkSignalListItemFactory *factory)
 {
   IdeTreeExpander *expander;
   GtkDragSource *drag;
+  GtkDropTarget *drop;
   GtkGesture *gesture;
   GtkImage *image;
 
@@ -478,6 +537,19 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (drag));
+
+  /* Setup drop site for this row */
+  drop = gtk_drop_target_new (G_TYPE_INVALID, GDK_ACTION_ALL);
+  gtk_drop_target_set_actions (drop, GDK_ACTION_ALL);
+  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (drop), "ide-tree-drop");
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (drop),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect_object (drop,
+                           "accept",
+                           G_CALLBACK (ide_tree_drop_accept_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (drop));
 }
 
 static void
