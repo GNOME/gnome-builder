@@ -42,6 +42,8 @@ typedef struct
   GtkScrolledWindow      *scroller;
   GtkListView            *list_view;
   GtkSingleSelection     *selection;
+
+  GdkDragAction           drop_action;
 } IdeTreePrivate;
 
 enum {
@@ -66,11 +68,20 @@ typedef struct
 
 typedef struct
 {
-  IdeTree     *tree;
-  IdeTreeNode *node;
-  GdkDrop     *drop;
-  guint        accept : 1;
+  IdeTree       *tree;
+  GtkDropTarget *drop_target;
+  IdeTreeNode   *node;
+  GArray        *gtypes;
+  GdkDragAction  action;
 } DropAccept;
+
+typedef struct
+{
+  IdeTree       *tree;
+  GtkDropTarget *drop_target;
+  IdeTreeNode   *node;
+  GPtrArray     *active;
+} Drop;
 
 typedef struct
 {
@@ -426,10 +437,10 @@ ide_tree_drag_source_drag_end_cb (IdeTree       *self,
 }
 
 static void
-ide_tree_drop_accept_foreach_cb (IdeExtensionSetAdapter *adapter,
-                                 PeasPluginInfo         *plugin_info,
-                                 PeasExtension          *exten,
-                                 gpointer                user_data)
+ide_tree_drop_target_accept_foreach_cb (IdeExtensionSetAdapter *adapter,
+                                        PeasPluginInfo         *plugin_info,
+                                        PeasExtension          *exten,
+                                        gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)exten;
   DropAccept *state = user_data;
@@ -438,16 +449,17 @@ ide_tree_drop_accept_foreach_cb (IdeExtensionSetAdapter *adapter,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_TREE_ADDIN (addin));
 
-  state->accept |= ide_tree_addin_node_droppable (addin, state->node, state->drop);
+  state->action |= ide_tree_addin_node_droppable (addin, state->drop_target, state->node, state->gtypes);
 }
 
 static gboolean
-ide_tree_drop_accept_cb (IdeTree       *self,
-                         GdkDrop       *drop,
-                         GtkDropTarget *drop_target)
+ide_tree_drop_target_accept_cb (IdeTree       *self,
+                                GdkDrop       *drop,
+                                GtkDropTarget *drop_target)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   g_autoptr(IdeTreeNode) node = NULL;
+  g_autoptr(GArray) gtypes = NULL;
   IdeTreeExpander *expander;
   GtkTreeListRow *row;
   DropAccept state = {0};
@@ -462,17 +474,265 @@ ide_tree_drop_accept_cb (IdeTree       *self,
   expander = IDE_TREE_EXPANDER (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drop_target)));
   row = ide_tree_expander_get_list_row (expander);
   node = IDE_TREE_NODE (gtk_tree_list_row_get_item (row));
+  gtypes = g_array_new (FALSE, FALSE, sizeof (GType));
 
   state.tree = self;
+  state.drop_target = drop_target;
   state.node = node;
-  state.drop = drop;
-  state.accept = FALSE;
+  state.action = 0;
+  state.gtypes = gtypes;
 
   ide_extension_set_adapter_foreach (priv->addins,
-                                     ide_tree_drop_accept_foreach_cb,
+                                     ide_tree_drop_target_accept_foreach_cb,
                                      &state);
 
-  IDE_RETURN (state.accept);
+  gtk_drop_target_set_actions (drop_target, state.action);
+  gtk_drop_target_set_gtypes (drop_target, (GType *)(gpointer)gtypes->data, gtypes->len);
+
+  IDE_RETURN (state.action != 0);
+}
+
+static GdkDragAction
+get_preferred_action (IdeTree      *self,
+                      const GValue *value)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (!value || G_IS_VALUE (value));
+
+  if (value == NULL)
+    return GDK_ACTION_COPY;
+
+  if (G_VALUE_HOLDS_STRING (value))
+    return GDK_ACTION_COPY;
+
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    return GDK_ACTION_MOVE;
+
+  return GDK_ACTION_COPY;
+}
+
+static void
+ide_tree_drop_target_notify_value_cb (IdeTree       *self,
+                                      GParamSpec    *pspec,
+                                      GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+  GtkTreeListRow *row;
+  const GValue *value;
+  GtkWidget *widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  if (!(value = gtk_drop_target_get_value (drop_target)) || !G_IS_VALUE (value))
+    IDE_EXIT;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drop_target));
+  row = ide_tree_expander_get_list_row (IDE_TREE_EXPANDER (widget));
+  node = gtk_tree_list_row_get_item (row);
+
+  g_assert (!node || IDE_IS_TREE_NODE (node));
+
+  if (node == NULL)
+    IDE_EXIT;
+
+  priv->drop_action = get_preferred_action (self, value);
+
+  IDE_EXIT;
+}
+
+static GdkDragAction
+ide_tree_drop_target_enter_cb (IdeTree       *self,
+                               double         x,
+                               double         y,
+                               GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+  GtkTreeListRow *row;
+  const GValue *value;
+  GtkWidget *widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  priv->drop_action = 0;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drop_target));
+  row = ide_tree_expander_get_list_row (IDE_TREE_EXPANDER (widget));
+  node = gtk_tree_list_row_get_item (row);
+
+  g_assert (!node || IDE_IS_TREE_NODE (node));
+
+  if (node == NULL)
+    IDE_GOTO (reject);
+
+  value = gtk_drop_target_get_value (drop_target);
+
+  priv->drop_action = get_preferred_action (self, value);
+
+  IDE_RETURN (priv->drop_action);
+
+reject:
+  gtk_drop_target_reject (drop_target);
+
+  IDE_RETURN (0);
+}
+
+static GdkDragAction
+ide_tree_drop_target_motion_cb (IdeTree       *self,
+                                double         x,
+                                double         y,
+                                GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  IDE_RETURN (priv->drop_action);
+}
+
+static void
+ide_tree_drop_target_leave_cb (IdeTree       *self,
+                               GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  priv->drop_action = 0;
+
+  IDE_EXIT;
+}
+
+static void
+drop_finalize (gpointer data)
+{
+  Drop *drop = data;
+
+  g_clear_object (&drop->tree);
+  g_clear_object (&drop->node);
+  g_clear_object (&drop->drop_target);
+  g_clear_pointer (&drop->active, g_ptr_array_unref);
+}
+
+static void
+drop_unref (Drop *drop)
+{
+  g_atomic_rc_box_release_full (drop, drop_finalize);
+}
+
+static Drop *
+drop_ref (Drop *drop)
+{
+  return g_atomic_rc_box_acquire (drop);
+}
+
+static void
+ide_tree_drop_target_drop_addin_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)object;
+  g_autoptr(GError) error = NULL;
+  Drop *drop = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (drop != NULL);
+
+  if (!ide_tree_addin_node_dropped_finish (addin, result, &error))
+    {
+      if (!ide_error_ignore (error))
+        g_warning ("%s failed to handle drop onto node: %s",
+                   G_OBJECT_TYPE_NAME (addin), error->message);
+    }
+
+  drop_unref (drop);
+
+  IDE_EXIT;
+}
+
+static void
+ide_tree_drop_target_drop_foreach_cb (IdeExtensionSetAdapter *set,
+                                      PeasPluginInfo         *plugin_info,
+                                      PeasExtension          *exten,
+                                      gpointer                user_data)
+{
+  IdeTreeAddin *addin = (IdeTreeAddin *)exten;
+  g_autoptr(GArray) gtypes = NULL;
+  Drop *drop = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TREE_ADDIN (addin));
+
+  gtypes = g_array_new (FALSE, FALSE, sizeof (GType));
+
+  if (ide_tree_addin_node_droppable (addin, drop->drop_target, drop->node, gtypes))
+    ide_tree_addin_node_dropped_async (addin,
+                                       drop->drop_target,
+                                       drop->node,
+                                       NULL,
+                                       ide_tree_drop_target_drop_addin_cb,
+                                       drop_ref (drop));
+}
+
+static void
+ide_tree_drop_target_drop_cb (IdeTree       *self,
+                              const GValue  *value,
+                              double         x,
+                              double         y,
+                              GtkDropTarget *drop_target)
+{
+  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  g_autoptr(IdeTreeNode) node = NULL;
+  GtkTreeListRow *row;
+  GtkWidget *widget;
+  Drop *drop;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TREE (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drop_target));
+  row = ide_tree_expander_get_list_row (IDE_TREE_EXPANDER (widget));
+  node = gtk_tree_list_row_get_item (row);
+
+  drop = g_atomic_rc_box_new0 (Drop);
+  drop->tree = g_object_ref (self);
+  drop->drop_target = g_object_ref (drop_target);
+  drop->node = g_object_ref (node);
+  drop->active = g_ptr_array_new_with_free_func (g_object_unref);
+
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_tree_drop_target_drop_foreach_cb,
+                                     drop);
+
+  drop_unref (drop);
+
+  IDE_EXIT;
 }
 
 static void
@@ -540,13 +800,38 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
 
   /* Setup drop site for this row */
   drop = gtk_drop_target_new (G_TYPE_INVALID, GDK_ACTION_ALL);
-  gtk_drop_target_set_actions (drop, GDK_ACTION_ALL);
+  gtk_drop_target_set_preload (drop, TRUE);
   gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (drop), "ide-tree-drop");
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (drop),
                                               GTK_PHASE_CAPTURE);
   g_signal_connect_object (drop,
                            "accept",
-                           G_CALLBACK (ide_tree_drop_accept_cb),
+                           G_CALLBACK (ide_tree_drop_target_accept_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drop,
+                           "enter",
+                           G_CALLBACK (ide_tree_drop_target_enter_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drop,
+                           "leave",
+                           G_CALLBACK (ide_tree_drop_target_leave_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drop,
+                           "motion",
+                           G_CALLBACK (ide_tree_drop_target_motion_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drop,
+                           "notify::value",
+                           G_CALLBACK (ide_tree_drop_target_notify_value_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (drop,
+                           "drop",
+                           G_CALLBACK (ide_tree_drop_target_drop_cb),
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (drop));

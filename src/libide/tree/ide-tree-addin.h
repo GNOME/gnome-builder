@@ -68,14 +68,14 @@ struct _IdeTreeAddinInterface
   GdkContentProvider *
            (*node_draggable)        (IdeTreeAddin         *self,
                                      IdeTreeNode          *node);
-  gboolean (*node_droppable)        (IdeTreeAddin         *self,
+  GdkDragAction
+           (*node_droppable)        (IdeTreeAddin         *self,
+                                     GtkDropTarget        *drop_target,
                                      IdeTreeNode          *drop_node,
-                                     GdkDrop              *drop);
+                                     GArray               *gtypes);
   void     (*node_dropped_async)    (IdeTreeAddin         *self,
-                                     IdeTreeNode          *drag_node,
+                                     GtkDropTarget        *drop_target,
                                      IdeTreeNode          *drop_node,
-                                     const GValue         *value,
-                                     GdkDragAction         actions,
                                      GCancellable         *cancellable,
                                      GAsyncReadyCallback   callback,
                                      gpointer              user_data);
@@ -121,15 +121,15 @@ GdkContentProvider *
          ide_tree_addin_node_draggable        (IdeTreeAddin         *self,
                                                IdeTreeNode          *node);
 IDE_AVAILABLE_IN_44
-gboolean ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
+GdkDragAction
+         ide_tree_addin_node_droppable        (IdeTreeAddin         *self,
+                                               GtkDropTarget        *drop_target,
                                                IdeTreeNode          *drop_node,
-                                               GdkDrop              *drop);
-IDE_AVAILABLE_IN_ALL
+                                               GArray               *gtypes);
+IDE_AVAILABLE_IN_44
 void     ide_tree_addin_node_dropped_async    (IdeTreeAddin         *self,
-                                               IdeTreeNode          *drag_node,
+                                               GtkDropTarget        *drop_target,
                                                IdeTreeNode          *drop_node,
-                                               const GValue         *value,
-                                               GdkDragAction         actions,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);

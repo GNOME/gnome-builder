@@ -65,10 +65,8 @@ ide_tree_addin_real_build_children_finish (IdeTreeAddin  *self,
 
 static void
 ide_tree_addin_real_node_dropped_async (IdeTreeAddin        *self,
-                                        IdeTreeNode         *drag_node,
+                                        GtkDropTarget       *drop_target,
                                         IdeTreeNode         *drop_node,
-                                        const GValue        *value,
-                                        GdkDragAction        actions,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
@@ -297,46 +295,38 @@ ide_tree_addin_node_draggable (IdeTreeAddin *self,
   return NULL;
 }
 
-gboolean
-ide_tree_addin_node_droppable (IdeTreeAddin *self,
-                               IdeTreeNode  *drop_node,
-                               GdkDrop      *drop)
+GdkDragAction
+ide_tree_addin_node_droppable (IdeTreeAddin  *self,
+                               GtkDropTarget *drop_target,
+                               IdeTreeNode   *drop_node,
+                               GArray        *gtypes)
 {
-  g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TREE_NODE (drop_node), FALSE);
-  g_return_val_if_fail (GDK_IS_DROP (drop), FALSE);
+  g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), 0);
+  g_return_val_if_fail (GTK_IS_DROP_TARGET (drop_target), 0);
+  g_return_val_if_fail (IDE_IS_TREE_NODE (drop_node), 0);
+  g_return_val_if_fail (gtypes != NULL, 0);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable)
-    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drop_node, drop);
+    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drop_target, drop_node, gtypes);
 
-  return FALSE;
+  return 0;
 }
 
 void
 ide_tree_addin_node_dropped_async (IdeTreeAddin        *self,
-                                   IdeTreeNode         *drag_node,
+                                   GtkDropTarget       *drop_target,
                                    IdeTreeNode         *drop_node,
-                                   const GValue        *value,
-                                   GdkDragAction        actions,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_TREE_ADDIN (self));
-  g_return_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node));
   g_return_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node));
-  g_return_if_fail (value != NULL);
+  g_return_if_fail (GTK_IS_DROP_TARGET (drop_target));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_async (self,
-                                                       drag_node,
-                                                       drop_node,
-                                                       value,
-                                                       actions,
-                                                       cancellable,
-                                                       callback,
-                                                       user_data);
+  IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_async (self, drop_target, drop_node, cancellable, callback, user_data);
 }
 
 gboolean
