@@ -2,7 +2,6 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="IdeSearchEntry" parent="GtkWidget">
-    <property name="width-request">225</property>
     <child>
       <object class="GtkImage">
         <property name="icon-name">edit-find-symbolic</property>
@@ -12,8 +11,6 @@
       <object class="GtkText" id="text">
         <property name="hexpand">true</property>
         <property name="vexpand">true</property>
-        <property name="width-chars">12</property>
-        <property name="max-width-chars">12</property>
         <property name="placeholder-text" translatable="yes">Search</property>
         <signal name="notify" handler="on_text_notify_cb" swapped="true"/>
         <signal name="activate" handler="on_text_activate_cb" swapped="true"/>
