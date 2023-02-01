@@ -704,6 +704,33 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
   return NULL;
 }
 
+static char *
+gbp_meson_build_system_get_srcdir (IdeBuildSystem *build_system)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree char *base = NULL;
+  IdeContext *context;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
+
+  if (self->project_file == NULL)
+    return g_strdup (g_file_peek_path (workdir));
+
+  base = g_file_get_basename (self->project_file);
+
+  if (strcasecmp (base, "meson.build") == 0)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (self->project_file);
+      return g_file_get_path (parent);
+    }
+
+  return g_file_get_path (self->project_file);
+}
+
 static gboolean
 gbp_meson_build_system_supports_toolchain (IdeBuildSystem *self,
                                            IdeToolchain   *toolchain)
@@ -754,6 +781,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_build_flags_for_files_async = gbp_meson_build_system_get_build_flags_for_files_async;
   iface->get_build_flags_for_files_finish = gbp_meson_build_system_get_build_flags_for_files_finish;
   iface->get_builddir = gbp_meson_build_system_get_builddir;
+  iface->get_srcdir = gbp_meson_build_system_get_srcdir;
   iface->get_project_version = gbp_meson_build_system_get_project_version;
   iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
   iface->supports_language = gbp_meson_build_system_supports_language;
@@ -985,32 +1013,6 @@ gbp_meson_build_system_get_languages (GbpMesonBuildSystem *self)
   g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
 
   return (const gchar * const *)self->languages;
-}
-
-char *
-gbp_meson_build_system_get_project_dir (GbpMesonBuildSystem *self)
-{
-  g_autoptr(GFile) workdir = NULL;
-  g_autofree char *base = NULL;
-  IdeContext *context;
-
-  g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  workdir = ide_context_ref_workdir (context);
-
-  if (self->project_file == NULL)
-    return g_strdup (g_file_peek_path (workdir));
-
-  base = g_file_get_basename (self->project_file);
-
-  if (strcasecmp (base, "meson.build") == 0)
-    {
-      g_autoptr(GFile) parent = g_file_get_parent (self->project_file);
-      return g_file_get_path (parent);
-    }
-
-  return g_file_get_path (self->project_file);
 }
 
 char *
