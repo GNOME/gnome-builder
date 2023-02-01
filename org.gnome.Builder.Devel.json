@@ -58,8 +58,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm14/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm14/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm15/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm15/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -719,11 +719,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm14/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm14/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm14/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm14/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm14/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm15/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm15/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm15/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm15/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm15/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }
