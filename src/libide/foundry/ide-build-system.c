@@ -540,6 +540,29 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
   IDE_RETURN (ret);
 }
 
+char *
+ide_build_system_get_srcdir (IdeBuildSystem *self)
+{
+  char *ret = NULL;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_srcdir)
+    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_srcdir (self);
+
+  if (ret == NULL)
+    {
+      g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+
+      ret = g_file_get_path (workdir);
+    }
+
+  IDE_RETURN (ret);
+}
+
 gchar *
 ide_build_system_get_builddir (IdeBuildSystem   *self,
                                IdePipeline *pipeline)

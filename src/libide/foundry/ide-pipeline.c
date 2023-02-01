@@ -1385,10 +1385,23 @@ ide_pipeline_load_get_info_cb (GObject      *object,
 static void
 ide_pipeline_begin_load (IdePipeline *self)
 {
+  g_autofree char *srcdir = NULL;
+  IdeBuildSystem *build_system;
+  IdeContext *context;
+
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_DEVICE (self->device));
+
+  /* First query the build system for the actual source directory
+   * which may not be the same as the project workdir.
+   */
+  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
+      (build_system = ide_build_system_from_context (context)) &&
+      (srcdir = ide_build_system_get_srcdir (build_system)))
+    g_set_str (&self->srcdir, srcdir);
 
   /*
    * The first thing we need to do is get some information from the

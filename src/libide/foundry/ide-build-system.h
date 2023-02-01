@@ -66,6 +66,7 @@ struct _IdeBuildSystemInterface
   gchar      *(*get_project_version)               (IdeBuildSystem       *self);
   gboolean    (*supports_language)                 (IdeBuildSystem       *self,
                                                     const char           *language);
+  char       *(*get_srcdir)                        (IdeBuildSystem       *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -79,6 +80,8 @@ gint             ide_build_system_get_priority                     (IdeBuildSyst
 IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_builddir                     (IdeBuildSystem       *self,
                                                                     IdePipeline     *pipeline);
+IDE_AVAILABLE_IN_44
+char            *ide_build_system_get_srcdir                       (IdeBuildSystem       *self);
 IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_project_version              (IdeBuildSystem       *self);
 IDE_AVAILABLE_IN_ALL
