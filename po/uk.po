@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-25 18:17+0000\n"
-"PO-Revision-Date: 2023-01-27 22:59+0200\n"
+"POT-Creation-Date: 2023-02-01 09:13+0000\n"
+"PO-Revision-Date: 2023-02-01 16:09+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -244,7 +244,6 @@ msgstr ""
 "Засіб діагностики має автоматично вставляти точку зупинки у основній функції."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-#| msgid "Debugger Breakpoint at g_critical()"
 msgid "Debugger Breakpoint at Criticals"
 msgstr "Діагностична точка зупинки у критичних позиціях"
 
@@ -256,13 +255,10 @@ msgstr ""
 "g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-#| msgid "Debugger Breakpoint at g_critical()"
 msgid "Debugger Breakpoint at Warnings and Criticals"
 msgstr "Діагностична точка зупинки на попередженнях і критичних позиціях"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-#| msgid ""
-#| "Debugger should automatically insert breakpoint at g_warning() function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
@@ -1034,7 +1030,7 @@ msgstr "Не вдалося ініціалізувати конвеєр збир
 msgid "Failed to get device information: %s"
 msgstr "Не вдалося отримати дані щодо пристрою: %s"
 
-#: src/libide/foundry/ide-config-manager.c:535
+#: src/libide/foundry/ide-config-manager.c:537
 msgid "Active Configuration"
 msgstr "Активні налаштування"
 
@@ -1181,17 +1177,17 @@ msgstr "Команда без назви"
 msgid "Unit Test"
 msgstr "Перевірка модулів"
 
-#: src/libide/foundry/ide-run-manager.c:520
+#: src/libide/foundry/ide-run-manager.c:522
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:944
+#: src/libide/foundry/ide-run-manager.c:946
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1011
+#: src/libide/foundry/ide-run-manager.c:1013
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
@@ -1409,7 +1405,6 @@ msgid "Search"
 msgstr "Пошук"
 
 #: src/libide/gui/ide-search-popover.ui:61
-#| msgid "Search runtimes"
 msgid "Search for anything"
 msgstr "Шукати будь-що"
 
@@ -1418,22 +1413,18 @@ msgid "_Everything"
 msgstr "_Усе"
 
 #: src/libide/gui/ide-search-popover.ui:239
-#| msgid "Code Actions"
 msgid "_Actions"
 msgstr "_Дії"
 
 #: src/libide/gui/ide-search-popover.ui:246
-#| msgid "Commands"
 msgid "_Commands"
 msgstr "_Команди"
 
 #: src/libide/gui/ide-search-popover.ui:253
-#| msgid "Files"
 msgid "_Files"
 msgstr "_Файли"
 
 #: src/libide/gui/ide-search-popover.ui:260
-#| msgid "Symbols"
 msgid "_Symbols"
 msgstr "Си_мволи"
 
@@ -1582,7 +1573,7 @@ msgstr "Перемкнути праву панель"
 msgid "Search (Ctrl+Enter)"
 msgstr "Шукати (Ctrl+Enter)"
 
-#: src/libide/gui/ide-primary-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Перемкнути нижню панель (Ctrl+F9)"
 
@@ -1760,7 +1751,6 @@ msgid "Undo (Ctrl+Z)"
 msgstr "Скасувати (Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:39
-#| msgid "Run Project (Shift+Ctrl+Space)"
 msgid "Redo (Shift+Ctrl+Z)"
 msgstr "Повторити (Shift+Ctrl+Z)"
 
@@ -1769,17 +1759,14 @@ msgid "Zoom"
 msgstr "Масштаб"
 
 #: src/libide/sourceview/gtk/menus.ui:51
-#| msgid "Zoom Out"
 msgid "Zoom Out (Ctrl+-)"
 msgstr "Зменшити (Ctrl+-)"
 
 #: src/libide/sourceview/gtk/menus.ui:57
-#| msgid "Reset Zoom"
 msgid "Reset Zoom (Ctrl+0)"
 msgstr "Відновити масштаб (Ctrl+0)"
 
 #: src/libide/sourceview/gtk/menus.ui:63
-#| msgid "Zoom In"
 msgid "Zoom In (Ctrl++)"
 msgstr "Збільшити (Ctrl++)"
 
@@ -1960,17 +1947,6 @@ msgstr "Тільки збіг цілих слів"
 msgid "Wrap around"
 msgstr "Режим огортання"
 
-#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
-#: src/libide/tree/ide-tree-node.c:1497
-msgid "(Empty)"
-msgstr "(Порожньо)"
-
-#: src/libide/tree/ide-tree-node.c:1466
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
-msgid "Loading…"
-msgstr "Завантаження…"
-
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
 msgstr "Каталог проєктів"
@@ -2117,7 +2093,6 @@ msgid "Build Output"
 msgstr "Вивід збірки"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:360
-#| msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Виведення збирання (Shift+Ctrl+L)"
 
@@ -2288,7 +2263,6 @@ msgid "Delete configuration"
 msgstr "Вилучити налаштування"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
-#| msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
 msgstr "Припинити збирання проєкту (Shift+Ctrl+Alt+C)"
 
@@ -2322,12 +2296,10 @@ msgid "Configuration"
 msgstr "Налаштування"
 
 #: src/plugins/buildui/gtk/menus.ui:14
-#| msgid "Configuration"
 msgid "Reload Configuration"
 msgstr "Перезавантажити налаштування"
 
 #: src/plugins/buildui/gtk/menus.ui:16
-#| msgid "Delete configuration"
 msgid "Reload project configuration"
 msgstr "Перезавантажити налаштування проєкту"
 
@@ -2413,7 +2385,6 @@ msgid "Stop building project"
 msgstr "Зупинити збирання проєкту"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-#| msgid "Build Output"
 msgid "Show Bui_ld Output"
 msgstr "Показати виведення з_бирання"
 
@@ -2442,22 +2413,18 @@ msgid "Restart Program"
 msgstr "Перезапустити програму"
 
 #: src/plugins/buildui/gtk/menus.ui:137
-#| msgid "Continue running the program"
 msgid "Restart the running program"
 msgstr "Перезапустити запущену програму"
 
 #: src/plugins/buildui/gtk/menus.ui:143
-#| msgid "Stop Signal"
 msgid "Stop Program"
 msgstr "Зупинити програму"
 
 #: src/plugins/buildui/gtk/menus.ui:146
-#| msgid "Stop Running Project"
 msgid "Stop running the project"
 msgstr "Зупинити виконання проєкту"
 
 #: src/plugins/buildui/gtk/menus.ui:151
-#| msgid "Debugger"
 msgid "Debugging"
 msgstr "Діагностика"
 
@@ -2730,13 +2697,13 @@ msgstr ""
 "Набір інструментів, який використано для збирання вашої програми, буде "
 "автоматично визначено з середовища виконання."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 msgid "Fetch dependencies"
 msgstr "Отримати залежності"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Зібрати проєкт"
 
@@ -2795,7 +2762,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
 msgid "Configure project"
 msgstr "Налаштувати проєкт"
 
@@ -2861,7 +2828,6 @@ msgid "Declaration"
 msgstr "Оголошення"
 
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
-#| msgid "Projects"
 msgid "Project Symbols"
 msgstr "Символи проєкту"
 
@@ -2882,6 +2848,11 @@ msgstr "Дії з кодом"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
 msgstr "Заст_осувати"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "Завантаження…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
@@ -3140,12 +3111,10 @@ msgid "Debugger"
 msgstr "Засіб діагностики"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
-#| msgid "Logging Breakpoints"
 msgid "Toggle Breakpoint"
 msgstr "Встановити/зняти точку зупинки"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
-#| msgid "Debugger Breakpoint at Main"
 msgid "Toggle breakpoint at current line"
 msgstr "Встановити/зняти точку зупинки на поточному рядку"
 
@@ -3243,27 +3212,22 @@ msgid "Expression"
 msgstr "Вираз"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
-#| msgid "Interrupt the program"
 msgid "Pause the program (F6)"
 msgstr "Призупинити програму (F6)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
-#| msgid "Continue running the program"
 msgid "Continue running the program (F5)"
 msgstr "Продовжити виконання програми (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
-#| msgid "Execute the current line, stepping into any function calls"
 msgid "Execute the current line, stepping into any function calls (F8)"
 msgstr "Виконати поточний рядок, заходячи у виклики функцій (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
-#| msgid "Execute the current line, stepping over any function calls"
 msgid "Execute the current line, stepping over any function calls (F7)"
 msgstr "Виконати поточний рядок, не заходячи до викликів функцій (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
-#| msgid "Run until the end of the function"
 msgid "Run until the end of the function (Shift+F8)"
 msgstr "Виконати до кінця функції (Shift+F8)"
 
@@ -4018,7 +3982,7 @@ msgid "Open file or folder"
 msgstr "Відкриття файла або теки"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "Файли"
 
@@ -4080,9 +4044,6 @@ msgid "Resolving SDK Extensions"
 msgstr "Розв'язуємо розширення SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
@@ -4223,20 +4184,20 @@ msgstr "Ініціалізувати підмодулі git"
 msgid "Network is not available, skipping submodule update"
 msgstr "Мережа недоступна, пропускаємо оновлення підлеглих модулів"
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr "Надіслано."
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Записуємо посилання «%s»"
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:530
 msgid "Directory is not within repository"
 msgstr "Каталог перебуває поза межами сховища"
 
-#: src/plugins/git/gbp-git-vcs.c:536
+#: src/plugins/git/gbp-git-vcs.c:558
 msgid "Git"
 msgstr "Git"
 
@@ -4299,12 +4260,11 @@ msgstr "З_найти у %s"
 msgid "_Replace in %s"
 msgstr "За_мінити у %s"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Пошук у файлах"
 
 #: src/plugins/grep/gbp-grep-panel.ui:6
-#| msgid "Find in Files (Ctrl+Alt+Shift+F)"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Знайти у файлах (Shift+Ctrl+Alt+F)"
 
@@ -4340,27 +4300,27 @@ msgstr "З_найти у проєкті"
 msgid "_Replace in Project"
 msgstr "З_амінити у проєкті"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Шукати…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "З_найти"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Шукати у теках _рекурсивно"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Враховувати ре_гістр символів під час пошуку"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Тільки _цілі слова"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Використовувати _формальні вирази"
 
@@ -4429,7 +4389,6 @@ msgid "Maven Run"
 msgstr "Запуск Maven"
 
 #: src/plugins/menu-search/gbp-menu-search-provider.c:192
-#| msgid "Code Actions"
 msgid "Actions"
 msgstr "Дії"
 
@@ -4507,7 +4466,7 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Завантажити інтроспекцію Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
 msgid "Install project"
 msgstr "Встановити проєкт"
 
@@ -4609,43 +4568,43 @@ msgstr "Вилучити набір інструментів"
 msgid "Delete Tool"
 msgstr "Вилучити інструмент"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Проєкт на основі Meson для GNOME з використанням GTK 4 і libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "Програма GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "Заснований на Meson проєкт із використанням GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Заснований на Meson проєкт бібліотеки спільного використання"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Проєкт на основі Meson для програми командного рядка"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Порожній проєкт Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Порожній каркас проєкту Meson"
 
@@ -4826,7 +4785,6 @@ msgid "A file with that name already exists."
 msgstr "Файл з такою назвою вже існує."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "Назва файла"
@@ -4835,30 +4793,35 @@ msgstr "Назва файла"
 msgid "Folder Name"
 msgstr "Назва теки"
 
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+#| msgid "File Name"
+msgid "New File Name"
+msgstr "Нова назва файла"
+
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "_Створити"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, c-format
 msgid "Copying 1 file"
 msgstr "Копіювання одного файла"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Копіюємо %s з %s файлів"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Failed to copy files"
 msgstr "Не вдалося скопіювати файли"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:745
 msgid "Files copied"
 msgstr "Файли скопійовано"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -4867,11 +4830,11 @@ msgstr[1] "Скопійовано %s файли"
 msgstr[2] "Скопійовано %s файлів"
 msgstr[3] "Скопійовано один файл"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
 msgstr "Копіювання файлів…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
 
@@ -5258,7 +5221,6 @@ msgstr ""
 "основної операційної системи."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:56
-#| msgid "Find keyboard shortcuts"
 msgid "No keyboard shortcut found"
 msgstr "Не знайдено клавіатурного скорочення"
 
@@ -5267,7 +5229,6 @@ msgid "Try a different search"
 msgstr "Спробувати інші критерії пошуку"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
-#| msgid "Reset"
 msgid "_Reset All"
 msgstr "С_касувати всі зміни"
 
@@ -5276,7 +5237,6 @@ msgid "Reset all actions to original keyboard shortcut"
 msgstr "Відновити для усіх дій початкові клавіатурні скорочення"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
-#| msgid "_Find in Files"
 msgid "_Edit File"
 msgstr "_Редагувати файл"
 
@@ -5284,7 +5244,7 @@ msgstr "_Редагувати файл"
 msgid "Open keybindings.json in editor"
 msgstr "Відкрити keybindings.json у редакторі"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:86
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:85
 msgid "View and Customize Shortcuts…"
 msgstr "Перегляд і налаштовування скорочень…"
 
@@ -5325,7 +5285,6 @@ msgid "Filter Symbols…"
 msgstr "Фільтрувати символи…"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
-#| msgid "Symbols"
 msgid "Symbols in File"
 msgstr "Символи у файлі"
 
@@ -5964,6 +5923,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "(Empty)"
+#~ msgstr "(Порожньо)"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Діагностична точка зупинки у g_warning()"
