@@ -61,6 +61,7 @@
                         </child>
                         <child>
                           <object class="GtkText" id="find_entry">
+                            <property name="placeholder-text" translatable="yes">Search</property>
                             <property name="hexpand">true</property>
                           </object>
                         </child>
@@ -158,6 +159,7 @@
                     <child>
                       <object class="GtkText" id="replace_entry">
                         <property name="hexpand">true</property>
+                        <property name="placeholder-text" translatable="yes">Replace</property>
                       </object>
                     </child>
                   </object>
