@@ -2547,7 +2547,7 @@ gbp_gdb_debugger_interpret_finish (IdeDebugger   *debugger,
 }
 
 static void
-gbp_gdb_debugger_dispose (GObject *object)
+gbp_gdb_debugger_destroy (IdeObject *object)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
   g_autoptr(GList) list = NULL;
@@ -2584,7 +2584,7 @@ gbp_gdb_debugger_dispose (GObject *object)
   g_queue_foreach (&self->writequeue, (GFunc)g_bytes_unref, NULL);
   g_queue_clear (&self->writequeue);
 
-  G_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->destroy (object);
 }
 
 static void
@@ -2612,9 +2612,9 @@ gbp_gdb_debugger_class_init (GbpGdbDebuggerClass *klass)
   IdeObjectClass *ide_object_class = IDE_OBJECT_CLASS (klass);
   IdeDebuggerClass *debugger_class = IDE_DEBUGGER_CLASS (klass);
 
-  object_class->dispose = gbp_gdb_debugger_dispose;
   object_class->finalize = gbp_gdb_debugger_finalize;
 
+  ide_object_class->destroy = gbp_gdb_debugger_destroy;
   ide_object_class->parent_set = gbp_gdb_debugger_parent_set;
 
   debugger_class->supports_run_command = gbp_gdb_debugger_supports_run_command;
