@@ -1,3 +1,21 @@
+# GNOME Builder 43.5
+
+Changes since 43.4
+
+ * Fix selection for number of build CPUs in preferences with additional
+   concurrency options.
+ * Allow closing tabs with ctrl+w when focus is within the tab bar.
+ * Use "meson setup" when initializing build directories.
+ * Fix various runtime warnings.
+ * Fix tooltips for combo rows in preferences.
+ * Improve zoom-with-wheel-scroll in some situations.
+ * Fix save/record actions with Sysprof plugin.
+ * Fix editing of configure options in preferences.
+ * Fix terminal search.
+ * Add README.md to meson templates.
+ * Fixes to Rust GTK project template.
+ * Translation updates
+
 # GNOME Builder 43.4
 
 Changes since 43.3

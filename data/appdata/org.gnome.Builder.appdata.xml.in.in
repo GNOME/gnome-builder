@@ -90,6 +90,7 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="43.5" date="2023-02-01"/>
     <release version="43.4" date="2022-11-30"/>
     <release version="43.3" date="2022-11-14"/>
     <release version="43.2" date="2022-10-04"/>
