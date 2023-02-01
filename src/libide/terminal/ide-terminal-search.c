@@ -168,18 +168,6 @@ wrap_around_toggled_cb (GtkToggleButton *button,
 }
 
 static void
-reveal_options_changed_cb (GtkToggleButton *button,
-                           IdeTerminalSearch  *self)
-{
-  g_assert (IDE_IS_TERMINAL_SEARCH (self));
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->reveal_button)))
-    gtk_widget_set_visible (GTK_WIDGET (self->search_options), TRUE);
-  else
-    gtk_widget_set_visible (GTK_WIDGET (self->search_options), FALSE);
-}
-
-static void
 search_overlay_notify_regex_cb (VteTerminal    *terminal,
                                 GParamSpec     *pspec G_GNUC_UNUSED,
                                 IdeTerminalSearch *self)
@@ -367,7 +355,6 @@ ide_terminal_search_init (IdeTerminalSearch *self)
   g_signal_connect (self->match_case_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->entire_word_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->regex_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
-  g_signal_connect (self->reveal_button, "toggled", G_CALLBACK (reveal_options_changed_cb), self);
   g_signal_connect (self->wrap_around_checkbutton, "toggled", G_CALLBACK (wrap_around_toggled_cb), self);
   g_signal_connect (self->search_revealer, "notify::child-revealed", G_CALLBACK (search_revealer_cb), self);
 }

@@ -62,7 +62,7 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="reveal_button">
-                    <property name="action-target">true</property>
+                    <property name="active" bind-source="search_options" bind-property="visible" bind-flags="bidirectional|sync-create"/>
                     <property name="tooltip-text" translatable="yes">Show or hide search options such as case sensitivity</property>
                     <child>
                       <object class="GtkImage">
