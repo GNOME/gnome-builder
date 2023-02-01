@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-01 09:13+0000\n"
-"PO-Revision-Date: 2023-02-01 16:09+0200\n"
+"POT-Creation-Date: 2023-02-01 18:26+0000\n"
+"PO-Revision-Date: 2023-02-01 20:42+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -952,6 +952,7 @@ msgid "Cancel"
 msgstr "Скасувати"
 
 #: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Замінити"
 
@@ -984,6 +985,7 @@ msgid "Use Re_gular Expressions"
 msgstr "Скористатися _формальними виразами"
 
 #: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Враховувати регістр"
 
@@ -1400,7 +1402,8 @@ msgid "%u of %u"
 msgstr "%u з %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Пошук"
 
@@ -4268,35 +4271,30 @@ msgstr "Пошук у файлах"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Знайти у файлах (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "Знайти і замінити"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#| msgid "S_ort Directories First"
+msgid "_Recurse into Directories"
+msgstr "_Рекурсивний обхід каталогів"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "Р_екурсивно"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+#| msgid "Match Whole Words"
+msgid "Match Whole _Words"
+msgstr "Шукати _лише цілі слова"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "Враховувати _регістр"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+#| msgid "Use Re_gular Expressions"
+msgid "Use Regular _Expressions"
+msgstr "Скористатися _формальними виразами"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "Тільки _цілі слова"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "_Формальні вирази"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "Закрити панель (клавіша Escape)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "З_найти у проєкті"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "З_амінити у проєкті"
 
@@ -4794,7 +4792,6 @@ msgid "Folder Name"
 msgstr "Назва теки"
 
 #: src/plugins/project-tree/gbp-new-file-popover.ui:16
-#| msgid "File Name"
 msgid "New File Name"
 msgstr "Нова назва файла"
 
@@ -4830,11 +4827,11 @@ msgstr[1] "Скопійовано %s файли"
 msgstr[2] "Скопійовано %s файлів"
 msgstr[3] "Скопійовано один файл"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:944
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "Копіювання файлів…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:945
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
 
@@ -5923,6 +5920,21 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Find and Replace"
+#~ msgstr "Знайти і замінити"
+
+#~ msgid "R_ecursive"
+#~ msgstr "Р_екурсивно"
+
+#~ msgid "Match _Case"
+#~ msgstr "Враховувати _регістр"
+
+#~ msgid "Match _Words"
+#~ msgstr "Тільки _цілі слова"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "_Формальні вирази"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Порожньо)"
