@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-25 18:17+0000\n"
-"PO-Revision-Date: 2023-01-27 15:08+0000\n"
+"POT-Creation-Date: 2023-02-01 09:13+0000\n"
+"PO-Revision-Date: 2023-02-01 16:34+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1022,7 +1022,7 @@ msgstr "Falha ao iniciar o encadeamento de compilação: %s"
 msgid "Failed to get device information: %s"
 msgstr "Não foi possível obter a informação do dispositivo: %s"
 
-#: src/libide/foundry/ide-config-manager.c:535
+#: src/libide/foundry/ide-config-manager.c:537
 msgid "Active Configuration"
 msgstr "Configuração ativa"
 
@@ -1167,18 +1167,18 @@ msgstr "Comando sem título"
 msgid "Unit Test"
 msgstr "Testes de unitário"
 
-#: src/libide/foundry/ide-run-manager.c:520
+#: src/libide/foundry/ide-run-manager.c:522
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Não é possível executar o objetivo, pois outro objetivo está em execução"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:944
+#: src/libide/foundry/ide-run-manager.c:946
 #, c-format
 msgid "Running %s…"
 msgstr "A executar %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1011
+#: src/libide/foundry/ide-run-manager.c:1013
 msgid "Deploying to device…"
 msgstr "A implantar no dispositivo…"
 
@@ -1565,7 +1565,7 @@ msgstr "Ativa o painel direito"
 msgid "Search (Ctrl+Enter)"
 msgstr "Pesquisar (Ctrl+Enter)"
 
-#: src/libide/gui/ide-primary-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Ativa o painel inferior (Ctrl+F9)"
 
@@ -1757,7 +1757,6 @@ msgid "Reset Zoom (Ctrl+0)"
 msgstr "Repor zoom (Ctrl+0)"
 
 #: src/libide/sourceview/gtk/menus.ui:63
-#| msgid "Zoom In"
 msgid "Zoom In (Ctrl++)"
 msgstr "Aumentar (Ctrl++)"
 
@@ -1845,7 +1844,6 @@ msgstr "Ln %u, Col %u"
 #: src/libide/sourceview/ide-source-view.c:1541
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
-#| msgid "Ln %u, Col %u"
 msgid "Ln %u, Col %u (Sel: %u)"
 msgstr "Ln %u, Col %u (Sel: %u)"
 
@@ -1934,17 +1932,6 @@ msgstr "Corresponder apenas palavra inteira"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Ajustar à volta"
-
-#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
-#: src/libide/tree/ide-tree-node.c:1497
-msgid "(Empty)"
-msgstr "(Vazio)"
-
-#: src/libide/tree/ide-tree-node.c:1466
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
-msgid "Loading…"
-msgstr "A carregar…"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -2691,13 +2678,13 @@ msgstr ""
 "O SDK usado para compilar a sua aplicação é determinado automaticamente a "
 "partir do runtime."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 msgid "Fetch dependencies"
 msgstr "Buscar dependências"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Compilar projeto"
 
@@ -2754,7 +2741,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
 msgid "Configure project"
 msgstr "Configura o projeto"
 
@@ -2840,6 +2827,11 @@ msgstr "Ações de código"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
 msgstr "_Aplicar"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "A carregar…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
@@ -3971,7 +3963,7 @@ msgid "Open file or folder"
 msgstr "Abrir ficheiro ou pasta"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "Ficheiros"
 
@@ -4173,20 +4165,20 @@ msgstr "Inicializar submódulos git"
 msgid "Network is not available, skipping submodule update"
 msgstr "Rede não disponível, a ignorar atualização de submódulo"
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr "Push efetuado."
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "A efetuar push de ref “%s”"
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:530
 msgid "Directory is not within repository"
 msgstr "O diretório não está dentro do repositório"
 
-#: src/plugins/git/gbp-git-vcs.c:536
+#: src/plugins/git/gbp-git-vcs.c:558
 msgid "Git"
 msgstr "Git"
 
@@ -4249,7 +4241,7 @@ msgstr "_Localizar em %s"
 msgid "_Replace in %s"
 msgstr "_Substituir em %s"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Localizar em Ficheiros"
 
@@ -4289,27 +4281,27 @@ msgstr "Localizar no projeto"
 msgid "_Replace in Project"
 msgstr "Substituir no projeto"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Procurar por…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "Localizar"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Pesquisar _recursivamente pelas pastas"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "_Corresponder maiúsculo/minúsculo ao pesquisar"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Corresponder _palavras inteiras"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Permitir _expressões regulares"
 
@@ -4455,7 +4447,7 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Carregar introspecção do Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
 msgid "Install project"
 msgstr "Instalar projeto"
 
@@ -4557,43 +4549,43 @@ msgstr "Eliminar cadeia de ferramentas"
 msgid "Delete Tool"
 msgstr "Eliminar ferramenta"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "Aplicação GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Um projeto baseado em Meson para o GNOME usando GTK 4 e libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "Aplicação GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "Um projeto baseado em Meson usando GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Biblioteca partilhada"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Um projeto baseado em Meson para uma biblioteca compartilhada"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Um projeto baseado em Meson para um programa de linha de comando"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Projeto Meson vazio"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Um esqueleto de projeto Meson vazio"
 
@@ -4773,7 +4765,6 @@ msgid "A file with that name already exists."
 msgstr "Já existe um ficheiro com esse nome."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "Nome de ficheiro"
@@ -4782,41 +4773,45 @@ msgstr "Nome de ficheiro"
 msgid "Folder Name"
 msgstr "Nome da pasta"
 
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+msgid "New File Name"
+msgstr "Novo nome de ficheiro"
+
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "_Criar"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, c-format
 msgid "Copying 1 file"
 msgstr "A copiar 1 ficheiro"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "A copiar %s de %s ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Failed to copy files"
 msgstr "Falha ao copiar ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:745
 msgid "Files copied"
 msgstr "Ficheiros copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s ficheiro"
 msgstr[1] "Copiados %s ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
 msgstr "A copiar ficheiros…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr "Os ficheiros serão copiados dentro de momentos"
 
@@ -5225,7 +5220,7 @@ msgstr "_Editar ficheiro"
 msgid "Open keybindings.json in editor"
 msgstr "Abrir keybindings.json no editor"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:86
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:85
 msgid "View and Customize Shortcuts…"
 msgstr "Ver e personalizar atalhos…"
 
@@ -5906,6 +5901,9 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "(Empty)"
+#~ msgstr "(Vazio)"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Breakpoint do depurador em g_warning()"
