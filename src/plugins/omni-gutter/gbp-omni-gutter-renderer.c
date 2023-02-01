@@ -162,6 +162,7 @@ struct _GbpOmniGutterRenderer
   double draw_width_with_margin;
   guint draw_has_focus : 1;
   guint draw_has_selection : 1;
+  guint selection_is_multi_line : 1;
 
   /*
    * Some users might want to toggle off individual features of the
@@ -936,7 +937,8 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   self->draw_width = width;
   self->draw_width_with_margin = width + left_margin;
   self->draw_has_focus = gtk_widget_has_focus (GTK_WIDGET (view));
-  self->draw_has_selection = gtk_text_buffer_get_has_selection (buffer);
+  self->draw_has_selection = gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  self->selection_is_multi_line = gtk_text_iter_get_line (&begin) != gtk_text_iter_get_line (&end);
 
   self->begin_line = gtk_source_gutter_lines_get_first (lines);
   end_line = gtk_source_gutter_lines_get_last (lines);
@@ -1389,7 +1391,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
               rgba = &self->bkpt.fg;
               bold = self->bkpt.bold;
             }
-          else if (!self->draw_has_selection && gtk_source_gutter_lines_is_cursor (lines, line))
+          else if (!self->selection_is_multi_line && gtk_source_gutter_lines_is_cursor (lines, line))
             {
               rgba = &self->current.fg;
               bold = self->current.bold;
