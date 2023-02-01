@@ -48,10 +48,10 @@ struct _GbpGrepPanel
   GtkSpinner        *spinner;
 
   GtkButton         *replace_button;
-  GtkEntry          *replace_entry;
+  GtkEditable       *replace_entry;
 
   GtkButton         *find_button;
-  GtkEntry          *find_entry;
+  GtkEditable       *find_entry;
 
   GtkCheckButton    *regex_button;
   GtkCheckButton    *whole_words_button;
@@ -373,7 +373,7 @@ gbp_grep_panel_find_entry_text_changed_cb (GbpGrepPanel *self,
   gboolean is_query_empty;
 
   g_assert (GBP_IS_GREP_PANEL (self));
-  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (GTK_IS_EDITABLE (entry));
 
   is_query_empty = (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") == 0);
 
@@ -536,7 +536,7 @@ on_entry_activate_toggle_action_button_cb (GtkEntry *entry,
 {
   GtkButton *button = (GtkButton *)user_data;
 
-  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (GTK_IS_EDITABLE (entry));
   g_assert (GTK_IS_BUTTON (button));
 
   if (gtk_widget_get_sensitive (GTK_WIDGET (button)))
