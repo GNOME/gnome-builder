@@ -105,14 +105,14 @@ update_regex (IdeTerminalSearch *self)
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
-  caseless = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->match_case_checkbutton));
+  caseless = !gtk_check_button_get_active (GTK_CHECK_BUTTON (self->match_case_checkbutton));
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_checkbutton)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->regex_checkbutton)))
     pattern = g_strdup (search_text);
   else
     pattern = g_regex_escape_string (search_text, -1);
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->entire_word_checkbutton)))
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->entire_word_checkbutton)))
     {
       char *new_pattern;
       new_pattern = g_strdup_printf ("\\b%s\\b", pattern);
@@ -120,15 +120,10 @@ update_regex (IdeTerminalSearch *self)
       pattern = new_pattern;
     }
 
-  if (self->regex_caseless == caseless &&
-      g_strcmp0 (self->regex_pattern, pattern) == 0)
+  if (self->regex_caseless == caseless && g_strcmp0 (self->regex_pattern, pattern) == 0)
     return;
 
-  if (self->regex)
-    {
-      vte_regex_unref (self->regex);
-    }
-
+  g_clear_pointer (&self->regex, vte_regex_unref);
   g_clear_pointer (&self->regex_pattern, g_free);
 
   if (search_text[0] != '\0')
@@ -144,8 +139,6 @@ update_regex (IdeTerminalSearch *self)
       if (self->regex != NULL)
         self->regex_pattern = g_steal_pointer (&pattern);
     }
-  else
-    self->regex = NULL;
 
   update_sensitivity (self);
 
@@ -153,8 +146,9 @@ update_regex (IdeTerminalSearch *self)
 }
 
 static void
-search_text_changed_cb (IdeSearchEntry    *search_entry,
-                        IdeTerminalSearch *self)
+search_notify_text_cb (IdeSearchEntry    *search_entry,
+                       GParamSpec        *pspec,
+                       IdeTerminalSearch *self)
 {
   update_regex (self);
 }
@@ -214,8 +208,8 @@ search_overlay_notify_wrap_around_cb (VteTerminal    *terminal,
 }
 
 static void
-search_overlay_search_cb (VteTerminal    *terminal,
-                          gboolean        backward,
+search_overlay_search_cb (VteTerminal       *terminal,
+                          gboolean           backward,
                           IdeTerminalSearch *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
@@ -369,7 +363,7 @@ ide_terminal_search_init (IdeTerminalSearch *self)
   g_signal_connect (self->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
-  g_signal_connect (self->search_entry, "changed", G_CALLBACK (search_text_changed_cb), self);
+  g_signal_connect (self->search_entry, "notify::text", G_CALLBACK (search_notify_text_cb), self);
   g_signal_connect (self->match_case_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->entire_word_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->regex_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
@@ -417,7 +411,7 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
 {
   g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
-  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->wrap_around_checkbutton));
+  return gtk_check_button_get_active (GTK_CHECK_BUTTON (self->wrap_around_checkbutton));
 }
 
 /**
