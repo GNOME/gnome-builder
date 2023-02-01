@@ -451,6 +451,29 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
       IDE_RETURN (TRUE);
     }
 
+  if (g_str_equal (command, ":vsplit"))
+    {
+      g_autoptr(PanelPosition) position = ide_page_get_position (IDE_PAGE (self->page));
+      IdePage *new_page = ide_page_create_split (IDE_PAGE (self->page));
+      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (self->page));
+
+      panel_position_set_column (position, panel_position_get_column (position) + 1);
+
+      ide_workspace_add_page (workspace, new_page, position);
+
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, ":terminal") ||
+      g_str_equal (command, ":term"))
+    {
+      gtk_widget_activate_action (GTK_WIDGET (view),
+                                  "workspace.terminal.new-in-host",
+                                  NULL);
+
+      IDE_RETURN (TRUE);
+    }
+
   if (g_str_equal (command, "gd"))
     {
       gtk_widget_activate_action (GTK_WIDGET (view),
