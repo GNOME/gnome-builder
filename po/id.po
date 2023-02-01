@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-01-30 22:05+0000\n"
-"PO-Revision-Date: 2023-02-01 16:06+0700\n"
+"PO-Revision-Date: 2023-02-01 16:11+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -5580,7 +5580,7 @@ msgstr "Gulir Pada Masukan Papan Tik"
 
 #: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
-msgstr "Menggulir secara otomatis saat mengetik untuk menyisipkan teks"
+msgstr "Secara otomatis menggulir saat mengetik untuk menyisipkan teks"
 
 #: src/plugins/terminal/tweaks.ui:87
 msgid "Limit Scrollback"
