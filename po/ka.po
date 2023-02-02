@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-30 22:05+0000\n"
-"PO-Revision-Date: 2023-01-31 05:15+0100\n"
+"POT-Creation-Date: 2023-02-02 01:34+0000\n"
+"PO-Revision-Date: 2023-02-02 06:48+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -126,7 +126,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
 msgid "Quickly access your projects"
-msgstr ""
+msgstr "სწრაფი წვდომა თქვენს პროექტებთან"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
 msgid "Create new projects from a variety of templates"
@@ -201,7 +201,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
-msgstr ""
+msgstr "ბილიკი ctags-ის გამშვებ ფაილამდე"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
@@ -400,7 +400,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
-msgstr ""
+msgstr "ფრაგმენტების ჩართვა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
@@ -410,7 +410,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
-msgstr ""
+msgstr "აირჩიეთ პირველი დასრულება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
@@ -418,7 +418,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
-msgstr ""
+msgstr "გამოტოვების სტილი"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
 msgid "How to apply spaces when reformatting text."
@@ -483,7 +483,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
-msgstr ""
+msgstr "გაშვებისას აგების კეშების გასუფავება"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
@@ -568,7 +568,7 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
-msgstr ""
+msgstr "ჟურნალში დამატებითი ჩანაწერების ჩართვა"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
@@ -616,7 +616,7 @@ msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
-msgstr ""
+msgstr "აგების პროგრამა GNOME-სთვის"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
@@ -672,7 +672,7 @@ msgstr ""
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
-msgstr ""
+msgstr "ნაგულისხმები მნიშვნელობების ინიციალიზაციის შეცდომა."
 
 #. translators: %s is replaced with the error message
 #: src/libide/code/ide-unsaved-files.c:253
@@ -886,43 +886,45 @@ msgstr "შენახვა"
 msgid "Cancel"
 msgstr "გაუქმენა"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "გამოცვლა"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "წინა დამთხვევაზე გადასვლა (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "შემდეგ დამთხვევაზე გადასვლა (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "ძებნა და ჩანაცვლება (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "ძებნის დახურვა"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_გამოცვლა"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "ყველ_აფრის ჩანაცვლება"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "_რეგულარული გამოსახულებების გამოყენება"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_რეგისტრზე-დამოკიდებული"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "სიტყვების სრული დამთხვევა"
 
@@ -973,7 +975,7 @@ msgstr "აქტიური კონფიგურაცია"
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
 msgid "Discovered device “%s”"
-msgstr ""
+msgstr "აღმოჩენილი მოწყობილობა \"%s\""
 
 #: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
@@ -1020,77 +1022,77 @@ msgstr "აგება (%s)"
 msgid "Post-install (%s)"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3106
+#: src/libide/foundry/ide-pipeline.c:3145
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Cleaning…"
 msgstr "გასუფთავება…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3403
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "შეცდომა"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3348
+#: src/libide/foundry/ide-pipeline.c:3411
 msgid "Ready"
 msgstr "მზადაა"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3363
 msgid "Downloading…"
 msgstr "გადმოწერა…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3367
 msgid "Building dependencies…"
 msgstr "დამოკიდებულებების აგება…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3371
 msgid "Bootstrapping…"
 msgstr "საწყისი მომზადება…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3375
 msgid "Configuring…"
 msgstr "მორგება…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3379
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "აგება…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3383
 msgid "Installing…"
 msgstr "დაყენება…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3387
 msgid "Committing…"
 msgstr "კომიტი…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3391
 msgid "Exporting…"
 msgstr "გატანა…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3395
+#: src/libide/foundry/ide-pipeline.c:3399
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "წარმატება"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3407
 msgid "Preparing…"
 msgstr "მომზადება…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3763
 #, c-format
 msgid "Removing %s"
 msgstr "%s-ის წაშლა"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3822
 msgid "Removing build directories…"
 msgstr "აგების საქაღალდეების წაშლა…"
 
@@ -1320,13 +1322,14 @@ msgid "_Install"
 msgstr "_დაყენება"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u %u-დან"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "ძებნა"
 
@@ -1578,7 +1581,7 @@ msgstr "დიაგნოსტიკა"
 
 #: src/libide/plugins/ide-plugin.c:345
 msgid "Build Systems"
-msgstr ""
+msgstr "აგების სისტემები"
 
 #: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
@@ -2476,7 +2479,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
-msgstr ""
+msgstr "გაჩერების სიგნალი"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
@@ -2524,7 +2527,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
-msgstr ""
+msgstr "აგების ჟურნალის გასუფთავება"
 
 #: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
@@ -2790,7 +2793,7 @@ msgstr "მიმდინარე სიმბოლოს სახელი"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
 msgid "New Symbol name"
-msgstr ""
+msgstr "ახალი სიმბოლოს სახელი"
 
 #: src/plugins/codeui/gtk/menus.ui:7
 msgid "R_ename Symbol…"
@@ -2871,7 +2874,7 @@ msgstr "მდებარეობის არჩევა"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:259
 msgid "Failed to Create Project"
-msgstr ""
+msgstr "პროექტის შექმნის შეცდომა"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:10
 msgid "Project Name"
@@ -2966,7 +2969,7 @@ msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
-msgstr ""
+msgstr "CTags-ის ბილიკი"
 
 #: src/plugins/ctags/tweaks.ui:35
 msgid "The path to the ctags executable"
@@ -3840,7 +3843,7 @@ msgid "Open file or folder"
 msgstr "ფაილის ან საქაღალდის გახსნა"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:207
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "ფაილები"
 
@@ -4117,35 +4120,27 @@ msgstr "ფაილებში ძებნა"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "ფაილებში ძებნა (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "ძებნა და ჩანაცვლება"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "_Recurse into Directories"
+msgstr "_საქაღალდეების რეკურსიული დათვალიერება"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "რეკურსიული"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "სიტყვების სრული _დამთხვევა"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "დიდი და პატარა ასოების სხვაობის დამთხვევა"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "_რეგულარული გამოსახულებების გამოყენება"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "სიტყვების დამთხვევა"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "რეგულარული გამოსახულებები"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "პანელის დახურვა (ღილაკი Escape)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "პროექტში მოძებნა"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "პროექტში ჩანაცვლება"
 
@@ -4674,11 +4669,11 @@ msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s ფაილი დაკოპირდა"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:942
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "ფაილების კოპირება…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:943
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "ფაილების კოპირება მალე დაწყება"
 
@@ -5105,7 +5100,7 @@ msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 msgid "Filter Symbols…"
-msgstr "სიმბოლოების გაფილტვრა"
+msgstr "სიმბოლოების გაფილტვრა…"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
 msgid "Symbols in File"
@@ -5730,6 +5725,21 @@ msgstr ""
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr ""
+
+#~ msgid "Find and Replace"
+#~ msgstr "ძებნა და ჩანაცვლება"
+
+#~ msgid "R_ecursive"
+#~ msgstr "რეკურსიული"
+
+#~ msgid "Match _Case"
+#~ msgstr "დიდი და პატარა ასოების სხვაობის დამთხვევა"
+
+#~ msgid "Match _Words"
+#~ msgstr "სიტყვების დამთხვევა"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "რეგულარული გამოსახულებები"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ცარიელი)"
