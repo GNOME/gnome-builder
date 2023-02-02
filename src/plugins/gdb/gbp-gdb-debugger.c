@@ -111,10 +111,49 @@ gbp_gdb_debugger_parent_set (IdeObject *object,
   self->builddir = g_file_new_for_path (builddir);
 }
 
+static inline gboolean
+isoctal (int c)
+{
+  return c >= '0' && c < '8';
+}
+
+static char *
+decode_maybe_octal (const char *str)
+{
+  if (strchr (str, '\\') == NULL)
+    return g_strdup (str);
+  else
+    {
+      GByteArray *ba = g_byte_array_new ();
+      static const guint8 zero[1] = {0};
+
+      /* It looks like gdb is encoding UTF-8 as octal bytes in the string
+       * rather than as UTF-8 inline.
+       */
+
+      for (const char *c = str; *c; ++c)
+        {
+          if (c[0] == '\\' && isoctal (c[1]) && isoctal (c[2]) && isoctal (c[3]))
+            {
+              guint8 b = ((c[1] - '0') * 8 * 8) + ((c[2] - '0') * 8) + (c[3] - '0');
+              g_byte_array_append (ba, &b, 1);
+              c += 3;
+            }
+          else
+            g_byte_array_append (ba, (const guint8 *)c, 1);
+        }
+
+      g_byte_array_append (ba, zero, 1);
+
+      return (char *)g_byte_array_free (ba, FALSE);
+    }
+}
+
 static gchar *
 gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
                                  const gchar    *path)
 {
+  g_autofree char *decoded = NULL;
   g_autoptr(GFile) file = NULL;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
@@ -122,13 +161,15 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
   if (path == NULL)
     return NULL;
 
+  decoded = decode_maybe_octal (path);
+
   /* Generate a path, trying to resolve relative paths to
    * make things easier on the runtime path translation.
    */
-  if (self->builddir == NULL || g_path_is_absolute (path))
-    file = g_file_new_for_path (path);
+  if (self->builddir == NULL || g_path_is_absolute (decoded))
+    file = g_file_new_for_path (decoded);
   else
-    file = g_file_resolve_relative_path (self->builddir, path);
+    file = g_file_resolve_relative_path (self->builddir, decoded);
 
   /* If we still have access to the config, translate */
   if (self->current_config != NULL)
