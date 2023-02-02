@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-30 22:05+0000\n"
-"PO-Revision-Date: 2023-02-01 16:11+0700\n"
+"POT-Creation-Date: 2023-02-02 01:34+0000\n"
+"PO-Revision-Date: 2023-02-02 13:35+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -937,43 +937,45 @@ msgstr "Simpan"
 msgid "Cancel"
 msgstr "Batal"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Ganti"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Pindah ke cocok sebelumnya (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Pindah ke cocok berikutnya (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Cari & Ganti (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "Tutup pencarian"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_Ganti"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Ganti Semu_a"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "Gunakan Ekspresi Re_guler"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Peka Huruf Be_sar Kecil"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "Cocokkan Seluruh Kata"
 
@@ -1071,77 +1073,77 @@ msgstr "Bangun (%s)"
 msgid "Post-install (%s)"
 msgstr "Paska-pemasangan (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3106
+#: src/libide/foundry/ide-pipeline.c:3145
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Pembuatan terminal pseudo gagal. Fitur terminal akan terbatas."
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Cleaning…"
 msgstr "Membersihkan…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3403
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Gagal"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3348
+#: src/libide/foundry/ide-pipeline.c:3411
 msgid "Ready"
 msgstr "Siap"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3363
 msgid "Downloading…"
 msgstr "Mengunduh…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3367
 msgid "Building dependencies…"
 msgstr "Membangun dependensi…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3371
 msgid "Bootstrapping…"
 msgstr "Bootstrapping…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3375
 msgid "Configuring…"
 msgstr "Mengkonfigurasi…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3379
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Sedang membangun…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3383
 msgid "Installing…"
 msgstr "Memasang…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3387
 msgid "Committing…"
 msgstr "Mengkomit…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3391
 msgid "Exporting…"
 msgstr "Mengekspor…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3395
+#: src/libide/foundry/ide-pipeline.c:3399
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Berhasil"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3407
 msgid "Preparing…"
 msgstr "Mempersiapkan…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3763
 #, c-format
 msgid "Removing %s"
 msgstr "Menghapus %s"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3822
 msgid "Removing build directories…"
 msgstr "Menghapus direktori bangun…"
 
@@ -1372,13 +1374,14 @@ msgid "_Install"
 msgstr "_Pasang"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u dari %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Cari"
 
@@ -3949,7 +3952,7 @@ msgid "Open file or folder"
 msgstr "Buka berkas atau folder"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:207
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "Berkas"
 
@@ -4234,35 +4237,27 @@ msgstr "Cari dalam Berkas"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Temukan di Berkas (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "Cari dan Ganti"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "_Recurse into Directories"
+msgstr "_Rekursi ke Direktori"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "R_ekursif"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "_Cocokkan Seluruh Kata"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "_Cocokkan huruf besar/kecil"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "Gunakan _Ekspresi Reguler"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "Coco_kkan Kata"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "_Ekspresi Reguler"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "Tutup panel (Tombol escape)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "C_ari dalam Proyek"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "Ganti dalam P_royek"
 
@@ -4791,11 +4786,11 @@ msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s berkas telah disalin"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:942
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "Menyalin berkas…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:943
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
@@ -5874,6 +5869,21 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Find and Replace"
+#~ msgstr "Cari dan Ganti"
+
+#~ msgid "R_ecursive"
+#~ msgstr "R_ekursif"
+
+#~ msgid "Match _Case"
+#~ msgstr "_Cocokkan huruf besar/kecil"
+
+#~ msgid "Match _Words"
+#~ msgstr "Coco_kkan Kata"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "_Ekspresi Reguler"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Breakpoint Pengawakutu di g_warning()"
