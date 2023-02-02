@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-24 20:58+0000\n"
-"PO-Revision-Date: 2023-01-25 02:17+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-02-01 22:32+0000\n"
+"PO-Revision-Date: 2023-02-02 01:46+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:114 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:113 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -45,7 +45,7 @@ msgid "An IDE for GNOME"
 msgstr "GNOME için IDE"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:115
+#: src/libide/gui/ide-application-actions.c:118
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert ve arkadaşları."
 
@@ -870,8 +870,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
-"Dosyayı yüklemede kullanılan kodlamada hatalar saptandı. Durum "
-"çubuğundan başka kodlama seçip yeniden yükleyebilirsiniz."
+"Dosyayı yüklemede kullanılan kodlamada hatalar saptandı. Durum çubuğundan "
+"başka kodlama seçip yeniden yükleyebilirsiniz."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -937,43 +937,45 @@ msgstr "Kaydet"
 msgid "Cancel"
 msgstr "İptal Et"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Değiştir"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Önceki eşleşmeye git (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Sonraki eşleşmeye git (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Ara ve Değiştir (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "Aramayı kapat"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_Değiştir"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "_Tümünü Değiştir"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "Düzenli İ_fadeler Kullan"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Büyük/küçük Harf _Duyarlı"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "Tüm Sözcükleri Eşleştir"
 
@@ -1016,7 +1018,7 @@ msgstr "İnşa boru hattı ilklendirme başarısız oldu: %s"
 msgid "Failed to get device information: %s"
 msgstr "Aygıt bilgisi alınamadı: %s"
 
-#: src/libide/foundry/ide-config-manager.c:535
+#: src/libide/foundry/ide-config-manager.c:537
 msgid "Active Configuration"
 msgstr "Etkin Yapılandırma"
 
@@ -1071,77 +1073,77 @@ msgstr "İnşa (%s)"
 msgid "Post-install (%s)"
 msgstr "Kurulum sonrası (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3106
+#: src/libide/foundry/ide-pipeline.c:3145
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Sahte uçbirim oluşturma başarısız. Uçbirim özellikleri kısıtlanacak."
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Cleaning…"
 msgstr "Temizleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3403
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Başarısız oldu"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3348
+#: src/libide/foundry/ide-pipeline.c:3411
 msgid "Ready"
 msgstr "Hazır"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3363
 msgid "Downloading…"
 msgstr "İndiriliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3367
 msgid "Building dependencies…"
 msgstr "Bağımlılıklar inşa ediliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3371
 msgid "Bootstrapping…"
 msgstr "Özyükleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3375
 msgid "Configuring…"
 msgstr "Yapılandırılıyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3379
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "İnşa ediliyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3383
 msgid "Installing…"
 msgstr "Kuruluyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3387
 msgid "Committing…"
 msgstr "İşleniyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3391
 msgid "Exporting…"
 msgstr "Dışa aktarılıyor…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3395
+#: src/libide/foundry/ide-pipeline.c:3399
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Başarılı"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3407
 msgid "Preparing…"
 msgstr "Hazırlanıyor…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3763
 #, c-format
 msgid "Removing %s"
 msgstr "%s kaldırılıyor"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3822
 msgid "Removing build directories…"
 msgstr "İnşa dizinleri kaldırılıyor…"
 
@@ -1159,17 +1161,17 @@ msgstr "Başlıksız komut"
 msgid "Unit Test"
 msgstr "Birim Sınama"
 
-#: src/libide/foundry/ide-run-manager.c:520
+#: src/libide/foundry/ide-run-manager.c:522
 msgid "Cannot run target, another target is running"
 msgstr "Hedef çalıştırılamıyor, başka hedef çalışıyor"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:944
+#: src/libide/foundry/ide-run-manager.c:946
 #, c-format
 msgid "Running %s…"
 msgstr "%s çalışıyor…"
 
-#: src/libide/foundry/ide-run-manager.c:1011
+#: src/libide/foundry/ide-run-manager.c:1013
 msgid "Deploying to device…"
 msgstr "Aygıta konuşlandırılıyor…"
 
@@ -1372,13 +1374,14 @@ msgid "_Install"
 msgstr "_Kur"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Ara"
 
@@ -1466,14 +1469,14 @@ msgstr "Uçbirim"
 msgid "New Terminals"
 msgstr "Yeni Uçbirimler"
 
-#: src/libide/gui/ide-application-actions.c:122
+#: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
 "Muhammet Kara <muhammetk@gmail.com>\n"
 "Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Sabri Ünal <libreajans@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:129
+#: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
@@ -1554,7 +1557,7 @@ msgstr "Sağ Paneli Aç/Kapat"
 msgid "Search (Ctrl+Enter)"
 msgstr "Ara (Ctrl+Enter)"
 
-#: src/libide/gui/ide-primary-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Dip Paneli Aç/Kapat (Ctrl+F9)"
 
@@ -1918,17 +1921,6 @@ msgstr "Tüm sözcüğü eşleştir"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Çevrele"
-
-#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
-#: src/libide/tree/ide-tree-node.c:1497
-msgid "(Empty)"
-msgstr "(Boş)"
-
-#: src/libide/tree/ide-tree-node.c:1466
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
-msgid "Loading…"
-msgstr "Yükleniyor…"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -2667,13 +2659,13 @@ msgstr ""
 "Uygulamanızı inşa etmede kullanılan SDK, çalışma zamanından kendiliğinden "
 "belirlenir."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 msgid "Fetch dependencies"
 msgstr "Proje bağımlılıklarını getir"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Projeyi inşa et"
 
@@ -2730,7 +2722,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
 msgid "Configure project"
 msgstr "Projeyi yapılandır"
 
@@ -2816,6 +2808,11 @@ msgstr "Kod Eylemleri"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
 msgstr "_Uygula"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "Yükleniyor…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
@@ -3943,7 +3940,7 @@ msgid "Open file or folder"
 msgstr "Dosya veya klasörü aç"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "Dosyalar"
 
@@ -4144,20 +4141,20 @@ msgstr "Git altmodüllerini başlat"
 msgid "Network is not available, skipping submodule update"
 msgstr "Ağ kullanılabilir değil, altmodül güncelleme atlanıyor"
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr "İtildi."
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Ref “%s” itiliyor"
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:530
 msgid "Directory is not within repository"
 msgstr "Dizin depo içinde değil"
 
-#: src/plugins/git/gbp-git-vcs.c:536
+#: src/plugins/git/gbp-git-vcs.c:558
 msgid "Git"
 msgstr "Git"
 
@@ -4221,7 +4218,7 @@ msgstr "%s İçinde _Bul"
 msgid "_Replace in %s"
 msgstr "%s İçinde _Değiştir"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Dosyalarda Bul"
 
@@ -4229,59 +4226,52 @@ msgstr "Dosyalarda Bul"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Dosyalarda Bul (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "Bul ve Değiştir"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#, fuzzy
+msgid "_Recurse into Directories"
+msgstr "Dizinlerin İçine _Gir"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "Öz_yinelemeli"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "Tüm _Sözcükleri Eşleştir"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "Büyük/Küçük _Duyarlı"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "Düzenli İ_fadeler Kullan"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "_Sözcükleri Eşleştir"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "Düzenli İ_fadeler"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "Bölmeyi kapat (Escape tuşu)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "Projede _Bul"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "Projede _Değiştir"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Şunu ara…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Bul"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Dizinler arasında _özyinelemeli ara"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Ararken _büyük küçük harf eşleştir"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Tüm _sözcükleri eşleştir"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Düzenli ifadeler_e izin ver"
 
@@ -4431,7 +4421,7 @@ msgid "Load Meson Introspection"
 msgstr "Meson İç Gözlem Yükle"
 
 # the eklenmemiş fakat belli bir projeden bahsediliyor
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
 msgid "Install project"
 msgstr "Projeyi kur"
 
@@ -4533,43 +4523,43 @@ msgstr "Araç Takımını Sil"
 msgid "Delete Tool"
 msgstr "Aracı Sil"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "GNOME Uygulaması"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "GNOME için GTK 4 ve libadwaita kullanan Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "GTK 4 Uygulaması"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "GTK 4 kullanan Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Paylaşılan Kütüphane"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Paylaşılan kütüphane için Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Komut Satırı Aracı"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Komut satırı programı için Meson tabanlı proje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Boş Meson Projesi"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Boş Meson proje iskeleti"
 
@@ -4749,7 +4739,6 @@ msgid "A file with that name already exists."
 msgstr "Bu adda dosya zaten var."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "Dosya Adı"
@@ -4758,40 +4747,44 @@ msgstr "Dosya Adı"
 msgid "Folder Name"
 msgstr "Klasör Adı"
 
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+msgid "New File Name"
+msgstr "Yeni Dosya Adı"
+
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "_Oluştur"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, c-format
 msgid "Copying 1 file"
 msgstr "1 dosya kopyalanıyor"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "%s/%s dosya kopyalanıyor"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Failed to copy files"
 msgstr "Dosya kopyalanamadı"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:745
 msgid "Files copied"
 msgstr "Dosyalar kopyalandı"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s dosya kopyalandı"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "Dosyalar kopyalanıyor…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Dosyalar birazdan kopyalanmış olacak"
 
@@ -5059,11 +5052,11 @@ msgstr "Çalışma Dizini"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için <tt>"
-"$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
+"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için "
+"<tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5198,7 +5191,7 @@ msgstr "_Dosyayı _Düzenle"
 msgid "Open keybindings.json in editor"
 msgstr "keybindings.json dosyasını düzenleyicide aç"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:86
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:85
 msgid "View and Customize Shortcuts…"
 msgstr "Kısayolları Gör ve Özelleştir…"
 
@@ -5869,6 +5862,24 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Find and Replace"
+#~ msgstr "Bul ve Değiştir"
+
+#~ msgid "R_ecursive"
+#~ msgstr "Öz_yinelemeli"
+
+#~ msgid "Match _Case"
+#~ msgstr "Büyük/Küçük _Duyarlı"
+
+#~ msgid "Match _Words"
+#~ msgstr "_Sözcükleri Eşleştir"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "Düzenli İ_fadeler"
+
+#~ msgid "(Empty)"
+#~ msgstr "(Boş)"
 
 #~ msgid "Stop Building Project"
 #~ msgstr "Proje İnşasını Durdur"
