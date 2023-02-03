@@ -1007,7 +1007,8 @@ ide_source_view_zoom_one_action (GtkWidget  *widget,
                                  GVariant   *param)
 {
   IdeSourceView *self = IDE_SOURCE_VIEW (widget);
-  ide_source_view_set_font_scale (self, 1);
+
+  ide_source_view_set_font_scale (self, 0);
 }
 
 static void
