@@ -38,6 +38,7 @@ struct _IdeSearchPopover
 
   GCancellable       *cancellable;
   IdeSearchEngine    *search_engine;
+  GSettings          *settings;
 
   GListStore         *groups;
 
@@ -49,6 +50,7 @@ struct _IdeSearchPopover
   GtkListView        *list_view;
   AdwBin             *preview_bin;
   AdwWindowTitle     *preview_title;
+  GtkToggleButton    *preview_toggle;
   GtkRevealer        *preview_revealer;
   GtkListBox         *providers_list_box;
   GtkSingleSelection *selection;
@@ -672,6 +674,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_bin);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_toggle);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_title);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, providers_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, right);
@@ -699,6 +702,7 @@ ide_search_popover_init (IdeSearchPopover *self)
 {
   self->show_preview = TRUE;
   self->groups = g_list_store_new (IDE_TYPE_SEARCH_POPOVER_GROUP);
+  self->settings = g_settings_new ("org.gnome.builder");
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -707,6 +711,10 @@ ide_search_popover_init (IdeSearchPopover *self)
   gtk_list_box_bind_model (self->providers_list_box,
                            G_LIST_MODEL (self->groups),
                            create_group_row, self, NULL);
+
+  g_settings_bind (self->settings, "preview-search-results",
+                   self->preview_toggle, "active",
+                   G_SETTINGS_BIND_DEFAULT);
 }
 
 GtkWidget *

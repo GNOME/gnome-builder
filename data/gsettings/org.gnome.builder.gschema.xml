@@ -69,5 +69,10 @@
       <summary>Inherit Language Server stderr</summary>
       <description>If enabled, stderr of language servers will be redirected to the console.</description>
     </key>
+    <key name="preview-search-results" type="b">
+      <default>true</default>
+      <summary>Preview Search Results</summary>
+      <description>If previews for search results should be automatically displayed</description>
+    </key>
   </schema>
 </schemalist>
