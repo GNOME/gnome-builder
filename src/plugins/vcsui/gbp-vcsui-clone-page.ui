@@ -6,6 +6,7 @@
       <object class="AdwPreferencesPage" id="main">
         <child>
           <object class="AdwPreferencesGroup">
+            <property name="margin-top">36</property>
             <child>
               <object class="AdwEntryRow" id="uri_row">
                 <property name="title" translatable="yes">Repository URL</property>
