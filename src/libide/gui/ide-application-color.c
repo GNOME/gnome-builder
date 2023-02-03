@@ -99,6 +99,9 @@ _ide_application_update_style_scheme (IdeApplication *self)
     old_scheme = gtk_source_style_scheme_manager_get_scheme (scheme_manager, "Builder");
 
   /* Installation broken if we don't have a scheme */
+  if (old_scheme == NULL)
+    return;
+
   g_assert (GTK_SOURCE_IS_STYLE_SCHEME (old_scheme));
 
   /* Currently only support light/dark */
