@@ -31,14 +31,17 @@ popover.global-search contents {
   padding: 0;
   margin: 0;
 }
-popover.global-search .navigation-sidebar {
+popover.global-search contents .navigation-sidebar {
   border-right: 1px solid @borders;
 }
-popover.global-search listview row {
-  border-bottom: 1px solid @borders;
+popover.global-search listview.results {
+  padding: 6px 0;
 }
-popover.global-search listview row:last-child {
-  border-bottom: 1px solid transparent;
+popover.global-search listview.results row {
+  min-height: 36px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin: 0 6px 4px;
 }
 
 notificationstack button {

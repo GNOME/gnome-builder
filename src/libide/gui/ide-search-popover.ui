@@ -79,6 +79,9 @@
                     <property name="scroll-to-focus">true</property>
                     <child>
                       <object class="GtkListView" id="list_view">
+                        <style>
+                          <class name="results"/>
+                        </style>
                         <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
                         <property name="orientation">vertical</property>
                         <property name="model">
