@@ -30,12 +30,15 @@
 
 struct _GbpTodoPanel
 {
-  IdePane         parent_instance;
+  IdePane             parent_instance;
 
-  GbpTodoModel   *model;
+  GbpTodoModel       *model;
+  GtkFilterListModel *filter_model;
+  GtkCustomFilter    *filter;
 
-  GtkNoSelection *selection;
-  GtkStack       *stack;
+  GtkNoSelection     *selection;
+  GtkStack           *stack;
+  GtkSearchEntry     *search;
 };
 
 G_DEFINE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, IDE_TYPE_PANE)
@@ -108,6 +111,62 @@ gbp_todo_panel_activate_cb (GbpTodoPanel *self,
                                NULL, NULL, NULL, NULL);
 }
 
+static gboolean
+filter_func (gpointer itemptr,
+             gpointer user_data)
+{
+  GbpTodoItem *item = itemptr;
+  const char *str = user_data;
+  guint prio;
+
+  if (ide_str_empty0 (str))
+    return TRUE;
+
+  if (item->path && gtk_source_completion_fuzzy_match (item->path, str, &prio))
+    return TRUE;
+
+  for (guint i = 0; i < G_N_ELEMENTS (item->lines); i++)
+    {
+      if (item->lines[i] == NULL)
+        break;
+
+      if (strcasestr (item->lines[i], str) != NULL)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gbp_todo_panel_notify_text_cb (GbpTodoPanel   *self,
+                               GParamSpec     *pspec,
+                               GtkSearchEntry *search)
+{
+  const char *text;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TODO_PANEL (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search));
+
+  text = gtk_editable_get_text (GTK_EDITABLE (search));
+
+  gtk_custom_filter_set_filter_func (self->filter,
+                                     filter_func,
+                                     text[0] ? g_utf8_casefold (text, -1) : NULL,
+                                     g_free);
+
+  /* You could check the previous value here if you'd like
+   * to make this code faster.
+   */
+  gtk_filter_changed (GTK_FILTER (self->filter),
+                      GTK_FILTER_CHANGE_DIFFERENT);
+
+  if (text[0] == 0)
+    gtk_no_selection_set_model (self->selection, G_LIST_MODEL (self->model));
+  else
+    gtk_no_selection_set_model (self->selection, G_LIST_MODEL (self->filter_model));
+}
+
 static void
 gbp_todo_panel_dispose (GObject *object)
 {
@@ -115,6 +174,8 @@ gbp_todo_panel_dispose (GObject *object)
 
   g_assert (GBP_IS_TODO_PANEL (self));
 
+  g_clear_object (&self->filter_model);
+  g_clear_object (&self->filter);
   g_clear_object (&self->model);
 
   G_OBJECT_CLASS (gbp_todo_panel_parent_class)->dispose (object);
@@ -180,13 +241,18 @@ gbp_todo_panel_class_init (GbpTodoPanelClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/todo/gbp-todo-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpTodoPanel, selection);
   gtk_widget_class_bind_template_child (widget_class, GbpTodoPanel, stack);
+  gtk_widget_class_bind_template_child (widget_class, GbpTodoPanel, search);
   gtk_widget_class_bind_template_callback (widget_class, gbp_todo_panel_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_todo_panel_notify_text_cb);
 }
 
 static void
 gbp_todo_panel_init (GbpTodoPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->filter = gtk_custom_filter_new (filter_func, NULL, NULL);
+  self->filter_model = gtk_filter_list_model_new (NULL, g_object_ref (GTK_FILTER (self->filter)));
 }
 
 /**
@@ -215,6 +281,7 @@ gbp_todo_panel_set_model (GbpTodoPanel *self,
   if (g_set_object (&self->model, model))
     {
       gtk_no_selection_set_model (self->selection, G_LIST_MODEL (model));
+      gtk_filter_list_model_set_model (self->filter_model, G_LIST_MODEL (model));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODEL]);
     }
 }

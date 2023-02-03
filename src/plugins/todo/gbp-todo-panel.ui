@@ -20,20 +20,23 @@
           <object class="GtkStackPage">
             <property name="name">todos</property>
             <property name="child">
-              <object class="GtkScrolledWindow">
-                <property name="vexpand">true</property>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkListView" id="list_view">
-                    <signal name="activate" handler="gbp_todo_panel_activate_cb" swapped="true" object="GbpTodoPanel"/>
-                    <property name="orientation">vertical</property>
-                    <property name="single-click-activate">true</property>
-                    <property name="model">
-                      <object class="GtkNoSelection" id="selection">
-                      </object>
-                    </property>
-                    <property name="factory">
-                      <object class="GtkBuilderListItemFactory">
-                        <property name="bytes"><![CDATA[
+                  <object class="GtkScrolledWindow">
+                    <property name="vexpand">true</property>
+                    <child>
+                      <object class="GtkListView" id="list_view">
+                        <signal name="activate" handler="gbp_todo_panel_activate_cb" swapped="true" object="GbpTodoPanel"/>
+                        <property name="orientation">vertical</property>
+                        <property name="single-click-activate">true</property>
+                        <property name="model">
+                          <object class="GtkNoSelection" id="selection">
+                          </object>
+                        </property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
@@ -78,12 +81,24 @@
   </template>
 </interface>
 ]]>
+                            </property>
+                          </object>
                         </property>
+                        <style>
+                          <class name="navigation-sidebar"/>
+                        </style>
                       </object>
-                    </property>
-                    <style>
-                      <class name="navigation-sidebar"/>
-                    </style>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSearchEntry" id="search">
+                    <property name="placeholder-text" translatable="yes">Filter</property>
+                    <property name="margin-top">3</property>
+                    <property name="margin-bottom">3</property>
+                    <property name="margin-start">3</property>
+                    <property name="margin-end">3</property>
+                    <signal name="notify::text" handler="gbp_todo_panel_notify_text_cb" swapped="true"/>
                   </object>
                 </child>
               </object>
