@@ -1,3 +1,12 @@
+# GNOME Builder 43.6
+
+Changes since 43.5
+
+ * Backport a fix for preferences crashing due to GtkExpression bindings.
+ * Fix default font size in editor.
+ * Fix top padding for editor.
+ * Fix decoding of hex-encoded UTF-8 from gdb in path names.
+
 # GNOME Builder 43.5
 
 Changes since 43.4
