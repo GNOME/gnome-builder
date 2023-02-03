@@ -27,10 +27,11 @@
 #include <libide-gui.h>
 
 #include "gbp-editorui-application-addin.h"
+#include "gbp-editorui-resources.h"
+#include "gbp-editorui-search-provider.h"
 #include "gbp-editorui-tweaks-addin.h"
 #include "gbp-editorui-workbench-addin.h"
 #include "gbp-editorui-workspace-addin.h"
-#include "gbp-editorui-resources.h"
 
 _IDE_EXTERN void
 _gbp_editorui_register_types (PeasObjectModule *module)
@@ -40,6 +41,9 @@ _gbp_editorui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_EDITORUI_APPLICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GBP_TYPE_EDITORUI_SEARCH_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               GBP_TYPE_EDITORUI_TWEAKS_ADDIN);
