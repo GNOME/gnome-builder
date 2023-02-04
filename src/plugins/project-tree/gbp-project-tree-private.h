@@ -29,10 +29,18 @@ G_BEGIN_DECLS
 
 struct _GbpProjectTreePane
 {
-  IdePane       parent_instance;
-  IdeTree      *tree;
-  GActionGroup *actions;
-  guint         has_loaded : 1;
+  IdePane             parent_instance;
+
+  GCancellable       *cancellable;
+
+  IdeTree            *tree;
+  GtkStack           *stack;
+  GtkSearchEntry     *search;
+  GtkSingleSelection *selection;
+  GtkListView        *list;
+  GActionGroup       *actions;
+
+  guint               has_loaded : 1;
 };
 
 void _gbp_project_tree_pane_init_actions   (GbpProjectTreePane *self);
