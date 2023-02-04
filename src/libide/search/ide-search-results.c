@@ -158,6 +158,12 @@ ide_search_results_refilter (IdeSearchResults *self,
   g_return_val_if_fail (IDE_IS_SEARCH_RESULTS (self), FALSE);
   g_return_val_if_fail (query != NULL, FALSE);
 
+  /* If this is an empty query or our original was an empty
+   * query (ie: no results), then nothing to refilter.
+   */
+  if (query[0] == 0 || self->query_len == 0)
+    IDE_RETURN (FALSE);
+
   /* Can't refilter truncated sets, we want a new result set
    * instead so that we get possibly missing results.
    */
