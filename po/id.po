@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-02 01:34+0000\n"
-"PO-Revision-Date: 2023-02-02 13:35+0700\n"
+"POT-Creation-Date: 2023-02-03 23:29+0000\n"
+"PO-Revision-Date: 2023-02-04 12:23+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -547,6 +547,14 @@ msgstr "Mewarisi Bahasa Peladen stderr"
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr "Jika diaktifkan, stderr peladen bahasa akan dialihkan ke konsol."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Pratinjau Hasil Pencarian"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr "Jika pratinjau untuk hasil pencarian harus ditampilkan secara otomatis"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -1389,23 +1397,23 @@ msgstr "Cari"
 msgid "Search for anything"
 msgstr "Cari apa pun"
 
-#: src/libide/gui/ide-search-popover.ui:232
+#: src/libide/gui/ide-search-popover.ui:235
 msgid "_Everything"
 msgstr "S_emuanya"
 
-#: src/libide/gui/ide-search-popover.ui:239
+#: src/libide/gui/ide-search-popover.ui:242
 msgid "_Actions"
 msgstr "_Aksi"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:249
 msgid "_Commands"
 msgstr "_Perintah"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:256
 msgid "_Files"
 msgstr "_Berkas"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:263
 msgid "_Symbols"
 msgstr "_Simbol"
 
@@ -1824,14 +1832,14 @@ msgid "Code Navigation"
 msgstr "Navigasi Kode"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1539
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Brs %u, Kol %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1541
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2990,7 +2998,7 @@ msgstr ""
 #: src/plugins/grep/gbp-grep-panel.c:744
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:148
 msgid "Location"
 msgstr "Lokasi"
 
@@ -3999,7 +4007,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Name"
 msgstr "Nama"
 
@@ -4192,7 +4200,7 @@ msgstr "Sebuah URL Git yang valid diperlukan"
 msgid "Authorship"
 msgstr "Kepengarangan"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "Surel"
 
@@ -5644,6 +5652,10 @@ msgstr "TODO/FIXMEs"
 msgid "Loading TODOs…"
 msgstr "Memuat TODO…"
 
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "Penyaring"
+
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
 msgid "Updating Dependencies…"
 msgstr "Memutakhirkan Dependensi…"
@@ -5777,38 +5789,38 @@ msgstr "Memulai proyek kloning dari URI"
 msgid "A failure occurred while cloning the repository."
 msgstr "Kegagalan terjadi saat mengkloning repositori."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:12
 msgid "Repository URL"
 msgstr "URL repositori"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:31
 msgid "Choose an alternate branch"
 msgstr "Pilih cabang alternatif"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:50
 msgid "Branches"
 msgstr "Cabang"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:135
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Masukkan URL repositori kode sumber untuk proyek yang ingin Anda kloning."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:164
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Repositori akan dikloning ke dalam subdirektori baru."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:190
 msgid "Author Details"
 msgstr "Detail Penulis"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:208
 msgid "You may specify authorship information to override defaults."
 msgstr "Anda dapat menentukan informasi kepenulisan untuk mengganti bawaan."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:224
 msgid "Status"
 msgstr "Status"
 
@@ -6304,9 +6316,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Percent"
 #~ msgstr "Persen"
-
-#~ msgid "Filters:"
-#~ msgstr "Penyaring:"
 
 #~ msgid "Select a filter that act on the colors or “None”."
 #~ msgstr "Pilih penyaring yang bekerja pada warna atau \"None\"."
