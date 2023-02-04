@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-03 23:29+0000\n"
-"PO-Revision-Date: 2023-02-04 08:50+0100\n"
+"POT-Creation-Date: 2023-02-04 15:13+0000\n"
+"PO-Revision-Date: 2023-02-04 16:43+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -1579,7 +1579,7 @@ msgstr "ენის სერვერები"
 
 #: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
-msgstr ""
+msgstr "მოწყობილობები და სიმულატორები"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
@@ -1605,7 +1605,7 @@ msgstr "შაბლონები"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
-msgstr ""
+msgstr "რედაქტირება და ფორმატირება"
 
 #: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
@@ -1613,11 +1613,11 @@ msgstr "ვები"
 
 #: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
-msgstr ""
+msgstr "ენის ჩართვა"
 
 #: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
-msgstr ""
+msgstr "სამუშაო მაგიდის ინტეგრაცია"
 
 #: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
@@ -1871,6 +1871,14 @@ msgstr "მხოლოდ მთლიანი სიტყვის დამ
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "სიტყვების გადატანა"
+
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr ""
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "ცარიელი"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -2511,7 +2519,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
-msgstr ""
+msgstr "როგორც აპლიკაცია"
 
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
@@ -2601,7 +2609,7 @@ msgstr ""
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 msgid "Fetch dependencies"
-msgstr ""
+msgstr "დამოკიდებულებების გამოთხოვა"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
@@ -2761,7 +2769,7 @@ msgstr ""
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
 msgid "Symbol Not Selected"
-msgstr ""
+msgstr "სიმბოლო არჩეული არაა"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
 msgid "A symbol to rename must be selected"
@@ -3263,6 +3271,15 @@ msgstr "ფაილები მითითებული არაა."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr ""
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr ""
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "აპლიკაციის და რედაქტორის თემის გადართვა"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -4685,6 +4702,11 @@ msgstr "ფაილების კოპირება…"
 msgid "Files will be copied in a moment"
 msgstr "ფაილების კოპირება მალე დაწყება"
 
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "ფილტრი"
+
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
@@ -5512,10 +5534,6 @@ msgstr ""
 msgid "Loading TODOs…"
 msgstr ""
 
-#: src/plugins/todo/gbp-todo-panel.ui:96
-msgid "Filter"
-msgstr "ფილტრი"
-
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
 msgid "Updating Dependencies…"
 msgstr ""
@@ -5752,9 +5770,6 @@ msgstr ""
 
 #~ msgid "Regular E_xpressions"
 #~ msgstr "რეგულარული გამოსახულებები"
-
-#~ msgid "(Empty)"
-#~ msgstr "(ცარიელი)"
 
 #~ msgid "C_ut"
 #~ msgstr "ამ_ოჭრა"
