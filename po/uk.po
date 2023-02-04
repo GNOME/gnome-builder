@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-01 18:26+0000\n"
-"PO-Revision-Date: 2023-02-01 20:42+0200\n"
+"POT-Creation-Date: 2023-02-04 15:13+0000\n"
+"PO-Revision-Date: 2023-02-04 18:48+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -561,6 +561,14 @@ msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr "Якщо позначено, stderr серверів мов буде переспрямовано до консолі."
 
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Попередній перегляд результатів пошуку"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr "Чи слід автоматично показувати результати пошуку"
+
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
 msgstr "Додаток увімкнено"
@@ -951,45 +959,45 @@ msgstr "Зберегти"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Замінити"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Перейти до попереднього відповідника (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Перейти до наступного відповідника (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Знайти і замінити (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "Закрити вікно пошуку"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "За_мінити"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Замінити _все"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "Скористатися _формальними виразами"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Враховувати регістр"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "Шукати лише цілі слова"
 
@@ -1087,79 +1095,79 @@ msgstr "Збирання (%s)"
 msgid "Post-install (%s)"
 msgstr "Завершення встановлення (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3106
+#: src/libide/foundry/ide-pipeline.c:3145
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
 "обмежено."
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Cleaning…"
 msgstr "Очищення…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3403
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Помилка"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3348
+#: src/libide/foundry/ide-pipeline.c:3411
 msgid "Ready"
 msgstr "Виконано"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3363
 msgid "Downloading…"
 msgstr "Отримання…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3367
 msgid "Building dependencies…"
 msgstr "Збирання залежностей…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3371
 msgid "Bootstrapping…"
 msgstr "Самозбирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3375
 msgid "Configuring…"
 msgstr "Налаштування…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3379
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Збирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3383
 msgid "Installing…"
 msgstr "Встановлення…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3387
 msgid "Committing…"
 msgstr "Надсилання…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3391
 msgid "Exporting…"
 msgstr "Експортування…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3395
+#: src/libide/foundry/ide-pipeline.c:3399
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Зібрано"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3407
 msgid "Preparing…"
 msgstr "приготування"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3763
 #, c-format
 msgid "Removing %s"
 msgstr "Вилучення %s"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3822
 msgid "Removing build directories…"
 msgstr "Вилучаємо каталоги збирання…"
 
@@ -1396,12 +1404,12 @@ msgid "_Install"
 msgstr "_Встановити"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u з %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
@@ -1411,23 +1419,23 @@ msgstr "Пошук"
 msgid "Search for anything"
 msgstr "Шукати будь-що"
 
-#: src/libide/gui/ide-search-popover.ui:232
+#: src/libide/gui/ide-search-popover.ui:235
 msgid "_Everything"
 msgstr "_Усе"
 
-#: src/libide/gui/ide-search-popover.ui:239
+#: src/libide/gui/ide-search-popover.ui:242
 msgid "_Actions"
 msgstr "_Дії"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:249
 msgid "_Commands"
 msgstr "_Команди"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:256
 msgid "_Files"
 msgstr "_Файли"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:263
 msgid "_Symbols"
 msgstr "Си_мволи"
 
@@ -1848,14 +1856,14 @@ msgid "Code Navigation"
 msgstr "Навігація кодом"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1539
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Рд %u, Поз %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1541
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1949,6 +1957,15 @@ msgstr "Тільки збіг цілих слів"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Режим огортання"
+
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>Завантаження</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+#| msgid "(Empty)"
+msgid "Empty"
+msgstr "Порожньо"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -3027,7 +3044,7 @@ msgstr ""
 #: src/plugins/grep/gbp-grep-panel.c:744
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:148
 msgid "Location"
 msgstr "Місце"
 
@@ -3378,6 +3395,17 @@ msgstr "Не надано жодного файла."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr "Використовувати спрощений інтерфейс редактора"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+#| msgid "Switch to UI designer"
+msgid "Switch to %s style"
+msgstr "Перемкнутися на стиль %s"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+#| msgid "Switch to margin editor"
+msgid "Switch application and editor theme"
+msgstr "Перемкнути тему програми і редактора"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -4032,7 +4060,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Name"
 msgstr "Назва"
 
@@ -4226,7 +4254,7 @@ msgstr "Потрібно вказати правильне посилання у
 msgid "Authorship"
 msgstr "Авторство"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "Ел. пошта"
 
@@ -4272,17 +4300,14 @@ msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Знайти у файлах (Shift+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#| msgid "S_ort Directories First"
 msgid "_Recurse into Directories"
 msgstr "_Рекурсивний обхід каталогів"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
-#| msgid "Match Whole Words"
 msgid "Match Whole _Words"
 msgstr "Шукати _лише цілі слова"
 
 #: src/plugins/grep/gbp-grep-panel.ui:106
-#| msgid "Use Re_gular Expressions"
 msgid "Use Regular _Expressions"
 msgstr "Скористатися _формальними виразами"
 
@@ -4834,6 +4859,12 @@ msgstr "Копіювання файлів…"
 #: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
+
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+#| msgid "Filters:"
+msgid "Filter"
+msgstr "Фільтрувати"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5828,38 +5859,38 @@ msgstr "Почати клонування проєкту за адресою"
 msgid "A failure occurred while cloning the repository."
 msgstr "Під час клонування сховища сталася помилка"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:12
 msgid "Repository URL"
 msgstr "Адреса сховища"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:31
 msgid "Choose an alternate branch"
 msgstr "Виберіть альтернативну гілку"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:50
 msgid "Branches"
 msgstr "Гілки"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:135
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Введіть адресу сховища початкового коду проєкту, який ви хочете клонувати."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:164
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Сховище буде клоновано до нового підкаталогу."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:190
 msgid "Author Details"
 msgstr "Подробиці про автора"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:208
 msgid "You may specify authorship information to override defaults."
 msgstr "Ви можете вказати дані щодо авторства для перевизначення типових."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:224
 msgid "Status"
 msgstr "Стан"
 
@@ -5935,9 +5966,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Regular E_xpressions"
 #~ msgstr "_Формальні вирази"
-
-#~ msgid "(Empty)"
-#~ msgstr "(Порожньо)"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Діагностична точка зупинки у g_warning()"
@@ -6440,9 +6468,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Percent"
 #~ msgstr "Відсотків"
-
-#~ msgid "Filters:"
-#~ msgstr "Фільтри:"
 
 #~ msgid "Select a filter that act on the colors or “None”."
 #~ msgstr "Виберіть фільтр, що діятиме на кольори або «None»."
@@ -8202,9 +8227,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "_View Design"
 #~ msgstr "П_ереглянути дизайн"
 
-#~ msgid "Switch to UI designer"
-#~ msgstr "Перемкнутися на дизайнер інтерфейсу"
-
 #~ msgid "_View Source"
 #~ msgstr "П_ереглянути код"
 
@@ -8229,9 +8251,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Перемкнутися у режим перетягування для зміни розмірів"
-
-#~ msgid "Switch to margin editor"
-#~ msgstr "Перемкнутися на редактор полів"
 
 #~ msgid "Switch to alignment editor"
 #~ msgstr "Перемкнутися на редактор вирівнювання"
