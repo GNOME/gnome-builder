@@ -55,12 +55,12 @@ gbp_project_tree_pane_search_cb (GObject      *object,
 }
 
 static void
-on_search_notify_text_cb (GbpProjectTreePane *self,
-                          GParamSpec         *pspec,
-                          GtkSearchEntry     *search)
+on_search_cb (GbpProjectTreePane *self,
+              GtkSearchEntry     *search)
 {
   IdeSearchEngine *engine;
   IdeWorkbench *workbench;
+  GListModel *model;
   const char *visible_child_name;
   const char *text;
 
@@ -77,6 +77,15 @@ on_search_notify_text_cb (GbpProjectTreePane *self,
   else
     visible_child_name = "results";
 
+  if (text[0] == 0)
+    gtk_single_selection_set_model (self->selection, NULL);
+
+  model = gtk_single_selection_get_model (self->selection);
+
+  if (IDE_IS_SEARCH_RESULTS (model) &&
+      ide_search_results_refilter (IDE_SEARCH_RESULTS (model), text))
+    goto skip_search;
+
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
   engine = ide_workbench_get_search_engine (workbench);
 
@@ -91,6 +100,7 @@ on_search_notify_text_cb (GbpProjectTreePane *self,
                                   gbp_project_tree_pane_search_cb,
                                   g_object_ref (self));
 
+skip_search:
   gtk_stack_set_visible_child_name (self->stack, visible_child_name);
 
   IDE_EXIT;
@@ -167,7 +177,7 @@ gbp_project_tree_pane_class_init (GbpProjectTreePaneClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpProjectTreePane, selection);
   gtk_widget_class_bind_template_child (widget_class, GbpProjectTreePane, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpProjectTreePane, tree);
-  gtk_widget_class_bind_template_callback (widget_class, on_search_notify_text_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_list_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_search_activate_cb);
 
