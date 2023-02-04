@@ -90,6 +90,7 @@ src/libide/terminal/ide-terminal-page.c
 src/libide/terminal/ide-terminal-page.ui
 src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.ui
+src/libide/tree/ide-tree-empty.c
 src/libide/tree/ide-tree-node.c
 src/libide/tweaks/ide-tweaks-directory.c
 src/libide/tweaks/ide-tweaks-font.c
@@ -174,6 +175,7 @@ src/plugins/dub/gbp-dub-run-command-provider.c
 src/plugins/editorconfig/gbp-editorconfig-file-settings.c
 src/plugins/editorui/gbp-editorui-application-addin.c
 src/plugins/editorui/gbp-editorui-position-label.c
+src/plugins/editorui/gbp-editorui-search-result.c
 src/plugins/editorui/gbp-editorui-tweaks-addin.c
 src/plugins/editorui/gbp-editorui-workspace-addin.c
 src/plugins/editorui/gtk/menus.ui
@@ -249,6 +251,7 @@ src/plugins/podman/gbp-podman-runtime.c
 src/plugins/project-tree/gbp-new-file-popover.c
 src/plugins/project-tree/gbp-new-file-popover.ui
 src/plugins/project-tree/gbp-project-tree-addin.c
+src/plugins/project-tree/gbp-project-tree-pane.ui
 src/plugins/project-tree/gbp-project-tree-workspace-addin.c
 src/plugins/project-tree/gbp-rename-file-popover.c
 src/plugins/project-tree/gbp-rename-file-popover.ui
