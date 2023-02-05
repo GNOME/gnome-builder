@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-03 23:29+0000\n"
-"PO-Revision-Date: 2023-02-04 12:23+0700\n"
+"POT-Creation-Date: 2023-02-04 15:13+0000\n"
+"PO-Revision-Date: 2023-02-05 16:21+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -1932,6 +1932,14 @@ msgstr "Cocokkan seluruh kata"
 msgid "Wrap around"
 msgstr "Melipat"
 
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>Memuat</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "Kosong"
+
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
 msgstr "Direktori Proyek"
@@ -3352,6 +3360,15 @@ msgstr "Tidak ada berkas yang diberikan."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr "Gunakan antarmuka penyunting minimal"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr "Beralih ke gaya %s"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "Beralih tema aplikasi dan penyunting"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -4802,6 +4819,11 @@ msgstr "Menyalin berkas…"
 msgid "Files will be copied in a moment"
 msgstr "Berkas akan disalin sebentar lagi"
 
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "Penyaring"
+
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
@@ -5652,10 +5674,6 @@ msgstr "TODO/FIXMEs"
 msgid "Loading TODOs…"
 msgstr "Memuat TODO…"
 
-#: src/plugins/todo/gbp-todo-panel.ui:96
-msgid "Filter"
-msgstr "Penyaring"
-
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
 msgid "Updating Dependencies…"
 msgstr "Memutakhirkan Dependensi…"
@@ -5938,9 +5956,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Redo"
 #~ msgstr "Jadi Lagi"
-
-#~ msgid "(Empty)"
-#~ msgstr "(Kosong)"
 
 #~ msgid ""
 #~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
@@ -7961,9 +7976,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "_View Design"
 #~ msgstr "_Lihat Desain"
 
-#~ msgid "Switch to UI designer"
-#~ msgstr "Beralih ke perancang UI"
-
 #~ msgid "_View Source"
 #~ msgstr "_Lihat Sumber"
 
@@ -7990,9 +8002,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Beralih ke mode seret-ubah ukuran"
-
-#~ msgid "Switch to margin editor"
-#~ msgstr "Beralih ke penyunting marjin"
 
 #~ msgid "Switch to alignment editor"
 #~ msgstr "Beralih ke penyunting perataan"
