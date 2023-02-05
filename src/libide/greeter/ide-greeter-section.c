@@ -89,7 +89,7 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
  * @self: a #IdeGreeterSection
  * @spec: (nullable): a #IdePatternSpec or %NULL
  *
- * Refilter the visibile items based on the current search.
+ * Refilter the visible items based on the current search.
  *
  * Returns: %TRUE if at least one element matched.
  */
