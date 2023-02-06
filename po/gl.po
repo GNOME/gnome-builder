@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-04 15:13+0000\n"
-"PO-Revision-Date: 2023-02-05 22:17+0100\n"
+"POT-Creation-Date: 2023-02-05 21:21+0000\n"
+"PO-Revision-Date: 2023-02-06 09:20+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -1501,7 +1501,7 @@ msgstr "Novas Terminais"
 
 #: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
-msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2023"
+msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2023."
 
 #: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
