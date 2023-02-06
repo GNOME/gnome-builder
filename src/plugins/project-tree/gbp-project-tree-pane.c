@@ -151,6 +151,23 @@ gbp_project_tree_pane_grab_focus (GtkWidget *widget)
 }
 
 static void
+gbp_project_tree_pane_root (GtkWidget *widget)
+{
+  GbpProjectTreePane *self = (GbpProjectTreePane *)widget;
+  IdeContext *context;
+
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+
+  GTK_WIDGET_CLASS (gbp_project_tree_pane_parent_class)->root (widget);
+
+  /* Only show "Filter" if we have a project, as we need project
+   * indexes currently to perform search.
+   */
+  if (!(context = ide_widget_get_context (widget)) || !ide_context_has_project (context))
+    gtk_widget_hide (GTK_WIDGET (self->search));
+}
+
+static void
 gbp_project_tree_pane_dispose (GObject *object)
 {
   GbpProjectTreePane *self = (GbpProjectTreePane *)object;
@@ -170,6 +187,7 @@ gbp_project_tree_pane_class_init (GbpProjectTreePaneClass *klass)
   object_class->dispose = gbp_project_tree_pane_dispose;
 
   widget_class->grab_focus = gbp_project_tree_pane_grab_focus;
+  widget_class->root = gbp_project_tree_pane_root;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/project-tree/gbp-project-tree-pane.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpProjectTreePane, list);
