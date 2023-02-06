@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-02 12:47+0000\n"
-"PO-Revision-Date: 2023-02-03 16:06+0300\n"
+"POT-Creation-Date: 2023-02-04 16:49+0000\n"
+"PO-Revision-Date: 2023-02-06 12:17+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -550,6 +550,15 @@ msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr ""
 "Etkinleştirilirse, dil sunucularının stderr hataları uçbirime yönlendirilir."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Arama Sonuçlarını Ön İzle"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr ""
+"Arama sonuçları ön izlemelerinin kendiliğinden görüntülenmesi gerekiyorsa"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -1389,23 +1398,23 @@ msgstr "Ara"
 msgid "Search for anything"
 msgstr "Herhangi bir şey ara"
 
-#: src/libide/gui/ide-search-popover.ui:232
+#: src/libide/gui/ide-search-popover.ui:235
 msgid "_Everything"
 msgstr "_Her şey"
 
-#: src/libide/gui/ide-search-popover.ui:239
+#: src/libide/gui/ide-search-popover.ui:242
 msgid "_Actions"
 msgstr "_Eylemler"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:249
 msgid "_Commands"
 msgstr "_Komutlar"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:256
 msgid "_Files"
 msgstr "_Dosyalar"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:263
 msgid "_Symbols"
 msgstr "_Simgeler"
 
@@ -1825,14 +1834,14 @@ msgid "Code Navigation"
 msgstr "Kod Gezinme"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1539
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Satır %u, Sütun %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1541
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1921,6 +1930,14 @@ msgstr "Tüm sözcüğü eşleştir"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Çevrele"
+
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>Yükleniyor</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "Boş"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -2981,7 +2998,7 @@ msgstr ""
 #: src/plugins/grep/gbp-grep-panel.c:744
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:148
 msgid "Location"
 msgstr "Konum"
 
@@ -3336,6 +3353,15 @@ msgstr "Hiçbir dosya sağlanmadı."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr "En küçük düzenleyici arayüzünü kullan"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr "%s biçemine geç"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "Uygulama ve düzenleyici gövdesini değiştir"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -3987,7 +4013,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Name"
 msgstr "Ad"
 
@@ -4180,7 +4206,7 @@ msgstr "Geçerli Git URL adresi gerekir"
 msgid "Authorship"
 msgstr "Yazarlık"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "E-posta"
 
@@ -4787,6 +4813,11 @@ msgstr "Dosyalar kopyalanıyor…"
 msgid "Files will be copied in a moment"
 msgstr "Dosyalar birazdan kopyalanmış olacak"
 
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "Süzgeç"
+
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
@@ -5196,14 +5227,14 @@ msgstr "Kısayolları Gör ve Özelleştir…"
 
 #: src/plugins/shortcutui/tweaks.ui:15
 msgid "Keyboard Theme"
-msgstr "Klavye Teması"
+msgstr "Klavye Gövdesi"
 
 #: src/plugins/shortcutui/tweaks.ui:16
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
-"Kısayol temaları, diğer IDE’lere ve düzenleyicilere benzer klavye deneyimi "
+"Kısayol gövdeleri, diğer IDE’lere ve düzenleyicilere benzer klavye deneyimi "
 "sağlar"
 
 # Enchant 2 bir program adı.
@@ -5769,38 +5800,38 @@ msgstr "Projeyi URIʼden kopyalamaya başla"
 msgid "A failure occurred while cloning the repository."
 msgstr "Depo klonlanırken hata oluştu."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:12
 msgid "Repository URL"
 msgstr "Depo URL’si"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:31
 msgid "Choose an alternate branch"
 msgstr "Alternatif dal seç"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:50
 msgid "Branches"
 msgstr "Dallar"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:135
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr "Klonlamak istediğiniz projenin kaynak kodu deposunun URLʼsini girin."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:164
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Depo yeni bir alt dizinde klonlanacak."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:190
 msgid "Author Details"
 msgstr "Yazar Ayrıntıları"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:208
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 "Öntanımlıları geçersiz kılmak için yazarlık bilgilerini belirleyebilirsiniz."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:224
 msgid "Status"
 msgstr "Durum"
 
@@ -5861,24 +5892,3 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
-
-#~ msgid "Find and Replace"
-#~ msgstr "Bul ve Değiştir"
-
-#~ msgid "R_ecursive"
-#~ msgstr "Öz_yinelemeli"
-
-#~ msgid "Match _Case"
-#~ msgstr "Büyük/Küçük _Duyarlı"
-
-#~ msgid "Match _Words"
-#~ msgstr "_Sözcükleri Eşleştir"
-
-#~ msgid "Regular E_xpressions"
-#~ msgstr "Düzenli İ_fadeler"
-
-#~ msgid "(Empty)"
-#~ msgstr "(Boş)"
-
-#~ msgid "Stop Building Project"
-#~ msgstr "Proje İnşasını Durdur"
