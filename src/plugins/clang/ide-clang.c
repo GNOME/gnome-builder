@@ -1,6 +1,6 @@
 /* ide-clang.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1336,7 +1336,6 @@ ide_clang_build_completion (GVariantBuilder    *builder,
   for (guint i = 0; i < n_chunks; i++)
     {
       g_auto(CXString) str = clang_getCompletionChunkText (result->CompletionString, i);
-      g_autofree char *rewritten = NULL;
       const gchar *text = clang_getCString (str);
       guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
 
@@ -1362,7 +1361,7 @@ ide_clang_build_completion (GVariantBuilder    *builder,
               g_string_append_len (string, text, strlen (text) - strlen (bar));
               g_string_append_c (string, ')');
               g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", string->str);
-              g_string_free (string, FALSE);
+              g_string_free (string, TRUE);
             }
           else
             {
