@@ -451,10 +451,20 @@ ide_webkit_page_init (IdeWebkitPage *self)
 {
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
   WebKitBackForwardList *list;
+#if WEBKIT_CHECK_VERSION(2, 39, 6)
+  WebKitNetworkSession *session;
+  WebKitWebsiteDataManager *manager;
+#endif
 
   panel_widget_set_can_maximize (PANEL_WIDGET (self), TRUE);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+#if WEBKIT_CHECK_VERSION(2, 39, 6)
+  session = webkit_web_view_get_network_session (priv->web_view);
+  manager = webkit_network_session_get_website_data_manager (session);
+  webkit_website_data_manager_set_favicons_enabled (manager, TRUE);
+#endif
 
   g_object_bind_property_full (priv->web_view, "title", self, "title", 0,
                                transform_title_with_fallback,
