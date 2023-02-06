@@ -54,6 +54,9 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_NODE (node));
 
+  if (self->monitor == NULL)
+    return;
+
   item = ide_tree_node_get_item (node);
 
   if (IDE_IS_PROJECT_FILE (item))
