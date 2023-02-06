@@ -1,6 +1,6 @@
 /* ide-tree-addin.c
  *
- * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -295,6 +295,21 @@ ide_tree_addin_node_draggable (IdeTreeAddin *self,
   return NULL;
 }
 
+/**
+ * ide_tree_addin_node_droppable:
+ * @self: an #IdeTreeAddin
+ * @drop_target: a #GtkDropTarget
+ * @drop_node: an #IdeTreeNode
+ * @gtypes: (element-type GType): an array of #GType
+ *
+ * Determines if @drop_node is a droppable for @drop_target.
+ *
+ * If so, this function should add the allowed #GType to @gtypes.
+ *
+ * Returns: 0 if not droppable, otherwise a #GdkDragAction
+ *
+ * Since: 44
+ */
 GdkDragAction
 ide_tree_addin_node_droppable (IdeTreeAddin  *self,
                                GtkDropTarget *drop_target,
