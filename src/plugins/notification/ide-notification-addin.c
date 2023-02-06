@@ -39,7 +39,7 @@ struct _IdeNotificationAddin
   char             *shell_notif_id;
   IdePipelinePhase  requested_phase;
   gint64            last_time;
-  guint             supress : 1;
+  guint             suppress : 1;
   guint             did_first_build : 1;
 };
 
@@ -67,8 +67,8 @@ title_with_default (GBinding     *binding,
 }
 
 static gboolean
-should_supress_message (IdeNotificationAddin *self,
-                        const gchar          *message)
+should_suppress_message (IdeNotificationAddin *self,
+                         const char           *message)
 {
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (message != NULL);
@@ -101,7 +101,7 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
 
-  if (self->supress)
+  if (self->suppress)
     return;
 
   app = GTK_APPLICATION (g_application_get_default ());
@@ -140,7 +140,7 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   g_notification_set_priority (notification, G_NOTIFICATION_PRIORITY_NORMAL);
   g_notification_set_icon (notification, icon);
 
-  if (!should_supress_message (self, msg_body))
+  if (!should_suppress_message (self, msg_body))
     g_application_send_notification (g_application_get_default (), self->shell_notif_id, notification);
 }
 
@@ -169,12 +169,12 @@ ide_notification_addin_pipeline_started (IdeNotificationAddin *self,
    * deps).
    */
   self->requested_phase = requested_phase;
-  self->supress = requested_phase < IDE_PIPELINE_PHASE_BUILD && self->did_first_build;
+  self->suppress = requested_phase < IDE_PIPELINE_PHASE_BUILD && self->did_first_build;
   self->did_first_build = TRUE;
 
   g_assert (self->notif == NULL);
 
-  if (!self->supress)
+  if (!self->suppress)
     {
       /* Setup new in-app notification */
       self->notif = ide_notification_new ();
