@@ -62,8 +62,8 @@ ide_shortcut_new (const char          *action,
 }
 
 static IdeShortcut *
-ide_shortcut_new_supress (TmplExpr            *when,
-                          GtkPropagationPhase  phase)
+ide_shortcut_new_suppress (TmplExpr            *when,
+                           GtkPropagationPhase  phase)
 {
   IdeShortcut *ret;
 
@@ -362,7 +362,7 @@ populate_from_object (IdeShortcutBundle  *self,
   IdeShortcut *state;
   GtkPropagationPhase phase = 0;
   JsonObject *obj;
-  gboolean supress = FALSE;
+  gboolean suppress = FALSE;
 
   g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
   g_assert (node != NULL);
@@ -381,7 +381,7 @@ populate_from_object (IdeShortcutBundle  *self,
       !get_string_member (obj, "command", &command, error) ||
       !get_string_member (obj, "action", &action, error) ||
       !get_string_member (obj, "phase", &phase_str, error) ||
-      !get_boolean_member (obj, "supress", &supress, error))
+      !get_boolean_member (obj, "suppress", &suppress, error))
     return FALSE;
 
   if (!(trigger = gtk_shortcut_trigger_parse_string (trigger_str)))
@@ -394,7 +394,7 @@ populate_from_object (IdeShortcutBundle  *self,
       return FALSE;
     }
 
-  if (supress)
+  if (suppress)
     goto do_parse_when;
 
   if (!ide_str_empty0 (command) && !ide_str_empty0 (action))
@@ -447,8 +447,8 @@ do_parse_when:
       return FALSE;
     }
 
-  if (supress)
-    state = ide_shortcut_new_supress (when, phase);
+  if (suppress)
+    state = ide_shortcut_new_suppress (when, phase);
   else
     state = ide_shortcut_new (action, args, when, phase);
 
