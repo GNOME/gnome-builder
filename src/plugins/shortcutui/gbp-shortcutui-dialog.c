@@ -1,6 +1,6 @@
 /* gbp-shortcutui-dialog.c
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-shortcutui-action.h"
@@ -311,6 +312,57 @@ reset_all_shortcuts (GtkWidget  *widget,
 }
 
 static void
+edit_shortcuts (GtkWidget  *widget,
+                const char *action_name,
+                GVariant   *param)
+{
+  GbpShortcutuiDialog *self = GBP_SHORTCUTUI_DIALOG (widget);
+  g_autoptr(GFile) file = NULL;
+  IdeWorkbench *workbench = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+
+  file = g_file_new_build_filename (g_get_user_config_dir (),
+                                    "gnome-builder",
+                                    "keybindings.json",
+                                    NULL);
+
+  /* Ensure there is a file to open */
+  if (!g_file_query_exists (file, NULL))
+    g_file_set_contents (g_file_peek_path (file), "", 0, NULL);
+
+  if (TRUE)
+    {
+      g_autoptr(GFile) workdir = g_file_get_parent (file);
+      IdeEditorWorkspace *workspace;
+      IdeContext *context;
+
+      workbench = ide_workbench_new ();
+      ide_application_add_workbench (IDE_APPLICATION_DEFAULT, workbench);
+
+      context = ide_workbench_get_context (workbench);
+      ide_context_set_workdir (context, workdir);
+
+      workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
+      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+      gtk_window_present (GTK_WINDOW (workspace));
+
+      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+    }
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  ide_workbench_open_async (workbench, file, "editorui", IDE_BUFFER_OPEN_FLAGS_NONE,
+                            NULL, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -329,6 +381,7 @@ gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gbp_shortcutui_dialog_queue_update);
 
   gtk_widget_class_install_action (widget_class, "shortcuts.reset-all", NULL, reset_all_shortcuts);
+  gtk_widget_class_install_action (widget_class, "shortcuts.edit", NULL, edit_shortcuts);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
