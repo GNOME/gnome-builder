@@ -308,7 +308,7 @@ reset_all_shortcuts (GtkWidget  *widget,
                      const char *action_name,
                      GVariant   *param)
 {
-  g_print ("TODO: Reset shortcuts!\n");
+  ide_shortcut_manager_reset_user ();
 }
 
 static void
