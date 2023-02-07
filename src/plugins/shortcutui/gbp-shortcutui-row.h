@@ -22,14 +22,17 @@
 
 #include <adwaita.h>
 
+#include "gbp-shortcutui-action.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_SHORTCUTUI_ROW (gbp_shortcutui_row_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiRow, gbp_shortcutui_row, GBP, SHORTCUTUI_ROW, AdwActionRow)
 
-const char *gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self);
-void        gbp_shortcutui_row_update_header   (GbpShortcutuiRow *self,
-                                                GbpShortcutuiRow *before);
+const char          *gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self);
+GbpShortcutuiAction *gbp_shortcutui_row_get_action      (GbpShortcutuiRow *self);
+void                 gbp_shortcutui_row_update_header   (GbpShortcutuiRow *self,
+                                                         GbpShortcutuiRow *before);
 
 G_END_DECLS

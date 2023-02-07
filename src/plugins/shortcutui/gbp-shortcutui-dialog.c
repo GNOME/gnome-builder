@@ -142,12 +142,16 @@ gbp_shortcutui_dialog_group_header_cb (GtkListBoxRow *row,
 
 static void
 set_accel (GbpShortcutuiDialog *self,
+           GbpShortcutuiAction *action,
            const char          *accel)
 {
   g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
+  g_assert (GBP_IS_SHORTCUTUI_ACTION (action));
 
-  /* TODO: Set accel for dialog */
-  g_printerr ("Set accel to %s\n", accel);
+  g_printerr ("TODO: Set action %s from %s to %s\n",
+              gbp_shortcutui_action_get_action_name (action),
+              gbp_shortcutui_action_get_accelerator (action),
+              accel);
 }
 
 static void
@@ -155,19 +159,22 @@ shortcut_dialog_response_cb (GbpShortcutuiDialog    *self,
                              int                     response_id,
                              IdeShortcutAccelDialog *dialog)
 {
+  GbpShortcutuiAction *action;
+  const char *accel;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SHORTCUTUI_DIALOG (self));
   g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      const char *accel;
+  action = g_object_get_data (G_OBJECT (dialog), "GBP_SHORTCUTUI_ACTION");
+  accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
 
-      accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
-      set_accel (self, accel);
-    }
+  g_assert (GBP_IS_SHORTCUTUI_ACTION (action));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    set_accel (self, action, accel);
 
   gtk_window_destroy (GTK_WINDOW (dialog));
 
@@ -179,6 +186,7 @@ gbp_shortcutui_dialog_row_activated_cb (GbpShortcutuiDialog *self,
                                         GbpShortcutuiRow    *row)
 {
   IdeShortcutAccelDialog *dialog;
+  GbpShortcutuiAction *action;
   const char *accel;
   const char *name;
 
@@ -189,7 +197,9 @@ gbp_shortcutui_dialog_row_activated_cb (GbpShortcutuiDialog *self,
   g_assert (GBP_IS_SHORTCUTUI_ROW (row));
 
   name = adw_preferences_row_get_title (ADW_PREFERENCES_ROW (row));
+  action = gbp_shortcutui_row_get_action (row);
   accel = gbp_shortcutui_row_get_accelerator (row);
+
   dialog = g_object_new (IDE_TYPE_SHORTCUT_ACCEL_DIALOG,
                          "accelerator", accel,
                          "transient-for", self,
@@ -203,6 +213,10 @@ gbp_shortcutui_dialog_row_activated_cb (GbpShortcutuiDialog *self,
                            G_CALLBACK (shortcut_dialog_response_cb),
                            self,
                            G_CONNECT_SWAPPED);
+  g_object_set_data_full (G_OBJECT (dialog),
+                          "GBP_SHORTCUTUI_ACTION",
+                          g_object_ref (action),
+                          g_object_unref);
   gtk_window_present (GTK_WINDOW (dialog));
 
   IDE_EXIT;

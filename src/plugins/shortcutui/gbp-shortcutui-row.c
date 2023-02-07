@@ -247,3 +247,11 @@ gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self)
 
   return gbp_shortcutui_action_get_accelerator (self->action);
 }
+
+GbpShortcutuiAction *
+gbp_shortcutui_row_get_action (GbpShortcutuiRow *self)
+{
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_ROW (self), NULL);
+
+  return self->action;
+}
