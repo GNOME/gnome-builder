@@ -307,3 +307,9 @@ gbp_shortcutui_action_get_group (const GbpShortcutuiAction *self)
 {
   return self->group;
 }
+
+const char *
+gbp_shortcutui_action_get_action_name (const GbpShortcutuiAction *self)
+{
+  return self->action_name;
+}

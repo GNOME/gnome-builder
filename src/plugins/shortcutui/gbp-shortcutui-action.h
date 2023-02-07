@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiAction, gbp_shortcutui_action, GBP, SHORTCUTUI_ACTION, GObject)
 
+const char *gbp_shortcutui_action_get_action_name (const GbpShortcutuiAction *self);
 const char *gbp_shortcutui_action_get_accelerator (const GbpShortcutuiAction *self);
 const char *gbp_shortcutui_action_get_page        (const GbpShortcutuiAction *self);
 const char *gbp_shortcutui_action_get_group       (const GbpShortcutuiAction *self);
