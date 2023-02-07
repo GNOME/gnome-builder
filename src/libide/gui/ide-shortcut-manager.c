@@ -57,6 +57,9 @@ struct _IdeShortcutManager
   /* Extension set of IdeShortcutProvider */
   IdeExtensionSetAdapter *providers;
   GListStore *providers_models;
+
+  /* Used to track action-name -> accel mappings */
+  IdeShortcutObserver *observer;
 };
 
 static GType
@@ -259,6 +262,7 @@ ide_shortcut_manager_destroy (IdeObject *object)
 {
   IdeShortcutManager *self = (IdeShortcutManager *)object;
 
+  g_clear_object (&self->observer);
   g_clear_object (&self->providers);
   g_clear_object (&self->providers_models);
   g_clear_object (&self->plugin_models);
@@ -331,6 +335,9 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
                            G_CALLBACK (ide_shortcut_manager_items_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  /* Build a "compiled" shortcut map to make remappings easier */
+  self->observer = ide_shortcut_observer_new (G_LIST_MODEL (self->flatten));
 }
 
 /**
@@ -419,4 +426,22 @@ ide_shortcut_manager_remove_resources (const char *resource_path)
           return;
         }
     }
+}
+
+IdeShortcutObserver *
+ide_shortcut_manager_get_observer (IdeShortcutManager *self)
+{
+  g_return_val_if_fail (IDE_IS_SHORTCUT_MANAGER (self), NULL);
+
+  return self->observer;
+}
+
+void
+ide_shortcut_manager_reset_user (void)
+{
+  g_autoptr(GFile) file = g_file_new_build_filename (g_get_user_config_dir (),
+                                                     "gnome-builder",
+                                                     "keybindings.json",
+                                                     NULL);
+  g_file_delete (file, NULL, NULL);
 }

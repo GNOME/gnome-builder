@@ -24,14 +24,18 @@
 
 #include <libide-core.h>
 
+#include "ide-shortcut-observer-private.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SHORTCUT_MANAGER (ide_shortcut_manager_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeShortcutManager, ide_shortcut_manager, IDE, SHORTCUT_MANAGER, IdeObject)
 
-IdeShortcutManager *ide_shortcut_manager_from_context     (IdeContext *context);
-void                ide_shortcut_manager_add_resources    (const char *resource_path);
-void                ide_shortcut_manager_remove_resources (const char *resource_path);
+IdeShortcutManager  *ide_shortcut_manager_from_context     (IdeContext         *context);
+void                 ide_shortcut_manager_add_resources    (const char         *resource_path);
+void                 ide_shortcut_manager_remove_resources (const char         *resource_path);
+IdeShortcutObserver *ide_shortcut_manager_get_observer     (IdeShortcutManager *self);
+void                 ide_shortcut_manager_reset_user       (void);
 
 G_END_DECLS
