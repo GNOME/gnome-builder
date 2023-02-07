@@ -24,12 +24,15 @@
 
 #include <libide-gui.h>
 
+#include "ide-shortcut-observer-private.h"
+
 #include "gbp-shortcutui-action.h"
 #include "gbp-shortcutui-row.h"
 
 struct _GbpShortcutuiRow
 {
   AdwActionRow parent_instance;
+  IdeShortcutObserver *observer;
   GbpShortcutuiAction *action;
   GtkWidget *shortcut;
 };
@@ -39,6 +42,7 @@ G_DEFINE_FINAL_TYPE (GbpShortcutuiRow, gbp_shortcutui_row, ADW_TYPE_ACTION_ROW)
 enum {
   PROP_0,
   PROP_ACTION,
+  PROP_OBSERVER,
   N_PROPS
 };
 
@@ -71,11 +75,52 @@ gbp_shortcutui_row_set_action (GbpShortcutuiRow    *self,
 }
 
 static void
+on_accel_changed_cb (GbpShortcutuiRow *self,
+                     const char       *action_name,
+                     const char       *accel)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHORTCUTUI_ROW (self));
+  g_assert (action_name != NULL);
+
+  g_debug ("Action \"%s\" changed to accel %s", action_name, accel);
+
+  g_object_set (self->shortcut,
+                "accelerator", accel,
+                NULL);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_shortcutui_row_constructed (GObject *object)
+{
+  GbpShortcutuiRow *self = (GbpShortcutuiRow *)object;
+  g_autofree char *detail = NULL;
+  const char *action_name;
+
+  G_OBJECT_CLASS (gbp_shortcutui_row_parent_class)->constructed (object);
+
+  if (!(action_name = gbp_shortcutui_action_get_action_name (self->action)))
+    return;
+
+  detail = g_strdup_printf ("accel-changed::%s", action_name);
+
+  g_signal_connect_object (self->observer,
+                           detail,
+                           G_CALLBACK (on_accel_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gbp_shortcutui_row_dispose (GObject *object)
 {
   GbpShortcutuiRow *self = (GbpShortcutuiRow *)object;
 
   g_clear_object (&self->action);
+  g_clear_object (&self->observer);
 
   G_OBJECT_CLASS (gbp_shortcutui_row_parent_class)->dispose (object);
 }
@@ -113,6 +158,10 @@ gbp_shortcutui_row_set_property (GObject      *object,
       gbp_shortcutui_row_set_action (self, g_value_get_object (value));
       break;
 
+    case PROP_OBSERVER:
+      self->observer = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -124,6 +173,7 @@ gbp_shortcutui_row_class_init (GbpShortcutuiRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gbp_shortcutui_row_constructed;
   object_class->dispose = gbp_shortcutui_row_dispose;
   object_class->get_property = gbp_shortcutui_row_get_property;
   object_class->set_property = gbp_shortcutui_row_set_property;
@@ -132,6 +182,11 @@ gbp_shortcutui_row_class_init (GbpShortcutuiRowClass *klass)
     g_param_spec_object ("action", NULL, NULL,
                          GBP_TYPE_SHORTCUTUI_ACTION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_OBSERVER] =
+    g_param_spec_object ("observer", NULL, NULL,
+                         IDE_TYPE_SHORTCUT_OBSERVER,
+                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 

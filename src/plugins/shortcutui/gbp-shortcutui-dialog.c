@@ -27,6 +27,8 @@
 #include <libide-editor.h>
 #include <libide-gui.h>
 
+#include "ide-shortcut-manager-private.h"
+
 #include "gbp-shortcutui-action.h"
 #include "gbp-shortcutui-action-model.h"
 #include "gbp-shortcutui-dialog.h"
@@ -35,6 +37,7 @@
 struct _GbpShortcutuiDialog
 {
   GtkWindow            parent_instance;
+
   GtkSearchEntry      *search;
   GtkListBox          *results_list_box;
   AdwPreferencesGroup *overview;
@@ -42,6 +45,8 @@ struct _GbpShortcutuiDialog
   AdwPreferencesGroup *empty;
   GtkStringFilter     *string_filter;
   GtkFilterListModel  *filter_model;
+
+  IdeShortcutObserver *observer;
   guint                update_source;
 };
 
@@ -107,6 +112,7 @@ gbp_shortcutui_dialog_dispose (GObject *object)
   GbpShortcutuiDialog *self = (GbpShortcutuiDialog *)object;
 
   g_clear_handle_id (&self->update_source, g_source_remove);
+  g_clear_object (&self->observer);
 
   G_OBJECT_CLASS (gbp_shortcutui_dialog_parent_class)->dispose (object);
 }
@@ -216,6 +222,7 @@ gbp_shortcutui_dialog_create_row_cb (gpointer item,
   row = g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
                       "activatable", TRUE,
                       "action", action,
+                      "observer", self->observer,
                       NULL);
   g_signal_connect_object (row,
                            "activated",
@@ -227,7 +234,8 @@ gbp_shortcutui_dialog_create_row_cb (gpointer item,
 
 void
 gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
-                                 GListModel          *model)
+                                 GListModel          *model,
+                                 IdeShortcutObserver *observer)
 {
   g_autoptr(GListModel) wrapped = NULL;
   AdwExpanderRow *last_group_row = NULL;
@@ -238,6 +246,8 @@ gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
 
   g_return_if_fail (GBP_IS_SHORTCUTUI_DIALOG (self));
   g_return_if_fail (G_IS_LIST_MODEL (model));
+
+  g_set_object (&self->observer, observer);
 
   wrapped = gbp_shortcutui_action_model_new (model);
   n_items = g_list_model_get_n_items (wrapped);
@@ -285,6 +295,7 @@ gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
           row = g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
                               "activatable", TRUE,
                               "action", action,
+                              "observer", self->observer,
                               NULL);
           g_signal_connect_object (row,
                                    "activated",

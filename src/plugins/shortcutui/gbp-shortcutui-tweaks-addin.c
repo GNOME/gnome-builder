@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 
 #include "ide-shortcut-manager-private.h"
+#include "ide-shortcut-observer-private.h"
 
 #include "gbp-shortcutui-dialog.h"
 #include "gbp-shortcutui-tweaks-addin.h"
@@ -43,13 +44,28 @@ static void
 gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
                                               AdwActionRow *row)
 {
+  g_autoptr(IdeShortcutManager) temp_manager = NULL;
   GbpShortcutuiDialog *dialog;
+  IdeShortcutObserver *observer;
+  IdeShortcutManager *manager;
+  IdeContext *context;
   GtkRoot *root;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (ADW_IS_ACTION_ROW (row));
+
+  context = ide_widget_get_context (GTK_WIDGET (row));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context != NULL)
+    manager = ide_shortcut_manager_from_context (context);
+  else
+    manager = temp_manager = g_object_new (IDE_TYPE_SHORTCUT_MANAGER, NULL);
+
+  observer = ide_shortcut_manager_get_observer (manager);
+  g_assert (IDE_IS_SHORTCUT_OBSERVER (observer));
 
   root = gtk_widget_get_root (GTK_WIDGET (row));
   dialog = g_object_new (GBP_TYPE_SHORTCUTUI_DIALOG,
@@ -60,7 +76,7 @@ gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
                          "modal", TRUE,
                          NULL);
 
-  gbp_shortcutui_dialog_set_model (dialog, model);
+  gbp_shortcutui_dialog_set_model (dialog, model, observer);
 
   gtk_window_present (GTK_WINDOW (dialog));
 
