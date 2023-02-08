@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-02-04 15:13+0000\n"
-"PO-Revision-Date: 2023-02-05 16:21+0700\n"
+"PO-Revision-Date: 2023-02-08 08:12+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -4398,19 +4398,23 @@ msgstr "Jungkitkan Panel Kiri"
 msgid "Toggle the left panel in or out of view"
 msgstr "Jungkitkan panel kiri ke dalam atau di luar tampilan"
 
+# Nama ikon
+# https://gitlab.gnome.org/Teams/Translation/id/-/issues/1
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
-msgstr "panel-kiri-simbolik"
+msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:35
 msgid "Toggle the right panel in or out of view"
 msgstr "Jungkitkan panel kanan ke dalam atau di luar tampilan"
 
+# Nama ikon
+# https://gitlab.gnome.org/Teams/Translation/id/-/issues/1
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
-msgstr "panel-kanan-simbolik"
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
