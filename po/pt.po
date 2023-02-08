@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-01 09:13+0000\n"
-"PO-Revision-Date: 2023-02-01 16:34+0000\n"
+"POT-Creation-Date: 2023-02-06 21:28+0000\n"
+"PO-Revision-Date: 2023-02-08 11:21+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -554,6 +554,16 @@ msgstr ""
 "Se ativada, o stderr de servidores de linguagem será redirecionado para a "
 "consola."
 
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Pré-visualizar resultados da pesquisa"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr ""
+"Se as pré-visualizações para resultados de pesquisa devem ser "
+"automaticamente exibidas"
+
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
 msgstr "Extensão ativada"
@@ -943,43 +953,45 @@ msgstr "Guardar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Mover para a correspondência anterior (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Mover para a próxima correspondência (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Pesquisar e substituir (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "Fechar pesquisa"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_Substituir"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Substituir tudo"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "Usar expressões re_gulares"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Diferen_ciar maiúsculas de minúsculas"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "Combinar palavras inteiras"
 
@@ -1078,78 +1090,78 @@ msgstr "Compilar (%s)"
 msgid "Post-install (%s)"
 msgstr "Pós-instalação (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3106
+#: src/libide/foundry/ide-pipeline.c:3145
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Criação de pseudo terminal falhou. Os recursos de terminal serão limitados."
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3342
 msgid "Cleaning…"
 msgstr "A limpar…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3403
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Falhou"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3348
+#: src/libide/foundry/ide-pipeline.c:3411
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3363
 msgid "Downloading…"
 msgstr "A transferir…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3367
 msgid "Building dependencies…"
 msgstr "A criar dependências…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3371
 msgid "Bootstrapping…"
 msgstr "A inicializar…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3375
 msgid "Configuring…"
 msgstr "A configurar…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3379
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "A construir…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3383
 msgid "Installing…"
 msgstr "A instalar…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3387
 msgid "Committing…"
 msgstr "A submeter…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3391
 msgid "Exporting…"
 msgstr "A exportar…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3395
+#: src/libide/foundry/ide-pipeline.c:3399
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3407
 msgid "Preparing…"
 msgstr "A preparar…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3763
 #, c-format
 msgid "Removing %s"
 msgstr "A remover %s"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3822
 msgid "Removing build directories…"
 msgstr "A remover diretórios de compilação…"
 
@@ -1383,13 +1395,14 @@ msgid "_Install"
 msgstr "_Instalar"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Procurar"
 
@@ -1397,23 +1410,23 @@ msgstr "Procurar"
 msgid "Search for anything"
 msgstr "Procurar por qualquer coisa"
 
-#: src/libide/gui/ide-search-popover.ui:232
+#: src/libide/gui/ide-search-popover.ui:235
 msgid "_Everything"
 msgstr "_Tudo"
 
-#: src/libide/gui/ide-search-popover.ui:239
+#: src/libide/gui/ide-search-popover.ui:242
 msgid "_Actions"
 msgstr "_Ações"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:249
 msgid "_Commands"
 msgstr "_Comandos"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:256
 msgid "_Files"
 msgstr "_Ficheiros"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:263
 msgid "_Symbols"
 msgstr "_Símbolos"
 
@@ -1834,14 +1847,14 @@ msgid "Code Navigation"
 msgstr "Navegação de código"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1539
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Ln %u, Col %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1541
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1932,6 +1945,14 @@ msgstr "Corresponder apenas palavra inteira"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Ajustar à volta"
+
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>A carregar</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "Vazio"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -3004,7 +3025,7 @@ msgstr ""
 #: src/plugins/grep/gbp-grep-panel.c:744
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:148
 msgid "Location"
 msgstr "Localização"
 
@@ -3358,6 +3379,15 @@ msgstr "Nenhum ficheiro fornecido."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr "Usar a interface mínima do editor"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr "Mudar para estilo %s"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "Mudar a aplicação e o tema do editor"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -4010,7 +4040,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Name"
 msgstr "Nome"
 
@@ -4204,7 +4234,7 @@ msgstr "É necessário um URL Git válido"
 msgid "Authorship"
 msgstr "Autoria"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "E-mail"
 
@@ -4249,35 +4279,27 @@ msgstr "Localizar em Ficheiros"
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Localizar em Ficheiros (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "Localizar e Substituir"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "_Recurse into Directories"
+msgstr "_Recursar para diretórios"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "R_ecursivo"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "Combinar _palavras inteiras"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "Letras _correspondentes"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "Usar _expressões regulares"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "Palavras correspondentes"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "E_xpressões regulares"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "Fechar o painel (Tecla Esc)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "Localizar no projeto"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "Substituir no projeto"
 
@@ -4807,13 +4829,18 @@ msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s ficheiro"
 msgstr[1] "Copiados %s ficheiros"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:944
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "A copiar ficheiros…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:945
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Os ficheiros serão copiados dentro de momentos"
+
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "Filtro"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5028,7 +5055,7 @@ msgid "Untitled Command"
 msgstr "Comando sem título"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:191
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:192
 msgid "Set Shortcut"
 msgstr "Definir atalho"
 
@@ -5809,38 +5836,38 @@ msgstr "Começar a clonagem do projeto a partir da URI"
 msgid "A failure occurred while cloning the repository."
 msgstr "Ocorreu uma falha ao clonar o repositório."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:12
 msgid "Repository URL"
 msgstr "URL do Repositório"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:31
 msgid "Choose an alternate branch"
 msgstr "Escolhe um ramo alternativo"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:50
 msgid "Branches"
 msgstr "Ramos"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:135
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Insira a URL do repositório de código-fonte do projeto que quer clonar."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:164
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "O repositório será clonado num novo subdiretório."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:190
 msgid "Author Details"
 msgstr "Detalhes do autor"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:208
 msgid "You may specify authorship information to override defaults."
 msgstr "Pode especificar informações de autoria para substitui o padrão."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:224
 msgid "Status"
 msgstr "Estado"
 
@@ -5902,8 +5929,20 @@ msgstr "Falha ao criar a árvore XML."
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
 
-#~ msgid "(Empty)"
-#~ msgstr "(Vazio)"
+#~ msgid "Find and Replace"
+#~ msgstr "Localizar e Substituir"
+
+#~ msgid "R_ecursive"
+#~ msgstr "R_ecursivo"
+
+#~ msgid "Match _Case"
+#~ msgstr "Letras _correspondentes"
+
+#~ msgid "Match _Words"
+#~ msgstr "Palavras correspondentes"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "E_xpressões regulares"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Breakpoint do depurador em g_warning()"
@@ -6402,9 +6441,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "Percent"
 #~ msgstr "Porcentagem"
-
-#~ msgid "Filters:"
-#~ msgstr "Filtros:"
 
 #~ msgid "Select a filter that act on the colors or “None”."
 #~ msgstr "Selecione um filtro que aja nas cores ou “Nenhum”."
@@ -8063,9 +8099,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "_View Design"
 #~ msgstr "_Ver Design"
 
-#~ msgid "Switch to UI designer"
-#~ msgstr "Alternar para construtor de UI"
-
 #~ msgid "_View Source"
 #~ msgstr "_Ver fonte"
 
@@ -8093,9 +8126,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Alterna para o modo arrastar-redimensionar"
-
-#~ msgid "Switch to margin editor"
-#~ msgstr "Alterna para editor de margem"
 
 #~ msgid "Switch to alignment editor"
 #~ msgstr "Alterna para o editor de alinhamento"
