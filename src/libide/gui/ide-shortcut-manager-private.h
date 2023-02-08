@@ -24,6 +24,7 @@
 
 #include <libide-core.h>
 
+#include "ide-shortcut-bundle-private.h"
 #include "ide-shortcut-observer-private.h"
 
 G_BEGIN_DECLS
@@ -37,5 +38,6 @@ void                 ide_shortcut_manager_add_resources    (const char         *
 void                 ide_shortcut_manager_remove_resources (const char         *resource_path);
 IdeShortcutObserver *ide_shortcut_manager_get_observer     (IdeShortcutManager *self);
 void                 ide_shortcut_manager_reset_user       (void);
+IdeShortcutBundle   *ide_shortcut_manager_get_user_bundle  (void);
 
 G_END_DECLS

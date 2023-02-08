@@ -441,3 +441,9 @@ ide_shortcut_manager_reset_user (void)
                                                      NULL);
   g_file_delete (file, NULL, NULL);
 }
+
+IdeShortcutBundle *
+ide_shortcut_manager_get_user_bundle (void)
+{
+  return user_bundle;
+}
