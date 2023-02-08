@@ -39,17 +39,18 @@ typedef struct
 
 G_DECLARE_FINAL_TYPE (IdeShortcutBundle, ide_shortcut_bundle, IDE, SHORTCUT_BUNDLE, GObject)
 
-IdeShortcutBundle *ide_shortcut_bundle_new      (void);
-gboolean           ide_shortcut_bundle_parse    (IdeShortcutBundle    *self,
-                                                 GFile                *file,
-                                                 GError              **error);
-const GError      *ide_shortcut_bundle_error    (IdeShortcutBundle    *self);
-void               ide_shortcut_bundle_override (IdeShortcutBundle    *bundle,
-                                                 GtkShortcut          *shortcut,
-                                                 const char           *accelerator);
-gboolean           ide_shortcut_is_phase        (GtkShortcut          *shortcut,
-                                                 GtkPropagationPhase   phase);
-gboolean           ide_shortcut_is_suppress     (GtkShortcut          *shortcut);
+IdeShortcutBundle *ide_shortcut_bundle_new          (void);
+IdeShortcutBundle *ide_shortcut_bundle_new_for_file (GFile                *file);
+gboolean           ide_shortcut_bundle_parse        (IdeShortcutBundle    *self,
+                                                     GFile                *file,
+                                                     GError              **error);
+const GError      *ide_shortcut_bundle_error        (IdeShortcutBundle    *self);
+void               ide_shortcut_bundle_override     (IdeShortcutBundle    *bundle,
+                                                     GtkShortcut          *shortcut,
+                                                     const char           *accelerator);
+gboolean           ide_shortcut_is_phase            (GtkShortcut          *shortcut,
+                                                     GtkPropagationPhase   phase);
+gboolean           ide_shortcut_is_suppress         (GtkShortcut          *shortcut);
 
 
 G_END_DECLS

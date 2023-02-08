@@ -34,9 +34,12 @@
 
 struct _IdeShortcutBundle
 {
-  GObject    parent_instance;
-  GPtrArray *items;
-  GError    *error;
+  GObject       parent_instance;
+  GPtrArray    *items;
+  GError       *error;
+  GFile        *file;
+  GFileMonitor *file_monitor;
+  guint         reload_source;
 };
 
 static TmplScope *imports_scope;
@@ -207,8 +210,12 @@ ide_shortcut_bundle_dispose (GObject *object)
 {
   IdeShortcutBundle *self = (IdeShortcutBundle *)object;
 
+  g_clear_object (&self->file);
+  g_clear_object (&self->file_monitor);
   g_clear_pointer (&self->items, g_ptr_array_unref);
   g_clear_error (&self->error);
+
+  g_clear_handle_id (&self->reload_source, g_source_remove);
 
   G_OBJECT_CLASS (ide_shortcut_bundle_parent_class)->dispose (object);
 }
@@ -601,4 +608,86 @@ ide_shortcut_is_suppress (GtkShortcut *shortcut)
     return GTK_IS_NOTHING_ACTION (state->action);
 
   return FALSE;
+}
+
+static gboolean
+ide_shortcut_bundle_do_reload (IdeShortcutBundle *self)
+{
+  g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
+
+  self->reload_source = 0;
+
+  if (self->items->len > 0)
+    {
+      guint len = self->items->len;
+
+      g_ptr_array_remove_range (self->items, 0, len);
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, len, 0);
+    }
+
+  g_clear_error (&self->error);
+
+  if (g_file_query_exists (self->file, NULL) &&
+      !ide_shortcut_bundle_parse (self, self->file, &self->error))
+    g_warning ("Failed to parse %s: %s",
+               g_file_peek_path (self->file),
+               self->error->message);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_shortcut_bundle_queue_reload (IdeShortcutBundle *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
+
+  if (self->reload_source == 0)
+    self->reload_source = g_idle_add_full (G_PRIORITY_LOW,
+                                           (GSourceFunc)ide_shortcut_bundle_do_reload,
+                                           self, NULL);
+}
+
+static void
+on_file_monitor_changed_cb (IdeShortcutBundle *self,
+                            GFile             *file,
+                            GFile             *other_file,
+                            GFileMonitorEvent  event,
+                            GFileMonitor      *monitor)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SHORTCUT_BUNDLE (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_FILE_MONITOR (monitor));
+
+  ide_shortcut_bundle_queue_reload (self);
+}
+
+IdeShortcutBundle *
+ide_shortcut_bundle_new_for_file (GFile *file)
+{
+  IdeShortcutBundle *self;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  self = ide_shortcut_bundle_new ();
+
+  g_debug ("Looking for user shortcuts at \"%s\"\n",
+           g_file_peek_path (file));
+
+  self->file = g_object_ref (file);
+  self->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, NULL);
+
+  g_signal_connect_object (self->file_monitor,
+                           "changed",
+                           G_CALLBACK (on_file_monitor_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  on_file_monitor_changed_cb (self,
+                              file,
+                              NULL,
+                              G_FILE_MONITOR_EVENT_CHANGED,
+                              self->file_monitor);
+
+  return self;
 }
