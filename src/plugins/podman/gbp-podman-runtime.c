@@ -509,6 +509,13 @@ resolve_overlay (GbpPodmanRuntime *runtime)
 
   g_assert (layer == NULL);
 
+  if (image_id == NULL)
+    {
+      g_message ("Failed to locate overlay image for %s",
+                 ide_runtime_get_id (IDE_RUNTIME (runtime)));
+      IDE_EXIT;
+    }
+
   /* apply image layer */
   if (!json_parser_load_from_file (image_parser, image_json, &error))
     IDE_EXIT;
