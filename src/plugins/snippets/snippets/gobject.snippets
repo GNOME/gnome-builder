@@ -8,7 +8,7 @@ typedef struct
 	$0
 } ${2:$1|camelize}Private;
 
-G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+G_DEFINE_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
 
 enum {
 	PROP_0,
