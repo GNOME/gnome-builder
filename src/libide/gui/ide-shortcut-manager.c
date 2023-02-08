@@ -104,6 +104,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeShortcutManager, ide_shortcut_manager, IDE_TYP
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static GListStore *plugin_models;
+static IdeShortcutBundle *user_bundle;
 
 static GListModel *
 get_internal_shortcuts (void)
@@ -288,30 +289,25 @@ static void
 ide_shortcut_manager_init (IdeShortcutManager *self)
 {
   GtkFlattenListModel *flatten;
-  g_autoptr(GFile) user_file = NULL;
 
   if (plugin_models == NULL)
     plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
 
   self->toplevel = g_list_store_new (G_TYPE_LIST_MODEL);
 
-  /* Setup user shortcuts at highest priority */
-  user_file = g_file_new_build_filename (g_get_user_config_dir (),
-                                         "gnome-builder",
-                                         "keybindings.json",
-                                         NULL);
-  self->user_bundle = ide_shortcut_bundle_new ();
-  g_list_store_append (self->toplevel, self->user_bundle);
-  g_debug ("Looking for user shortcuts at \"%s\"\n",
-           g_file_peek_path (user_file));
-  if (g_file_query_exists (user_file, NULL))
+  if (user_bundle == NULL)
     {
-      g_autoptr(GError) error = NULL;
+      g_autoptr(GFile) user_file = NULL;
 
-      if (!ide_shortcut_bundle_parse (self->user_bundle, user_file, &error))
-        g_warning ("Failed to parse user keybindings: %s: %s",
-                   g_file_peek_path (user_file), error->message);
+      user_file = g_file_new_build_filename (g_get_user_config_dir (),
+                                             "gnome-builder",
+                                             "keybindings.json",
+                                             NULL);
+      user_bundle = ide_shortcut_bundle_new_for_file (user_file);
     }
+
+  /* Setup user shortcuts at highest priority */
+  g_list_store_append (self->toplevel, user_bundle);
 
   /* Then add providers implemented by plugins */
   self->providers_models = g_list_store_new (G_TYPE_LIST_MODEL);
