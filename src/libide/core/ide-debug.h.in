@@ -19,7 +19,16 @@
 #ifndef IDE_DEBUG_H
 #define IDE_DEBUG_H
 
+#ifndef IDE_ENABLE_TRACE
+# define IDE_ENABLE_TRACE @ENABLE_TRACING@
+#endif
+#if IDE_ENABLE_TRACE != 1
+# undef IDE_ENABLE_TRACE
+#endif
+
+#ifdef IDE_ENABLE_TRACE
 #include <execinfo.h>
+#endif
 #include <glib.h>
 
 #include "ide-version-macros.h"
@@ -86,13 +95,6 @@ G_BEGIN_DECLS
  *
  * Similar to %IDE_PROBE but allows specifying a log message.
  */
-
-#ifndef IDE_ENABLE_TRACE
-# define IDE_ENABLE_TRACE @ENABLE_TRACING@
-#endif
-#if IDE_ENABLE_TRACE != 1
-# undef IDE_ENABLE_TRACE
-#endif
 
 /**
  * IDE_LOG_LEVEL_TRACE: (skip)
