@@ -53,6 +53,8 @@ glib::wrapper! {
 
 impl {{PreFix}}Window {
     pub fn new<P: glib::IsA<gtk::Application>>(application: &P) -> Self {
-        glib::Object::new(&[("application", application)])
+        glib::Object::builder()
+            .property("application", application)
+            .build()
     }
 }
