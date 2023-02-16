@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-02-15 23:28+0000\n"
-"PO-Revision-Date: 2023-02-04 18:48+0200\n"
+"PO-Revision-Date: 2023-02-16 15:22+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -2541,7 +2541,8 @@ msgstr "Авто"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr "Мапу огляду автоматично показано на основі введених користувачем даних"
+msgstr ""
+"Мапу огляду автоматично показано на основі введених користувачем даних"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2621,7 +2622,8 @@ msgid "As Application"
 msgstr "Як програму"
 
 #: src/plugins/buildui/tweaks.ui:164
-msgid "Run unit with access to display and other runtime environment features."
+msgid ""
+"Run unit with access to display and other runtime environment features."
 msgstr ""
 "Запустити модуль із доступом до дисплея та інших можливостей середовища "
 "виконання."
@@ -2769,7 +2771,8 @@ msgid "Complete Parameters"
 msgstr "Доповнювати параметри"
 
 #: src/plugins/clang/tweaks.ui:30
-msgid "Include parameters and type information when completing clang proposals"
+msgid ""
+"Include parameters and type information when completing clang proposals"
 msgstr ""
 "Включати параметри і дані типів при формуванні пропозицій доповнення clang"
 
@@ -3609,7 +3612,8 @@ msgstr "Показувати праве поле"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr ""
+"Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -3637,7 +3641,8 @@ msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
+msgid ""
+"Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
 "також лапок"
@@ -5481,7 +5486,8 @@ msgstr "Профілювання пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
-msgstr "Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
+msgstr ""
+"Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
@@ -5722,7 +5728,6 @@ msgid "Updating Dependencies…"
 msgstr "Оновлення залежностей…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-#, fuzzy
 #| msgid "Builder is updating your projects configured dependencies."
 msgid "Builder is updating your project’s configured dependencies."
 msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
