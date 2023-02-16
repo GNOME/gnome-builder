@@ -1,3 +1,28 @@
+# GNOME Builder 44.beta
+
+Changes in this release:
+
+ * SDK extension resolving has been made asynchronous so projects load much
+   faster in conjunction with Flatpak. This brings in a new dependency on
+   libdex which I've written about on planet.gnome.org.
+   https://blogs.gnome.org/chergert/2022/11/24/concurrency-parallelism-i-o-scheduling-thread-pooling-and-work-stealing/
+ * Fixes for recent WebKitGTK changes.
+ * Shortcut improvements.
+ * Rust template updates.
+ * The search entry now focuses the text editor when enter is pressed.
+ * A number of new search providers have been added.
+ * Preview of search results in the global search popover.
+ * User-defined keybindings in $XDG_CONFIG_DIR/gnome-builder/keybindings.json
+ * Many keyboard shortcuts have been added.
+ * The project tree has been ported to GtkListView and includes DnD again.
+ * Preferences bug fixes.
+ * Lots of safety improvements under the hood.
+ * New filters for project-tree and todo panels.
+ * Podman fixes for odd configuration files.
+ * Build systems can now alter the "srcdir" allowing for projects which
+   are in subdirectories of their git project to work better.
+ * Support for SourceKit LSP for Swift.
+
 # GNOME Builder 44.alpha
 
 This is the first alpha release as we progress towards GNOME 44. It is
