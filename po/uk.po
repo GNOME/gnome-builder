@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-04 15:13+0000\n"
+"POT-Creation-Date: 2023-02-15 23:28+0000\n"
 "PO-Revision-Date: 2023-02-04 18:48+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -794,7 +794,7 @@ msgstr "Параметри"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:58
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
@@ -1963,7 +1963,6 @@ msgid "<i>Loading</i>"
 msgstr "<i>Завантаження</i>"
 
 #: src/libide/tree/ide-tree-empty.c:209
-#| msgid "(Empty)"
 msgid "Empty"
 msgstr "Порожньо"
 
@@ -2542,8 +2541,7 @@ msgstr "Авто"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
-"Мапу огляду автоматично показано на основі введених користувачем даних"
+msgstr "Мапу огляду автоматично показано на основі введених користувачем даних"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2623,8 +2621,7 @@ msgid "As Application"
 msgstr "Як програму"
 
 #: src/plugins/buildui/tweaks.ui:164
-msgid ""
-"Run unit with access to display and other runtime environment features."
+msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 "Запустити модуль із доступом до дисплея та інших можливостей середовища "
 "виконання."
@@ -2772,8 +2769,7 @@ msgid "Complete Parameters"
 msgstr "Доповнювати параметри"
 
 #: src/plugins/clang/tweaks.ui:30
-msgid ""
-"Include parameters and type information when completing clang proposals"
+msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Включати параметри і дані типів при формуванні пропозицій доповнення clang"
 
@@ -3398,12 +3394,10 @@ msgstr "Використовувати спрощений інтерфейс р�
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:62
 #, c-format
-#| msgid "Switch to UI designer"
 msgid "Switch to %s style"
 msgstr "Перемкнутися на стиль %s"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
-#| msgid "Switch to margin editor"
 msgid "Switch application and editor theme"
 msgstr "Перемкнути тему програми і редактора"
 
@@ -3615,8 +3609,7 @@ msgstr "Показувати праве поле"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
-"Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -3644,8 +3637,7 @@ msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-msgid ""
-"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
 "також лапок"
@@ -4788,12 +4780,12 @@ msgid "Drop Down"
 msgstr "Спадний список"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:656
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Toolbox"
 msgstr "Контейнери/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:662
+#: src/plugins/podman/gbp-podman-runtime.c:669
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
@@ -4862,7 +4854,6 @@ msgstr "Невдовзі файли буде скопійовано"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
 #: src/plugins/todo/gbp-todo-panel.ui:96
-#| msgid "Filters:"
 msgid "Filter"
 msgstr "Фільтрувати"
 
@@ -5079,7 +5070,7 @@ msgid "Untitled Command"
 msgstr "Команда без назви"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:191
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
 msgid "Set Shortcut"
 msgstr "Встановити скорочення"
 
@@ -5131,11 +5122,11 @@ msgstr "Робочий каталог"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"Команду буде запущено з цього місця. Скористайтеся <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt> або <tt>$HOME</tt> для визначення відносного шляху."
+"Команду буде запущено з цього місця. Скористайтеся <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt> або <tt>$HOME</tt> для визначення відносного шляху."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5272,7 +5263,7 @@ msgstr "_Редагувати файл"
 msgid "Open keybindings.json in editor"
 msgstr "Відкрити keybindings.json у редакторі"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:85
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
 msgid "View and Customize Shortcuts…"
 msgstr "Перегляд і налаштовування скорочень…"
 
@@ -5490,8 +5481,7 @@ msgstr "Профілювання пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
-"Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
+msgstr "Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
@@ -5732,7 +5722,9 @@ msgid "Updating Dependencies…"
 msgstr "Оновлення залежностей…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-msgid "Builder is updating your projects configured dependencies."
+#, fuzzy
+#| msgid "Builder is updating your projects configured dependencies."
+msgid "Builder is updating your project’s configured dependencies."
 msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
@@ -6897,8 +6889,8 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
 #~ "sources"
 #~ msgstr ""
-#~ "Clang буде надіслано запит щодо діагностики у початковому коді мовами C, C"
-#~ "++ і Objective-C"
+#~ "Clang буде надіслано запит щодо діагностики у початковому коді мовами C, "
+#~ "C++ і Objective-C"
 
 #~ msgid "Use Clang for Completions"
 #~ msgstr "Скористатися Clang для доповнення"
