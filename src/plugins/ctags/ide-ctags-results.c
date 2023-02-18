@@ -297,11 +297,7 @@ ide_ctags_results_set_word (IdeCtagsResults *self,
 {
   g_assert (IDE_IS_CTAGS_RESULTS (self));
 
-  if (word != self->word)
-    {
-      g_free (self->word);
-      self->word = g_strdup (word);
-    }
+  g_set_str (&self->word, word);
 }
 
 IdeCtagsResults *
