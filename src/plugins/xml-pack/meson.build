@@ -6,6 +6,7 @@ plugins_sources += files([
   'ide-xml-completion-values.c',
   'ide-xml-completion-provider.c',
   'ide-xml-diagnostic-provider.c',
+  'ide-xml-formatter.c',
   'ide-xml-hash-table.c',
   'ide-xml-highlighter.c',
   'ide-xml-indenter.c',

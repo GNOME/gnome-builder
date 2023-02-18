@@ -8,6 +8,10 @@ A boxed type grouping together an #IdeXmlSymbolTree and the associated #IdeDiagn
 
 Get diagnostics for xml/html files from the #IdeXmlService.
 
+## IdeXmlFormatter
+
+Implements full-file formatting for XML/HTML
+
 ## IdeXmlHighlighter
 
 Highlight the matching tags in xml/html files.
