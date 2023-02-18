@@ -292,13 +292,19 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
   if (gtk_source_buffer_iter_has_context_class (buffer, &begin, "path") &&
       gtk_source_buffer_iter_has_context_class (buffer, &end, "path"))
     {
-      begin = end;
-      gtk_source_buffer_iter_backward_to_context_class_toggle (buffer, &begin, "path");
+      gunichar ch;
+
+      while (gtk_text_iter_backward_char (&begin) &&
+             !gtk_text_iter_starts_line (&begin) &&
+             (ch = gtk_text_iter_get_char (&begin)) &&
+             ch != '/' && ch != '<' && ch != '"')
+        { /* Do Nothing */ }
 
       end = begin;
       gtk_source_buffer_iter_forward_to_context_class_toggle (buffer, &end, "path");
 
-      if (gtk_text_iter_get_char (&begin) == '"')
+      if (gtk_text_iter_get_char (&begin) == '"' ||
+          gtk_text_iter_get_char (&begin) == '<')
         gtk_text_iter_forward_char (&begin);
 
       gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
