@@ -286,6 +286,24 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
         }
     }
 
+  /* If we're in a path context, remove everything within it because
+   * clang will try to replace it and the trailing ".
+   */
+  if (gtk_source_buffer_iter_has_context_class (buffer, &begin, "path") &&
+      gtk_source_buffer_iter_has_context_class (buffer, &end, "path"))
+    {
+      begin = end;
+      gtk_source_buffer_iter_backward_to_context_class_toggle (buffer, &begin, "path");
+
+      end = begin;
+      gtk_source_buffer_iter_forward_to_context_class_toggle (buffer, &end, "path");
+
+      if (gtk_text_iter_get_char (&begin) == '"')
+        gtk_text_iter_forward_char (&begin);
+
+      gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
+    }
+
   if (self->activation_keyval == GDK_KEY_semicolon &&
       !ends_with_string (snippet, ";"))
     {
