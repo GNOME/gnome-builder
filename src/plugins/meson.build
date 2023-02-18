@@ -129,6 +129,7 @@ subdir('sourcekit-lsp')
 subdir('spellcheck')
 subdir('sphinx-preview')
 subdir('stylelint')
+subdir('swift-format')
 subdir('symbol-tree')
 subdir('sysprof')
 subdir('sysroot')
@@ -210,6 +211,7 @@ status += [
   'Sphinx Preview (reStructuredText) .... : @0@'.format(get_option('plugin_sphinx_preview')),
   'Rubocop .............................. : @0@'.format(get_option('plugin_rubocop')),
   'Spellcheck ........................... : @0@'.format(get_option('plugin_spellcheck')),
+  'Swift-Format ......................... : @0@'.format(get_option('plugin_swiftformat')),
   'Stylelint ............................ : @0@'.format(get_option('plugin_stylelint')),
   'Sysprof .............................. : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot .............................. : @0@'.format(get_option('plugin_sysroot')),
