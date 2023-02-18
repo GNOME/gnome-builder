@@ -15,5 +15,4 @@ X-Diagnostic-Provider-Languages=swift
 X-Highlighter-Languages=swift
 X-Hover-Provider-Languages=swift
 X-Rename-Provider-Languages=swift
-X-Formatter-Languages=swift
 X-Code-Action-Languages=swift
