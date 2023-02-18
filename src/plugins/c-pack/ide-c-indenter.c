@@ -35,7 +35,7 @@
 
 typedef enum
 {
-  IDE_C_INDENT_ACTION_ALIGN_PARAMETERS,
+  IDE_C_INDENT_ACTION_ALIGN_PARAMETERS = 1,
   IDE_C_INDENT_ACTION_CLOSE_COMMENT,
   IDE_C_INDENT_ACTION_INDENT_LINE,
   IDE_C_INDENT_ACTION_UNINDENT_CASE_OR_LABEL,
@@ -1379,6 +1379,7 @@ ide_c_indenter_is_trigger (GtkSourceIndenter *indenter,
       return !maybe_accel;
 
     default:
+      c->indent_action = 0;
       return FALSE;
     }
 }
@@ -1440,10 +1441,6 @@ ide_c_indenter_indent (GtkSourceIndenter *indenter,
     maybe_close_comment (c, buffer, iter);
     break;
 
-  case IDE_C_INDENT_ACTION_INDENT_LINE:
-    c_indenter_indent_line (c, view, buffer, iter);
-    break;
-
   case IDE_C_INDENT_ACTION_UNINDENT_CASE_OR_LABEL:
     /*
      * If this is a label or a case, adjust indentation.
@@ -1475,7 +1472,9 @@ ide_c_indenter_indent (GtkSourceIndenter *indenter,
     maybe_unindent_opening_brace (c, text_view, buffer, file_settings, iter);
     break;
 
+  case IDE_C_INDENT_ACTION_INDENT_LINE:
   default:
+    c_indenter_indent_line (c, view, buffer, iter);
     break;
   }
 }
