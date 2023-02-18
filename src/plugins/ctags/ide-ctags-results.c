@@ -73,7 +73,9 @@ ide_ctags_results_get_item (GListModel *model,
   const Item *item;
 
   g_assert (IDE_IS_CTAGS_RESULTS (self));
-  g_assert (position < self->items->len);
+
+  if (position >= self->items->len)
+    return NULL;
 
   item = &g_array_index (self->items, Item, position);
 
