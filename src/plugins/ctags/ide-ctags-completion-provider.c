@@ -256,8 +256,6 @@ ide_ctags_completion_provider_populate_async (GtkSourceCompletionProvider *provi
   g_autoptr(IdeCtagsResults) model = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *word = NULL;
-  g_auto(GStrv) context_classes = NULL;
-  GtkSourceBuffer *buffer;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
@@ -278,22 +276,28 @@ ide_ctags_completion_provider_populate_async (GtkSourceCompletionProvider *provi
 
   gtk_source_completion_context_get_bounds (context, &begin, &end);
 
-  buffer = gtk_source_completion_context_get_buffer (context);
-
-  if ((context_classes = gtk_source_buffer_get_context_classes_at_iter (buffer, &begin)))
+  if (gtk_source_completion_context_get_activation (context) == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
     {
-      for (guint i = 0; context_classes[i]; i++)
+      g_auto(GStrv) context_classes = NULL;
+      GtkSourceBuffer *buffer;
+
+      buffer = gtk_source_completion_context_get_buffer (context);
+
+      if ((context_classes = gtk_source_buffer_get_context_classes_at_iter (buffer, &begin)))
         {
-          if (strcmp (context_classes[i], "string") == 0 ||
-              strcmp (context_classes[i], "path") == 0 ||
-              strcmp (context_classes[i], "comment") == 0)
+          for (guint i = 0; context_classes[i]; i++)
             {
-              ide_task_return_new_error (task,
-                                         G_IO_ERROR,
-                                         G_IO_ERROR_NOT_SUPPORTED,
-                                         "Cannot complete, within %s context",
-                                         context_classes[i]);
-              return;
+              if (strcmp (context_classes[i], "string") == 0 ||
+                  strcmp (context_classes[i], "path") == 0 ||
+                  strcmp (context_classes[i], "comment") == 0)
+                {
+                  ide_task_return_new_error (task,
+                                             G_IO_ERROR,
+                                             G_IO_ERROR_NOT_SUPPORTED,
+                                             "Cannot complete, within %s context",
+                                             context_classes[i]);
+                  return;
+                }
             }
         }
     }
