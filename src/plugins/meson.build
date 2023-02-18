@@ -78,6 +78,7 @@ subdir('gopls')
 subdir('gradle')
 subdir('greeter')
 subdir('grep')
+subdir('hadolint')
 subdir('host')
 subdir('html-completion')
 subdir('html-preview')
@@ -184,6 +185,7 @@ status += [
   'Git .................................. : @0@'.format(get_option('plugin_git')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
+  'Hadolint ............................. : @0@'.format(get_option('plugin_hadolint')),
   'HTML Completion ...................... : @0@'.format(get_option('plugin_html_completion')),
   'HTML Preview ......................... : @0@'.format(get_option('plugin_html_preview')),
   'JHBuild .............................. : @0@'.format(get_option('plugin_jhbuild')),

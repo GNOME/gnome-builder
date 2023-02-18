@@ -1,0 +1,10 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Copyright=Copyright © 2023 JCWasmx86
+Description=Provides linting of docker files using hadolint
+Embedded=_gbp_hadolint_register_types
+Module=hadolint
+Name=Hadolint
+X-Category=diagnostics
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=docker
