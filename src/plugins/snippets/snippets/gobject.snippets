@@ -621,11 +621,10 @@ G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gproperty" trigger="gproperty" _description="Add GObject property">
     <text languages="c;"><![CDATA[properties [PROP_${1:NAME}] =
-	g_param_spec_${2:object} ("${3:$1|lower}",
-	             ${$2|space}  "${4:$3|camelize}",
-	             ${$2|space}  "${5:$3|camelize}",
-	             ${$2|space}  ${6}
-	             ${$2|space}  (G_PARAM_${7:READWRITE} |
+	g_param_spec_${2:object} ("${3:$1|lower}", NULL, NULL,
+	             ${$2|space}  ${4:G_TYPE_OBJECT},
+	             ${$2|space}  (G_PARAM_${5:READWRITE} |
+	             ${$2|space}   G_PARAM_EXPLICIT_NOTIFY |
 	             ${$2|space}   G_PARAM_STATIC_STRINGS));
 g_object_class_install_property (object_class, PROP_$1, properties [PROP_$1]);$0]]></text>
     <text languages="js;"><![CDATA[${1:foo}: GObject.ParamSpec.${2:int}('$1',
