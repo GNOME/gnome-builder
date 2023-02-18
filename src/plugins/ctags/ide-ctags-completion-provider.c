@@ -367,7 +367,8 @@ ide_ctags_completion_provider_refilter (GtkSourceCompletionProvider *self,
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_CTAGS_RESULTS (model));
 
-  gtk_source_completion_context_get_word (context);
+  word = gtk_source_completion_context_get_word (context);
+
   ide_ctags_results_set_word (IDE_CTAGS_RESULTS (model), word);
   ide_ctags_results_refilter (IDE_CTAGS_RESULTS (model));
 }
