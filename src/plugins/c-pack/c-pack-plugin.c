@@ -26,7 +26,6 @@
 #include <libide-sourceview.h>
 
 #include "ide-c-indenter.h"
-#include "cpack-completion-provider.h"
 #include "cpack-editor-page-addin.h"
 
 _IDE_EXTERN void
@@ -38,7 +37,4 @@ _ide_c_pack_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               CPACK_TYPE_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                              CPACK_TYPE_COMPLETION_PROVIDER);
 }

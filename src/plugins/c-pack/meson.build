@@ -3,9 +3,6 @@ if get_option('plugin_c_pack')
 plugins_sources += files([
   'c-pack-plugin.c',
   'c-parse-helper.c',
-  'cpack-completion-item.c',
-  'cpack-completion-provider.c',
-  'cpack-completion-results.c',
   'cpack-editor-page-addin.c',
   'ide-c-indenter.c',
   'hdr-format.c',
