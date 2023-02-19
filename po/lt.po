@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-04 15:13+0000\n"
-"PO-Revision-Date: 2023-02-06 22:02+0200\n"
+"POT-Creation-Date: 2023-02-18 08:10+0000\n"
+"PO-Revision-Date: 2023-02-19 21:21+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -770,7 +770,7 @@ msgstr "Nuostatos"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:58
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Klaviatūros trumpiniai"
@@ -4718,12 +4718,12 @@ msgid "Drop Down"
 msgstr "Iškrentantis sąrašas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:656
+#: src/plugins/podman/gbp-podman-runtime.c:663
 msgid "Containers/Toolbox"
 msgstr "Konteineriai/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:662
+#: src/plugins/podman/gbp-podman-runtime.c:669
 msgid "Containers/Podman"
 msgstr "Konteineriai/Podman"
 
@@ -5006,7 +5006,7 @@ msgid "Untitled Command"
 msgstr "Nepavadinta komanda"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:191
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
 msgid "Set Shortcut"
 msgstr "Rodyti trumpinį"
 
@@ -5193,7 +5193,7 @@ msgstr "R_edaguoti failą"
 msgid "Open keybindings.json in editor"
 msgstr "Atverti klavišų susiejimų json redaktoriuje"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:85
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
 msgid "View and Customize Shortcuts…"
 msgstr "Rodyti ir tinkinti trumpinius…"
 
@@ -5643,7 +5643,7 @@ msgid "Updating Dependencies…"
 msgstr "Atnaujinamos priklausomybės…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-msgid "Builder is updating your projects configured dependencies."
+msgid "Builder is updating your project’s configured dependencies."
 msgstr "Kūrėjas atnaujina jūsų projektuose sukonfigūruotas priklausomybes."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
