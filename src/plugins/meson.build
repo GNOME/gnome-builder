@@ -91,6 +91,7 @@ subdir('lua-language-server')
 subdir('make')
 subdir('make-templates')
 subdir('markdown-preview')
+subdir('markdown-indenter')
 subdir('maven')
 subdir('menu-search')
 subdir('meson')
@@ -192,6 +193,7 @@ status += [
   'Make ................................. : @0@'.format(get_option('plugin_make')),
   'Make Templates ....................... : @0@'.format(get_option('plugin_make_templates')),
   'Markdown Preview ..................... : @0@'.format(get_option('plugin_markdown_preview')),
+  'Markdown Indenter .................... : @0@'.format(get_option('plugin_markdown_indenter')),
   'Maven ................................ : @0@'.format(get_option('plugin_maven')),
   'Meson ................................ : @0@'.format(get_option('plugin_meson')),
   'Meson Templates ...................... : @0@'.format(get_option('plugin_meson_templates')),

@@ -1,0 +1,11 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Builtin=true
+Copyright=Copyright © 2023 JCWasmx86
+Description=Indenter for Markdown
+Embedded=_gbp_markdown_indenter_register_types
+Module=markdown-indenter
+Name=Markdown Indenter
+X-Category=language
+X-Indenter-Languages-Priority=1500
+X-Indenter-Languages=markdown
