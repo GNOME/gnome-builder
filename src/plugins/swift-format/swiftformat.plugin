@@ -1,0 +1,9 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Copyright=Copyright © 2023 JCWasmx86
+Description=Provides support for formatting swift files
+Embedded=_gbp_swiftformat_register_types
+Module=swiftformat
+Name=Swift-Format
+X-Category=editing
+X-Formatter-Languages=swift
