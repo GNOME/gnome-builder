@@ -834,13 +834,24 @@ notify_providers_loaded (IdeConfigManager *self,
 
   if (user_value != NULL)
     {
-      const gchar *str = g_variant_get_string (user_value, NULL);
+      const char *config_id = g_variant_get_string (user_value, NULL);
       IdeConfig *config;
 
-      if ((config = ide_config_manager_get_config (self, str)))
+      if ((config = ide_config_manager_get_config (self, config_id)))
         {
           if (config != self->current)
             ide_config_manager_set_current (self, config);
+        }
+      else
+        {
+          /* We failed to locate the user's config-id that we last used.
+           * Notify the user so they have some sort of indication of
+           * build pipeline failure.
+           */
+          ide_object_message (IDE_OBJECT (self),
+                              /* translators: %s will be replaced with the build configuration identifier */
+                              _("Failed to locate build configuration “%s”. It may be invalid or incorrectly formatted."),
+                              config_id);
         }
     }
 
