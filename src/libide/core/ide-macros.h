@@ -55,6 +55,26 @@ G_BEGIN_DECLS
   ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
      g_steal_pointer ((arptr)); })
 
+static inline gboolean
+ide_set_strv (char               ***dest,
+              const char * const   *src)
+{
+  if ((const char * const *)*dest == src)
+    return FALSE;
+
+  if (*dest == NULL ||
+      src == NULL ||
+      !g_strv_equal ((const char * const *)*dest, src))
+    {
+      char **copy = g_strdupv ((char **)src);
+      g_strfreev (*dest);
+      *dest = copy;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static inline gpointer
 ide_ptr_array_steal_index (GPtrArray      *array,
                            guint           index,
