@@ -42,5 +42,6 @@ plugin_xml_pack_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_xml_pack_resources
+plugins_deps += [libdex_dep]
 
 endif
