@@ -1351,6 +1351,7 @@ ide_config_set_build_commands (IdeConfig           *self,
   if (ide_set_strv (&priv->build_commands, build_commands))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS]);
+      ide_config_set_dirty (self, TRUE);
     }
 }
 
@@ -1375,6 +1376,7 @@ ide_config_set_post_install_commands (IdeConfig           *self,
   if (ide_set_strv (&priv->post_install_commands, post_install_commands))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POST_INSTALL_COMMANDS]);
+      ide_config_set_dirty (self, TRUE);
     }
 }
 
@@ -1812,6 +1814,7 @@ ide_config_set_locality (IdeConfig        *self,
     {
       priv->locality = locality;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCALITY]);
+      ide_config_set_dirty (self, TRUE);
     }
 }
 
