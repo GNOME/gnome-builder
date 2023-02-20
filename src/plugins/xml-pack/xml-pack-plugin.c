@@ -27,6 +27,7 @@
 
 #include "ide-xml-completion-provider.h"
 #include "ide-xml-diagnostic-provider.h"
+#include "ide-xml-formatter.h"
 #include "ide-xml-highlighter.h"
 #include "ide-xml-indenter.h"
 #include "ide-xml-symbol-resolver.h"
@@ -40,6 +41,9 @@ _ide_xml_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_FORMATTER,
+                                              IDE_TYPE_XML_FORMATTER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
                                               IDE_TYPE_XML_HIGHLIGHTER);

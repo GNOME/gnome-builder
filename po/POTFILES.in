@@ -322,6 +322,7 @@ src/plugins/vcsui/gtk/menus.ui
 src/plugins/vim/tweaks.ui
 src/plugins/waf/gbp-waf-pipeline-addin.c
 src/plugins/web-browser/gtk/menus.ui
+src/plugins/xml-pack/ide-xml-formatter.c
 src/plugins/xml-pack/ide-xml-parser.c
 src/plugins/xml-pack/ide-xml-service.c
 src/plugins/xml-pack/ide-xml-tree-builder.c

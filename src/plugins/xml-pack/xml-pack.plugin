@@ -11,6 +11,7 @@ X-Completion-Provider-Languages-Priority=0
 X-Completion-Provider-Languages=xml,html
 X-Diagnostic-Provider-Languages-Priority=0
 X-Diagnostic-Provider-Languages=xml,html
+X-Formatter-Languages=xml,html
 X-Highlighter-Languages-Priority=0
 X-Highlighter-Languages=xml,html
 X-Indenter-Languages-Priority=0
