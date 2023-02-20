@@ -415,6 +415,38 @@
                   <object class="IdeTweaksGroup">
                     <property name="title" translatable="yes">Build Environment</property>
                     <child>
+                      <object class="IdeTweaksCombo">
+                        <property name="title" translatable="yes">Locality</property>
+                        <property name="subtitle" translatable="yes">Where your project builds</property>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">locality</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Default</property>
+                            <property name="value">['default']</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Inside Source Tree</property>
+                            <property name="value">['in-tree']</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Outside Source Tree</property>
+                            <property name="value">['out-of-tree']</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="IdeTweaksWidget">
                         <signal name="create-for-item" handler="create_runtime_list_cb" swapped="true" object="GbpBuilduiTweaksAddin"/>
                         <property name="binding">
