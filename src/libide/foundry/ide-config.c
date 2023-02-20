@@ -1348,10 +1348,8 @@ ide_config_set_build_commands (IdeConfig           *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (priv->build_commands != (gchar **)build_commands)
+  if (ide_set_strv (&priv->build_commands, build_commands))
     {
-      g_strfreev (priv->build_commands);
-      priv->build_commands = g_strdupv ((gchar **)build_commands);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS]);
     }
 }
@@ -1374,10 +1372,8 @@ ide_config_set_post_install_commands (IdeConfig           *self,
 
   g_return_if_fail (IDE_IS_CONFIG (self));
 
-  if (priv->post_install_commands != (gchar **)post_install_commands)
+  if (ide_set_strv (&priv->post_install_commands, post_install_commands))
     {
-      g_strfreev (priv->post_install_commands);
-      priv->post_install_commands = g_strdupv ((gchar **)post_install_commands);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POST_INSTALL_COMMANDS]);
     }
 }
