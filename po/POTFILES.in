@@ -45,6 +45,7 @@ src/libide/foundry/ide-pipeline-stage-transfer.c
 src/libide/foundry/ide-run-command.c
 src/libide/foundry/ide-run-manager.c
 src/libide/foundry/ide-runtime.c
+src/libide/foundry/ide-run-tool.c
 src/libide/foundry/ide-toolchain-manager.c
 src/libide/greeter/gtk/menus.ui
 src/libide/greeter/ide-greeter-buttons-section.c
@@ -77,6 +78,7 @@ src/libide/gui/ide-workspace.c
 src/libide/gui/tweaks.ui
 src/libide/io/ide-pkcon-transfer.c
 src/libide/lsp/ide-lsp-client.c
+src/libide/lsp/ide-lsp-service.c
 src/libide/plugins/ide-plugin.c
 src/libide/plugins/ide-plugin-view.ui
 src/libide/projects/ide-project.c
@@ -90,6 +92,7 @@ src/libide/terminal/ide-terminal-page.c
 src/libide/terminal/ide-terminal-page.ui
 src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.ui
+src/libide/threading/ide-subprocess.c
 src/libide/tree/ide-tree-empty.c
 src/libide/tree/ide-tree-node.c
 src/libide/tweaks/ide-tweaks-directory.c
@@ -124,6 +127,7 @@ src/plugins/buildui/gtk/preferences.ui
 src/plugins/buildui/tweaks.ui
 src/plugins/cargo/gbp-cargo-pipeline-addin.c
 src/plugins/cargo/gbp-cargo-run-command-provider.c
+src/plugins/clang/ide-clang-client.c
 src/plugins/clang/ide-clang-symbol-node.c
 src/plugins/clang/org.gnome.builder.clang.gschema.xml
 src/plugins/clang/tweaks.ui
@@ -239,6 +243,7 @@ src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui
 src/plugins/meson/gbp-meson-tool-row.ui
 src/plugins/meson/gbp-meson-utils.c
 src/plugins/meson-templates/gbp-meson-template-provider.c
+src/plugins/messages/gbp-messages-panel.c
 src/plugins/messages/gbp-messages-panel.ui
 src/plugins/newcomers/gbp-newcomers-section.ui
 src/plugins/notification/ide-notification-addin.c
