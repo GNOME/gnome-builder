@@ -31,13 +31,10 @@
 
 struct _GbpBuilduiLogPane
 {
-  IdePane            parent_instance;
-
-  IdePipeline  *pipeline;
-
-  IdeTerminal       *terminal;
-
-  guint              log_observer;
+  IdePane      parent_instance;
+  IdePipeline *pipeline;
+  IdeTerminal *terminal;
+  guint        log_observer;
 };
 
 enum {
@@ -115,9 +112,9 @@ gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
           self->pipeline = g_object_ref (pipeline);
           self->log_observer =
             ide_pipeline_add_log_observer (self->pipeline,
-                                                 gbp_buildui_log_pane_log_observer,
-                                                 self,
-                                                 NULL);
+                                           gbp_buildui_log_pane_log_observer,
+                                           self,
+                                           NULL);
           vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
           vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
                                 ide_pipeline_get_pty (pipeline));

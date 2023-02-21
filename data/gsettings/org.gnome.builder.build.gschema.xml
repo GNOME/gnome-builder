@@ -11,6 +11,11 @@
       <summary>Clear build logs</summary>
       <description>If enabled, build log pane will be cleared on rebuild.</description>
     </key>
+    <key name="show-log-for-build" type="b">
+      <default>true</default>
+      <summary>Show Log When Building</summary>
+      <description>If enabled, the build log will be raised when a build starts</description>
+    </key>
     <key name="allow-network-when-metered" type="b">
       <default>false</default>
       <summary>Allow network when metered</summary>

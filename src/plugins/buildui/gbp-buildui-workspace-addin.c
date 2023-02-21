@@ -244,10 +244,12 @@ gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
   IDE_TRACE_MSG ("Pipeline phase 0x%x requested", phase);
 
   settings = g_settings_new ("org.gnome.builder.build");
+
   if (g_settings_get_boolean (settings, "clear-build-log-pane"))
       gbp_buildui_log_pane_clear (self->log_pane);
 
-  if (phase > IDE_PIPELINE_PHASE_CONFIGURE)
+  if (phase > IDE_PIPELINE_PHASE_CONFIGURE &&
+      g_settings_get_boolean (settings, "show-log-for-build"))
     panel_widget_raise (PANEL_WIDGET (self->log_pane));
 
   IDE_EXIT;

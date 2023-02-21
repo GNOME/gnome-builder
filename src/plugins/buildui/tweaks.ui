@@ -207,6 +207,18 @@
                             </property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Show Build Logs</property>
+                            <property name="subtitle" translatable="yes">Show the build log when a new build begins</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.build</property>
+                                <property name="schema-key">show-log-for-build</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
