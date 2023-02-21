@@ -60,8 +60,13 @@ struct _IdeVcsClonerInterface
                                        GError              **error);
   char       *(*get_directory_name)   (IdeVcsCloner         *self,
                                        IdeVcsUri            *uri);
+  void        (*set_pty_fd)           (IdeVcsCloner         *self,
+                                       int                   pty_fd);
 };
 
+IDE_AVAILABLE_IN_44
+void        ide_vcs_cloner_set_pty_fd           (IdeVcsCloner         *self,
+                                                 int                   pty_fd);
 IDE_AVAILABLE_IN_ALL
 char       *ide_vcs_cloner_get_title            (IdeVcsCloner         *self);
 IDE_AVAILABLE_IN_ALL

@@ -22,10 +22,15 @@
 
 #include "config.h"
 
+#include <sys/socket.h>
+
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <glib-unix.h>
+
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
-#include <glib/gi18n.h>
-#include <glib-unix.h>
+
 #include <libide-threading.h>
 
 #include "gbp-git-client.h"
@@ -50,50 +55,28 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpGitClient, gbp_git_client, IDE_TYPE_OBJECT)
 
 static void
-gbp_git_client_subprocess_spawned (GbpGitClient            *self,
-                                   IdeSubprocess           *subprocess,
-                                   IdeSubprocessSupervisor *supervisor)
+new_connection_cb (GObject      *object,
+                   GAsyncResult *result,
+                   gpointer      user_data)
 {
-  g_autoptr(GIOStream) stream = NULL;
-  GOutputStream *output;
-  GInputStream *input;
+  g_autoptr(GbpGitClient) self = user_data;
+  g_autoptr(GDBusConnection) connection = NULL;
+  g_autoptr(GError) error = NULL;
   GList *queued;
-  gint fd;
 
-  IDE_ENTRY;
-
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_CLIENT (self));
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
-  ide_object_message (self,
-                      _("Git integration has started as process %s"),
-                      ide_subprocess_get_identifier (subprocess));
+  if (!(connection = g_dbus_connection_new_finish (result, &error)))
+    {
+      g_warning ("Failed to create D-Bus connection to gnome-builder-git: %s",
+                 error->message);
+      return;
+    }
 
-  ide_object_lock (IDE_OBJECT (self));
+  g_set_object (&self->connection, connection);
 
-  g_assert (self->service == NULL);
-
-  if (self->state == STATE_SPAWNING)
-    self->state = STATE_RUNNING;
-
-  input = ide_subprocess_get_stdout_pipe (subprocess);
-  output = ide_subprocess_get_stdin_pipe (subprocess);
-  stream = g_simple_io_stream_new (input, output);
-
-  g_assert (G_IS_UNIX_INPUT_STREAM (input));
-  g_assert (G_IS_UNIX_OUTPUT_STREAM (output));
-
-  fd = g_unix_input_stream_get_fd (G_UNIX_INPUT_STREAM (input));
-  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
-
-  fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (output));
-  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
-
-  self->connection = g_dbus_connection_new_sync (stream, NULL,
-                                                 G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
-                                                 NULL, NULL, NULL);
-  g_dbus_connection_set_exit_on_close (self->connection, FALSE);
   g_dbus_connection_start_message_processing (self->connection);
 
   self->service = ipc_git_service_proxy_new_sync (self->connection,
@@ -120,6 +103,78 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
     }
 
   g_list_free_full (queued, g_object_unref);
+}
+
+
+static gboolean
+gbp_git_client_subprocess_supervise (GbpGitClient            *self,
+                                     IdeSubprocessLauncher   *launcher,
+                                     IdeSubprocessSupervisor *supervisor)
+{
+  int pair[2] = {-1, -1};
+  int res;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  g_clear_object (&self->service);
+  g_clear_object (&self->connection);
+
+  res = socketpair (AF_UNIX, SOCK_STREAM|SOCK_NONBLOCK|SOCK_CLOEXEC, 0, pair);
+
+  if (res == 0)
+    {
+      g_autoptr(GSocket) socket = g_socket_new_from_fd (pair[0], NULL);
+
+      if (socket != NULL)
+        {
+          g_autoptr(GSocketConnection) stream = NULL;
+          g_autofree char *guid = NULL;
+
+          pair[0] = -1;
+
+          ide_subprocess_launcher_take_fd (launcher, g_steal_fd (&pair[1]), 3);
+
+          stream = g_socket_connection_factory_create_connection (socket);
+          guid = g_dbus_generate_guid ();
+          g_dbus_connection_new (G_IO_STREAM (stream), guid,
+                                 (G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING |
+                                  G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER),
+                                 NULL,
+                                 NULL,
+                                 new_connection_cb,
+                                 g_object_ref (self));
+        }
+    }
+
+  g_clear_fd (&pair[0], NULL);
+  g_clear_fd (&pair[1], NULL);
+
+  IDE_RETURN (FALSE);
+}
+
+static void
+gbp_git_client_subprocess_spawned (GbpGitClient            *self,
+                                   IdeSubprocess           *subprocess,
+                                   IdeSubprocessSupervisor *supervisor)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_CLIENT (self));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  ide_object_message (self,
+                      _("Git integration has started as process %s"),
+                      ide_subprocess_get_identifier (subprocess));
+
+  ide_object_lock (IDE_OBJECT (self));
+
+  if (self->state == STATE_SPAWNING)
+    self->state = STATE_RUNNING;
 
   ide_object_unlock (IDE_OBJECT (self));
 
@@ -145,6 +200,7 @@ gbp_git_client_subprocess_exited (GbpGitClient            *self,
     self->state = STATE_SPAWNING;
 
   g_clear_object (&self->service);
+  g_clear_object (&self->connection);
 
   ide_object_unlock (IDE_OBJECT (self));
 
@@ -178,8 +234,7 @@ gbp_git_client_parent_set (IdeObject *object,
 
   ide_object_lock (IDE_OBJECT (self));
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDIN_PIPE);
+  launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 #if 0
@@ -190,6 +245,12 @@ gbp_git_client_parent_set (IdeObject *object,
 
   self->supervisor = ide_subprocess_supervisor_new ();
   ide_subprocess_supervisor_set_launcher (self->supervisor, launcher);
+
+  g_signal_connect_object (self->supervisor,
+                           "supervise",
+                           G_CALLBACK (gbp_git_client_subprocess_supervise),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->supervisor,
                            "spawned",
@@ -324,7 +385,10 @@ gbp_git_client_get_service_async (GbpGitClient        *self,
       break;
 
     case STATE_RUNNING:
-      ide_task_return_object (task, g_object_ref (self->service));
+      if (self->service != NULL)
+        ide_task_return_object (task, g_object_ref (self->service));
+      else
+        g_queue_push_tail (&self->get_service, g_steal_pointer (&task));
       break;
 
     case STATE_SHUTDOWN:

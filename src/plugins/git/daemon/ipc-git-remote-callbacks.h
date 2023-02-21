@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IpcGitRemoteCallbacks, ipc_git_remote_callbacks, IPC, GIT_REMOTE_CALLBACKS, GgitRemoteCallbacks)
 
-GgitRemoteCallbacks *ipc_git_remote_callbacks_new    (IpcGitProgress        *progress);
+GgitRemoteCallbacks *ipc_git_remote_callbacks_new    (IpcGitProgress        *progress,
+                                                      int                    pty_fd);
 void                 ipc_git_remote_callbacks_cancel (IpcGitRemoteCallbacks *self);
 
 G_END_DECLS

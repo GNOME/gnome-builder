@@ -57,7 +57,7 @@ test_clone_cb (GObject      *object,
   g_autofree char *location = NULL;
   g_autoptr(GError) error = NULL;
 
-  if (!ipc_git_service_call_clone_finish (IPC_GIT_SERVICE (object), &location, result, &error))
+  if (!ipc_git_service_call_clone_finish (IPC_GIT_SERVICE (object), &location, NULL, result, &error))
     g_error ("Error cloning: %s", error->message);
   else
     g_printerr ("Cloning complete: %s\n", location);
@@ -74,11 +74,13 @@ test_clone (IpcGitService *service,
   g_autoptr(IpcGitRepository) repository = NULL;
   g_autoptr(IpcGitChangeMonitor) monitor = NULL;
   g_autoptr(IpcGitConfig) config = NULL;
+  g_autoptr(GUnixFDList) fd_list = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) files = NULL;
   g_autofree gchar *location = NULL;
   GVariantDict opts;
   GDBusConnection *conn;
+  int fd;
 
   g_assert (IPC_IS_GIT_SERVICE (service));
 
@@ -92,7 +94,14 @@ test_clone (IpcGitService *service,
   g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (progress), conn, PROGRESS_PATH, &error);
   g_assert_no_error (error);
 
-  ipc_git_service_call_clone (service, url, path, "", g_variant_dict_end (&opts), PROGRESS_PATH, NULL, test_clone_cb, g_object_ref (progress));
+  fd = open ("test-output.log", O_RDWR, 0666);
+  fd_list = g_unix_fd_list_new ();
+  g_unix_fd_list_append (fd_list, fd, NULL);
+  close (fd);
+
+  ipc_git_service_call_clone (service, url, path, "", g_variant_dict_end (&opts), PROGRESS_PATH,
+                              g_variant_new_handle (0), fd_list,
+                              NULL, test_clone_cb, g_object_ref (progress));
 }
 
 gint

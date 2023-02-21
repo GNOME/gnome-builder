@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ipc-git-service-impl"
 
+#include <glib/gstdio.h>
+
 #include <libgit2-glib/ggit.h>
 
 #include "ipc-git-config-impl.h"
@@ -151,6 +153,7 @@ typedef struct
   char                  *branch;
   GVariant              *config_options;
   char                  *progress_path;
+  int                    clone_pty;
 } Clone;
 
 static void
@@ -162,6 +165,7 @@ clone_free (Clone *c)
   g_clear_pointer (&c->progress_path, g_free);
   g_clear_pointer (&c->config_options, g_variant_unref);
   g_clear_object (&c->invocation);
+  g_clear_fd (&c->clone_pty, NULL);
   g_slice_free (Clone, c);
 }
 
@@ -197,7 +201,7 @@ ipc_git_service_impl_clone_worker (GTask        *task,
 
   file = g_file_new_for_path (c->location);
 
-  callbacks = ipc_git_remote_callbacks_new (progress);
+  callbacks = ipc_git_remote_callbacks_new (progress, c->clone_pty);
 
   fetch_options = ggit_fetch_options_new ();
   ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
@@ -229,6 +233,7 @@ ipc_git_service_impl_clone_worker (GTask        *task,
   clone_location = ggit_repository_get_location (repository);
   ipc_git_service_complete_clone (source_object,
                                   g_steal_pointer (&c->invocation),
+                                  NULL,
                                   g_file_peek_path (clone_location));
 
 gerror:
@@ -241,20 +246,27 @@ gerror:
 static gboolean
 ipc_git_service_impl_handle_clone (IpcGitService         *service,
                                    GDBusMethodInvocation *invocation,
+                                   GUnixFDList           *fd_list,
                                    const gchar           *url,
                                    const gchar           *location,
                                    const gchar           *branch,
                                    GVariant              *config_options,
-                                   const gchar           *progress_path)
+                                   const gchar           *progress_path,
+                                   GVariant              *handle_variant)
 {
   g_autoptr(GTask) task = NULL;
+  int handle;
   Clone *c;
 
   g_assert (IPC_IS_GIT_SERVICE_IMPL (service));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (G_IS_UNIX_FD_LIST (fd_list));
   g_assert (url != NULL);
   g_assert (branch != NULL);
   g_assert (location != NULL);
+  g_assert (g_variant_is_of_type (handle_variant, G_VARIANT_TYPE_HANDLE));
+
+  handle = g_variant_get_handle (handle_variant);
 
   c = g_slice_new0 (Clone);
   c->url = g_strdup (url);
@@ -263,6 +275,7 @@ ipc_git_service_impl_handle_clone (IpcGitService         *service,
   c->config_options = g_variant_ref (config_options);
   c->progress_path = g_strdup (progress_path);
   c->invocation = g_steal_pointer (&invocation);
+  c->clone_pty = g_unix_fd_list_get (fd_list, handle, NULL);
 
   task = g_task_new (service, NULL, NULL, NULL);
   g_task_set_source_tag (task, ipc_git_service_impl_handle_clone);
@@ -467,7 +480,7 @@ ipc_git_service_impl_list_remote_refs_by_kind (IpcGitService         *service,
     }
 
   state = g_slice_new0 (ListRemoteRefsByKind);
-  state->callbacks = ipc_git_remote_callbacks_new (NULL);
+  state->callbacks = ipc_git_remote_callbacks_new (NULL, -1);
   state->uri = g_strdup (uri);
   state->kind = kind;
 

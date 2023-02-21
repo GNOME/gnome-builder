@@ -864,7 +864,7 @@ ipc_git_repository_impl_handle_push (IpcGitRepository      *repository,
   if (progress == NULL)
     return complete_wrapped_error (invocation, error);
 
-  callbacks = ipc_git_remote_callbacks_new (progress);
+  callbacks = ipc_git_remote_callbacks_new (progress, -1);
 
   push_options = ggit_push_options_new ();
   ggit_push_options_set_remote_callbacks (push_options, callbacks);
@@ -1052,7 +1052,7 @@ ipc_git_repository_impl_handle_update_submodules (IpcGitRepository      *reposit
   progress = ipc_git_progress_proxy_new_sync (conn,
                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
                                               NULL, progress_path, NULL, &error);
-  callbacks = ipc_git_remote_callbacks_new (progress);
+  callbacks = ipc_git_remote_callbacks_new (progress, -1);
 
   update_options = ggit_submodule_update_options_new ();
   ggit_submodule_update_options_set_fetch_options (update_options, fetch_options);

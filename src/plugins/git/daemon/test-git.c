@@ -179,12 +179,14 @@ test_clone (IpcGitService *service)
   g_auto(GStrv) tags = NULL;
   g_auto(GStrv) branches = NULL;
   g_autoptr(GVariant) changes = NULL;
+  g_autoptr(GUnixFDList) fd_list = NULL;
   g_autofree gchar *monitor_path = NULL;
   GVariantDict opts;
   GVariant *details;
   GDBusConnection *conn;
   GVariantIter iter;
   gboolean ret;
+  int fd;
 
   g_assert (IPC_IS_GIT_SERVICE (service));
 
@@ -203,6 +205,11 @@ test_clone (IpcGitService *service)
                                     &error);
   g_assert_no_error (error);
 
+  fd = open ("test-output.txt", O_RDWR, 0666);
+  fd_list = g_unix_fd_list_new ();
+  g_unix_fd_list_append (fd_list, fd, NULL);
+  close (fd);
+
   g_message ("Cloning hello");
   ret = ipc_git_service_call_clone_sync (service,
                                          "https://gitlab.gnome.org/chergert/hello.git",
@@ -210,7 +217,10 @@ test_clone (IpcGitService *service)
                                          "master",
                                          g_variant_dict_end (&opts),
                                          PROGRESS_PATH,
+                                         g_variant_new_handle (0),
+                                         fd_list,
                                          &location,
+                                         NULL,
                                          NULL,
                                          &error);
   g_assert_no_error (error);

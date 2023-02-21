@@ -28,12 +28,11 @@ struct _IpcGitRemoteCallbacks
 {
   GgitRemoteCallbacks  parent_instance;
   IpcGitProgress      *progress;
-  char                *message;
   double               fraction;
   guint                queued_progress;
   GgitCredtype         tried;
+  int                  pty_fd;
   guint                cancelled : 1;
-  guint                message_changed : 1;
   guint                fraction_changed : 1;
 };
 
@@ -50,13 +49,9 @@ ipc_git_remote_callbacks_update_progress (gpointer data)
     {
       if (self->fraction_changed)
         ipc_git_progress_set_fraction (self->progress, self->fraction);
-
-      if (self->message_changed)
-        ipc_git_progress_set_message (self->progress, self->message);
     }
 
   self->fraction_changed = FALSE;
-  self->message_changed = FALSE;
   self->queued_progress = 0;
 
   return G_SOURCE_REMOVE;
@@ -72,12 +67,14 @@ ipc_git_remote_callbacks_queue_progress (IpcGitRemoteCallbacks *self)
 }
 
 GgitRemoteCallbacks *
-ipc_git_remote_callbacks_new (IpcGitProgress *progress)
+ipc_git_remote_callbacks_new (IpcGitProgress *progress,
+                              int             pty_fd)
 {
   IpcGitRemoteCallbacks *ret;
 
   ret = g_object_new (IPC_TYPE_GIT_REMOTE_CALLBACKS, NULL);
   ret->progress = progress ? g_object_ref (progress) : NULL;
+  ret->pty_fd = pty_fd;
 
   return GGIT_REMOTE_CALLBACKS (g_steal_pointer (&ret));
 }
@@ -148,11 +145,8 @@ ipc_git_remote_callbacks_progress (GgitRemoteCallbacks *callbacks,
 
   g_assert (IPC_IS_GIT_REMOTE_CALLBACKS (self));
 
-  if (g_set_str (&self->message, message))
-    {
-      self->message_changed = TRUE;
-      ipc_git_remote_callbacks_queue_progress (self);
-    }
+  if (self->pty_fd != -1)
+    write (self->pty_fd, message, strlen (message));
 }
 
 static void
@@ -195,8 +189,9 @@ ipc_git_remote_callbacks_finalize (GObject *object)
   IpcGitRemoteCallbacks *self = (IpcGitRemoteCallbacks *)object;
 
   g_clear_object (&self->progress);
-  g_clear_pointer (&self->message, g_free);
   g_clear_handle_id (&self->queued_progress, g_source_remove);
+
+  self->pty_fd = -1;
 
   G_OBJECT_CLASS (ipc_git_remote_callbacks_parent_class)->finalize (object);
 }
@@ -218,6 +213,7 @@ ipc_git_remote_callbacks_class_init (IpcGitRemoteCallbacksClass *klass)
 static void
 ipc_git_remote_callbacks_init (IpcGitRemoteCallbacks *self)
 {
+  self->pty_fd = -1;
 }
 
 /**

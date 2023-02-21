@@ -50,6 +50,7 @@
       </arg>
     </method>
     <method name="Clone">
+      <annotation name="org.gtk.GDBus.C.UnixFD" value="true"/>
       <arg name="url" direction="in" type="s">
         <doc:doc><doc:summary>The URL to the repository.</doc:summary></doc:doc>
       </arg>
@@ -63,6 +64,7 @@
       <arg name="progress" direction="in" type="o">
         <doc:doc><doc:summary>The path to an org.gnome.Builder.Git.Progress object on the callers connection.</doc:summary></doc:doc>
       </arg>
+      <arg name="pty_fd" direction="in" type="h"/>
       <arg name="git_location" direction="out" type="ay">
         <doc:doc><doc:summary>A repository object.</doc:summary></doc:doc>
       </arg>

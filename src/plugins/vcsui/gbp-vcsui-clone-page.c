@@ -225,6 +225,8 @@ clone_action (GtkWidget  *widget,
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
   g_autoptr(IdeNotification) notif = NULL;
   IdeGreeterWorkspace *greeter;
+  VtePty *pty;
+  int fd, pty_fd;
 
   IDE_ENTRY;
 
@@ -252,8 +254,13 @@ clone_action (GtkWidget  *widget,
   gtk_label_set_label (self->failure_message, NULL);
   gtk_label_set_label (self->error_label, NULL);
 
+  pty = vte_terminal_get_pty (self->terminal);
+  fd = vte_pty_get_fd (pty);
+  pty_fd = ide_pty_intercept_create_producer (fd, TRUE);
+
   ide_vcs_clone_request_clone_async (self->request,
                                      notif,
+                                     pty_fd,
                                      NULL,
                                      gbp_vcsui_clone_page_clone_cb,
                                      g_object_ref (self));
@@ -426,6 +433,7 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
 {
   g_autofree char *projects_dir = ide_path_collapse (ide_get_projects_dir ());
   static GdkRGBA transparent = {0, 0, 0, 0};
+  g_autoptr(VtePty) pty = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -433,6 +441,9 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
   gtk_editable_set_text (GTK_EDITABLE (self->author_name_row), g_get_real_name ());
 
   vte_terminal_set_colors (self->terminal, NULL, &transparent, NULL, 0);
+
+  pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+  vte_terminal_set_pty (self->terminal, pty);
 }
 
 void

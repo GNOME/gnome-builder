@@ -78,9 +78,10 @@ IDE_AVAILABLE_IN_ALL
 void                          ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
 IdeVcsCloneRequestValidation  ide_vcs_clone_request_validate          (IdeVcsCloneRequest   *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_44
 void                          ide_vcs_clone_request_clone_async       (IdeVcsCloneRequest   *self,
                                                                        IdeNotification      *notif,
+                                                                       int                   pty_fd,
                                                                        GCancellable         *cancellable,
                                                                        GAsyncReadyCallback   callback,
                                                                        gpointer              user_data);

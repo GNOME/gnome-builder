@@ -23,6 +23,8 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 #include <libide-threading.h>
 
 #include "daemon/ipc-git-service.h"
@@ -36,6 +38,7 @@
 struct _GbpGitVcsCloner
 {
   IdeObject parent_instance;
+  int       clone_pty;
 };
 
 typedef struct
@@ -107,13 +110,27 @@ clone_request_new (IdeVcsUri       *uri,
 }
 
 static void
+gbp_git_vcs_cloner_destroy (IdeObject *object)
+{
+  GbpGitVcsCloner *self = (GbpGitVcsCloner *)object;
+
+  g_clear_fd (&self->clone_pty, NULL);
+
+  IDE_OBJECT_CLASS (gbp_git_vcs_cloner_parent_class)->destroy (object);
+}
+
+static void
 gbp_git_vcs_cloner_class_init (GbpGitVcsClonerClass *klass)
 {
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
+
+  i_object_class->destroy = gbp_git_vcs_cloner_destroy;
 }
 
 static void
 gbp_git_vcs_cloner_init (GbpGitVcsCloner *self)
 {
+  self->clone_pty = -1;
 }
 
 static gchar *
@@ -182,8 +199,9 @@ gbp_git_vcs_cloner_clone_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ipc_git_service_call_clone_finish (service, &git_location, result, &error))
+  if (!ipc_git_service_call_clone_finish (service, &git_location, NULL, result, &error))
     {
+      g_print ("Failed to clone: %s\n", error->message);
       g_dbus_error_strip_remote_error (error);
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -208,6 +226,7 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   g_autoptr(IpcGitService) service = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) location = NULL;
+  g_autoptr(GUnixFDList) fd_list = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *uristr = NULL;
   GDBusConnection *connection;
@@ -216,6 +235,7 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
   GVariantDict dict;
   const gchar *branch;
   IdeContext *context;
+  int handle;
 
   g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
   g_assert (uri != NULL);
@@ -268,13 +288,16 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
         }
     }
 
+  fd_list = g_unix_fd_list_new ();
+
   /* Create state for the task */
   req = clone_request_new (vcs_uri, branch, location, notif);
   ide_task_set_task_data (task, req, clone_request_free);
 
   if (!(service = gbp_git_client_get_service (client, cancellable, &error)) ||
       !(connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (service))) ||
-      !(req->progress = gbp_git_progress_new (connection, notif, cancellable, &error)))
+      !(req->progress = gbp_git_progress_new (connection, notif, cancellable, &error)) ||
+      -1 == (handle = g_unix_fd_list_append (fd_list, self->clone_pty, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       g_variant_dict_clear (&dict);
@@ -287,6 +310,8 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
                               req->branch ?: "",
                               g_variant_dict_end (&dict),
                               g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (req->progress)),
+                              g_variant_new_handle (handle),
+                              fd_list,
                               cancellable,
                               gbp_git_vcs_cloner_clone_cb,
                               g_steal_pointer (&task));
@@ -528,6 +553,18 @@ gbp_git_vcs_cloner_get_directory_name (IdeVcsCloner *cloner,
 }
 
 static void
+gbp_git_vcs_cloner_set_pty_fd (IdeVcsCloner *cloner,
+                               int           pty_fd)
+{
+  GbpGitVcsCloner *self = (GbpGitVcsCloner *)cloner;
+
+  g_assert (GBP_IS_GIT_VCS_CLONER (self));
+
+  g_clear_fd (&self->clone_pty, NULL);
+  self->clone_pty = dup (pty_fd);
+}
+
+static void
 vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
 {
   iface->get_title = gbp_git_vcs_cloner_get_title;
@@ -537,4 +574,5 @@ vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
   iface->list_branches_async = gbp_git_vcs_cloner_list_branches_async;
   iface->list_branches_finish = gbp_git_vcs_cloner_list_branches_finish;
   iface->get_directory_name = gbp_git_vcs_cloner_get_directory_name;
+  iface->set_pty_fd = gbp_git_vcs_cloner_set_pty_fd;
 }

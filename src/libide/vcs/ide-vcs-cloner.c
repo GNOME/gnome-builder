@@ -372,3 +372,22 @@ ide_vcs_cloner_get_directory_name (IdeVcsCloner *self,
 
   IDE_RETURN (ret);
 }
+
+/**
+ * ide_vcs_cloner_set_pty_fd:
+ * @self: a #IdeVcsCloner
+ * @pty_fd: a fd or -1
+ *
+ * Sets a PTY that should be written to for message contents.
+ *
+ * Since: 44
+ */
+void
+ide_vcs_cloner_set_pty_fd (IdeVcsCloner *self,
+                           int           pty_fd)
+{
+  g_return_if_fail (IDE_IS_VCS_CLONER (self));
+
+  if (IDE_VCS_CLONER_GET_IFACE (self)->set_pty_fd)
+    IDE_VCS_CLONER_GET_IFACE (self)->set_pty_fd (self, pty_fd);
+}

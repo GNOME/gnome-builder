@@ -601,6 +601,7 @@ ide_vcs_clone_request_clone_cb (GObject      *object,
 void
 ide_vcs_clone_request_clone_async (IdeVcsCloneRequest  *self,
                                    IdeNotification     *notif,
+                                   int                  pty_fd,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
@@ -647,6 +648,8 @@ ide_vcs_clone_request_clone_async (IdeVcsCloneRequest  *self,
     g_variant_dict_insert (&params, "user.email", "s", self->author_email);
   if (!ide_str_empty0 (self->branch_name))
     g_variant_dict_insert (&params, "branch", "s", self->branch_name);
+
+  ide_vcs_cloner_set_pty_fd (self->cloner, pty_fd);
 
   ide_vcs_cloner_clone_async (self->cloner,
                               uri_str,
