@@ -20,71 +20,48 @@
 
 #define G_LOG_DOMAIN "gbp-messages-panel"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
-#include <vte/vte.h>
 
 #include "gbp-messages-panel.h"
 
 struct _GbpMessagesPanel
 {
   IdePane         parent_instance;
-  IdeSignalGroup *signals;
-  VteTerminal    *terminal;
+  GtkColumnView  *column_view;
+  GtkNoSelection *selection;
 };
 
 G_DEFINE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, IDE_TYPE_PANE)
 
 static char *
-ensure_crlf (const char *message)
+severity_to_string (GObject        *object,
+                    GLogLevelFlags  flags)
 {
-  GString *s = g_string_new (NULL);
+  const char *ret = "";
 
-  g_assert (message != NULL);
+  flags &= G_LOG_LEVEL_MASK;
 
-  for (const char *iter = message;
-       *iter;
-       iter = g_utf8_next_char (iter))
-    {
-      gunichar ch = g_utf8_get_char (iter);
+  if (flags & G_LOG_LEVEL_DEBUG)
+    ret = _("Debug");
+  else if (flags & G_LOG_LEVEL_INFO)
+    ret = _("Info");
+  else if (flags & G_LOG_LEVEL_MESSAGE)
+    ret = _("Message");
+  else if (flags & G_LOG_LEVEL_WARNING)
+    ret = _("Warning");
+  else if (flags & G_LOG_LEVEL_CRITICAL)
+    ret = _("Critical");
 
-      switch (ch)
-        {
-        case '\r':
-          break;
-
-        case '\n':
-          g_string_append_len (s, "\r\n", 2);
-          break;
-
-        default:
-          g_string_append_unichar (s, ch);
-          break;
-        }
-    }
-
-  return g_string_free (s, FALSE);
+  return g_strdup (ret);
 }
 
-static void
-gbp_messages_panel_log_cb (GbpMessagesPanel *self,
-                           GLogLevelFlags    log_level,
-                           const gchar      *domain,
-                           const gchar      *message,
-                           IdeContext       *context)
+static char *
+date_time_to_string (GObject   *object,
+                     GDateTime *dt)
 {
-  g_autofree char *out_message = NULL;
-
-  g_assert (GBP_IS_MESSAGES_PANEL (self));
-  g_assert (message != NULL);
-  g_assert (IDE_IS_CONTEXT (context));
-
-  if G_UNLIKELY (strchr (message, '\n') != NULL)
-    message = out_message = ensure_crlf (message);
-
-  vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
-  vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", 2);
-  panel_widget_set_needs_attention (PANEL_WIDGET (self), TRUE);
-  gtk_widget_show (GTK_WIDGET (self));
+  return g_date_time_format (dt, "%X");
 }
 
 static void
@@ -92,33 +69,27 @@ gbp_messages_panel_set_context (GtkWidget  *widget,
                                 IdeContext *context)
 {
   GbpMessagesPanel *self = (GbpMessagesPanel *)widget;
+  g_autoptr(GListModel) model = NULL;
 
   g_assert (GBP_IS_MESSAGES_PANEL (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  ide_signal_group_set_target (self->signals, context);
-}
+  if (context != NULL)
+    model = ide_context_ref_logs (context);
 
-static void
-gbp_messages_panel_dispose (GObject *object)
-{
-  GbpMessagesPanel *self = (GbpMessagesPanel *)object;
-
-  g_clear_object (&self->signals);
-
-  G_OBJECT_CLASS (gbp_messages_panel_parent_class)->dispose (object);
+  gtk_no_selection_set_model (self->selection, model);
 }
 
 static void
 gbp_messages_panel_class_init (GbpMessagesPanelClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = gbp_messages_panel_dispose;
-
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/messages/gbp-messages-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, terminal);
+  gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, column_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, selection);
+  gtk_widget_class_bind_template_callback (widget_class, date_time_to_string);
+  gtk_widget_class_bind_template_callback (widget_class, severity_to_string);
 }
 
 static void
@@ -127,12 +98,4 @@ gbp_messages_panel_init (GbpMessagesPanel *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_widget_set_context_handler (GTK_WIDGET (self), gbp_messages_panel_set_context);
-
-  self->signals = ide_signal_group_new (IDE_TYPE_CONTEXT);
-
-  ide_signal_group_connect_object (self->signals,
-                                   "log",
-                                   G_CALLBACK (gbp_messages_panel_log_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
 }

@@ -46,7 +46,6 @@ plugins_deps += [
   libostree_dep,
   libportal_dep,
   libsoup_dep,
-  libdex_dep,
 ]
 
 plugins_sources += plugin_flatpak_resources

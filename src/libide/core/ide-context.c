@@ -30,6 +30,7 @@
 #include "ide-context-private.h"
 #include "ide-debug.h"
 #include "ide-gsettings-action-group.h"
+#include "ide-log-model-private.h"
 #include "ide-macros.h"
 #include "ide-marshal.h"
 #include "ide-notifications.h"
@@ -51,6 +52,7 @@ struct _IdeContext
   char           *title;
   GFile          *workdir;
   IdeActionMuxer *action_muxer;
+  IdeLogModel    *logs;
   guint           project_loaded : 1;
 };
 
@@ -62,15 +64,9 @@ enum {
   N_PROPS
 };
 
-enum {
-  LOG,
-  N_SIGNALS
-};
-
 G_DEFINE_FINAL_TYPE (IdeContext, ide_context, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
-static guint signals [N_SIGNALS];
 static const char *app_schema_ids[] = {
   "org.gnome.builder",
   "org.gnome.builder.code-insight",
@@ -224,6 +220,7 @@ ide_context_finalize (GObject *object)
 
   g_clear_object (&self->action_muxer);
   g_clear_object (&self->workdir);
+  g_clear_object (&self->logs);
   g_clear_pointer (&self->project_id, g_free);
   g_clear_pointer (&self->title, g_free);
 
@@ -348,31 +345,6 @@ ide_context_class_init (IdeContextClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
-
-  /**
-   * IdeContext::log:
-   * @self: an #IdeContext
-   * @severity: the log severity
-   * @domain: the log domain
-   * @message: the log message
-   *
-   * This signal is emitted when a log item has been added for the context.
-   */
-  signals [LOG] =
-    g_signal_new_class_handler ("log",
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (ide_context_real_log),
-                                NULL, NULL,
-                                ide_marshal_VOID__UINT_STRING_STRING,
-                                G_TYPE_NONE,
-                                3,
-                                G_TYPE_UINT,
-                                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE,
-                                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (signals [LOG],
-                              G_TYPE_FROM_CLASS (klass),
-                              ide_marshal_VOID__UINT_STRING_STRINGv);
 }
 
 static void
@@ -387,6 +359,8 @@ ide_context_init (IdeContext *self)
 
   notifs = ide_notifications_new ();
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (notifs));
+
+  self->logs = _ide_log_model_new ();
 }
 
 /**
@@ -861,7 +835,8 @@ ide_context_log (IdeContext     *self,
 {
   g_assert (IDE_IS_CONTEXT (self));
 
-  g_signal_emit (self, signals [LOG], 0, level, domain, message);
+  if (self->logs != NULL)
+    _ide_log_model_append (self->logs, level, domain, message);
 }
 
 /**
@@ -967,4 +942,22 @@ ide_context_unregister_settings (IdeContext *self,
       ide_action_muxer_insert_action_group (muxer, project_group, NULL);
       ide_action_muxer_insert_action_group (muxer, app_group, NULL);
     }
+}
+
+/**
+ * ide_context_ref_logs:
+ * @self: a #IdeContext
+ *
+ * Gets the logs for the context.
+ *
+ * Returns: (transfer full): a #GListModel of #IdeLogItem
+ *
+ * Since: 44
+ */
+GListModel *
+ide_context_ref_logs (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return g_object_ref (G_LIST_MODEL (self->logs));
 }

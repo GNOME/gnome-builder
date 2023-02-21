@@ -1,6 +1,6 @@
-/* ide-core.h
+/* ide-log-item.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,31 +20,24 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <glib-object.h>
 
-#define IDE_CORE_INSIDE
-
-#include "ide-action-group.h"
-#include "ide-action-muxer.h"
-#include "ide-binding-group.h"
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-global.h"
-#include "ide-gsettings-action-group.h"
-#include "ide-log.h"
-#include "ide-log-item.h"
-#include "ide-macros.h"
-#include "ide-notification.h"
-#include "ide-notifications.h"
-#include "ide-object.h"
-#include "ide-object-box.h"
-#include "ide-property-action-group.h"
-#include "ide-settings.h"
-#include "ide-settings-flag-action.h"
-#include "ide-signal-group.h"
-#include "ide-transfer.h"
-#include "ide-transfer-manager.h"
-#include "ide-version.h"
 #include "ide-version-macros.h"
 
-#undef IDE_CORE_INSIDE
+G_BEGIN_DECLS
+
+#define IDE_TYPE_LOG_ITEM (ide_log_item_get_type())
+
+IDE_AVAILABLE_IN_44
+G_DECLARE_FINAL_TYPE (IdeLogItem, ide_log_item, IDE, LOG_ITEM, GObject)
+
+IDE_AVAILABLE_IN_44
+const char     *ide_log_item_get_domain     (IdeLogItem *self);
+IDE_AVAILABLE_IN_44
+const char     *ide_log_item_get_message    (IdeLogItem *self);
+IDE_AVAILABLE_IN_44
+GDateTime      *ide_log_item_get_created_at (IdeLogItem *self);
+IDE_AVAILABLE_IN_44
+GLogLevelFlags  ide_log_item_get_severity   (IdeLogItem *self);
+
+G_END_DECLS

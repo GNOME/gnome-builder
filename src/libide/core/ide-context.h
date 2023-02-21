@@ -86,6 +86,8 @@ void            ide_context_log                  (IdeContext     *self,
                                                   GLogLevelFlags  level,
                                                   const gchar    *domain,
                                                   const gchar    *message);
+IDE_AVAILABLE_IN_44
+GListModel     *ide_context_ref_logs             (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
 IdeActionMuxer *ide_context_ref_action_muxer     (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL

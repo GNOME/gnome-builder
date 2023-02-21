@@ -8,9 +8,129 @@
         <property name="hscrollbar-policy">never</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="IdeTerminal" id="terminal">
-            <property name="hexpand">true</property>
-            <property name="scroll-on-output">false</property>
+          <object class="GtkColumnView" id="column_view">
+            <style>
+              <class name="data-table"/>
+            </style>
+            <property name="model">
+              <object class="GtkNoSelection" id="selection">
+              </object>
+            </property>
+            <child>
+              <object class="GtkColumnViewColumn" id="created_at_column">
+                <property name="title" translatable="yes">Time</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+                      <?xml version="1.0" encoding="UTF-8"?>
+                      <interface>
+                        <template class="GtkListItem">
+                          <property name="child">
+                            <object class="GtkLabel">
+                              <property name="xalign">0</property>
+                              <property name="ellipsize">end</property>
+                              <binding name="label">
+                                <closure type="gchararray" function="date_time_to_string">
+                                  <lookup name="created-at" type="IdeLogItem">
+                                    <lookup name="item">GtkListItem</lookup>
+                                  </lookup>
+                                </closure>
+                              </binding>
+                            </object>
+                          </property>
+                        </template>
+                      </interface>
+                      ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="severity_column">
+                <property name="title" translatable="yes">Severity</property>
+                <property name="resizable">true</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+                      <?xml version="1.0" encoding="UTF-8"?>
+                      <interface>
+                        <template class="GtkListItem">
+                          <property name="child">
+                            <object class="GtkLabel">
+                              <property name="xalign">0</property>
+                              <property name="ellipsize">end</property>
+                              <binding name="label">
+                                <closure type="gchararray" function="severity_to_string">
+                                  <lookup name="severity" type="IdeLogItem">
+                                    <lookup name="item">GtkListItem</lookup>
+                                  </lookup>
+                                </closure>
+                              </binding>
+                            </object>
+                          </property>
+                        </template>
+                      </interface>
+                      ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="domain_column">
+                <property name="title" translatable="yes">Section</property>
+                <property name="resizable">true</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+                      <?xml version="1.0" encoding="UTF-8"?>
+                      <interface>
+                        <template class="GtkListItem">
+                          <property name="child">
+                            <object class="GtkLabel">
+                              <property name="xalign">0</property>
+                              <property name="ellipsize">end</property>
+                              <binding name="label">
+                                <lookup name="domain" type="IdeLogItem">
+                                  <lookup name="item">GtkListItem</lookup>
+                                </lookup>
+                              </binding>
+                            </object>
+                          </property>
+                        </template>
+                      </interface>
+                      ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="message_column">
+                <property name="title" translatable="yes">Message</property>
+                <property name="expand">true</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+                      <?xml version="1.0" encoding="UTF-8"?>
+                      <interface>
+                        <template class="GtkListItem">
+                          <property name="child">
+                            <object class="GtkLabel">
+                              <property name="xalign">0</property>
+                              <property name="ellipsize">end</property>
+                              <binding name="label">
+                                <lookup name="message" type="IdeLogItem">
+                                  <lookup name="item">GtkListItem</lookup>
+                                </lookup>
+                              </binding>
+                            </object>
+                          </property>
+                        </template>
+                      </interface>
+                      ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

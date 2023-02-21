@@ -71,6 +71,7 @@ libide_core_public_headers = [
   'ide-global.h',
   'ide-gsettings-action-group.h',
   'ide-log.h',
+  'ide-log-item.h',
   'ide-macros.h',
   'ide-notification.h',
   'ide-notifications.h',
@@ -89,6 +90,8 @@ libide_core_public_headers = [
 libide_core_private_headers = [
   'gsettings-mapping.h',
   'ide-layered-settings-private.h',
+  'ide-log-item-private.h',
+  'ide-log-model-private.h',
   'ide-transfer-manager-private.h',
 ]
 
@@ -105,6 +108,7 @@ libide_core_public_sources = [
   'ide-global.c',
   'ide-gsettings-action-group.c',
   'ide-log.c',
+  'ide-log-item.c',
   'ide-notification.c',
   'ide-notifications.c',
   'ide-object-box.c',
@@ -121,6 +125,7 @@ libide_core_public_sources = [
 libide_core_private_sources = [
   'gsettings-mapping.c',
   'ide-layered-settings.c',
+  'ide-log-model.c',
 ]
 
 libide_core_sources = []
@@ -134,6 +139,7 @@ libide_core_sources += ide_marshal
 #
 
 libide_core_deps = [
+  libdex_dep,
   libgio_dep,
   libgtk_dep,
   libpeas_dep,
