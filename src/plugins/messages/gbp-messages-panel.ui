@@ -36,6 +36,9 @@
                                   </lookup>
                                 </closure>
                               </binding>
+                              <attributes>
+                                <attribute name="font-features" value="tnum"/>
+                              </attributes>
                             </object>
                           </property>
                         </template>
