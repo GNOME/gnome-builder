@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 #include <glib-unix.h>
@@ -161,6 +163,8 @@ ide_clang_client_subprocess_exited (IdeClangClient          *self,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
+  ide_object_message (self, _("Clang integration server has exited"));
+
   if (self->state == STATE_RUNNING)
     self->state = STATE_SPAWNING;
 
@@ -190,6 +194,10 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
   g_assert (self->rpc_client == NULL);
+
+  ide_object_message (self,
+                      _("Clang integration server has started as process %s"),
+                      ide_subprocess_get_identifier (subprocess));
 
   if (self->state == STATE_SPAWNING)
     self->state = STATE_RUNNING;
