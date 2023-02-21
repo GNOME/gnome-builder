@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-15 23:28+0000\n"
-"PO-Revision-Date: 2023-02-16 10:31+0700\n"
+"POT-Creation-Date: 2023-02-20 22:50+0000\n"
+"PO-Revision-Date: 2023-02-21 07:57+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -1029,6 +1029,16 @@ msgstr "Gagal mendapatkan informasi perangkat: %s"
 #: src/libide/foundry/ide-config-manager.c:537
 msgid "Active Configuration"
 msgstr "Konfigurasi Aktif"
+
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:853
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+"Gagal menemukan konfigurasi bangun \"%s\". Ini mungkin tidak valid atau "
+"salah format."
 
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
@@ -2634,7 +2644,7 @@ msgstr "Pekerja"
 msgid "Number of workers to use when performing builds"
 msgstr "Jumlah pekerja yang akan digunakan saat membangun"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:244 src/plugins/buildui/tweaks.ui:431
 msgid "Default"
 msgstr "Baku"
 
@@ -2673,7 +2683,24 @@ msgstr ""
 msgid "Build Environment"
 msgstr "Lingkungan Bangun"
 
-#: src/plugins/buildui/tweaks.ui:432
+#: src/plugins/buildui/tweaks.ui:419
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Lokalitas"
+
+#: src/plugins/buildui/tweaks.ui:420
+msgid "Where your project builds"
+msgstr "Tempat proyek Anda dibangun"
+
+#: src/plugins/buildui/tweaks.ui:437
+msgid "Inside Source Tree"
+msgstr "Di dalam Pohon Sumber"
+
+#: src/plugins/buildui/tweaks.ui:443
+msgid "Outside Source Tree"
+msgstr "Di luar Pohon Sumber"
+
+#: src/plugins/buildui/tweaks.ui:464
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -5106,10 +5133,6 @@ msgstr "Gunakan Subshell"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Jalankan program dari subshell seperti <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Lokalitas"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
@@ -5895,6 +5918,10 @@ msgstr "Lokasi Fokus"
 #: src/plugins/web-browser/gtk/menus.ui:32
 msgid "Focus the current page's location"
 msgstr "Memfokuskan lokasi halaman saat ini"
+
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "Gagal mengurai dokumen XML"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
@@ -7229,9 +7256,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Switch surface"
 #~ msgstr "Ganti permukaan"
 
-#~ msgid "Search your project"
-#~ msgstr "Cari proyek Anda"
-
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Gagal menemukan runtime"
 
@@ -7983,9 +8007,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "_View Source"
 #~ msgstr "_Lihat Sumber"
-
-#~ msgid "Failed to save glade document: %s"
-#~ msgstr "Gagal menyimpan dokumen glade: %s"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Pintasan Glade"
