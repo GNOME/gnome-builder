@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-lsp-service.h"
 
 /**
@@ -472,6 +474,28 @@ ide_lsp_service_set_inherit_stderr (IdeLspService *self,
 }
 
 static void
+on_supervisor_exited_cb (IdeLspService           *self,
+                         IdeSubprocess           *subprocess,
+                         IdeSubprocessSupervisor *supervisor)
+{
+  IdeLspServicePrivate *priv = ide_lsp_service_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_SERVICE (self));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  ide_object_message (IDE_OBJECT (self),
+                      /* translators: %s is replaced with the name of the language server */
+                      _("Language server “%s” exited"),
+                      priv->program);
+
+  IDE_EXIT;
+}
+
+static void
 on_supervisor_spawned_cb (IdeLspService           *self,
                           IdeSubprocess           *subprocess,
                           IdeSubprocessSupervisor *supervisor)
@@ -501,6 +525,12 @@ on_supervisor_spawned_cb (IdeLspService           *self,
       ide_lsp_client_stop (priv->client);
       ide_object_destroy (IDE_OBJECT (priv->client));
     }
+
+  ide_object_message (IDE_OBJECT (self),
+                      /* translators: the first %s is replaced with the language server name, second %s with PID */
+                      _("Language server “%s” spawned as process %s"),
+                      priv->program,
+                      ide_subprocess_get_identifier (subprocess));
 
   client = ide_lsp_client_new (iostream);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (client));
@@ -562,6 +592,11 @@ ensure_started (IdeLspService *self,
   g_signal_connect_object (supervisor,
                            "spawned",
                            G_CALLBACK (on_supervisor_spawned_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (supervisor,
+                           "exited",
+                           G_CALLBACK (on_supervisor_exited_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
