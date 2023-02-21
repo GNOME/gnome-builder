@@ -22,9 +22,11 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include <unistd.h>
+
+#include <glib/gi18n.h>
+
+#include <gtk/gtk.h>
 
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
@@ -760,9 +762,16 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
   g_clear_object (&self->current_subprocess);
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_error_copy (error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  if (error != NULL)
+    ide_object_message (IDE_OBJECT (self),
+                        _("Application exited with error: %s"),
+                        error->message);
+  else
+    ide_object_message (IDE_OBJECT (self), _("Application exited"));
 
   if (self->run_tool != NULL)
     _ide_run_tool_emit_stopped (self->run_tool);
@@ -1222,17 +1231,17 @@ ide_run_manager_run_action_cb (GObject      *object,
                                gpointer      user_data)
 {
   IdeRunManager *self = (IdeRunManager *)object;
-  IdeContext *context;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  ide_run_manager_run_finish (self, result, &error);
 
-  /* Propagate the error to the context */
-  if (!ide_run_manager_run_finish (self, result, &error))
-    ide_context_warning (context, "%s", error->message);
+  IDE_EXIT;
 }
 
 static void
@@ -1324,6 +1333,9 @@ ide_run_manager_actions_stop (IdeRunManager *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
+
+  ide_object_message (IDE_OBJECT (self),
+                      _("User requested application to stop"));
 
   ide_run_manager_cancel (self);
 

@@ -1044,6 +1044,11 @@ ide_config_manager_set_current (IdeConfigManager *self,
 
       ide_config_manager_set_action_state (self, "current", g_variant_new_string (id));
 
+      ide_object_message (IDE_OBJECT (self),
+                          /* translators: %s is set to the identifier of the build configuration */
+                          _("Active configuration set to “%s”"),
+                          id);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);

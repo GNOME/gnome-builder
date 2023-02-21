@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-marshal.h"
 
 #include "ide-pipeline.h"
@@ -59,8 +61,14 @@ ide_run_tool_real_force_exit (IdeRunTool *self)
 
   g_assert (IDE_IS_RUN_TOOL (self));
 
-  if (priv->subprocess != NULL)
-    ide_subprocess_force_exit (priv->subprocess);
+  if (priv->subprocess == NULL)
+    return;
+
+  ide_object_message (IDE_OBJECT (self),
+                      _("Forcing subprocess %s to exit"),
+                      ide_subprocess_get_identifier (priv->subprocess));
+
+  ide_subprocess_force_exit (priv->subprocess);
 }
 
 static void
@@ -72,7 +80,10 @@ ide_run_tool_real_send_signal (IdeRunTool *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_TOOL (self));
 
-  g_debug ("Sending signal %d to subprocess %p", signum, priv->subprocess);
+  ide_object_message (IDE_OBJECT (self),
+                      _("Sending signal %d to subprocess %s"),
+                      signum,
+                      ide_subprocess_get_identifier (priv->subprocess));
 
   if (priv->subprocess != NULL)
     ide_subprocess_send_signal (priv->subprocess, signum);

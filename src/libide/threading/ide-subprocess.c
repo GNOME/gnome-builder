@@ -23,6 +23,9 @@
 #include "config.h"
 
 #include <string.h>
+
+#include <glib/gi18n.h>
+
 #include <libide-core.h>
 
 #include "ide-subprocess.h"
@@ -158,7 +161,7 @@ ide_subprocess_wait_check_cb (GObject      *object,
       g_task_return_new_error (task,
                                G_SPAWN_ERROR,
                                G_SPAWN_ERROR_FAILED,
-                               "Child process killed by signal %d",
+                               _("Process terminated by signal %d"),
                                term_sig);
       IDE_EXIT;
     }

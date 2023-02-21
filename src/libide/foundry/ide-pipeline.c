@@ -948,6 +948,11 @@ ide_pipeline_real_started (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
+  if (self->in_clean)
+    ide_object_message (IDE_OBJECT (self), _("Pipeline started to clean build tree"));
+  else
+    ide_object_message (IDE_OBJECT (self), _("Pipeline started"));
+
   self->errors_on_stdout = FALSE;
 
   for (guint i = 0; i < self->pipeline->len; i++)
@@ -971,6 +976,8 @@ ide_pipeline_real_finished (IdePipeline *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_PIPELINE (self));
+
+  ide_object_message (IDE_OBJECT (self), _("Pipeline finished"));
 
   IDE_EXIT;
 }

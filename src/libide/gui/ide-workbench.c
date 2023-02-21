@@ -1072,6 +1072,8 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
       g_clear_object (&self->session);
     }
 
+  ide_object_message (self->context, _("Project loaded"));
+
   ide_task_return_boolean (task, TRUE);
 }
 
@@ -1231,6 +1233,11 @@ ide_workbench_load_project_async (IdeWorkbench        *self,
       g_autofree gchar *generated = ide_create_project_id (project_id);
       ide_context_set_project_id (self->context, generated);
     }
+
+  ide_object_message (self->context,
+                      /* translators: %s is replaced with the project name */
+                      _("Loading project “%s”"),
+                      ide_project_info_get_name (project_info));
 
   if (!ide_project_info_get_directory (project_info) &&
       !ide_project_info_get_file (project_info))
