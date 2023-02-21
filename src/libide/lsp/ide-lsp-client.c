@@ -1213,7 +1213,7 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
 }
 
 static void
-ide_lsp_client_dispose (GObject *object)
+ide_lsp_client_destroy (IdeObject *object)
 {
   IdeLspClient *self = (IdeLspClient *)object;
   IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
@@ -1228,7 +1228,7 @@ ide_lsp_client_dispose (GObject *object)
       pending_message_fail (message);
     }
 
-  G_OBJECT_CLASS (ide_lsp_client_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_lsp_client_parent_class)->destroy (object);
 }
 
 static void
@@ -1343,11 +1343,13 @@ static void
 ide_lsp_client_class_init (IdeLspClientClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_lsp_client_dispose;
   object_class->finalize = ide_lsp_client_finalize;
   object_class->get_property = ide_lsp_client_get_property;
   object_class->set_property = ide_lsp_client_set_property;
+
+  i_object_class->destroy = ide_lsp_client_destroy;
 
   klass->notification = ide_lsp_client_real_notification;
   klass->supports_language = ide_lsp_client_real_supports_language;

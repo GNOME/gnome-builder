@@ -272,10 +272,12 @@ ide_lsp_highlighter_buffer_line_flags_changed (IdeLspHighlighter *self,
 }
 
 static void
-ide_lsp_highlighter_dispose (GObject *object)
+ide_lsp_highlighter_destroy (IdeObject *object)
 {
   IdeLspHighlighter *self = (IdeLspHighlighter *)object;
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
+
+  g_assert (IDE_IS_LSP_HIGHLIGHTER (self));
 
   priv->engine = NULL;
 
@@ -285,7 +287,7 @@ ide_lsp_highlighter_dispose (GObject *object)
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->client);
 
-  G_OBJECT_CLASS (ide_lsp_highlighter_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_lsp_highlighter_parent_class)->destroy (object);
 }
 
 static void
@@ -330,10 +332,12 @@ static void
 ide_lsp_highlighter_class_init (IdeLspHighlighterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_lsp_highlighter_dispose;
   object_class->get_property = ide_lsp_highlighter_get_property;
   object_class->set_property = ide_lsp_highlighter_set_property;
+
+  i_object_class->destroy = ide_lsp_highlighter_destroy;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",

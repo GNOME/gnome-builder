@@ -157,17 +157,19 @@ ide_lsp_hover_provider_real_prepare (IdeLspHoverProvider *self)
 }
 
 static void
-ide_lsp_hover_provider_dispose (GObject *object)
+ide_lsp_hover_provider_destroy (IdeObject *object)
 {
   IdeLspHoverProvider *self = (IdeLspHoverProvider *)object;
   IdeLspHoverProviderPrivate *priv = ide_lsp_hover_provider_get_instance_private (self);
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_LSP_HOVER_PROVIDER (self));
+
   g_clear_object (&priv->client);
   g_clear_pointer (&priv->category, g_free);
 
-  G_OBJECT_CLASS (ide_lsp_hover_provider_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_lsp_hover_provider_parent_class)->destroy (object);
 
   IDE_EXIT;
 }
@@ -233,10 +235,12 @@ static void
 ide_lsp_hover_provider_class_init (IdeLspHoverProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_lsp_hover_provider_dispose;
   object_class->get_property = ide_lsp_hover_provider_get_property;
   object_class->set_property = ide_lsp_hover_provider_set_property;
+
+  i_object_class->destroy = ide_lsp_hover_provider_destroy;
 
   klass->prepare = ide_lsp_hover_provider_real_prepare;
 
