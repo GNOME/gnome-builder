@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-21 09:46+0000\n"
-"PO-Revision-Date: 2023-02-21 16:47+0200\n"
+"POT-Creation-Date: 2023-02-21 16:36+0000\n"
+"PO-Revision-Date: 2023-02-21 22:33+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -194,16 +194,14 @@ msgstr ""
 "збиранні."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
-#| msgid "Stop Building"
 msgid "Show Log When Building"
 msgstr "Показувати журнал при збиранні"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
-#| msgid "If enabled, build log pane will be cleared on rebuild."
 msgid "If enabled, the build log will be raised when a build starts"
 msgstr ""
-"Якщо позначено, програма підніматиме панель журналу збирання, коли"
-" розпочинатиметься збирання"
+"Якщо позначено, програма підніматиме панель журналу збирання, коли "
+"розпочинатиметься збирання"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -1063,13 +1061,12 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"Не вдалося знайти налаштування для збирання «%s». Можливо, вони некоректні"
-" або неправильно форматовані."
+"Не вдалося знайти налаштування для збирання «%s». Можливо, вони некоректні "
+"або неправильно форматовані."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1049
 #, c-format
-#| msgid "Active Configuration"
 msgid "Active configuration set to “%s”"
 msgstr "Активними налаштуваннями стали «%s»"
 
@@ -1231,7 +1228,6 @@ msgstr "Перевірка модулів"
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
 #: src/libide/foundry/ide-run-manager.c:182
 #, c-format
-#| msgid "Connected to “%s”"
 msgid "User requested run tool “%s”"
 msgstr "Користувачем надіслано запит на запуск інструмента «%s»"
 
@@ -1241,7 +1237,6 @@ msgstr "Неможливо запустити ціль — вже запущен
 
 #: src/libide/foundry/ide-run-manager.c:771
 #, c-format
-#| msgid "Application exited"
 msgid "Application exited with error: %s"
 msgstr "Програма завершила роботу із помилкою: %s"
 
@@ -1261,12 +1256,10 @@ msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
 #: src/libide/foundry/ide-run-manager.c:1256
-#| msgid "The application to run"
 msgid "User requested application to run"
 msgstr "Користувачем надіслано запит щодо запуску програми"
 
 #: src/libide/foundry/ide-run-manager.c:1288
-#| msgid "The application to run"
 msgid "User requested application to restart"
 msgstr "Користувачем надіслано запит щодо перезапуску програми"
 
@@ -1275,11 +1268,10 @@ msgstr "Користувачем надіслано запит щодо пере
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
-"Користувачем надіслано запит щодо запуску програми за допомогою інструмента"
-" «%s»"
+"Користувачем надіслано запит щодо запуску програми за допомогою інструмента "
+"«%s»"
 
 #: src/libide/foundry/ide-run-manager.c:1338
-#| msgid "The application to run"
 msgid "User requested application to stop"
 msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
@@ -1290,6 +1282,16 @@ msgstr "Користувачем надіслано запит щодо прип
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Основна система"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Примусово викликаємо вихід з підпроцесу %s"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Надсилаємо сигнал %d до підпроцесу %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1692,14 +1694,12 @@ msgid "Other"
 msgstr "Інше"
 
 #: src/libide/gui/ide-workbench.c:1075
-#| msgid "Project Name"
 msgid "Project loaded"
 msgstr "Проєкт завантажено"
 
 #. translators: %s is replaced with the project name
 #: src/libide/gui/ide-workbench.c:1243
 #, c-format
-#| msgid "Cloning project %s"
 msgid "Loading project “%s”"
 msgstr "Завантажуємо проєкт «%s»"
 
@@ -1735,6 +1735,19 @@ msgstr[3] "Встановлюємо %u пакунок"
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
+
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+#| msgid "Language Servers"
+msgid "Language server “%s” exited"
+msgstr "Роботу сервера мови «%s» завершено"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr "Сервер мови «%s» породжено як процес %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
@@ -2051,6 +2064,11 @@ msgstr "Тільки збіг цілих слів"
 #: src/libide/terminal/ide-terminal-search.ui:133
 msgid "Wrap around"
 msgstr "Режим огортання"
+
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr "Роботу процесу перервано сигналом %d"
 
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
@@ -2747,12 +2765,10 @@ msgid "Clear the build log history when a new build begins"
 msgstr "Спорожняти журнал збирання, якщо розпочинається нове збирання"
 
 #: src/plugins/buildui/tweaks.ui:212
-#| msgid "Show Build _Log"
 msgid "Show Build Logs"
 msgstr "Показувати журнал збирання"
 
 #: src/plugins/buildui/tweaks.ui:213
-#| msgid "Clear the build log history when a new build begins"
 msgid "Show the build log when a new build begins"
 msgstr "Показувати журнал збирання, якщо розпочинається нове збирання"
 
@@ -2818,12 +2834,10 @@ msgid "Locality"
 msgstr "Локальність"
 
 #: src/plugins/buildui/tweaks.ui:432
-#| msgid "Search your project"
 msgid "Where your project builds"
 msgstr "Де збирається ваш проєкт"
 
 #: src/plugins/buildui/tweaks.ui:449
-#| msgid "Indexing Source Code"
 msgid "Inside Source Tree"
 msgstr "В ієрархії коду"
 
@@ -2852,6 +2866,17 @@ msgstr "Зібрати проєкт"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Запустити Cargo"
+
+#: src/plugins/clang/ide-clang-client.c:166
+#| msgid "Git integration has exited"
+msgid "Clang integration server has exited"
+msgstr "Роботу сервера інтеграції Clang завершено"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+#| msgid "Git integration has started as process %s"
+msgid "Clang integration server has started as process %s"
+msgstr "Запущено сервер інтеграції з Clang як процес %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -4325,7 +4350,6 @@ msgid "Git integration has started as process %s"
 msgstr "Розпочато інтеграцію з Git як процес %s"
 
 #: src/plugins/git/gbp-git-client.c:195
-#| msgid "Integration with Git"
 msgid "Git integration has exited"
 msgstr "Завершено інтеграцію з Git"
 
@@ -4761,6 +4785,30 @@ msgstr "Порожній проєкт Meson"
 msgid "An empty Meson project skeleton"
 msgstr "Порожній каркас проєкту Meson"
 
+#: src/plugins/messages/gbp-messages-panel.c:47
+#| msgid "Debugger"
+msgid "Debug"
+msgstr "Діагностика"
+
+#: src/plugins/messages/gbp-messages-panel.c:49
+msgid "Info"
+msgstr "Відомості"
+
+#: src/plugins/messages/gbp-messages-panel.c:51
+#: src/plugins/messages/gbp-messages-panel.ui:111
+msgid "Message"
+msgstr "Повідомлення"
+
+#: src/plugins/messages/gbp-messages-panel.c:53
+#| msgid "Warnings"
+msgid "Warning"
+msgstr "Попередження"
+
+#: src/plugins/messages/gbp-messages-panel.c:55
+#| msgid "Stop at Criticals"
+msgid "Critical"
+msgstr "Критична помилка"
+
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Повідомлення"
@@ -4769,20 +4817,13 @@ msgstr "Повідомлення"
 msgid "Time"
 msgstr "Час"
 
-#: src/plugins/messages/gbp-messages-panel.ui:50
-#| msgid "Never"
+#: src/plugins/messages/gbp-messages-panel.ui:53
 msgid "Severity"
 msgstr "Важливість"
 
-#: src/plugins/messages/gbp-messages-panel.ui:80
-#| msgid "Selection"
+#: src/plugins/messages/gbp-messages-panel.ui:83
 msgid "Section"
 msgstr "Розділ"
-
-#: src/plugins/messages/gbp-messages-panel.ui:108
-#| msgid "Messages"
-msgid "Message"
-msgstr "Повідомлення"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -6084,7 +6125,6 @@ msgid "Focus the current page's location"
 msgstr "Фокусувати місце на поточній сторінці"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:133
-#| msgid "Failed to save glade document: %s"
 msgid "Failed to parse XML document"
 msgstr "Не вдалося обробити документ XML"
 
