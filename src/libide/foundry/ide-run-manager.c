@@ -175,6 +175,11 @@ ide_run_manager_set_run_tool_from_module_name (IdeRunManager *self,
 
   g_debug ("Looking for run-tool from module %s", name);
 
+  ide_object_message (IDE_OBJECT (self),
+                      /* translators: %s is replaced with the name of the run tool such as "valgrind" */
+                      _("User requested run tool “%s”"),
+                      name);
+
   if (!ide_str_empty0 (name))
     plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), name);
 
@@ -1238,6 +1243,9 @@ ide_run_manager_actions_run (IdeRunManager *self,
 
   g_assert (IDE_IS_RUN_MANAGER (self));
 
+  ide_object_message (IDE_OBJECT (self),
+                      _("User requested application to run"));
+
   ide_run_manager_run_async (self,
                              NULL,
                              ide_run_manager_run_action_cb,
@@ -1267,6 +1275,9 @@ ide_run_manager_actions_restart (IdeRunManager *self,
 
   g_assert (IDE_IS_RUN_MANAGER (self));
 
+  ide_object_message (IDE_OBJECT (self),
+                      _("User requested application to restart"));
+
   ide_run_manager_actions_stop (self, NULL);
 
   g_timeout_add_full (G_PRIORITY_LOW,
@@ -1282,13 +1293,21 @@ static void
 ide_run_manager_actions_run_with_handler (IdeRunManager *self,
                                           GVariant      *param)
 {
+  const char *name;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
-  ide_run_manager_set_run_tool_from_module_name (self, g_variant_get_string (param, NULL));
+  name = g_variant_get_string (param, NULL);
+  ide_run_manager_set_run_tool_from_module_name (self, name);
+
+  ide_object_message (IDE_OBJECT (self),
+                      /* translators: %s is replaced with the name of the tool */
+                      _("User requested application to run with tool “%s”"),
+                      name);
 
   ide_run_manager_run_async (self,
                              NULL,
