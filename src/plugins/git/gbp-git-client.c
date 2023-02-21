@@ -66,6 +66,10 @@ gbp_git_client_subprocess_spawned (GbpGitClient            *self,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
 
+  ide_object_message (self,
+                      _("Git integration has started as process %s"),
+                      ide_subprocess_get_identifier (subprocess));
+
   ide_object_lock (IDE_OBJECT (self));
 
   g_assert (self->service == NULL);
@@ -132,6 +136,8 @@ gbp_git_client_subprocess_exited (GbpGitClient            *self,
   g_assert (GBP_IS_GIT_CLIENT (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  ide_object_message (self, _("Git integration has exited"));
 
   ide_object_lock (IDE_OBJECT (self));
 
