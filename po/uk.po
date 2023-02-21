@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-15 23:28+0000\n"
-"PO-Revision-Date: 2023-02-16 15:22+0200\n"
+"POT-Creation-Date: 2023-02-21 09:46+0000\n"
+"PO-Revision-Date: 2023-02-21 16:47+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -171,7 +171,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Використання мінікарти для повнішого перегляду вмісту файла"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Паралельне збирання"
 
@@ -194,10 +194,22 @@ msgstr ""
 "збиранні."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+#| msgid "Stop Building"
+msgid "Show Log When Building"
+msgstr "Показувати журнал при збиранні"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#| msgid "If enabled, build log pane will be cleared on rebuild."
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr ""
+"Якщо позначено, програма підніматиме панель журналу збирання, коли"
+" розпочинатиметься збирання"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Працювати у мережі, якщо ведеться облік"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -751,7 +763,7 @@ msgstr "Не вдалося запустити типові мови."
 msgid "Failed to save draft: %s"
 msgstr "Не вдалося зберегти чернетку: %s"
 
-#: src/libide/core/ide-context.c:385 src/libide/core/ide-context.c:846
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Без назви"
 
@@ -760,8 +772,8 @@ msgstr "Без назви"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1528
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -777,7 +789,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1524
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
@@ -936,7 +948,7 @@ msgid "Failed to format selection: %s"
 msgstr "Не вдалося форматувати позначене: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Зберегти файл"
@@ -1044,6 +1056,23 @@ msgstr "Не вдалося отримати дані щодо пристрою:
 msgid "Active Configuration"
 msgstr "Активні налаштування"
 
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:853
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+"Не вдалося знайти налаштування для збирання «%s». Можливо, вони некоректні"
+" або неправильно форматовані."
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1049
+#, c-format
+#| msgid "Active Configuration"
+msgid "Active configuration set to “%s”"
+msgstr "Активними налаштуваннями стали «%s»"
+
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
@@ -1083,91 +1112,103 @@ msgstr "Конвеєр збирання перебуває у стані пом�
 msgid "The build configuration has errors"
 msgstr "У конвеєрі збирання сталися помилки"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr "Розпочато конвеєр для очищення ієрархії збирання"
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr "Розпочато конвеєр"
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr "Завершено конвеєр"
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1100
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Збирання (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1141
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Завершення встановлення (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3106
-#: src/libide/foundry/ide-pipeline.c:3145
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
 "обмежено."
 
-#: src/libide/foundry/ide-pipeline.c:3342
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Очищення…"
 
-#: src/libide/foundry/ide-pipeline.c:3346
-#: src/libide/foundry/ide-pipeline.c:3403
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Помилка"
 
-#: src/libide/foundry/ide-pipeline.c:3348
-#: src/libide/foundry/ide-pipeline.c:3411
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Виконано"
 
-#: src/libide/foundry/ide-pipeline.c:3363
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Отримання…"
 
-#: src/libide/foundry/ide-pipeline.c:3367
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Збирання залежностей…"
 
-#: src/libide/foundry/ide-pipeline.c:3371
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Самозбирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3375
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Налаштування…"
 
-#: src/libide/foundry/ide-pipeline.c:3379
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Збирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3383
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Встановлення…"
 
-#: src/libide/foundry/ide-pipeline.c:3387
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "Надсилання…"
 
-#: src/libide/foundry/ide-pipeline.c:3391
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Експортування…"
 
-#: src/libide/foundry/ide-pipeline.c:3395
-#: src/libide/foundry/ide-pipeline.c:3399
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Зібрано"
 
-#: src/libide/foundry/ide-pipeline.c:3407
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "приготування"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3763
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "Вилучення %s"
 
-#: src/libide/foundry/ide-pipeline.c:3822
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "Вилучаємо каталоги збирання…"
 
@@ -1187,19 +1228,60 @@ msgstr "Команда без назви"
 msgid "Unit Test"
 msgstr "Перевірка модулів"
 
-#: src/libide/foundry/ide-run-manager.c:522
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:182
+#, c-format
+#| msgid "Connected to “%s”"
+msgid "User requested run tool “%s”"
+msgstr "Користувачем надіслано запит на запуск інструмента «%s»"
+
+#: src/libide/foundry/ide-run-manager.c:529
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
+#: src/libide/foundry/ide-run-manager.c:771
+#, c-format
+#| msgid "Application exited"
+msgid "Application exited with error: %s"
+msgstr "Програма завершила роботу із помилкою: %s"
+
+#: src/libide/foundry/ide-run-manager.c:774
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Програма завершила роботу"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:946
+#: src/libide/foundry/ide-run-manager.c:960
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1027
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
+
+#: src/libide/foundry/ide-run-manager.c:1256
+#| msgid "The application to run"
+msgid "User requested application to run"
+msgstr "Користувачем надіслано запит щодо запуску програми"
+
+#: src/libide/foundry/ide-run-manager.c:1288
+#| msgid "The application to run"
+msgid "User requested application to restart"
+msgstr "Користувачем надіслано запит щодо перезапуску програми"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1318
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr ""
+"Користувачем надіслано запит щодо запуску програми за допомогою інструмента"
+" «%s»"
+
+#: src/libide/foundry/ide-run-manager.c:1338
+#| msgid "The application to run"
+msgid "User requested application to stop"
+msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
 #: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
@@ -1286,7 +1368,7 @@ msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/gui/ide-workbench.c:1527
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -1458,7 +1540,7 @@ msgid "Close Project"
 msgstr "Закрити проєкт"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Загальне"
 
@@ -1609,6 +1691,18 @@ msgstr "Запустити проєкт"
 msgid "Other"
 msgstr "Інше"
 
+#: src/libide/gui/ide-workbench.c:1075
+#| msgid "Project Name"
+msgid "Project loaded"
+msgstr "Проєкт завантажено"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1243
+#, c-format
+#| msgid "Cloning project %s"
+msgid "Loading project “%s”"
+msgstr "Завантажуємо проєкт «%s»"
+
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
 msgstr "Маємо незбережені документи"
@@ -1637,7 +1731,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1657
+#: src/libide/lsp/ide-lsp-client.c:1659
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -1652,7 +1746,7 @@ msgstr "Контроль версії"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Сервери мов"
 
@@ -2102,16 +2196,16 @@ msgstr "Копія"
 msgid "Remove"
 msgstr "Вилучити"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "З_берегти"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Вивід збірки"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Виведення збирання (Shift+Ctrl+L)"
 
@@ -2289,7 +2383,7 @@ msgstr "Припинити збирання проєкту (Shift+Ctrl+Alt+C)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Зібрати проєкт (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Показати діагностику збирання (Ctrl+Alt+?)"
 
@@ -2652,39 +2746,49 @@ msgstr "Спорожняти журнал збирання"
 msgid "Clear the build log history when a new build begins"
 msgstr "Спорожняти журнал збирання, якщо розпочинається нове збирання"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+#| msgid "Show Build _Log"
+msgid "Show Build Logs"
+msgstr "Показувати журнал збирання"
+
+#: src/plugins/buildui/tweaks.ui:213
+#| msgid "Clear the build log history when a new build begins"
+msgid "Show the build log when a new build begins"
+msgstr "Показувати журнал збирання, якщо розпочинається нове збирання"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Журналювання до консолі"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Переспрямувати помилки журналу сервера мов до stderr"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Обробники"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Кількість обробників, які слід використовувати для виконання збирання"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Типовий"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 на процесор"
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Інструменти"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Префікс встановлення"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2692,11 +2796,11 @@ msgstr ""
 "Проєкт буде встановлено до цього каталогу під час кроку встановлення у "
 "конвеєрі збирання."
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Параметри конфігурації"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2704,11 +2808,30 @@ msgstr ""
 "Ці параметри буде використано системою збирання для налаштовування проєкту "
 "під час кроку налаштовування у конвеєрі збирання"
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Середовище збирання"
 
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Локальність"
+
 #: src/plugins/buildui/tweaks.ui:432
+#| msgid "Search your project"
+msgid "Where your project builds"
+msgstr "Де збирається ваш проєкт"
+
+#: src/plugins/buildui/tweaks.ui:449
+#| msgid "Indexing Source Code"
+msgid "Inside Source Tree"
+msgstr "В ієрархії коду"
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr "Поза ієрархією коду"
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -4027,7 +4150,7 @@ msgid "Installation complete"
 msgstr "Встановлення завершено"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Клієнт закрито"
 
@@ -4167,12 +4290,12 @@ msgstr "Не вказано даних даних для визначення р
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Не вдалося виконати дію. Початкове повідомлення про помилку — «%s»"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Виконання дії було скасовано"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4195,6 +4318,16 @@ msgstr "Неможливо підписати внесок без GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Неможливо стежити за файлами поза робочим каталогом"
+
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr "Розпочато інтеграцію з Git як процес %s"
+
+#: src/plugins/git/gbp-git-client.c:195
+#| msgid "Integration with Git"
+msgid "Git integration has exited"
+msgstr "Завершено інтеграцію з Git"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4229,21 +4362,21 @@ msgstr "Каталог перебуває поза межами сховища"
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr "Не вдалося знайти сховища за адресою «%s»."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Підтримки протоколу «%s» не передбачено."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "Клонуємо сховище"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "Потрібно вказати правильне посилання у Git"
 
@@ -4630,6 +4763,25 @@ msgstr "Порожній каркас проєкту Meson"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
+msgstr "Повідомлення"
+
+#: src/plugins/messages/gbp-messages-panel.ui:21
+msgid "Time"
+msgstr "Час"
+
+#: src/plugins/messages/gbp-messages-panel.ui:50
+#| msgid "Never"
+msgid "Severity"
+msgstr "Важливість"
+
+#: src/plugins/messages/gbp-messages-panel.ui:80
+#| msgid "Selection"
+msgid "Section"
+msgstr "Розділ"
+
+#: src/plugins/messages/gbp-messages-panel.ui:108
+#| msgid "Messages"
+msgid "Message"
 msgstr "Повідомлення"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
@@ -5141,10 +5293,6 @@ msgstr "Використовувати підоболонку"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Запустити програму у підоболонці, зокрема <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Локальність"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
@@ -5574,10 +5722,6 @@ msgstr "%s (Sysroot SDK)"
 msgid "Application started at %s\r\n"
 msgstr "Програму запущено о %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Програма завершила роботу"
-
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Виведені програмою дані"
@@ -5728,7 +5872,6 @@ msgid "Updating Dependencies…"
 msgstr "Оновлення залежностей…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-#| msgid "Builder is updating your projects configured dependencies."
 msgid "Builder is updating your project’s configured dependencies."
 msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
 
@@ -5940,6 +6083,11 @@ msgstr "Фокусувати місце"
 msgid "Focus the current page's location"
 msgstr "Фокусувати місце на поточній сторінці"
 
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+#| msgid "Failed to save glade document: %s"
+msgid "Failed to parse XML document"
+msgstr "Не вдалося обробити документ XML"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5982,9 +6130,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Stop Building Project"
 #~ msgstr "Зупинити збирання проєкту"
-
-#~ msgid "Show Build _Log"
-#~ msgstr "Показати _журнал збирання"
 
 #~ msgid "Tools"
 #~ msgstr "Інструменти"
@@ -7755,9 +7900,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Switch surface"
 #~ msgstr "Перемкнути поверхню"
 
-#~ msgid "Search your project"
-#~ msgstr "Шукати у вашому проєкті"
-
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Не вдалося знайти середовище виконання"
 
@@ -8057,10 +8199,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Close search bar (Escape key)"
 #~ msgstr "Закрити панель пошуку (клавіша Escape)"
 
-#, c-format
-#~ msgid "Connected to “%s”"
-#~ msgstr "З'єднано з «%s»"
-
 #~ msgid "Object Path"
 #~ msgstr "Шлях до об'єкта"
 
@@ -8211,10 +8349,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ "інформації у файлах JavaScript. Це може призвести до виконання коду у "
 #~ "вашому проєкті."
 
-#, c-format
-#~ msgid "Cloning project %s"
-#~ msgstr "Клонуємо проєкт %s"
-
 #~ msgid "Downloading application sources…"
 #~ msgstr "Отримання початкового коду програми…"
 
@@ -8226,10 +8360,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "_View Source"
 #~ msgstr "П_ереглянути код"
-
-#, c-format
-#~ msgid "Failed to save glade document: %s"
-#~ msgstr "Не вдалося зберегти документ glade: %s"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Скорочення Glade"
