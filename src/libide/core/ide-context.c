@@ -81,15 +81,6 @@ static const char *project_schema_ids[] = {
   "org.gnome.builder.project",
 };
 
-static void
-ide_context_real_log (IdeContext     *self,
-                      GLogLevelFlags  level,
-                      const gchar    *domain,
-                      const gchar    *message)
-{
-  g_log (domain, level, "%s", message);
-}
-
 static gchar *
 ide_context_repr (IdeObject *object)
 {
@@ -837,6 +828,8 @@ ide_context_log (IdeContext     *self,
 
   if (self->logs != NULL)
     _ide_log_model_append (self->logs, level, domain, message);
+
+  g_log (domain, level, "%s", message);
 }
 
 /**
