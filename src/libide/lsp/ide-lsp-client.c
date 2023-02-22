@@ -1206,6 +1206,7 @@ ide_lsp_client_handle_call (IdeLspClient  *self,
     }
   else if (strcmp (method, "window/workDoneProgress/create") == 0)
     {
+      jsonrpc_client_reply_async (client, id, NULL, NULL, NULL, NULL);
       IDE_RETURN (TRUE);
     }
 
