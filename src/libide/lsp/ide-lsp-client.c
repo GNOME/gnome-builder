@@ -2066,25 +2066,31 @@ ide_lsp_client_call_async (IdeLspClient        *self,
   ide_task_set_source_tag (task, ide_lsp_client_call_async);
 
   if (priv->rpc_client == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               "No connection to language server");
-  else if (!priv->initialized &&
-           !(g_str_equal (method, "initialize") ||
-             g_str_equal (method, "initialized")))
-    ide_lsp_client_queue_message (self,
-                                  method,
-                                  params,
-                                  cancellable,
-                                  g_steal_pointer (&task));
-  else
-    jsonrpc_client_call_async (priv->rpc_client,
-                               method,
-                               params,
-                               cancellable,
-                               ide_lsp_client_call_cb,
-                               g_steal_pointer (&task));
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "No connection to language server");
+      IDE_EXIT;
+    }
+
+  if (!priv->initialized &&
+      !(g_str_equal (method, "initialize") || g_str_equal (method, "initialized")))
+    {
+      ide_lsp_client_queue_message (self,
+                                    method,
+                                    params,
+                                    cancellable,
+                                    g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+
+  jsonrpc_client_call_async (priv->rpc_client,
+                             method,
+                             params,
+                             cancellable,
+                             ide_lsp_client_call_cb,
+                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }
