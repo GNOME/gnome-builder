@@ -188,11 +188,17 @@ ide_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *self,
                                          GAsyncReadyCallback  callback,
                                          gpointer             user_data)
 {
+  IDE_ENTRY;
+
+  IDE_TRACE_MSG ("Resolving via %s", G_OBJECT_TYPE_NAME (self));
+
   g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
   g_return_if_fail (location != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_SYMBOL_RESOLVER_GET_IFACE (self)->lookup_symbol_async (self, location, cancellable, callback, user_data);
+
+  IDE_EXIT;
 }
 
 /**
@@ -211,10 +217,16 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
                                           GAsyncResult       *result,
                                           GError            **error)
 {
+  IdeSymbol *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->lookup_symbol_finish (self, result, error);
+  ret = IDE_SYMBOL_RESOLVER_GET_IFACE (self)->lookup_symbol_finish (self, result, error);
+
+  IDE_RETURN (ret);
 }
 
 /**
@@ -236,10 +248,16 @@ ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
   g_return_if_fail (G_IS_FILE (file));
 
+  IDE_TRACE_MSG ("Resolving via %s", G_OBJECT_TYPE_NAME (self));
+
   IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_async (self, file, contents, cancellable, callback, user_data);
+
+  IDE_EXIT;
 }
 
 /**
@@ -256,10 +274,16 @@ ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,
                                             GAsyncResult       *result,
                                             GError            **error)
 {
+  IdeSymbolTree *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
   g_return_val_if_fail (!result || G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_finish (self, result, error);
+  ret = IDE_SYMBOL_RESOLVER_GET_IFACE (self)->get_symbol_tree_finish (self, result, error);
+
+  IDE_RETURN (ret);
 }
 
 void

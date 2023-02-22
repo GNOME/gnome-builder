@@ -3620,11 +3620,15 @@ _ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
 {
   GBytes *content;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   if ((content = ide_buffer_dup_content (self)))
     g_bytes_unref (content);
+
+  IDE_EXIT;
 }
 
 /**
@@ -3665,6 +3669,8 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   LookUpSymbolData *data;
   IdeBuffer *self;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -3696,6 +3702,8 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
+  IDE_TRACE_MSG ("%u resolvers left to query", data->resolvers->len);
+
   if (data->resolvers->len > 0)
     {
       IdeSymbolResolver *resolver;
@@ -3721,6 +3729,8 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
     {
       ide_task_return_object (task, g_steal_pointer (&data->symbol));
     }
+
+  IDE_EXIT;
 }
 
 /**
@@ -3748,6 +3758,8 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   guint line;
   guint line_offset;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (location != NULL);
@@ -3765,7 +3777,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_SUPPORTED,
                                  _("The current language lacks a symbol resolver."));
-      return;
+      IDE_EXIT;
     }
 
   /* If this query is the same as one in-flight, then try to chain
@@ -3775,7 +3787,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
       self->in_flight_symbol_at_location != NULL)
     {
       ide_task_chain (self->in_flight_symbol_at_location, task);
-      return;
+      IDE_EXIT;
     }
   else
     {
@@ -3801,6 +3813,8 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
                                            cancellable,
                                            ide_buffer_get_symbol_at_location_cb,
                                            g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 /**
@@ -3818,11 +3832,17 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
                                           GAsyncResult  *result,
                                           GError       **error)
 {
+  IdeSymbol *symbol;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_object (IDE_TASK (result), error);
+  symbol = ide_task_propagate_object (IDE_TASK (result), error);
+
+  IDE_RETURN (symbol);
 }
 
 /**
