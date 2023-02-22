@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-20 22:50+0000\n"
-"PO-Revision-Date: 2023-02-21 07:57+0700\n"
+"POT-Creation-Date: 2023-02-22 01:12+0000\n"
+"PO-Revision-Date: 2023-02-22 16:55+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -165,7 +165,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Gunakan minimap untuk melihat lebih banyak berkas"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Paralelisme Bangun"
 
@@ -186,10 +186,18 @@ msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr "Bila difungsikan, panel log bangun akan dihapus saat dibangun kembali."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "Tampilkan Log Saat Membangun"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr "Bila difungsikan, log bangun akan dinaikkan saat bangun kembali"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Izinkan jaringan ketika memakai kuota"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -420,7 +428,7 @@ msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Jika diaktifkan, Builder akan secara otomatis menampilkan anjuran "
+"Bila difungsikan, Builder akan secara otomatis menampilkan anjuran "
 "penyelesaian saat Anda mengetik."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
@@ -525,7 +533,7 @@ msgstr "Hapus tembolok bangun saat awal mula"
 #: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
-"Jika diaktifkan, Builder akan menghapus tembolok bangun saat awal mula."
+"Bila difungsikan, Builder akan menghapus tembolok bangun saat awal mula."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
@@ -546,7 +554,7 @@ msgstr "Mewarisi Bahasa Peladen stderr"
 #: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
-msgstr "Jika diaktifkan, stderr peladen bahasa akan dialihkan ke konsol."
+msgstr "Bila difungsikan, stderr peladen bahasa akan dialihkan ke konsol."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -673,7 +681,7 @@ msgstr "Memeriksa ejaan di dalam dokumen secara otomatis"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
-msgstr "Kembangkan perangkat lunak bagi GNOME"
+msgstr "Bangun perangkat lunak untuk GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
@@ -737,7 +745,7 @@ msgstr "Gagal menginisialisasi baku."
 msgid "Failed to save draft: %s"
 msgstr "Gagal menyimpan draf: %s"
 
-#: src/libide/core/ide-context.c:385 src/libide/core/ide-context.c:846
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Tanpa Judul"
 
@@ -746,8 +754,8 @@ msgstr "Tanpa Judul"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1528
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -763,7 +771,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Pengawakutu yang cocok tidak ditemukan."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1524
 msgid "Open File…"
 msgstr "Buka Berkas…"
 
@@ -922,7 +930,7 @@ msgid "Failed to format selection: %s"
 msgstr "Gagal memformat pilihan: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Simpan Berkas"
@@ -1040,6 +1048,12 @@ msgstr ""
 "Gagal menemukan konfigurasi bangun \"%s\". Ini mungkin tidak valid atau "
 "salah format."
 
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1049
+#, c-format
+msgid "Active configuration set to “%s”"
+msgstr "Konfigurasi aktif diatur ke \"%s\""
+
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
@@ -1079,89 +1093,101 @@ msgstr "Pipa bangun berada dalam keadaan gagal"
 msgid "The build configuration has errors"
 msgstr "Konfigurasi bangun memiliki galat"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr "Pipa mulai membersihkan pohon bangun"
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr "Pipa dimulai"
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr "Pipa selesai"
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1100
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Bangun (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1141
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Paska-pemasangan (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3106
-#: src/libide/foundry/ide-pipeline.c:3145
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Pembuatan terminal pseudo gagal. Fitur terminal akan terbatas."
 
-#: src/libide/foundry/ide-pipeline.c:3342
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Membersihkan…"
 
-#: src/libide/foundry/ide-pipeline.c:3346
-#: src/libide/foundry/ide-pipeline.c:3403
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Gagal"
 
-#: src/libide/foundry/ide-pipeline.c:3348
-#: src/libide/foundry/ide-pipeline.c:3411
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Siap"
 
-#: src/libide/foundry/ide-pipeline.c:3363
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Mengunduh…"
 
-#: src/libide/foundry/ide-pipeline.c:3367
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Membangun dependensi…"
 
-#: src/libide/foundry/ide-pipeline.c:3371
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Bootstrapping…"
 
-#: src/libide/foundry/ide-pipeline.c:3375
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Mengkonfigurasi…"
 
-#: src/libide/foundry/ide-pipeline.c:3379
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Sedang membangun…"
 
-#: src/libide/foundry/ide-pipeline.c:3383
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Memasang…"
 
-#: src/libide/foundry/ide-pipeline.c:3387
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "Mengkomit…"
 
-#: src/libide/foundry/ide-pipeline.c:3391
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Mengekspor…"
 
-#: src/libide/foundry/ide-pipeline.c:3395
-#: src/libide/foundry/ide-pipeline.c:3399
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Berhasil"
 
-#: src/libide/foundry/ide-pipeline.c:3407
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "Mempersiapkan…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3763
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "Menghapus %s"
 
-#: src/libide/foundry/ide-pipeline.c:3822
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "Menghapus direktori bangun…"
 
@@ -1179,19 +1205,53 @@ msgstr "Perintah tanpa judul"
 msgid "Unit Test"
 msgstr "Pengujian Unit"
 
-#: src/libide/foundry/ide-run-manager.c:522
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:185
+#, c-format
+msgid "User requested run tool “%s”"
+msgstr "Pengguna meminta menjalankan alat “%s”"
+
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
+#: src/libide/foundry/ide-run-manager.c:806
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Aplikasi keluar dengan galat: %s"
+
+#: src/libide/foundry/ide-run-manager.c:809
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Aplikasi keluar"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:946
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "Menjalankan %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "Deploy ke perangkat…"
+
+#: src/libide/foundry/ide-run-manager.c:1293
+msgid "User requested application to run"
+msgstr "Pengguna meminta aplikasi untuk dijalankan"
+
+#: src/libide/foundry/ide-run-manager.c:1325
+msgid "User requested application to restart"
+msgstr "Pengguna meminta aplikasi untuk memulai ulang"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1355
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr "Pengguna meminta aplikasi untuk dijalankan dengan alat “%s”"
+
+#: src/libide/foundry/ide-run-manager.c:1375
+msgid "User requested application to stop"
+msgstr "Pengguna meminta aplikasi untuk berhenti"
 
 #: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
@@ -1200,6 +1260,16 @@ msgstr "Deploy ke perangkat…"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Sistem host"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Memaksa subproses %s untuk keluar"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Mengirim sinyal %d ke subproses %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1277,7 +1347,7 @@ msgid "Select Project File"
 msgstr "Pilih Berkas Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/gui/ide-workbench.c:1527
 msgid "_Open"
 msgstr "B_uka"
 
@@ -1446,7 +1516,7 @@ msgid "Close Project"
 msgstr "Tutup Proyek"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Umum"
 
@@ -1599,6 +1669,16 @@ msgstr "Jalankan proyek"
 msgid "Other"
 msgstr "Lainnya"
 
+#: src/libide/gui/ide-workbench.c:1075
+msgid "Project loaded"
+msgstr "Proyek dimuat"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1243
+#, c-format
+msgid "Loading project “%s”"
+msgstr "Memuat proyek \"%s\""
+
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
 msgstr "Ada dokumen yang belum disimpan"
@@ -1624,10 +1704,22 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Memasang %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1657
+#: src/libide/lsp/ide-lsp-client.c:1659
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
+
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "Peladen bahasa \"%s\" keluar"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr "Peladen bahasa “%s” muncul sebagai proses %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
@@ -1639,7 +1731,7 @@ msgstr "Kendali Versi"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Peladen Bahasa"
 
@@ -1942,6 +2034,11 @@ msgstr "Cocokkan seluruh kata"
 msgid "Wrap around"
 msgstr "Melipat"
 
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr "Proses diakhiri oleh sinyal %d"
+
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
 msgstr "<i>Memuat</i>"
@@ -2083,16 +2180,16 @@ msgstr "Salin"
 msgid "Remove"
 msgstr "Buang"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "_Simpan"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Keluaran Bangun"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Keluaran Bangun (Shift+Ctrl+L)"
 
@@ -2266,9 +2363,9 @@ msgstr "Berhenti Membangun Proyek (Shift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr "Proyek Bangun (Shift+Ctrl+Alt+B)"
+msgstr "Bangun Proyek (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Tampilkan Diagnostik Bangun (Ctrl+Alt+?)"
 
@@ -2464,6 +2561,10 @@ msgstr "Kiri ke Kanan"
 msgid "Right-to-Left"
 msgstr "Kanan ke Kiri"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "Tampilkan Pemeriksa"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2628,50 +2729,58 @@ msgstr "Bersihkan Log Bangun"
 msgid "Clear the build log history when a new build begins"
 msgstr "Hapus riwayat log bangun saat pembangunan baru dimulai"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "Tampilkan Log Bangun"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr "Tampilkan log bangun saat pembangunan baru dimulai"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Masuk ke Konsol"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Alihkan log galat peladen bahasa ke stderr"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Pekerja"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Jumlah pekerja yang akan digunakan saat membangun"
 
-#: src/plugins/buildui/tweaks.ui:244 src/plugins/buildui/tweaks.ui:431
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Baku"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 per CPU"
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Perkakas"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Prefiks Pemasangan"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 "Proyek akan dipasang ke direktori ini selama fase pemasangan pipa bangun."
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Opsi Konfigurasi"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2679,28 +2788,28 @@ msgstr ""
 "Opsi ini digunakan oleh sistem bangun untuk mengonfigurasi proyek selama "
 "fase konfigurasi pipa bangun"
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Lingkungan Bangun"
 
-#: src/plugins/buildui/tweaks.ui:419
+#: src/plugins/buildui/tweaks.ui:431
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Lokalitas"
 
-#: src/plugins/buildui/tweaks.ui:420
+#: src/plugins/buildui/tweaks.ui:432
 msgid "Where your project builds"
 msgstr "Tempat proyek Anda dibangun"
 
-#: src/plugins/buildui/tweaks.ui:437
+#: src/plugins/buildui/tweaks.ui:449
 msgid "Inside Source Tree"
 msgstr "Di dalam Pohon Sumber"
 
-#: src/plugins/buildui/tweaks.ui:443
+#: src/plugins/buildui/tweaks.ui:455
 msgid "Outside Source Tree"
 msgstr "Di luar Pohon Sumber"
 
-#: src/plugins/buildui/tweaks.ui:464
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2721,6 +2830,15 @@ msgstr "Bangun proyek"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Jalankan Cargo"
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr "Peladen integrasi clang telah keluar"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
+msgstr "Peladen integrasi clang telah dimulai sebagai proses %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -4021,7 +4139,7 @@ msgid "Installation complete"
 msgstr "Pemasangan selesai"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Klien telah tertutup"
 
@@ -4160,12 +4278,12 @@ msgstr "Tidak ada konten yang diatur untuk dibandingkan"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Operasi gagal. Galat asli adalah \"%s\""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Operasi dibatalkan"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4188,6 +4306,15 @@ msgstr "Tidak dapat menandatangani komit tanpa GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Tidak dapat memantau berkas diluar direktori kerja"
+
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr "Integrasi Git telah dimulai sejak proses %s"
+
+#: src/plugins/git/gbp-git-client.c:195
+msgid "Git integration has exited"
+msgstr "Integrasi Git telah keluar"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4222,21 +4349,21 @@ msgstr "Direktori tidak ada dalam repositori"
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr "Repositori tidak dapat ditemukan di “%s”."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Protokol \"%s\" tidak didukung."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "Mengkloning Repositori"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "Sebuah URL Git yang valid diperlukan"
 
@@ -4625,9 +4752,42 @@ msgstr "Proyek Meson Kosong"
 msgid "An empty Meson project skeleton"
 msgstr "Kerangka proyek Meson yang kosong"
 
+#: src/plugins/messages/gbp-messages-panel.c:47
+msgid "Debug"
+msgstr "Awakutu"
+
+#: src/plugins/messages/gbp-messages-panel.c:49
+msgid "Info"
+msgstr "Info"
+
+#: src/plugins/messages/gbp-messages-panel.c:51
+#: src/plugins/messages/gbp-messages-panel.ui:111
+msgid "Message"
+msgstr "Pesan"
+
+#: src/plugins/messages/gbp-messages-panel.c:53
+msgid "Warning"
+msgstr "Peringatan"
+
+#: src/plugins/messages/gbp-messages-panel.c:55
+msgid "Critical"
+msgstr "Kritis"
+
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Pesan"
+
+#: src/plugins/messages/gbp-messages-panel.ui:21
+msgid "Time"
+msgstr "Waktu"
+
+#: src/plugins/messages/gbp-messages-panel.ui:53
+msgid "Severity"
+msgstr "Tingkat Keparahan"
+
+#: src/plugins/messages/gbp-messages-panel.ui:83
+msgid "Section"
+msgstr "Bagian"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -4719,7 +4879,7 @@ msgstr "Perekam suara modern untuk GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
-msgstr "Bangun Sukses"
+msgstr "Bangun sukses"
 
 #: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
@@ -5554,10 +5714,6 @@ msgstr "%s (Sysroot SDK)"
 msgid "Application started at %s\r\n"
 msgstr "Aplikasi dimulai pada %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Aplikasi keluar"
-
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Keluaran Aplikasi"
@@ -6112,9 +6268,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "R_un With…"
 #~ msgstr "_Jalankan Dengan…"
-
-#~ msgid "Show Build _Log"
-#~ msgstr "Tampilkan Log Bangun"
 
 #~ msgid "Tools"
 #~ msgstr "Perkakas"
@@ -7835,9 +7988,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Close search bar (Escape key)"
 #~ msgstr "Tutup bilah pencarian (Tombol escape)"
 
-#~ msgid "Connected to “%s”"
-#~ msgstr "Tersambung ke \"%s\""
-
 #~ msgid "Object Path"
 #~ msgstr "Path Objek"
 
@@ -7986,9 +8136,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ "Memungkinkan penggunaan eslint untuk menemukan diagnostik tambahan dalam "
 #~ "berkas JavaScript. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
 #~ "Anda."
-
-#~ msgid "Cloning project %s"
-#~ msgstr "Mengkloning proyek %s"
 
 #~ msgid "Downloading application sources…"
 #~ msgstr "Mengunduh sumber aplikasi…"
