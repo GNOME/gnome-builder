@@ -206,6 +206,12 @@
         <attribute name="action">context.settings.project:org.gnome.builder.project.verbose-logging</attribute>
         <attribute name="role">check</attribute>
       </item>
+      <item>
+        <attribute name="id">run-menu-interactive</attribute>
+        <attribute name="label" translatable="yes">Show Inspector</attribute>
+        <attribute name="action">context.run-manager.interactive</attribute>
+        <attribute name="role">check</attribute>
+      </item>
     </section>
   </menu>
 </interface>

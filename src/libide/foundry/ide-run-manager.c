@@ -96,6 +96,8 @@ static void ide_run_manager_actions_high_contrast       (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_text_direction      (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_interactive         (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "restart", ide_run_manager_actions_restart },
@@ -105,6 +107,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
+  { "interactive", ide_run_manager_actions_interactive, NULL, "false" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -199,6 +202,20 @@ ide_run_manager_actions_high_contrast (IdeRunManager *self,
   state = ide_run_manager_get_action_state (self, "high-contrast");
   ide_run_manager_set_action_state (self,
                                     "high-contrast",
+                                    g_variant_new_boolean (!g_variant_get_boolean (state)));
+}
+
+static void
+ide_run_manager_actions_interactive (IdeRunManager *self,
+                                     GVariant      *param)
+{
+  GVariant *state;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  state = ide_run_manager_get_action_state (self, "interactive");
+  ide_run_manager_set_action_state (self,
+                                    "interactive",
                                     g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
@@ -606,14 +623,18 @@ apply_high_contrast (IdeRunContext *run_context,
 }
 
 static void
-apply_text_direction (IdeRunContext *run_context,
-                      const char    *text_dir_str)
+apply_gtk_debug (IdeRunContext *run_context,
+                 const char    *text_dir_str,
+                 gboolean       interactive)
 {
+  g_autoptr(GString) str = NULL;
   GtkTextDirection dir;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  str = g_string_new (NULL);
 
   if (ide_str_equal0 (text_dir_str, "rtl"))
     dir = GTK_TEXT_DIR_RTL;
@@ -623,7 +644,21 @@ apply_text_direction (IdeRunContext *run_context,
     g_return_if_reached ();
 
   if (dir != gtk_widget_get_default_direction ())
-    ide_run_context_setenv (run_context, "GTK_DEBUG", "invert-text-dir");
+    {
+      if (str->len)
+        g_string_append_c (str, ',');
+      g_string_append (str, "invert-text-dir");
+    }
+
+  if (interactive)
+    {
+      if (str->len)
+        g_string_append_c (str, ',');
+      g_string_append (str, "interactive");
+    }
+
+  if (str->len > 0)
+    ide_run_context_setenv (run_context, "GTK_DEBUG", str->str);
 
   IDE_EXIT;
 }
@@ -853,7 +888,9 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   ide_run_context_push (run_context, NULL, NULL, NULL);
   apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
-  apply_text_direction (run_context, get_action_state_string (self, "text-direction"));
+  apply_gtk_debug (run_context,
+                   get_action_state_string (self, "text-direction"),
+                   get_action_state_bool (self, "interactive"));
   apply_messages_debug (run_context, ide_settings_get_boolean (self->project_settings, "verbose-logging"));
 
 #if 0
