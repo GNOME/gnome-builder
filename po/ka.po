@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-21 02:39+0000\n"
-"PO-Revision-Date: 2023-02-21 05:54+0100\n"
+"POT-Creation-Date: 2023-02-22 01:12+0000\n"
+"PO-Revision-Date: 2023-02-22 06:40+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -153,7 +153,7 @@ msgid "Use the minimap to see more of the file"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "პარალელური აგება"
 
@@ -172,10 +172,18 @@ msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "აგებისას ჟურნალის ჩვენება"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "გაზომვადი ქსელის დაშვება"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -287,7 +295,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
-msgstr ""
+msgstr "შესაბამისი ხაზის ნომრების ჩვენება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
@@ -512,7 +520,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
-msgstr ""
+msgstr "ძიების შედეგების გადახედვა"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
@@ -698,7 +706,7 @@ msgstr "უსახელო"
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1528
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -871,7 +879,7 @@ msgid "Failed to format selection: %s"
 msgstr "მონიშნულის ფორმატის შეცდომა: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "ფაილის შენახვა"
@@ -1145,50 +1153,50 @@ msgid "Unit Test"
 msgstr "ერთეულის ტესტი"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:182
+#: src/libide/foundry/ide-run-manager.c:185
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:529
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:771
+#: src/libide/foundry/ide-run-manager.c:806
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "აპლიკაცია დასრულდა შეცდომით: %s"
 
-#: src/libide/foundry/ide-run-manager.c:774
+#: src/libide/foundry/ide-run-manager.c:809
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr ""
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:960
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "%s გაშვებულია…"
 
-#: src/libide/foundry/ide-run-manager.c:1027
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1256
+#: src/libide/foundry/ide-run-manager.c:1293
 msgid "User requested application to run"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1288
+#: src/libide/foundry/ide-run-manager.c:1325
 msgid "User requested application to restart"
 msgstr ""
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1318
+#: src/libide/foundry/ide-run-manager.c:1355
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1338
+#: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
 msgstr ""
 
@@ -1199,6 +1207,16 @@ msgstr ""
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "ჰოსტს სისტემა"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr ""
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr ""
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1444,7 +1462,7 @@ msgid "Close Project"
 msgstr "პროექტის დახურვა"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "ზოგადი"
 
@@ -1633,6 +1651,18 @@ msgstr[0] "%u პაკეტის დაყენება"
 msgid "Failed to initialize language server: %s"
 msgstr ""
 
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "ენის სერვერმა \"%s\" მუშაობა დაასრულა"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr ""
+
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
@@ -1643,7 +1673,7 @@ msgstr "ვერსიის კონტროლი"
 msgid "SDKs"
 msgstr "SDKები"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "ენის სერვერები"
 
@@ -1942,9 +1972,14 @@ msgstr "მხოლოდ მთლიანი სიტყვის დამ
 msgid "Wrap around"
 msgstr "სიტყვების გადატანა"
 
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr ""
+
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
-msgstr ""
+msgstr "<i>ჩატვირთვა</i>"
 
 #: src/libide/tree/ide-tree-empty.c:209
 msgid "Empty"
@@ -2081,16 +2116,16 @@ msgstr "კოპირება"
 msgid "Remove"
 msgstr "წაშლა"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "შ_ეინახე"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "აგების გამონატანი"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "აგების გამონატანი (Shift+Ctrl+L)"
 
@@ -2168,7 +2203,7 @@ msgstr "აგების სტატუსი:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
-msgstr ""
+msgstr "დასრულების დრო:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:53
 #: src/plugins/buildui/gbp-buildui-pane.ui:67
@@ -2265,7 +2300,7 @@ msgstr "პროექტის აგების შეჩერება (Sh
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr ""
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr ""
 
@@ -2461,6 +2496,10 @@ msgstr "მარცხნიდან-მარჯვნივ"
 msgid "Right-to-Left"
 msgstr "მარჯვნიდან-მარცხნივ"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "ინსპექტორის ჩვენება"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2619,76 +2658,84 @@ msgstr "აგების ჟურნალის გასუფთავე�
 msgid "Clear the build log history when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "აგების ჟურნალის ჩვენება"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "კონსოლში შესვლა"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "აგების დამხმარე პროცესები"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:244 src/plugins/buildui/tweaks.ui:431
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "სტანდარტული"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "ხელსაწყოები"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "დაყენების პრეფიქსი"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "პარამეტრების მორგება"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "აგების გარემო"
 
-#: src/plugins/buildui/tweaks.ui:419
+#: src/plugins/buildui/tweaks.ui:431
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "რაიონი"
 
-#: src/plugins/buildui/tweaks.ui:420
+#: src/plugins/buildui/tweaks.ui:432
 msgid "Where your project builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:437
+#: src/plugins/buildui/tweaks.ui:449
 msgid "Inside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:443
+#: src/plugins/buildui/tweaks.ui:455
 msgid "Outside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:464
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2706,6 +2753,15 @@ msgstr "პროექტის აგება"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr "Clang-თან ინტეგრაცია დასრულდა"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
 msgstr ""
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
@@ -3438,11 +3494,11 @@ msgstr "8"
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
 msgid "Indentation Size"
-msgstr ""
+msgstr "შეწევის ზომა"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
-msgstr ""
+msgstr "იგივე როგორც ჩანართის სიგანე"
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
@@ -3450,7 +3506,7 @@ msgstr "ხაზის ბოლო"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
-msgstr ""
+msgstr "Windows (CR/LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
@@ -3972,7 +4028,7 @@ msgid "Installation complete"
 msgstr "დაყენება დასრულებულია"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:334
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "კლიენტი დაიხურა"
 
@@ -4105,12 +4161,12 @@ msgstr ""
 msgid "The operation failed. The original error was \"%s\""
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4132,12 +4188,12 @@ msgstr ""
 msgid "Cannot monitor files outside the working directory"
 msgstr ""
 
-#: src/plugins/git/gbp-git-client.c:70
+#: src/plugins/git/gbp-git-client.c:171
 #, c-format
 msgid "Git integration has started as process %s"
 msgstr ""
 
-#: src/plugins/git/gbp-git-client.c:140
+#: src/plugins/git/gbp-git-client.c:195
 msgid "Git integration has exited"
 msgstr "Git-თან ინტეგრაცია დასრულდა"
 
@@ -4174,21 +4230,21 @@ msgstr "საქაღალდე რეპოზიტორიაში ა�
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "რეპოზიტორიის კლონირება"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr ""
 
@@ -4573,25 +4629,42 @@ msgstr ""
 msgid "An empty Meson project skeleton"
 msgstr ""
 
+#: src/plugins/messages/gbp-messages-panel.c:47
+msgid "Debug"
+msgstr "გამართვა"
+
+#: src/plugins/messages/gbp-messages-panel.c:49
+msgid "Info"
+msgstr ""
+
+#: src/plugins/messages/gbp-messages-panel.c:51
+#: src/plugins/messages/gbp-messages-panel.ui:111
+msgid "Message"
+msgstr "შეტყობინება"
+
+#: src/plugins/messages/gbp-messages-panel.c:53
+msgid "Warning"
+msgstr "გაფრთხილება"
+
+#: src/plugins/messages/gbp-messages-panel.c:55
+msgid "Critical"
+msgstr "კრიტიკული"
+
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "შეტყობინებები"
 
 #: src/plugins/messages/gbp-messages-panel.ui:21
 msgid "Time"
-msgstr ""
+msgstr "დრო"
 
-#: src/plugins/messages/gbp-messages-panel.ui:50
+#: src/plugins/messages/gbp-messages-panel.ui:53
 msgid "Severity"
 msgstr "სიმძიმე"
 
-#: src/plugins/messages/gbp-messages-panel.ui:80
+#: src/plugins/messages/gbp-messages-panel.ui:83
 msgid "Section"
 msgstr "სექცია"
-
-#: src/plugins/messages/gbp-messages-panel.ui:108
-msgid "Message"
-msgstr "შეტყობინება"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
