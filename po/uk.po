@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-21 16:36+0000\n"
-"PO-Revision-Date: 2023-02-21 22:33+0200\n"
+"POT-Creation-Date: 2023-02-22 01:12+0000\n"
+"PO-Revision-Date: 2023-02-22 16:41+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1226,52 +1226,52 @@ msgid "Unit Test"
 msgstr "Перевірка модулів"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:182
+#: src/libide/foundry/ide-run-manager.c:185
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Користувачем надіслано запит на запуск інструмента «%s»"
 
-#: src/libide/foundry/ide-run-manager.c:529
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
-#: src/libide/foundry/ide-run-manager.c:771
+#: src/libide/foundry/ide-run-manager.c:806
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Програма завершила роботу із помилкою: %s"
 
-#: src/libide/foundry/ide-run-manager.c:774
+#: src/libide/foundry/ide-run-manager.c:809
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:960
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1027
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
-#: src/libide/foundry/ide-run-manager.c:1256
+#: src/libide/foundry/ide-run-manager.c:1293
 msgid "User requested application to run"
 msgstr "Користувачем надіслано запит щодо запуску програми"
 
-#: src/libide/foundry/ide-run-manager.c:1288
+#: src/libide/foundry/ide-run-manager.c:1325
 msgid "User requested application to restart"
 msgstr "Користувачем надіслано запит щодо перезапуску програми"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1318
+#: src/libide/foundry/ide-run-manager.c:1355
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 "Користувачем надіслано запит щодо запуску програми за допомогою інструмента "
 "«%s»"
 
-#: src/libide/foundry/ide-run-manager.c:1338
+#: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
 msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
@@ -1739,7 +1739,6 @@ msgstr "Не вдалося ініціалізувати сервер мови: 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:492
 #, c-format
-#| msgid "Language Servers"
 msgid "Language server “%s” exited"
 msgstr "Роботу сервера мови «%s» завершено"
 
@@ -2597,6 +2596,11 @@ msgstr "Зліва праворуч"
 msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+#| msgid "D-Bus Inspector"
+msgid "Show Inspector"
+msgstr "Показати інспектор"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2868,13 +2872,11 @@ msgid "Cargo Run"
 msgstr "Запустити Cargo"
 
 #: src/plugins/clang/ide-clang-client.c:166
-#| msgid "Git integration has exited"
 msgid "Clang integration server has exited"
 msgstr "Роботу сервера інтеграції Clang завершено"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
-#| msgid "Git integration has started as process %s"
 msgid "Clang integration server has started as process %s"
 msgstr "Запущено сервер інтеграції з Clang як процес %s"
 
@@ -4786,7 +4788,6 @@ msgid "An empty Meson project skeleton"
 msgstr "Порожній каркас проєкту Meson"
 
 #: src/plugins/messages/gbp-messages-panel.c:47
-#| msgid "Debugger"
 msgid "Debug"
 msgstr "Діагностика"
 
@@ -4800,12 +4801,10 @@ msgid "Message"
 msgstr "Повідомлення"
 
 #: src/plugins/messages/gbp-messages-panel.c:53
-#| msgid "Warnings"
 msgid "Warning"
 msgstr "Попередження"
 
 #: src/plugins/messages/gbp-messages-panel.c:55
-#| msgid "Stop at Criticals"
 msgid "Critical"
 msgstr "Критична помилка"
 
