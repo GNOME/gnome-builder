@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2016-2022 Christian Hergert
+Description=Provides integration with the Golang build system
+Embedded=_gbp_golang_register_types
+Module=golang
+Name=Golang
+X-Category=buildsystems
+X-Project-File-Filter-Name=Golang (Golang.toml)
+X-Project-File-Filter-Pattern=Golang.toml
