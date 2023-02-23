@@ -47,10 +47,10 @@ create_run_command (IdePipeline *pipeline,
 
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (project_dir != NULL);
-  g_assert (goroot != NULL);
 
   ret = ide_run_command_new ();
-  ide_run_command_setenv (ret, "GOROOT", goroot);
+  if (goroot != NULL)
+    ide_run_command_setenv (ret, "GOROOT", goroot);
   ide_run_command_set_cwd (ret, project_dir);
 
   va_start (args, argv);
@@ -141,7 +141,7 @@ gbp_golang_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (go != NULL);
 
   if (!(goroot = ide_config_getenv (config, "GOROOT")))
-    goroot = project_dir;
+    goroot = NULL;
 
   fetch_command = create_run_command (pipeline, project_dir, goroot, go, "get", "-v", NULL);
   fetch_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_command, NULL, _("Fetch dependencies"));
@@ -173,3 +173,4 @@ static void
 gbp_golang_pipeline_addin_init (GbpGolangPipelineAddin *self)
 {
 }
+
