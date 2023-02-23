@@ -61,6 +61,9 @@ struct _IdeLspClientClass
 
 IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_client_new                        (GIOStream            *io_stream);
+IDE_AVAILABLE_IN_44
+void          ide_lsp_client_set_name                   (IdeLspClient         *self,
+                                                         const char           *name);
 IDE_AVAILABLE_IN_ALL
 IdeLspTrace   ide_lsp_client_get_trace                  (IdeLspClient         *self);
 IDE_AVAILABLE_IN_ALL

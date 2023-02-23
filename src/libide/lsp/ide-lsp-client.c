@@ -63,8 +63,9 @@ typedef struct
   GPtrArray      *languages;
   GVariant       *server_capabilities;
   GVariant       *initialization_options;
+  char           *root_uri;
+  char           *name;
   IdeLspTrace     trace;
-  gchar          *root_uri;
   gboolean        initialized;
   GQueue          pending_messages;
   guint           use_markdown_in_diagnostics : 1;
@@ -101,9 +102,10 @@ enum {
   PROP_0,
   PROP_INITIALIZATION_OPTIONS,
   PROP_IO_STREAM,
+  PROP_NAME,
+  PROP_ROOT_URI,
   PROP_SERVER_CAPABILITIES,
   PROP_TRACE,
-  PROP_ROOT_URI,
   PROP_USE_MARKDOWN_IN_DIAGNOSTICS,
   N_PROPS
 };
@@ -964,6 +966,8 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                                   const gchar  *method,
                                   GVariant     *params)
 {
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -1037,12 +1041,18 @@ ide_lsp_client_real_notification (IdeLspClient *self,
           if (ide_str_equal0 (kind, "end") && notification != NULL)
             ide_notification_withdraw (notification);
         }
-      else if (g_str_equal (method, "window/showMessage"))
+      else if (g_str_equal (method, "window/showMessage") ||
+               g_str_equal (method, "window/logMessage"))
         {
           const gchar *message = NULL;
+
           JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+
           if (!ide_str_empty0 (message))
-            ide_object_warning (self, "%s", message);
+            ide_object_log (self,
+                            G_LOG_LEVEL_MESSAGE,
+                            priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
+                            "%s", message);
         }
     }
 
@@ -1221,6 +1231,9 @@ ide_lsp_client_destroy (IdeObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  if (priv->rpc_client != NULL)
+    g_object_run_dispose (G_OBJECT (priv->rpc_client));
+
   while (priv->pending_messages.length > 0)
     {
       PendingMessage *message = priv->pending_messages.head->data;
@@ -1240,6 +1253,7 @@ ide_lsp_client_finalize (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  g_clear_pointer (&priv->name, g_free);
   g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
   g_clear_pointer (&priv->server_capabilities, g_variant_unref);
   g_clear_pointer (&priv->languages, g_ptr_array_unref);
@@ -1283,6 +1297,10 @@ ide_lsp_client_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_NAME:
+      g_value_set_string (value, priv->name);
+      break;
+
     case PROP_SERVER_CAPABILITIES:
       g_value_set_variant (value, priv->server_capabilities);
       break;
@@ -1321,6 +1339,10 @@ ide_lsp_client_set_property (GObject      *object,
     {
     case PROP_USE_MARKDOWN_IN_DIAGNOSTICS:
       priv->use_markdown_in_diagnostics = g_value_get_boolean (value);
+      break;
+
+    case PROP_NAME:
+      ide_lsp_client_set_name (self, g_value_get_string (value));
       break;
 
     case PROP_IO_STREAM:
@@ -1362,6 +1384,11 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_USE_MARKDOWN_IN_DIAGNOSTICS] =
     g_param_spec_boolean ("use-markdown-in-diagnostics",
@@ -2405,4 +2432,28 @@ ide_lsp_client_get_initialization_options (IdeLspClient *self)
   g_return_val_if_fail (IDE_IS_LSP_CLIENT (self), NULL);
 
   return priv->initialization_options;
+}
+
+/**
+ * ide_lsp_client_set_name:
+ * @self: a #IdeLspClient
+ * @name: the name of the LSP like "gopls"
+ *
+ * Sets the name for the client.
+ *
+ * This is useful in situations where you want to be able to have better
+ * logging messages which include the LSP name.
+ *
+ * Since: 44
+ */
+void
+ide_lsp_client_set_name (IdeLspClient *self,
+                         const char   *name)
+{
+  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LSP_CLIENT (self));
+
+  if (g_set_str (&priv->name, name))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
 }
