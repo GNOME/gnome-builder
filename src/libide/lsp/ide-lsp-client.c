@@ -1041,8 +1041,7 @@ ide_lsp_client_real_notification (IdeLspClient *self,
           if (ide_str_equal0 (kind, "end") && notification != NULL)
             ide_notification_withdraw (notification);
         }
-      else if (g_str_equal (method, "window/showMessage") ||
-               g_str_equal (method, "window/logMessage"))
+      else if (g_str_equal (method, "window/showMessage"))
         {
           const gchar *message = NULL;
 
@@ -1053,6 +1052,18 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                             G_LOG_LEVEL_MESSAGE,
                             priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
                             "%s", message);
+        }
+      else if (g_str_equal (method, "$/logTrace") ||
+               g_str_equal (method, "window/logMessage"))
+        {
+          const gchar *message = NULL;
+
+          JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+
+          if (!ide_str_empty0 (message))
+            g_log (priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
+                   IDE_LOG_LEVEL_TRACE,
+                   "%s", message);
         }
     }
 
