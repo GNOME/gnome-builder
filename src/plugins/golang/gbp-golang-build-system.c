@@ -137,7 +137,7 @@ gbp_golang_build_system_class_init (GbpGolangBuildSystemClass *klass)
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
                          "Project File",
-                         "The project file (Golang.toml)",
+                         "The project file (go.mod)",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

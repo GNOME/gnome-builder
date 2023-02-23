@@ -7,5 +7,5 @@ Embedded=_gbp_golang_register_types
 Module=golang
 Name=Golang
 X-Category=buildsystems
-X-Project-File-Filter-Name=Golang (Golang.toml)
-X-Project-File-Filter-Pattern=Golang.toml
+X-Project-File-Filter-Name=Golang (go.mod)
+X-Project-File-Filter-Pattern=go.mod
