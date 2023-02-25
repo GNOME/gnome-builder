@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-22 01:12+0000\n"
-"PO-Revision-Date: 2023-02-22 06:40+0100\n"
+"POT-Creation-Date: 2023-02-25 01:35+0000\n"
+"PO-Revision-Date: 2023-02-25 04:50+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -56,7 +56,7 @@ msgstr "თვისებები:"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
 msgid "Built in syntax highlighting for many languages"
-msgstr ""
+msgstr "ჩაშენებული გამოკვეთის მხარდაჭერა ბევრი ენისთვის"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
 msgid "Side-by-side code editors"
@@ -68,7 +68,7 @@ msgstr "მრავალი ეკრანის მხარდაჭერ�
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
 msgid "Code overview mini-map"
-msgstr ""
+msgstr "კოდის მიმოხილვის მინი-რუკა"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Integration with Git"
@@ -146,7 +146,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
 msgid "Debug with the GNU debugger"
-msgstr ""
+msgstr "GNU debugger-ით გამართვა"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
 msgid "Use the minimap to see more of the file"
@@ -662,7 +662,7 @@ msgstr "ახალი რედაქტორის სამუშაო ს
 msgid "D-Bus Inspector"
 msgstr "D-Bus-ის ინსპექტორი"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
@@ -1011,7 +1011,12 @@ msgstr "აღმოჩენილი მოწყობილობა \"%s\""
 msgid "Devices"
 msgstr "მოწყობილობები"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "მოწყობილობა დაყენებულია %s-ზე"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 
@@ -1170,7 +1175,7 @@ msgstr "აპლიკაცია დასრულდა შეცდომ�
 #: src/libide/foundry/ide-run-manager.c:809
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
-msgstr ""
+msgstr "აპლიკაცია დასრულდა"
 
 #. translators: %s is replaced with the name of the users run command
 #: src/libide/foundry/ide-run-manager.c:997
@@ -1180,15 +1185,15 @@ msgstr "%s გაშვებულია…"
 
 #: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
-msgstr ""
+msgstr "მოწყობილობაზე გაშლა…"
 
 #: src/libide/foundry/ide-run-manager.c:1293
 msgid "User requested application to run"
-msgstr ""
+msgstr "მომხმარებელმა აპლიკაციის გაშვება მოითხოვა"
 
 #: src/libide/foundry/ide-run-manager.c:1325
 msgid "User requested application to restart"
-msgstr ""
+msgstr "მომხმარებელმა აპლიკაციის გადატვირთვა მოითხოვა"
 
 #. translators: %s is replaced with the name of the tool
 #: src/libide/foundry/ide-run-manager.c:1355
@@ -1198,7 +1203,7 @@ msgstr ""
 
 #: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
-msgstr ""
+msgstr "მომხმარებელმა აპლიკაციის გაჩერება მოითხოვა"
 
 #: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
@@ -1273,7 +1278,7 @@ msgstr "_დახურვა"
 
 #: src/libide/greeter/ide-greeter-workspace.c:555
 msgid "Delete Project Sources?"
-msgstr ""
+msgstr "წავშალო პროექტის კოდი?"
 
 #: src/libide/greeter/ide-greeter-workspace.c:556
 msgid "Deleting the project source code from your computer cannot be undone."
@@ -1281,7 +1286,7 @@ msgstr ""
 
 #: src/libide/greeter/ide-greeter-workspace.c:559
 msgid "_Delete Project Sources"
-msgstr ""
+msgstr "პროექტის კოდის _წაშლა"
 
 #: src/libide/greeter/ide-greeter-workspace.c:654
 #: src/libide/greeter/ide-greeter-workspace.c:691
@@ -1468,11 +1473,11 @@ msgstr "ზოგადი"
 
 #: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
-msgstr ""
+msgstr "აპლიკაციის პარამეტრების ჩვენება"
 
 #: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
-msgstr ""
+msgstr "კლავიატურის მალსახმობების პოვნა"
 
 #: src/libide/gui/gtk/menus.ui:43
 msgid "Get help with using Builder"
@@ -1480,7 +1485,7 @@ msgstr "Builder-ით დახმარების მიღება"
 
 #: src/libide/gui/gtk/menus.ui:51
 msgid "Show information about Builder"
-msgstr ""
+msgstr "Builder-ს შესახებ ინფორმაციის ცვენება"
 
 #: src/libide/gui/gtk/menus.ui:60
 msgid "Quit without saving changes"
@@ -1592,7 +1597,7 @@ msgstr "ქვედა პანელის გადართვა (Ctrl+F9)
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
-msgstr ""
+msgstr "პროექტის გაშვება (Shift+Ctrl+Space)"
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
@@ -1646,7 +1651,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "%u პაკეტის დაყენება"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1659
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr ""
@@ -1887,7 +1892,7 @@ msgstr "ხზ %u, სვტ %u"
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
-msgstr ""
+msgstr "ხაზი %u, სვეტი %u (მონიშნ: %u)"
 
 #: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
@@ -2360,7 +2365,7 @@ msgstr "თავიდან აგება"
 
 #: src/plugins/buildui/gtk/menus.ui:39
 msgid "Rebuild the project"
-msgstr ""
+msgstr "პროექტის თავიდან აგება"
 
 #: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Clean"
@@ -2388,7 +2393,7 @@ msgstr "პროექტის დაყენება"
 
 #: src/plugins/buildui/gtk/menus.ui:67
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "მოწყობილობაზე გაშლა…"
 
 #: src/plugins/buildui/gtk/menus.ui:69
 msgid "Deploy project to current device"
