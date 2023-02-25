@@ -639,7 +639,9 @@ ide_device_manager_set_device (IdeDeviceManager *self,
       if (device_id == NULL)
         device_id = "local";
 
-      IDE_TRACE_MSG ("Device set to %s", device_id);
+      ide_object_message (self,
+                          _("Device set to %s"),
+                          self->device != NULL ?  ide_device_get_display_name (self->device) : device_id);
 
       ide_device_manager_set_action_state (self, "device", g_variant_new_string (device_id));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
