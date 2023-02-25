@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-25 03:52+0000\n"
-"PO-Revision-Date: 2023-02-25 09:16+0200\n"
+"POT-Creation-Date: 2023-02-25 11:21+0000\n"
+"PO-Revision-Date: 2023-02-25 14:14+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1082,7 +1082,6 @@ msgstr "Пристрої"
 
 #: src/libide/foundry/ide-device-manager.c:643
 #, c-format
-#| msgid "Devices & Simulators"
 msgid "Device set to %s"
 msgstr "Пристрій встановлено у %s"
 
@@ -2863,11 +2862,13 @@ msgstr ""
 "автоматично визначено з середовища виконання."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "Отримати залежності"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Зібрати проєкт"
@@ -4418,6 +4419,10 @@ msgstr "Авторство"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "Ел. пошта"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
