@@ -84,15 +84,6 @@ populate_data_free (PopulateData *data)
 }
 
 static void
-plan_item_free (GbpCodeIndexPlanItem *item)
-{
-  g_clear_object (&item->file_info);
-  g_clear_pointer (&item->build_flags, g_strfreev);
-  item->indexer_module_name = NULL;
-  g_slice_free (GbpCodeIndexPlanItem, item);
-}
-
-static void
 cull_indexed_free (CullIndexed *cull)
 {
   g_clear_object (&cull->cachedir);
@@ -381,7 +372,7 @@ gbp_code_index_plan_populate_cb (GFile     *directory,
   g_assert (G_IS_FILE (state->workdir));
   g_assert (state->indexers != NULL);
 
-  items = g_ptr_array_new_with_free_func ((GDestroyNotify)plan_item_free);
+  items = g_ptr_array_new_with_free_func ((GDestroyNotify)gbp_code_index_plan_item_unref);
 
   for (guint i = 0; i < file_infos->len; i++)
     {
@@ -422,7 +413,7 @@ gbp_code_index_plan_populate_cb (GFile     *directory,
       if (indexer_module_name == NULL)
         continue;
 
-      item = g_slice_new0 (GbpCodeIndexPlanItem);
+      item = g_atomic_rc_box_new0 (GbpCodeIndexPlanItem);
       item->file_info = g_object_ref (file_info);
       item->build_flags = NULL;
       item->indexer_module_name = indexer_module_name;
@@ -579,14 +570,10 @@ gbp_code_index_plan_fill_build_flags_cb (GFile              *directory,
       GbpCodeIndexPlanItem *item = g_ptr_array_index (plan_items, i);
       const gchar *name = g_file_info_get_name (item->file_info);
       g_autoptr(GFile) file = g_file_get_child (directory, name);
-      gchar **item_flags;
+      const char * const *item_flags;
 
       if ((item_flags = g_hash_table_lookup (build_flags, file)))
-        {
-          /* Implausible, but lets clear anyway */
-          g_clear_pointer (&item->build_flags, g_strfreev);
-          item->build_flags = g_strdupv (item_flags);
-        }
+        ide_set_strv (&item->build_flags, item_flags);
     }
 
   return FALSE;
@@ -692,21 +679,26 @@ gbp_code_index_plan_item_copy (const GbpCodeIndexPlanItem *item)
   if (item == NULL)
     return NULL;
 
-  ret = g_slice_new0 (GbpCodeIndexPlanItem);
+  ret = g_atomic_rc_box_new0 (GbpCodeIndexPlanItem);
   ret->file_info = g_object_ref (item->file_info);
-  ret->build_flags = g_strdupv ((gchar **)item->build_flags);
+  ret->build_flags = g_strdupv (item->build_flags);
   ret->indexer_module_name = item->indexer_module_name;
 
   return g_steal_pointer (&ret);
 }
 
-void
-gbp_code_index_plan_item_free (GbpCodeIndexPlanItem *item)
+static void
+gbp_code_index_plan_item_finalize (gpointer data)
 {
-  if (item != NULL)
-    {
-      g_clear_object (&item->file_info);
-      g_clear_pointer (&item->build_flags, g_strfreev);
-      g_slice_free (GbpCodeIndexPlanItem, item);
-    }
+  GbpCodeIndexPlanItem *item = data;
+
+  g_clear_object (&item->file_info);
+  g_clear_pointer (&item->build_flags, g_strfreev);
+  item->indexer_module_name = NULL;
+}
+
+void
+gbp_code_index_plan_item_unref (GbpCodeIndexPlanItem *item)
+{
+  g_atomic_rc_box_release_full (item, gbp_code_index_plan_item_finalize);
 }

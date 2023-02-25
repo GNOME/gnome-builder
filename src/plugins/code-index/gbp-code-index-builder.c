@@ -82,7 +82,7 @@ gbp_code_index_builder_class_init (GbpCodeIndexBuilderClass *klass)
 static void
 gbp_code_index_builder_init (GbpCodeIndexBuilder *self)
 {
-  self->items = g_ptr_array_new_with_free_func ((GDestroyNotify)gbp_code_index_plan_item_free);
+  self->items = g_ptr_array_new_with_free_func ((GDestroyNotify)gbp_code_index_plan_item_unref);
   self->map = ide_persistent_map_builder_new ();
   self->fuzzy = ide_fuzzy_index_builder_new ();
 }
