@@ -28,6 +28,7 @@
 
 #include "gbp-buildui-editor-page-addin.h"
 #include "gbp-buildui-tweaks-addin.h"
+#include "gbp-buildui-workbench-addin.h"
 #include "gbp-buildui-workspace-addin.h"
 
 _IDE_EXTERN void
@@ -39,6 +40,9 @@ _gbp_buildui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               GBP_TYPE_BUILDUI_TWEAKS_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_BUILDUI_WORKBENCH_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_BUILDUI_WORKSPACE_ADDIN);

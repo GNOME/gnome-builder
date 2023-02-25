@@ -13,6 +13,7 @@ plugins_sources += files([
   'gbp-buildui-status-popover.c',
   'gbp-buildui-targets-dialog.c',
   'gbp-buildui-tweaks-addin.c',
+  'gbp-buildui-workbench-addin.c',
   'gbp-buildui-workspace-addin.c',
 ])
 
