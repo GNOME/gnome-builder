@@ -2783,7 +2783,7 @@ ide_pipeline_get_srcdir (IdePipeline *self)
 static gchar *
 ide_pipeline_build_path_va_list (const gchar *prefix,
                                  const gchar *first_part,
-                                 va_list      args)
+                                 va_list     *args)
 {
   g_autoptr(GPtrArray) ar = NULL;
 
@@ -2794,7 +2794,7 @@ ide_pipeline_build_path_va_list (const gchar *prefix,
   g_ptr_array_add (ar, (gchar *)prefix);
   do
     g_ptr_array_add (ar, (gchar *)first_part);
-  while (NULL != (first_part = va_arg (args, const gchar *)));
+  while (NULL != (first_part = va_arg (*args, const gchar *)));
   g_ptr_array_add (ar, NULL);
 
   return g_build_filenamev ((gchar **)ar->pdata);
@@ -2824,7 +2824,7 @@ ide_pipeline_build_srcdir_path (IdePipeline *self,
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
-  ret = ide_pipeline_build_path_va_list (self->srcdir, first_part, args);
+  ret = ide_pipeline_build_path_va_list (self->srcdir, first_part, &args);
   va_end (args);
 
   return ret;
@@ -2854,7 +2854,7 @@ ide_pipeline_build_builddir_path (IdePipeline *self,
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
-  ret = ide_pipeline_build_path_va_list (self->builddir, first_part, args);
+  ret = ide_pipeline_build_path_va_list (self->builddir, first_part, &args);
   va_end (args);
 
   return ret;
