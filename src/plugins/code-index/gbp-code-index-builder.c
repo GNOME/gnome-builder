@@ -65,6 +65,7 @@ gbp_code_index_builder_finalize (GObject *object)
 
   g_clear_object (&self->index_dir);
   g_clear_object (&self->source_dir);
+  g_clear_object (&self->fuzzy);
   g_clear_pointer (&self->items, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gbp_code_index_builder_parent_class)->finalize (object);
