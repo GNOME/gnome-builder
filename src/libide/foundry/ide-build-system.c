@@ -324,6 +324,7 @@ ide_build_system_translate (IdeBuildSystem *self,
                             const char     *prefix,
                             const char     *path)
 {
+  g_autofree char *freeme = NULL;
   IdeConfig *config;
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
@@ -333,7 +334,6 @@ ide_build_system_translate (IdeBuildSystem *self,
 
   if (pipeline && (config = ide_pipeline_get_config (pipeline)))
     {
-      g_autofree char *freeme = NULL;
       g_autoptr(GFile) file = NULL;
       g_autoptr(GFile) translated = NULL;
 
