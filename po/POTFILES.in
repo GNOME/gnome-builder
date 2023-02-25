@@ -212,6 +212,8 @@ src/plugins/git/gbp-git-submodule-stage.c
 src/plugins/git/gbp-git-vcs.c
 src/plugins/git/gbp-git-vcs-cloner.c
 src/plugins/git/tweaks.ui
+src/plugins/golang/gbp-golang-pipeline-addin.c
+src/plugins/golang/gbp-golang-run-command-provider.c
 src/plugins/gradle/gbp-gradle-pipeline-addin.c
 src/plugins/gradle/gbp-gradle-run-command-provider.c
 src/plugins/greeter/gbp-greeter-application-addin.c
