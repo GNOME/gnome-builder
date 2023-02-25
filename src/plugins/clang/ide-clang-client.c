@@ -653,6 +653,7 @@ ide_clang_client_index_file_async (IdeClangClient      *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
+  static const char * const empty[] = { NULL };
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *path = NULL;
@@ -672,6 +673,9 @@ ide_clang_client_index_file_async (IdeClangClient      *self,
                                  "Only local files can be indexed");
       return;
     }
+
+  if (flags == NULL)
+    flags = empty;
 
   path = g_file_get_path (file);
 
