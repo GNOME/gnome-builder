@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-22 01:12+0000\n"
-"PO-Revision-Date: 2023-02-22 16:41+0200\n"
+"POT-Creation-Date: 2023-02-25 03:52+0000\n"
+"PO-Revision-Date: 2023-02-25 09:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -727,7 +727,7 @@ msgstr "Новий робочий простір редактора"
 msgid "D-Bus Inspector"
 msgstr "Інспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -1080,7 +1080,13 @@ msgstr "Виявлено пристрій «%s»"
 msgid "Devices"
 msgstr "Пристрої"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+#| msgid "Devices & Simulators"
+msgid "Device set to %s"
+msgstr "Пристрій встановлено у %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Не вдалося розгорнути пристрій — конвеєр збирання не ініціалізовано"
 
@@ -1731,7 +1737,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1659
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -2597,7 +2603,6 @@ msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
 #: src/plugins/buildui/gtk/menus.ui:211
-#| msgid "D-Bus Inspector"
 msgid "Show Inspector"
 msgstr "Показати інспектор"
 
