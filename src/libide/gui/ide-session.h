@@ -63,5 +63,8 @@ IdeSession     *ide_session_new_from_variant (GVariant         *variant,
                                               GError          **error);
 IDE_AVAILABLE_IN_ALL
 GVariant        *ide_session_to_variant       (IdeSession      *self);
+IDE_AVAILABLE_IN_44
+IdeSessionItem  *ide_session_lookup_by_id     (IdeSession      *self,
+                                               const char      *id);
 
 G_END_DECLS

@@ -283,3 +283,29 @@ ide_session_insert (IdeSession     *self,
 
   g_ptr_array_insert (self->items, position, g_object_ref (item));
 }
+
+/**
+ * ide_session_lookup_by_id:
+ * @self: a #IdeSession
+ * @id: the id of the item
+ *
+ * Gets a session item matching @id.
+ *
+ * Returns: (transfer full) (nullable): an #IdeSessionItem or %NULL
+ */
+IdeSessionItem *
+ide_session_lookup_by_id (IdeSession *self,
+                          const char *id)
+{
+  g_return_val_if_fail (IDE_IS_SESSION (self), NULL);
+
+  for (guint i = 0; i < self->items->len; i++)
+    {
+      IdeSessionItem *item = g_ptr_array_index (self->items, i);
+
+      if (g_strcmp0 (id, ide_session_item_get_id (item)) == 0)
+        return g_object_ref (item);
+    }
+
+  return NULL;
+}
