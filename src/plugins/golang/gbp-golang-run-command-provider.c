@@ -79,6 +79,7 @@ gbp_golang_run_command_provider_list_commands_async (IdeRunCommandProvider *prov
   ide_run_command_set_display_name (run_command, _("go run"));
   ide_run_command_set_argv (run_command, IDE_STRV_INIT (go, "run", "main.go"));
   ide_run_command_set_cwd (run_command, project_dir);
+  ide_run_command_set_can_default (run_command, TRUE);
 
   store = g_list_store_new (IDE_TYPE_RUN_COMMAND);
   g_list_store_append (store, run_command);
