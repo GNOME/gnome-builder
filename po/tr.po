@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-22 01:12+0000\n"
-"PO-Revision-Date: 2023-02-22 14:20+0300\n"
+"POT-Creation-Date: 2023-02-25 11:21+0000\n"
+"PO-Revision-Date: 2023-02-29 09:40+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -712,7 +712,7 @@ msgstr "Yeni Düzenleyici Çalışma Alanı"
 msgid "D-Bus Inspector"
 msgstr "D-Bus İnceleyici"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -1065,7 +1065,12 @@ msgstr "“%s” aygıtı bulundu"
 msgid "Devices"
 msgstr "Aygıtlar"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Aygıt şuna ayarlandı: %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Aygıta konuşlanamıyor, inşa boru hattı başlatılmadı"
 
@@ -1706,7 +1711,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "%u paket kuruluyor"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1659
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirilemedi: %s"
@@ -2813,11 +2818,13 @@ msgstr ""
 "belirlenir."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "Proje bağımlılıklarını getir"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Projeyi inşa et"
@@ -4361,6 +4368,10 @@ msgstr "Yazarlık"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "E-posta"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
