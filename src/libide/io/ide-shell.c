@@ -219,6 +219,7 @@ _ide_guess_user_path (GCancellable        *cancellable,
       ide_subprocess_launcher_push_argv (launcher, user_shell);
       if (ide_shell_supports_dash_login (user_shell))
         ide_subprocess_launcher_push_argv (launcher, "-l");
+      ide_subprocess_launcher_push_argv (launcher, "-i");
       ide_subprocess_launcher_push_argv (launcher, "-c");
       ide_subprocess_launcher_push_argv (launcher, "echo $PATH");
     }
