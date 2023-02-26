@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-15 23:28+0000\n"
-"PO-Revision-Date: 2023-02-16 18:32+0000\n"
+"POT-Creation-Date: 2023-02-25 11:21+0000\n"
+"PO-Revision-Date: 2023-02-26 16:43+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -170,7 +170,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Utilize o minimapa para ver mais do ficheiro"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Criar Paralelismo"
 
@@ -192,10 +192,19 @@ msgstr ""
 "Se ativado, o painel de registo de compilação será limpo ao recompilar."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "Mostrar registo ao compilar"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr ""
+"Se ativado, o registo de compilação será gerado quando uma compilação inicia"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Permitir rede quando limitada"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -711,7 +720,7 @@ msgstr "Nova área de trabalho do editor"
 msgid "D-Bus Inspector"
 msgstr "Inspetor D-Bus"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "A linguagem atual tem um símbolo de solução em falta."
 
@@ -745,7 +754,7 @@ msgstr "Não foi possível inicializar as predefinições."
 msgid "Failed to save draft: %s"
 msgstr "Não foi possível guardar o rascunho: %s"
 
-#: src/libide/core/ide-context.c:385 src/libide/core/ide-context.c:846
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Sem Título"
 
@@ -754,8 +763,8 @@ msgstr "Sem Título"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1528
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -771,7 +780,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Não foi possível encontrar um depurador adequado."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1524
 msgid "Open File…"
 msgstr "Abrir Ficheiro…"
 
@@ -930,7 +939,7 @@ msgid "Failed to format selection: %s"
 msgstr "Falha ao formatar a seleção: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Guardar ficheiro"
@@ -1038,6 +1047,20 @@ msgstr "Não foi possível obter a informação do dispositivo: %s"
 msgid "Active Configuration"
 msgstr "Configuração ativa"
 
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:853
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1049
+#, c-format
+msgid "Active configuration set to “%s”"
+msgstr "Configuração ativa definida para \"%s\""
+
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
@@ -1048,7 +1071,12 @@ msgstr "Dispositivo descoberto “%s”"
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Dispositivo definido para %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Não é possível implantar no dispositivo, compilação de pipeline não iniciado"
@@ -1078,90 +1106,102 @@ msgstr "A compilação de pipeline está num estado de falha"
 msgid "The build configuration has errors"
 msgstr "A configuração de criação tem erros"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr ""
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1100
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Compilar (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1141
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Pós-instalação (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3106
-#: src/libide/foundry/ide-pipeline.c:3145
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Criação de pseudo terminal falhou. Os recursos de terminal serão limitados."
 
-#: src/libide/foundry/ide-pipeline.c:3342
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "A limpar…"
 
-#: src/libide/foundry/ide-pipeline.c:3346
-#: src/libide/foundry/ide-pipeline.c:3403
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Falhou"
 
-#: src/libide/foundry/ide-pipeline.c:3348
-#: src/libide/foundry/ide-pipeline.c:3411
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/libide/foundry/ide-pipeline.c:3363
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "A transferir…"
 
-#: src/libide/foundry/ide-pipeline.c:3367
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "A criar dependências…"
 
-#: src/libide/foundry/ide-pipeline.c:3371
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "A inicializar…"
 
-#: src/libide/foundry/ide-pipeline.c:3375
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "A configurar…"
 
-#: src/libide/foundry/ide-pipeline.c:3379
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "A construir…"
 
-#: src/libide/foundry/ide-pipeline.c:3383
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "A instalar…"
 
-#: src/libide/foundry/ide-pipeline.c:3387
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "A submeter…"
 
-#: src/libide/foundry/ide-pipeline.c:3391
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "A exportar…"
 
-#: src/libide/foundry/ide-pipeline.c:3395
-#: src/libide/foundry/ide-pipeline.c:3399
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/libide/foundry/ide-pipeline.c:3407
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "A preparar…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3763
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "A remover %s"
 
-#: src/libide/foundry/ide-pipeline.c:3822
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "A remover diretórios de compilação…"
 
@@ -1179,20 +1219,54 @@ msgstr "Comando sem título"
 msgid "Unit Test"
 msgstr "Testes de unitário"
 
-#: src/libide/foundry/ide-run-manager.c:522
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:185
+#, c-format
+msgid "User requested run tool “%s”"
+msgstr "Ferramenta de execução solicitada pelo utilizador \"%s\""
+
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Não é possível executar o objetivo, pois outro objetivo está em execução"
 
+#: src/libide/foundry/ide-run-manager.c:806
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Aplicação encerrada com erro: %s"
+
+#: src/libide/foundry/ide-run-manager.c:809
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Aplicação terminada"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:946
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "A executar %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "A implantar no dispositivo…"
+
+#: src/libide/foundry/ide-run-manager.c:1293
+msgid "User requested application to run"
+msgstr "O utilizador solicitou a aplicação a executar"
+
+#: src/libide/foundry/ide-run-manager.c:1325
+msgid "User requested application to restart"
+msgstr "O utilizador solicitou a aplicação para reiniciar"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1355
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:1375
+msgid "User requested application to stop"
+msgstr "O utilizador solicitou a paragem da aplicação"
 
 #: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
@@ -1201,6 +1275,16 @@ msgstr "A implantar no dispositivo…"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Sistema Anfitrião"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr ""
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr ""
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1279,7 +1363,7 @@ msgid "Select Project File"
 msgstr "Selecionar ficheiro do projeto"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/gui/ide-workbench.c:1527
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1449,7 +1533,7 @@ msgid "Close Project"
 msgstr "Fechar Projeto"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Geral"
 
@@ -1603,6 +1687,17 @@ msgstr "Executar projeto"
 msgid "Other"
 msgstr "Outro"
 
+#: src/libide/gui/ide-workbench.c:1075
+msgid "Project loaded"
+msgstr "Projeto carregado"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1243
+#, c-format
+#| msgid "Cloning project %s"
+msgid "Loading project “%s”"
+msgstr "A carregar projeto “%s”"
+
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
 msgstr "Existem documentos por guardar"
@@ -1629,10 +1724,22 @@ msgstr[0] "A instalar %u pacote"
 msgstr[1] "A instalar %u pacotes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1657
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falha ao inicializar o servidor de linguagem: %s"
+
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "O servidor de idiomas \"%s\" foi encerrado"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
@@ -1644,7 +1751,7 @@ msgstr "Controlo de versões"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Servidores de idiomas"
 
@@ -1946,6 +2053,11 @@ msgstr "Corresponder apenas palavra inteira"
 msgid "Wrap around"
 msgstr "Ajustar à volta"
 
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr ""
+
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
 msgstr "<i>A carregar</i>"
@@ -2085,16 +2197,16 @@ msgstr "Copiar"
 msgid "Remove"
 msgstr "Remover"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "_Guardar"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Saída de construção"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Resultado da compilação (Shift+Ctrl+L)"
 
@@ -2271,7 +2383,7 @@ msgstr "Parar a compilação do projeto (Shift+Ctrl+Alt+C)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Compilar projeto (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Mostrar diagnósticos de compilação (Ctrl+Alt+?)"
 
@@ -2467,6 +2579,10 @@ msgstr "Esquerda para a direita"
 msgid "Right-to-Left"
 msgstr "Direita para a esquerda"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "Mostrar Inspector"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2635,39 +2751,47 @@ msgstr "Limpar registos de compilação"
 msgid "Clear the build log history when a new build begins"
 msgstr "Limpa o histórico de registo de compilação ao iniciar nova compilação"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "Mostrar registos de compilação"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr "Mostrar o registo de compilação quando uma nova compilação é iniciada"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Aceder à consola"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Redirecionar registos de erros do servidor de linguagem para stderr"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Trabalhos"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Número de trabalhos a serem usados ao efetuar compilações"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Padrão"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 por CPU"
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Ferramental"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Prefixo da instalação"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2675,11 +2799,11 @@ msgstr ""
 "O projeto será instalado neste diretório durante a fase de instalação do "
 "pipeline de compilação."
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Configurar opções"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2687,11 +2811,28 @@ msgstr ""
 "Estas opções são usadas pelo sistema de compilação para configurar o projeto "
 "durante a fase de configuração do pipeline de compilação"
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Ambiente de compilação"
 
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Localidade"
+
 #: src/plugins/buildui/tweaks.ui:432
+msgid "Where your project builds"
+msgstr "Onde o seu projeto é compilado"
+
+#: src/plugins/buildui/tweaks.ui:449
+msgid "Inside Source Tree"
+msgstr "Dentro da árvore de origem"
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2700,11 +2841,13 @@ msgstr ""
 "partir do runtime."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "Buscar dependências"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Compilar projeto"
@@ -2712,6 +2855,15 @@ msgstr "Compilar projeto"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo Run"
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
+msgstr ""
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -4010,7 +4162,7 @@ msgid "Installation complete"
 msgstr "Instalação concluída"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "O cliente foi fechado"
 
@@ -4151,12 +4303,12 @@ msgstr "Nenhum conteúdo foi definido para comparar"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "A operação falhou. O erro original foi “%s”"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "A operação foi cancelada"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4178,6 +4330,15 @@ msgstr "Não é possível assinar um commit sem GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Não é possível monitorizar ficheiros fora do diretório de trabalho"
+
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr ""
+
+#: src/plugins/git/gbp-git-client.c:195
+msgid "Git integration has exited"
+msgstr "A integração do Git foi encerrada"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4212,21 +4373,21 @@ msgstr "O diretório não está dentro do repositório"
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
-msgstr "Um repositório não pôde ser encontrado em “%s”."
+msgstr "Não foi possível encontrar um repositório em “%s”."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Não há suporte ao protocolo “%s”."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "A clonar repositório"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "É necessário um URL Git válido"
 
@@ -4238,10 +4399,14 @@ msgstr "Autoria"
 msgid "Email"
 msgstr "E-mail"
 
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "executar"
+
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
-msgstr "Inicializando projeto"
+msgstr "A inicializar projeto"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
 msgid "Gradle Run"
@@ -4611,9 +4776,42 @@ msgstr "Projeto Meson vazio"
 msgid "An empty Meson project skeleton"
 msgstr "Um esqueleto de projeto Meson vazio"
 
+#: src/plugins/messages/gbp-messages-panel.c:47
+msgid "Debug"
+msgstr "Depurar"
+
+#: src/plugins/messages/gbp-messages-panel.c:49
+msgid "Info"
+msgstr "Informação"
+
+#: src/plugins/messages/gbp-messages-panel.c:51
+#: src/plugins/messages/gbp-messages-panel.ui:111
+msgid "Message"
+msgstr "Mensagem"
+
+#: src/plugins/messages/gbp-messages-panel.c:53
+msgid "Warning"
+msgstr "Aviso"
+
+#: src/plugins/messages/gbp-messages-panel.c:55
+msgid "Critical"
+msgstr "Crítico"
+
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Mensagens"
+
+#: src/plugins/messages/gbp-messages-panel.ui:21
+msgid "Time"
+msgstr "Hora"
+
+#: src/plugins/messages/gbp-messages-panel.ui:53
+msgid "Severity"
+msgstr "Gravidade"
+
+#: src/plugins/messages/gbp-messages-panel.ui:83
+msgid "Section"
+msgstr "Secção"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -5120,10 +5318,6 @@ msgstr "Usar subshell"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Executa o programa a partir de um subshell como <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Localidade"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
@@ -5552,10 +5746,6 @@ msgstr "%s (SDK de raiz de sistema)"
 msgid "Application started at %s\r\n"
 msgstr "Aplicação iniciada às %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Aplicação terminada"
-
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Saída da aplicação"
@@ -5920,6 +6110,10 @@ msgstr "Local do foco"
 msgid "Focus the current page's location"
 msgstr "Coloca o foco no local da página atual"
 
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "Falha ao processar documento XML"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5973,9 +6167,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "Stop Building Project"
 #~ msgstr "Parar de compilar o projeto"
-
-#~ msgid "Show Build _Log"
-#~ msgstr "Mostrar _registo de compilação"
 
 #~ msgid "Tools"
 #~ msgstr "Ferramentas"
@@ -7608,9 +7799,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Switch surface"
 #~ msgstr "Mudar plano"
 
-#~ msgid "Search your project"
-#~ msgstr "Procure o seu projeto"
-
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Não foi possível localizar o tempo de execução"
 
@@ -7918,10 +8106,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Close search bar (Escape key)"
 #~ msgstr "Fechar a barra de pesquisa (Tecla Escape)"
 
-#, c-format
-#~ msgid "Connected to “%s”"
-#~ msgstr "Ligado a “%s”"
-
 #~ msgid "Session"
 #~ msgstr "Sessão"
 
@@ -8078,10 +8262,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Ativa o uso do ESLint para localizar diagnósticos adicionais em programa "
 #~ "JavaScript. Isto pode resultar na execução do código de seu projeto."
 
-#, c-format
-#~ msgid "Cloning project %s"
-#~ msgstr "A clonar o projeto %s"
-
 #~ msgid "Downloading application sources…"
 #~ msgstr "A transferir fontes da aplicação…"
 
@@ -8101,10 +8281,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "_View Source"
 #~ msgstr "_Ver fonte"
-
-#, c-format
-#~ msgid "Failed to save glade document: %s"
-#~ msgstr "Falha ao gravar documento glade: %s"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Atalhos do glade"
