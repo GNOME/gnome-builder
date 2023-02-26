@@ -1,0 +1,11 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Builtin=true
+Copyright=Copyright © 2023 JCWasmx86
+Description=Provides integration with the Swift build system
+Embedded=_gbp_swift_register_types
+Module=swift
+Name=Swift
+X-Category=buildsystems
+X-Project-File-Filter-Name=Swift (Package.swift)
+X-Project-File-Filter-Pattern=Package.swift
