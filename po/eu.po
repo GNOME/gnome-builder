@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-22 01:12+0000\n"
-"PO-Revision-Date: 2023-02-23 10:00+0100\n"
+"POT-Creation-Date: 2023-02-25 11:21+0000\n"
+"PO-Revision-Date: 2023-02-26 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -660,7 +660,7 @@ msgstr "Editorearen laneko area berria"
 msgid "D-Bus Inspector"
 msgstr "D-Bus ikuskatzailea"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "Uneko lengoaiak ez du ikur-ebazlerik."
 
@@ -1009,7 +1009,12 @@ msgstr "“%s” gailua aurkitu da"
 msgid "Devices"
 msgstr "Gailuak"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Gailua %s gisa ezarri da"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Ezin izan da gailuan instalatu, eraikuntza-kanalizazioa hasieratu gabe dago"
 
@@ -1646,7 +1651,7 @@ msgstr[0] "Pakete %u instalatzen"
 msgstr[1] "%u paketa instalatzen"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1659
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Huts egin du lengoaia-zerbitzariak hasieratzeak: %s"
@@ -2041,7 +2046,7 @@ msgstr "Exekutatu Builder-en instantzia berria"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:204
 msgid "Building cache…"
-msgstr "Cache-a eraikitzen…"
+msgstr "Cachea eraikitzen…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
@@ -2742,11 +2747,13 @@ msgid ""
 msgstr "Aplikazioa eraikitzeko erabiliko den SDKa automatikoki zehaztuko da exekuzio-denboratik."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "Atzitu mendekotasunak"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Eraiki proiektua"
@@ -4255,6 +4262,10 @@ msgstr "Egiletza"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "Posta elektronikoa"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "joan exekutatu"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
