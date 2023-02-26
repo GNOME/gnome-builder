@@ -1143,7 +1143,7 @@ msgstr "Eraikuntza-direktorioak kentzen…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr "Ezin da eraiki transferentzia neurtutako konexio batean"
+msgstr "Ezin da eraiki transferentzia konexio mugatu batean"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
@@ -5094,13 +5094,13 @@ msgstr "Deskargak"
 
 #: src/plugins/sdkui/tweaks.ui:15
 msgid "Download on Metered Connections"
-msgstr "Deskargatu neurtutako konexioetan"
+msgstr "Deskargatu konexio mugatuetan"
 
 #: src/plugins/sdkui/tweaks.ui:16
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "Onartu SDKak eta mendekotasunak desgargatzea neurtutako konexioetan"
+msgstr "Onartu SDKak eta mendekotasunak desgargatzea konexio mugatuetan"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
