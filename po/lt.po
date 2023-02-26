@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-18 08:10+0000\n"
-"PO-Revision-Date: 2023-02-19 21:21+0200\n"
+"POT-Creation-Date: 2023-02-25 11:21+0000\n"
+"PO-Revision-Date: 2023-02-26 22:33+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -166,7 +166,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Naudokite mini žemėlapį didesnei failo daliai matyti"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Kūrimo lygiagretinimas"
 
@@ -187,10 +187,18 @@ msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr "Jei įjungta, kūrimo žurnalo skydelis bus išvalytas perkuriant."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "Rodyti žurnalą kuriant"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr "Jei įjungta, kūrimo žurnalo skydelis bus pakeltas pradedant kūrimą."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Visą tinklą kai matuojama"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -693,7 +701,7 @@ msgstr "Nauja redaktoriaus darbo sritis"
 msgid "D-Bus Inspector"
 msgstr "D-Bus inspektorius"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "Dabartinei kalbai trūksta simbolių gavėjo."
 
@@ -727,7 +735,7 @@ msgstr "Nepavyko inicializuotų numatytųjų nustatymų."
 msgid "Failed to save draft: %s"
 msgstr "Nepavyko įrašyti juodraščio: %s"
 
-#: src/libide/core/ide-context.c:385 src/libide/core/ide-context.c:846
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Nepavadinta"
 
@@ -736,8 +744,8 @@ msgstr "Nepavadinta"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1528
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -753,7 +761,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Nerasta tinkama derintuvė."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1524
 msgid "Open File…"
 msgstr "Atverti failą…"
 
@@ -912,7 +920,7 @@ msgid "Failed to format selection: %s"
 msgstr "Nepavyko formatuoti žymėjimo: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Įrašyti failą"
@@ -1020,6 +1028,22 @@ msgstr "Nepavyko gauti įrenginio informacijos: %s"
 msgid "Active Configuration"
 msgstr "Aktyvi konfigūracija"
 
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:853
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+"Nepavyko rasti kūrimo konfigūracijos „%s“. Ji gali būti neteisinga arba "
+"blogai suformatuota."
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1049
+#, c-format
+msgid "Active configuration set to “%s”"
+msgstr "Aktyvi konfigūracija nusiųsta į „%s“"
+
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
@@ -1030,7 +1054,12 @@ msgstr "Aptiktas įrenginys „%s“"
 msgid "Devices"
 msgstr "Įrenginiai"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Įrenginiys nustatytas į %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Nepavyko patalpinti įrenginyje, neinicijuotas kūrimo konvejeris"
 
@@ -1059,89 +1088,101 @@ msgstr "Kūrimo konvejeris yra neveiksnios būsenos"
 msgid "The build configuration has errors"
 msgstr "Kūrimo konfigūracijoje yra klaidų"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr "Konvejeris pradėjo valyti kūrimo medį"
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr "Konvejeris pradėjo darbą"
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr "Konvejeris baigė darbą"
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1100
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Kūrimas (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1141
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Po diegimo (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3106
-#: src/libide/foundry/ide-pipeline.c:3145
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Nepavyko sukurti pseudo terminalo. Terminalo funkcijos bus ribotos."
 
-#: src/libide/foundry/ide-pipeline.c:3342
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Išvaloma…"
 
-#: src/libide/foundry/ide-pipeline.c:3346
-#: src/libide/foundry/ide-pipeline.c:3403
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Nepavyko"
 
-#: src/libide/foundry/ide-pipeline.c:3348
-#: src/libide/foundry/ide-pipeline.c:3411
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Pasiruošęs"
 
-#: src/libide/foundry/ide-pipeline.c:3363
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Parsiunčiama…"
 
-#: src/libide/foundry/ide-pipeline.c:3367
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Kuriamos priklausomybės…"
 
-#: src/libide/foundry/ide-pipeline.c:3371
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Vykdomas pakopinis paleidimas…"
 
-#: src/libide/foundry/ide-pipeline.c:3375
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Konfigūruojama…"
 
-#: src/libide/foundry/ide-pipeline.c:3379
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Kuriama…"
 
-#: src/libide/foundry/ide-pipeline.c:3383
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Diegiama…"
 
-#: src/libide/foundry/ide-pipeline.c:3387
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "Nusiunčiama…"
 
-#: src/libide/foundry/ide-pipeline.c:3391
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Eksportuojama…"
 
-#: src/libide/foundry/ide-pipeline.c:3395
-#: src/libide/foundry/ide-pipeline.c:3399
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Pavyko"
 
-#: src/libide/foundry/ide-pipeline.c:3407
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "Paruošiama…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3763
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "Šalinama %s"
 
-#: src/libide/foundry/ide-pipeline.c:3822
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "Šalinami kūrimo katalogai…"
 
@@ -1159,19 +1200,53 @@ msgstr "Nepavadinta komanda"
 msgid "Unit Test"
 msgstr "Modulių testai"
 
-#: src/libide/foundry/ide-run-manager.c:522
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:185
+#, c-format
+msgid "User requested run tool “%s”"
+msgstr "Naudotojas paprašė paleisti įrankį „%s“"
+
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "Negalima vykdyti paskirties, jau vykdoma kita paskirtis"
 
+#: src/libide/foundry/ide-run-manager.c:806
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Programa baigė darbą su klaida: %s"
+
+#: src/libide/foundry/ide-run-manager.c:809
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Programa baigė darbą"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:946
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "Vykdoma %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "Įkeliama į įrenginį…"
+
+#: src/libide/foundry/ide-run-manager.c:1293
+msgid "User requested application to run"
+msgstr "Naudotojas paprašė vykdyti programą"
+
+#: src/libide/foundry/ide-run-manager.c:1325
+msgid "User requested application to restart"
+msgstr "Naudotojas paprašė perleisti programą"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1355
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr "Naudotojas paprašė paleisti programą su įrankiu „%s“"
+
+#: src/libide/foundry/ide-run-manager.c:1375
+msgid "User requested application to stop"
+msgstr "Naudotojas paprašė stabdyti programą"
 
 #: src/libide/foundry/ide-runtime.c:409
 #: src/plugins/host/gbp-host-runtime-provider.c:55
@@ -1180,6 +1255,16 @@ msgstr "Įkeliama į įrenginį…"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Operacinė sistema"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Priverstinai baigiamas vaikinis procesas %s"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Siunčiamas signalas %d vaikiniam procesui %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1257,7 +1342,7 @@ msgid "Select Project File"
 msgstr "Pasirinkite projekto failą"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/gui/ide-workbench.c:1527
 msgid "_Open"
 msgstr "_Atverti"
 
@@ -1428,7 +1513,7 @@ msgid "Close Project"
 msgstr "Užverti projektą"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Bendra"
 
@@ -1579,6 +1664,16 @@ msgstr "Vykdyti projektą"
 msgid "Other"
 msgstr "kitos"
 
+#: src/libide/gui/ide-workbench.c:1075
+msgid "Project loaded"
+msgstr "Projektas įkeltas"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1243
+#, c-format
+msgid "Loading project “%s”"
+msgstr "Įkeliamas projektas „%s“"
+
 #: src/libide/gui/ide-workspace.c:1712
 msgid "There are unsaved documents"
 msgstr "Yra neįrašytų dokumentų"
@@ -1606,10 +1701,22 @@ msgstr[1] "Diegiami %u paketai"
 msgstr[2] "Diegiama %u paketų"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1657
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nepavyko inicijuoti kalbos serverio: %s"
+
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "Kalbos serveris „%s“ baigė darbą"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr "Kalbos serveris „%s“ paleistas kaip procesas %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
@@ -1621,7 +1728,7 @@ msgstr "Versijavimas"
 msgid "SDKs"
 msgstr "Programavimo komplektai"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Kalbos serveriai"
 
@@ -1921,6 +2028,11 @@ msgstr "Ieškoti pilnų žodžių"
 msgid "Wrap around"
 msgstr "Apsupti"
 
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr "Procesas nutrauktas su signalu %d"
+
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
 msgstr "<i>Įkeliama</i>"
@@ -2060,16 +2172,16 @@ msgstr "Kopijuoti"
 msgid "Remove"
 msgstr "Pašalinti"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "Į_rašyti"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Kūrimo išvestis"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Kūrimo išvesti (Lyg2+Vald+L)"
 
@@ -2245,7 +2357,7 @@ msgstr "Stabdyti projekto kūrimą (Lyg2+Vald+Alt+C)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Kurti projektą (vald+lyg2+alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Rodyti kūrimo diagnostiką (Vald+Alt+?)"
 
@@ -2441,6 +2553,10 @@ msgstr "Iš-kairės-į-dešinę"
 msgid "Right-to-Left"
 msgstr "Iš-dešinės-į-kairę"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "Rodyti inspektorių"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2603,50 +2719,58 @@ msgstr "Išvalyti kūrimo žurnalus"
 msgid "Clear the build log history when a new build begins"
 msgstr "Išvalyti kūrimo žurnalą pradedant kūrimą"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "Rodyti kūrimo žurnalus"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr "Išvalyti kūrimo žurnalą kai pradedamas naujas kūrimas"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Išvesti į konsolę"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Nukreipti kalbos serverio klaidų išvestį į stderr"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Darbininkai"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Kuriant naudojamų darbininkų skaičius"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Numatyta"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 kiekvienam CPU"
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Įrankinė"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Įdiegimo kelio pradžia"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 "Projektas bus diegiamas į šį katalogą diegimo fazės metu kūrimo konvejeryje."
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Konfigūravimo parametrai"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2654,11 +2778,28 @@ msgstr ""
 "Šios parinktys yra naudojamos kūrimo sistemos konvejeryje projekto "
 "konfigūravimo fazėje"
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Kūrimo aplinka"
 
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Vieta"
+
 #: src/plugins/buildui/tweaks.ui:432
+msgid "Where your project builds"
+msgstr "Kur jūsų projektas kuria"
+
+#: src/plugins/buildui/tweaks.ui:449
+msgid "Inside Source Tree"
+msgstr "Kodas medžio viduje"
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr "Už kodo medžio"
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2667,11 +2808,13 @@ msgstr ""
 "aplinką."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "Atsisiųsti projekto priklausomybes"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "Kurti projektą"
@@ -2679,6 +2822,15 @@ msgstr "Kurti projektą"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo Run"
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr "Clang integracijos serveris baigė darbą"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
+msgstr "Clang integracijos serveris paleistas kaip procesas %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -3962,7 +4114,7 @@ msgid "Installation complete"
 msgstr "Diegimas užbaigtas"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Klientas buvo užvertas"
 
@@ -4103,12 +4255,12 @@ msgstr "Nėra turinio palyginimui"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Veiksmas nepavyko. Pradinė klaida buvo „%s“"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Veiksmas buvo nutrauktas"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4129,6 +4281,15 @@ msgstr "Negalima pasirašyti be GPG_KEY_ID"
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Negalima stebėti failų už darbinio katalogo ribų"
+
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr "Git integracija paleista kaip procesas %s"
+
+#: src/plugins/git/gbp-git-client.c:195
+msgid "Git integration has exited"
+msgstr "Git integracija baigė darbą"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4163,21 +4324,21 @@ msgstr "Katalogas nėra saugykloje"
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr "„%s“ nepavyko rasti saugyklos."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Protokolas „%s“ nepalaikomas."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "Klonuojama saugykla"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "Reikalingas tinkamas Git URL"
 
@@ -4188,6 +4349,10 @@ msgstr "Autorius"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "El. paštas"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4562,9 +4727,42 @@ msgstr "Tuščias Meson projektas"
 msgid "An empty Meson project skeleton"
 msgstr "Tuščio Meson projekto skeletas"
 
+#: src/plugins/messages/gbp-messages-panel.c:47
+msgid "Debug"
+msgstr "Derinti"
+
+#: src/plugins/messages/gbp-messages-panel.c:49
+msgid "Info"
+msgstr "Informacija"
+
+#: src/plugins/messages/gbp-messages-panel.c:51
+#: src/plugins/messages/gbp-messages-panel.ui:111
+msgid "Message"
+msgstr "Pranešimas"
+
+#: src/plugins/messages/gbp-messages-panel.c:53
+msgid "Warning"
+msgstr "Įspėjimas"
+
+#: src/plugins/messages/gbp-messages-panel.c:55
+msgid "Critical"
+msgstr "Kritinė"
+
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Pranešimai"
+
+#: src/plugins/messages/gbp-messages-panel.ui:21
+msgid "Time"
+msgstr "Laikas"
+
+#: src/plugins/messages/gbp-messages-panel.ui:53
+msgid "Severity"
+msgstr "Rimtumas"
+
+#: src/plugins/messages/gbp-messages-panel.ui:83
+msgid "Section"
+msgstr "Skiltis"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -5071,10 +5269,6 @@ msgstr "Naudoti apvalkalą"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Vykdyto programą apvalkale, tokiame kaip <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Vieta"
-
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
@@ -5493,10 +5687,6 @@ msgstr "%s (Sysroot SDK)"
 msgid "Application started at %s\r\n"
 msgstr "Programa pradėti %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Programa baigė darbą"
-
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Programos išvestis"
@@ -5852,6 +6042,10 @@ msgstr "Fokusuoti vietą"
 msgid "Focus the current page's location"
 msgstr "Fokusuoti dabartinę puslapio vietą"
 
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "Nepavyko išanalizuoti XML dokumento"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5890,9 +6084,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "Stop Building Project"
 #~ msgstr "Stabdyti projekto kūrimą"
-
-#~ msgid "Show Build _Log"
-#~ msgstr "_Rodyti kūrimo žurnalą"
 
 #~ msgid "Tools"
 #~ msgstr "Įrankiai"
@@ -7401,9 +7592,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 #~ msgid "Switch surface"
 #~ msgstr "Perjungti paviršių"
 
-#~ msgid "Search your project"
-#~ msgstr "Ieškoti jūsų projekto"
-
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Nepavyko rasti vykdymo aplinkos"
 
@@ -7709,10 +7897,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 #~ msgid "Close search bar (Escape key)"
 #~ msgstr "Užverti paieškos juostą (escape klavišas)"
 
-#, c-format
-#~ msgid "Connected to “%s”"
-#~ msgstr "Prisijungta prie „%s“"
-
 #~ msgid "Session"
 #~ msgstr "Seanso"
 
@@ -7864,10 +8048,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 #~ "Įjungti eslint papildomai diagnostikai JavaScript failuose. Tai gali "
 #~ "vykdyti jūsų projekto kodą."
 
-#, c-format
-#~ msgid "Cloning project %s"
-#~ msgstr "Konfigūruojamas projektas %s"
-
 #~ msgid "Downloading application sources…"
 #~ msgstr "Parsiunčiami programų šaltiniai…"
 
@@ -7887,10 +8067,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "_View Source"
 #~ msgstr "_Rodyti kodą"
-
-#, c-format
-#~ msgid "Failed to save glade document: %s"
-#~ msgstr "Nepavyko įrašyti glade dokumento: %s"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Glade trumpiniai"
@@ -9732,9 +9908,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 #~ msgid "Value Type"
 #~ msgstr "Vertės tipas"
 
-#~ msgid "Timespan"
-#~ msgstr "Laiko tarpas"
-
 #~ msgid "Max Samples"
 #~ msgstr "Didžiausių pavyzdžiai"
 
@@ -9993,9 +10166,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "A GFile to the underlying file."
 #~ msgstr "Failo GFile."
-
-#~ msgid "File Info"
-#~ msgstr "Failo informacija"
 
 #~ msgid "The file information for the project file."
 #~ msgstr "Projekto failo informacija."
