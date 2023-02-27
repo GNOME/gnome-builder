@@ -156,12 +156,16 @@ static void
 client_op_reply (ClientOp *op,
                  GVariant *reply)
 {
+  g_autoptr(GVariant) sunk = NULL;
+
   g_assert (op != NULL);
   g_assert (op->client != NULL);
 
+  sunk = g_variant_ref_sink (reply);
+
   jsonrpc_client_reply_async (op->client,
                               op->id,
-                              reply,
+                              sunk,
                               op->cancellable,
                               (GAsyncReadyCallback)handle_reply_cb,
                               client_op_ref (op));
