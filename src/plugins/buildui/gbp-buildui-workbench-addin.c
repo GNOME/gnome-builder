@@ -38,10 +38,6 @@ gbp_buildui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
                                           IdeSession        *session)
 {
   GbpBuilduiWorkbenchAddin *self = (GbpBuilduiWorkbenchAddin *)addin;
-  g_autoptr(IdeSessionItem) item = NULL;
-  IdeDeviceManager *device_manager = NULL;
-  const char *device_id = NULL;
-  IdeDevice *device = NULL;
 
   IDE_ENTRY;
 
@@ -49,16 +45,24 @@ gbp_buildui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_BUILDUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_SESSION (session));
 
-  device_manager = ide_device_manager_from_context (self->context);
-  device = ide_device_manager_get_device (device_manager);
-  device_id = ide_device_get_id (device);
-  item = ide_session_item_new ();
+  if (ide_context_has_project (self->context))
+    {
+      g_autoptr(IdeSessionItem) item = NULL;
+      IdeDeviceManager *device_manager = NULL;
+      const char *device_id = NULL;
+      IdeDevice *device = NULL;
 
-  ide_session_item_set_id (item, "ide.context.foundry.device-manager.device");
-  ide_session_item_set_module_name (item, "buildui");
-  ide_session_item_set_metadata (item, "id", "s", device_id);
+      device_manager = ide_device_manager_from_context (self->context);
+      device = ide_device_manager_get_device (device_manager);
+      device_id = ide_device_get_id (device);
+      item = ide_session_item_new ();
 
-  ide_session_append (session, item);
+      ide_session_item_set_id (item, "ide.context.foundry.device-manager.device");
+      ide_session_item_set_module_name (item, "buildui");
+      ide_session_item_set_metadata (item, "id", "s", device_id);
+
+      ide_session_append (session, item);
+    }
 
   IDE_EXIT;
 }
