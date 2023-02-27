@@ -20,6 +20,7 @@ gdbwire = static_library('gdbwire', ['gdbwire.c'],
             '-Wno-missing-declarations',
             '-Wno-uninitialized',
             '-Wno-declaration-after-statement' ],
+  gnu_symbol_visibility: 'hidden',
 )
 
 plugins_link_with += gdbwire
