@@ -32,7 +32,7 @@
 #include "ide-debugger-hover-provider.h"
 #include "ide-debugger-workspace-addin.h"
 
-void
+_IDE_EXTERN void
 _gbp_debuggerui_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

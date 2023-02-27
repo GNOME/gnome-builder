@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "c-pack-plugin"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include <libide-editor.h>

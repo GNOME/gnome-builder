@@ -31,7 +31,7 @@
 #include "gbp-project-tree-tweaks-addin.h"
 #include "gbp-project-tree-workspace-addin.h"
 
-void
+_IDE_EXTERN void
 _gbp_project_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

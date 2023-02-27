@@ -157,10 +157,11 @@ subdir('xml-pack')
 subdir('zls')
 
 plugins = static_library('plugins', plugins_sources,
-         dependencies: plugins_deps,
-               c_args: release_args,
-  include_directories: plugins_include_directories,
-            link_with: plugins_link_with,
+           dependencies: plugins_deps,
+                 c_args: release_args,
+    include_directories: plugins_include_directories,
+              link_with: plugins_link_with,
+  gnu_symbol_visibility: 'hidden',
 )
 
 status += [

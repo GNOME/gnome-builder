@@ -28,7 +28,7 @@
 #include "gbp-create-project-application-addin.h"
 #include "gbp-create-project-workspace-addin.h"
 
-void
+_IDE_EXTERN void
 _gbp_create_project_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

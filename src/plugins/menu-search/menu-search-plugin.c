@@ -28,7 +28,7 @@
 
 #include "gbp-menu-search-provider.h"
 
-void
+_IDE_EXTERN void
 _gbp_menu_search_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

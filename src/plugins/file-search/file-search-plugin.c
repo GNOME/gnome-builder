@@ -22,12 +22,13 @@
 
 #include "config.h"
 
-#include <libide-search.h>
 #include <libpeas/peas.h>
+
+#include <libide-search.h>
 
 #include "gbp-file-search-provider.h"
 
-void
+_IDE_EXTERN void
 _gbp_file_search_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
