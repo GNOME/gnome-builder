@@ -161,7 +161,8 @@ client_op_reply (ClientOp *op,
   g_assert (op != NULL);
   g_assert (op->client != NULL);
 
-  sunk = g_variant_ref_sink (reply);
+  if (reply != NULL)
+    sunk = g_variant_ref_sink (reply);
 
   jsonrpc_client_reply_async (op->client,
                               op->id,
