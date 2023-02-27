@@ -849,6 +849,7 @@ gbp_flatpak_manifest_finalize (GObject *object)
 
   g_clear_pointer (&self->build_args, g_strfreev);
   g_clear_pointer (&self->command, g_free);
+  g_clear_pointer (&self->x_run_args, g_strfreev);
   g_clear_pointer (&self->finish_args, g_strfreev);
   g_clear_pointer (&self->runtime, g_free);
   g_clear_pointer (&self->runtime_version, g_free);
