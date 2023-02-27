@@ -73,7 +73,10 @@ update_dependencies_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (updater));
 
   if (!ide_dependency_updater_update_finish (updater, result, &error))
-    ide_context_warning (context, "%s", error->message);
+    {
+      if (!ide_error_ignore (error))
+        ide_context_warning (context, "%s", error->message);
+    }
 
   ide_object_destroy (IDE_OBJECT (updater));
 
