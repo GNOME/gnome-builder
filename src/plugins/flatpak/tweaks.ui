@@ -10,7 +10,7 @@
                 <child>
                   <object class="IdeTweaksCombo">
                     <property name="title" translatable="yes">Preferred Flatpak Installation</property>
-                    <property name="subtitle" translatable="yes">Install SDKs using a specific Flatpak installation</property>
+                    <property name="subtitle" translatable="yes">When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation which contains the extension.</property>
                     <property name="binding">
                       <object class="IdeTweaksSetting">
                         <property name="schema-id">org.gnome.builder.flatpak</property>
