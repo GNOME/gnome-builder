@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.flatpak" path="/org/gnome/builder/plugins/flatpak/" gettext-domain="gnome-builder">
+    <key name="preferred-installation" type="s">
+      <choices>
+        <choice value="private"/>
+        <choice value="user"/>
+        <choice value="system"/>
+      </choices>
+      <default>'private'</default>
+      <summary>Flatpak installation for new SDKs</summary>
+      <description>The Flatpak installation to use for new SDKs and SDK extensions.</description>
+    </key>
+  </schema>
+</schemalist>

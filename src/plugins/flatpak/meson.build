@@ -50,4 +50,6 @@ plugins_deps += [
 
 plugins_sources += plugin_flatpak_resources
 
+install_data(['org.gnome.builder.flatpak.gschema.xml'], install_dir: schema_dir)
+
 endif

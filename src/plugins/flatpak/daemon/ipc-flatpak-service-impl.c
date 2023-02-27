@@ -1,6 +1,6 @@
 /* ipc-flatpak-service-impl.c
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2019-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ typedef struct
 {
   FlatpakInstallation *installation;
   GFileMonitor *monitor;
+  guint is_private : 1;
 } Install;
 
 typedef struct
@@ -411,6 +412,7 @@ is_private_install (const Install *install)
 static gboolean
 add_installation (IpcFlatpakServiceImpl  *self,
                   FlatpakInstallation    *installation,
+                  Install               **out_install,
                   GError                **error)
 {
   g_autoptr(GFile) file = NULL;
@@ -419,6 +421,9 @@ add_installation (IpcFlatpakServiceImpl  *self,
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_INSTALLATION (installation));
+
+  if (out_install != NULL)
+    *out_install = NULL;
 
   file = flatpak_installation_get_path (installation);
 
@@ -449,6 +454,9 @@ add_installation (IpcFlatpakServiceImpl  *self,
 
   install_reload (self, install);
 
+  if (out_install != NULL)
+    *out_install = install;
+
   return TRUE;
 }
 
@@ -474,7 +482,7 @@ ipc_flatpak_service_impl_add_installation (IpcFlatpakService     *service,
   if (!g_hash_table_contains (self->installs, file))
     {
       if (!(installation = flatpak_installation_new_for_path (file, is_user, NULL, &error)) ||
-          !add_installation (self, installation, &error))
+          !add_installation (self, installation, NULL, &error))
         return complete_wrapped_error (invocation, error);
     }
 
@@ -908,12 +916,23 @@ refs_equal (FlatpakRef *a,
                       flatpak_ref_get_branch (b)));
 }
 
+enum {
+  MODE_PRIVATE = 0,
+  MODE_USER = 1,
+  MODE_SYSTEM = 2,
+};
+
 static char *
 find_remote_for_ref (IpcFlatpakServiceImpl  *self,
                      FlatpakRef             *ref,
                      FlatpakInstallation   **installation)
 {
   FlatpakQueryFlags flags = FLATPAK_QUERY_FLAGS_NONE;
+  g_autoptr(GPtrArray) installs = NULL;
+  g_autoptr(GPtrArray) suffix = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree char *preferred = NULL;
+  int mode = 0;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
@@ -929,12 +948,39 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
 # warning "Flatpak is too old, searching for alternate arches will not work"
 #endif
 
-  /* Someday we might want to prompt the user for which remote to install from,
-   * but for now we'll just take the first.
-   */
+  settings = g_settings_new ("org.gnome.builder.flatpak");
+  preferred = g_settings_get_string (settings, "preferred-installation");
+
+  installs = g_ptr_array_new ();
+  suffix = g_ptr_array_new ();
+
+  if (g_strcmp0 (preferred, "private") == 0)
+    mode = MODE_PRIVATE;
+  else if (g_strcmp0 (preferred, "system") == 0)
+    mode = MODE_SYSTEM;
+  else
+    mode = MODE_USER;
+
   for (guint i = 0; i < self->installs_ordered->len; i++)
     {
       Install *install = g_ptr_array_index (self->installs_ordered, i);
+
+      if ((mode == MODE_PRIVATE && install->is_private) ||
+          (mode == MODE_SYSTEM && !install->is_private && !flatpak_installation_get_is_user (install->installation)) ||
+          (mode == MODE_USER && !install->is_private && flatpak_installation_get_is_user (install->installation)))
+        g_ptr_array_add (installs, install);
+      else
+        g_ptr_array_add (suffix, install);
+    }
+
+  g_ptr_array_extend (installs, suffix, NULL, NULL);
+
+  /* Someday we might want to prompt the user for which remote to install from,
+   * but for now we'll just take the first.
+   */
+  for (guint i = 0; i < installs->len; i++)
+    {
+      Install *install = g_ptr_array_index (installs, i);
       g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (install->installation, NULL, NULL);
 
       /* Ignore if failure or this is a system installation (as we can't install
@@ -1574,8 +1620,6 @@ ipc_flatpak_service_impl_constructed (GObject *object)
   IpcFlatpakServiceImpl *self = (IpcFlatpakServiceImpl *)object;
   IpcFlatpakRepo *repo = ipc_flatpak_repo_get_default ();
   g_autoptr(GPtrArray) installations = NULL;
-  g_autoptr(FlatpakInstallation) user = NULL;
-  g_autoptr(GFile) user_file = NULL;
   FlatpakInstallation *priv_install;
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->constructed (object);
@@ -1589,7 +1633,7 @@ ipc_flatpak_service_impl_constructed (GObject *object)
       if ((installations = flatpak_get_system_installations (NULL, NULL)))
         {
           for (guint i = 0; i < installations->len; i++)
-            add_installation (self, g_ptr_array_index (installations, i), NULL);
+            add_installation (self, g_ptr_array_index (installations, i), NULL, NULL);
         }
     }
 
@@ -1598,9 +1642,12 @@ ipc_flatpak_service_impl_constructed (GObject *object)
     {
       g_autofree char *config_dir = ipc_flatpak_repo_get_config_dir (repo);
       g_autofree char *path = ipc_flatpak_repo_get_path (repo);
+      Install *priv_install_ptr = NULL;
 
-      add_installation (self, priv_install, NULL);
+      add_installation (self, priv_install, &priv_install_ptr, NULL);
       ipc_flatpak_service_set_config_dir (IPC_FLATPAK_SERVICE (self), config_dir);
+
+      priv_install_ptr->is_private = TRUE;
 
       g_debug ("Added installation at %s and FLATPAK_CONFIG_DIR %s", config_dir, path);
     }
