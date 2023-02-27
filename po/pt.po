@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-25 11:21+0000\n"
-"PO-Revision-Date: 2023-02-26 16:43+0000\n"
+"POT-Creation-Date: 2023-02-26 16:46+0000\n"
+"PO-Revision-Date: 2023-02-27 12:55+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -50,8 +50,8 @@ msgstr ""
 "O Builder é um 'Ambiente de Desenvolvimento Integrado' (IDE) de "
 "desenvolvimento ativo para o GNOME. Este combina suporte integrado para "
 "tecnologias GNOME essenciais, tais como GTK+, GLib, e GNOME APIs com "
-"funcionalidades que qualquer programador irá apreciar, tais como "
-"\"snippets\" e realce de sintaxe."
+"funcionalidades que qualquer programador irá apreciar, tais como \"snippets"
+"\" e realce de sintaxe."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
 msgid ""
@@ -1054,6 +1054,8 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
+"Falha na localização da configuração de compilação \"%s\". Pode estar "
+"inválida ou formatada incorretamente."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1049
@@ -1108,15 +1110,15 @@ msgstr "A configuração de criação tem erros"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "O Pipeline iniciou a limpeza da estrutura de compilação"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "O Pipeline iniciou"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "O Pipeline terminou"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1262,7 +1264,7 @@ msgstr "O utilizador solicitou a aplicação para reiniciar"
 #: src/libide/foundry/ide-run-manager.c:1355
 #, c-format
 msgid "User requested application to run with tool “%s”"
-msgstr ""
+msgstr "O utilizador solicitou a aplicação a executar com a ferramenta \"%s\""
 
 #: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
@@ -1279,12 +1281,12 @@ msgstr "Sistema Anfitrião"
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
 msgid "Forcing subprocess %s to exit"
-msgstr ""
+msgstr "Forçar a saída do sub-processo %s"
 
 #: src/libide/foundry/ide-run-tool.c:84
 #, c-format
 msgid "Sending signal %d to subprocess %s"
-msgstr ""
+msgstr "A enviar sinal %d para sub-processo %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1694,7 +1696,6 @@ msgstr "Projeto carregado"
 #. translators: %s is replaced with the project name
 #: src/libide/gui/ide-workbench.c:1243
 #, c-format
-#| msgid "Cloning project %s"
 msgid "Loading project “%s”"
 msgstr "A carregar projeto “%s”"
 
@@ -1739,7 +1740,7 @@ msgstr "O servidor de idiomas \"%s\" foi encerrado"
 #: src/libide/lsp/ide-lsp-service.c:531
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr ""
+msgstr "Servidor de linguagem \"%s\" gerado como processo %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
@@ -2056,7 +2057,7 @@ msgstr "Ajustar à volta"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr ""
+msgstr "Processo terminado por sinal %d"
 
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
@@ -2826,11 +2827,11 @@ msgstr "Onde o seu projeto é compilado"
 
 #: src/plugins/buildui/tweaks.ui:449
 msgid "Inside Source Tree"
-msgstr "Dentro da árvore de origem"
+msgstr "Dentro da estrutura de origem"
 
 #: src/plugins/buildui/tweaks.ui:455
 msgid "Outside Source Tree"
-msgstr ""
+msgstr "Fora da estrutura de origem"
 
 #: src/plugins/buildui/tweaks.ui:476
 msgid ""
@@ -2858,12 +2859,12 @@ msgstr "Cargo Run"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "A integração do servidor Clang foi encerrada"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "A integração do servidor Clang iniciou como processo %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2875,7 +2876,7 @@ msgstr "Completar parênteses"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr "Se parênteses devem ser incluídos ao completar."
+msgstr "Se os parênteses devem ser incluídos ao completar."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
@@ -4334,7 +4335,7 @@ msgstr "Não é possível monitorizar ficheiros fora do diretório de trabalho"
 #: src/plugins/git/gbp-git-client.c:171
 #, c-format
 msgid "Git integration has started as process %s"
-msgstr ""
+msgstr "A integração do Git iniciou como processo %s"
 
 #: src/plugins/git/gbp-git-client.c:195
 msgid "Git integration has exited"
@@ -4342,7 +4343,7 @@ msgstr "A integração do Git foi encerrada"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
-msgstr "O controle de versão Git não está em uso"
+msgstr "O controlo de versão Git não está em utilização"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -5304,11 +5305,11 @@ msgstr "Diretório de trabalho"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
+"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -6272,24 +6273,20 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Run with _Debugger"
 #~ msgstr "Executar com _Depurador"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 #~ msgstr ""
 #~ "Plugin embelezador: erro ao copiar o ficheiro de configuração gresource "
 #~ "para “%s”: %s"
 
-#, c-format
 #~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
 #~ msgstr ""
 #~ "Plugin embelezador: erro ao criar ficheiro de configuração temporário "
 #~ "para “%s”"
 
-#, c-format
 #~ msgid "Beautifier plugin: Can’t read .ini file: %s"
 #~ msgstr "Plugin embelezador: não foi possível ler o ficheiro .ini: %s"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
 #~ "“%s” disabled"
@@ -6297,7 +6294,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Plugin embelezador: chaves de comando ou padrão de comando não "
 #~ "encontradas: entrada “%s” desativada"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: both command and command-pattern keys found: entry "
 #~ "“%s” disabled"
@@ -6305,21 +6301,18 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Plugin embelezador: chaves de comando e padrão de comando encontradas: "
 #~ "entrada “%s” desativada"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 #~ msgstr ""
 #~ "Plugin embelezador: caminho de configuração “%s” não existem, entrada "
 #~ "“%s” desativada"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
 #~ msgstr ""
 #~ "Plugin embelezador: chave de comando fora dos valores possíveis: entrada "
 #~ "“%s” desativada"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
 #~ "set: entry “%s” disabled"
@@ -6327,7 +6320,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Plug-in embelezador: @c@ na chave de padrão de comando “%s”, mas nenhum "
 #~ "ficheiro de configuração definido: entrada “%s” desativada"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
 #~ "disabled"
@@ -6335,15 +6327,12 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Plug-in embelezador: não foi possível criar ficheiro temporário para "
 #~ "“%s”: entrada “%s” desativada"
 
-#, c-format
 #~ msgid "Beautifier plugin: “%s”"
 #~ msgstr "Plug-in embelezador: “%s”"
 
-#, c-format
 #~ msgid "Beautifier plugin: %s"
 #~ msgstr "Plug-in embelezador: %s"
 
-#, c-format
 #~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
 #~ msgstr ""
 #~ "Plug-in embelezador: não foi possível ler o seguinte ficheiro de recurso: "
@@ -6364,19 +6353,15 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Beautifier Plugin: Nothing selected"
 #~ msgstr "Plug-in embelezador: nada selecionado"
 
-#, c-format
 #~ msgid "No beautifier available for “%s”"
 #~ msgstr "Nenhum embelezador disponível para “%s”"
 
-#, c-format
 #~ msgid "No beautifier available"
 #~ msgstr "Nenhum embelezador disponível"
 
-#, c-format
 #~ msgid "Beautifier plugin: no valid entries, disabling: %s"
 #~ msgstr "Plugin embelezador: nenhuma entrada válida, a desativar: %s"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 #~ "temporary directory: “%s”"
@@ -6384,7 +6369,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Plugin embelezador: tentativa bloqueada de remover um ficheiro fora do "
 #~ "diretório temporário “%s”: “%s”"
 
-#, c-format
 #~ msgid ""
 #~ "Beautifier plugin: command error output:\n"
 #~ "%s"
@@ -6404,7 +6388,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Colors"
 #~ msgstr "Cores"
 
-#, c-format
 #~ msgid "Save changes to palette “%s” before closing?"
 #~ msgstr "Guardar as alterações para a paleta “%s” antes de fechar?"
 
@@ -6495,38 +6478,30 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Enter a new name for the color"
 #~ msgstr "Insira um novo nome para a cor"
 
-#, c-format
 #~ msgid "failed to parse line %i\n"
 #~ msgstr "falha ao analisar a linha %i\n"
 
-#, c-format
 #~ msgid "%s: palette is empty\n"
 #~ msgstr "%s: a paleta está vazia\n"
 
-#, c-format
 #~ msgid "%s: failed to parse\n"
 #~ msgstr "%s: falha ao analisar\n"
 
-#, c-format
 #~ msgid "Unable to open %s\n"
 #~ msgstr "Não foi possível abrir %s\n"
 
-#, c-format
 #~ msgid "%s: This file format is not supported\n"
 #~ msgstr "%s: Este formato de ficheiro não é suportado\n"
 
-#, c-format
 #~ msgid "failed to parse\n"
 #~ msgstr "falha ao analisar\n"
 
 #~ msgid "Generated"
 #~ msgstr "Gerado"
 
-#, c-format
 #~ msgid "Unable to save %s\n"
 #~ msgstr "Não foi possível guardar %s\n"
 
-#, c-format
 #~ msgid "Unsaved palette %u"
 #~ msgstr "Paleta não gravada %u"
 
@@ -7342,7 +7317,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Save As"
 #~ msgstr "Gravar Como"
 
-#, c-format
 #~ msgid "Failed to save file: %s"
 #~ msgstr "Não foi possível guardar o ficheiro: %s"
 
@@ -7802,7 +7776,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Não foi possível localizar o tempo de execução"
 
-#, c-format
 #~ msgid "The build target failed to build: %s"
 #~ msgstr "O objetivo da compilação falhou em compilar: %s"
 
@@ -7812,11 +7785,9 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Process quit unexpectedly"
 #~ msgstr "O processo saiu inesperadamente"
 
-#, c-format
 #~ msgid "The directory “%s” already exists. Please choose another directory."
 #~ msgstr "O diretório \" %s\" já existe. Escolha outro diretório."
 
-#, c-format
 #~ msgid "Your project will be created at %s"
 #~ msgstr "O seu projeto será criado em %s"
 
@@ -7872,7 +7843,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Command failed"
 #~ msgstr "Comando falhou"
 
-#, c-format
 #~ msgid "Failed to locate command “%s”"
 #~ msgstr "Não foi possível localizar o comando: \"%s\""
 
@@ -7950,25 +7920,21 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Zoom _Out"
 #~ msgstr "_Reduzir"
 
-#, c-format
 #~ msgid "Insert “%s”"
 #~ msgstr "Inserir \"%s\""
 
-#, c-format
 #~ msgid "Replace “%s” with “%s”"
 #~ msgstr "Substituir \"%s\" por \"%s\""
 
 #~ msgid "Apply Fix-It"
 #~ msgstr "Aplicar Reparar"
 
-#, c-format
 #~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 #~ msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
 #~ msgid "Requested runtime is not installed"
 #~ msgstr "O tempo de execução solicitado não está instalado"
 
-#, c-format
 #~ msgid "Failed to create shell within runtime “%s”"
 #~ msgstr "Falha ao criar shell dentro do tempo de execução “%s”"
 
@@ -8050,7 +8016,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Directory already exists with that name"
 #~ msgstr "O diretório já existe com aquele nome"
 
-#, c-format
 #~ msgid "Your project will be created within %s."
 #~ msgstr "O seu projeto será criado dentro de %s."
 
@@ -8130,7 +8095,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Process ID"
 #~ msgstr "ID do processo"
 
-#, c-format
 #~ msgid "%s: %s"
 #~ msgstr "%s: %s"
 
@@ -8143,7 +8107,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "No"
 #~ msgstr "Não"
 
-#, c-format
 #~ msgid "%s: %u"
 #~ msgstr "%s: %u"
 
@@ -8168,7 +8131,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Properties"
 #~ msgstr "Propriedades"
 
-#, c-format
 #~ msgid "Array of [%s]"
 #~ msgstr "Vetor de [%s]"
 
@@ -8224,7 +8186,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ "Se fechar sem gravar, todas as suas alterações serão permanentemente "
 #~ "perdidas."
 
-#, c-format
 #~ msgid "Provide a number between 1 and %u"
 #~ msgstr "Indique um número entre 1 e %u"
 
@@ -8265,11 +8226,9 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Downloading application sources…"
 #~ msgstr "A transferir fontes da aplicação…"
 
-#, c-format
 #~ msgid "%s <b>%s</b>"
 #~ msgstr "%s <b>%s</b>"
 
-#, c-format
 #~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 #~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
@@ -8388,7 +8347,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Your computer is missing python3-sphinx"
 #~ msgstr "O computador não possui python3-sphinx"
 
-#, c-format
 #~ msgid "%s — Directory"
 #~ msgstr "%s — Diretório"
 
@@ -8496,7 +8454,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Click + to add an external command"
 #~ msgstr "Clique em + para adicionar um comando externo"
 
-#, c-format
 #~ msgid "Failed to parse snippet “%s”"
 #~ msgstr "Falha ao analisar trecho de código “%s”"
 
@@ -8527,7 +8484,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "This word is already in the personal dictionary"
 #~ msgstr "Essa palavra já está no dicionário pessoal"
 
-#, c-format
 #~ msgid "This word is already in the %s dictionary"
 #~ msgstr "Essa palavra já está no dicionário %s"
 
@@ -8587,7 +8543,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Generate Support Log"
 #~ msgstr "Gerar ficheiro de assistência"
 
-#, c-format
 #~ msgid ""
 #~ "The support log file has been written to “%s”. Please provide this file "
 #~ "as an attachment on your bug report or support request."
@@ -8616,7 +8571,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Terminal in Runtime"
 #~ msgstr "Terminal do tempo de execução"
 
-#, c-format
 #~ msgid "Running test “%s”…"
 #~ msgstr "A executar o teste “%s”…"
 
@@ -8626,43 +8580,33 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Vagrant"
 #~ msgstr "Vagrant"
 
-#, c-format
 #~ msgid "Number required"
 #~ msgstr "Número requerido"
 
-#, c-format
 #~ msgid "%s is invalid for %s"
 #~ msgstr "%s é inválido para %s"
 
-#, c-format
 #~ msgid "Cannot find language “%s”"
 #~ msgstr "Não foi possível localizar a linguagem “%s”"
 
-#, c-format
 #~ msgid "This command requires a GtkSourceView to be focused"
 #~ msgstr "Este comando requer GtkSourceView de modo a ter foco"
 
-#, c-format
 #~ msgid "This command requires a view to be focused"
 #~ msgstr "Este comando requer uma vista para ser focado"
 
-#, c-format
 #~ msgid "Unknown option: %s"
 #~ msgstr "Opção desconhecida: %s"
 
-#, c-format
 #~ msgid "Cannot find colorscheme “%s”"
 #~ msgstr "Não foi possível localizar o esquema de cores “%s”"
 
-#, c-format
 #~ msgid "Failed to locate working directory"
 #~ msgstr "Falha ao localizar pasta de trabalho"
 
-#, c-format
 #~ msgid "Invalid :syntax subcommand: %s"
 #~ msgstr "Subcomando de sintaxe inválido: %s"
 
-#, c-format
 #~ msgid "Invalid search and replace request"
 #~ msgstr "Pedido de procura e substituição inválido"
 
@@ -8690,7 +8634,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "Save and close the current page"
 #~ msgstr "Gravar e fechar a página atual"
 
-#, c-format
 #~ msgid "Not a command: %s"
 #~ msgstr "Não é um comando: %s"
 
