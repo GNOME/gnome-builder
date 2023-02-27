@@ -221,7 +221,7 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
                   extension = json_array_get_string_element (sdk_extensions_array, j);
                   if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
                       ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
-                      buildsystem = "cargo_plugin";
+                    buildsystem = "cargo";
                 }
             }
 
