@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="foundry_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="sdk_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="sdk_sources_group">
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="title" translatable="yes">Preferred Flatpak Installation</property>
+                    <property name="subtitle" translatable="yes">Install SDKs using a specific Flatpak installation</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.flatpak</property>
+                        <property name="schema-key">preferred-installation</property>
+                      </object>
+                    </property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">GNOME Builder</property>
+                        <property name="value">'private'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">User</property>
+                        <property name="value">'user'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">System</property>
+                        <property name="value">'system'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

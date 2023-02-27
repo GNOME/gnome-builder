@@ -36,6 +36,7 @@
 #include "gbp-flatpak-run-command-provider.h"
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-sdk-provider.h"
+#include "gbp-flatpak-tweaks-addin.h"
 #include "gbp-flatpak-workbench-addin.h"
 
 _IDE_EXTERN void
@@ -64,6 +65,9 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SDK_PROVIDER,
                                               GBP_TYPE_FLATPAK_SDK_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_FLATPAK_TWEAKS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_FLATPAK_WORKBENCH_ADDIN);

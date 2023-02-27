@@ -25,6 +25,11 @@
               </object>
             </child>
             <child>
+              <object class="IdeTweaksGroup" id="sdk_sources_group">
+                <property name="title" translatable="yes">Sources</property>
+              </object>
+            </child>
+            <child>
               <object class="IdeTweaksGroup">
                 <property name="title" translatable="yes">Available SDKs</property>
                 <child>

@@ -31,6 +31,7 @@ plugins_sources += files([
   'gbp-flatpak-sdk-provider.c',
   'gbp-flatpak-sdk-stage.c',
   'gbp-flatpak-sources.c',
+  'gbp-flatpak-tweaks-addin.c',
   'gbp-flatpak-util.c',
   'gbp-flatpak-workbench-addin.c',
   'ipc-flatpak-transfer-impl.c',
