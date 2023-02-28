@@ -32,6 +32,7 @@ struct _IpcFlatpakTransferImpl
 {
   IpcFlatpakTransferSkeleton  parent_instance;
   GtkWindow                  *toplevel;
+  GbpFlatpakInstallDialog    *dialog;
 };
 
 static void transfer_iface_init (IpcFlatpakTransferIface *iface);
@@ -44,6 +45,22 @@ typedef struct
   GDBusMethodInvocation *invocation;
   IpcFlatpakTransfer *transfer;
 } Confirm;
+
+static void
+ipc_flatpak_transfer_impl_destroy (IpcFlatpakTransferImpl *self)
+{
+  g_autoptr(GbpFlatpakInstallDialog) dialog = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_FLATPAK_TRANSFER_IMPL (self));
+
+  if ((dialog = g_steal_pointer (&self->dialog)))
+    gtk_window_destroy (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
 
 static void
 gbp_flatpak_runtime_provider_handle_confirm_cb (GObject      *object,
@@ -68,6 +85,8 @@ gbp_flatpak_runtime_provider_handle_confirm_cb (GObject      *object,
   else
     ipc_flatpak_transfer_complete_confirm (state->transfer,
                                            g_steal_pointer (&state->invocation));
+
+  ipc_flatpak_transfer_impl_destroy (IPC_FLATPAK_TRANSFER_IMPL (state->transfer));
 
   g_clear_object (&state->invocation);
   g_clear_object (&state->transfer);
@@ -99,6 +118,8 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
       return TRUE;
     }
 
+  g_set_object (&self->dialog, dialog);
+
   state = g_slice_new0 (Confirm);
   state->transfer = g_object_ref (transfer);
   state->invocation = g_object_ref (invocation);
@@ -112,11 +133,28 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
 }
 
 static void
+ipc_flatpak_transfer_impl_cancel (IpcFlatpakTransfer *transfer)
+{
+  IpcFlatpakTransferImpl *self = (IpcFlatpakTransferImpl *)transfer;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IPC_IS_FLATPAK_TRANSFER_IMPL (self));
+
+  ipc_flatpak_transfer_impl_destroy (self);
+
+  IDE_EXIT;
+}
+
+static void
 ipc_flatpak_transfer_impl_dispose (GObject *object)
 {
   IpcFlatpakTransferImpl *self = (IpcFlatpakTransferImpl *)object;
 
   g_clear_object (&self->toplevel);
+
+  ipc_flatpak_transfer_impl_destroy (self);
 
   G_OBJECT_CLASS (ipc_flatpak_transfer_impl_parent_class)->dispose (object);
 }
@@ -160,4 +198,5 @@ static void
 transfer_iface_init (IpcFlatpakTransferIface *iface)
 {
   iface->handle_confirm = ipc_flatpak_transfer_impl_handle_confirm;
+  iface->cancel = ipc_flatpak_transfer_impl_cancel;
 }
