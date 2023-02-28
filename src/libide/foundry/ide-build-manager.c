@@ -655,6 +655,12 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
+  if (!self->started)
+    {
+      IDE_TRACE_MSG ("Ignoring invalidation, project not yet loaded");
+      IDE_EXIT;
+    }
+
   context = ide_object_get_context (IDE_OBJECT (self));
 
   IDE_TRACE_MSG ("Reloading pipeline due to configuration change");
