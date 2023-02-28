@@ -672,7 +672,7 @@ ide_shortcut_bundle_new_for_file (GFile *file)
 
   self = ide_shortcut_bundle_new ();
 
-  g_debug ("Looking for user shortcuts at \"%s\"\n",
+  g_debug ("Looking for user shortcuts at \"%s\"",
            g_file_peek_path (file));
 
   self->file = g_object_ref (file);
