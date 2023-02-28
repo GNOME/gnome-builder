@@ -66,6 +66,8 @@ ide_session_init (IdeSession *self)
  * The result of this function may be passed to
  * ide_session_new_from_variant() to recreate a #IdeSession.
  *
+ * The resulting variant will not be floating.
+ *
  * Returns: (transfer full): a #GVariant
  */
 GVariant *
@@ -90,7 +92,7 @@ ide_session_to_variant (IdeSession *self)
         g_variant_builder_close (&builder);
       g_variant_builder_close (&builder);
     g_variant_builder_close (&builder);
-  return g_variant_builder_end (&builder);
+  return g_variant_take_ref (g_variant_builder_end (&builder));
 }
 
 static gboolean
