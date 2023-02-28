@@ -1380,6 +1380,7 @@ update_resolved_cb (DexFuture *completed,
 {
   GbpFlatpakManifest *self = user_data;
   gboolean changed = FALSE;
+  gboolean has_missing = FALSE;
   guint size;
 
   IDE_ENTRY;
@@ -1398,15 +1399,13 @@ update_resolved_cb (DexFuture *completed,
       DexFuture *future = dex_future_set_get_future_at (DEX_FUTURE_SET (completed), i);
       g_autofree char *str = dex_await_string (dex_ref (future), NULL);
 
-      if (!ide_str_empty0 (str))
-        {
-          g_free (self->sdk_extensions[i]);
-          self->sdk_extensions[i] = g_steal_pointer (&str);
-          changed = TRUE;
-        }
+      has_missing |= ide_str_empty0 (str);
+
+      if (!ide_str_empty0 (str) && g_set_str (&self->sdk_extensions[i], str))
+        changed = TRUE;
     }
 
-  if (changed)
+  if (changed && !has_missing)
     g_signal_emit_by_name (self, "changed");
 
   IDE_RETURN (NULL);
