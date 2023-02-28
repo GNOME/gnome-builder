@@ -1057,7 +1057,6 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
    * the build manager to start.
    */
   build_manager = ide_build_manager_from_context (self->context);
-  _ide_build_manager_start (build_manager);
 
   /* Enable actions that are available to projects */
   ide_action_mixin_set_enabled (self, "configure", TRUE);
@@ -1073,6 +1072,8 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
     }
 
   ide_object_message (self->context, _("Project loaded"));
+
+  _ide_build_manager_start (build_manager);
 
   ide_task_return_boolean (task, TRUE);
 }
