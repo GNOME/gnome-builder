@@ -1439,7 +1439,8 @@ ide_build_manager_build_targets_cb (GObject      *object,
 
   if (!ide_pipeline_build_targets_finish (pipeline, result, &error))
     {
-      ide_object_warning (pipeline, "%s", error->message);
+      if (!ide_error_ignore (error))
+        ide_object_warning (pipeline, "%s", error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
