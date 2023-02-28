@@ -403,8 +403,7 @@ ide_clang_client_destroy (IdeObject *object)
 
   self->state = STATE_SHUTDOWN;
 
-  if (self->seq_by_file != NULL)
-    g_hash_table_remove_all (self->seq_by_file);
+  g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
 
   if (self->supervisor != NULL)
     {
@@ -414,6 +413,7 @@ ide_clang_client_destroy (IdeObject *object)
     }
 
   g_clear_object (&self->rpc_client);
+  g_clear_object (&self->root_uri);
 
   queued = g_steal_pointer (&self->get_client.head);
 
