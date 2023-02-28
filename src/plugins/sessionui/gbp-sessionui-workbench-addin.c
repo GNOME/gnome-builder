@@ -36,6 +36,77 @@ struct _GbpSessionuiWorkbenchAddin
   IdeSession   *session;
 };
 
+typedef struct
+{
+  GFile    *file;
+  GVariant *variant;
+} SaveState;
+
+static void
+save_state_free (gpointer data)
+{
+  SaveState *ss = data;
+
+  g_clear_object (&ss->file);
+  g_clear_pointer (&ss->variant, g_variant_unref);
+  g_free (ss);
+}
+
+static SaveState *
+save_state_new (GFile    *file,
+                GVariant *variant)
+{
+  SaveState *ss;
+
+  ss = g_new0 (SaveState, 1);
+  ss->file = g_object_ref (file);
+  ss->variant = g_variant_ref_sink (variant);
+
+  return ss;
+}
+
+static void
+save_state_worker (IdeTask      *task,
+                   gpointer      source_object,
+                   gpointer      task_data,
+                   GCancellable *cancellable)
+{
+  SaveState *ss = task_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) directory = NULL;
+  gconstpointer buffer;
+  gsize length;
+
+  IDE_ENTRY;
+
+  g_assert (!IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (source_object));
+  g_assert (ss != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  directory = g_file_get_parent (ss->file);
+  buffer = g_variant_get_data (ss->variant);
+  length = g_variant_get_size (ss->variant);
+
+  g_assert (G_IS_FILE (directory));
+
+  if (!g_file_make_directory_with_parents (directory, cancellable, &error))
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+    }
+
+  if (!g_file_replace_contents (ss->file, buffer, length, NULL, FALSE, 0, NULL, cancellable, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
 static void
 gbp_sessionui_workbench_addin_load (IdeWorkbenchAddin *addin,
                                     IdeWorkbench      *workbench)
@@ -199,30 +270,6 @@ gbp_sessionui_workbench_addin_load_project_finish (IdeWorkbenchAddin  *addin,
 }
 
 static void
-gbp_sessionui_workbench_addin_replace_state_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
-{
-  GFile *file = (GFile *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_FILE (file));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_boolean (task, TRUE);
-
-  IDE_EXIT;
-}
-
-static void
 gbp_sessionui_workbench_addin_unload_project_async (IdeWorkbenchAddin   *addin,
                                                     IdeProjectInfo      *project_info,
                                                     GCancellable        *cancellable,
@@ -230,9 +277,8 @@ gbp_sessionui_workbench_addin_unload_project_async (IdeWorkbenchAddin   *addin,
                                                     gpointer             user_data)
 {
   GbpSessionuiWorkbenchAddin *self = (GbpSessionuiWorkbenchAddin *)addin;
-  g_autoptr(GVariant) sessionv = NULL;
+  g_autoptr(GVariant) variant = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GFile) file = NULL;
   IdeContext *context;
 
@@ -244,22 +290,14 @@ gbp_sessionui_workbench_addin_unload_project_async (IdeWorkbenchAddin   *addin,
   g_assert (IDE_IS_SESSION (self->session));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_sessionui_workbench_addin_unload_project_async);
-
   context = ide_workbench_get_context (self->workbench);
   file = ide_context_cache_file (context, "session.gvariant", NULL);
-  sessionv = ide_session_to_variant (self->session);
-  bytes = g_variant_get_data_as_bytes (sessionv);
+  variant = ide_session_to_variant (self->session);
 
-  g_file_replace_contents_bytes_async (file,
-                                       bytes,
-                                       NULL,
-                                       FALSE,
-                                       G_FILE_CREATE_REPLACE_DESTINATION,
-                                       cancellable,
-                                       gbp_sessionui_workbench_addin_replace_state_cb,
-                                       g_steal_pointer (&task));
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_sessionui_workbench_addin_unload_project_async);
+  ide_task_set_task_data (task, save_state_new (file, variant), save_state_free);
+  ide_task_run_in_thread (task, save_state_worker);
 
   IDE_EXIT;
 }
