@@ -983,12 +983,6 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
       Install *install = g_ptr_array_index (installs, i);
       g_autoptr(GPtrArray) remotes = flatpak_installation_list_remotes (install->installation, NULL, NULL);
 
-      /* Ignore if failure or this is a system installation (as we can't install
-       * anything for that).
-       */
-      if (remotes == NULL || !flatpak_installation_get_is_user (install->installation))
-        continue;
-
       for (guint j = 0; j < remotes->len; j++)
         {
           FlatpakRemote *remote = g_ptr_array_index (remotes, j);
@@ -1039,7 +1033,20 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
   g_assert (self->installs_ordered->len > 0);
   g_assert (refs != NULL);
 
-  private_install = g_ptr_array_index (self->installs_ordered, self->installs_ordered->len - 1);
+  for (guint i = 0; i < self->installs_ordered->len; i++)
+    {
+      Install *install = g_ptr_array_index (self->installs_ordered, i);
+
+      if (install->is_private)
+        {
+          private_install = install;
+          break;
+        }
+    }
+
+  g_assert (private_install != NULL);
+  g_assert (private_install->is_private == TRUE);
+
   installations = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (guint i = 0; i < refs->len; i++)
@@ -1061,20 +1068,15 @@ find_installations_for_refs (IpcFlatpakServiceImpl *self,
            */
           if (str_equal0 (name, r->name) &&
               str_equal0 (arch, r->arch) &&
-              str_equal0 (branch, r->branch) &&
-              flatpak_installation_get_is_user (r->installation))
+              str_equal0 (branch, r->branch))
             {
               g_ptr_array_add (installations, g_object_ref (r->installation));
               goto next_ref;
             }
         }
 
-      /* Now see if it is found in a configured remote. We must limit things
-       * to user installations because we cannot write to the host system
-       * from within the sandbox.
-       */
-      if ((remote = find_remote_for_ref (self, ir->fref, &install)) &&
-          flatpak_installation_get_is_user (install))
+      /* Now see if it is found in a configured remote. */
+      if ((remote = find_remote_for_ref (self, ir->fref, &install)))
         {
           g_ptr_array_add (installations, g_steal_pointer (&install));
           goto next_ref;
