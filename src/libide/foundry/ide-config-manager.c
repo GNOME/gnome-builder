@@ -53,6 +53,7 @@ struct _IdeConfigManager
   guint             queued_save_source;
 
   guint             propagate_to_settings : 1;
+  guint             save_needs_invalidate : 1;
 };
 
 typedef struct
@@ -594,7 +595,11 @@ ide_config_manager_do_save (gpointer data)
 
   self->queued_save_source = 0;
 
-  g_signal_emit (self, signals [INVALIDATE], 0);
+  if (self->save_needs_invalidate)
+    {
+      self->save_needs_invalidate = FALSE;
+      g_signal_emit (self, signals [INVALIDATE], 0);
+    }
 
   ide_config_manager_save_async (self, NULL, NULL, NULL);
 
@@ -608,7 +613,15 @@ ide_config_manager_changed (IdeConfigManager *self,
   g_assert (IDE_IS_CONFIG_MANAGER (self));
   g_assert (IDE_IS_CONFIG (config));
 
-  g_clear_handle_id (&self->queued_save_source, g_source_remove);
+  if (self->queued_save_source != 0)
+    return;
+
+  ide_object_message (self,
+                      _("Configuration %s changed"),
+                      ide_config_get_display_name (config));
+
+  self->save_needs_invalidate |= config == self->current;
+
   self->queued_save_source =
     g_timeout_add_seconds_full (G_PRIORITY_LOW,
                                 WRITEBACK_DELAY_SEC,
