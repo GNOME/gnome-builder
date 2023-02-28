@@ -616,6 +616,12 @@ ide_config_manager_changed (IdeConfigManager *self,
   if (self->queued_save_source != 0)
     return;
 
+  /* We only care if the changed causes the config to become dirty
+   * and therefore needs a writeback.
+   */
+  if (!ide_config_get_dirty (config))
+    return;
+
   ide_object_message (self,
                       _("Configuration %s changed"),
                       ide_config_get_display_name (config));
