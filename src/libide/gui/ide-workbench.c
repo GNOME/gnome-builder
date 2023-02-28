@@ -422,7 +422,7 @@ ide_workbench_constructed (GObject *object)
 }
 
 static void
-ide_workbench_finalize (GObject *object)
+ide_workbench_dispose (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
 
@@ -433,13 +433,14 @@ ide_workbench_finalize (GObject *object)
 
   g_clear_object (&self->build_system);
   g_clear_object (&self->vcs);
+  g_clear_object (&self->vcs_monitor);
   g_clear_object (&self->search_engine);
   g_clear_object (&self->project_info);
   g_clear_object (&self->cancellable);
-  g_clear_object (&self->context);
   g_clear_object (&self->session);
+  g_clear_object (&self->context);
 
-  G_OBJECT_CLASS (ide_workbench_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_workbench_parent_class)->dispose (object);
 }
 
 static void
@@ -494,7 +495,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ide_workbench_constructed;
-  object_class->finalize = ide_workbench_finalize;
+  object_class->dispose = ide_workbench_dispose;
   object_class->get_property = ide_workbench_get_property;
   object_class->set_property = ide_workbench_set_property;
 
