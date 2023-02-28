@@ -70,9 +70,6 @@ gbp_vcsui_workbench_addin_vcs_changed (IdeWorkbenchAddin *addin,
   g_assert (!vcs || IDE_IS_VCS (vcs));
 
   ide_signal_group_set_target (self->vcs_signals, vcs);
-
-  if (vcs != NULL)
-    on_notify_branch_name (self, NULL, vcs);
 }
 
 static void
