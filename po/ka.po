@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-25 01:35+0000\n"
-"PO-Revision-Date: 2023-02-25 04:50+0100\n"
+"POT-Creation-Date: 2023-02-28 01:07+0000\n"
+"PO-Revision-Date: 2023-02-28 20:32+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -705,7 +705,7 @@ msgstr "უსახელო"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1529
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -722,7 +722,7 @@ msgid "A suitable debugger could not be found."
 msgstr ""
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1524
+#: src/libide/gui/ide-workbench.c:1525
 msgid "Open File…"
 msgstr "ფაილის გახსნა…"
 
@@ -983,12 +983,17 @@ msgstr ""
 msgid "Failed to get device information: %s"
 msgstr ""
 
-#: src/libide/foundry/ide-config-manager.c:537
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "აქტიური კონფიგურაცია"
 
+#: src/libide/foundry/ide-config-manager.c:620
+#, c-format
+msgid "Configuration %s changed"
+msgstr "კონფიგურაცია %s შეიცვალა"
+
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:853
+#: src/libide/foundry/ide-config-manager.c:866
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -996,7 +1001,7 @@ msgid ""
 msgstr ""
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1049
+#: src/libide/foundry/ide-config-manager.c:1062
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "აქტიური კონფიგურაცია დაყენებულია მნიშვნელობაზე \"%s\""
@@ -1298,7 +1303,7 @@ msgid "Select Project File"
 msgstr "აირჩიეთ პროექტის ფაილი"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1528
 msgid "_Open"
 msgstr "_გახსნა"
 
@@ -1616,12 +1621,12 @@ msgstr "პროექტის გაშვება"
 msgid "Other"
 msgstr "სხვა"
 
-#: src/libide/gui/ide-workbench.c:1075
+#: src/libide/gui/ide-workbench.c:1074
 msgid "Project loaded"
 msgstr "პროექტი ჩატვირთულია"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1243
+#: src/libide/gui/ide-workbench.c:1244
 #, c-format
 msgid "Loading project “%s”"
 msgstr "იტვირთება პროექტი \"%s\""
@@ -2311,7 +2316,7 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
-msgstr ""
+msgstr "პროექტის მორგება…"
 
 #: src/plugins/buildui/gtk/menus.ui:8
 msgid "Configure settings related to the project"
@@ -2747,11 +2752,13 @@ msgid ""
 msgstr ""
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 msgid "Fetch dependencies"
 msgstr "დამოკიდებულებების გამოთხოვა"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 msgid "Build project"
 msgstr "პროექტის აგება"
@@ -4024,11 +4031,11 @@ msgstr "ფაილები"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr ""
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "დაყენების შეცდომა"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "დაყენება დასრულებულია"
 
@@ -4260,6 +4267,10 @@ msgstr ""
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Email"
 msgstr "ელ-ფოსტა"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr ""
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -5096,6 +5107,10 @@ msgid ""
 msgstr ""
 
 #: src/plugins/sdkui/tweaks.ui:29
+msgid "Sources"
+msgstr "წყაროები"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "ხელმისაწვდომი SDK-ები"
 
@@ -5716,11 +5731,11 @@ msgstr ""
 msgid "Loading TODOs…"
 msgstr ""
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr ""
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
 msgstr ""
 
