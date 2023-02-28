@@ -31,7 +31,7 @@
 _IDE_EXTERN void
 _gbp_sphinx_preview_register_types (PeasObjectModule *module)
 {
-  const char *path;
+  g_autofree char *path = NULL;
 
   if (!(path = g_find_program_in_path ("sphinx-build")))
     {
