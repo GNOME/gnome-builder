@@ -134,6 +134,7 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
                                              GError                  **error)
 {
   g_autoptr(GPtrArray) manifests = NULL;
+  g_autoptr(GFile) project_dir = NULL;
 
   IDE_ENTRY;
 
@@ -146,6 +147,11 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
   gbp_flatpak_build_system_discovery_find_manifests (project_file, manifests, 0, cancellable);
 
   IDE_TRACE_MSG ("We found %u potential manifests", manifests->len);
+
+  if (g_file_query_file_type (project_file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+    project_dir = g_object_ref (project_file);
+  else
+    project_dir = g_file_get_parent (project_file);
 
   if (priority)
     *priority = 0;
@@ -217,11 +223,16 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
               len = json_array_get_length (sdk_extensions_array);
               for (guint j = 0; j < len; j++)
                 {
-                  const gchar *extension;
-                  extension = json_array_get_string_element (sdk_extensions_array, j);
+                  const char *extension = json_array_get_string_element (sdk_extensions_array, j);
+
                   if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
                       ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
-                    buildsystem = "cargo";
+                    {
+                      g_autoptr(GFile) Cargo_toml = g_file_get_child (project_dir, "Cargo.toml");
+
+                      if (g_file_query_exists (Cargo_toml, NULL))
+                        buildsystem = "cargo";
+                    }
                 }
             }
 
