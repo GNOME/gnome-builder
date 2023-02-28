@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-25 11:21+0000\n"
-"PO-Revision-Date: 2023-02-25 14:14+0200\n"
+"POT-Creation-Date: 2023-02-28 01:07+0000\n"
+"PO-Revision-Date: 2023-02-28 09:29+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -770,7 +770,7 @@ msgstr "Без назви"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1529
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -787,7 +787,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1524
+#: src/libide/gui/ide-workbench.c:1525
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
@@ -1050,12 +1050,18 @@ msgstr "Не вдалося ініціалізувати конвеєр збир
 msgid "Failed to get device information: %s"
 msgstr "Не вдалося отримати дані щодо пристрою: %s"
 
-#: src/libide/foundry/ide-config-manager.c:537
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "Активні налаштування"
 
+#: src/libide/foundry/ide-config-manager.c:620
+#, c-format
+#| msgid "Configurations"
+msgid "Configuration %s changed"
+msgstr "Змінено налаштування %s"
+
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:853
+#: src/libide/foundry/ide-config-manager.c:866
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1065,7 +1071,7 @@ msgstr ""
 "або неправильно форматовані."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1049
+#: src/libide/foundry/ide-config-manager.c:1062
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "Активними налаштуваннями стали «%s»"
@@ -1375,7 +1381,7 @@ msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1528
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -1698,12 +1704,12 @@ msgstr "Запустити проєкт"
 msgid "Other"
 msgstr "Інше"
 
-#: src/libide/gui/ide-workbench.c:1075
+#: src/libide/gui/ide-workbench.c:1074
 msgid "Project loaded"
 msgstr "Проєкт завантажено"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1243
+#: src/libide/gui/ide-workbench.c:1244
 #, c-format
 msgid "Loading project “%s”"
 msgstr "Завантажуємо проєкт «%s»"
@@ -4174,11 +4180,11 @@ msgstr "Файли"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Подібні файли (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Встановлення завершилося невдало"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Встановлення завершено"
 
@@ -5269,6 +5275,11 @@ msgstr ""
 "з'єднаннях"
 
 #: src/plugins/sdkui/tweaks.ui:29
+#| msgid "_View Source"
+msgid "Sources"
+msgstr "Джерела"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "Доступні набори засобів розробки"
 
@@ -5917,11 +5928,11 @@ msgstr "TODO/FIXME"
 msgid "Loading TODOs…"
 msgstr "Завантажуємо TODO…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr "Оновлення залежностей…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
 msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
 
@@ -8406,9 +8417,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "_View Design"
 #~ msgstr "П_ереглянути дизайн"
-
-#~ msgid "_View Source"
-#~ msgstr "П_ереглянути код"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Скорочення Glade"
