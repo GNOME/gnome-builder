@@ -193,6 +193,7 @@ gbp_podman_runtime_provider_load_sniff_cb (GObject      *object,
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   GbpPodmanRuntimeProvider *self;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) new_subprocess = NULL;
   g_autofree gchar *stdout_buf = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -223,10 +224,10 @@ gbp_podman_runtime_provider_load_sniff_cb (GObject      *object,
   ide_subprocess_launcher_push_argv (launcher, "--all");
   ide_subprocess_launcher_push_argv (launcher, "--format=json");
 
-  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+  if (!(new_subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_subprocess_communicate_utf8_async (subprocess,
+    ide_subprocess_communicate_utf8_async (new_subprocess,
                                            NULL,
                                            cancellable,
                                            gbp_podman_runtime_provider_load_communicate_cb,
