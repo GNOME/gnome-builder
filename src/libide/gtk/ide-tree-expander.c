@@ -220,6 +220,9 @@ ide_tree_expander_dispose (GObject *object)
   g_clear_object (&self->list_row);
   g_clear_object (&self->menu_model);
 
+  g_clear_object (&self->icon);
+  g_clear_object (&self->expanded_icon);
+
   child = gtk_widget_get_first_child (GTK_WIDGET (self));
 
   while (child != NULL)
