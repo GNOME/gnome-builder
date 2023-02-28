@@ -268,7 +268,6 @@ ide_config_environment_changed (IdeConfig      *self,
     return;
 
   ide_config_set_dirty (self, TRUE);
-  ide_config_emit_changed (self);
 
   IDE_EXIT;
 }
@@ -286,7 +285,6 @@ ide_config_runtime_environment_changed (IdeConfig      *self,
     return;
 
   ide_config_set_dirty (self, TRUE);
-  ide_config_emit_changed (self);
 
   IDE_EXIT;
 }
@@ -919,7 +917,6 @@ ide_config_set_toolchain_id (IdeConfig   *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TOOLCHAIN]);
 
       ide_config_set_dirty (self, TRUE);
-      ide_config_emit_changed (self);
     }
 }
 
@@ -1161,7 +1158,7 @@ ide_config_set_display_name (IdeConfig   *self,
   if (g_set_str (&priv->display_name, display_name))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
-      ide_config_emit_changed (self);
+      ide_config_set_dirty (self, TRUE);
     }
 }
 
