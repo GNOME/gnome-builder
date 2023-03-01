@@ -900,7 +900,7 @@ extract_metadata (GbpMesonBuildSystem *self,
   g_regex_match (regex, contents, 0, &match_info);
   while (g_match_info_matches (match_info))
     {
-      const gchar *str = g_match_info_fetch (match_info, 1);
+      g_autofree gchar *str = g_match_info_fetch (match_info, 1);
       self->languages = _gbp_meson_build_system_parse_languages (str);
 
       g_match_info_next (match_info, NULL);
