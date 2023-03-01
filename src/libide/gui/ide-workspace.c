@@ -627,6 +627,7 @@ ide_workspace_finalize (GObject *object)
   IdeWorkspace *self = (IdeWorkspace *)object;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
 
+  g_clear_pointer (&priv->id, g_free);
   g_clear_object (&priv->context);
   g_clear_object (&priv->cancellable);
   g_clear_handle_id (&priv->queued_window_save, g_source_remove);
