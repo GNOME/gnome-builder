@@ -170,6 +170,7 @@ static void
 open_free (Open *o)
 {
   g_clear_pointer (&o->addins, g_ptr_array_unref);
+  g_clear_object (&o->position);
   g_clear_object (&o->preferred);
   g_clear_object (&o->file);
   g_clear_pointer (&o->hint, g_free);
