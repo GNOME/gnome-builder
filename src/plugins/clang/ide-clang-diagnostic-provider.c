@@ -186,8 +186,8 @@ static void
 ide_clang_diagnostic_provider_load (IdeDiagnosticProvider *provider)
 {
   IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
+  g_autoptr(IdeClangClient) client = NULL;
   IdeBuildSystem *build_system;
-  IdeClangClient *client;
   IdeContext *context;
 
   IDE_ENTRY;
