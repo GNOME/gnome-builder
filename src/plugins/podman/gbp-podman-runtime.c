@@ -495,7 +495,6 @@ resolve_overlay (GbpPodmanRuntime *runtime)
         }
     }
 
-  layer_parser = json_parser_new ();
   if (!json_parser_load_from_file (layer_parser, layer_json, &error))
     IDE_EXIT;
 
