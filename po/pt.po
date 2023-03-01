@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-26 16:46+0000\n"
-"PO-Revision-Date: 2023-02-27 12:55+0000\n"
+"POT-Creation-Date: 2023-02-28 01:07+0000\n"
+"PO-Revision-Date: 2023-03-01 18:42+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -50,8 +50,8 @@ msgstr ""
 "O Builder é um 'Ambiente de Desenvolvimento Integrado' (IDE) de "
 "desenvolvimento ativo para o GNOME. Este combina suporte integrado para "
 "tecnologias GNOME essenciais, tais como GTK+, GLib, e GNOME APIs com "
-"funcionalidades que qualquer programador irá apreciar, tais como \"snippets"
-"\" e realce de sintaxe."
+"funcionalidades que qualquer programador irá apreciar, tais como "
+"\"snippets\" e realce de sintaxe."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
 msgid ""
@@ -763,7 +763,7 @@ msgstr "Sem Título"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1529
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -780,7 +780,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Não foi possível encontrar um depurador adequado."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1524
+#: src/libide/gui/ide-workbench.c:1525
 msgid "Open File…"
 msgstr "Abrir Ficheiro…"
 
@@ -1043,12 +1043,17 @@ msgstr "Falha ao iniciar o encadeamento de compilação: %s"
 msgid "Failed to get device information: %s"
 msgstr "Não foi possível obter a informação do dispositivo: %s"
 
-#: src/libide/foundry/ide-config-manager.c:537
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "Configuração ativa"
 
+#: src/libide/foundry/ide-config-manager.c:620
+#, c-format
+msgid "Configuration %s changed"
+msgstr "Configuração %s alterada"
+
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:853
+#: src/libide/foundry/ide-config-manager.c:866
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1058,7 +1063,7 @@ msgstr ""
 "inválida ou formatada incorretamente."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1049
+#: src/libide/foundry/ide-config-manager.c:1062
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "Configuração ativa definida para \"%s\""
@@ -1365,7 +1370,7 @@ msgid "Select Project File"
 msgstr "Selecionar ficheiro do projeto"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1528
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1689,12 +1694,12 @@ msgstr "Executar projeto"
 msgid "Other"
 msgstr "Outro"
 
-#: src/libide/gui/ide-workbench.c:1075
+#: src/libide/gui/ide-workbench.c:1074
 msgid "Project loaded"
 msgstr "Projeto carregado"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1243
+#: src/libide/gui/ide-workbench.c:1244
 #, c-format
 msgid "Loading project “%s”"
 msgstr "A carregar projeto “%s”"
@@ -4154,11 +4159,11 @@ msgstr "Ficheiros"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Ficheiros semelhantes (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Falha na instalação"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Instalação concluída"
 
@@ -5246,6 +5251,10 @@ msgstr ""
 "Internet limitadas"
 
 #: src/plugins/sdkui/tweaks.ui:29
+msgid "Sources"
+msgstr "Fontes"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "SDKs disponíveis"
 
@@ -5305,11 +5314,11 @@ msgstr "Diretório de trabalho"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
+"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5894,11 +5903,11 @@ msgstr "TODO/FIXMEs"
 msgid "Loading TODOs…"
 msgstr "A carregar AFAZERes…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr "A atualizar as dependências…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
 msgstr ""
 "O Builder está a atualizar as dependências configuradas nos seus projetos."
@@ -8237,9 +8246,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "_View Design"
 #~ msgstr "_Ver Design"
-
-#~ msgid "_View Source"
-#~ msgstr "_Ver fonte"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Atalhos do glade"
