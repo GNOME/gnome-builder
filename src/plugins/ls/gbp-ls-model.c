@@ -443,11 +443,11 @@ gbp_ls_model_worker (IdeTask      *task,
   while ((info = g_file_enumerator_next_file (enumerator, cancellable, &error)))
     {
       GFileType file_type = g_file_info_get_file_type (info);
-      GIcon *file_icon = NULL;
+      g_autoptr(GIcon) file_icon = NULL;
 
       /* Prefer our symbolic icon for folders */
       if (file_type == G_FILE_TYPE_DIRECTORY)
-        file_icon = icon;
+        file_icon = g_object_ref (icon);
       else
         file_icon = ide_g_content_type_get_symbolic_icon (g_file_info_get_content_type (info),
                                                           g_file_info_get_display_name (info));
