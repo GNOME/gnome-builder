@@ -759,6 +759,7 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
   g_autofree char *id = NULL;
   g_autofree char *short_id = NULL;
   g_autofree char *triplet = NULL;
+  g_autofree char *system_arch = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
 
@@ -788,7 +789,9 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
   else if (g_str_has_prefix (name, "org.kde."))
     g_string_append (category, "KDE/");
 
-  if (ide_str_equal0 (ide_get_system_arch (), arch))
+  system_arch = ide_get_system_arch ();
+
+  if (ide_str_equal0 (system_arch, arch))
     g_string_append (category, name);
   else
     g_string_append_printf (category, "%s (%s)", name, arch);

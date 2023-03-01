@@ -197,7 +197,7 @@ gbp_flatpak_manifest_translate_file (IdeConfig *config,
   if (pipeline != NULL)
     arch = ide_pipeline_dup_arch (pipeline);
   else
-    arch = g_strdup (ide_get_system_arch ());
+    arch = ide_get_system_arch ();
 
   /* Start with SDK-extensions, since they tend to have the
    * Longest Common Prefix with the target.

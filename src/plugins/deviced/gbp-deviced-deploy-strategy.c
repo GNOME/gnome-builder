@@ -192,6 +192,7 @@ deploy_get_commit_cb (GObject      *object,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autofree char *commit_id = NULL;
+  g_autofree char *system_arch = NULL;
   g_autofree char *dest_path = NULL;
   g_autofree char *name = NULL;
   g_autofree char *repo_dir = NULL;
@@ -230,6 +231,7 @@ deploy_get_commit_cb (GObject      *object,
 #endif
   name = g_strdup_printf ("%s.flatpak", app_id);
   dest_path = g_build_filename (staging_dir, name, NULL);
+  system_arch = ide_get_system_arch ();
 
   state->flatpak_path = g_strdup (dest_path);
 
@@ -238,7 +240,7 @@ deploy_get_commit_cb (GObject      *object,
   ide_subprocess_launcher_push_argv (launcher, "build-bundle");
   ide_subprocess_launcher_push_argv (launcher, "-vv");
   ide_subprocess_launcher_push_argv (launcher, "--arch");
-  ide_subprocess_launcher_push_argv (launcher, arch ?: ide_get_system_arch ());
+  ide_subprocess_launcher_push_argv (launcher, arch ? arch : system_arch);
   ide_subprocess_launcher_push_argv (launcher, repo_dir);
   ide_subprocess_launcher_push_argv (launcher, dest_path);
   ide_subprocess_launcher_push_argv (launcher, app_id);

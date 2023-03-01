@@ -143,11 +143,9 @@ gbp_flatpak_split_id (const gchar  *str,
   return _gbp_flatpak_split_id (str, id, arch, branch);
 }
 
-static const char *
+static char *
 _gbp_flatpak_get_default_arch (IdeObject *object)
 {
-  const char *ret = NULL;
-
   if (object != NULL)
     {
       g_autoptr(IdeContext) context = ide_object_ref_context (object);
@@ -158,14 +156,11 @@ _gbp_flatpak_get_default_arch (IdeObject *object)
           IpcFlatpakService *service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
           if (service != NULL)
-            ret = ipc_flatpak_service_get_default_arch (service);
+            return g_strdup (ipc_flatpak_service_get_default_arch (service));
         }
     }
 
-  if (ret == NULL)
-    ret = ide_get_system_arch ();
-
-  return ret;
+  return ide_get_system_arch ();
 }
 
 const char *
@@ -174,7 +169,7 @@ gbp_flatpak_get_default_arch (IdeObject *object)
   static char *default_arch;
 
   if (default_arch == NULL)
-    default_arch = g_strdup (_gbp_flatpak_get_default_arch (object));
+    default_arch = _gbp_flatpak_get_default_arch (object);
 
   return default_arch;
 }
