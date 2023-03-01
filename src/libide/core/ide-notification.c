@@ -95,6 +95,7 @@ ide_notification_destroy (IdeObject *object)
   IdeNotification *self = (IdeNotification *)object;
   IdeNotificationPrivate *priv = ide_notification_get_instance_private (self);
 
+  g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->title, g_free);
   g_clear_pointer (&priv->body, g_free);
   g_clear_pointer (&priv->default_action, g_free);
