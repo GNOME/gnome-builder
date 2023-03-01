@@ -542,14 +542,14 @@ ide_diagnostics_group_queue_diagnose (IdeDiagnosticsGroup   *group,
 }
 
 static void
-ide_diagnostics_manager_finalize (GObject *object)
+ide_diagnostics_manager_destroy (IdeObject *object)
 {
   IdeDiagnosticsManager *self = (IdeDiagnosticsManager *)object;
 
   g_clear_handle_id (&self->queued_diagnose_source, g_source_remove);
   g_clear_pointer (&self->groups_by_file, g_hash_table_unref);
 
-  G_OBJECT_CLASS (ide_diagnostics_manager_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_diagnostics_manager_parent_class)->destroy (object);
 }
 
 static void
@@ -575,9 +575,11 @@ static void
 ide_diagnostics_manager_class_init (IdeDiagnosticsManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_diagnostics_manager_finalize;
   object_class->get_property = ide_diagnostics_manager_get_property;
+
+  i_object_class->destroy = ide_diagnostics_manager_destroy;
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
