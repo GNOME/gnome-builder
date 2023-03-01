@@ -326,13 +326,16 @@ on_tag_added_cb (EditorTextBufferSpellAdapter *self,
                  GtkTextTag                   *tag,
                  GtkTextTagTable              *tag_table)
 {
-  char *name;
+  g_autofree char *name = NULL;
 
   g_assert (EDITOR_IS_TEXT_BUFFER_SPELL_ADAPTER (self));
   g_assert (GTK_IS_TEXT_TAG (tag));
   g_assert (GTK_IS_TEXT_TAG_TABLE (tag_table));
 
-  g_object_get (tag, "name", &name, NULL);
+  g_object_get (tag,
+                "name", &name,
+                NULL);
+
   if (name && strcmp (name, "gtksourceview:context-classes:no-spell-check") == 0)
     {
       g_set_object (&self->no_spell_check_tag, tag);
