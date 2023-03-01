@@ -465,12 +465,14 @@ create_status_model (GbpGitVcs *self,
   while (g_variant_iter_next (&iter, "(&su)", &path, &flags))
     {
       g_autoptr(GFile) file = g_file_get_child (self->workdir, path);
+      g_autoptr(IdeVcsFileInfo) info = NULL;
 
-      g_list_store_append (store,
-                           g_object_new (IDE_TYPE_VCS_FILE_INFO,
-                                         "file", file,
-                                         "status", flags,
-                                         NULL));
+      info = g_object_new (IDE_TYPE_VCS_FILE_INFO,
+                           "file", file,
+                           "status", flags,
+                           NULL);
+
+      g_list_store_append (store, info);
     }
 
   return G_LIST_MODEL (g_steal_pointer (&store));
