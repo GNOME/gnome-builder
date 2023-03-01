@@ -66,6 +66,8 @@ find_test_files_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
+  IDE_PTR_ARRAY_SET_FREE_FUNC (files, g_object_unref);
+
   for (guint i = 0; i < files->len; i++)
     {
       GFile *file = g_ptr_array_index (files, i);

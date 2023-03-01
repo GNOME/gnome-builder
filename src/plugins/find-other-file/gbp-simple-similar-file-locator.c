@@ -57,6 +57,8 @@ gbp_simple_similar_file_locator_list_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, g_object_unref);
+
   vcs = ide_task_get_task_data (task);
   store = g_list_store_new (G_TYPE_FILE);
 
