@@ -316,12 +316,21 @@ gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
                                     IdeRuntimeManager  *manager)
 {
   GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
+  IdeObject *child;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+
+  while ((child = ide_object_get_nth_child (IDE_OBJECT (self), 0)))
+    {
+      g_assert (IDE_IS_RUNTIME (child));
+
+      ide_runtime_manager_remove (self->manager, IDE_RUNTIME (child));
+      ide_object_destroy (child);
+    }
 
   self->manager = NULL;
 
