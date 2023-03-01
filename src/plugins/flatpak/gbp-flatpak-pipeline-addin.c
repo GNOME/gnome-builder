@@ -92,7 +92,7 @@ get_arch_option (IdePipeline *pipeline)
 
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  arch = ide_pipeline_get_arch (pipeline);
+  arch = ide_pipeline_dup_arch (pipeline);
 
   return g_strdup_printf ("--arch=%s", arch);
 }

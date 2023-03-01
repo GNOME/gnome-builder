@@ -191,16 +191,16 @@ deploy_get_commit_cb (GObject      *object,
   GbpDevicedDevice *device = (GbpDevicedDevice *)object;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeTask) task = user_data;
-  g_autofree gchar *commit_id = NULL;
-  g_autofree gchar *dest_path = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *staging_dir = NULL;
+  g_autofree char *commit_id = NULL;
+  g_autofree char *dest_path = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *repo_dir = NULL;
+  g_autofree char *staging_dir = NULL;
+  g_autofree char *arch = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   IdeConfig *config;
-  const gchar *arch;
-  const gchar *app_id;
+  const char *app_id;
   DeployState *state;
   IdeContext *context;
 
@@ -219,7 +219,7 @@ deploy_get_commit_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (state->pipeline));
   config = ide_pipeline_get_config (state->pipeline);
-  arch = ide_pipeline_get_arch (state->pipeline);
+  arch = ide_pipeline_dup_arch (state->pipeline);
   staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
   app_id = ide_config_get_app_id (config);
@@ -322,10 +322,10 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
 {
   GbpDevicedDeployStrategy *self = (GbpDevicedDeployStrategy *)strategy;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree char *arch = NULL;
   IdeConfig *config;
   DeployState *state;
-  const gchar *app_id;
-  const gchar *arch;
+  const char *app_id;
   IdeDevice *device;
 
   IDE_ENTRY;
@@ -339,7 +339,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
 
   config = ide_pipeline_get_config (pipeline);
   device = ide_pipeline_get_device (pipeline);
-  arch = ide_pipeline_get_arch (pipeline);
+  arch = ide_pipeline_dup_arch (pipeline);
   app_id = ide_config_get_app_id (config);
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (config));

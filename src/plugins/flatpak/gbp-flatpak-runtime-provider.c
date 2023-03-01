@@ -498,7 +498,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autofree char *full_sdk = NULL;
   g_autofree char *full_platform = NULL;
-  const char *arch;
+  g_autofree char *arch = NULL;
   Bootstrap *state;
   IdeConfig *config;
 
@@ -508,7 +508,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  arch = ide_pipeline_get_arch (pipeline);
+  arch = ide_pipeline_dup_arch (pipeline);
   config = ide_pipeline_get_config (pipeline);
 
   state = g_slice_new0 (Bootstrap);

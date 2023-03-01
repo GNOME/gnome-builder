@@ -4338,8 +4338,18 @@ ide_pipeline_is_native (IdePipeline *self)
   return FALSE;
 }
 
-gchar *
-ide_pipeline_get_arch (IdePipeline *self)
+/**
+ * ide_pipeline_dup_arch:
+ * @self: a #IdePipeline
+ *
+ * Gets the name of the arch.
+ *
+ * Returns: (transfer full): a new string containing the arch
+ *
+ * Since: 44
+ */
+char *
+ide_pipeline_dup_arch (IdePipeline *self)
 {
   IdeRuntime *runtime;
 

@@ -36,9 +36,9 @@ gbp_flatpak_get_repo_dir (IdeContext *context)
 gchar *
 gbp_flatpak_get_staging_dir (IdePipeline *pipeline)
 {
-  g_autofree gchar *branch = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *arch = NULL;
+  g_autofree char *branch = NULL;
+  g_autofree char *name = NULL;
+  g_autofree char *arch = NULL;
   g_autoptr (IdeTriplet) triplet = NULL;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(IdeVcs) vcs = NULL;
@@ -49,7 +49,7 @@ gbp_flatpak_get_staging_dir (IdePipeline *pipeline)
   context = ide_object_ref_context (IDE_OBJECT (pipeline));
   vcs = ide_vcs_ref_from_context (context);
   branch = ide_vcs_get_branch_name (vcs);
-  arch = ide_pipeline_get_arch (pipeline);
+  arch = ide_pipeline_dup_arch (pipeline);
   name = g_strdup_printf ("%s-%s", arch, branch);
 
   g_strdelimit (name, G_DIR_SEPARATOR_S, '-');

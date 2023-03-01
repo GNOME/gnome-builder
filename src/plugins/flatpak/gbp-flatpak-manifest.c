@@ -195,7 +195,7 @@ gbp_flatpak_manifest_translate_file (IdeConfig *config,
     }
 
   if (pipeline != NULL)
-    arch = ide_pipeline_get_arch (pipeline);
+    arch = ide_pipeline_dup_arch (pipeline);
   else
     arch = g_strdup (ide_get_system_arch ());
 

@@ -583,10 +583,10 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       g_autofree gchar *branch = NULL;
       g_autoptr(GFile) base = NULL;
       g_autoptr(GFile) nosymlink = NULL;
+      g_autofree char *arch = NULL;
       IdeConfig *config;
       const gchar *config_id;
       const gchar *runtime_id;
-      const gchar *arch;
       IdeRuntime *runtime;
       IdeContext *context;
       IdeVcs *vcs;
@@ -598,7 +598,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       runtime = ide_pipeline_get_runtime (pipeline);
       runtime_id = ide_runtime_get_short_id (runtime);
       branch = ide_vcs_get_branch_name (vcs);
-      arch = ide_pipeline_get_arch (pipeline);
+      arch = ide_pipeline_dup_arch (pipeline);
 
       if (branch != NULL)
         name = g_strdup_printf ("%s-%s-%s-%s", config_id, runtime_id, arch, branch);
