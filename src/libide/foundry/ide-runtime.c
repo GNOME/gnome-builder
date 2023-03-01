@@ -182,18 +182,19 @@ ide_runtime_repr (IdeObject *object)
 }
 
 static void
-ide_runtime_finalize (GObject *object)
+ide_runtime_destroy (IdeObject *object)
 {
   IdeRuntime *self = (IdeRuntime *)object;
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
-  g_clear_pointer (&priv->icon_name, g_free);
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->short_id, g_free);
-  g_clear_pointer (&priv->display_name, g_free);
+  g_clear_pointer (&priv->category, g_free);
   g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
+  g_clear_pointer (&priv->icon_name, g_free);
 
-  G_OBJECT_CLASS (ide_runtime_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_runtime_parent_class)->destroy (object);
 }
 
 static void
@@ -274,10 +275,10 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_runtime_finalize;
   object_class->get_property = ide_runtime_get_property;
   object_class->set_property = ide_runtime_set_property;
 
+  i_object_class->destroy = ide_runtime_destroy;
   i_object_class->repr = ide_runtime_repr;
 
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
@@ -356,9 +357,7 @@ ide_runtime_set_id (IdeRuntime  *self,
   g_return_if_fail (id != NULL);
 
   if (g_set_str (&priv->id, id))
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
 }
 
 const gchar *
@@ -381,9 +380,7 @@ ide_runtime_set_short_id (IdeRuntime  *self,
   g_return_if_fail (short_id != NULL);
 
   if (g_set_str (&priv->short_id, short_id))
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORT_ID]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHORT_ID]);
 }
 
 const gchar *
@@ -409,9 +406,7 @@ ide_runtime_set_category (IdeRuntime  *self,
     category = _("Host System");
 
   if (g_set_str (&priv->category, category))
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CATEGORY]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CATEGORY]);
 }
 
 const gchar *
@@ -464,9 +459,7 @@ ide_runtime_set_display_name (IdeRuntime  *self,
   g_return_if_fail (IDE_IS_RUNTIME (self));
 
   if (g_set_str (&priv->display_name, display_name))
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
 }
 
 IdeRuntime *
