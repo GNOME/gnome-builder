@@ -569,6 +569,8 @@ gbp_podman_runtime_destroy (IdeObject *object)
 
   g_clear_pointer (&self->object, json_object_unref);
   g_clear_pointer (&self->id, g_free);
+  g_clear_list (&self->layers, g_free);
+  g_clear_object (&self->path_cache);
 
   IDE_OBJECT_CLASS (gbp_podman_runtime_parent_class)->destroy (object);
 }
@@ -578,10 +580,7 @@ gbp_podman_runtime_finalize (GObject *object)
 {
   GbpPodmanRuntime *self = (GbpPodmanRuntime *)object;
 
-  g_clear_pointer (&self->id, g_free);
   g_mutex_clear (&self->mutex);
-  g_clear_list (&self->layers, g_free);
-  g_clear_object (&self->path_cache);
 
   G_OBJECT_CLASS (gbp_podman_runtime_parent_class)->finalize (object);
 }
