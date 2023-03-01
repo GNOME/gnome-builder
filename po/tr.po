@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-25 11:21+0000\n"
-"PO-Revision-Date: 2023-02-29 09:40+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-03-01 01:45+0000\n"
+"PO-Revision-Date: 2023-03-01 22:44+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -755,7 +755,7 @@ msgstr "Başlıksız"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1531
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -772,7 +772,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Uygun hata ayıklayıcı bulunamadı."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1524
+#: src/libide/gui/ide-workbench.c:1527
 msgid "Open File…"
 msgstr "Dosya Aç…"
 
@@ -1035,12 +1035,17 @@ msgstr "İnşa boru hattı ilklendirilemedi: %s"
 msgid "Failed to get device information: %s"
 msgstr "Aygıt bilgisi alınamadı: %s"
 
-#: src/libide/foundry/ide-config-manager.c:537
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "Etkin Yapılandırma"
 
+#: src/libide/foundry/ide-config-manager.c:626
+#, c-format
+msgid "Configuration %s changed"
+msgstr "%s yapılandırması değişti"
+
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:853
+#: src/libide/foundry/ide-config-manager.c:872
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1050,7 +1055,7 @@ msgstr ""
 "olabilir."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1049
+#: src/libide/foundry/ide-config-manager.c:1068
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "Etkin yapılandırma “%s” olarak ayarlandı"
@@ -1259,7 +1264,7 @@ msgstr "Kullanıcı, uygulamanın “%s” aracıyla çalıştırılmasını ist
 msgid "User requested application to stop"
 msgstr "Kullanıcı, uygulamanın durdurulmasını istedi"
 
-#: src/libide/foundry/ide-runtime.c:409
+#: src/libide/foundry/ide-runtime.c:406
 #: src/plugins/host/gbp-host-runtime-provider.c:55
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
@@ -1316,7 +1321,7 @@ msgid "Directory"
 msgstr "Dizin"
 
 #: src/libide/greeter/ide-greeter-workspace.c:230
-#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
+#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1353,7 +1358,7 @@ msgid "Select Project File"
 msgstr "Proje Dosyası Seç"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_Aç"
 
@@ -1676,17 +1681,17 @@ msgstr "Projeyi çalıştır"
 msgid "Other"
 msgstr "Diğer"
 
-#: src/libide/gui/ide-workbench.c:1075
+#: src/libide/gui/ide-workbench.c:1076
 msgid "Project loaded"
 msgstr "Proje yüklendi"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1243
+#: src/libide/gui/ide-workbench.c:1246
 #, c-format
 msgid "Loading project “%s”"
 msgstr "“%s” projesi yükleniyor"
 
-#: src/libide/gui/ide-workspace.c:1712
+#: src/libide/gui/ide-workspace.c:1713
 msgid "There are unsaved documents"
 msgstr "Kaydedilmemiş belgeler var"
 
@@ -4126,11 +4131,11 @@ msgstr "Dosyalar"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Benzer Dosyalar (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Kurulum başarısız"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Kurulum bitti"
 
@@ -4335,11 +4340,11 @@ msgstr "İtildi."
 msgid "Pushing ref “%s”"
 msgstr "Ref “%s” itiliyor"
 
-#: src/plugins/git/gbp-git-vcs.c:530
+#: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
 msgstr "Dizin depo içinde değil"
 
-#: src/plugins/git/gbp-git-vcs.c:558
+#: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
 msgstr "Git"
 
@@ -4379,7 +4384,7 @@ msgid "Bootstrapping project"
 msgstr "Proje özyükleniyor"
 
 # Gradle program adı
-#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr "Gradle Çalıştır"
 
@@ -4524,7 +4529,7 @@ msgstr "Boş Makefile Projesi"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Basit bir Makefile kullanarak yeni boş proje oluştur"
 
-#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+#: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr "Maven Çalıştır"
 
@@ -4940,12 +4945,12 @@ msgid "Drop Down"
 msgstr "Açılır"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:663
+#: src/plugins/podman/gbp-podman-runtime.c:661
 msgid "Containers/Toolbox"
 msgstr "Konteynerler/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:669
+#: src/plugins/podman/gbp-podman-runtime.c:667
 msgid "Containers/Podman"
 msgstr "Konteynerler/Podman"
 
@@ -5219,6 +5224,10 @@ msgstr ""
 "izin ver"
 
 #: src/plugins/sdkui/tweaks.ui:29
+msgid "Sources"
+msgstr "Kaynaklar"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "Kullanılabilir SDK’ler"
 
@@ -5855,11 +5864,11 @@ msgstr "TODO/FIXME’ler"
 msgid "Loading TODOs…"
 msgstr "TODOʼlar yükleniyor…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr "Bağımlılıklar Güncelleniyor…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
 msgstr "Builder, projenizin yapılandırılmış bağımlılıklarını güncelliyor."
 
