@@ -35,7 +35,7 @@ struct _GbpPodmanRuntimeProvider
   IdeObject          parent_instance;
   GCancellable      *cancellable;
   IdeRuntimeManager *manager;
-  const gchar       *runtime_id;
+  char              *runtime_id;
 };
 
 static gboolean
@@ -327,6 +327,7 @@ gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
+  g_clear_pointer (&self->runtime_id, g_free);
 
   IDE_EXIT;
 }
@@ -408,7 +409,7 @@ gbp_podman_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       IDE_EXIT;
     }
 
-  self->runtime_id = runtime_id;
+  g_set_str (&self->runtime_id, runtime_id);
 
   gbp_podman_runtime_provider_load_async (self,
                                           self->cancellable,
