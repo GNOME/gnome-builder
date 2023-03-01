@@ -169,6 +169,7 @@ ide_tweaks_model_dispose (GObject *object)
 
   g_clear_object (&self->item);
   g_clear_pointer (&self->branches, g_ptr_array_unref);
+  g_clear_pointer (&self->items, g_ptr_array_unref);
 
   if (self->visitor_data_destroy)
     {
