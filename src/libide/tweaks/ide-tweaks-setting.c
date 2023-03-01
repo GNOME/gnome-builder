@@ -152,7 +152,7 @@ ide_tweaks_setting_get_value (IdeTweaksBinding *binding,
 
       if (variant != NULL)
         {
-          g_variant_ref_sink (variant);
+          g_variant_take_ref (variant);
           return g_settings_get_mapping (value, variant, NULL);
         }
     }
