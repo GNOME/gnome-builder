@@ -158,7 +158,7 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
         {
           const char *id = ide_pane_get_id (IDE_PANE (widget));
           g_autoptr(PanelPosition) page_position = panel_widget_get_position (widget);
-          g_autoptr(IdeSessionItem) page_item = ide_session_item_new ();
+          g_autoptr(IdeSessionItem) page_item = NULL;
 
           if (id == NULL)
             continue;
