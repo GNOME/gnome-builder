@@ -3,6 +3,9 @@
   <template class="GbpCreateProjectWidget" parent="GtkWidget">
     <child>
       <object class="AdwPreferencesPage" id="main">
+        <style>
+          <class name="undershoot-top"/>
+        </style>
         <child>
           <object class="AdwPreferencesGroup">
             <child>

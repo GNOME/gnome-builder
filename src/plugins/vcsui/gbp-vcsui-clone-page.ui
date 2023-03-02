@@ -4,6 +4,9 @@
   <template class="GbpVcsuiClonePage" parent="GtkWidget">
     <child>
       <object class="AdwPreferencesPage" id="main">
+        <style>
+          <class name="undershoot-top"/>
+        </style>
         <child>
           <object class="AdwPreferencesGroup">
             <property name="margin-top">36</property>
