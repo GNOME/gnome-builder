@@ -36,7 +36,7 @@ typedef struct
 
 typedef struct
 {
-  GWeakRef    instance;
+  gpointer    instance;
   GParamSpec *pspec;
   int         inhibit;
   Binding    *binding;
@@ -200,7 +200,7 @@ ide_tweaks_binding_real_changed (IdeTweaksBinding *self)
 
   g_assert (IDE_IS_TWEAKS_BINDING (self));
 
-  if (!(instance = g_weak_ref_get (&priv->instance)))
+  if (!g_set_object (&instance, priv->instance))
     return;
 
   g_assert (G_IS_OBJECT (instance));
@@ -237,22 +237,13 @@ ide_tweaks_binding_dispose (GObject *object)
   IdeTweaksBinding *self = (IdeTweaksBinding *)object;
   IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
 
-  g_clear_pointer (&priv->binding, binding_unref);
-  g_weak_ref_set (&priv->instance, NULL);
   priv->pspec = NULL;
 
+  g_clear_weak_pointer (&priv->instance);
+
+  g_clear_pointer (&priv->binding, binding_unref);
+
   G_OBJECT_CLASS (ide_tweaks_binding_parent_class)->dispose (object);
-}
-
-static void
-ide_tweaks_binding_finalize (GObject *object)
-{
-  IdeTweaksBinding *self = (IdeTweaksBinding *)object;
-  IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
-
-  g_weak_ref_clear (&priv->instance);
-
-  G_OBJECT_CLASS (ide_tweaks_binding_parent_class)->finalize (object);
 }
 
 static void
@@ -261,7 +252,6 @@ ide_tweaks_binding_class_init (IdeTweaksBindingClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_tweaks_binding_dispose;
-  object_class->finalize = ide_tweaks_binding_finalize;
 
   klass->changed = ide_tweaks_binding_real_changed;
 
@@ -278,9 +268,6 @@ ide_tweaks_binding_class_init (IdeTweaksBindingClass *klass)
 static void
 ide_tweaks_binding_init (IdeTweaksBinding *self)
 {
-  IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
-
-  g_weak_ref_init (&priv->instance, NULL);
 }
 
 void
@@ -369,9 +356,9 @@ ide_tweaks_binding_unbind (IdeTweaksBinding *self)
 
   g_clear_pointer (&priv->binding, binding_unref);
 
-  if ((instance = g_weak_ref_get (&priv->instance)))
+  if (g_set_object (&instance, priv->instance))
     {
-      g_weak_ref_set (&priv->instance, NULL);
+      g_clear_weak_pointer (&priv->instance);
       priv->pspec = NULL;
 
       g_signal_handlers_disconnect_by_func (instance,
@@ -421,7 +408,7 @@ ide_tweaks_binding_bind_with_transform (IdeTweaksBinding          *self,
       return;
     }
 
-  g_weak_ref_set (&priv->instance, instance);
+  g_set_weak_pointer (&priv->instance, instance);
   priv->binding = binding_new (get_transform, set_transform, user_data, notify);
 
   /* Get notifications on property changes */
