@@ -217,7 +217,7 @@ test_run_context_push_shell (void)
   g_assert_nonnull (launcher);
 
   g_assert_true (g_strv_equal (ide_subprocess_launcher_get_argv (launcher),
-                               IDE_STRV_INIT ("/bin/sh", "-l", "-i", "-c", "env 'PATH=path' 'which' 'foo'")));
+                               IDE_STRV_INIT ("/bin/sh", "-l", "-c", "env 'PATH=path' 'which' 'foo'")));
 
   g_assert_finalize_object (launcher);
   g_assert_finalize_object (run_context);
