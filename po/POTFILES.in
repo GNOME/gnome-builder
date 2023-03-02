@@ -200,6 +200,8 @@ src/plugins/flatpak/gbp-flatpak-run-command-provider.c
 src/plugins/flatpak/gbp-flatpak-runtime.c
 src/plugins/flatpak/gbp-flatpak-runtime-provider.c
 src/plugins/flatpak/gbp-flatpak-sdk-stage.c
+src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml
+src/plugins/flatpak/tweaks.ui
 src/plugins/gcc/gbp-gcc-toolchain-provider.c
 src/plugins/git/daemon/ipc-git-change-monitor-impl.c
 src/plugins/git/daemon/ipc-git-remote-callbacks.c
@@ -289,6 +291,8 @@ src/plugins/shortcutui/tweaks.ui
 src/plugins/spellcheck/editor-enchant-spell-provider.c
 src/plugins/spellcheck/editor-spell-menu.c
 src/plugins/sphinx-preview/gtk/menus.ui
+src/plugins/swift/gbp-swift-pipeline-addin.c
+src/plugins/swift/gbp-swift-run-command-provider.c
 src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-popover.ui
 src/plugins/symbol-tree/gbp-symbol-search-provider.c
