@@ -36,6 +36,8 @@ popover.global-search contents .navigation-sidebar {
 }
 popover.global-search listview.results {
   padding: 6px 0;
+  background: none;
+  color: inherit;
 }
 popover.global-search listview.results row {
   min-height: 36px;
