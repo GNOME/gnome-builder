@@ -102,6 +102,22 @@ ide_terminal_get_colors (IdeTerminal *self,
 }
 
 static void
+ide_terminal_direction_changed (GtkWidget        *widget,
+                                GtkTextDirection  previous_direction)
+{
+  IdeTerminal *self = IDE_TERMINAL (widget);
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+
+  if (priv->popover != NULL)
+    {
+      if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+        gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_END);
+      else
+        gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_START);
+    }
+}
+
+static void
 ide_terminal_css_changed (GtkWidget         *widget,
                           GtkCssStyleChange *change)
 {
@@ -215,7 +231,12 @@ ide_terminal_popup (IdeTerminal *self,
 
       priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (menu)));
       gtk_popover_set_has_arrow (priv->popover, FALSE);
-      gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_END);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+        gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_END);
+      else
+        gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_START);
+
       gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
 
       g_signal_connect_object (priv->popover,
@@ -558,6 +579,7 @@ ide_terminal_class_init (IdeTerminalClass *klass)
 
   object_class->dispose = ide_terminal_dispose;
 
+  widget_class->direction_changed = ide_terminal_direction_changed;
   widget_class->css_changed = ide_terminal_css_changed;
   widget_class->size_allocate = ide_terminal_size_allocate;
 
