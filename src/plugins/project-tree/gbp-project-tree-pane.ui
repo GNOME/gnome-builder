@@ -111,10 +111,10 @@
             <signal name="search-started" handler="on_search_cb" swapped="true"/>
             <signal name="activate" handler="on_search_activate_cb" swapped="true"/>
             <property name="placeholder-text" translatable="yes">Filter</property>
-            <property name="margin-start">3</property>
-            <property name="margin-end">3</property>
-            <property name="margin-top">3</property>
-            <property name="margin-bottom">3</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
           </object>
         </child>
       </object>
