@@ -35,7 +35,7 @@
                     <property name="min-content-width">300</property>
                     <property name="max-content-width">300</property>
                     <style>
-                      <class name="shadow-when-scroll"/>
+                      <class name="undershoot-top"/>
                     </style>
                     <child>
                       <object class="GtkListView" id="branches_view">
@@ -101,7 +101,7 @@
                     <property name="min-content-width">300</property>
                     <property name="max-content-width">300</property>
                     <style>
-                      <class name="shadow-when-scroll"/>
+                      <class name="undershoot-top"/>
                     </style>
                     <child>
                       <object class="GtkListView" id="tags_view">

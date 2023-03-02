@@ -275,6 +275,6 @@ gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
        child = gtk_widget_get_next_sibling (child))
     {
       if (GTK_IS_SCROLLED_WINDOW (child))
-        gtk_widget_add_css_class (child, "shadow-when-scroll");
+        gtk_widget_add_css_class (child, "undershoot-top");
     }
 }

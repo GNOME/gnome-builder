@@ -50,11 +50,11 @@ notificationstack button {
   background: none;
 }
 
-scrolledwindow.shadow-when-scroll undershoot.top {
+scrolledwindow.undershoot-top undershoot.top {
   box-shadow: inset 0px 5px 14px -14px rgba(0,0,0,.9);
 }
 
-scrolledwindow.bottom-shadow-when-scroll undershoot.bottom {
+scrolledwindow.undershoot-bottom undershoot.bottom {
   box-shadow: inset 0px -5px 14px -14px rgba(0,0,0,.9);
 }
 
