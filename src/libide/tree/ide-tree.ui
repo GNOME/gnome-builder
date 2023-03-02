@@ -23,6 +23,7 @@
             </property>
             <style>
               <class name="navigation-sidebar"/>
+              <class name="bottom-shadow-when-scroll"/>
             </style>
           </object>
         </child>
