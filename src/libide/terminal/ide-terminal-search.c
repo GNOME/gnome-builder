@@ -38,9 +38,17 @@
 
 G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, ADW_TYPE_BIN)
 
+gboolean use_regex = FALSE;
+gboolean wrap_word = FALSE;
+gboolean match_case = FALSE;
+gboolean entire_word = FALSE;
+
 enum {
   PROP_0,
   PROP_REGEX,
+  PROP_CASE_SENSITIVE,
+  PROP_USE_REGEX,
+  PROP_WHOLE_WORDS,
   PROP_WRAP_AROUND,
   LAST_PROP
 };
@@ -105,14 +113,14 @@ update_regex (IdeTerminalSearch *self)
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
-  caseless = !gtk_check_button_get_active (GTK_CHECK_BUTTON (self->match_case_checkbutton));
+  caseless = !match_case;
 
-  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->regex_checkbutton)))
+  if (use_regex)
     pattern = g_strdup (search_text);
   else
     pattern = g_regex_escape_string (search_text, -1);
 
-  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->entire_word_checkbutton)))
+  if (entire_word)
     {
       char *new_pattern;
       new_pattern = g_strdup_printf ("\\b%s\\b", pattern);
@@ -154,17 +162,9 @@ search_notify_text_cb (IdeSearchEntry    *search_entry,
 }
 
 static void
-search_parameters_changed_cb (GtkToggleButton *button,
-                              IdeTerminalSearch  *self)
+search_parameters_changed_cb (IdeTerminalSearch *self)
 {
   update_regex (self);
-}
-
-static void
-wrap_around_toggled_cb (GtkToggleButton *button,
-                        IdeTerminalSearch  *self)
-{
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WRAP_AROUND]);
 }
 
 static void
@@ -186,13 +186,10 @@ search_overlay_notify_wrap_around_cb (VteTerminal    *terminal,
                                       GParamSpec     *pspec G_GNUC_UNUSED,
                                       IdeTerminalSearch *self)
 {
-  gboolean wrap;
-
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  wrap = ide_terminal_search_get_wrap_around (self);
-  vte_terminal_search_set_wrap_around (terminal, wrap);
+  vte_terminal_search_set_wrap_around (terminal, wrap_word);
 }
 
 static void
@@ -236,6 +233,38 @@ search_revealer_cb (GtkRevealer       *search_revealer,
     {
       gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
     }
+}
+
+static gboolean
+on_search_key_pressed_cb (GtkEventControllerKey *key,
+                          guint                  keyval,
+                          guint                  keycode,
+                          GdkModifierType        state,
+                          IdeTerminalSearch     *self)
+{
+  g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
+
+  if ((state & (GDK_CONTROL_MASK | GDK_ALT_MASK)) == 0)
+    {
+      switch (keyval)
+        {
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+          perform_search (self, FALSE);
+          return TRUE;
+
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+          perform_search (self, TRUE);
+          return TRUE;
+
+        default:
+          break;
+        }
+    }
+
+  return FALSE;
 }
 
 static void
@@ -285,8 +314,55 @@ ide_terminal_search_get_property (GObject    *object,
       g_value_set_boxed (value, ide_terminal_search_get_regex (self));
       break;
 
+    case PROP_USE_REGEX:
+      g_value_set_boolean (value, use_regex);
+      break;
+
+    case PROP_CASE_SENSITIVE:
+      g_value_set_boolean (value, match_case);
+      break;
+
+    case PROP_WHOLE_WORDS:
+      g_value_set_boolean (value, entire_word);
+      break;
+
     case PROP_WRAP_AROUND:
-      g_value_set_boolean (value, ide_terminal_search_get_wrap_around (self));
+      g_value_set_boolean (value, wrap_word);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_terminal_search_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (object);
+
+  switch (prop_id)
+    {
+   case PROP_USE_REGEX:
+      use_regex = !use_regex;
+      search_parameters_changed_cb (self);
+      break;
+
+    case PROP_CASE_SENSITIVE:
+      match_case = !match_case;
+      search_parameters_changed_cb (self);
+      break;
+
+    case PROP_WHOLE_WORDS:
+      entire_word = !entire_word;
+      search_parameters_changed_cb (self);
+      break;
+
+    case PROP_WRAP_AROUND:
+      wrap_word = !wrap_word;
+      search_parameters_changed_cb (self);
       break;
 
     default:
@@ -301,19 +377,15 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = ide_terminal_search_get_property;
+  object_class->set_property = ide_terminal_search_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-search.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_next_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, close_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, match_case_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, entire_word_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, regex_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, wrap_around_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, reveal_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_revealer);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_options);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_key_pressed_cb);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
 
@@ -327,17 +399,37 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  properties[PROP_REGEX] =
+  properties [PROP_REGEX] =
     g_param_spec_boxed ("regex", NULL, NULL,
-                        VTE_TYPE_REGEX,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          VTE_TYPE_REGEX,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_WRAP_AROUND] =
+  properties [PROP_CASE_SENSITIVE] =
+    g_param_spec_boolean ("case-sensitive", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_REGEX] =
+    g_param_spec_boolean ("use-regex", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_WHOLE_WORDS] =
+    g_param_spec_boolean ("whole-words", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_WRAP_AROUND] =
     g_param_spec_boolean ("wrap-around", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  gtk_widget_class_install_property_action (widget_class, "search.case-sensitive", "case-sensitive");
+  gtk_widget_class_install_property_action (widget_class, "search.use-regex", "use-regex");
+  gtk_widget_class_install_property_action (widget_class, "search.whole-words", "whole-words");
+  gtk_widget_class_install_property_action (widget_class, "search.wrap-around", "wrap-around");
 }
 
 static void
@@ -352,10 +444,6 @@ ide_terminal_search_init (IdeTerminalSearch *self)
   g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
   g_signal_connect (self->search_entry, "notify::text", G_CALLBACK (search_notify_text_cb), self);
-  g_signal_connect (self->match_case_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
-  g_signal_connect (self->entire_word_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
-  g_signal_connect (self->regex_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
-  g_signal_connect (self->wrap_around_checkbutton, "toggled", G_CALLBACK (wrap_around_toggled_cb), self);
   g_signal_connect (self->search_revealer, "notify::child-revealed", G_CALLBACK (search_revealer_cb), self);
 }
 
@@ -398,7 +486,7 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
 {
   g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
-  return gtk_check_button_get_active (GTK_CHECK_BUTTON (self->wrap_around_checkbutton));
+  return wrap_word;
 }
 
 /**

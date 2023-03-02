@@ -40,14 +40,6 @@ struct _IdeTerminalSearch
   GtkButton           *search_next_button;
   GtkButton           *close_button;
 
-  GtkGrid             *search_options;
-
-  GtkToggleButton     *reveal_button;
-  GtkToggleButton     *match_case_checkbutton;
-  GtkToggleButton     *entire_word_checkbutton;
-  GtkToggleButton     *regex_checkbutton;
-  GtkToggleButton     *wrap_around_checkbutton;
-
   /* Cached regex */
   gboolean             regex_caseless;
   gchar               *regex_pattern;
