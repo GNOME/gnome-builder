@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-28 01:07+0000\n"
-"PO-Revision-Date: 2023-02-28 20:32+0100\n"
+"POT-Creation-Date: 2023-03-02 16:18+0000\n"
+"PO-Revision-Date: 2023-03-02 22:52+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -705,7 +705,7 @@ msgstr "უსახელო"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1529
+#: src/libide/gui/ide-workbench.c:1531
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -722,7 +722,7 @@ msgid "A suitable debugger could not be found."
 msgstr ""
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1525
+#: src/libide/gui/ide-workbench.c:1527
 msgid "Open File…"
 msgstr "ფაილის გახსნა…"
 
@@ -987,13 +987,13 @@ msgstr ""
 msgid "Active Configuration"
 msgstr "აქტიური კონფიგურაცია"
 
-#: src/libide/foundry/ide-config-manager.c:620
+#: src/libide/foundry/ide-config-manager.c:626
 #, c-format
 msgid "Configuration %s changed"
 msgstr "კონფიგურაცია %s შეიცვალა"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:866
+#: src/libide/foundry/ide-config-manager.c:872
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1001,7 +1001,7 @@ msgid ""
 msgstr ""
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1062
+#: src/libide/foundry/ide-config-manager.c:1068
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "აქტიური კონფიგურაცია დაყენებულია მნიშვნელობაზე \"%s\""
@@ -1210,7 +1210,7 @@ msgstr ""
 msgid "User requested application to stop"
 msgstr "მომხმარებელმა აპლიკაციის გაჩერება მოითხოვა"
 
-#: src/libide/foundry/ide-runtime.c:409
+#: src/libide/foundry/ide-runtime.c:406
 #: src/plugins/host/gbp-host-runtime-provider.c:55
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
@@ -1266,7 +1266,7 @@ msgid "Directory"
 msgstr "საქაღალდე"
 
 #: src/libide/greeter/ide-greeter-workspace.c:230
-#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
+#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1303,7 +1303,7 @@ msgid "Select Project File"
 msgstr "აირჩიეთ პროექტის ფაილი"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_გახსნა"
 
@@ -1621,17 +1621,17 @@ msgstr "პროექტის გაშვება"
 msgid "Other"
 msgstr "სხვა"
 
-#: src/libide/gui/ide-workbench.c:1074
+#: src/libide/gui/ide-workbench.c:1076
 msgid "Project loaded"
 msgstr "პროექტი ჩატვირთულია"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1244
+#: src/libide/gui/ide-workbench.c:1246
 #, c-format
 msgid "Loading project “%s”"
 msgstr "იტვირთება პროექტი \"%s\""
 
-#: src/libide/gui/ide-workspace.c:1712
+#: src/libide/gui/ide-workspace.c:1713
 msgid "There are unsaved documents"
 msgstr "არსებობს არ-შენახული დოკუმენტები"
 
@@ -2753,6 +2753,7 @@ msgstr ""
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "დამოკიდებულებების გამოთხოვა"
 
@@ -2760,6 +2761,7 @@ msgstr "დამოკიდებულებების გამოთხ�
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:152
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "პროექტის აგება"
 
@@ -4152,6 +4154,37 @@ msgstr ""
 msgid "Updating SDK Runtime"
 msgstr ""
 
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
+msgid "Flatpak installation for new SDKs"
+msgstr ""
+
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
+msgid "The Flatpak installation to use for new SDKs and SDK extensions."
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:12
+msgid "Preferred Flatpak Installation"
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:13
+msgid ""
+"When installing SDKs and SDK extensions, Builder may prefer a specific "
+"Flatpak installation which contains the extension."
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:22
+#| msgid "GNOME Builder palette"
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: src/plugins/flatpak/tweaks.ui:28
+msgid "User"
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "სისტემა"
+
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4234,11 +4267,11 @@ msgstr "პუში წარმატებულია."
 msgid "Pushing ref “%s”"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:530
+#: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
 msgstr "საქაღალდე რეპოზიტორიაში არაა"
 
-#: src/plugins/git/gbp-git-vcs.c:558
+#: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
 msgstr "Git"
 
@@ -4277,7 +4310,7 @@ msgstr ""
 msgid "Bootstrapping project"
 msgstr "პროექტის საწყისი მომზადება"
 
-#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr ""
 
@@ -4421,7 +4454,7 @@ msgstr "Makefile-ის ცარიელი პროექტის შექ
 msgid "Create a new empty project using a simple Makefile"
 msgstr ""
 
-#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+#: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr ""
 
@@ -4834,12 +4867,12 @@ msgid "Drop Down"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:663
+#: src/plugins/podman/gbp-podman-runtime.c:661
 msgid "Containers/Toolbox"
 msgstr "კონტეინერები/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:669
+#: src/plugins/podman/gbp-podman-runtime.c:667
 msgid "Containers/Podman"
 msgstr "კონტეინერები/Podman"
 
@@ -5324,6 +5357,10 @@ msgstr "იგნორი"
 #: src/plugins/spellcheck/editor-spell-menu.c:259
 msgid "Languages"
 msgstr "ენები"
+
+#: src/plugins/swift/gbp-swift-run-command-provider.c:77
+msgid "swift run"
+msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -6065,9 +6102,6 @@ msgstr ""
 #~ msgid "GIMP palette"
 #~ msgstr "GIMP-ის პალიტრა"
 
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME Builder palette-ის პალიტრა"
-
 #~ msgid "Palette name"
 #~ msgstr "პალიტრის სახელი"
 
@@ -6198,9 +6232,6 @@ msgstr ""
 
 #~ msgid "Load"
 #~ msgstr "ჩატვირთვა"
-
-#~ msgid "System"
-#~ msgstr "სისტემა"
 
 #~ msgid "follow"
 #~ msgstr "მიყოლა"
