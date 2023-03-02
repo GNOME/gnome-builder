@@ -75,23 +75,20 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="min-content-height">400</property>
                 <child>
-                  <object class="GtkViewport">
-                    <property name="scroll-to-focus">true</property>
-                    <child>
-                      <object class="GtkListView" id="list_view">
-                        <style>
-                          <class name="results"/>
-                        </style>
-                        <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                        <property name="orientation">vertical</property>
-                        <property name="model">
-                          <object class="GtkSingleSelection" id="selection">
-                            <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
-                          </object>
-                        </property>
-                        <property name="factory">
-                          <object class="GtkBuilderListItemFactory">
-                            <property name="bytes"><![CDATA[
+                  <object class="GtkListView" id="list_view">
+                    <style>
+                      <class name="results"/>
+                    </style>
+                    <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                    <property name="orientation">vertical</property>
+                    <property name="model">
+                      <object class="GtkSingleSelection" id="selection">
+                        <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                      </object>
+                    </property>
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 <template class="GtkListItem">
@@ -174,11 +171,9 @@
 </template>
 </interface>
 ]]>
-                            </property>
-                          </object>
                         </property>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
