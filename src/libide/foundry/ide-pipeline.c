@@ -4439,7 +4439,7 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
         return FALSE;
 
       ar = ide_config_get_extensions (self->config);
-      IDE_PTR_ARRAY_SET_FREE_FUNC (ar, g_object_unref);
+      IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_object_unref_and_destroy);
 
       for (guint i = 0; i < ar->len; i++)
         {
