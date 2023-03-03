@@ -14,6 +14,10 @@
             </style>
             <property name="model">
               <object class="GtkNoSelection" id="selection">
+                <property name="model">
+                  <object class="GtkFilterListModel" id="filter_model">
+                  </object>
+                </property>
               </object>
             </property>
             <child>
@@ -52,6 +56,7 @@
               <object class="GtkColumnViewColumn" id="severity_column">
                 <property name="title" translatable="yes">Severity</property>
                 <property name="resizable">true</property>
+                <property name="header-menu">severity_menu</property>
                 <property name="factory">
                   <object class="GtkBuilderListItemFactory">
                     <property name="bytes"><![CDATA[
@@ -139,4 +144,33 @@
       </object>
     </child>
   </template>
+  <menu id="severity_menu">
+    <section>
+      <attribute name="label" translatable="yes">Severity</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Critical</attribute>
+        <attribute name="action">page.messages.severity</attribute>
+        <attribute name="target" type="s">'critical'</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Warning</attribute>
+        <attribute name="action">page.messages.severity</attribute>
+        <attribute name="target" type="s">'warning'</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Message</attribute>
+        <attribute name="action">page.messages.severity</attribute>
+        <attribute name="target" type="s">'message'</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Debug</attribute>
+        <attribute name="action">page.messages.severity</attribute>
+        <attribute name="target" type="s">'debug'</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
