@@ -1,16 +1,16 @@
 # Hungarian translation for gnome-builder.
-# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022. Free Software Foundation, Inc.
+# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-11-03 18:07+0000\n"
-"PO-Revision-Date: 2022-11-05 19:05+0100\n"
+"POT-Creation-Date: 2023-02-25 01:36+0000\n"
+"PO-Revision-Date: 2023-03-03 02:11+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -185,7 +185,7 @@ msgstr "Összeállítási naplók törlése"
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr ""
-"Ha be van kapcsolva, akkor az összeállítási napló ablaktábla újbóli "
+"Ha engedélyezve van, akkor az összeállítási napló ablaktábla újbóli "
 "összeállításkor ki lesz ürítve."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
@@ -217,7 +217,7 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"Ha be van kapcsolva, akkor a forráskódból kinyert információt további "
+"Ha engedélyezve van, akkor a forráskódból kinyert információt további "
 "kiemelés céljából használja fel a támogatott nyelvekben."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
@@ -237,8 +237,9 @@ msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr "A hibakereső automatikusan szúrjon töréspontot a main() függvénybe."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
-msgstr "Hibakereső töréspont a g_critical() függvényben"
+#| msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Criticals"
+msgstr "Hibakereső töréspont a kritikus hibáknál"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
@@ -247,14 +248,19 @@ msgstr ""
 "A hibakereső automatikusan szúrjon töréspontot a g_critical() függvénybe."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr "Hibakereső töréspont a g_warning() függvényben"
+#| msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
+msgstr "Hibakereső töréspont a figyelmeztetéseknél és kritikus hibáknál"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+#| msgid ""
+#| "Debugger should automatically insert breakpoint at g_warning() function."
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
-"A hibakereső automatikusan szúrjon töréspontot a g_warning() függvénybe."
+"A hibakereső automatikusan szúrjon töréspontot a g_warning() és g_critical() "
+"függvénybe."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -273,7 +279,7 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
-"Ha be van kapcsolva, akkor a szerkesztő jelzi a hozzáadott és a változtatott "
+"Ha engedélyezve van, akkor a szerkesztő jelzi a hozzáadott és a változtatott "
 "sorokat a forráskód mellett."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
@@ -284,7 +290,7 @@ msgstr "Diagnosztika megjelenítése a sor száma mellett"
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Ha be van kapcsolva, akkor a szerkesztő megjeleníti a diagnosztikát a sorok "
+"Ha engedélyezve van, akkor a szerkesztő megjeleníti a diagnosztikát a sorok "
 "száma mellett."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
@@ -294,7 +300,7 @@ msgstr "Jelenlegi sor kiemelése"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr ""
-"Ha be van kapcsolva, akkor a szerkesztő kiemeli a sort, ahol a kurzor "
+"Ha engedélyezve van, akkor a szerkesztő kiemeli a sort, ahol a kurzor "
 "található."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
@@ -303,7 +309,7 @@ msgstr "Zárójelpárok kiemelése"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr "Ha be van kapcsolva, akkor a szerkesztő kiemeli a zárójelpárokat."
+msgstr "Ha engedélyezve van, akkor a szerkesztő kiemeli a zárójelpárokat."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -311,7 +317,7 @@ msgstr "Sorok számának megjelenítése"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr "Ha be van kapcsolva, akkor a szerkesztő megjeleníti a sorok számát."
+msgstr "Ha engedélyezve van, akkor a szerkesztő megjeleníti a sorok számát."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
@@ -320,7 +326,7 @@ msgstr "Relatív sorszámok megjelenítése"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
 msgstr ""
-"Ha be van kapcsolva, akkor a szerkesztő megjeleníti a relatív sorszámokat."
+"Ha engedélyezve van, akkor a szerkesztő megjeleníti a relatív sorszámokat."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/plugins/editorui/tweaks.ui:494
@@ -350,7 +356,7 @@ msgstr "Rácsvonalak megjelenítése"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr ""
-"Ha be van kapcsolva, akkor a forráskód mögött rácsvonalakat rajzol a "
+"Ha engedélyezve van, akkor a forráskód mögött rácsvonalakat rajzol a "
 "szerkesztő."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
@@ -421,7 +427,7 @@ msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Ha be van kapcsolva, akkor az Építő automatikusan megjeleníti a kiegészítési "
+"Ha engedélyezve van, akkor az Építő automatikusan megjeleníti a kiegészítési "
 "javaslatokat gépelés közben."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
@@ -527,7 +533,7 @@ msgstr "Összeállítási gyorsítótárak ürítése indításkor"
 #: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
-"Ha be van kapcsolva, akkor az Építő indításkor üríteni fogja az "
+"Ha engedélyezve van, akkor az Építő indításkor üríteni fogja az "
 "összeállítási gyorsítótárakat."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
@@ -633,7 +639,7 @@ msgstr "Figyelmen kívül hagyott fájlok megjelenítése"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Ha be van kapcsolva, akkor a projektfa megjeleníti a VCS által figyelmen "
+"Ha engedélyezve van, akkor a projektfa megjeleníti a VCS által figyelmen "
 "kívül hagyott fájlokat."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
@@ -645,7 +651,7 @@ msgstr "Mappák előre sorolása"
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
-"Ha be van kapcsolva, akkor a projektfa a könyvtárakat a normál fájlok előtt "
+"Ha engedélyezve van, akkor a projektfa a könyvtárakat a normál fájlok előtt "
 "jeleníti meg."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
@@ -1052,7 +1058,7 @@ msgstr "Tartalék"
 #: src/libide/foundry/ide-local-device.c:140
 #, c-format
 msgid "My Computer (%s)"
-msgstr "Sajátgép (%s)"
+msgstr "Számítógép (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
@@ -1507,7 +1513,7 @@ msgstr "Új terminál"
 msgid "Open application menu (F10)"
 msgstr "Alkalmazásmenü megnyitása (F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "A HTML nem tölthető be. Hiányzó WebKit-támogatás."
 
@@ -1785,7 +1791,7 @@ msgid "Code Navigation"
 msgstr "Kódnavigáció"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1546
+#: src/libide/sourceview/ide-source-view.c:1629
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1927,7 +1933,6 @@ msgid "Allow JavaScript"
 msgstr "JavaScript engedélyezése"
 
 #: src/libide/webkit/ide-webkit-page.ui:104
-#| msgid "Printing"
 msgid "Print"
 msgstr "Nyomtatás"
 
@@ -1977,7 +1982,6 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-#| msgid "Remove environment variable"
 msgid "Use KEY=VALUE to set an environment variable"
 msgstr "Használjon KULCS=ÉRTÉK párt egy környezeti változó beállításához"
 
@@ -2508,7 +2512,7 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Összeállítás és eszközök"
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:357
 msgid "General"
 msgstr "Általános"
 
@@ -2550,62 +2554,15 @@ msgstr "Alapértelmezett"
 msgid "1 per CPU"
 msgstr "CPU-nként 1"
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr "16"
-
-#: src/plugins/buildui/tweaks.ui:275
-msgid "32"
-msgstr "32"
-
-#: src/plugins/buildui/tweaks.ui:281
-msgid "64"
-msgstr "64"
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr "128"
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr "256"
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr "512"
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:325
 msgid "Tooling"
 msgstr "Eszközök"
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:360
 msgid "Installation Prefix"
 msgstr "Telepítési előtag"
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:361
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2613,11 +2570,11 @@ msgstr ""
 "A projekt ebbe a könyvtárba lesz telepítve az összeállítási futószalag "
 "telepítési fázisában."
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
 msgstr "Konfigurálás beállításai"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:392
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2625,11 +2582,11 @@ msgstr ""
 "Ezeket a beállításokat az összeállítási rendszer használja a projekt "
 "konfigurálásához az összeállítási futószalag konfigurálási fázisában"
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
 msgstr "Összeállítási környezet"
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:415
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -3277,13 +3234,25 @@ msgstr "Behúzás szóközökkel"
 msgid "Spaces per Tab"
 msgstr "Tabulátoronkénti szóközök"
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -4122,31 +4091,31 @@ msgstr "_Keresés a projektben"
 msgid "_Replace in Project"
 msgstr "_Csere a projektben"
 
-#: src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Keresés fájlokban"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Keresés…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Keresés"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "_Rekurzív keresés a mappák között"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Kis- és nagybetű megkülönböztetése kereséskor"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Keresés csak _teljes szavakra"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "_Reguláris kifejezések engedélyezése"
 
@@ -4389,43 +4358,43 @@ msgstr "Eszközlánc törlése"
 msgid "Delete Tool"
 msgstr "Eszköz törlése"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "GNOME alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Egy Meson-alapú projekt a GNOME-hoz GTK 4 és libadwaita használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "GTK 4-es alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "Egy Meson-alapú projekt GTK 4 használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Megosztott programkönyvtár"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Egy Meson-alapú projekt egy megosztott programkönyvtárhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Parancssoros eszköz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Egy Meson-alapú projekt egy parancssori programhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Üres Meson projekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Egy üres Meson projektváz"
 
@@ -4585,12 +4554,12 @@ msgid "Drop Down"
 msgstr "Legördülő"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:657
+#: src/plugins/podman/gbp-podman-runtime.c:664
 msgid "Containers/Toolbox"
 msgstr "Konténerek/Eszköztár"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:663
+#: src/plugins/podman/gbp-podman-runtime.c:670
 msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
@@ -4970,8 +4939,8 @@ msgstr "Munkakönyvtár"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "A parancs erről a helyről lesz futtatva. Relatív útvonal megadásához "
 "használja a <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> vagy <tt>$HOME</tt> "
