@@ -1,0 +1,10 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Copyright=Copyright © 2023 JCWasmx86
+Description=Provides linting of Swift source code using SwiftLint
+Embedded=_gbp_swiftlint_register_types
+Module=swiftlint
+Name=SwiftLint
+X-Category=diagnostics
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=swift

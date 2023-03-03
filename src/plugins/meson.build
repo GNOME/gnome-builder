@@ -132,6 +132,7 @@ subdir('spellcheck')
 subdir('sphinx-preview')
 subdir('stylelint')
 subdir('swift')
+subdir('swiftlint')
 subdir('swift-format')
 subdir('symbol-tree')
 subdir('sysprof')
@@ -217,6 +218,7 @@ status += [
   'Spellcheck ........................... : @0@'.format(get_option('plugin_spellcheck')),
   'Swift ................................ : @0@'.format(get_option('plugin_swift')),
   'Swift-Format ......................... : @0@'.format(get_option('plugin_swiftformat')),
+  'SwiftLint ............................ : @0@'.format(get_option('plugin_swiftlint')),
   'Stylelint ............................ : @0@'.format(get_option('plugin_stylelint')),
   'Sysprof .............................. : @0@'.format(get_option('plugin_sysprof')),
   'Sysroot .............................. : @0@'.format(get_option('plugin_sysroot')),
