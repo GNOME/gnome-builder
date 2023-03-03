@@ -22,10 +22,14 @@
 
 #include <glib-object.h>
 
+#include "gbp-grep-panel.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_GREP_WORKSPACE_ADDIN (gbp_grep_workspace_addin_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, GBP, GREP_WORKSPACE_ADDIN, GObject)
+
+GbpGrepPanel *gbp_grep_workspace_addin_get_panel (GbpGrepWorkspaceAddin *self);
 
 G_END_DECLS

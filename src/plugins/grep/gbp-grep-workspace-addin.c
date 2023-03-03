@@ -101,3 +101,11 @@ static void
 gbp_grep_workspace_addin_init (GbpGrepWorkspaceAddin *self)
 {
 }
+
+GbpGrepPanel *
+gbp_grep_workspace_addin_get_panel (GbpGrepWorkspaceAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_GREP_WORKSPACE_ADDIN (self), NULL);
+
+  return GBP_GREP_PANEL (self->panel);
+}
