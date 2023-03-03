@@ -221,7 +221,6 @@ status += [
   'SwiftLint ............................ : @0@'.format(get_option('plugin_swiftlint')),
   'Stylelint ............................ : @0@'.format(get_option('plugin_stylelint')),
   'Sysprof .............................. : @0@'.format(get_option('plugin_sysprof')),
-  'Sysroot .............................. : @0@'.format(get_option('plugin_sysroot')),
   'Todo ................................. : @0@'.format(get_option('plugin_todo')),
   'Update Manager ....................... : @0@'.format(get_option('plugin_update_manager')),
   'Vala Compiler ........................ : @0@'.format(get_option('plugin_valac')),
