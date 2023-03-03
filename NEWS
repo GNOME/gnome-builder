@@ -1,3 +1,25 @@
+# GNOME Builder 44.rc
+
+Changes in this release:
+
+ * UI and CSS styling fixes
+ * Lots of memory leak fixes
+ * Various improvements in Vim emulation
+ * Fixes and performance improvements to various completion providers
+ * New XML and Swift formatters
+ * Ensure we only show a single grep search panel
+ * A golang build system addin
+ * A new user messages panel
+ * Podman integration fixes
+ * Plugin symbols are no longer exported by the ELF except type registration
+ * Fixes for various LSP conformance
+ * Git now uses a PTY when cloning to provide better messaging to users
+ * Lots of internal operations now log to messages panel
+ * A new markdown indenter
+ * A new swift linter
+ * The sysroot plugin has been removed
+ * Translation updates
+
 # GNOME Builder 44.beta
 
 Changes in this release:
