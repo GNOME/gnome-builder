@@ -29,6 +29,7 @@
 #include "gbp-grep-model.h"
 #include "gbp-grep-panel.h"
 #include "gbp-grep-popover.h"
+#include "gbp-grep-workspace-addin.h"
 
 struct _GbpGrepPopover
 {
@@ -61,9 +62,10 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
 {
   g_autoptr(GbpGrepModel) model = NULL;
   g_autoptr(PanelPosition) position = NULL;
+  IdeWorkspaceAddin *addin;
   IdeWorkspace *workspace;
+  GbpGrepPanel *panel;
   IdeContext *context;
-  GtkWidget *panel;
   gboolean use_regex;
   gboolean at_word_boundaries;
   gboolean case_sensitive;
@@ -95,14 +97,15 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   else
     gbp_grep_model_set_recursive (model, FALSE);
 
-  panel = gbp_grep_panel_new ();
-  ide_workspace_add_pane (workspace, IDE_PANE (panel), position);
-  gbp_grep_panel_set_model (GBP_GREP_PANEL (panel), model);
+  addin = ide_workspace_addin_find_by_module_name (workspace, "grep");
+  panel = gbp_grep_workspace_addin_get_panel (GBP_GREP_WORKSPACE_ADDIN (addin));
+
+  gbp_grep_panel_set_model (panel, model);
   panel_widget_raise (PANEL_WIDGET (panel));
 
   gtk_popover_popdown (GTK_POPOVER (self));
 
-  gbp_grep_panel_launch_search (GBP_GREP_PANEL (panel));
+  gbp_grep_panel_launch_search (panel);
 }
 
 static void
