@@ -815,9 +815,7 @@ ide_lsp_service_set_program (IdeLspService *self,
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
 
   if (g_set_str (&priv->program, program))
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRAM]);
 }
 
 const char * const *
@@ -847,10 +845,6 @@ ide_lsp_service_set_search_path (IdeLspService      *self,
 
   g_return_if_fail (IDE_IS_LSP_SERVICE (self));
 
-  if ((const char * const *)priv->search_path == search_path)
-    return;
-
-  g_strfreev (priv->search_path);
-  priv->search_path = g_strdupv ((char **)search_path);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_PATH]);
+  if (ide_set_strv (&priv->search_path, search_path))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_PATH]);
 }
