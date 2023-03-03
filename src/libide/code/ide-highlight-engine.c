@@ -354,12 +354,16 @@ again:
     }
 
   if (gtk_text_iter_compare (&iter, &invalid_end) < 0)
-    ide_highlighter_update (self->highlighter,
-                            self->private_tags,
-                            ide_highlight_engine_apply_style,
-                            &invalid_begin,
-                            &invalid_end,
-                            &iter);
+    {
+      GtkTextIter alt_begin = iter;
+
+      ide_highlighter_update (self->highlighter,
+                              self->private_tags,
+                              ide_highlight_engine_apply_style,
+                              &alt_begin,
+                              &invalid_end,
+                              &iter);
+    }
 
   if (!gtk_text_iter_equal (&iter, &invalid_begin))
     _cjh_text_region_replace (self->region,
@@ -617,10 +621,26 @@ ide_highlight_engine_insert_after_cb (IdeBuffer *buffer,
                                       gpointer   user_data)
 {
   IdeHighlightEngine *self = user_data;
+  GtkTextIter begin;
+  GtkTextIter end;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  mark_unchecked (self, buffer, offset, length);
+  /* Mark the whole line as unchecked */
+
+  gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), &begin, offset);
+  gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), &end, offset + length);
+
+  if (!gtk_text_iter_starts_line (&begin))
+    gtk_text_iter_set_line_offset (&begin, 0);
+
+  if (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_to_line_end (&end);
+
+  mark_unchecked (self,
+                  buffer,
+                  gtk_text_iter_get_offset (&begin),
+                  gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin));
 }
 
 static void
@@ -643,10 +663,26 @@ ide_highlight_engine_delete_after_cb (IdeBuffer *buffer,
                                       gpointer   user_data)
 {
   IdeHighlightEngine *self = user_data;
+  GtkTextIter begin;
+  GtkTextIter end;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  mark_unchecked (self, buffer, offset, 0);
+  /* Mark the whole line as unchecked */
+
+  gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (buffer), &begin, offset);
+  end = begin;
+
+  if (!gtk_text_iter_starts_line (&begin))
+    gtk_text_iter_set_line_offset (&begin, 0);
+
+  if (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_to_line_end (&end);
+
+  mark_unchecked (self,
+                  buffer,
+                  gtk_text_iter_get_offset (&begin),
+                  gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin));
 }
 
 static void
