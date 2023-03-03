@@ -38,7 +38,7 @@ glib_req_version = '2.75.0'
 gtk_req_version = '4.8'
 gtksourceview_req_version = '5.5.2'
 libadwaita_req_version = '1.2.0'
-libdex_req_version = '0.1.0'
+libdex_req_version = '0.1.1'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
