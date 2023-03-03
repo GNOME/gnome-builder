@@ -36,7 +36,7 @@ pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-
 # Check dependencies
 glib_req_version = '2.75.0'
 gtk_req_version = '4.8'
-gtksourceview_req_version = '5.5.2'
+gtksourceview_req_version = '5.7.2'
 libadwaita_req_version = '1.2.0'
 libdex_req_version = '0.1.1'
 
@@ -298,14 +298,14 @@ libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
 libgtk_dep = dependency('gtk4', version: gtk_req)
 libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
-libpanel_dep = dependency('libpanel-1', version: '>= 1.1.0')
+libpanel_dep = dependency('libpanel-1', version: '>= 1.1.2')
 libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.42.0')
+libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.43.0')
 libm_dep = cc.find_library('m', required: false)
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.34.0')
 libportal_dep = dependency('libportal-gtk4', required: false)
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.36.0')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.36.1')
 libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.70.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
