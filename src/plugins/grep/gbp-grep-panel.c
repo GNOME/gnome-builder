@@ -430,15 +430,15 @@ gbp_grep_panel_scan_cb (GObject      *object,
        * search results later when they arrive. So instead, don't do any of this and just
        * let the next pending search results update the UI accordingly when we get them.
        */
-      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      if (ide_error_ignore (error))
         return;
-      else
-        /* TODO: For now we warn in the not-very-noticeable messages panel, but when we start
-         * depending on libadwaita we'll be able to use a status page here as an error page,
-         * in the stack.
-         */
-        ide_object_warning (ide_widget_get_context (GTK_WIDGET (self)),
-                            "Failed to find files: %s", error->message);
+
+      /* TODO: For now we warn in the not-very-noticeable messages panel, but when we start
+       * depending on libadwaita we'll be able to use a status page here as an error page,
+       * in the stack.
+       */
+      ide_object_warning (ide_widget_get_context (GTK_WIDGET (self)),
+                          "Failed to find files: %s", error->message);
     }
   else
     gbp_grep_panel_set_model (self, model);
@@ -470,20 +470,23 @@ void
 gbp_grep_panel_launch_search (GbpGrepPanel *self)
 {
   GbpGrepModel *model;
-  g_autoptr(GFile) root_dir = NULL;
+  GFile *root_dir = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GREP_PANEL (self));
 
   model = gbp_grep_panel_get_model (self);
+
   /* Nothing's really reusable between search operations (and it isn't allowed anyway by
    * gbp_grep_model_scan_async()), so just start from a new one. The only part we keep
    * from it is the search directory because we can't modify it in the UI and so the
    * only place where it's actually stored is the (old) model.
    */
-  if (model)
+  if (model != NULL)
     root_dir = gbp_grep_model_get_directory (model);
-  if (root_dir)
-    g_object_ref (root_dir);
+
   model = gbp_grep_model_new (ide_widget_get_context (GTK_WIDGET (self)));
   gbp_grep_model_set_directory (model, root_dir);
 
@@ -514,6 +517,8 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
                              self->cancellable,
                              gbp_grep_panel_scan_cb,
                              g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void
@@ -658,6 +663,8 @@ gbp_grep_panel_init (GbpGrepPanel *self)
   GtkCellRenderer *cell;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  panel_widget_set_id (PANEL_WIDGET (self), "org.gnome.builder.grep.panel");
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group),
