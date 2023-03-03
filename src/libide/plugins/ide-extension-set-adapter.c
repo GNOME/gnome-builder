@@ -26,6 +26,8 @@
 
 #include <glib/gi18n.h>
 
+#include <gio/gio.h>
+
 #include "ide-marshal.h"
 
 #include "ide-extension-set-adapter.h"
@@ -40,13 +42,47 @@ struct _IdeExtensionSetAdapter
   gchar      *value;
   GHashTable *extensions;
   GPtrArray  *settings;
+  GPtrArray  *extensions_array;
 
   GType       interface_type;
 
   guint       reload_handler;
 };
 
-G_DEFINE_FINAL_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE_TYPE_OBJECT)
+static GType
+ide_extension_set_adapter_get_item_type (GListModel *model)
+{
+  return IDE_EXTENSION_SET_ADAPTER (model)->interface_type;
+}
+
+static guint
+ide_extension_set_adapter_get_n_items (GListModel *model)
+{
+  return IDE_EXTENSION_SET_ADAPTER (model)->extensions_array->len;
+}
+
+static gpointer
+ide_extension_set_adapter_get_item (GListModel *model,
+                                    guint       position)
+{
+  IdeExtensionSetAdapter *self = IDE_EXTENSION_SET_ADAPTER (model);
+
+  if (position < self->extensions_array->len)
+    return g_object_ref (g_ptr_array_index (self->extensions_array, position));
+
+  return NULL;
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = ide_extension_set_adapter_get_item_type;
+  iface->get_n_items = ide_extension_set_adapter_get_n_items;
+  iface->get_item = ide_extension_set_adapter_get_item;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   EXTENSIONS_LOADED,
@@ -88,6 +124,8 @@ add_extension (IdeExtensionSetAdapter *self,
                PeasPluginInfo         *plugin_info,
                PeasExtension          *exten)
 {
+  guint position;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
@@ -108,6 +146,10 @@ add_extension (IdeExtensionSetAdapter *self,
   if (IDE_IS_OBJECT (exten))
     ide_object_append (IDE_OBJECT (self), IDE_OBJECT (exten));
 
+  position = self->extensions_array->len;
+  g_ptr_array_add (self->extensions_array, exten);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+
   g_signal_emit (self, signals [EXTENSION_ADDED], 0, plugin_info, exten);
 }
 
@@ -117,6 +159,7 @@ remove_extension (IdeExtensionSetAdapter *self,
                   PeasExtension          *exten)
 {
   g_autoptr(GObject) hold = NULL;
+  guint position;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
@@ -128,6 +171,17 @@ remove_extension (IdeExtensionSetAdapter *self,
   hold = g_object_ref (exten);
 
   g_hash_table_remove (self->extensions, plugin_info);
+
+  if (g_ptr_array_find (self->extensions_array, exten, &position))
+    {
+      g_ptr_array_remove_index (self->extensions_array, position);
+      g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
   g_signal_emit (self, signals [EXTENSION_REMOVED], 0, plugin_info, hold);
 
   if (IDE_IS_OBJECT (hold))
@@ -401,6 +455,7 @@ ide_extension_set_adapter_finalize (GObject *object)
   g_clear_object (&self->engine);
   g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->value, g_free);
+  g_clear_pointer (&self->extensions_array, g_ptr_array_unref);
   g_clear_pointer (&self->extensions, g_hash_table_unref);
   g_clear_pointer (&self->settings, g_ptr_array_unref);
 
@@ -560,6 +615,7 @@ ide_extension_set_adapter_init (IdeExtensionSetAdapter *self)
 {
   self->settings = g_ptr_array_new_with_free_func (g_object_unref);
   self->extensions = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+  self->extensions_array = g_ptr_array_new ();
 }
 
 /**
