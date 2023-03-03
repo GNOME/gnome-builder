@@ -18,16 +18,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-02-09 01:01+0000\n"
-"PO-Revision-Date: 2023-02-13 22:51+0100\n"
-"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
+"POT-Creation-Date: 2023-03-03 01:14+0000\n"
+"PO-Revision-Date: 2023-03-03 08:51+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
@@ -455,6 +455,12 @@ msgstr "Minimale Zeichenanzahl für Übereinstimmungsauswahl angeben."
 msgid "Enable Snippets"
 msgstr "Schnipsel aktivieren"
 
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+msgid ""
+"Allow expanding snippets from the editor by pressing tab after the snippet "
+"trigger."
+msgstr ""
+
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
 msgstr "Erste Vervollständigung wählen"
@@ -540,15 +546,17 @@ msgstr ""
 "Legt fest, ob abgelaufene Zwischenspeicher beim Start von Builder geleert "
 "werden sollen."
 
+#: data/gsettings/org.gnome.builder.gschema.xml:50
+msgid "The interface style to change pages"
+msgstr ""
+
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
 msgstr "Vorgabelizenz"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:65
-#, fuzzy
-#| msgid "The default color scheme for Builder"
 msgid "The default license to use for new projects"
-msgstr "Das Vorgabefarbschema für Builder"
+msgstr "Die Vorgabelizenz für neue Projekte"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -574,17 +582,19 @@ msgstr ""
 msgid "Install Project Before Running"
 msgstr "Projekt installieren vor dem Ausführen"
 
+#: data/gsettings/org.gnome.builder.project.gschema.xml:14
+msgid ""
+"Run the pipelines install phase before running the project. Only use this if "
+"you know what you're doing with your project."
+msgstr ""
+
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
-#, fuzzy
-#| msgid "Delete Command"
 msgid "Default Run Command"
-msgstr "Löschbefehl"
+msgstr "Vorgegebener Ausführen-Befehl"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
-#, fuzzy
-#| msgid "the default cargo command"
 msgid "The id of the default run command"
-msgstr "Der vorgegebene Cargo-Befehl"
+msgstr "Die Kennung des vorgegebenen Ausführen-Befehls"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
@@ -612,6 +622,11 @@ msgstr "Welche Umgebung bei Ausführung der Unit-Tests verwendet wird"
 #: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Ausführliche Protokollierung"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:51
+msgid ""
+"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -1073,10 +1088,9 @@ msgstr "Erstellung (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1137
-#, fuzzy, c-format
-#| msgid "Installed %s"
+#, c-format
 msgid "Post-install (%s)"
-msgstr "%s wurde installiert"
+msgstr "Nach-Installation (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3077
 #: src/libide/foundry/ide-pipeline.c:3116
@@ -1425,7 +1439,7 @@ msgstr "Informationen zu Builder anzeigen"
 
 #: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
-msgstr ""
+msgstr "Web durchsuchen"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
@@ -1827,10 +1841,11 @@ msgstr "Verweis _kopieren"
 msgid "Paste from clipboard into the terminal"
 msgstr "Aus der Zwischenablage in das Temrinal einfügen"
 
-# grammatikalisch falsches Original
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
 msgstr ""
+"Gesamten Text aus dem Terminal, einschließlich der Zeilenvorhaltung, "
+"auswählen"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -2240,7 +2255,7 @@ msgstr "Die Einstellungen des Projekts einrichten"
 #: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
 #: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
-msgstr ""
+msgstr "Code-Schmiede"
 
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
@@ -2451,7 +2466,7 @@ msgstr "Navigieren mit Reitern"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Dokumente wechseln durch Benutzungsoberfläche mit Reitern"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
@@ -2471,10 +2486,8 @@ msgid "Run Command"
 msgstr "Einen Befehl ausführen"
 
 #: src/plugins/buildui/tweaks.ui:17
-#, fuzzy
-#| msgid "This command requires a view to be focused"
 msgid "This command is used to run your project"
-msgstr "Dieser Befehl benötigt eine fokussierte Ansicht"
+msgstr "Dieser Befehl wird verwendet, um Ihr Projekt auszuführen"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2489,6 +2502,9 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
+"Installiert die Anwendung vor dem Ausführen. Dies ist für die meisten "
+"Projekte notwendig, wenn keine benutzerdefinierten Ausführen-Befehle "
+"verwendet werden."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2515,10 +2531,8 @@ msgstr ""
 "Fehlerdiagnose"
 
 #: src/plugins/buildui/tweaks.ui:151
-#, fuzzy
-#| msgid "Run in build environment"
 msgid "Run unit tests from within the build environment."
-msgstr "In Erstellungsumgebung ausführen"
+msgstr "Unit-Tests in der Erstellungsumgebung ausführen."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -2527,6 +2541,8 @@ msgstr "Als Anwendung"
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
+"Unit-Tests mit Zugriff auf die Anzeige und andere Laufzeitumgebungsvariablen "
+"ausführen."
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
@@ -2553,24 +2569,17 @@ msgid "Clear Build Logs"
 msgstr "Erstellungsprotokolle leeren"
 
 #: src/plugins/buildui/tweaks.ui:201
-#, fuzzy
-#| msgid "Clear build log pane on rebuild"
 msgid "Clear the build log history when a new build begins"
-msgstr "Erstellungsprotokoll bei Neubau leeren"
+msgstr ""
+"Die Erstellungsprotokoll-Chronik leeren, wenn eine Neuerstellung beginnt"
 
 #: src/plugins/buildui/tweaks.ui:214
 msgid "Workers"
 msgstr "Worker"
 
 #: src/plugins/buildui/tweaks.ui:218
-#, fuzzy
-#| msgid ""
-#| "Number of workers to use when performing builds. -1 for sensible default. "
-#| "0 for number of CPU."
 msgid "Number of workers to use when performing builds"
-msgstr ""
-"Anzahl der Arbeits-Threads beim Erstellen. »-1« steht für eine sinnvolle "
-"Vorgabe. »0« steht für die Anzahl an CPUs."
+msgstr "Anzahl der Arbeits-Threads beim Erstellen"
 
 #: src/plugins/buildui/tweaks.ui:227
 msgid "Default"
@@ -2593,6 +2602,8 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
+"Das Projekt wird während der Installationsphase der Erstellungskette in "
+"dieses Verzeichnis installiert."
 
 #: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
@@ -2603,6 +2614,9 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"Diese Einstellungen werden vom Erstellungssystem während der "
+"Konfigurationsphase der Erstellungskette verwendet, um das Projekt "
+"einzurichten"
 
 #: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
@@ -2613,6 +2627,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"Das zur Erstellung Ihrer Anwendung verwendete SDK wird automatisch in der "
+"Laufzeit ermittelt."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 msgid "Fetch dependencies"
@@ -2625,7 +2641,7 @@ msgstr "Projekt erstellen"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
-msgstr ""
+msgstr "Cargo ausführen"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2777,6 +2793,8 @@ msgstr "Keine Referenzen gefunden"
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
+"Die Werkzeuge der Programmiersprache unterstützen vielleicht das Finden von "
+"Referenzen nicht"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
@@ -3192,11 +3210,11 @@ msgstr "Die auszuführende Anwendung"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "Ein PTY, das bidirektional auf das Gerät übertragen wird"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "Anzahl an Sekunden, die auf die Gegenstelle des Geräts gewartet wird"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -3422,6 +3440,7 @@ msgstr "Rechten Rand anzeigen"
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
+"Eine Grenze im Editor anzeigen, die die maximal gewünschte Breite andeutet"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -4055,10 +4074,8 @@ msgid "A valid Git URL is required"
 msgstr "Eine gültige git-Adresse wird benötigt"
 
 #: src/plugins/git/tweaks.ui:13
-#, fuzzy
-#| msgid "Author Email"
 msgid "Authorship"
-msgstr "E-Mail des Autors"
+msgstr "Autorschaft"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
 msgid "Email"
@@ -4071,7 +4088,7 @@ msgstr "»Bootstrapping« des Projektes"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
 msgid "Gradle Run"
-msgstr ""
+msgstr "Gradle ausführen"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:134
 msgid "Display a new greeter window"
@@ -4194,7 +4211,7 @@ msgstr "Geändert"
 
 #: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
 msgid "With _Folder Listing"
-msgstr ""
+msgstr "Mit _Ordnerliste"
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
@@ -4206,13 +4223,11 @@ msgstr "Mit _Dateiverwaltung …"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
-msgstr ""
+msgstr "Standard-Make-Ziel"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#, fuzzy
-#| msgid "CMake"
 msgid "Make Run"
-msgstr "CMake"
+msgstr "Make ausführen"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -4225,7 +4240,7 @@ msgstr ""
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:198
 msgid "Maven Run"
-msgstr ""
+msgstr "Maven ausführen"
 
 #: src/plugins/menu-search/gtk/menus.ui:13
 msgid "Global Search"
@@ -4250,7 +4265,7 @@ msgstr "Die linke Seitenleiste anzeigen oder verbergen"
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
-msgstr ""
+msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:35
 msgid "Toggle the right panel in or out of view"
@@ -4259,7 +4274,7 @@ msgstr "Die rechte Seitenleiste ein- oder ausblenden"
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
-msgstr ""
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
@@ -4428,21 +4443,16 @@ msgid "Shared Library"
 msgstr "Gemeinsam verwendete Bibliothek"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:203
-#, fuzzy
-#| msgid "Create a new project with a shared library"
 msgid "A Meson-based project for a shared library"
-msgstr "Ein neues Projekt mit einer gemeinsam verwendeten Bibliothek erstellen"
+msgstr "Ein Meson-Projekt für eine gemeinsam verwendete Bibliothek"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Befehlszeilenwerkzeug"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:211
-#, fuzzy
-#| msgid "A Meson-based project is loaded but Ninja could not be found."
 msgid "An Meson-based project for a command-line program"
-msgstr ""
-"Ein Meson-Projekt wurde geladen, aber Ninja konnte nicht gefunden werden."
+msgstr "Ein Meson-Projekt für ein Befehlszeilenprogramm"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
@@ -4795,6 +4805,9 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
+"Dieser Bezeichner wird verwendet, um auf Ihre Projekteinstellungen, "
+"Erstellungsverzeichnisse und zwischengespeicherten Informationen zu "
+"verweisen."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -4813,6 +4826,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
+"Die Konfiguration wird verwendet, um Erstellungsketten anzulegen, Ihr "
+"Erstellungssystem einzurichten und Ihr Projekt auszuführen."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -4880,17 +4895,15 @@ msgstr "Funktionsmerkmale"
 
 #: src/plugins/rust-analyzer/tweaks.ui:48
 msgid "Proc Macros"
-msgstr ""
+msgstr "Proc-Makros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the Proc Macros feature of rust-analyzer"
 msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
-#, fuzzy
-#| msgid "Clear build logs"
 msgid "Cargo Build Scripts"
-msgstr "Erstellungsprotokolle leeren"
+msgstr "Cargo-Erstellungsskripte"
 
 #: src/plugins/rust-analyzer/tweaks.ui:62
 msgid "Run build scripts (build.rs) for more precise code analysis"
@@ -4989,8 +5002,8 @@ msgstr "Arbeitsordner"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "Der Befehl wird von diesem Ort aus ausgeführt. Verwenden Sie <tt>$BUILDDIR</"
 "tt>, <tt>$SRCDIR</tt> oder <tt>$HOME</tt>, um einen relativen Pfad anzugeben."
@@ -5144,10 +5157,8 @@ msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Symbol auswählen (Strg+Umschalttaste+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
-#, fuzzy
-#| msgid "Create a split page below the current page"
 msgid "Navigate to a symbol within the current page"
-msgstr "Seite unterhalb der aktuellen Seite teilen"
+msgstr "Zu einem Symbol innerhalb der aktuellen Seite navigieren"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
 msgid "Profiling Application…"
@@ -5155,7 +5166,7 @@ msgstr "Anwendung wird analysiert …"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:308
 msgid "Symbol decoding will begin after application exits"
-msgstr ""
+msgstr "Symbol-Dekodierung beginnt, nachdem die Anwendung beendet wurde"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5187,10 +5198,8 @@ msgid "Profiler"
 msgstr "Profiler"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
-#, fuzzy
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "Recht_schreibung prüfen"
+msgstr "Thread-Sampling"
 
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "CPU Performance"
@@ -5209,10 +5218,8 @@ msgid "Graphics"
 msgstr "Grafik"
 
 #: src/plugins/sysprof/gtk/menus.ui:52
-#, fuzzy
-#| msgid "_Display Options"
 msgid "Display Timings"
-msgstr "An_zeigeeinstellungen"
+msgstr "Zeiten anzeigen"
 
 #: src/plugins/sysprof/gtk/menus.ui:58
 msgid "Counters"
@@ -5247,10 +5254,8 @@ msgid "Battery Charge"
 msgstr "Akkuladung"
 
 #: src/plugins/sysprof/gtk/menus.ui:95
-#, fuzzy
-#| msgid "Application Runtime"
 msgid "Allow Application Integration"
-msgstr "Anwendungslaufzeit"
+msgstr "Anwendungsintegration ermöglichen"
 
 #: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Allow CPU Throttling"
@@ -5531,7 +5536,7 @@ msgstr "Alle Unit-Tests ausführen"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr ""
+msgstr "Ausführung aller Unit-Tests anfragen"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
@@ -5691,6 +5696,8 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"Adresse des Quellcode-Repositories für das Projekt angeben, das geklont "
+"werden soll."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
@@ -5703,6 +5710,8 @@ msgstr "Details des Autors"
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
 msgstr ""
+"Sie können Informationen zur Autorschaft angeben, um die Voreinstellungen zu "
+"überschreiben."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
@@ -5747,16 +5756,12 @@ msgid "Reload the current page ignoring cache"
 msgstr "Die aktuelle Seite neu laden und den Zwischenspeicher übergehen"
 
 #: src/plugins/web-browser/gtk/menus.ui:30
-#, fuzzy
-#| msgid "Project Location"
 msgid "Focus Location"
-msgstr "Ort des Projekts"
+msgstr "Ort fokussieren"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
-#, fuzzy
-#| msgid "Save the current page"
 msgid "Focus the current page's location"
-msgstr "Die aktuelle Seite speichern"
+msgstr "Den Ort der aktuellen Seite fokussieren"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
@@ -8286,8 +8291,8 @@ msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 #~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
 #~ "with profiler</a> from the run menu to begin"
 #~ msgstr ""
-#~ "Wählen Sie <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Mit Profiler ausführen</a> im Menü aus, um zu beginnen"
+#~ "Wählen Sie <a href=\"action://run-manager.run-with-handler::"
+#~ "profiler\">Mit Profiler ausführen</a> im Menü aus, um zu beginnen"
 
 #~ msgid "Abstract"
 #~ msgstr "Abstrakt"
