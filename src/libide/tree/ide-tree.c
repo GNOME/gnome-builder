@@ -953,7 +953,7 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
 #define BIND_PROPERTY(name) \
   G_STMT_START { \
     GBinding *binding = g_object_bind_property (node, name, expander, name, G_BINDING_SYNC_CREATE); \
-    g_object_set_data (G_OBJECT (expander), "BINDING_" name, binding); \
+    g_object_set_data_full (G_OBJECT (expander), "BINDING_" name, g_object_ref (binding), g_object_unref); \
   } G_STMT_END
 
   BIND_PROPERTY ("expanded-icon");
@@ -961,12 +961,13 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
   BIND_PROPERTY ("title");
   BIND_PROPERTY ("use-markup");
 
-  g_object_set_data (G_OBJECT (expander),
-                     "BINDING_flags",
-                     g_object_bind_property_full (node, "flags",
-                                                  suffix, "gicon",
-                                                  G_BINDING_SYNC_CREATE,
-                                                  flags_to_icon, NULL, NULL, NULL));
+  g_object_set_data_full (G_OBJECT (expander),
+                          "BINDING_flags",
+                          g_object_ref (g_object_bind_property_full (node, "flags",
+                                                                     suffix, "gicon",
+                                                                     G_BINDING_SYNC_CREATE,
+                                                                     flags_to_icon, NULL, NULL, NULL)),
+                          g_object_unref);
 
 #undef BIND_PROPERTY
 
@@ -1012,7 +1013,11 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
 #define UNBIND_PROPERTY(name) \
   G_STMT_START { \
     GBinding *binding = g_object_steal_data (G_OBJECT (expander), "BINDING_" name); \
-    g_binding_unbind (binding); \
+    if (binding != NULL) \
+      { \
+        g_binding_unbind (binding); \
+        g_object_unref (binding); \
+      } \
   } G_STMT_END
 
   UNBIND_PROPERTY ("expanded-icon");
