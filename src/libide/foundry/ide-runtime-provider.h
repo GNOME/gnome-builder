@@ -1,6 +1,7 @@
-/* ide-runtime-provider.h
+/*
+ * ide-runtime-provider.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,53 +27,43 @@
 
 #include <libide-core.h>
 
-#include "ide-foundry-types.h"
+#include "ide-pipeline.h"
+#include "ide-runtime.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_RUNTIME_PROVIDER (ide_runtime_provider_get_type ())
+#define IDE_TYPE_RUNTIME_PROVIDER (ide_runtime_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, IDE, RUNTIME_PROVIDER, IdeObject)
+IDE_AVAILABLE_IN_44
+G_DECLARE_DERIVABLE_TYPE (IdeRuntimeProvider, ide_runtime_provider, IDE, RUNTIME_PROVIDER, IdeObject)
 
-struct _IdeRuntimeProviderInterface
+struct _IdeRuntimeProviderClass
 {
-  GTypeInterface parent;
+  IdeObjectClass parent_class;
 
-  void        (*load)             (IdeRuntimeProvider   *self,
-                                   IdeRuntimeManager    *manager);
-  void        (*unload)           (IdeRuntimeProvider   *self,
-                                   IdeRuntimeManager    *manager);
-  gboolean    (*provides)         (IdeRuntimeProvider   *self,
-                                   const gchar          *runtime_id);
-  void        (*bootstrap_async)  (IdeRuntimeProvider   *self,
-                                   IdePipeline          *pipeline,
-                                   GCancellable         *cancellable,
-                                   GAsyncReadyCallback   callback,
-                                   gpointer              user_data);
-  IdeRuntime *(*bootstrap_finish) (IdeRuntimeProvider   *self,
-                                   GAsyncResult         *result,
-                                   GError              **error);
+  DexFuture *(*load)              (IdeRuntimeProvider *self);
+  DexFuture *(*unload)            (IdeRuntimeProvider *self);
+  DexFuture *(*bootstrap_runtime) (IdeRuntimeProvider *self,
+                                   IdePipeline        *pipeline);
+  gboolean   (*provides)          (IdeRuntimeProvider *self,
+                                   const char         *runtime_id);
 };
 
-IDE_AVAILABLE_IN_ALL
-void        ide_runtime_provider_load             (IdeRuntimeProvider   *self,
-                                                   IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_ALL
-void        ide_runtime_provider_unload           (IdeRuntimeProvider   *self,
-                                                   IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_ALL
-gboolean    ide_runtime_provider_provides         (IdeRuntimeProvider   *self,
-                                                   const gchar          *runtime_id);
-IDE_AVAILABLE_IN_ALL
-void        ide_runtime_provider_bootstrap_async  (IdeRuntimeProvider   *self,
-                                                   IdePipeline          *pipeline,
-                                                   GCancellable         *cancellable,
-                                                   GAsyncReadyCallback   callback,
-                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-IdeRuntime *ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider   *self,
-                                                   GAsyncResult         *result,
-                                                   GError              **error);
+IDE_AVAILABLE_IN_44
+DexFuture *ide_runtime_provider_load              (IdeRuntimeProvider *self);
+IDE_AVAILABLE_IN_44
+DexFuture *ide_runtime_provider_unload            (IdeRuntimeProvider *self);
+IDE_AVAILABLE_IN_44
+DexFuture *ide_runtime_provider_bootstrap_runtime (IdeRuntimeProvider *self,
+                                                   IdePipeline        *pipeline);
+IDE_AVAILABLE_IN_44
+void       ide_runtime_provider_add               (IdeRuntimeProvider *self,
+                                                   IdeRuntime         *runtime);
+IDE_AVAILABLE_IN_44
+void       ide_runtime_provider_remove            (IdeRuntimeProvider *self,
+                                                   IdeRuntime         *runtime);
+IDE_AVAILABLE_IN_44
+gboolean   ide_runtime_provider_provides          (IdeRuntimeProvider *self,
+                                                   const char         *runtime_id);
 
 G_END_DECLS

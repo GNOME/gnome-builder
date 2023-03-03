@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_HOST_RUNTIME_PROVIDER (gbp_host_runtime_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpHostRuntimeProvider, gbp_host_runtime_provider, GBP, HOST_RUNTIME_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpHostRuntimeProvider, gbp_host_runtime_provider, GBP, HOST_RUNTIME_PROVIDER, IdeRuntimeProvider)
 
 G_END_DECLS

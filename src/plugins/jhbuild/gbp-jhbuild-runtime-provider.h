@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_JHBUILD_RUNTIME_PROVIDER (gbp_jhbuild_runtime_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpJhbuildRuntimeProvider, gbp_jhbuild_runtime_provider, GBP, JHBUILD_RUNTIME_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpJhbuildRuntimeProvider, gbp_jhbuild_runtime_provider, GBP, JHBUILD_RUNTIME_PROVIDER, IdeRuntimeProvider)
 
 G_END_DECLS

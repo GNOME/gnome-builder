@@ -40,7 +40,7 @@ struct _IdeRuntimeManager
 {
   IdeObject               parent_instance;
   IdeExtensionSetAdapter *extensions;
-  GPtrArray              *runtimes;
+  GtkFlattenListModel    *runtimes;
   guint                   unloading : 1;
 };
 
@@ -50,12 +50,6 @@ typedef struct
   IdeRuntimeProvider *provider;
 } InstallLookup;
 
-typedef struct
-{
-  IdePipeline *pipeline;
-  gchar            *runtime_id;
-} PrepareState;
-
 static void list_model_iface_init (GListModelInterface *iface);
 static void initable_iface_init   (GInitableIface      *iface);
 
@@ -64,11 +58,44 @@ G_DEFINE_TYPE_EXTENDED (IdeRuntimeManager, ide_runtime_manager, IDE_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 static void
-prepare_state_free (PrepareState *state)
+ide_runtime_manager_items_changed_cb (IdeRuntimeManager *self,
+                                      guint              position,
+                                      guint              removed,
+                                      guint              added,
+                                      GListModel        *model)
 {
-  g_clear_object (&state->pipeline);
-  g_clear_pointer (&state->runtime_id, g_free);
-  g_slice_free (PrepareState, state);
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUNTIME_MANAGER (self));
+  g_assert (GTK_IS_FLATTEN_LIST_MODEL (model));
+
+  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+
+  IDE_EXIT;
+}
+
+static DexFuture *
+ide_runtime_manager_provider_load_cb (DexFuture *future,
+                                      gpointer   user_data)
+{
+  IdeRuntimeProvider *provider = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (DEX_IS_FUTURE (future));
+  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
+
+  if (!dex_await (dex_ref (future), &error))
+    g_debug ("Runtime provider \"%s\" failed to load with error: %s",
+             G_OBJECT_TYPE_NAME (provider), error->message);
+  else
+    g_debug ("Runtime provider \"%s\" loaded",
+             G_OBJECT_TYPE_NAME (provider));
+
+  IDE_RETURN (NULL);
 }
 
 static void
@@ -77,15 +104,50 @@ ide_runtime_manager_extension_added (IdeExtensionSetAdapter *set,
                                      PeasExtension          *exten,
                                      gpointer                user_data)
 {
-  IdeRuntimeManager *self = user_data;
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;
+  g_autoptr(DexFuture) future = NULL;
+  IdeRuntimeManager *self = user_data;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
+  g_assert (IDE_IS_RUNTIME_MANAGER (self));
 
-  ide_runtime_provider_load (provider, self);
+  future = ide_runtime_provider_load (provider);
+  future = dex_future_finally (future,
+                               ide_runtime_manager_provider_load_cb,
+                               g_object_ref (provider),
+                               g_object_unref);
+
+  IDE_EXIT;
+}
+
+static DexFuture *
+ide_runtime_manager_provider_unload_cb (DexFuture *future,
+                                        gpointer   user_data)
+{
+  IdeRuntimeProvider *provider = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (DEX_IS_FUTURE (future));
+  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
+
+  if (!dex_await (dex_ref (future), &error))
+    g_debug ("Runtime provider \"%s\" failed to unload with error: %s",
+             G_OBJECT_TYPE_NAME (provider), error->message);
+  else
+    g_debug ("Runtime provider \"%s\" unloaded",
+             G_OBJECT_TYPE_NAME (provider));
+
+  ide_object_destroy (IDE_OBJECT (provider));
+
+  IDE_RETURN (NULL);
 }
 
 static void
@@ -94,15 +156,23 @@ ide_runtime_manager_extension_removed (IdeExtensionSetAdapter *set,
                                        PeasExtension          *exten,
                                        gpointer                user_data)
 {
-  IdeRuntimeManager *self = user_data;
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;
+  g_autoptr(DexFuture) future = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
 
-  ide_runtime_provider_unload (provider, self);
+  future = ide_runtime_provider_unload (provider);
+  future = dex_future_finally (future,
+                               ide_runtime_manager_provider_unload_cb,
+                               g_object_ref (provider),
+                               g_object_unref);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -134,6 +204,9 @@ ide_runtime_manager_initable_init (GInitable     *initable,
                                      ide_runtime_manager_extension_added,
                                      self);
 
+  gtk_flatten_list_model_set_model (self->runtimes,
+                                    G_LIST_MODEL (self->extensions));
+
   return TRUE;
 }
 
@@ -150,8 +223,13 @@ ide_runtime_manager_destroy (IdeObject *object)
 
   self->unloading = TRUE;
 
+  if (self->runtimes != NULL)
+    {
+      gtk_flatten_list_model_set_model (self->runtimes, NULL);
+      g_clear_object (&self->runtimes);
+    }
+
   ide_clear_and_destroy_object (&self->extensions);
-  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   IDE_OBJECT_CLASS (ide_runtime_manager_parent_class)->destroy (object);
 }
@@ -167,7 +245,13 @@ ide_runtime_manager_class_init (IdeRuntimeManagerClass *klass)
 static void
 ide_runtime_manager_init (IdeRuntimeManager *self)
 {
-  self->runtimes = g_ptr_array_new_with_free_func (g_object_unref);
+  self->runtimes = gtk_flatten_list_model_new (NULL);
+
+  g_signal_connect_object (self->runtimes,
+                           "items-changed",
+                           G_CALLBACK (ide_runtime_manager_items_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static GType
@@ -179,23 +263,24 @@ ide_runtime_manager_get_item_type (GListModel *model)
 static guint
 ide_runtime_manager_get_n_items (GListModel *model)
 {
-  IdeRuntimeManager *self = (IdeRuntimeManager *)model;
+  IdeRuntimeManager *self = IDE_RUNTIME_MANAGER (model);
 
-  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), 0);
+  if (self->runtimes != NULL)
+    return g_list_model_get_n_items (G_LIST_MODEL (self->runtimes));
 
-  return self->runtimes->len;
+  return 0;
 }
 
 static gpointer
 ide_runtime_manager_get_item (GListModel *model,
                               guint       position)
 {
-  IdeRuntimeManager *self = (IdeRuntimeManager *)model;
+  IdeRuntimeManager *self = IDE_RUNTIME_MANAGER (model);
 
-  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
-  g_return_val_if_fail (position < self->runtimes->len, NULL);
+  if (self->runtimes != NULL)
+    return g_list_model_get_item (G_LIST_MODEL (self->runtimes), position);
 
-  return g_object_ref (g_ptr_array_index (self->runtimes, position));
+  return NULL;
 }
 
 static void
@@ -206,41 +291,6 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item = ide_runtime_manager_get_item;
 }
 
-void
-ide_runtime_manager_add (IdeRuntimeManager *self,
-                         IdeRuntime        *runtime)
-{
-  guint idx;
-
-  g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
-  g_return_if_fail (IDE_IS_RUNTIME (runtime));
-
-  idx = self->runtimes->len;
-  g_ptr_array_add (self->runtimes, g_object_ref (runtime));
-  g_list_model_items_changed (G_LIST_MODEL (self), idx, 0, 1);
-}
-
-void
-ide_runtime_manager_remove (IdeRuntimeManager *self,
-                            IdeRuntime        *runtime)
-{
-  g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
-  g_return_if_fail (IDE_IS_RUNTIME (runtime));
-
-  for (guint i = 0; i < self->runtimes->len; i++)
-    {
-      IdeRuntime *item = g_ptr_array_index (self->runtimes, i);
-
-      if (runtime == item)
-        {
-          g_ptr_array_remove_index (self->runtimes, i);
-          if (!ide_object_in_destruction (IDE_OBJECT (self)))
-            g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
-          break;
-        }
-    }
-}
-
 /**
  * ide_runtime_manager_get_runtime:
  * @self: An #IdeRuntimeManager
@@ -248,34 +298,43 @@ ide_runtime_manager_remove (IdeRuntimeManager *self,
  *
  * Gets the runtime by its internal identifier.
  *
- * Returns: (transfer none): An #IdeRuntime.
+ * Returns: (nullable) (transfer none): An #IdeRuntime.
  */
 IdeRuntime *
 ide_runtime_manager_get_runtime (IdeRuntimeManager *self,
                                  const gchar       *id)
 {
-  guint i;
+  IdeRuntime *ret = NULL;
+  guint n_items;
 
   g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
   g_return_val_if_fail (id != NULL, NULL);
 
-  for (i = 0; i < self->runtimes->len; i++)
+  /* TODO: Rename and fix transfer semantics to ref_runtime(). */
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+
+  for (guint i = 0; i < n_items; i++)
     {
-      IdeRuntime *runtime = g_ptr_array_index (self->runtimes, i);
+      g_autoptr(IdeRuntime) runtime = g_list_model_get_item (G_LIST_MODEL (self), i);
       const gchar *runtime_id = ide_runtime_get_id (runtime);
 
       if (g_strcmp0 (runtime_id, id) == 0)
-        return runtime;
+        {
+          /* Return borrowed pointer */
+          ret = runtime;
+          break;
+        }
     }
 
-  return NULL;
+  return ret;
 }
 
 static void
 provides_lookup_cb (IdeExtensionSetAdapter *set,
-                   PeasPluginInfo         *plugin,
-                   IdeRuntimeProvider     *provider,
-                   InstallLookup          *lookup)
+                    PeasPluginInfo         *plugin,
+                    IdeRuntimeProvider     *provider,
+                    InstallLookup          *lookup)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -292,32 +351,105 @@ provides_lookup_cb (IdeExtensionSetAdapter *set,
     }
 }
 
-static void
-ide_runtime_manager_prepare_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
+typedef struct _Prepare
 {
-  IdeRuntimeProvider *provider = (IdeRuntimeProvider *)object;
-  g_autoptr(IdeRuntime) runtime = NULL;
+  IdeRuntimeManager *self;
+  IdePipeline       *pipeline;
+} Prepare;
+
+static void
+prepare_free (Prepare *prepare)
+{
+  g_clear_object (&prepare->self);
+  g_clear_object (&prepare->pipeline);
+  g_free (prepare);
+}
+
+static Prepare *
+prepare_new (IdeRuntimeManager *self,
+             IdePipeline       *pipeline)
+{
+  Prepare *prepare = g_new0 (Prepare, 1);
+
+  g_set_object (&prepare->self, self);
+  g_set_object (&prepare->pipeline, pipeline);
+
+  return prepare;
+}
+
+static DexFuture *
+ide_runtime_manager_prepare_fiber (gpointer user_data)
+{
+  g_autoptr(IdeRuntime) resolved = NULL;
+  g_autoptr(DexFuture) future = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(IdeTask) task = user_data;
+  Prepare *prepare = user_data;
+  g_autofree char *runtime_id = NULL;
+  IdeRuntime *runtime = NULL;
+  IdeConfig *config;
+  InstallLookup lookup;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (prepare != NULL);
+  g_assert (IDE_IS_RUNTIME_MANAGER (prepare->self));
+  g_assert (IDE_IS_PIPELINE (prepare->pipeline));
 
-  runtime = ide_runtime_provider_bootstrap_finish (provider, result, &error);
+  config = ide_pipeline_get_config (prepare->pipeline);
+  runtime_id = g_strdup (ide_config_get_runtime_id (config));
 
-  g_assert (!runtime ||IDE_IS_RUNTIME (runtime));
+  /*
+   * Detect extensions that are a runtime-provider for the configured
+   * runtime_id.  Providers might need more time to finish setting up, but they
+   * can indicate here that they do provide the runtime for the current
+   * runtime_id. The runtime can then use the bootstrap_async method to finish
+   * the setup and let us know when it's ready.
+   */
+  lookup = (InstallLookup) { .runtime_id = runtime_id };
+  ide_extension_set_adapter_foreach (prepare->self->extensions,
+                                     (IdeExtensionSetAdapterForeachFunc) provides_lookup_cb,
+                                     &lookup);
 
-  if (runtime == NULL)
-    ide_task_return_error (task, g_steal_pointer (&error));
+  if (lookup.provider == NULL)
+    future = dex_future_new_reject (G_IO_ERROR,
+                                    G_IO_ERROR_NOT_SUPPORTED,
+                                    "Failed to locate provider for runtime: %s",
+                                    runtime_id);
   else
-    ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
+    future = ide_runtime_provider_bootstrap_runtime (lookup.provider, prepare->pipeline);
 
-  IDE_EXIT;
+  if ((resolved = dex_await_object (g_steal_pointer (&future), &error)))
+    _ide_pipeline_set_runtime (prepare->pipeline, resolved);
+  else if ((runtime = ide_runtime_manager_get_runtime (prepare->self, runtime_id)))
+    _ide_pipeline_set_runtime (prepare->pipeline, runtime);
+
+  if (resolved != NULL || runtime != NULL)
+    future = dex_future_new_for_boolean (TRUE);
+  else
+    future = dex_future_new_for_error (g_steal_pointer (&error));
+
+  IDE_RETURN (g_steal_pointer (&future));
+}
+
+static DexFuture *
+ide_runtime_manager_prepare (IdeRuntimeManager *self,
+                             IdePipeline       *pipeline)
+{
+  g_autoptr(DexFuture) ret = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUNTIME_MANAGER (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  ret = dex_scheduler_spawn (NULL, 0,
+                             ide_runtime_manager_prepare_fiber,
+                             prepare_new (self, pipeline),
+                             (GDestroyNotify)prepare_free);
+
+  IDE_RETURN (g_steal_pointer (&ret));
 }
 
 void
@@ -327,12 +459,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(IdeTask) task = NULL;
-  IdeConfig *config;
-  PrepareState *state;
-  const gchar *runtime_id;
-  InstallLookup lookup = { 0 };
-  IdeRuntime *runtime;
+  g_autoptr(DexAsyncResult) result = NULL;
 
   IDE_ENTRY;
 
@@ -340,59 +467,9 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  config = ide_pipeline_get_config (pipeline);
-  runtime_id = ide_config_get_runtime_id (config);
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, _ide_runtime_manager_prepare_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_release_on_propagate (task, FALSE);
-
-  state = g_slice_new0 (PrepareState);
-  state->runtime_id = g_strdup (runtime_id);
-  state->pipeline = g_object_ref (pipeline);
-  ide_task_set_task_data (task, state, prepare_state_free);
-
-  if (runtime_id == NULL)
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "Configuration lacks runtime specification");
-      IDE_EXIT;
-    }
-
-  /*
-   * It would be tempting to just return early here if we could locate
-   * the runtime as already registered. But that isn't enough since we
-   * might need to also install an SDK.
-   */
-  if ((runtime = ide_runtime_manager_get_runtime (self, runtime_id)))
-    _ide_pipeline_set_runtime (pipeline, runtime);
-
-  /*
-   * Detect extensions that are a runtime-provider for the configured runtime_id.
-   * Providers might need more time to finish setting up, but they can indicate here
-   * that they do provide the runtime for the current runtime_id. The runtime can then
-   * use the bootstrap_async method to finish the setup and let us know when it's ready.
-   */
-  lookup.runtime_id = runtime_id;
-  ide_extension_set_adapter_foreach (self->extensions,
-                                     (IdeExtensionSetAdapterForeachFunc) provides_lookup_cb,
-                                     &lookup);
-
-  if (lookup.provider == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to locate provider for runtime: %s",
-                               runtime_id);
-  else
-    ide_runtime_provider_bootstrap_async (lookup.provider,
-                                          pipeline,
-                                          cancellable,
-                                          ide_runtime_manager_prepare_cb,
-                                          g_steal_pointer (&task));
+  result = dex_async_result_new (self, cancellable, callback, user_data);
+  dex_async_result_await (result,
+                          ide_runtime_manager_prepare (self, pipeline));
 
   IDE_EXIT;
 }
@@ -402,38 +479,14 @@ _ide_runtime_manager_prepare_finish (IdeRuntimeManager  *self,
                                      GAsyncResult       *result,
                                      GError            **error)
 {
-  g_autoptr(IdeRuntime) ret = NULL;
-  g_autoptr(GError) local_error = NULL;
-  PrepareState *state;
+  gboolean ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (DEX_IS_ASYNC_RESULT (result), FALSE);
 
-  state = ide_task_get_task_data (IDE_TASK (result));
-  ret = ide_task_propagate_pointer (IDE_TASK (result), &local_error);
+  ret = dex_async_result_propagate_boolean (DEX_ASYNC_RESULT (result), error);
 
-  /*
-   * If we got NOT_SUPPORTED error, and the runtime already exists,
-   * then we can synthesize a successful result to the caller.
-   */
-  if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
-    {
-      if ((ret = ide_runtime_manager_get_runtime (self, state->runtime_id)))
-        {
-          g_object_ref (ret);
-          g_clear_error (&local_error);
-        }
-    }
-
-  if (error != NULL)
-    *error = g_steal_pointer (&local_error);
-
-  g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), FALSE);
-
-  if (IDE_IS_RUNTIME (ret))
-    _ide_pipeline_set_runtime (state->pipeline, ret);
-
-  IDE_RETURN (ret != NULL);
+  IDE_RETURN (ret);
 }

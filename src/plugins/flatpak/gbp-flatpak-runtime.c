@@ -746,8 +746,7 @@ gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 }
 
 GbpFlatpakRuntime *
-gbp_flatpak_runtime_new (IdeObject  *parent,
-                         const char *name,
+gbp_flatpak_runtime_new (const char *name,
                          const char *arch,
                          const char *branch,
                          const char *sdk_name,
@@ -763,7 +762,6 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
 
-  g_return_val_if_fail (IDE_IS_OBJECT (parent), NULL);
   g_return_val_if_fail (name != NULL, NULL);
   g_return_val_if_fail (arch != NULL, NULL);
   g_return_val_if_fail (branch != NULL, NULL);
@@ -797,7 +795,6 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
     g_string_append_printf (category, "%s (%s)", name, arch);
 
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
-                       "parent", parent,
                        "id", id,
                        "short-id", short_id,
                        "triplet", triplet_object,

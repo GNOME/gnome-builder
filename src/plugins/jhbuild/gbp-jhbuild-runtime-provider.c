@@ -32,8 +32,7 @@
 
 struct _GbpJhbuildRuntimeProvider
 {
-  IdeObject          parent_instance;
-  GbpJhbuildRuntime *runtime;
+  IdeRuntimeProvider parent_instance;
 };
 
 static char *
@@ -90,64 +89,41 @@ get_jhbuild_prefix (const char *jhbuild_bin)
   return g_steal_pointer (&stdout_buf);
 }
 
-static void
-gbp_jhbuild_runtime_provider_load (IdeRuntimeProvider *provider,
-                                   IdeRuntimeManager  *manager)
+static DexFuture *
+gbp_jhbuild_runtime_provider_load (IdeRuntimeProvider *provider)
 {
-  GbpJhbuildRuntimeProvider *self = (GbpJhbuildRuntimeProvider *)provider;
   g_autofree char *jhbuild_bin = NULL;
   g_autofree char *jhbuild_prefix = NULL;
+  g_autoptr(IdeRuntime) runtime = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_JHBUILD_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+  g_assert (GBP_IS_JHBUILD_RUNTIME_PROVIDER (provider));
 
   if (!(jhbuild_bin = get_jhbuild_path ()))
     {
       g_debug ("jhbuild not found within path, ignoring");
-      IDE_EXIT;
+      goto finished;
     }
 
   if (!(jhbuild_prefix = get_jhbuild_prefix (jhbuild_bin)))
     {
       g_debug ("jhbuild installation not complete, ignoring");
-      IDE_EXIT;
+      goto finished;
     }
 
-  self->runtime = g_object_new (GBP_TYPE_JHBUILD_RUNTIME,
-                                "parent", IDE_OBJECT (self),
-                                "id", "jhbuild",
-                                "category", _("Host System"),
-                                "display-name", "JHBuild",
-                                "executable-path", jhbuild_bin,
-                                "install-prefix", jhbuild_prefix,
-                                NULL);
-  ide_runtime_manager_add (manager, IDE_RUNTIME (self->runtime));
+  runtime = g_object_new (GBP_TYPE_JHBUILD_RUNTIME,
+                          "id", "jhbuild",
+                          "category", _("Host System"),
+                          "display-name", "JHBuild",
+                          "executable-path", jhbuild_bin,
+                          "install-prefix", jhbuild_prefix,
+                          NULL);
+  ide_runtime_provider_add (provider, runtime);
 
-  IDE_EXIT;
-}
-
-static void
-gbp_jhbuild_runtime_provider_unload (IdeRuntimeProvider *provider,
-                                     IdeRuntimeManager  *manager)
-{
-  GbpJhbuildRuntimeProvider *self = (GbpJhbuildRuntimeProvider *)provider;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_JHBUILD_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
-
-  if (self->runtime != NULL)
-    {
-      ide_runtime_manager_remove (manager, IDE_RUNTIME (self->runtime));
-      ide_clear_and_destroy_object (&self->runtime);
-    }
-
-  IDE_EXIT;
+finished:
+  IDE_RETURN (dex_future_new_for_boolean (TRUE));
 }
 
 static gboolean
@@ -161,33 +137,15 @@ gbp_jhbuild_runtime_provider_provides (IdeRuntimeProvider *provider,
   return ide_str_equal0 (runtime_id, "jhbuild");
 }
 
-static void
-runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
-{
-  iface->load = gbp_jhbuild_runtime_provider_load;
-  iface->unload = gbp_jhbuild_runtime_provider_unload;
-  iface->provides = gbp_jhbuild_runtime_provider_provides;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpJhbuildRuntimeProvider, gbp_jhbuild_runtime_provider, IDE_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
-
-static void
-gbp_jhbuild_runtime_provider_destroy (IdeObject *object)
-{
-  GbpJhbuildRuntimeProvider *self = (GbpJhbuildRuntimeProvider *)object;
-
-  ide_clear_and_destroy_object (&self->runtime);
-
-  IDE_OBJECT_CLASS (gbp_jhbuild_runtime_provider_parent_class)->destroy (object);
-}
+G_DEFINE_FINAL_TYPE (GbpJhbuildRuntimeProvider, gbp_jhbuild_runtime_provider, IDE_TYPE_RUNTIME_PROVIDER)
 
 static void
 gbp_jhbuild_runtime_provider_class_init (GbpJhbuildRuntimeProviderClass *klass)
 {
-  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
+  IdeRuntimeProviderClass *runtime_provider_class = IDE_RUNTIME_PROVIDER_CLASS (klass);
 
-  i_object_class->destroy = gbp_jhbuild_runtime_provider_destroy;
+  runtime_provider_class->load = gbp_jhbuild_runtime_provider_load;
+  runtime_provider_class->provides = gbp_jhbuild_runtime_provider_provides;
 }
 
 static void

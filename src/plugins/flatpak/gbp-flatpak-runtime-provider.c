@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
@@ -40,37 +41,16 @@
 
 struct _GbpFlatpakRuntimeProvider
 {
-  IdeObject parent_instance;
-  GPtrArray *runtimes;
+  IdeRuntimeProvider parent_instance;
 };
 
-static void runtime_provider_iface_init (IdeRuntimeProviderInterface *iface);
+G_DEFINE_FINAL_TYPE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, IDE_TYPE_RUNTIME_PROVIDER)
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, IDE_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
-
-static void
-gbp_flatpak_runtime_provider_destroy (IdeObject *object)
+static gboolean
+gbp_flatpak_runtime_provider_provides (IdeRuntimeProvider *provider,
+                                       const char         *runtime_id)
 {
-  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
-
-  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
-
-  IDE_OBJECT_CLASS (gbp_flatpak_runtime_provider_parent_class)->destroy (object);
-}
-
-static void
-gbp_flatpak_runtime_provider_class_init (GbpFlatpakRuntimeProviderClass *klass)
-{
-  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
-
-  i_object_class->destroy = gbp_flatpak_runtime_provider_destroy;
-}
-
-static void
-gbp_flatpak_runtime_provider_init (GbpFlatpakRuntimeProvider *self)
-{
-  self->runtimes = g_ptr_array_new_with_free_func (g_object_unref);
+  return g_str_has_prefix (runtime_id, "flatpak:");
 }
 
 static void
@@ -81,7 +61,6 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
 {
   g_autoptr(GbpFlatpakRuntime) runtime = NULL;
   g_autoptr(IdeContext) context = NULL;
-  IdeRuntimeManager *manager;
   const gchar *name;
   const gchar *arch;
   const gchar *branch;
@@ -93,13 +72,11 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (info != NULL);
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (g_variant_is_of_type (info, RUNTIME_VARIANT_TYPE));
-
-  if (self->runtimes == NULL)
-    IDE_EXIT;
 
   if (!runtime_variant_parse (info,
                               &name, &arch, &branch,
@@ -114,9 +91,7 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
     IDE_EXIT;
 
   context = ide_object_ref_context (IDE_OBJECT (self));
-  manager = ide_runtime_manager_from_context (context);
-  runtime = gbp_flatpak_runtime_new (IDE_OBJECT (self),
-                                     name,
+  runtime = gbp_flatpak_runtime_new (name,
                                      arch,
                                      branch,
                                      sdk_name,
@@ -128,11 +103,38 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
   g_debug ("Discovered Flatpak runtime %s/%s/%s using SDK %s//%s from %s",
            name, arch, branch, sdk_name, sdk_branch, deploy_dir);
 
-  g_ptr_array_add (self->runtimes, g_object_ref (runtime));
-  ide_runtime_manager_add (manager, IDE_RUNTIME (runtime));
+  ide_runtime_provider_add (IDE_RUNTIME_PROVIDER (self), IDE_RUNTIME (runtime));
 
   IDE_EXIT;
 }
+
+typedef struct _Load
+{
+  GbpFlatpakRuntimeProvider *self;
+  DexPromise *promise;
+} Load;
+
+static Load *
+load_new (GbpFlatpakRuntimeProvider *self,
+          DexPromise                *promise)
+{
+  Load *load = g_new0 (Load, 1);
+
+  load->self = g_object_ref (self);
+  load->promise = dex_ref (promise);
+
+  return load;
+}
+
+static void
+load_free (Load *load)
+{
+  g_clear_object (&load->self);
+  dex_clear (&load->promise);
+  g_free (load);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (Load, load_free)
 
 static void
 gbp_flatpak_runtime_provider_load_list_runtimes_cb (GObject      *object,
@@ -140,72 +142,76 @@ gbp_flatpak_runtime_provider_load_list_runtimes_cb (GObject      *object,
                                                     gpointer      user_data)
 {
   IpcFlatpakService *service = (IpcFlatpakService *)object;
-  g_autoptr(GbpFlatpakRuntimeProvider) self = user_data;
+  g_autoptr(Load) load = user_data;
   g_autoptr(GVariant) runtimes = NULL;
   g_autoptr(GError) error = NULL;
   GVariantIter iter;
   GVariant *info;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IPC_IS_FLATPAK_SERVICE (service));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (load != NULL);
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (load->self));
+  g_assert (DEX_IS_PROMISE (load->promise));
 
   if (!ipc_flatpak_service_call_list_runtimes_finish (service, &runtimes, result, &error))
     {
-      g_warning ("Failed to list flatpak runtimes: %s", error->message);
-      return;
+      dex_promise_reject (load->promise, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
   g_variant_iter_init (&iter, runtimes);
+
   while ((info = g_variant_iter_next_value (&iter)))
     {
-      on_runtime_added_cb (self, info, service);
+      on_runtime_added_cb (load->self, info, service);
       g_variant_unref (info);
     }
+
+  dex_promise_resolve_boolean (load->promise, TRUE);
+
+  IDE_EXIT;
 }
 
-static void
-gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
-                                   IdeRuntimeManager  *manager)
+static DexFuture *
+gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider)
 {
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
   g_autoptr(IpcFlatpakService) service = NULL;
   g_autoptr(IdeContext) context = NULL;
   GbpFlatpakClient *client;
 
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+  IDE_ENTRY;
 
-  if ((context = ide_object_ref_context (IDE_OBJECT (provider))) &&
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+
+  if ((context = ide_object_ref_context (IDE_OBJECT (self))) &&
       (client = gbp_flatpak_client_get_default ()) &&
       (service = gbp_flatpak_client_get_service (client, NULL, NULL)))
     {
+      g_autoptr(DexPromise) promise = dex_promise_new ();
+
       g_signal_connect_object (service,
                                "runtime-added",
                                G_CALLBACK (on_runtime_added_cb),
                                provider,
                                G_CONNECT_SWAPPED);
+
       ipc_flatpak_service_call_list_runtimes (service,
                                               NULL,
                                               gbp_flatpak_runtime_provider_load_list_runtimes_cb,
-                                              g_object_ref (provider));
+                                              load_new (self, promise));
+
+      IDE_RETURN (DEX_FUTURE (g_steal_pointer (&promise)));
     }
-}
 
-static void
-gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
-                                     IdeRuntimeManager  *manager)
-{
-  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
-
-  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
-
-  if (self->runtimes == NULL || self->runtimes->len == 0)
-    return;
-
-  for (guint i = 0; i < self->runtimes->len; i++)
-    ide_runtime_manager_remove (manager, g_ptr_array_index (self->runtimes, i));
-  g_ptr_array_remove_range (self->runtimes, 0, self->runtimes->len);
+  IDE_RETURN (dex_future_new_reject (G_IO_ERROR,
+                                     G_IO_ERROR_FAILED,
+                                     "Failed to locate flatpak service"));
 }
 
 typedef struct
@@ -606,19 +612,70 @@ gbp_flatpak_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *provider,
   IDE_RETURN (ret);
 }
 
-static gboolean
-gbp_flatpak_runtime_provider_provides (IdeRuntimeProvider *provider,
-                                       const char         *runtime_id)
+static void
+gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
 {
-  return g_str_has_prefix (runtime_id, "flatpak:");
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)object;
+  g_autoptr(DexPromise) promise = user_data;
+  g_autoptr(IdeRuntime) runtime = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (DEX_IS_PROMISE (promise));
+
+  if (!(runtime = gbp_flatpak_runtime_provider_bootstrap_finish (IDE_RUNTIME_PROVIDER (self), result, &error)))
+    dex_promise_reject (promise, g_error_copy (error));
+  else
+    dex_promise_resolve_object (promise, g_steal_pointer (&runtime));
+
+  IDE_EXIT;
+}
+
+static DexFuture *
+gbp_flatpak_runtime_provider_bootstrap_runtime (IdeRuntimeProvider *provider,
+                                                IdePipeline        *pipeline)
+{
+  g_autoptr(DexPromise) promise = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  /* This is just a wrapper until bootstrap_async() is turned into
+   * a DexFuture-based implementation. To do that well, we really need
+   * to have a gdbus-codegen that can generate DexFuture or improve how
+   * we can wrap calls w/ DexAsyncPair.
+   */
+
+  promise = dex_promise_new_cancellable ();
+  gbp_flatpak_runtime_provider_bootstrap_async (provider,
+                                                pipeline,
+                                                dex_promise_get_cancellable (promise),
+                                                gbp_flatpak_runtime_provider_bootstrap_cb,
+                                                dex_ref (promise));
+
+  IDE_RETURN (DEX_FUTURE (g_steal_pointer (&promise)));
 }
 
 static void
-runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
+gbp_flatpak_runtime_provider_class_init (GbpFlatpakRuntimeProviderClass *klass)
 {
-  iface->load = gbp_flatpak_runtime_provider_load;
-  iface->unload = gbp_flatpak_runtime_provider_unload;
-  iface->bootstrap_async = gbp_flatpak_runtime_provider_bootstrap_async;
-  iface->bootstrap_finish = gbp_flatpak_runtime_provider_bootstrap_finish;
-  iface->provides = gbp_flatpak_runtime_provider_provides;
+  IdeRuntimeProviderClass *runtime_provider_class = IDE_RUNTIME_PROVIDER_CLASS (klass);
+
+  runtime_provider_class->load = gbp_flatpak_runtime_provider_load;
+  runtime_provider_class->bootstrap_runtime = gbp_flatpak_runtime_provider_bootstrap_runtime;
+  runtime_provider_class->provides = gbp_flatpak_runtime_provider_provides;
+}
+
+static void
+gbp_flatpak_runtime_provider_init (GbpFlatpakRuntimeProvider *self)
+{
 }

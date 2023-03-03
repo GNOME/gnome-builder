@@ -22,45 +22,23 @@
 
 #include "config.h"
 
+#include <string.h>
+
+#include <json-glib/json-glib.h>
+
 #include <libide-foundry.h>
 #include <libide-threading.h>
-#include <json-glib/json-glib.h>
-#include <string.h>
 
 #include "gbp-podman-runtime.h"
 #include "gbp-podman-runtime-provider.h"
 
 struct _GbpPodmanRuntimeProvider
 {
-  IdeObject          parent_instance;
-  GCancellable      *cancellable;
-  IdeRuntimeManager *manager;
-  char              *runtime_id;
+  IdeRuntimeProvider  parent_instance;
+  DexFuture          *loaded;
 };
 
-static gboolean
-contains_runtime (GbpPodmanRuntimeProvider *self,
-                  GbpPodmanRuntime         *runtime)
-{
-  const char *id;
-  guint n_items;
-
-  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
-  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
-
-  id = ide_runtime_get_id (IDE_RUNTIME (runtime));
-  n_items = ide_object_get_n_children (IDE_OBJECT (self));
-
-  for (guint i = 0; i < n_items; i++)
-    {
-      IdeObject *ele = ide_object_get_nth_child (IDE_OBJECT (self), i);
-
-      if (g_strcmp0 (id, ide_runtime_get_id (IDE_RUNTIME (ele))) == 0)
-        return TRUE;
-    }
-
-  return FALSE;
-}
+G_DEFINE_FINAL_TYPE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, IDE_TYPE_RUNTIME_PROVIDER)
 
 static void
 gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
@@ -77,21 +55,12 @@ gbp_podman_runtime_provider_apply_cb (JsonArray *ar,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
 
-  if (self->manager == NULL)
-    return;
-
   if (!JSON_NODE_HOLDS_OBJECT (element_node) ||
       !(obj = json_node_get_object (element_node)))
-    return;
+    IDE_EXIT;
 
   if ((runtime = gbp_podman_runtime_new (obj)))
-    {
-      if (!contains_runtime (self, runtime))
-        {
-          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
-          ide_runtime_manager_add (self->manager, IDE_RUNTIME (runtime));
-        }
-    }
+    ide_runtime_provider_add (IDE_RUNTIME_PROVIDER (self), IDE_RUNTIME (runtime));
 
   IDE_EXIT;
 }
@@ -277,68 +246,85 @@ gbp_podman_runtime_provider_load_async (GbpPodmanRuntimeProvider *self,
   IDE_EXIT;
 }
 
-static void
-gbp_podman_runtime_provider_load (IdeRuntimeProvider *provider,
-                                  IdeRuntimeManager  *manager)
+static gboolean
+gbp_podman_runtime_provider_load_finish (GbpPodmanRuntimeProvider  *self,
+                                         GAsyncResult              *result,
+                                         GError                   **error)
 {
-  GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
+  gboolean ret;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+  g_assert (IDE_IS_TASK (result));
 
-  self->cancellable = g_cancellable_new ();
-  self->manager = manager;
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
-  /**
-   * We attempt to initialize the podman provider asynchronously even if podman
-   * is not configured as the runtime provider in the build configuration. This is
-   * to make sure we show available runtimes in the configuration surface.
-   *
-   * If podman is selected as the provider for the runtime used in the build
-   * configuration the _provides method will ensure that the runtime is loaded
-   * before the pipeline is marked as active.
-   *
-   * TODO: we can probably let the bootstrap process continue with this async load
-   *       when that load is not done yet before the pipeline wants us to be ready.
-   */
-  gbp_podman_runtime_provider_load_async (self,
-                                          self->cancellable,
-                                          NULL, NULL);
+  IDE_RETURN (ret);
+}
+
+static void
+gbp_podman_runtime_provider_load_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)object;
+  g_autoptr(DexPromise) promise = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (DEX_IS_PROMISE (promise));
+
+  if (!gbp_podman_runtime_provider_load_finish (self, result, &error))
+    dex_promise_reject (promise, g_steal_pointer (&error));
+  else
+    dex_promise_resolve_boolean (promise, TRUE);
 
   IDE_EXIT;
 }
 
-static void
-gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider,
-                                    IdeRuntimeManager  *manager)
+static DexFuture *
+gbp_podman_runtime_provider_load (IdeRuntimeProvider *provider)
 {
   GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
-  IdeObject *child;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (manager));
+  g_assert (self->loaded == NULL);
 
-  while ((child = ide_object_get_nth_child (IDE_OBJECT (self), 0)))
-    {
-      g_assert (IDE_IS_RUNTIME (child));
+  /* FIXME: Once we have Future based subprocess APIs, this would be
+   *        a great thing to clean up.
+   */
 
-      ide_runtime_manager_remove (self->manager, IDE_RUNTIME (child));
-      ide_object_destroy (child);
-    }
+  self->loaded = DEX_FUTURE (dex_promise_new ());
+  gbp_podman_runtime_provider_load_async (self,
+                                          NULL,
+                                          gbp_podman_runtime_provider_load_cb,
+                                          dex_ref (self->loaded));
 
-  self->manager = NULL;
+  IDE_RETURN (dex_ref (self->loaded));
+}
 
-  g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->runtime_id, g_free);
+static DexFuture *
+gbp_podman_runtime_provider_unload (IdeRuntimeProvider *provider)
+{
+  GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
 
-  IDE_EXIT;
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
+
+  dex_clear (&self->loaded);
+
+  IDE_RETURN (dex_future_new_for_boolean (TRUE));
 }
 
 static gboolean
@@ -354,114 +340,13 @@ gbp_podman_runtime_provider_provides (IdeRuntimeProvider *provider,
 }
 
 static void
-gbp_podman_runtime_provider_bootstrap_complete (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
-{
-  GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)object;
-  g_autoptr(IdeTask) task = user_data;
-  IdeContext *context;
-  IdeRuntime *runtime;
-  IdeRuntimeManager *runtime_manager;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  runtime_manager = ide_runtime_manager_from_context (context);
-
-  runtime = ide_runtime_manager_get_runtime (runtime_manager, self->runtime_id);
-
-  if (runtime != NULL)
-    ide_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
-  else
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to initialize runtime for build");
-}
-
-static void
-gbp_podman_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
-                                              IdePipeline         *pipeline,
-                                              GCancellable        *cancellable,
-                                              GAsyncReadyCallback  callback,
-                                              gpointer             user_data)
-{
-  GbpPodmanRuntimeProvider *self = (GbpPodmanRuntimeProvider *)provider;
-  g_autoptr(IdeTask) task = NULL;
-  const gchar *runtime_id;
-  IdeConfig *config;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_release_on_propagate (task, FALSE);
-  ide_task_set_source_tag (task, gbp_podman_runtime_provider_bootstrap_async);
-
-  config = ide_pipeline_get_config (pipeline);
-  runtime_id = ide_config_get_runtime_id (config);
-
-  if (runtime_id == NULL ||
-      !g_str_has_prefix (runtime_id, "podman:"))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_FOUND,
-                                 "No runtime available");
-      IDE_EXIT;
-    }
-
-  g_set_str (&self->runtime_id, runtime_id);
-
-  gbp_podman_runtime_provider_load_async (self,
-                                          self->cancellable,
-                                          gbp_podman_runtime_provider_bootstrap_complete,
-                                          g_object_ref (task));
-
-  IDE_EXIT;
-
-}
-
-static IdeRuntime *
-gbp_podman_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *provider,
-                                               GAsyncResult        *result,
-                                               GError             **error)
-{
-  IdeRuntime *ret;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_PODMAN_RUNTIME_PROVIDER (provider));
-  g_assert (IDE_IS_TASK (result));
-
-  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
-static void
-runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
-{
-  iface->load = gbp_podman_runtime_provider_load;
-  iface->unload = gbp_podman_runtime_provider_unload;
-  iface->provides = gbp_podman_runtime_provider_provides;
-  iface->bootstrap_async = gbp_podman_runtime_provider_bootstrap_async;
-  iface->bootstrap_finish = gbp_podman_runtime_provider_bootstrap_finish;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
-
-static void
 gbp_podman_runtime_provider_class_init (GbpPodmanRuntimeProviderClass *klass)
 {
+  IdeRuntimeProviderClass *runtime_provider_class = IDE_RUNTIME_PROVIDER_CLASS (klass);
+
+  runtime_provider_class->load = gbp_podman_runtime_provider_load;
+  runtime_provider_class->unload = gbp_podman_runtime_provider_unload;
+  runtime_provider_class->provides = gbp_podman_runtime_provider_provides;
 }
 
 static void

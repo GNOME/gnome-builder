@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_PODMAN_RUNTIME_PROVIDER (gbp_podman_runtime_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, GBP, PODMAN_RUNTIME_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpPodmanRuntimeProvider, gbp_podman_runtime_provider, GBP, PODMAN_RUNTIME_PROVIDER, IdeRuntimeProvider)
 
 G_END_DECLS
