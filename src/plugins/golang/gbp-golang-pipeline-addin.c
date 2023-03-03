@@ -146,6 +146,10 @@ gbp_golang_pipeline_addin_load (IdePipelineAddin *addin,
   fetch_command = create_run_command (pipeline, project_dir, goroot, go, "get", "-v", NULL);
   fetch_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_command, NULL, _("Fetch dependencies"));
 
+  g_object_set (fetch_stage,
+                "ignore-exit-status", TRUE,
+                NULL);
+
   build_command = create_run_command (pipeline, project_dir, goroot, go, "build", "-v", NULL);
   clean_command = create_run_command (pipeline, project_dir, goroot, go, "clean", "-v", NULL);
 
