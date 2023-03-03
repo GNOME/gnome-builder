@@ -45,6 +45,7 @@ src/libide/foundry/ide-pipeline-stage-transfer.c
 src/libide/foundry/ide-run-command.c
 src/libide/foundry/ide-run-manager.c
 src/libide/foundry/ide-runtime.c
+src/libide/foundry/ide-runtime-provider.c
 src/libide/foundry/ide-run-tool.c
 src/libide/foundry/ide-toolchain-manager.c
 src/libide/greeter/gtk/menus.ui
@@ -303,8 +304,6 @@ src/plugins/sysprof/gbp-sysprof-tool.c
 src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
 src/plugins/sysprof/tweaks.ui
-src/plugins/sysroot/gbp-sysroot-preferences-row.ui
-src/plugins/sysroot/gbp-sysroot-toolchain-provider.c
 src/plugins/terminal/gbp-terminal-workspace-addin.c
 src/plugins/terminal/gtk/menus.ui
 src/plugins/terminal/tweaks.ui
