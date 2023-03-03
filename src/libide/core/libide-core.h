@@ -21,6 +21,7 @@
 #pragma once
 
 #include <gio/gio.h>
+#include <libdex.h>
 
 #define IDE_CORE_INSIDE
 
