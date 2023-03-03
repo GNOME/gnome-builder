@@ -823,7 +823,10 @@ gbp_flatpak_manifest_get_extensions (IdeConfig *config)
           IdeRuntime *found = find_extension (self, self->sdk_extensions[i]);
 
           if (found)
-            g_ptr_array_add (ret, g_steal_pointer (&found));
+            {
+              ide_object_append (IDE_OBJECT (self), IDE_OBJECT (found));
+              g_ptr_array_add (ret, g_steal_pointer (&found));
+            }
         }
     }
 
