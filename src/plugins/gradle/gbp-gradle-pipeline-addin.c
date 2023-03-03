@@ -55,7 +55,6 @@ static void
 gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
                                 IdePipeline      *pipeline)
 {
-  g_autoptr(IdePipelineStage) wrapper_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   IdeBuildSystem *build_system;
   const char *srcdir;
@@ -64,7 +63,8 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
 
   g_autoptr(IdeRunCommand) build_command = NULL;
   g_autoptr(IdeRunCommand) clean_command = NULL;
-  g_autoptr(IdeRunCommand) wrapper_command = NULL;
+
+  g_autofree gchar *gradle_wrapper_path = NULL;
 
   IDE_ENTRY;
 
@@ -78,13 +78,22 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
   if (!GBP_IS_GRADLE_BUILD_SYSTEM (build_system))
     IDE_EXIT;
 
-  wrapper_command = ide_run_command_new ();
-  ide_run_command_set_argv (wrapper_command, IDE_STRV_INIT ("gradle", "wrapper"));
-  ide_run_command_set_cwd (wrapper_command, srcdir);
-  wrapper_stage = ide_pipeline_stage_command_new (wrapper_command, NULL);
-  ide_pipeline_stage_set_name (wrapper_stage, _("Bootstrapping project"));
-  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, wrapper_stage);
-  ide_pipeline_addin_track (addin, id);
+  gradle_wrapper_path = g_build_filename (srcdir, "gradlew", NULL);
+
+  g_debug ("Checking if gradle wrapper already exists %s", gradle_wrapper_path);
+
+  if (!g_file_test (gradle_wrapper_path, G_FILE_TEST_IS_EXECUTABLE))
+  {
+    g_autoptr(IdePipelineStage) wrapper_stage = NULL;
+    g_autoptr(IdeRunCommand) wrapper_command = NULL;
+    wrapper_command = ide_run_command_new ();
+    ide_run_command_set_argv (wrapper_command, IDE_STRV_INIT ("gradle", "wrapper"));
+    ide_run_command_set_cwd (wrapper_command, srcdir);
+    wrapper_stage = ide_pipeline_stage_command_new (wrapper_command, NULL);
+    ide_pipeline_stage_set_name (wrapper_stage, _("Bootstrapping project"));
+    id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, wrapper_stage);
+    ide_pipeline_addin_track (addin, id);
+  }
 
   build_command = ide_run_command_new ();
   ide_run_command_set_argv (build_command, IDE_STRV_INIT ("./gradlew", "build"));
