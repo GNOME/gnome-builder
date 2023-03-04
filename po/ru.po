@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-01-24 20:58+0000\n"
-"PO-Revision-Date: 2023-01-25 00:32+0300\n"
+"POT-Creation-Date: 2023-03-03 22:20+0000\n"
+"PO-Revision-Date: 2023-03-04 13:00+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:114 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:113 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -34,7 +34,7 @@ msgid "An IDE for GNOME"
 msgstr "IDE для GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:115
+#: src/libide/gui/ide-application-actions.c:118
 msgid "Christian Hergert, et al."
 msgstr "Кристиан Хергерт и др."
 
@@ -168,7 +168,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Использовать мини-карту для более полного просмотра содержимого файл"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Параллельная сборка"
 
@@ -190,10 +190,19 @@ msgstr ""
 "Если этот параметр включён, журнала сборки будет очищен при пересборке."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "Показать журнал при сборке"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr ""
+"Если включено, журнал сборки будет подниматься, когда начинается сборка"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Разрешить доступ к сети на лимитных соединениях"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -556,6 +565,16 @@ msgstr ""
 "Если этот параметр включён, stderr языковых серверов будет перенаправлен на "
 "консоль."
 
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Предпросмотр результатов поиска"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr ""
+"Должны ли автоматически отображаться предварительные просмотры результатов "
+"поиска"
+
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
 msgstr "Плагин включён"
@@ -690,7 +709,7 @@ msgid "Start New Project"
 msgstr "Начать новый проект"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:282
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
 msgstr "Клонировать репозиторий"
@@ -704,7 +723,7 @@ msgstr "Новое рабочее пространство редактора"
 msgid "D-Bus Inspector"
 msgstr "Инспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3767
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "В текущем языке отсутствует распознаватель символов."
 
@@ -738,7 +757,7 @@ msgstr "Не удалось инициализировать значения п
 msgid "Failed to save draft: %s"
 msgstr "Не удалось сохранить черновик: %s"
 
-#: src/libide/core/ide-context.c:385 src/libide/core/ide-context.c:846
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Безымянный"
 
@@ -747,13 +766,13 @@ msgstr "Безымянный"
 #: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1531
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
 #: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Cancel"
@@ -764,7 +783,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не удалось найти подходящий отладчик."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1527
 msgid "Open File…"
 msgstr "Открыть файл…"
 
@@ -781,7 +800,7 @@ msgstr "Параметры"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:58
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Комбинации клавиш"
@@ -923,7 +942,7 @@ msgid "Failed to format selection: %s"
 msgstr "Не удалось форматировать выделение: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Сохранить файл"
@@ -946,43 +965,45 @@ msgstr "Сохранить"
 msgid "Cancel"
 msgstr "Отменить"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Заменить"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Переместится к прошлому совпадению (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Переместится к следующему совпадению (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Найти и заменить (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
 msgid "Close search"
 msgstr "Закрыть поиск"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_Заменить"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Заменить _все"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
 msgid "Use Re_gular Expressions"
 msgstr "Использовать регулярные выражения"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Учитывать регистр"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
 msgid "Match Whole Words"
 msgstr "Только полные слова"
 
@@ -1011,7 +1032,7 @@ msgid "Line Ending:"
 msgstr "Окончание строки:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:93
+#: src/plugins/create-project/gbp-create-project-widget.ui:96
 msgid "Language"
 msgstr "Язык"
 
@@ -1025,9 +1046,30 @@ msgstr "Не удалось инициализировать конвейер с
 msgid "Failed to get device information: %s"
 msgstr "Не удалось получить информацию об устройстве: %s"
 
-#: src/libide/foundry/ide-config-manager.c:535
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "Активная конфигурация"
+
+#: src/libide/foundry/ide-config-manager.c:626
+#, c-format
+msgid "Configuration %s changed"
+msgstr "Конфигурация %s изменена"
+
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:872
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+"Не удалось найти конфигурацию сборки \"%s\". Возможно, она недействительна "
+"или неправильно отформатирована."
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1068
+#, c-format
+msgid "Active configuration set to “%s”"
+msgstr "Активная конфигурация установлена в \"%s\""
 
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
@@ -1039,7 +1081,12 @@ msgstr "Найдено устройство «%s»"
 msgid "Devices"
 msgstr "Устройства"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Устройство установлено в %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Развёртывание на устройство невозможно: конвейер сборки не инициализирован"
@@ -1069,90 +1116,102 @@ msgstr "Конвейер сборки находится в состоянии �
 msgid "The build configuration has errors"
 msgstr "Конфигурация сборки имеет ошибки"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr "Запущен конвейер для очистки дерева сборки"
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr "Конвейер запущен"
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr "Конвейер завершен"
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1100
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Собрать (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1141
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "После установки (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3093
-#: src/libide/foundry/ide-pipeline.c:3132
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Ошибка создания псевдо-терминала. Возможности терминала будут ограничены."
 
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Очистка…"
 
-#: src/libide/foundry/ide-pipeline.c:3333
-#: src/libide/foundry/ide-pipeline.c:3390
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Неудачно"
 
-#: src/libide/foundry/ide-pipeline.c:3335
-#: src/libide/foundry/ide-pipeline.c:3398
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Готово"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Скачивание…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Построение зависимостей…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Начальная загрузка…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Настройка…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Сборка…"
 
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Установка…"
 
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "Создание коммита…"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Экпорт…"
 
-#: src/libide/foundry/ide-pipeline.c:3382
-#: src/libide/foundry/ide-pipeline.c:3386
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Успешно"
 
-#: src/libide/foundry/ide-pipeline.c:3394
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "Подготовка…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3750
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "Удаление %s"
 
-#: src/libide/foundry/ide-pipeline.c:3809
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "Удаление каталога сборки…"
 
@@ -1170,27 +1229,81 @@ msgstr "Безымянная команда"
 msgid "Unit Test"
 msgstr "Модульный тест"
 
-#: src/libide/foundry/ide-run-manager.c:520
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:185
+#, c-format
+msgid "User requested run tool “%s”"
+msgstr "Пользователь запросил запустить инструмент \"%s\""
+
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "Не удается выполнить цель, выполняется другая цель"
 
+#: src/libide/foundry/ide-run-manager.c:806
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Приложение завершилось с ошибкой: %s"
+
+#: src/libide/foundry/ide-run-manager.c:809
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Приложение завершилось"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:944
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "Выполнение %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1011
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "Развёртывание на устройство…"
 
-#: src/libide/foundry/ide-runtime.c:409
-#: src/plugins/host/gbp-host-runtime-provider.c:55
+#: src/libide/foundry/ide-run-manager.c:1293
+msgid "User requested application to run"
+msgstr "Пользователь запросил запуск приложения"
+
+#: src/libide/foundry/ide-run-manager.c:1325
+msgid "User requested application to restart"
+msgstr "Пользователь запросил перезапуск приложения"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1355
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr "Пользователь запросил запуск приложения с помощью инструмента \"%s\""
+
+#: src/libide/foundry/ide-run-manager.c:1375
+msgid "User requested application to stop"
+msgstr "Пользователь запросил остановить приложение"
+
+#: src/libide/foundry/ide-runtime.c:406
+#: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Операционная система хоста"
+
+#: src/libide/foundry/ide-runtime-provider.c:147
+#, c-format
+msgid "Discovered runtime “%s”"
+msgstr "Обнаружена среда выполнения \"%s\""
+
+#: src/libide/foundry/ide-runtime-provider.c:170
+#, c-format
+msgid "Removing runtime “%s”"
+msgstr "Удаление среды выполнения \"%s\""
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Принудительное завершение подпроцесса %s"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Отправка сигнала %d подпроцессу %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1230,7 +1343,7 @@ msgid "Directory"
 msgstr "Каталог"
 
 #: src/libide/greeter/ide-greeter-workspace.c:230
-#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
+#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1269,7 +1382,7 @@ msgid "Select Project File"
 msgstr "Выбрать файл проекта"
 
 #: src/libide/greeter/ide-greeter-workspace.c:696
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_Открыть"
 
@@ -1386,13 +1499,14 @@ msgid "_Install"
 msgstr "_Установить"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u из %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Поиск"
 
@@ -1400,23 +1514,23 @@ msgstr "Поиск"
 msgid "Search for anything"
 msgstr "Поиск чего-либо"
 
-#: src/libide/gui/ide-search-popover.ui:232
+#: src/libide/gui/ide-search-popover.ui:230
 msgid "_Everything"
 msgstr "_Все"
 
-#: src/libide/gui/ide-search-popover.ui:239
+#: src/libide/gui/ide-search-popover.ui:237
 msgid "_Actions"
 msgstr "_Действия"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:244
 msgid "_Commands"
 msgstr "_Команды"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:251
 msgid "_Files"
 msgstr "_Файлы"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:258
 msgid "_Symbols"
 msgstr "_Символы"
 
@@ -1439,7 +1553,7 @@ msgid "Close Project"
 msgstr "Закрыть проект"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:374
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Общие"
 
@@ -1478,7 +1592,7 @@ msgstr "Терминал"
 msgid "New Terminals"
 msgstr "Новые терминалы"
 
-#: src/libide/gui/ide-application-actions.c:122
+#: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
 "Stas Solovey <whats_up@tut.by>, 2017\n"
@@ -1486,7 +1600,7 @@ msgstr ""
 "Ser-82-png <asvmail.as@mail.ru>, 2022\n"
 "David Lapshin <ddaudix@gmail.com>, 2022"
 
-#: src/libide/gui/ide-application-actions.c:129
+#: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Финансируется"
 
@@ -1567,7 +1681,7 @@ msgstr "Переключить правую панель"
 msgid "Search (Ctrl+Enter)"
 msgstr "Поиск (Ctrl+Enter)"
 
-#: src/libide/gui/ide-primary-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Переключить нижнюю панель (Ctrl+F9)"
 
@@ -1592,7 +1706,17 @@ msgstr "Запустить проект"
 msgid "Other"
 msgstr "Другое"
 
-#: src/libide/gui/ide-workspace.c:1712
+#: src/libide/gui/ide-workbench.c:1076
+msgid "Project loaded"
+msgstr "Проект загружен"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1246
+#, c-format
+msgid "Loading project “%s”"
+msgstr "Загрузка проекта \"%s\""
+
+#: src/libide/gui/ide-workspace.c:1713
 msgid "There are unsaved documents"
 msgstr "Имеются несохранённые документы"
 
@@ -1619,13 +1743,25 @@ msgstr[1] "Устанавливается %u пакета"
 msgstr[2] "Устанавливается %u пакетов"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1657
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не удалось инициализировать сервер языковой поддержки: %s"
 
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "Языковой сервер \"%s\" завершил работу"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr "Языковой сервер \"%s\" создан как процесс %s"
+
 #: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Контроль версий"
@@ -1634,7 +1770,7 @@ msgstr "Контроль версий"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Языковые сервера"
 
@@ -1837,14 +1973,14 @@ msgid "Code Navigation"
 msgstr "Навигация по коду"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1539
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Строка %u, Стлб %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1541
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1938,16 +2074,18 @@ msgstr "По слову целиком"
 msgid "Wrap around"
 msgstr "Обратный поиск"
 
-#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
-#: src/libide/tree/ide-tree-node.c:1497
-msgid "(Empty)"
-msgstr "(Пусто)"
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr "Процесс прекращен сигналом %d"
 
-#: src/libide/tree/ide-tree-node.c:1466
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
-msgid "Loading…"
-msgstr "Загрузка…"
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>Загрузка</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "Пусто"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -2085,16 +2223,16 @@ msgstr "Копировать"
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "_Сохранить"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Вывод результата сборки"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:360
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Результат сборки (Shift+Ctrl+L)"
 
@@ -2254,7 +2392,6 @@ msgstr "Сделать конфигурацию активной и переза
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
 msgid "Delete"
 msgstr "Удалить"
 
@@ -2270,7 +2407,7 @@ msgstr "Остановить сборку проекта (Shift+Ctrl+Alt+C)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Собрать проект (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Показать диагностику сборки (Ctrl+Alt+?)"
 
@@ -2466,6 +2603,10 @@ msgstr "Слево-направо"
 msgid "Right-to-Left"
 msgstr "Справа-налево"
 
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "Показать инспектор"
+
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
@@ -2629,50 +2770,58 @@ msgstr "Очистить журналы сборки"
 msgid "Clear the build log history when a new build begins"
 msgstr "Очищать журнал сборки, когда начинается новая сборка"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "Показать журналы сборки"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr "Показать журнал сборки, когда начинается новая сборка"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Журнал в консоль"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Перенаправить журналы ошибок языкового сервера в stderr"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Рабочие потоки"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Количество рабочих потоков, используемых для сборки"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "По умолчанию"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 на ЦП"
 
-#: src/plugins/buildui/tweaks.ui:342
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Инструменты"
 
-#: src/plugins/buildui/tweaks.ui:377
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Префикс установки"
 
-#: src/plugins/buildui/tweaks.ui:378
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 "Проект будет установлен в этот каталог на этапе установки конвейера сборки."
 
-#: src/plugins/buildui/tweaks.ui:396
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Параметры конфигурирования"
 
-#: src/plugins/buildui/tweaks.ui:409
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2680,11 +2829,28 @@ msgstr ""
 "Эти параметры используются системой сборки для настройки проекта на этапе "
 "настройки конвейера сборки"
 
-#: src/plugins/buildui/tweaks.ui:416
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Окружение сборки"
 
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Расположение"
+
 #: src/plugins/buildui/tweaks.ui:432
+msgid "Where your project builds"
+msgstr "Где собирается ваш проект"
+
+#: src/plugins/buildui/tweaks.ui:449
+msgid "Inside Source Tree"
+msgstr "Внутреннее дерево исходного кода"
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr "Внешнее дерево исходного кода"
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2692,19 +2858,32 @@ msgstr ""
 "SDK, используемый для создания вашего приложения, автоматически определяется "
 "во время выполнения."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Получить зависимости"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Собрать проект"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Запустить Cargo"
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr "Сервер интеграции Clang завершил работу"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
+msgstr "Сервер интеграции Clang запущен как процесс %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2753,7 +2932,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
 msgid "Configure project"
 msgstr "Конфигурация проекта"
 
@@ -2839,6 +3018,11 @@ msgstr "Коды операций"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
 msgstr "_Применить"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "Загрузка…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
@@ -2973,15 +3157,15 @@ msgstr "Выбрать расположение"
 msgid "Failed to Create Project"
 msgstr "Не удалось создать проект"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:10
+#: src/plugins/create-project/gbp-create-project-widget.ui:13
 msgid "Project Name"
 msgstr "Название проекта"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:16
+#: src/plugins/create-project/gbp-create-project-widget.ui:19
 msgid "A subdirectory with this name already exists"
 msgstr "Подкаталог с этим именем уже существует"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:26
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -2991,11 +3175,11 @@ msgstr ""
 "других ресурсах. Название должно состоять из строчных символов, не содержать "
 "пробелов и не начинаться с цифры."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:39
+#: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
 msgstr "ID приложения…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:45
+#: src/plugins/create-project/gbp-create-project-widget.ui:48
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -3003,29 +3187,28 @@ msgstr ""
 "Обратный идентификатор домена имени, используемый для идентификации "
 "приложения, такой как \"org.gnome.Builder\". Он может не содержать тире."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:61
+#: src/plugins/create-project/gbp-create-project-widget.ui:64
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:151
 msgid "Location"
 msgstr "Расположение"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:77
+#: src/plugins/create-project/gbp-create-project-widget.ui:80
 msgid "The project will be created in a new subdirectory."
 msgstr "Ваш проект будет создан в новом подкаталоге."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Лицензия"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:119
+#: src/plugins/create-project/gbp-create-project-widget.ui:122
 msgid "Template"
 msgstr "Шаблон"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:178
+#: src/plugins/create-project/gbp-create-project-widget.ui:181
 msgid "Create Project"
 msgstr "Создать проект"
 
@@ -3360,6 +3543,15 @@ msgstr "Файл не был предоставлен."
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
 msgstr "Использовать минимальный интерфейс редактора"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr "Переключиться на %s стиль"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "Переключение приложения и темы редактора"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -3966,7 +4158,7 @@ msgid "Open file or folder"
 msgstr "Открыть файл или папку"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
 msgid "Files"
 msgstr "Файлы"
 
@@ -3974,16 +4166,16 @@ msgstr "Файлы"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Похожие файлы (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Установка завершилась неудачно"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Установка завершена"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Клиент был закрыт"
 
@@ -4012,14 +4204,12 @@ msgstr ""
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Name"
 msgstr "Название"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr "Архитектура"
 
@@ -4033,7 +4223,7 @@ msgid ""
 msgstr ""
 "Builder найдет соответствующие расширения SDK для сборки вашего проекта"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:837
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4069,11 +4259,11 @@ msgstr "Создание пакета flatpak"
 msgid "Flatpak Application"
 msgstr "Приложение Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
 msgid "Installing Necessary SDKs"
 msgstr "Установка необходимых SDK"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4102,6 +4292,40 @@ msgstr ""
 msgid "Updating SDK Runtime"
 msgstr "Обновление SDK Runtime"
 
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
+msgid "Flatpak installation for new SDKs"
+msgstr "Установка Flatpak для новых SDK"
+
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
+msgid "The Flatpak installation to use for new SDKs and SDK extensions."
+msgstr ""
+"Установка Flatpak, которую следует использовать для новых SDK и расширений "
+"SDK."
+
+#: src/plugins/flatpak/tweaks.ui:12
+msgid "Preferred Flatpak Installation"
+msgstr "Предпочтительная установка Flatpak"
+
+#: src/plugins/flatpak/tweaks.ui:13
+msgid ""
+"When installing SDKs and SDK extensions, Builder may prefer a specific "
+"Flatpak installation which contains the extension."
+msgstr ""
+"При установке SDK и расширений SDK, Builder может предпочесть конкретную "
+"установку Flatpak, содержащую расширение."
+
+#: src/plugins/flatpak/tweaks.ui:22
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: src/plugins/flatpak/tweaks.ui:28
+msgid "User"
+msgstr "Пользователь"
+
+#: src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "Система"
+
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4123,12 +4347,12 @@ msgstr "Не установлено содержимое для сравнени
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Операция завершилась неудачно. Исходная ошибка: «%s»"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Операция была отменена"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4152,6 +4376,15 @@ msgstr "Нельзя подписать коммит без GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "Нельзя отслеживать изменения файлов вне рабочего каталога"
 
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr "Интеграция Git началась как процесс %s"
+
+#: src/plugins/git/gbp-git-client.c:195
+msgid "Git integration has exited"
+msgstr "Интеграция Git завершена"
+
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
 msgstr "Система контроля версий Git не используется"
@@ -4168,38 +4401,38 @@ msgstr "Инициализация подмодулей Git"
 msgid "Network is not available, skipping submodule update"
 msgstr "Сеть недоступна, пропуск обновления подмодулей"
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr "Отправка завершена."
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Отправка ссылки «%s»"
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
 msgstr "Каталог не является частью репозитория"
 
-#: src/plugins/git/gbp-git-vcs.c:536
+#: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr "Не найден репозиторий по адресу «%s»."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Протокол «%s» не поддерживается."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "Клонировать репозиторий"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "Требуется корректный URL-адрес Git"
 
@@ -4207,16 +4440,20 @@ msgstr "Требуется корректный URL-адрес Git"
 msgid "Authorship"
 msgstr "Авторство"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
 msgstr "Email"
+
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "запустить"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Начальная настройка проекта"
 
-#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr "Запуск Gradle"
 
@@ -4224,87 +4461,79 @@ msgstr "Запуск Gradle"
 msgid "Display a new greeter window"
 msgstr "Отобразить новое окно приветствия"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:763
 msgid "Match"
 msgstr "Результат"
 
-#: src/plugins/grep/gbp-grep-panel.c:768
+#: src/plugins/grep/gbp-grep-panel.c:775
 msgid "Path"
 msgstr "Путь"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:832
+#: src/plugins/grep/gbp-grep-panel.c:839
 #, c-format
 msgid "_Find in %s"
 msgstr "_Найти в %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:834
+#: src/plugins/grep/gbp-grep-panel.c:841
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Заменить на %s"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
-msgstr "Найти в файлах"
+msgstr "Найти в Файлах"
 
 #: src/plugins/grep/gbp-grep-panel.ui:6
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Найти в Файлах (Shift+Ctrl+Alt+F)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:47
-msgid "Find and Replace"
-msgstr "Найти и заменить"
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "_Recurse into Directories"
+msgstr "_Рекурсия по каталогам"
 
-#: src/plugins/grep/gbp-grep-panel.ui:66
-msgid "R_ecursive"
-msgstr "Р_екурсивно"
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "Сопоставить целые _слова"
 
-#: src/plugins/grep/gbp-grep-panel.ui:73
-msgid "Match _Case"
-msgstr "Учитывать _регистр"
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "Использовать регулярные _выражения"
 
-#: src/plugins/grep/gbp-grep-panel.ui:79
-msgid "Match _Words"
-msgstr "Только целые _слова"
-
-#: src/plugins/grep/gbp-grep-panel.ui:85
-msgid "Regular E_xpressions"
-msgstr "Регулярные _выражение"
-
-#: src/plugins/grep/gbp-grep-panel.ui:94
+#: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
 msgstr "Закрыть панель (Клавиша Escape)"
 
-#: src/plugins/grep/gbp-grep-panel.ui:125
+#: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
 msgstr "_Найти в проекте"
 
-#: src/plugins/grep/gbp-grep-panel.ui:145
+#: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
 msgstr "_Заменить в проекте"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Найти…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Искать"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Поиск по папкам рекурсивно"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Учитывать регистр"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Только полные слова"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Регулярные _выражения"
 
@@ -4312,7 +4541,7 @@ msgstr "Регулярные _выражения"
 msgid "_Find in Files"
 msgstr "_Найти в файлах"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
 msgstr "Операционная система хоста"
 
@@ -4368,7 +4597,7 @@ msgstr "Пустой проект с использованием Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Создать новый пустой проект, используя обычный Makefile"
 
-#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+#: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr "Запуск Maven"
 
@@ -4450,7 +4679,7 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Загрузить интроспекцию Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
 msgid "Install project"
 msgstr "Установить проект"
 
@@ -4464,12 +4693,10 @@ msgid "No Provided Tool"
 msgstr "Нет инструментов"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
 msgstr "Название для идентификации sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
 msgstr "Системная архитектура sysroot."
 
@@ -4552,49 +4779,87 @@ msgstr "Удалить набор инструментов"
 msgid "Delete Tool"
 msgstr "Удалить инструмент"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "Приложение GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Проект на базе Meson для GNOME с использованием GTK4 и libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "Приложение GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "Проект на базе Meson с использованием GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Разделяемая библиотека"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Проект на базе Meson для библиотеки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Инструмент командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Проект на базе Meson для программы командной строки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Пустой проект Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Пустой скелет проекта на Meson"
+
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
+msgid "Debug"
+msgstr "Отладка"
+
+#: src/plugins/messages/gbp-messages-panel.c:104
+msgid "Info"
+msgstr "Инфо"
+
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
+msgid "Message"
+msgstr "Сообщение"
+
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
+msgid "Critical"
+msgstr "Критическое"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Сообщения"
+
+#: src/plugins/messages/gbp-messages-panel.ui:25
+msgid "Time"
+msgstr "Время"
+
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
+msgid "Severity"
+msgstr "Важность"
+
+#: src/plugins/messages/gbp-messages-panel.ui:88
+msgid "Section"
+msgstr "Раздел"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -4602,7 +4867,7 @@ msgstr "Попробуйте один из проектов GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
-msgstr "Боксы"
+msgstr "Boxes"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
@@ -4748,12 +5013,12 @@ msgid "Drop Down"
 msgstr "Выпадающее меню"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:656
+#: src/plugins/podman/gbp-podman-runtime.c:661
 msgid "Containers/Toolbox"
 msgstr "Контейнеры/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:662
+#: src/plugins/podman/gbp-podman-runtime.c:667
 msgid "Containers/Podman"
 msgstr "Контейнеры/Podman"
 
@@ -4768,39 +5033,42 @@ msgid "A file with that name already exists."
 msgstr "Файл с таким именем уже существует."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
-msgstr "Название файла"
+msgstr "Имя файла"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:356
 msgid "Folder Name"
-msgstr "Название папки"
+msgstr "Имя папки"
+
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+msgid "New File Name"
+msgstr "Новое имя файла"
 
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "_Создать"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, c-format
 msgid "Copying 1 file"
 msgstr "Копирование 1 файла"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Копирование %s из %s файлов"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Failed to copy files"
 msgstr "Не удалось скопировать файлы"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:745
 msgid "Files copied"
 msgstr "Файлы скопированы"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -4808,13 +5076,18 @@ msgstr[0] "Скопирован %s файл"
 msgstr[1] "Скопировано %s файла"
 msgstr[2] "Скопировано %s файлов"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "Копирование файлов…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Файлы будут скопированы через мгновение"
+
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:96
+msgid "Filter"
+msgstr "Фильтр"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5020,6 +5293,10 @@ msgstr ""
 "Разрешить загрузку SDK и зависимостей при лимитных интернет-соединениях"
 
 #: src/plugins/sdkui/tweaks.ui:29
+msgid "Sources"
+msgstr "Источники"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "Доступные SDK"
 
@@ -5028,7 +5305,7 @@ msgid "Untitled Command"
 msgstr "Безымянная команда"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:191
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
 msgid "Set Shortcut"
 msgstr "Установить комбинацию клавиш"
 
@@ -5093,10 +5370,6 @@ msgstr "Использовать подоболочку"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Запустить программу в подоболочке, вроде <tt>sh -c ''</tt>"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Местонахождение"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
@@ -5220,7 +5493,7 @@ msgstr "_Редактировать файл"
 msgid "Open keybindings.json in editor"
 msgstr "Открыть keybindings.json в редакторе"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:86
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
 msgid "View and Customize Shortcuts…"
 msgstr "Просмотр и изменение комбинаций клавиш…"
 
@@ -5251,6 +5524,10 @@ msgstr "Игнорировать"
 #: src/plugins/spellcheck/editor-spell-menu.c:259
 msgid "Languages"
 msgstr "Языки"
+
+#: src/plugins/swift/gbp-swift-run-command-provider.c:77
+msgid "swift run"
+msgstr "запуск swift"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5500,34 +5777,11 @@ msgstr ""
 "Предоставьте переменную среды «TRACE_FD» для приложений, чтобы сообщать о "
 "пользовательских событиях"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
-msgid "An absolute file-system path to the sysroot."
-msgstr "Абсолютный путь к корневому каталогу."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
-msgid "Package Config Path"
-msgstr "Путь к файлам конфигурации пакетов"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
-msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr ""
-"Необязательный список путей, разделённых запятыми, который будет записан в "
-"PKG_CONFIG_PATH."
-
-#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
-#, c-format
-msgid "%s (Sysroot SDK)"
-msgstr "%s (SDK из корневого каталога)"
-
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Приложение запущено в %s\n"
-
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Приложение завершилось"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
@@ -5674,13 +5928,13 @@ msgstr "TODO/FIXME"
 msgid "Loading TODOs…"
 msgstr "Загрузка TODO…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr "Обновление зависимостей…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-msgid "Builder is updating your projects configured dependencies."
-msgstr "Builder обновляет зависимости вашего проекта."
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
+msgid "Builder is updating your project’s configured dependencies."
+msgstr "Builder обновляет настроенные зависимости вашего проекта."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -5806,19 +6060,19 @@ msgstr "Начать клонирование проекта из URI"
 msgid "A failure occurred while cloning the repository."
 msgstr "Произошел сбой при клонировании репозитория."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:15
 msgid "Repository URL"
 msgstr "URL-адрес репозитория"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
 msgid "Choose an alternate branch"
 msgstr "Выберете альтернативную ветку"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
 msgid "Branches"
 msgstr "Ветви"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
@@ -5826,21 +6080,21 @@ msgstr ""
 "Введите URL-адрес репозитория исходного кода проекта которого вы хотите "
 "клонировать."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Репозиторий будет клонирован в новый подкаталог."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Author Details"
 msgstr "Информация об авторе"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 "Вы можете упомянуть информацию об авторстве, чтобы перезаписать информацию "
 "по умолчанию."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
 msgid "Status"
 msgstr "Статус"
 
@@ -5893,6 +6147,10 @@ msgstr "Сфокусировать местоположение"
 msgid "Focus the current page's location"
 msgstr "Сфокусировать местоположение текущей страницы"
 
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "Не удалось разобрать документ XML"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5901,6 +6159,36 @@ msgstr "Не удалось создать дерево XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл должен быть сохранен локально для разбора."
+
+#~ msgid "An absolute file-system path to the sysroot."
+#~ msgstr "Абсолютный путь к корневому каталогу."
+
+#~ msgid "Package Config Path"
+#~ msgstr "Путь к файлам конфигурации пакетов"
+
+#~ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+#~ msgstr ""
+#~ "Необязательный список путей, разделённых запятыми, который будет записан "
+#~ "в PKG_CONFIG_PATH."
+
+#, c-format
+#~ msgid "%s (Sysroot SDK)"
+#~ msgstr "%s (SDK из корневого каталога)"
+
+#~ msgid "Find and Replace"
+#~ msgstr "Найти и заменить"
+
+#~ msgid "R_ecursive"
+#~ msgstr "Р_екурсивно"
+
+#~ msgid "Match _Case"
+#~ msgstr "Учитывать _регистр"
+
+#~ msgid "Match _Words"
+#~ msgstr "Только целые _слова"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "Регулярные _выражение"
 
 #~ msgid "Stop Building Project"
 #~ msgstr "Остановить сборку проекта"
@@ -5913,9 +6201,6 @@ msgstr "Файл должен быть сохранен локально для 
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "Точка останова отладчика в функции g_warning()"
-
-#~ msgid "Show Build _Log"
-#~ msgstr "Показать _журнал сборки"
 
 #~ msgid "Tools"
 #~ msgstr "Инструменты"
@@ -6204,9 +6489,6 @@ msgstr "Файл должен быть сохранен локально для 
 #~ msgid "GIMP palette"
 #~ msgstr "Палитра GIMP"
 
-#~ msgid "GNOME Builder palette"
-#~ msgstr "Палитра GNOME Builder"
-
 #~ msgid "Palette name"
 #~ msgstr "Название палитры"
 
@@ -6289,10 +6571,6 @@ msgstr "Файл должен быть сохранен локально для 
 #, c-format
 #~ msgid "%s: This file format is not supported\n"
 #~ msgstr "%s: Данный формат файла не поддерживается\n"
-
-#, c-format
-#~ msgid "failed to parse\n"
-#~ msgstr "не удалось обработать\n"
 
 #~ msgid "Generated"
 #~ msgstr "Сформирован"
@@ -6408,9 +6686,6 @@ msgstr "Файл должен быть сохранен локально для 
 #~ msgid "Percent"
 #~ msgstr "Проценты"
 
-#~ msgid "Filters:"
-#~ msgstr "Фильтры:"
-
 #~ msgid "Select a filter that act on the colors or “None”."
 #~ msgstr "Выберите фильтр, действующий на цвета или «None»."
 
@@ -6493,9 +6768,6 @@ msgstr "Файл должен быть сохранен локально для 
 
 #~ msgid "Display the open files list in the project sidebar."
 #~ msgstr "Отображать список открытых файлов в боковой панели проекта."
-
-#~ msgid "System"
-#~ msgstr "Система"
 
 #~ msgid "follow"
 #~ msgstr "следовать"
