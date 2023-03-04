@@ -65,6 +65,7 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdeRunCommand) build_command = NULL;
   g_autoptr(IdeRunCommand) clean_command = NULL;
   g_autoptr(IdeRunCommand) wrapper_command = NULL;
+  g_autofree gchar *gradle_wrapper_path = NULL;
 
   IDE_ENTRY;
 
@@ -83,6 +84,12 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
   ide_run_command_set_cwd (wrapper_command, srcdir);
   wrapper_stage = ide_pipeline_stage_command_new (wrapper_command, NULL);
   ide_pipeline_stage_set_name (wrapper_stage, _("Bootstrapping project"));
+  gradle_wrapper_path = g_build_filename (srcdir, "gradlew", NULL);
+  if (g_file_test (gradle_wrapper_path, G_FILE_TEST_IS_EXECUTABLE))
+  {
+    g_debug ("gradle wrapper already exists and is executable %s", gradle_wrapper_path);
+    ide_pipeline_stage_set_completed (wrapper_stage, TRUE);
+  }
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, wrapper_stage);
   ide_pipeline_addin_track (addin, id);
 
