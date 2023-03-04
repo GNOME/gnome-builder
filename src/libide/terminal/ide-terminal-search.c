@@ -38,11 +38,6 @@
 
 G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, ADW_TYPE_BIN)
 
-gboolean use_regex = FALSE;
-gboolean wrap_word = FALSE;
-gboolean match_case = FALSE;
-gboolean entire_word = FALSE;
-
 enum {
   PROP_0,
   PROP_REGEX,
@@ -113,14 +108,14 @@ update_regex (IdeTerminalSearch *self)
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
-  caseless = !match_case;
+  caseless = !self->match_case;
 
-  if (use_regex)
+  if (self->use_regex)
     pattern = g_strdup (search_text);
   else
     pattern = g_regex_escape_string (search_text, -1);
 
-  if (entire_word)
+  if (self->entire_word)
     {
       char *new_pattern;
       new_pattern = g_strdup_printf ("\\b%s\\b", pattern);
@@ -189,7 +184,7 @@ search_overlay_notify_wrap_around_cb (VteTerminal    *terminal,
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  vte_terminal_search_set_wrap_around (terminal, wrap_word);
+  vte_terminal_search_set_wrap_around (terminal, self->wrap_word);
 }
 
 static void
@@ -315,19 +310,19 @@ ide_terminal_search_get_property (GObject    *object,
       break;
 
     case PROP_USE_REGEX:
-      g_value_set_boolean (value, use_regex);
+      g_value_set_boolean (value, self->use_regex);
       break;
 
     case PROP_CASE_SENSITIVE:
-      g_value_set_boolean (value, match_case);
+      g_value_set_boolean (value, self->match_case);
       break;
 
     case PROP_WHOLE_WORDS:
-      g_value_set_boolean (value, entire_word);
+      g_value_set_boolean (value, self->entire_word);
       break;
 
     case PROP_WRAP_AROUND:
-      g_value_set_boolean (value, wrap_word);
+      g_value_set_boolean (value, self->wrap_word);
       break;
 
     default:
@@ -346,22 +341,22 @@ ide_terminal_search_set_property (GObject      *object,
   switch (prop_id)
     {
    case PROP_USE_REGEX:
-      use_regex = !use_regex;
+      self->use_regex = !self->use_regex;
       search_parameters_changed_cb (self);
       break;
 
     case PROP_CASE_SENSITIVE:
-      match_case = !match_case;
+      self->match_case = !self->match_case;
       search_parameters_changed_cb (self);
       break;
 
     case PROP_WHOLE_WORDS:
-      entire_word = !entire_word;
+      self->entire_word = !self->entire_word;
       search_parameters_changed_cb (self);
       break;
 
     case PROP_WRAP_AROUND:
-      wrap_word = !wrap_word;
+      self->wrap_word = !self->wrap_word;
       search_parameters_changed_cb (self);
       break;
 
@@ -486,7 +481,7 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
 {
   g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
-  return wrap_word;
+  return self->wrap_word;
 }
 
 /**

@@ -45,6 +45,12 @@ struct _IdeTerminalSearch
   gchar               *regex_pattern;
   VteRegex            *regex;
 
+  /* Search options */
+  guint                use_regex : 1;
+  guint                wrap_word : 1;
+  guint                match_case : 1;
+  guint                entire_word : 1;
+
   gchar               *selected_text;
   gchar               *selection_buffer;
 };
