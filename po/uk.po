@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-02 16:18+0000\n"
-"PO-Revision-Date: 2023-03-02 22:14+0200\n"
+"POT-Creation-Date: 2023-03-03 21:35+0000\n"
+"PO-Revision-Date: 2023-03-05 09:45+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -713,7 +713,7 @@ msgid "Start New Project"
 msgstr "Створити проєкт"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:282
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
 msgstr "Клонувати сховище"
@@ -776,7 +776,7 @@ msgstr "Без назви"
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
 #: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Cancel"
@@ -1036,7 +1036,7 @@ msgid "Line Ending:"
 msgstr "Кодування рядка:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:93
+#: src/plugins/create-project/gbp-create-project-widget.ui:96
 msgid "Language"
 msgstr "Мова"
 
@@ -1286,12 +1286,24 @@ msgid "User requested application to stop"
 msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
 #: src/libide/foundry/ide-runtime.c:406
-#: src/plugins/host/gbp-host-runtime-provider.c:55
+#: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Основна система"
+
+#: src/libide/foundry/ide-runtime-provider.c:147
+#, c-format
+#| msgid "Discovered device “%s”"
+msgid "Discovered runtime “%s”"
+msgstr "Виявлено середовище виконання «%s»"
+
+#: src/libide/foundry/ide-runtime-provider.c:170
+#, c-format
+#| msgid "Removing Files…"
+msgid "Removing runtime “%s”"
+msgstr "Вилучаємо середовище виконання «%s»"
 
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
@@ -1513,23 +1525,23 @@ msgstr "Пошук"
 msgid "Search for anything"
 msgstr "Шукати будь-що"
 
-#: src/libide/gui/ide-search-popover.ui:235
+#: src/libide/gui/ide-search-popover.ui:230
 msgid "_Everything"
 msgstr "_Усе"
 
-#: src/libide/gui/ide-search-popover.ui:242
+#: src/libide/gui/ide-search-popover.ui:237
 msgid "_Actions"
 msgstr "_Дії"
 
-#: src/libide/gui/ide-search-popover.ui:249
+#: src/libide/gui/ide-search-popover.ui:244
 msgid "_Commands"
 msgstr "_Команди"
 
-#: src/libide/gui/ide-search-popover.ui:256
+#: src/libide/gui/ide-search-popover.ui:251
 msgid "_Files"
 msgstr "_Файли"
 
-#: src/libide/gui/ide-search-popover.ui:263
+#: src/libide/gui/ide-search-popover.ui:258
 msgid "_Symbols"
 msgstr "Си_мволи"
 
@@ -1759,7 +1771,7 @@ msgid "Language server “%s” spawned as process %s"
 msgstr "Сервер мови «%s» породжено як процес %s"
 
 #: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Контроль версії"
@@ -2394,7 +2406,6 @@ msgstr "Зробити налаштування активними і перез
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
 msgid "Delete"
 msgstr "Вилучити"
 
@@ -2874,7 +2885,7 @@ msgstr "Отримати залежності"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/golang/gbp-golang-pipeline-addin.c:152
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:236
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
@@ -3170,15 +3181,15 @@ msgstr "Вибрати місце"
 msgid "Failed to Create Project"
 msgstr "Не вдалося створити проєкт"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:10
+#: src/plugins/create-project/gbp-create-project-widget.ui:13
 msgid "Project Name"
 msgstr "Назва проєкту"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:16
+#: src/plugins/create-project/gbp-create-project-widget.ui:19
 msgid "A subdirectory with this name already exists"
 msgstr "Підкаталог із такою назвою вже існує."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:26
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -3188,11 +3199,11 @@ msgstr ""
 "ресурсів. Назва має складатися з малих латинських літер і не починатися з "
 "цифри."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:39
+#: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
 msgstr "Ідентифікатор програми…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:45
+#: src/plugins/create-project/gbp-create-project-widget.ui:48
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -3201,29 +3212,28 @@ msgstr ""
 "вашої програми. Приклад: «org.gnome.Builder». Ідентифікатор не повинен "
 "містити дефісів."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:61
+#: src/plugins/create-project/gbp-create-project-widget.ui:64
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:148
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:151
 msgid "Location"
 msgstr "Місце"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:77
+#: src/plugins/create-project/gbp-create-project-widget.ui:80
 msgid "The project will be created in a new subdirectory."
 msgstr "Проєкт буде створено у новому підкаталозі."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Ліцензування"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:119
+#: src/plugins/create-project/gbp-create-project-widget.ui:122
 msgid "Template"
 msgstr "Шаблон"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:178
+#: src/plugins/create-project/gbp-create-project-widget.ui:181
 msgid "Create Project"
 msgstr "Створити проєкт"
 
@@ -4219,14 +4229,12 @@ msgstr ""
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Name"
 msgstr "Назва"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr "Архітектура"
 
@@ -4240,7 +4248,7 @@ msgid ""
 msgstr ""
 "«Будівнику» шукає відповідні розширення SDK для збирання вашого проєкту"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:837
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4276,11 +4284,11 @@ msgstr "Створюємо комплект flatpak"
 msgid "Flatpak Application"
 msgstr "Програма Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
 msgid "Installing Necessary SDKs"
 msgstr "Встановлення потрібних наборів інструментів для розробки"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4327,8 +4335,8 @@ msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
-"При встановленні SDK та розширень SDK «Будівник» може надавати перевагу"
-" певному встановленню Flatpak, де міститься розширення."
+"При встановленні SDK та розширень SDK «Будівник» може надавати перевагу "
+"певному встановленню Flatpak, де міститься розширення."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -4456,7 +4464,7 @@ msgstr "Потрібно вказати правильне посилання у
 msgid "Authorship"
 msgstr "Авторство"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
 msgstr "Ел. пошта"
 
@@ -4477,22 +4485,22 @@ msgstr "Запуск Gradle"
 msgid "Display a new greeter window"
 msgstr "Показати нове вікно вітання"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:763
 msgid "Match"
 msgstr "Відповідність"
 
-#: src/plugins/grep/gbp-grep-panel.c:768
+#: src/plugins/grep/gbp-grep-panel.c:775
 msgid "Path"
 msgstr "Шлях"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:832
+#: src/plugins/grep/gbp-grep-panel.c:839
 #, c-format
 msgid "_Find in %s"
 msgstr "З_найти у %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:834
+#: src/plugins/grep/gbp-grep-panel.c:841
 #, c-format
 msgid "_Replace in %s"
 msgstr "За_мінити у %s"
@@ -4557,7 +4565,7 @@ msgstr "Використовувати _формальні вирази"
 msgid "_Find in Files"
 msgstr "З_найти у файлах"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
 msgstr "Основна операційна система"
 
@@ -4709,12 +4717,10 @@ msgid "No Provided Tool"
 msgstr "Не вказано засобу"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
 msgstr "Назва для ідентифікації sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
 msgstr "Архітектура системи sysroot."
 
@@ -5795,25 +5801,6 @@ msgstr ""
 "Надати змінну середовища TRACE_FD для програм для повідомлень про нетипові "
 "події"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
-msgid "An absolute file-system path to the sysroot."
-msgstr "Абсолютний шлях у файловій системі до sysroot."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
-msgid "Package Config Path"
-msgstr "Шлях до налаштувань пакунків"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
-msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr ""
-"Необов'язковий набір відокремлених комами шляхів для визначення "
-"PKG_CONFIG_PATH."
-
-#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
-#, c-format
-msgid "%s (Sysroot SDK)"
-msgstr "%s (Sysroot SDK)"
-
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
@@ -6097,38 +6084,38 @@ msgstr "Почати клонування проєкту за адресою"
 msgid "A failure occurred while cloning the repository."
 msgstr "Під час клонування сховища сталася помилка"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:12
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:15
 msgid "Repository URL"
 msgstr "Адреса сховища"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:31
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
 msgid "Choose an alternate branch"
 msgstr "Виберіть альтернативну гілку"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:50
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
 msgid "Branches"
 msgstr "Гілки"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:135
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Введіть адресу сховища початкового коду проєкту, який ви хочете клонувати."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:164
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Сховище буде клоновано до нового підкаталогу."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:190
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Author Details"
 msgstr "Подробиці про автора"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:208
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
 msgid "You may specify authorship information to override defaults."
 msgstr "Ви можете вказати дані щодо авторства для перевизначення типових."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:224
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
 msgid "Status"
 msgstr "Стан"
 
@@ -6193,6 +6180,21 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "An absolute file-system path to the sysroot."
+#~ msgstr "Абсолютний шлях у файловій системі до sysroot."
+
+#~ msgid "Package Config Path"
+#~ msgstr "Шлях до налаштувань пакунків"
+
+#~ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+#~ msgstr ""
+#~ "Необов'язковий набір відокремлених комами шляхів для визначення "
+#~ "PKG_CONFIG_PATH."
+
+#, c-format
+#~ msgid "%s (Sysroot SDK)"
+#~ msgstr "%s (Sysroot SDK)"
 
 #~ msgid "Find and Replace"
 #~ msgstr "Знайти і замінити"
