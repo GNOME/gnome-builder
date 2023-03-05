@@ -64,3 +64,4 @@ IDE_AVAILABLE_IN_ALL
 IdeTerminal         *ide_terminal_page_get_terminal              (IdeTerminalPage     *self);
 
 G_END_DECLS
+

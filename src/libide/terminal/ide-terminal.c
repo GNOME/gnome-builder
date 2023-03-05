@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 
 #include "ide-terminal.h"
+#include "ide-terminal-page.h"
 #include "ide-terminal-search.h"
 
 #define BUILDER_PCRE2_MULTILINE 0x00000400u
@@ -386,47 +387,6 @@ open_link_action (GtkWidget  *widget,
                                 NULL);
 }
 
-static GtkWidget *
-find_child_typed (GtkWidget *parent,
-                  GType      child_type)
-{
-  for (GtkWidget *child = gtk_widget_get_first_child (parent);
-       child;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      if (g_type_is_a (G_OBJECT_TYPE (child), child_type))
-        return child;
-    }
-
-  return NULL;
-}
-
-static void
-ide_terminal_search_reveal (GtkWidget  *widget,
-                            const char *action_name,
-                            GVariant   *param)
-{
-  IdeTerminal *self = (IdeTerminal *)widget;
-  GtkWidget *parent_overlay;
-
-  g_assert (IDE_IS_TERMINAL (self));
-
-  parent_overlay = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_OVERLAY);
-
-  if (parent_overlay != NULL)
-    {
-      IdeTerminalSearch *search = IDE_TERMINAL_SEARCH (find_child_typed (parent_overlay, IDE_TYPE_TERMINAL_SEARCH));
-
-      if (search != NULL)
-        {
-          GtkRevealer *revealer = ide_terminal_search_get_revealer (search);
-
-          if (!gtk_revealer_get_child_revealed (revealer))
-            gtk_revealer_set_reveal_child (revealer, TRUE);
-        }
-    }
-}
-
 static void
 ide_terminal_font_changed (IdeTerminal *self,
                            const gchar *key,
@@ -592,7 +552,6 @@ ide_terminal_class_init (IdeTerminalClass *klass)
   gtk_widget_class_install_action (widget_class, "clipboard.copy-link", NULL, copy_link_address_action);
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL, paste_clipboard_action);
   gtk_widget_class_install_action (widget_class, "terminal.open-link", NULL, open_link_action);
-  gtk_widget_class_install_action (widget_class, "terminal.search", NULL, ide_terminal_search_reveal);
   gtk_widget_class_install_action (widget_class, "terminal.select-all", "b", select_all_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.copy", NULL);

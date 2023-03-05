@@ -5,7 +5,7 @@
     <property name="hexpand">true</property>
     <property name="vexpand">true</property>
     <property name="title" translatable="yes">Untitled Terminal</property>
-    <child>
+    <child type="content">
       <object class="GtkPaned" id="paned">
         <property name="orientation">vertical</property>
         <child>
@@ -21,6 +21,31 @@
                     <property name="vexpand">true</property>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="content">
+      <object class="GtkRevealer" id="search_revealer">
+        <property name="reveal-child">false</property>
+        <property name="transition-type">slide-up</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">horizontal</property>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTerminalSearch" id="search_bar">
+                <property name="halign">center</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
               </object>
             </child>
           </object>

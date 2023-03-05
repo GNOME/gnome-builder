@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 struct _IdeTerminalSearch
 {
-  AdwBin               parent_instance;
+  GtkWidget            parent_instance;
 
   VteTerminal         *terminal;
 
@@ -36,6 +36,7 @@ struct _IdeTerminalSearch
 
   IdeSearchEntry      *search_entry;
 
+  GtkGrid             *grid;
   GtkButton           *search_prev_button;
   GtkButton           *search_next_button;
   GtkButton           *close_button;

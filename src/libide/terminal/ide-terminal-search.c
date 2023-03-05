@@ -36,7 +36,7 @@
 #include "ide-terminal-search.h"
 #include "ide-terminal-search-private.h"
 
-G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -77,15 +77,6 @@ perform_search (IdeTerminalSearch *self,
     return;
 
   g_signal_emit (self, signals[SEARCH], 0, backward);
-}
-
-static void
-close_clicked_cb (GtkButton        *button,
-                  IdeTerminalSearch *self)
-{
-  g_assert (IDE_IS_TERMINAL_SEARCH (self));
-
-  gtk_revealer_set_reveal_child(self->search_revealer, FALSE);
 }
 
 static void
@@ -200,36 +191,6 @@ search_overlay_search_cb (VteTerminal       *terminal,
     vte_terminal_search_find_next (terminal);
 }
 
-static void
-search_revealer_cb (GtkRevealer       *search_revealer,
-                    GParamSpec        *pspec,
-                    IdeTerminalSearch *self)
-{
-  g_assert (IDE_IS_TERMINAL_SEARCH (self));
-
-  if (gtk_revealer_get_child_revealed (search_revealer))
-    {
-#if 0
-      if (vte_terminal_get_has_selection (self->terminal))
-        {
-          vte_terminal_copy_primary (self->terminal);
-
-          g_clear_pointer (&self->selected_text, g_free);
-
-          /* TODO: Wait for async text read */
-
-          gtk_editable_set_text (GTK_EDITABLE (self->search_entry), self->selected_text);
-        }
-#endif
-
-      gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
-    }
-  else
-    {
-      gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
-    }
-}
-
 static gboolean
 on_search_key_pressed_cb (GtkEventControllerKey *key,
                           guint                  keyval,
@@ -263,17 +224,6 @@ on_search_key_pressed_cb (GtkEventControllerKey *key,
 }
 
 static void
-search_hide_action (GtkWidget  *widget,
-                    const char *action_name,
-                    GVariant   *param)
-{
-  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (widget);
-
-  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
-  gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
-}
-
-static void
 ide_terminal_search_connect_terminal (IdeTerminalSearch *self)
 {
   g_signal_connect_object (self,
@@ -293,6 +243,22 @@ ide_terminal_search_connect_terminal (IdeTerminalSearch *self)
                            G_CALLBACK (search_overlay_search_cb),
                            self->terminal,
                            G_CONNECT_SWAPPED);
+}
+
+static void
+ide_terminal_search_dispose (GObject *object)
+{
+  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (object);
+
+  g_clear_pointer ((GtkWidget **)&self->grid, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (ide_terminal_search_parent_class)->dispose (object);
+}
+
+static void
+ide_terminal_search_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (ide_terminal_search_parent_class)->finalize (object);
 }
 
 static void
@@ -371,18 +337,20 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_terminal_search_dispose;
+  object_class->finalize = ide_terminal_search_finalize;
   object_class->get_property = ide_terminal_search_get_property;
   object_class->set_property = ide_terminal_search_set_property;
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, "searchbar");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-search.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_next_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, close_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_revealer);
   gtk_widget_class_bind_template_callback (widget_class, on_search_key_pressed_cb);
-
-  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
 
   signals[SEARCH] =
     g_signal_new ("search",
@@ -425,6 +393,8 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
   gtk_widget_class_install_property_action (widget_class, "search.use-regex", "use-regex");
   gtk_widget_class_install_property_action (widget_class, "search.whole-words", "whole-words");
   gtk_widget_class_install_property_action (widget_class, "search.wrap-around", "wrap-around");
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "page.search.hide", NULL);
 }
 
 static void
@@ -437,9 +407,7 @@ ide_terminal_search_init (IdeTerminalSearch *self)
 
   g_signal_connect (self->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
-  g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
   g_signal_connect (self->search_entry, "notify::text", G_CALLBACK (search_notify_text_cb), self);
-  g_signal_connect (self->search_revealer, "notify::child-revealed", G_CALLBACK (search_revealer_cb), self);
 }
 
 /**
@@ -482,20 +450,4 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
   g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
   return self->wrap_word;
-}
-
-/**
- * ide_terminal_search_get_revealer:
- * @self: a #IdeTerminalSearch
- *
- * Gets the revealer widget used for the terminal search.
- *
- * Returns: (transfer none): a #GtkRevealer
- */
-GtkRevealer *
-ide_terminal_search_get_revealer (IdeTerminalSearch *self)
-{
-  g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
-
-  return self->search_revealer;
 }

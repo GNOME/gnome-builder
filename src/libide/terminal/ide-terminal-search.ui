@@ -1,115 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeTerminalSearch" parent="AdwBin">
-    <property name="hexpand">true</property>
-    <property name="halign">fill</property>
-    <property name="valign">end</property>
+  <requires lib="gtk" version="4.0" />
+  <template class="IdeTerminalSearch" parent="GtkWidget">
     <child>
-      <object class="GtkRevealer" id="search_revealer">
-        <property name="reveal-child">false</property>
-        <property name="transition-type">slide-up</property>
+      <object class="GtkGrid" id="grid">
+        <property name="column-spacing">6</property>
+        <property name="row-spacing">6</property>
+        <child>
+          <object class="IdeSearchEntry" id="search_entry">
+            <property name="hexpand">true</property>
+            <property name="width-chars">10</property>
+            <property name="max-width-chars">30</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+            </layout>
+            <child>
+              <object class="GtkEventControllerKey">
+                <property name="propagation-phase">capture</property>
+                <signal name="key-pressed" handler="on_search_key_pressed_cb" />
+              </object>
+            </child>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
-            <property name="orientation">vertical</property>
+            <property name="homogeneous">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkButton" id="search_prev_button">
+                <property name="action-target">false</property>
+                <property name="tooltip-text" translatable="yes">Move to previous match</property>
+                <property name="icon-name">go-up-symbolic</property>
+                <style>
+                  <class name="flat" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="search_next_button">
+                <property name="action-target">false</property>
+                <property name="tooltip-text" translatable="yes">Move to next match</property>
+                <property name="icon-name">go-down-symbolic</property>
+                <style>
+                  <class name="flat" />
+                </style>
+              </object>
+            </child>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="direction">up</property>
+            <property name="icon-name">view-more-symbolic</property>
+            <property name="menu-model">options_menu</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">3</property>
+            </layout>
             <style>
-              <class name="background"/>
+              <class name="flat" />
             </style>
-            <child>
-              <object class="GtkSeparator">
-                <property name="orientation">horizontal</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid">
-                <property name="halign">center</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="column-spacing">6</property>
-                <property name="row-spacing">6</property>
-                <child>
-                  <object class="IdeSearchEntry" id="search_entry">
-                    <property name="hexpand">true</property>
-                    <property name="width-chars">10</property>
-                    <property name="max-width-chars">30</property>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">0</property>
-                    </layout>
-                    <child>
-                      <object class="GtkEventControllerKey">
-                        <property name="propagation-phase">capture</property>
-                        <signal name="key-pressed" handler="on_search_key_pressed_cb"/>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="homogeneous">true</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkButton" id="search_prev_button">
-                        <property name="action-target">false</property>
-                        <property name="tooltip-text" translatable="yes">Move to previous match (Ctrl+Shift+G)</property>
-                        <property name="icon-name">go-up-symbolic</property>
-                        <style>
-                          <class name="flat" />
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="search_next_button">
-                        <property name="action-target">false</property>
-                        <property name="tooltip-text" translatable="yes">Move to next match (Ctrl+G)</property>
-                        <property name="icon-name">go-down-symbolic</property>
-                        <style>
-                          <class name="flat" />
-                        </style>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkMenuButton">
-                    <property name="direction">up</property>
-                    <property name="icon-name">view-more-symbolic</property>
-                    <property name="menu-model">options_menu</property>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">3</property>
-                    </layout>
-                    <style>
-                      <class name="flat" />
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="close_button">
-                    <property name="margin-end">3</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="tooltip-text" translatable="yes">Close search</property>
-                    <property name="icon-name">window-close-symbolic</property>
-                    <style>
-                      <class name="flat" />
-                      <class name="small-button" />
-                      <class name="circular" />
-                    </style>
-                    <layout>
-                      <property name="column">4</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-              </object>
-            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="margin-end">3</property>
+            <property name="action-name">page.search.hide</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="tooltip-text" translatable="yes">Close search</property>
+            <property name="icon-name">window-close-symbolic</property>
+            <style>
+              <class name="flat" />
+              <class name="small-button" />
+              <class name="circular" />
+            </style>
+            <layout>
+              <property name="column">4</property>
+              <property name="row">0</property>
+            </layout>
           </object>
         </child>
       </object>

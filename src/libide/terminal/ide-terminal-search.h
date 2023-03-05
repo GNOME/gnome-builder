@@ -43,7 +43,4 @@ gboolean     ide_terminal_search_get_wrap_around (IdeTerminalSearch *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_terminal_search_set_terminal    (IdeTerminalSearch *self,
                                                   VteTerminal       *terminal);
-IDE_AVAILABLE_IN_ALL
-GtkRevealer *ide_terminal_search_get_revealer    (IdeTerminalSearch *self);
-
 G_END_DECLS

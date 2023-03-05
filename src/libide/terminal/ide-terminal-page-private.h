@@ -36,8 +36,8 @@ struct _IdeTerminalPage
   VtePty              *pty;
 
   /* Template widgets */
-  GtkOverlay          *terminal_overlay;
   GtkRevealer         *search_revealer;
+  IdeTerminalSearch   *search_bar;
   IdeTerminal         *terminal;
   IdeTerminalSearch   *tsearch;
 

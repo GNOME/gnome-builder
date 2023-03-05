@@ -250,7 +250,6 @@ focus_in_event_cb (GtkEventControllerFocus *focus,
   g_assert (IDE_IS_TERMINAL_PAGE (self));
 
   panel_widget_set_needs_attention (PANEL_WIDGET (self), FALSE);
-  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
 }
 
 static void
@@ -377,6 +376,37 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
 }
 
 static void
+set_search_visible (IdeTerminalPage          *self,
+                    gboolean                search_visible)
+{
+  g_return_if_fail (IDE_IS_TERMINAL_PAGE (self));
+
+  gtk_revealer_set_reveal_child (self->search_revealer, search_visible);
+
+  if (search_visible)
+    gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+}
+
+static void
+search_hide_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeTerminalPage *self = IDE_TERMINAL_PAGE (widget);
+
+  set_search_visible (self, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+}
+
+static void
+search_show_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
+{
+  set_search_visible (IDE_TERMINAL_PAGE (widget), TRUE);
+}
+
+static void
 ide_terminal_page_dispose (GObject *object)
 {
   IdeTerminalPage *self = IDE_TERMINAL_PAGE (object);
@@ -480,7 +510,13 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal);
-  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, terminal_overlay);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, search_revealer);
+
+  gtk_widget_class_install_action (widget_class, "page.search.hide", NULL, search_hide_action);
+  gtk_widget_class_install_action (widget_class, "terminal.search", NULL, search_show_action);
+
+  g_type_ensure (IDE_TYPE_TERMINAL_SEARCH);
 
   properties [PROP_CLOSE_ON_EXIT] =
     g_param_spec_boolean ("close-on-exit",
@@ -518,6 +554,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
 }
 
 static void
@@ -527,22 +564,15 @@ ide_terminal_page_init (IdeTerminalPage *self)
   self->respawn_on_exit = TRUE;
   self->manage_spawn = TRUE;
 
-  self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH,
-                                "visible", TRUE,
-                                NULL);
-  self->search_revealer = ide_terminal_search_get_revealer (self->tsearch);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
 
-  gtk_overlay_add_overlay (self->terminal_overlay, GTK_WIDGET (self->tsearch));
-
   ide_terminal_page_connect_terminal (self, VTE_TERMINAL (self->terminal));
 
-  ide_terminal_search_set_terminal (self->tsearch, VTE_TERMINAL (self->terminal));
+  ide_terminal_search_set_terminal (self->search_bar, VTE_TERMINAL (self->terminal));
 
   ide_terminal_page_actions_init (self);
 
@@ -698,3 +728,4 @@ ide_terminal_page_new_completed (const char *title,
 
   return self;
 }
+
