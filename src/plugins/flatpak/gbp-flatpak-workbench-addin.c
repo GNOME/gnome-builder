@@ -72,7 +72,7 @@ gbp_flatpak_workbench_addin_run_cb (GbpFlatpakWorkbenchAddin *self,
 
   filename = g_build_filename (g_get_home_dir (), ".var", "app", app_id, "config", "glib-2.0", "settings", "keyfile", NULL);
   backend = g_keyfile_settings_backend_new (filename, "/", NULL);
-  gtk_settings = g_settings_new_with_backend ("org.gtk.Settings.Debug", backend);
+  gtk_settings = g_settings_new_with_backend ("org.gtk.gtk4.Settings.Debug", backend);
 
   g_settings_set_boolean (gtk_settings, "enable-inspector-keybinding", TRUE);
 
