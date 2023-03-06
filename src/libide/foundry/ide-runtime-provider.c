@@ -187,6 +187,12 @@ ide_runtime_provider_remove (IdeRuntimeProvider *self,
   IDE_EXIT;
 }
 
+/**
+ * ide_runtime_provider_load:
+ * @self: a #IdeRuntimeProvider
+ *
+ * Returns: (transfer full): a #DexFuture
+ */
 DexFuture *
 ide_runtime_provider_load (IdeRuntimeProvider *self)
 {
@@ -220,6 +226,12 @@ ide_runtime_provider_unload_cb (DexFuture *completed,
   IDE_RETURN (g_steal_pointer (&ret));
 }
 
+/**
+ * ide_runtime_provider_unload:
+ * @self: a #IdeRuntimeProvider
+ *
+ * Returns: (transfer full): a #DexFuture
+ */
 DexFuture *
 ide_runtime_provider_unload (IdeRuntimeProvider *self)
 {
