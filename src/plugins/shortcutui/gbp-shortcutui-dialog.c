@@ -409,6 +409,8 @@ gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
   gtk_widget_class_install_action (widget_class, "shortcuts.edit", NULL, edit_shortcuts);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+
+  g_type_ensure (GBP_TYPE_SHORTCUTUI_ACTION);
 }
 
 static void
