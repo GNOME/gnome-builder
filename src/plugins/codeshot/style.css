@@ -1,0 +1,10 @@
+window.codeshot {
+  box-shadow: 0 9px 30px 20px @shadow_color,
+              0 0 0 1px alpha(@shadow_color, 1);
+}
+
+window.codeshot textview {
+  padding: 16px;
+  font-size: 13pt;
+  line-height: 1.2;
+}

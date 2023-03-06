@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/codeshot">
+    <file>codeshot.plugin</file>
+    <file>style.css</file>
+    <file>gtk/keybindings.json</file>
+    <file preprocess="xml-stripblanks">gbp-codeshot-window.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+  </gresource>
+</gresources>

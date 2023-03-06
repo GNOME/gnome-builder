@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Alt><Shift>c", "action" : "page.codeshot.copy-clipboard", "when" : "canEdit()", "phase" : "capture" },

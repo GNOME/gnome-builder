@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpCodeshotWindow" parent="AdwWindow">
+    <style>
+      <class name="codeshot"/>
+      <class name="devel"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">false</property>
+            <property name="show-end-title-buttons">false</property>
+            <child type="title">
+              <object class="AdwWindowTitle" id="title">
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSourceView" id="view">
+            <property name="cursor-visible">false</property>
+            <property name="editable">false</property>
+            <property name="highlight-current-line">false</property>
+            <property name="monospace">true</property>
+            <property name="wrap-mode">word-char</property>
+            <property name="show-right-margin">false</property>
+            <property name="show-line-numbers">false</property>
+            <property name="left-margin">0</property>
+            <property name="top-margin">0</property>
+            <property name="right-margin">0</property>
+            <property name="bottom-margin">0</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

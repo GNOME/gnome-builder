@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2023 Christian Hergert
+Depends=editorui;
+Description=Take screenshots of code
+Embedded=_gbp_codeshot_register_types
+Hidden=true
+Module=codeshot
+Name=Code Screenshots
