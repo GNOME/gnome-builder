@@ -61,14 +61,15 @@ gnome_builder_pkg_requires = [
 ]
 
 gnome_builder_gir_includes = [
+  'Adw-1',
+  'Dex-1',
   'Gio-2.0',
   'Gtk-4.0',
-  'Peas-1.0',
-  'Vte-3.91',
   'GtkSource-5',
-  'Adw-1',
   'Panel-1',
+  'Peas-1.0',
   'Template-1.0',
+  'Vte-3.91',
 ]
 
 subdir('libide')
