@@ -2418,6 +2418,13 @@ gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "gdb");
   ide_run_context_append_argv (run_context, "--interpreter=mi2");
 
+  /* Set the CWD for the inferior but leave gdb untouched */
+  if (cwd != NULL)
+    {
+      ide_run_context_append_argv (run_context, "--cd");
+      ide_run_context_append_argv (run_context, cwd);
+    }
+
   /* Steal the PTY for the inferior so we can assign it as another
    * file-descriptor and map it to the inferior from GDB.
    */
@@ -2454,13 +2461,6 @@ gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
   ide_run_context_append_formatted (run_context,
                                     "set inferior-tty /proc/self/fd/%d",
                                     pty_dest_fd);
-
-  /* Set the CWD for the inferior but leave gdb untouched */
-  if (cwd != NULL)
-    {
-      ide_run_context_append_argv (run_context, "-ex");
-      ide_run_context_append_formatted (run_context, "set cwd %s", cwd);
-    }
 
   /* We don't want GDB to get the environment from this layer, so we specify
    * a wrapper script to set the environment for the inferior only. That
