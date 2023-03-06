@@ -55,7 +55,7 @@ gbp_swiftlint_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
   ide_run_context_append_argv (run_context, "--quiet");
 
   if (contents != NULL)
-    ide_run_context_append_argv (run_context, "/dev/stdin");
+    ide_run_context_append_argv (run_context, "--use-stdin");
   else
     ide_run_context_append_argv (run_context, g_file_peek_path (file));
 
