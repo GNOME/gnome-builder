@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-03 21:35+0000\n"
-"PO-Revision-Date: 2023-03-05 09:45+0200\n"
+"POT-Creation-Date: 2023-03-07 16:40+0000\n"
+"PO-Revision-Date: 2023-03-07 20:42+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1295,13 +1295,11 @@ msgstr "Основна система"
 
 #: src/libide/foundry/ide-runtime-provider.c:147
 #, c-format
-#| msgid "Discovered device “%s”"
 msgid "Discovered runtime “%s”"
 msgstr "Виявлено середовище виконання «%s»"
 
 #: src/libide/foundry/ide-runtime-provider.c:170
 #, c-format
-#| msgid "Removing Files…"
 msgid "Removing runtime “%s”"
 msgstr "Вилучаємо середовище виконання «%s»"
 
@@ -3023,6 +3021,18 @@ msgstr "Оголошення"
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
 msgid "Project Symbols"
 msgstr "Символи проєкту"
+
+#: src/plugins/codeshot/gtk/menus.ui:6
+#| msgctxt "shortcut window"
+#| msgid "Copy and Paste"
+msgid "Copy as Image"
+msgstr "Копіювати як зображення"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+#| msgctxt "shortcut window"
+#| msgid "Cut selected text to clipboard"
+msgid "Copy seleted text as an image"
+msgstr "Скопіювати позначений текст як зображення"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -4843,24 +4853,28 @@ msgstr "Порожній проєкт Meson"
 msgid "An empty Meson project skeleton"
 msgstr "Порожній каркас проєкту Meson"
 
-#: src/plugins/messages/gbp-messages-panel.c:47
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
 msgid "Debug"
 msgstr "Діагностика"
 
-#: src/plugins/messages/gbp-messages-panel.c:49
+#: src/plugins/messages/gbp-messages-panel.c:104
 msgid "Info"
 msgstr "Відомості"
 
-#: src/plugins/messages/gbp-messages-panel.c:51
-#: src/plugins/messages/gbp-messages-panel.ui:111
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
 msgstr "Повідомлення"
 
-#: src/plugins/messages/gbp-messages-panel.c:53
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
 msgid "Warning"
 msgstr "Попередження"
 
-#: src/plugins/messages/gbp-messages-panel.c:55
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
 msgstr "Критична помилка"
 
@@ -4868,15 +4882,16 @@ msgstr "Критична помилка"
 msgid "Messages"
 msgstr "Повідомлення"
 
-#: src/plugins/messages/gbp-messages-panel.ui:21
+#: src/plugins/messages/gbp-messages-panel.ui:25
 msgid "Time"
 msgstr "Час"
 
-#: src/plugins/messages/gbp-messages-panel.ui:53
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
 msgstr "Важливість"
 
-#: src/plugins/messages/gbp-messages-panel.ui:83
+#: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
 msgstr "Розділ"
 
@@ -5106,7 +5121,7 @@ msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Фільтрувати"
 
@@ -7563,14 +7578,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "Забрати підсвічування"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Копіювати та вставити"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Вирізати вибраний текст у буфер"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
