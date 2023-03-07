@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-06 12:58+0000\n"
-"PO-Revision-Date: 2023-03-06 17:41+0000\n"
+"POT-Creation-Date: 2023-03-07 16:40+0000\n"
+"PO-Revision-Date: 2023-03-07 18:57+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -3000,6 +3000,14 @@ msgstr "Declaração"
 msgid "Project Symbols"
 msgstr "Símbolos do projeto"
 
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Copiar como imagem"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy seleted text as an image"
+msgstr "Copiar texto selecionado como uma imagem"
+
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
@@ -5085,7 +5093,7 @@ msgid "Files will be copied in a moment"
 msgstr "Os ficheiros serão copiados dentro de momentos"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Filtro"
 
@@ -7496,14 +7504,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "Limpar realce"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Copiar e colar"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Cortar o texto selecionado para a área de transferência"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
