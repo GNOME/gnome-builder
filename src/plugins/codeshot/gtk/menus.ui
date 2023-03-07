@@ -4,7 +4,7 @@
     <item>
       <attribute name="verb-icon" type="s">'image-x-generic-symbolic'</attribute>
       <attribute name="label" translatable="yes">Copy as Image</attribute>
-      <attribute name="description" translatable="yes">Copy seleted text as an image</attribute>
+      <attribute name="description" translatable="yes">Copy selected text as an image</attribute>
       <attribute name="action">page.codeshot.copy-clipboard</attribute>
       <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;c</attribute>
     </item>
