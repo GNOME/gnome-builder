@@ -139,6 +139,7 @@ src/plugins/code-index/gbp-code-index-application-addin.c
 src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/code-index/ide-code-index-search-provider.c
+src/plugins/codeshot/gtk/menus.ui
 src/plugins/codespell/ide-codespell-diagnostic-provider.c
 src/plugins/codeui/gbp-codeui-buffer-addin.c
 src/plugins/codeui/gbp-codeui-code-action-dialog.ui
