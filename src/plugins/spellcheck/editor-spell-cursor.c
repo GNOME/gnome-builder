@@ -18,12 +18,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifndef G_LOG_DOMAIN
+# define G_LOG_DOMAIN "editor-spell-cursor"
+#endif
+
 #include "config.h"
 
 #include "cjhtextregionprivate.h"
 #include "editor-spell-cursor.h"
 
 #define RUN_UNCHECKED NULL
+
+#if 1
+# define RETURN(r) G_STMT_START { return (r); } G_STMT_END
+#else
+# define RETURN(r) G_STMT_START { typeof(r) _r = (r); g_debug (" EXIT: %s(): %s", G_STRFUNC, G_STRLOC); return (_r); } G_STMT_END
+#endif
 
 typedef struct
 {
@@ -73,10 +83,10 @@ region_iter_next_cb (gsize                   position,
     {
       gsize *pos = user_data;
       *pos = position;
-      return TRUE;
+      RETURN (TRUE);
     }
 
-  return FALSE;
+  RETURN (FALSE);
 }
 
 static gboolean
@@ -88,7 +98,7 @@ region_iter_next (RegionIter  *self,
   if (self->pos >= (gssize)_cjh_text_region_get_length (self->region))
     {
       gtk_text_buffer_get_end_iter (self->buffer, iter);
-      return FALSE;
+      RETURN (FALSE);
     }
 
   if (self->pos < 0)
@@ -106,7 +116,7 @@ region_iter_next (RegionIter  *self,
   gtk_text_buffer_get_iter_at_offset (self->buffer, iter, pos);
   self->pos = pos;
 
-  return TRUE;
+  RETURN (TRUE);
 }
 
 static void
@@ -139,7 +149,7 @@ tag_iter_next (TagIter     *self,
 
   *pos = self->pos;
 
-  return TRUE;
+  RETURN (TRUE);
 }
 
 static void
@@ -150,90 +160,98 @@ tag_iter_seek (TagIter           *self,
 }
 
 static inline gboolean
-is_extra_word_char (const GtkTextIter *iter,
-                    const char        *extra_word_chars)
+utf8_contains_unichar (const char *utf8,
+                       gunichar    ch)
 {
-  gunichar ch = gtk_text_iter_get_char (iter);
+  if (ch == 0)
+    RETURN (FALSE);
 
-  /* Short-circuit for known space */
-  if (ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r')
-    return FALSE;
-
-  if (ch == '\'')
-    return TRUE;
-
-  for (const char *c = extra_word_chars; *c; c = g_utf8_next_char (c))
+  for (const char *c = utf8; *c; c = g_utf8_next_char (c))
     {
       if (ch == g_utf8_get_char (c))
-        return TRUE;
+        RETURN (TRUE);
     }
 
-  return FALSE;
+  RETURN (FALSE);
+}
+
+static inline gboolean
+is_word_char (const GtkTextIter *iter,
+              const char        *extra_word_chars)
+{
+  if (gtk_text_iter_starts_word (iter))
+    RETURN (TRUE);
+
+  if (gtk_text_iter_inside_word (iter))
+    RETURN (TRUE);
+
+  if (extra_word_chars != NULL)
+    {
+      if (utf8_contains_unichar (extra_word_chars, gtk_text_iter_get_char (iter)))
+        RETURN (TRUE);
+    }
+
+  RETURN (FALSE);
 }
 
 gboolean
 editor_spell_iter_forward_word_end (GtkTextIter *iter,
                                     const char  *extra_word_chars)
 {
-  GtkTextIter tmp = *iter;
+  GtkTextIter orig = *iter;
+  GtkTextIter peek;
 
-  if (gtk_text_iter_forward_word_end (iter))
+  if (!gtk_text_iter_forward_word_end (iter))
     {
-      tmp = *iter;
+      /* We might get here if we moved but are at the end of the buffer.
+       * If the previous character ends a word, that is fine too.
+       */
+      if (gtk_text_iter_is_end (iter) &&
+          !gtk_text_iter_equal (iter, &orig))
+        RETURN (gtk_text_iter_ends_word (iter));
 
-      if (is_extra_word_char (&tmp, extra_word_chars))
-        {
-          if (editor_spell_iter_forward_word_end (&tmp, extra_word_chars))
-            *iter = tmp;
-        }
-
-      return TRUE;
+      RETURN (FALSE);
     }
 
-  if (gtk_text_iter_is_end (iter) &&
-      gtk_text_iter_ends_word (iter) &&
-      !gtk_text_iter_equal (&tmp, iter))
-    return TRUE;
+  if (!is_word_char (iter, extra_word_chars))
+    RETURN (TRUE);
 
-  return FALSE;
+  peek = *iter;
+
+  while (gtk_text_iter_forward_char (&peek) &&
+         is_word_char (&peek, extra_word_chars)) { /* Do nothing */ }
+
+  *iter = peek;
+
+  RETURN (TRUE);
 }
 
 gboolean
 editor_spell_iter_backward_word_start (GtkTextIter *iter,
                                        const char  *extra_word_chars)
 {
-  if (extra_word_chars == NULL)
-    return gtk_text_iter_backward_word_start (iter);
+  GtkTextIter peek;
 
-  /* If we get extra_word_chars, then expect those to be
-   * comprehensive of what we expect to find as valid characters
-   * for words (which seems to be the case for enchant?)
-   */
+  if (gtk_text_iter_is_start (iter))
+    RETURN (FALSE);
 
-  if (!gtk_text_iter_backward_char (iter))
-    return FALSE;
+  if (!gtk_text_iter_backward_word_start (iter))
+    RETURN (gtk_text_iter_starts_word (iter));
 
-  while (g_unichar_isspace (gtk_text_iter_get_char (iter)) ||
-         !is_extra_word_char (iter, extra_word_chars))
+  peek = *iter;
+
+  while (is_word_char (&peek, extra_word_chars) &&
+         gtk_text_iter_backward_char (&peek)) { /* Do Nothing */ }
+
+  if (!gtk_text_iter_is_start (&peek) || !is_word_char (&peek, extra_word_chars))
     {
-      if (!gtk_text_iter_backward_char (iter))
-        return FALSE;
+      if (!gtk_text_iter_equal (&peek, iter))
+        gtk_text_iter_forward_char (&peek);
     }
 
-  while (is_extra_word_char (iter, extra_word_chars))
-    {
-      /* Move backward another character. If we fail to move it's because
-       * we're at the beginning of the file (which is successful since
-       * we're already on a extra_word_char).
-       */
-      if (!gtk_text_iter_backward_char (iter))
-        return TRUE;
-    }
+  *iter = peek;
 
-  /* We moved one character too far, move forward */
-  gtk_text_iter_forward_char (iter);
-
-  return TRUE;
+  RETURN (TRUE);
 }
 
 static void
@@ -255,7 +273,7 @@ word_iter_next (WordIter    *self,
     {
       *word_begin = self->word_end;
       *word_end = self->word_end;
-      return FALSE;
+      RETURN (FALSE);
     }
 
   self->word_begin = self->word_end;
@@ -264,13 +282,13 @@ word_iter_next (WordIter    *self,
     {
       *word_begin = self->word_end;
       *word_end = self->word_end;
-      return FALSE;
+      RETURN (FALSE);
     }
 
   *word_begin = self->word_begin;
   *word_end = self->word_end;
 
-  return TRUE;
+  RETURN (TRUE);
 }
 
 static void
@@ -316,16 +334,16 @@ contains_tag (const GtkTextIter *word_begin,
   GtkTextIter toggle_iter;
 
   if (tag == NULL)
-    return FALSE;
+    RETURN (FALSE);
 
   if (gtk_text_iter_has_tag (word_begin, tag))
-    return TRUE;
+    RETURN (TRUE);
 
   toggle_iter = *word_begin;
   if (!gtk_text_iter_forward_to_tag_toggle (&toggle_iter, tag))
-    return FALSE;
+    RETURN (FALSE);
 
-  return gtk_text_iter_compare (word_end, &toggle_iter) > 0;
+  RETURN (gtk_text_iter_compare (word_end, &toggle_iter) > 0);
 }
 
 gboolean
@@ -337,7 +355,7 @@ editor_spell_cursor_next (EditorSpellCursor *self,
   if (!region_iter_next (&self->region, word_end))
     {
       *word_begin = *word_end;
-      return FALSE;
+      RETURN (FALSE);
     }
 
   /* Pass that position to the next iter, so it can skip
@@ -349,7 +367,7 @@ editor_spell_cursor_next (EditorSpellCursor *self,
   if (!tag_iter_next (&self->tag, word_end))
     {
       *word_begin = *word_end;
-      return FALSE;
+      RETURN (FALSE);
     }
 
   /* Now pass that information to the word iter, so that it can
@@ -358,7 +376,7 @@ editor_spell_cursor_next (EditorSpellCursor *self,
    */
   word_iter_seek (&self->word, word_end);
   if (!word_iter_next (&self->word, word_begin, word_end, self->extra_word_chars))
-    return FALSE;
+    RETURN (FALSE);
 
   /* Now pass our new position to the region so that it will
    * skip past the word when advancing.
@@ -369,7 +387,7 @@ editor_spell_cursor_next (EditorSpellCursor *self,
    * again to skip past even more content.
    */
   if (contains_tag (word_begin, word_end, self->tag.tag))
-    return editor_spell_cursor_next (self, word_begin, word_end);
+    RETURN (editor_spell_cursor_next (self, word_begin, word_end));
 
-  return TRUE;
+  RETURN (TRUE);
 }
