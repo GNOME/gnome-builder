@@ -693,22 +693,21 @@ mark_unchecked (EditorTextBufferSpellAdapter *self,
   g_assert (self->enabled);
 
   gtk_text_buffer_get_iter_at_offset (self->buffer, &begin, offset);
+  backward_word_start (self, &begin);
+
   gtk_text_buffer_get_iter_at_offset (self->buffer, &end, offset + length);
+  forward_word_end (self, &end);
 
-  if (!gtk_text_iter_starts_word (&begin))
-    backward_word_start (self, &begin);
+  if (!gtk_text_iter_equal (&begin, &end))
+    {
+      _cjh_text_region_replace (self->region,
+                                gtk_text_iter_get_offset (&begin),
+                                gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin),
+                                RUN_UNCHECKED);
+      gtk_text_buffer_remove_tag (self->buffer, self->tag, &begin, &end);
 
-  if (!gtk_text_iter_ends_word (&end))
-    forward_word_end (self, &end);
-
-  _cjh_text_region_replace (self->region,
-                            gtk_text_iter_get_offset (&begin),
-                            gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin),
-                            RUN_UNCHECKED);
-
-  gtk_text_buffer_remove_tag (self->buffer, self->tag, &begin, &end);
-
-  editor_text_buffer_spell_adapter_queue_update (self);
+      editor_text_buffer_spell_adapter_queue_update (self);
+    }
 }
 
 void
