@@ -29,4 +29,16 @@ plugins_deps += [
 
 plugins_sources += plugin_spellcheck_resources
 
+test_spell_cursor_sources = [
+  'test-spell-cursor.c',
+]
+test_spell_cursor = executable('test-spell-cursor', test_spell_cursor_sources,
+         dependencies: [libgtk_dep, libgtksource_dep],
+  include_directories: [
+    include_directories('.'),
+    include_directories('../../libide/code'),
+  ]
+)
+test('test-spell-cursor', test_spell_cursor)
+
 endif
