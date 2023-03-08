@@ -8,7 +8,7 @@
 { "trigger" : "<Control><Shift>c", "action" : "clipboard.copy", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>v", "action" : "clipboard.paste", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>a", "action" : "terminal.select-all", "args" : "true", "when" : "inTerminal()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>f", "action" : "terminal.search", "when" : "inTerminal()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>f", "action" : "page.terminal.search", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceleft", "action" : "page.move-left", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceright", "action" : "page.move-right", "when" : "inTerminal()", "phase" : "capture" },
 
