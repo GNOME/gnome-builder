@@ -679,6 +679,7 @@
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Ddocs=false",
+                "-Dintrospection=enabled",
                 "-Dexamples=false",
                 "-Dtests=false",
                 "-Dsysprof=true"
