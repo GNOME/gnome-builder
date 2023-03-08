@@ -980,6 +980,8 @@ ide_application_install_schemes_cb (GObject      *object,
   GPtrArray *ar;
   GFile *src;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -998,7 +1000,7 @@ ide_application_install_schemes_cb (GObject      *object,
   if (ar->len == 0)
     {
       g_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   src = g_ptr_array_index (ar, ar->len-1);
@@ -1011,6 +1013,8 @@ ide_application_install_schemes_cb (GObject      *object,
                      NULL, NULL,
                      ide_application_install_schemes_cb,
                      g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 void
@@ -1027,6 +1031,8 @@ ide_application_install_schemes_async (IdeApplication       *self,
   g_autoptr(GFile) dst = NULL;
   g_autoptr(GFile) dir = NULL;
   GFile *src;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_APPLICATION (self));
@@ -1049,8 +1055,9 @@ ide_application_install_schemes_async (IdeApplication       *self,
   if (!g_file_query_exists (dir, NULL) &&
       !g_file_make_directory_with_parents (dir, cancellable, &error))
     {
+      g_warning ("Failed to create directory for style scheme: %s", error->message);
       g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   g_file_copy_async (src, dst,
@@ -1060,6 +1067,8 @@ ide_application_install_schemes_async (IdeApplication       *self,
                      NULL, NULL,
                      ide_application_install_schemes_cb,
                      g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 gboolean
