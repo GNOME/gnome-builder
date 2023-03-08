@@ -2490,7 +2490,7 @@ ide_pipeline_do_flush (gpointer data)
       {
         const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
 
-        g_debug (" pipeline[%u]: %12s: %s [%s]",
+        g_debug (" pipeline[%02u]: %12s: %s [%s]",
                  i,
                  build_phase_nick (entry->phase),
                  G_OBJECT_TYPE_NAME (entry->stage),
