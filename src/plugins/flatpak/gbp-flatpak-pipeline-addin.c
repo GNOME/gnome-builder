@@ -253,8 +253,8 @@ check_for_build_init_files (IdePipelineStage *stage,
       g_file_test (var, G_FILE_TEST_IS_DIR))
     completed = TRUE;
 
-  IDE_TRACE_MSG ("Checking for previous build-init in %s: %s",
-                 staging_dir, completed ? "yes" : "no");
+  g_debug ("Checking for previous build-init in %s: %s",
+           staging_dir, completed ? "yes" : "no");
 
   ide_pipeline_stage_set_completed (stage, completed);
 
