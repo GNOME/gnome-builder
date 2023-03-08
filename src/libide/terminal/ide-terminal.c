@@ -481,33 +481,18 @@ copy_clipboard_action (GtkWidget  *widget,
 }
 
 static void
-ide_terminal_read_text_cb (GObject      *object,
-                           GAsyncResult *result,
-                           gpointer      user_data)
-{
-  GdkClipboard *clipboard = (GdkClipboard *)object;
-  g_autoptr(IdeTerminal) self = user_data;
-  g_autofree char *text = NULL;
-
-  g_assert (GDK_IS_CLIPBOARD (clipboard));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TERMINAL (self));
-
-  if ((text = gdk_clipboard_read_text_finish (clipboard, result, NULL)))
-    vte_terminal_paste_text (VTE_TERMINAL (self), text);
-}
-
-static void
 paste_clipboard_action (GtkWidget  *widget,
                         const char *action_name,
                         GVariant   *param)
 {
-  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+  IDE_ENTRY;
 
-  gdk_clipboard_read_text_async (clipboard,
-                                 NULL,
-                                 ide_terminal_read_text_cb,
-                                 g_object_ref (widget));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (VTE_IS_TERMINAL (widget));
+
+  vte_terminal_paste_clipboard (VTE_TERMINAL (widget));
+
+  IDE_EXIT;
 }
 
 static void
