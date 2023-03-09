@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-03 21:35+0000\n"
-"PO-Revision-Date: 2023-03-03 23:49+0100\n"
+"POT-Creation-Date: 2023-03-07 16:40+0000\n"
+"PO-Revision-Date: 2023-03-08 10:30+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -2902,6 +2902,14 @@ msgstr "დეკლარაცია"
 msgid "Project Symbols"
 msgstr "პროექტის სიმბოლოები"
 
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "გამოსახულების სახით კოპირება"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy seleted text as an image"
+msgstr "მონიშნული ტექსტის გამოსახულების სახით კოპირება"
+
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
@@ -4681,24 +4689,28 @@ msgstr ""
 msgid "An empty Meson project skeleton"
 msgstr ""
 
-#: src/plugins/messages/gbp-messages-panel.c:47
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
 msgid "Debug"
 msgstr "გამართვა"
 
-#: src/plugins/messages/gbp-messages-panel.c:49
+#: src/plugins/messages/gbp-messages-panel.c:104
 msgid "Info"
 msgstr ""
 
-#: src/plugins/messages/gbp-messages-panel.c:51
-#: src/plugins/messages/gbp-messages-panel.ui:111
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
 msgstr "შეტყობინება"
 
-#: src/plugins/messages/gbp-messages-panel.c:53
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
 msgid "Warning"
 msgstr "გაფრთხილება"
 
-#: src/plugins/messages/gbp-messages-panel.c:55
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
 msgstr "კრიტიკული"
 
@@ -4706,15 +4718,16 @@ msgstr "კრიტიკული"
 msgid "Messages"
 msgstr "შეტყობინებები"
 
-#: src/plugins/messages/gbp-messages-panel.ui:21
+#: src/plugins/messages/gbp-messages-panel.ui:25
 msgid "Time"
 msgstr "დრო"
 
-#: src/plugins/messages/gbp-messages-panel.ui:53
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
 msgstr "სიმძიმე"
 
-#: src/plugins/messages/gbp-messages-panel.ui:83
+#: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
 msgstr "სექცია"
 
@@ -4940,7 +4953,7 @@ msgid "Files will be copied in a moment"
 msgstr "ფაილების კოპირება მალე დაწყება"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "ფილტრი"
 
@@ -6415,14 +6428,6 @@ msgstr ""
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "გამოკვეთილის გასუფთავება"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "კოპირება და ჩასმა"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "მონიშნული ტექსტის გაცვლის ბუფერში ამოჭრა"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
