@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-06 12:58+0000\n"
-"PO-Revision-Date: 2023-03-07 01:03+0100\n"
+"POT-Creation-Date: 2023-03-07 16:40+0000\n"
+"PO-Revision-Date: 2023-03-08 09:25+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -1287,13 +1287,11 @@ msgstr "Gazdarendszer"
 
 #: src/libide/foundry/ide-runtime-provider.c:147
 #, c-format
-#| msgid "Discovered device “%s”"
 msgid "Discovered runtime “%s”"
 msgstr "„%s” futtatókörnyezet felfedezve"
 
 #: src/libide/foundry/ide-runtime-provider.c:170
 #, c-format
-#| msgid "Removing Files…"
 msgid "Removing runtime “%s”"
 msgstr "„%s” futtatókörnyezet eltávolítása"
 
@@ -3009,6 +3007,14 @@ msgstr "Deklaráció"
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
 msgid "Project Symbols"
 msgstr "Projektszimbólumok"
+
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Másolás képként"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy seleted text as an image"
+msgstr "A kijelölt szöveg másolása képként"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -5089,7 +5095,7 @@ msgid "Files will be copied in a moment"
 msgstr "A fájlok egy pillanat múlva át lesznek másolva"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Szűrő"
 
