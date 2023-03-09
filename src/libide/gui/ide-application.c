@@ -965,6 +965,15 @@ get_user_style_file (GFile *file)
 
   basename = g_file_get_basename (file);
 
+  /* Style schemes must have .xml suffix to be picked up
+   * by GtkSourceView. See GNOME/gnome-builder#1999.
+   */
+  if (!g_str_has_suffix (basename, ".xml"))
+    {
+      g_autofree char *tmp = g_steal_pointer (&basename);
+      basename = g_strdup_printf ("%s.xml", tmp);
+    }
+
   return g_file_get_child (style_dir, basename);
 }
 
