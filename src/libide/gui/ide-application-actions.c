@@ -267,8 +267,73 @@ ide_application_actions_light (GSimpleAction *action,
   g_settings_set_string (self->settings, "style-variant", "light");
 }
 
+static void print_object_repr (IdeObject *object,
+                               guint      depth);
+
+static void
+print_object_repr_cb (gpointer data,
+                      gpointer user_data)
+{
+  print_object_repr (data, GPOINTER_TO_UINT (user_data));
+}
+
+static void
+print_object_repr (IdeObject *object,
+                   guint      depth)
+{
+  g_autofree char *repr = ide_object_repr (object);
+
+  for (guint i = 0; i < depth; i++)
+    g_print ("  ");
+  g_print ("%s\n", repr);
+
+  ide_object_foreach (object,
+                      (GFunc)print_object_repr_cb,
+                      GUINT_TO_POINTER (depth+1));
+}
+
+static void
+ide_application_actions_context_foreach_cb (IdeWorkbench *workbench,
+                                            gpointer      user_data)
+{
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  /* Implausible */
+  if (!(context = ide_workbench_get_context (workbench)))
+    IDE_EXIT;
+
+  print_object_repr (IDE_OBJECT (context), 0);
+
+  IDE_EXIT;
+}
+
+static void
+ide_application_actions_contexts (GSimpleAction *action,
+                                  GVariant      *param,
+                                  gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (self));
+
+  ide_application_foreach_workbench (self,
+                                     (GFunc)ide_application_actions_context_foreach_cb,
+                                     NULL);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry IdeApplicationActions[] = {
   { "about:types", ide_application_actions_stats },
+  { "about:contexts", ide_application_actions_contexts },
   { "about", ide_application_actions_about },
   { "load-project", ide_application_actions_load_project, "s"},
   { "preferences", ide_application_actions_tweaks },
