@@ -29,8 +29,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SHORTCUT_BUNDLE (ide_shortcut_bundle_get_type())
 
-typedef struct
+typedef struct _IdeShortcut
 {
+  char                *id;
+  char                *override;
+  GtkShortcutTrigger  *trigger;
   TmplExpr            *when;
   GVariant            *args;
   GtkShortcutAction   *action;
@@ -39,18 +42,20 @@ typedef struct
 
 G_DECLARE_FINAL_TYPE (IdeShortcutBundle, ide_shortcut_bundle, IDE, SHORTCUT_BUNDLE, GObject)
 
-IdeShortcutBundle *ide_shortcut_bundle_new          (void);
-IdeShortcutBundle *ide_shortcut_bundle_new_for_file (GFile                *file);
-gboolean           ide_shortcut_bundle_parse        (IdeShortcutBundle    *self,
-                                                     GFile                *file,
-                                                     GError              **error);
-const GError      *ide_shortcut_bundle_error        (IdeShortcutBundle    *self);
-void               ide_shortcut_bundle_override     (IdeShortcutBundle    *bundle,
-                                                     GtkShortcut          *shortcut,
-                                                     const char           *accelerator);
-gboolean           ide_shortcut_is_phase            (GtkShortcut          *shortcut,
-                                                     GtkPropagationPhase   phase);
-gboolean           ide_shortcut_is_suppress         (GtkShortcut          *shortcut);
+IdeShortcutBundle *ide_shortcut_bundle_new               (void);
+IdeShortcutBundle *ide_shortcut_bundle_new_for_user      (GFile                *file);
+gboolean           ide_shortcut_bundle_parse             (IdeShortcutBundle    *self,
+                                                          GFile                *file,
+                                                          GError              **error);
+const GError      *ide_shortcut_bundle_error             (IdeShortcutBundle    *self);
+void               ide_shortcut_bundle_override          (IdeShortcutBundle    *bundle,
+                                                          GtkShortcut          *shortcut,
+                                                          const char           *accelerator);
+gboolean           ide_shortcut_is_phase                 (GtkShortcut          *shortcut,
+                                                          GtkPropagationPhase   phase);
+gboolean           ide_shortcut_is_suppress              (GtkShortcut          *shortcut);
+void               ide_shortcut_bundle_override_triggers (IdeShortcutBundle    *self,
+                                                          GHashTable           *id_to_trigger);
 
 
 G_END_DECLS

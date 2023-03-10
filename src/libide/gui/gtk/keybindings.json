@@ -1,9 +1,9 @@
 /* Global Search */
-{ "trigger" : "<Control>Return", "action" : "context.workbench.global-search", "when" : "canSearch()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.workspace.global-search", "trigger" : "<Control>Return", "action" : "context.workbench.global-search", "when" : "canSearch()", "phase" : "capture" },
 { "trigger" : "Escape", "action" : "search.hide", "when" : "inPopoverSearch() || inPageSearch()", "phase" : "capture" },
 
 /* Open Files */
-{ "trigger" : "<Control>o", "action" : "context.workbench.open", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.workspace.open", "trigger" : "<Control>o", "action" : "context.workbench.open", "when" : "canEdit()", "phase" : "bubble" },
 
 /* Switching pages in grid */
 { "trigger" : "<Alt>1", "action" : "frame.page", "args" : "1", "when" : "inGrid()", "phase" : "capture" },
@@ -17,13 +17,13 @@
 { "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
 
 /* Workspace Actions */
-{ "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
-{ "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
-{ "trigger" : "<Control>q", "action" : "app.quit", "phase" : "bubble" },
-{ "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inPage()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.preferences", "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
+{ "id" : "org.gnome.builder.project.configure", "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
+{ "id" : "org.gnome.builder.quit", "trigger" : "<Control>q", "action" : "app.quit", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.workspace.close-page", "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inPage()", "phase" : "bubble" },
 { "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inTab()", "phase" : "bubble" },
 { "trigger" : "<Control>question", "action" : "workspace.show-help-overlay" },
 
 /* Toggle Panels */
-{ "trigger" : "<Control>F9", "action" : "workspace.panel.toggle-bottom", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "F9", "action" : "workspace.panel.toggle-start", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.workspace.panels.bottom.toggle", "trigger" : "<Control>F9", "action" : "workspace.panel.toggle-bottom", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.workspace.panels.left.toggle", "trigger" : "F9", "action" : "workspace.panel.toggle-start", "when" : "canEdit()", "phase" : "capture" },

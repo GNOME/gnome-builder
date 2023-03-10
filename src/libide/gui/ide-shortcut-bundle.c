@@ -40,23 +40,30 @@ struct _IdeShortcutBundle
   GFile        *file;
   GFileMonitor *file_monitor;
   guint         reload_source;
+  guint         is_user : 1;
 };
 
 static TmplScope *imports_scope;
 
 static IdeShortcut *
-ide_shortcut_new (const char          *action,
+ide_shortcut_new (const char          *id,
+                  const char          *override,
+                  const char          *action,
                   GVariant            *args,
                   TmplExpr            *when,
                   GtkPropagationPhase  phase)
 {
   IdeShortcut *ret;
 
-  g_assert (action != NULL);
+  g_assert (id == NULL || override == NULL);
   g_assert (phase == GTK_PHASE_CAPTURE || phase == GTK_PHASE_BUBBLE);
+  g_assert (action != NULL || override != NULL);
 
   ret = g_slice_new0 (IdeShortcut);
-  ret->action = gtk_named_action_new (action);
+  ret->id = g_strdup (id);
+  ret->override = g_strdup (override);
+  if (action != NULL)
+    ret->action = gtk_named_action_new (action);
   ret->args = args ? g_variant_ref_sink (args) : NULL;
   ret->when = when ? tmpl_expr_ref (when) : NULL;
   ret->phase = phase;
@@ -84,9 +91,12 @@ ide_shortcut_new_suppress (TmplExpr            *when,
 static void
 ide_shortcut_free (IdeShortcut *shortcut)
 {
+  g_clear_pointer (&shortcut->id, g_free);
+  g_clear_pointer (&shortcut->override, g_free);
   g_clear_pointer (&shortcut->when, tmpl_expr_unref);
   g_clear_pointer (&shortcut->args, g_variant_unref);
   g_clear_object (&shortcut->action);
+  g_clear_object (&shortcut->trigger);
   shortcut->phase = 0;
   g_slice_free (IdeShortcut, shortcut);
 }
@@ -113,6 +123,16 @@ ide_shortcut_activate (GtkWidget *widget,
 
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (shortcut != NULL);
+
+  /* Never activate if this is an override. We want the shortcut to activate
+   * from the original position so that it applies the same "when" and "phase"
+   * as the original shortcut this overrides.
+   *
+   * Bundles can bind their trigger to the shortcut manager to have their
+   * trigger updated in response to user bundle changes.
+   */
+  if (shortcut->override != NULL)
+    return FALSE;
 
   if (shortcut->when != NULL)
     {
@@ -361,6 +381,8 @@ populate_from_object (IdeShortcutBundle  *self,
   g_autoptr(TmplExpr) when = NULL;
   g_autoptr(GVariant) args = NULL;
   const char *trigger_str = NULL;
+  const char *id_str = NULL;
+  const char *override_str = NULL;
   const char *when_str = NULL;
   const char *args_str = NULL;
   const char *phase_str = NULL;
@@ -383,6 +405,8 @@ populate_from_object (IdeShortcutBundle  *self,
    */
 
   if (!get_string_member (obj, "trigger", &trigger_str, error) ||
+      !get_string_member (obj, "id", &id_str, error) ||
+      !get_string_member (obj, "override", &override_str, error) ||
       !get_string_member (obj, "when", &when_str, error) ||
       !get_string_member (obj, "args", &args_str, error) ||
       !get_string_member (obj, "command", &command, error) ||
@@ -398,6 +422,24 @@ populate_from_object (IdeShortcutBundle  *self,
                    G_IO_ERROR_INVALID_DATA,
                    "Failed to parse shortcut trigger: \"%s\"",
                    trigger_str);
+      return FALSE;
+    }
+
+  if (id_str != NULL && suppress == TRUE)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "\"id\" and \"supress\" may not both be set");
+      return FALSE;
+    }
+
+  if (id_str != NULL && override_str != NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "\"id\" and \"override\" may not both be set");
       return FALSE;
     }
 
@@ -457,7 +499,13 @@ do_parse_when:
   if (suppress)
     state = ide_shortcut_new_suppress (when, phase);
   else
-    state = ide_shortcut_new (action, args, when, phase);
+    state = ide_shortcut_new (id_str, override_str, action, args, when, phase);
+
+  /* Keep a copy of the original trigger around so that if we override the
+   * shortcut's trigger from a user-bundle override, we can reset it if that
+   * shortcut gets removed.
+   */
+  g_set_object (&state->trigger, trigger);
 
   callback = gtk_callback_action_new (ide_shortcut_activate, state,
                                       (GDestroyNotify) ide_shortcut_free);
@@ -633,6 +681,9 @@ ide_shortcut_bundle_do_reload (IdeShortcutBundle *self)
                g_file_peek_path (self->file),
                self->error->message);
 
+  if (self->items->len > 0)
+    g_list_model_items_changed (G_LIST_MODEL (self), 0, 0, self->items->len);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -664,7 +715,7 @@ on_file_monitor_changed_cb (IdeShortcutBundle *self,
 }
 
 IdeShortcutBundle *
-ide_shortcut_bundle_new_for_file (GFile *file)
+ide_shortcut_bundle_new_for_user (GFile *file)
 {
   IdeShortcutBundle *self;
 
@@ -677,6 +728,7 @@ ide_shortcut_bundle_new_for_file (GFile *file)
 
   self->file = g_object_ref (file);
   self->file_monitor = g_file_monitor (file, G_FILE_MONITOR_NONE, NULL, NULL);
+  self->is_user = TRUE;
 
   g_signal_connect_object (self->file_monitor,
                            "changed",
@@ -690,4 +742,38 @@ ide_shortcut_bundle_new_for_file (GFile *file)
                               self->file_monitor);
 
   return self;
+}
+
+void
+ide_shortcut_bundle_override_triggers (IdeShortcutBundle *self,
+                                       GHashTable        *id_to_trigger)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_SHORTCUT_BUNDLE (self));
+  g_return_if_fail (id_to_trigger != NULL);
+
+  /* This function will see if we can override the GtkShortcut:trigger for
+   * each of the GtkShortcut in the bundle. Generally @id_to_trigger should
+   * have been made by consuming the overrides in the user bundle.
+   */
+
+  for (guint i = 0; i < self->items->len; i++)
+    {
+      GtkShortcut *shortcut = g_ptr_array_index (self->items, i);
+      IdeShortcut *state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT");
+      GtkShortcutTrigger *trigger;
+
+      g_assert (GTK_IS_SHORTCUT (shortcut));
+      g_assert (state != NULL);
+
+      if (state->id == NULL)
+        continue;
+
+      trigger = g_hash_table_lookup (id_to_trigger, state->id);
+
+      if (trigger != NULL)
+        gtk_shortcut_set_trigger (shortcut, trigger);
+      else
+        gtk_shortcut_set_trigger (shortcut, state->trigger);
+    }
 }

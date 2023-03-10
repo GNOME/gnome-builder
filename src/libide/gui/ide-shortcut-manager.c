@@ -60,6 +60,11 @@ struct _IdeShortcutManager
 
   /* Used to track action-name -> accel mappings */
   IdeShortcutObserver *observer;
+
+  /* Idle GSource to update triggers with new values from a user
+   * bundle having changed.
+   */
+  guint update_triggers_source;
 };
 
 static GType
@@ -138,6 +143,94 @@ get_internal_shortcuts (void)
     }
 
   return G_LIST_MODEL (flatten);
+}
+
+static void
+override_bundles (GListModel *model,
+                  GHashTable *id_to_trigger)
+{
+  guint n_items;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_LIST_MODEL (model));
+  g_assert (id_to_trigger != NULL);
+
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeShortcutBundle) bundle = g_list_model_get_item (model, i);
+
+      g_assert (bundle != NULL);
+      g_assert (IDE_IS_SHORTCUT_BUNDLE (bundle));
+
+      ide_shortcut_bundle_override_triggers (bundle, id_to_trigger);
+    }
+}
+
+static gboolean
+ide_shortcut_manager_update_overrides (IdeShortcutManager *self)
+{
+  g_autoptr(GHashTable) id_to_trigger = NULL;
+  GListModel *model;
+  guint n_items;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SHORTCUT_MANAGER (self));
+
+  self->update_triggers_source = 0;
+
+  if (user_bundle == NULL)
+    IDE_RETURN (G_SOURCE_REMOVE);
+
+  model = G_LIST_MODEL (user_bundle);
+  n_items = g_list_model_get_n_items (model);
+  id_to_trigger = g_hash_table_new_full (g_str_hash,
+                                         g_str_equal,
+                                         g_free,
+                                         g_object_unref);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GtkShortcut) shortcut = g_list_model_get_item (model, i);
+      IdeShortcut *state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT");
+
+      g_assert (GTK_IS_SHORTCUT (shortcut));
+      g_assert (state != NULL);
+
+      if (state->override != NULL && state->trigger != NULL)
+        g_hash_table_insert (id_to_trigger,
+                             g_strdup (state->override),
+                             g_object_ref (state->trigger));
+    }
+
+  override_bundles (G_LIST_MODEL (self->plugin_models), id_to_trigger);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_shortcut_manager_user_items_changed_cb (IdeShortcutManager *self,
+                                            guint               position,
+                                            guint               removed,
+                                            guint               added,
+                                            IdeShortcutBundle  *bundle)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SHORTCUT_MANAGER (self));
+  g_assert (IDE_IS_SHORTCUT_BUNDLE (bundle));
+
+  if (self->update_triggers_source == 0)
+    self->update_triggers_source =
+      g_idle_add_full (G_PRIORITY_LOW,
+                       (GSourceFunc) ide_shortcut_manager_update_overrides,
+                       self, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -263,6 +356,8 @@ ide_shortcut_manager_destroy (IdeObject *object)
 {
   IdeShortcutManager *self = (IdeShortcutManager *)object;
 
+  g_clear_handle_id (&self->update_triggers_source, g_source_remove);
+
   g_clear_object (&self->observer);
   g_clear_object (&self->providers);
   g_clear_object (&self->providers_models);
@@ -303,8 +398,18 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
                                              "gnome-builder",
                                              "keybindings.json",
                                              NULL);
-      user_bundle = ide_shortcut_bundle_new_for_file (user_file);
+      user_bundle = ide_shortcut_bundle_new_for_user (user_file);
     }
+
+  /* We monitor the user-bundle for changes so that we can
+   * handle any sort of override by replacing the trigger
+   * of the original shortcut.
+   */
+  g_signal_connect_object (user_bundle,
+                           "items-changed",
+                           G_CALLBACK (ide_shortcut_manager_user_items_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /* Setup user shortcuts at highest priority */
   g_list_store_append (self->toplevel, user_bundle);
@@ -334,6 +439,9 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
 
   /* Build a "compiled" shortcut map to make remappings easier */
   self->observer = ide_shortcut_observer_new (G_LIST_MODEL (self->flatten));
+
+  /* Apply user-bundle overrides to plugin models/etc */
+  ide_shortcut_manager_update_overrides (self);
 }
 
 /**
