@@ -155,6 +155,24 @@ ide_local_device_constructed (GObject *object)
   G_OBJECT_CLASS (ide_local_device_parent_class)->constructed (object);
 }
 
+static char *
+ide_local_device_repr (IdeObject *object)
+{
+  IdeLocalDevice *self = IDE_LOCAL_DEVICE (object);
+  IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
+
+  if (priv->triplet == NULL)
+    return g_strdup_printf ("%s default", G_OBJECT_TYPE_NAME (self));
+
+  return g_strdup_printf ("%s name=\"%s\" arch=\"%s\" vendor=\"%s\" kernel=\"%s\" operating-system=\"%s\"",
+                          G_OBJECT_TYPE_NAME (self),
+                          ide_triplet_get_full_name (priv->triplet) ?: "",
+                          ide_triplet_get_arch (priv->triplet) ?: "",
+                          ide_triplet_get_vendor (priv->triplet) ?: "",
+                          ide_triplet_get_kernel (priv->triplet) ?: "",
+                          ide_triplet_get_operating_system (priv->triplet) ?: "");
+}
+
 static void
 ide_local_device_finalize (GObject *object)
 {
@@ -170,12 +188,15 @@ static void
 ide_local_device_class_init (IdeLocalDeviceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdeDeviceClass *device_class = IDE_DEVICE_CLASS (klass);
 
   object_class->constructed = ide_local_device_constructed;
   object_class->finalize = ide_local_device_finalize;
   object_class->get_property = ide_local_device_get_property;
   object_class->set_property = ide_local_device_set_property;
+
+  i_object_class->repr = ide_local_device_repr;
 
   device_class->get_info_async = ide_local_device_get_info_async;
   device_class->get_info_finish = ide_local_device_get_info_finish;
