@@ -222,6 +222,43 @@ ide_pipeline_stage_command_clean_finish (IdePipelineStage  *stage,
   IDE_RETURN (ret);
 }
 
+static char *
+ide_pipeline_stage_command_repr (IdeObject *object)
+{
+  IdePipelineStageCommand *self = (IdePipelineStageCommand *)object;
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+  GString *str;
+
+  g_assert (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  str = g_string_new (G_OBJECT_TYPE_NAME (self));
+
+  g_string_append_printf (str, " completed=%s",
+                          ide_pipeline_stage_get_completed (IDE_PIPELINE_STAGE (self)) ? "yes" : "no");
+
+  if (priv->build_command != NULL)
+    {
+      const char * const *argv = ide_run_command_get_argv (priv->build_command);
+
+      g_string_append (str, " build:");
+
+      if (argv != NULL && argv[0] != NULL)
+        g_string_append_printf (str, " [%s ...]", argv[0]);
+    }
+
+  if (priv->clean_command != NULL)
+    {
+      const char * const *argv = ide_run_command_get_argv (priv->clean_command);
+
+      g_string_append (str, " clean:");
+
+      if (argv != NULL && argv[0] != NULL)
+        g_string_append_printf (str, " [%s ...]", argv[0]);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 ide_pipeline_stage_command_finalize (GObject *object)
 {
@@ -294,11 +331,14 @@ static void
 ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdePipelineStageClass *pipeline_stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
 
   object_class->finalize = ide_pipeline_stage_command_finalize;
   object_class->get_property = ide_pipeline_stage_command_get_property;
   object_class->set_property = ide_pipeline_stage_command_set_property;
+
+  i_object_class->repr = ide_pipeline_stage_command_repr;
 
   pipeline_stage_class->build_async = ide_pipeline_stage_command_build_async;
   pipeline_stage_class->build_finish = ide_pipeline_stage_command_build_finish;
