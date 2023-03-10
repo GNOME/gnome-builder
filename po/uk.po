@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-07 16:40+0000\n"
-"PO-Revision-Date: 2023-03-07 20:42+0200\n"
+"POT-Creation-Date: 2023-03-09 19:45+0000\n"
+"PO-Revision-Date: 2023-03-10 14:34+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -987,6 +987,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "Знайти і замінити (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Закрити вікно пошуку"
 
@@ -999,15 +1000,18 @@ msgid "Replace _All"
 msgstr "Замінити _все"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Скористатися _формальними виразами"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Враховувати регістр"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Шукати лише цілі слова"
 
@@ -2039,7 +2043,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Термінал без назви"
 
@@ -2062,25 +2066,17 @@ msgstr "Термінал без назви"
 msgid "Search runtimes"
 msgstr "Шукати у середовищах виконання"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
-"Показати або приховати параметри пошуку, зокрема чутливість до регістру "
-"символів"
+#: src/libide/terminal/ide-terminal-search.ui:34
+#| msgid "Move to the previous match"
+msgid "Move to previous match"
+msgstr "Перейти до попереднього збігу"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Форм. вираз"
+#: src/libide/terminal/ide-terminal-search.ui:44
+#| msgid "Move to next match (Ctrl+G)"
+msgid "Move to next match"
+msgstr "Перейти до наступного відповідника"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "З врахуванням регістру"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Тільки збіг цілих слів"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Режим огортання"
 
@@ -2168,7 +2164,7 @@ msgstr "Налаштовування проєкту"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -3023,15 +3019,12 @@ msgid "Project Symbols"
 msgstr "Символи проєкту"
 
 #: src/plugins/codeshot/gtk/menus.ui:6
-#| msgctxt "shortcut window"
-#| msgid "Copy and Paste"
 msgid "Copy as Image"
 msgstr "Копіювати як зображення"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
-#| msgctxt "shortcut window"
-#| msgid "Cut selected text to clipboard"
-msgid "Copy seleted text as an image"
+#| msgid "Copy seleted text as an image"
+msgid "Copy selected text as an image"
 msgstr "Скопіювати позначений текст як зображення"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
@@ -4482,7 +4475,7 @@ msgstr "Ел. пошта"
 msgid "go run"
 msgstr "go run"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Самозбирання проєкту"
@@ -6195,6 +6188,20 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr ""
+#~ "Показати або приховати параметри пошуку, зокрема чутливість до регістру "
+#~ "символів"
+
+#~ msgid "Regex"
+#~ msgstr "Форм. вираз"
+
+#~ msgid "Case sensitive"
+#~ msgstr "З врахуванням регістру"
+
+#~ msgid "Match whole word"
+#~ msgstr "Тільки збіг цілих слів"
 
 #~ msgid "An absolute file-system path to the sysroot."
 #~ msgstr "Абсолютний шлях у файловій системі до sysroot."
@@ -7918,9 +7925,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Find and replace"
 #~ msgstr "Знайти і замінити"
-
-#~ msgid "Move to the previous match"
-#~ msgstr "Перейти до попереднього збігу"
 
 #~ msgid "Move to the next error"
 #~ msgstr "Перейти до наступної помилки"
