@@ -114,6 +114,7 @@ diagnose_get_build_flags_cb (GObject      *object,
     {
       if (!ide_error_ignore (error))
         {
+          g_debug ("Failed to get build flags: %s", error->message);
           ide_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
