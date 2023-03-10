@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-07 16:40+0000\n"
-"PO-Revision-Date: 2023-03-08 10:30+0100\n"
+"POT-Creation-Date: 2023-03-09 19:47+0000\n"
+"PO-Revision-Date: 2023-03-10 02:55+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -920,6 +920,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "ძებნა და ჩანაცვლება (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "ძებნის დახურვა"
 
@@ -932,15 +933,18 @@ msgid "Replace _All"
 msgstr "ყველ_აფრის ჩანაცვლება"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "_რეგულარული გამოსახულებების გამოყენება"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_რეგისტრზე-დამოკიდებული"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "სიტყვების სრული დამთხვევა"
 
@@ -1951,7 +1955,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "უსახელო ტერმინალი"
 
@@ -1972,23 +1976,15 @@ msgstr "უსახელო ტერმინალი"
 msgid "Search runtimes"
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "წინა დამთხვევაზე გადასვლა"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "რეგექსი"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "შემდეგ დამთხვევაზე გადასვლა"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "დიდი და პატარა ასოების განსხვავება"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "მხოლოდ მთლიანი სიტყვის დამთხვევა"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "სიტყვების გადატანა"
 
@@ -2076,7 +2072,7 @@ msgstr "პროექტის მორგება"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2907,7 +2903,7 @@ msgid "Copy as Image"
 msgstr "გამოსახულების სახით კოპირება"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
-msgid "Copy seleted text as an image"
+msgid "Copy selected text as an image"
 msgstr "მონიშნული ტექსტის გამოსახულების სახით კოპირება"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
@@ -4318,7 +4314,7 @@ msgstr "ელ-ფოსტა"
 msgid "go run"
 msgstr ""
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "პროექტის საწყისი მომზადება"
@@ -5993,6 +5989,15 @@ msgstr ""
 msgid "File must be saved locally to parse."
 msgstr ""
 
+#~ msgid "Regex"
+#~ msgstr "რეგექსი"
+
+#~ msgid "Case sensitive"
+#~ msgstr "დიდი და პატარა ასოების განსხვავება"
+
+#~ msgid "Match whole word"
+#~ msgstr "მხოლოდ მთლიანი სიტყვის დამთხვევა"
+
 #, c-format
 #~ msgid "%s (Sysroot SDK)"
 #~ msgstr "%s (Sysroot SDK)"
@@ -6420,10 +6425,6 @@ msgstr ""
 #~ msgctxt "shortcut window"
 #~ msgid "Find the next match"
 #~ msgstr "შემდეგ დამთხვევაზე გადასვლა"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the previous match"
-#~ msgstr "წინა დამთხვევაზე გადასვლა"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
