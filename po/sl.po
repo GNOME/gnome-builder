@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-10-01 19:28+0000\n"
-"PO-Revision-Date: 2023-01-06 08:52+0100\n"
+"POT-Creation-Date: 2023-03-06 12:16+0000\n"
+"PO-Revision-Date: 2023-03-10 16:40+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -239,7 +239,9 @@ msgstr ""
 "main()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
+#, fuzzy
+#| msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Criticals"
 msgstr "Prekinitvena točka razhroščevalnika v funkciji g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
@@ -250,12 +252,18 @@ msgstr ""
 "g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr "Prekinitvena točka razhroščevalnika v funkciji g_warning()"
+#, fuzzy
+#| msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
+msgstr "Prekinitvena točka razhroščevalnika v funkciji g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+#, fuzzy
+#| msgid ""
+#| "Debugger should automatically insert breakpoint at g_warning() function."
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
 "Razhroščevalnik naj samodejno vstavi prekinitveno točko v funkcijo "
 "g_warning()."
@@ -420,9 +428,8 @@ msgid "Line Height"
 msgstr "Višina vrstice"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-#, fuzzy
 msgid "The line height to use for the selected font."
-msgstr "Vnos iskanega niza v šestnajstiški ali ASCII obliki"
+msgstr "Višina vrstice, ki naj bo v uporabi za izbrano pisavo."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "Interactive Completion"
@@ -948,7 +955,7 @@ msgstr "Shrani"
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
@@ -1198,7 +1205,7 @@ msgstr "Postavitev na napravo ..."
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Gostiteljski sistem"
 
@@ -1344,7 +1351,7 @@ msgstr "Odpri"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Izberi"
@@ -1522,7 +1529,7 @@ msgstr "Novo okno terminala"
 msgid "Open application menu (F10)"
 msgstr "Odpri meni programa (F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 
@@ -1535,11 +1542,8 @@ msgstr "Preklopi levi pladenj"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
 #: src/plugins/menu-search/gtk/menus.ui:34
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
 msgid "Toggle Right Panel"
-msgstr "Preklopi desni pladenj"
+msgstr "Preklopi levi pladenj (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
@@ -1755,9 +1759,8 @@ msgid "All _Upper Case"
 msgstr "Vse _velike črke"
 
 #: src/libide/sourceview/gtk/menus.ui:82
-#, fuzzy
 msgid "Convert the text selection to upper case"
-msgstr "Pretvori izbrano besedilo v velike črke"
+msgstr "Pretvori izbor besedila v velike črke"
 
 #: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
@@ -1813,7 +1816,7 @@ msgid "Code Navigation"
 msgstr "Krmarjenje po kodi"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1556
+#: src/libide/sourceview/ide-source-view.c:1629
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1955,6 +1958,10 @@ msgstr "Nastavitve"
 msgid "Allow JavaScript"
 msgstr "Dovoli JavaScript"
 
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Natisni"
+
 #: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "Zaženi nov primerek programa Builder"
@@ -2000,6 +2007,23 @@ msgstr "%s (kopija)"
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Mason pa ni mogoče najti."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+#, fuzzy
+#| msgid "Remove environment variable"
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr "Odstrani okoljsko spremenljivko"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
+msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2093,7 +2117,7 @@ msgstr "Opozorila"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr "Cevovod izgradnje"
 
@@ -2127,10 +2151,8 @@ msgid "Errors (%u)"
 msgstr "Napake (%u)"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
-#, fuzzy
-#| msgid "Shared Library"
 msgid "Shared"
-msgstr "Souporabna knjižnica"
+msgstr "Deljeno"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 msgid "Static"
@@ -2148,16 +2170,12 @@ msgid "Failed to list build targets: %s"
 msgstr "Določevanje mesta cilja izgradnje je spodletelo."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Select Build Target"
-msgstr "Izgradi cilje"
+msgstr "Izberite cilj izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Available Build Targets"
-msgstr "Izgradi cilje"
+msgstr "Razpoložljivi cilji izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 #, fuzzy
@@ -2224,10 +2242,8 @@ msgid "Configure Project…"
 msgstr "Nastavi projekt …"
 
 #: src/plugins/buildui/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Configuring project"
 msgid "Configure settings related to the project"
-msgstr "Poteka nastavljanje projekta"
+msgstr "Prilagodite nastavitve, povezane s projektom"
 
 #: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
@@ -2247,10 +2263,8 @@ msgid "Select Build Target…"
 msgstr "Izbor cilja izgradnje …"
 
 #: src/plugins/buildui/gtk/menus.ui:19
-#, fuzzy
-#| msgid "Failed to locate a build target"
 msgid "Change default build target"
-msgstr "Določevanje mesta cilja izgradnje je spodletelo."
+msgstr "Spremenite privzeti cilj gradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
 #: src/plugins/buildui/gtk/menus.ui:84
@@ -2470,10 +2484,8 @@ msgid "Run Command"
 msgstr "Zaženi ukaz"
 
 #: src/plugins/buildui/tweaks.ui:17
-#, fuzzy
-#| msgid "This command requires a view to be focused"
 msgid "This command is used to run your project"
-msgstr "Ukaz zahteva dejaven pogled"
+msgstr "Ta ukaz se uporablja za zagon vašega projekta"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2512,9 +2524,8 @@ msgid ""
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:151
-#, fuzzy
 msgid "Run unit tests from within the build environment."
-msgstr "Zaženi preskuse v okolju izgradnje."
+msgstr "Zaženite preskuse enot znotraj okolja gradnje."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -2530,7 +2541,7 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Izgradi nabor orodij"
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:357
 msgid "General"
 msgstr "Splošno"
 
@@ -2549,8 +2560,6 @@ msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Ko bo program Builder zagnan, bo predpomnilnik počiščen"
 
 #: src/plugins/buildui/tweaks.ui:200
-#, fuzzy
-#| msgid "Clear build logs"
 msgid "Clear Build Logs"
 msgstr "Počisti dnevnike izgradnje"
 
@@ -2580,84 +2589,37 @@ msgstr "Privzeto"
 msgid "1 per CPU"
 msgstr "1 na CPE"
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr "16"
-
-#: src/plugins/buildui/tweaks.ui:275
-msgid "32"
-msgstr "32"
-
-#: src/plugins/buildui/tweaks.ui:281
-msgid "64"
-msgstr "64"
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr "128"
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr "256"
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr "512"
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:325
 #, fuzzy
 #| msgid "Toolchain"
 msgid "Tooling"
 msgstr "Nabor orodij"
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:360
 msgid "Installation Prefix"
 msgstr "Predpona namestitve"
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:361
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
 msgstr "Nastavitev možnosti"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:392
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
 msgstr "Okolje izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:415
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2711,8 +2673,6 @@ msgid "Complete Parentheses"
 msgstr "Dopolni oklepaje"
 
 #: src/plugins/clang/tweaks.ui:18
-#, fuzzy
-#| msgid "Include parenthesis when completing clang proposals"
 msgid "Include parentheses when completing clang proposals"
 msgstr "Vključi oklepaje med dopolnjevanjem predlog clang"
 
@@ -3336,13 +3296,25 @@ msgstr "Zamakni z uporabo presledkov"
 msgid "Spaces per Tab"
 msgstr "Širina tabulatorja v presledkih"
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -3885,7 +3857,6 @@ msgstr ""
 "dokumenta"
 
 #: src/plugins/editorui/tweaks.ui:581
-#, fuzzy
 msgid "Format on Save"
 msgstr "Preoblikuj ob shranjevanju"
 
@@ -3900,9 +3871,8 @@ msgid "Restore Cursor Position"
 msgstr "Povrni položaj kazalke"
 
 #: src/plugins/editorui/tweaks.ui:598
-#, fuzzy
 msgid "Jump to the last position when re-opening a file"
-msgstr "Skoči na zadnji položaj ob ponovnem odpiranju datoteke"
+msgstr "Skoči na zadnji položaj ob ponovnem odprtju datoteke"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4204,31 +4174,31 @@ msgstr "_Najdi v projektu"
 msgid "_Replace in Project"
 msgstr "_Zamenjaj v projektu"
 
-#: src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Najdi v datotekah"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Poišči …"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Najdi"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Išči po _strukturi map"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Upoštevaj _velikost črk med iskanjem"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Išči _le cele besede"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Dovoli _logične izraze"
 
@@ -4355,14 +4325,12 @@ msgid "Change style-scheme to light variant"
 msgstr "Spremeni slogovno shemo v svetlo različico"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
-#, fuzzy
 msgid "Display Build Diagnostics"
 msgstr "Prikaži diagnostiko gradnje"
 
 #: src/plugins/menu-search/gtk/menus.ui:73
-#, fuzzy
 msgid "Display errors and warnings found during build"
-msgstr "Prikaže napake in opozorila, najdena med gradnjo"
+msgstr "Pokaži napake in opozorila, zaznane med gradnjo"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -4474,45 +4442,45 @@ msgstr "Izbriši nabor orodij"
 msgid "Delete Tool"
 msgstr "Izbriši orodje"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "Program GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "Program GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Souporabna knjižnica"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 #, fuzzy
 msgid "A Meson-based project for a shared library"
 msgstr "Na Mesonu zasnovan projekt za souporabo knjižnice"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Orodje ukazne vrstice"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 #, fuzzy
 msgid "An Meson-based project for a command-line program"
 msgstr "Na Mesonu zasnovan projekt za program ukazne vrstice"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Izprazni projekt Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 #, fuzzy
 msgid "An empty Meson project skeleton"
 msgstr "Prazen okostnjak projekta Meson"
@@ -4669,17 +4637,16 @@ msgid "Tab Bar"
 msgstr "Vrstica zavihkov"
 
 #: src/plugins/platformui/tweaks.ui:37
-#, fuzzy
 msgid "Drop Down"
 msgstr "Spustni seznam"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:686
+#: src/plugins/podman/gbp-podman-runtime.c:664
 msgid "Containers/Toolbox"
 msgstr "Zabojniki/Orodne vrstice"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:692
+#: src/plugins/podman/gbp-podman-runtime.c:670
 msgid "Containers/Podman"
 msgstr "Vsebniki/Podeman"
 
@@ -5002,24 +4969,24 @@ msgstr "Dovoli prenos SDK-jev in odvisnosti pri omejenih internetnih povezavah"
 msgid "Available SDKs"
 msgstr "Razpoložljive zbirke SDK …"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr "Neimenovan ukaz"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
 msgid "Set Shortcut"
 msgstr "Nastavi tipkovno bližnjico"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr "Izberite delovno mapo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Ustvari ukaz"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "Ust_vari"
 
@@ -5072,7 +5039,7 @@ msgstr ""
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 #, fuzzy
 msgid "Locality"
-msgstr "Lokacija"
+msgstr "Krajevnost"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
@@ -5080,36 +5047,36 @@ msgid ""
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr "_Izbriši ukaz"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr "Podrejeno opravilo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 #, fuzzy
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Zažene ukaz kot podproces graditelja/Builderja."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 #, fuzzy
 msgid "Runs the command on the host system."
 msgstr "Zažene ukaz na gostiteljskem sistemu."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 #, fuzzy
 msgid "Runs the command within the build pipeline."
 msgstr "Zažene ukaz znotraj cevovoda za gradnjo."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 #, fuzzy
 #| msgid "GTK Application"
 msgid "As Target Application"
 msgstr "Kot ciljni program"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -5169,7 +5136,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-#, fuzzy
 msgid "Enchant 2"
 msgstr "Enchant 2"
 
@@ -5422,10 +5388,8 @@ msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:169
-#, fuzzy
-#| msgid "Indentation"
 msgid "Integration"
-msgstr "Zamikanje"
+msgstr "Integracija"
 
 #: src/plugins/sysprof/tweaks.ui:172
 msgid "JavaScript"
