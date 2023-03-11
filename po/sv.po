@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-12-31 23:31+0000\n"
-"PO-Revision-Date: 2023-01-19 21:49+0100\n"
+"POT-Creation-Date: 2023-03-09 19:47+0000\n"
+"PO-Revision-Date: 2023-03-11 10:11+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -24,9 +24,9 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:114 src/main.c:218
-#: src/plugins/editorui/tweaks.ui:481
+#: src/libide/gui/ide-application-actions.c:113 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
 
@@ -35,7 +35,7 @@ msgid "An IDE for GNOME"
 msgstr "En utvecklingsmiljö för GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:115
+#: src/libide/gui/ide-application-actions.c:118
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert med flera."
 
@@ -169,7 +169,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Använd minikartan för att se mer av filen"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:234
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Byggparallellisering"
 
@@ -190,10 +190,18 @@ msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr "Om aktiverad kommer byggloggspanelen att rensas vid ombygge."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Show Log When Building"
+msgstr "Visa logg vid bygge"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr "Om aktiverad kommer byggloggen att tas fram då ett bygge startar"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Tillåt nätverk vid datakvot"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -238,8 +246,8 @@ msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr "Felsökare ska automatiskt infoga brytpunkt vid main()-funktion."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
-msgstr "Felsökningsbrytpunkt vid g_critical()"
+msgid "Debugger Breakpoint at Criticals"
+msgstr "Felsökningsbrytpunkt vid kritiska"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
@@ -247,13 +255,16 @@ msgid ""
 msgstr "Felsökare ska automatiskt infoga brytpunkt vid g_critical()-funktion."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
-msgstr "Felsökningsbrytpunkt vid g_warning()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
+msgstr "Felsökningsbrytpunkt vid varningar och kritiska"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
-msgstr "Felsökare ska automatiskt infoga brytpunkt vid g_warning()-funktion."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
+msgstr ""
+"Felsökare ska automatiskt infoga brytpunkt vid g_warning()- och g_critical-"
+"funktion."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -321,7 +332,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Om aktiverad kommer redigeraren att visa relativa radnummer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:494
+#: src/plugins/editorui/tweaks.ui:471
 msgid "Smart Backspace"
 msgstr "Smart backsteg"
 
@@ -334,7 +345,7 @@ msgstr ""
 "indenteringsstorleken."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:506
+#: src/plugins/editorui/tweaks.ui:483
 msgid "Smart Home/End"
 msgstr "Smarta Home/End"
 
@@ -547,6 +558,14 @@ msgid ""
 msgstr ""
 "Om aktiverat kommer standard fel från språkservrar omdirigeras till konsolen."
 
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr "Förhandsgranska sökresultat"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
+msgstr "Om förhandsgranskningar automatiskt ska visas för sökresultat"
+
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
 msgstr "Insticksmodul aktiverad"
@@ -611,7 +630,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Vilken miljö som ska användas vid körning av enhetstester"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:177 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Utförlig loggning"
 
@@ -680,7 +699,7 @@ msgid "Start New Project"
 msgstr "Starta nytt projekt"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:282
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
 msgstr "Klona arkiv"
@@ -694,12 +713,12 @@ msgstr "Ny redigerararbetsyta"
 msgid "D-Bus Inspector"
 msgstr "D-Bus-inspektör"
 
-#: src/libide/code/ide-buffer.c:3764
+#: src/libide/code/ide-buffer.c:3779
 msgid "The current language lacks a symbol resolver."
 msgstr "Det aktuella språket saknar en symboluppslagare."
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:381
+#: src/libide/code/ide-buffer-manager.c:391
 #, c-format
 msgid "unsaved file %u"
 msgstr "osparad fil %u"
@@ -728,22 +747,22 @@ msgstr "Misslyckades med att initiera standardvärden."
 msgid "Failed to save draft: %s"
 msgstr "Misslyckades med att spara utkast: %s"
 
-#: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:841
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Namnlös"
 
-#: src/libide/core/ide-transfer.c:541
-#: src/libide/greeter/ide-greeter-workspace.c:555
-#: src/libide/greeter/ide-greeter-workspace.c:692
+#: src/libide/core/ide-transfer.c:545
+#: src/libide/greeter/ide-greeter-workspace.c:558
+#: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1517
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1531
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
 #: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Cancel"
@@ -754,7 +773,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Kunde inte hitta någon lämplig felsökare."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1513
+#: src/libide/gui/ide-workbench.c:1527
 msgid "Open File…"
 msgstr "Öppna fil…"
 
@@ -771,6 +790,8 @@ msgstr "Inställningar"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Tangentbordsgenvägar"
 
@@ -809,12 +830,12 @@ msgid "Pages"
 msgstr "Sidor"
 
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
-#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
-#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:142
-#: src/libide/sourceview/gtk/menus.ui:150
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
+#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
+#: src/libide/sourceview/gtk/menus.ui:144
+#: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
@@ -830,8 +851,8 @@ msgstr "Sök och ersätt"
 msgid "Documents"
 msgstr "Dokument"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "Selection"
 msgstr "Markering"
 
@@ -911,7 +932,7 @@ msgid "Failed to format selection: %s"
 msgstr "Misslyckades med att formatera markering: %s"
 
 #: src/libide/editor/ide-editor-page.c:991
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Spara fil"
@@ -919,7 +940,7 @@ msgstr "Spara fil"
 #: src/libide/editor/ide-editor-page.c:994
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
+#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Spara"
 
@@ -934,43 +955,49 @@ msgstr "Spara"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Ersätt"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Gå till föregående matchning (Ctrl+Skift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Gå till nästa matchning (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Sök och ersätt (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Stäng sökning"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "_Ersätt"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Ersätt _alla"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
+#: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Använd re_guljära uttryck"
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Skiftlägeskänslig"
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
+#: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Matcha hela ord"
 
@@ -999,23 +1026,44 @@ msgid "Line Ending:"
 msgstr "Radslut:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:93
+#: src/plugins/create-project/gbp-create-project-widget.ui:96
 msgid "Language"
 msgstr "Språk"
 
-#: src/libide/foundry/ide-build-manager.c:468
+#: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Misslyckades med att initiera rörledning för bygge: %s"
 
-#: src/libide/foundry/ide-build-manager.c:609
+#: src/libide/foundry/ide-build-manager.c:623
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Misslyckades med att erhålla enhetsinformation: %s"
 
-#: src/libide/foundry/ide-config-manager.c:529
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
 msgstr "Aktiv konfiguration"
+
+#: src/libide/foundry/ide-config-manager.c:626
+#, c-format
+msgid "Configuration %s changed"
+msgstr "Konfigurationen %s ändrades"
+
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:872
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+"Misslyckades med att hitta byggkonfigurationen ”%s”. Den kan vara ogiltig "
+"eller felaktigt formaterad."
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1068
+#, c-format
+msgid "Active configuration set to “%s”"
+msgstr "Aktiv konfiguration inställd till ”%s”"
 
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
@@ -1027,7 +1075,12 @@ msgstr "Upptäckte enheten ”%s”"
 msgid "Devices"
 msgstr "Enheter"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+msgid "Device set to %s"
+msgstr "Enhet inställd till %s"
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Det går inte att distribuera till enhet, rörledning för bygge är inte "
@@ -1050,100 +1103,112 @@ msgstr "Min dator (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Min dator (%s) — %s"
 
-#: src/libide/foundry/ide-pipeline.c:835
+#: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
 msgstr "Rörledningen för bygget är i ett misslyckat tillstånd"
 
-#: src/libide/foundry/ide-pipeline.c:845
+#: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
 msgstr "Byggkonfigurationen innehåller fel"
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr "Rörledning påbörjad för att rensa byggträd"
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr "Rörledning påbörjad"
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr "Rörledning slutförd"
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1096
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
 msgstr "Bygge (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1137
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Efterinstallation (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3077
-#: src/libide/foundry/ide-pipeline.c:3116
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Skapande av pseudoterminal misslyckades. Terminalfunktioner kommer att vara "
 "begränsade."
 
-#: src/libide/foundry/ide-pipeline.c:3313
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Rensar…"
 
-#: src/libide/foundry/ide-pipeline.c:3317
-#: src/libide/foundry/ide-pipeline.c:3374
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: src/libide/foundry/ide-pipeline.c:3319
-#: src/libide/foundry/ide-pipeline.c:3382
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Redo"
 
-#: src/libide/foundry/ide-pipeline.c:3334
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Hämtar…"
 
-#: src/libide/foundry/ide-pipeline.c:3338
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Bygger beroenden…"
 
 # "Startar upp" kändes för allmänt, så utgår från stegets namn IDE_BUILD_PHASE_AUTOGEN
-#: src/libide/foundry/ide-pipeline.c:3342
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Automatisk generering…"
 
-#: src/libide/foundry/ide-pipeline.c:3346
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Konfigurerar…"
 
-#: src/libide/foundry/ide-pipeline.c:3350
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Bygger…"
 
-#: src/libide/foundry/ide-pipeline.c:3354
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Installerar…"
 
-#: src/libide/foundry/ide-pipeline.c:3358
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr "Verkställer…"
 
-#: src/libide/foundry/ide-pipeline.c:3362
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Exporterar…"
 
-#: src/libide/foundry/ide-pipeline.c:3366
-#: src/libide/foundry/ide-pipeline.c:3370
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Lyckades"
 
-#: src/libide/foundry/ide-pipeline.c:3378
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "Förbereder…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3734
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
 msgid "Removing %s"
 msgstr "Tar bort %s"
 
-#: src/libide/foundry/ide-pipeline.c:3793
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr "Tar bort byggkataloger…"
 
@@ -1162,34 +1227,88 @@ msgstr "Namnlöst kommando"
 msgid "Unit Test"
 msgstr "Enhetstest"
 
-#: src/libide/foundry/ide-run-manager.c:505
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:185
+#, c-format
+msgid "User requested run tool “%s”"
+msgstr "Körverktyget ”%s” begärt av användaren"
+
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "Det går inte att köra mål, ett annat mål körs"
 
+#: src/libide/foundry/ide-run-manager.c:806
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Programmet avslutades med fel: %s"
+
+#: src/libide/foundry/ide-run-manager.c:809
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Programmet avslutades"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "Kör %s…"
 
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "Distribuerar till enhet…"
 
-#: src/libide/foundry/ide-runtime.c:409
-#: src/plugins/host/gbp-host-runtime-provider.c:55
+#: src/libide/foundry/ide-run-manager.c:1293
+msgid "User requested application to run"
+msgstr "Användaren begärde att programmet ska köras"
+
+#: src/libide/foundry/ide-run-manager.c:1325
+msgid "User requested application to restart"
+msgstr "Användaren begärde att programmet ska startas om"
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1355
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr "Användaren begärde att programmet ska köras med verktyget ”%s”"
+
+#: src/libide/foundry/ide-run-manager.c:1375
+msgid "User requested application to stop"
+msgstr "Användaren begärde att programmet ska stoppas"
+
+#: src/libide/foundry/ide-runtime.c:406
+#: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
 msgstr "Värdsystem"
+
+#: src/libide/foundry/ide-runtime-provider.c:147
+#, c-format
+msgid "Discovered runtime “%s”"
+msgstr "Upptäckte exekveringsmiljön ”%s”"
+
+#: src/libide/foundry/ide-runtime-provider.c:170
+#, c-format
+msgid "Removing runtime “%s”"
+msgstr "Tar bort exekveringsmiljön ”%s”"
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Tvingar underprocess %s att avsluta"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Skickar signal %d till underprocessen %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
 msgstr "Standard (Värdoperativsystem)"
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
-#: src/libide/greeter/gtk/menus.ui:82
+#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:64
+#: src/libide/greeter/gtk/menus.ui:84
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "_Klona arkiv…"
@@ -1197,11 +1316,11 @@ msgstr "_Klona arkiv…"
 #: src/libide/greeter/gtk/menus.ui:20
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
 msgid "Close"
 msgstr "Stäng"
 
-#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
+#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:77
 msgid "Open a _Project…"
 msgstr "Öppna ett _projekt…"
 
@@ -1209,7 +1328,7 @@ msgstr "Öppna ett _projekt…"
 msgid "Open a new or existing project"
 msgstr "Skapa ett nytt eller befintligt projekt"
 
-#: src/libide/greeter/gtk/menus.ui:66
+#: src/libide/greeter/gtk/menus.ui:67
 msgid "Create a new project by cloning a repository"
 msgstr "Skapa ett nytt projekt genom att klona ett arkiv"
 
@@ -1221,49 +1340,49 @@ msgstr "Välj en _mapp…"
 msgid "Directory"
 msgstr "Katalog"
 
-#: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
+#: src/libide/greeter/ide-greeter-workspace.c:230
+#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:346
+#: src/libide/greeter/ide-greeter-workspace.c:349
 msgid "Failed to load the project"
 msgstr "Misslyckades med att läsa in projektet"
 
-#: src/libide/greeter/ide-greeter-workspace.c:348
+#: src/libide/greeter/ide-greeter-workspace.c:351
 #: src/plugins/create-project/gbp-create-project-widget.c:261
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "S_täng"
 
-#: src/libide/greeter/ide-greeter-workspace.c:552
+#: src/libide/greeter/ide-greeter-workspace.c:555
 msgid "Delete Project Sources?"
 msgstr "Ta bort projektkällor?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:553
+#: src/libide/greeter/ide-greeter-workspace.c:556
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr "Att ta bort projektets källkod från din dator kan inte ångras."
 
-#: src/libide/greeter/ide-greeter-workspace.c:556
+#: src/libide/greeter/ide-greeter-workspace.c:559
 msgid "_Delete Project Sources"
 msgstr "Ta _bort projektkällor"
 
-#: src/libide/greeter/ide-greeter-workspace.c:651
-#: src/libide/greeter/ide-greeter-workspace.c:688
+#: src/libide/greeter/ide-greeter-workspace.c:654
+#: src/libide/greeter/ide-greeter-workspace.c:691
 msgid "Select Project Folder"
 msgstr "Välj projektmapp"
 
-#: src/libide/greeter/ide-greeter-workspace.c:656
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project File"
 msgstr "Välj projektfil"
 
-#: src/libide/greeter/ide-greeter-workspace.c:693
-#: src/libide/gui/ide-workbench.c:1516
+#: src/libide/greeter/ide-greeter-workspace.c:696
+#: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "Ö_ppna"
 
-#: src/libide/greeter/ide-greeter-workspace.c:704
+#: src/libide/greeter/ide-greeter-workspace.c:707
 msgid "All Project Types"
 msgstr "Alla projekttyper"
 
@@ -1369,21 +1488,46 @@ msgid_plural "About %u years ago"
 msgstr[0] "Ungefär %u år sedan"
 msgstr[1] "Ungefär %u år sedan"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:56
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Installera"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:191
 #, c-format
 msgid "%u of %u"
 msgstr "%u av %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Sök"
+
+#: src/libide/gui/ide-search-popover.ui:61
+msgid "Search for anything"
+msgstr "Sök vad som helst"
+
+#: src/libide/gui/ide-search-popover.ui:230
+msgid "_Everything"
+msgstr "_Allt"
+
+#: src/libide/gui/ide-search-popover.ui:237
+msgid "_Actions"
+msgstr "Åt_gärder"
+
+#: src/libide/gui/ide-search-popover.ui:244
+msgid "_Commands"
+msgstr "_Kommandon"
+
+#: src/libide/gui/ide-search-popover.ui:251
+msgid "_Files"
+msgstr "_Filer"
+
+#: src/libide/gui/ide-search-popover.ui:258
+msgid "_Symbols"
+msgstr "_Symboler"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:392
@@ -1404,7 +1548,7 @@ msgid "Close Project"
 msgstr "Stäng projekt"
 
 #: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:362
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Allmänt"
 
@@ -1432,7 +1576,7 @@ msgstr "Avsluta utan att spara ändringar"
 msgid "Web Browsing"
 msgstr "Webbsurfning"
 
-#: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:29
+#: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
@@ -1443,7 +1587,7 @@ msgstr "Terminal"
 msgid "New Terminals"
 msgstr "Nya terminaler"
 
-#: src/libide/gui/ide-application-actions.c:122
+#: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -1453,7 +1597,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: src/libide/gui/ide-application-actions.c:129
+#: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Finansierat av"
 
@@ -1517,7 +1661,7 @@ msgstr "Ny terminal"
 msgid "Open application menu (F10)"
 msgstr "Öppna programmeny (F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Det går inte att läsa in HTML. Saknar WebKit-stöd."
 
@@ -1534,7 +1678,7 @@ msgstr "Aktivera/inaktivera högerpanel"
 msgid "Search (Ctrl+Enter)"
 msgstr "Sök (Ctrl+Retur)"
 
-#: src/libide/gui/ide-primary-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Aktivera/inaktivera bottenpanel (Ctrl+F9)"
 
@@ -1559,21 +1703,31 @@ msgstr "Kör projekt"
 msgid "Other"
 msgstr "Annan"
 
-#: src/libide/gui/ide-workspace.c:1701
+#: src/libide/gui/ide-workbench.c:1076
+msgid "Project loaded"
+msgstr "Projekt inläst"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1246
+#, c-format
+msgid "Loading project “%s”"
+msgstr "Läser in projektet ”%s”"
+
+#: src/libide/gui/ide-workspace.c:1713
 msgid "There are unsaved documents"
 msgstr "Det finns osparade dokument"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:132
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Utseende"
 
-#: src/libide/gui/tweaks.ui:63
+#: src/libide/gui/tweaks.ui:66
 msgid "Configurations"
 msgstr "Konfigurationer"
 
-#: src/libide/gui/tweaks.ui:75
+#: src/libide/gui/tweaks.ui:78
 msgid "Plugins"
 msgstr "Insticksmoduler"
 
@@ -1585,13 +1739,25 @@ msgstr[0] "Installerar %u paket"
 msgstr[1] "Installerar %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1530
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Misslyckades med att initiera språkserver: %s"
 
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:492
+#, c-format
+msgid "Language server “%s” exited"
+msgstr "Språkservern ”%s” avslutades"
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:531
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr "Språkservern ”%s” startad som process %s"
+
 #: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Versionshantering"
@@ -1600,7 +1766,7 @@ msgstr "Versionshantering"
 msgid "SDKs"
 msgstr "SDK:er"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:214
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Språkservrar"
 
@@ -1663,11 +1829,11 @@ msgstr "Version"
 msgid "Website"
 msgstr "Webbplats"
 
-#: src/libide/projects/ide-project.c:198
+#: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
 msgstr "Målfil måste vara i projektträdet."
 
-#: src/libide/projects/ide-project.c:435
+#: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
 msgstr "Fil måste vara i projektträdet."
 
@@ -1687,18 +1853,18 @@ msgid "Clipboard"
 msgstr "Urklipp"
 
 #: src/libide/sourceview/gtk/menus.ui:10
-msgid "C_ut"
-msgstr "Klipp _ut"
+msgid "C_ut (Ctrl+X)"
+msgstr "Klipp _ut (Ctrl+X)"
 
-#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
-msgid "_Copy"
-msgstr "K_opiera"
+#: src/libide/sourceview/gtk/menus.ui:16
+msgid "_Copy (Ctrl+C)"
+msgstr "_Kopiera (Ctrl+C)"
 
-#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
-msgid "_Paste"
-msgstr "_Klistra in"
+#: src/libide/sourceview/gtk/menus.ui:22
+msgid "_Paste (Ctrl+V)"
+msgstr "Klistra _in (Ctrl+V)"
 
-#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
+#: src/libide/sourceview/gtk/menus.ui:29
 msgid "Undo"
 msgstr "Ångra"
 
@@ -1706,109 +1872,113 @@ msgstr "Ångra"
 msgid "Undo & Redo"
 msgstr "Ångra och gör om"
 
-#: src/libide/sourceview/gtk/menus.ui:38
-msgid "Redo"
-msgstr "Gör om"
+#: src/libide/sourceview/gtk/menus.ui:33
+msgid "Undo (Ctrl+Z)"
+msgstr "Ångra (Ctrl+Z)"
+
+#: src/libide/sourceview/gtk/menus.ui:39
+msgid "Redo (Shift+Ctrl+Z)"
+msgstr "Gör om (Skift+Ctrl+Z)"
 
 # Gruppen för zoom-kommandon
-#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/libide/sourceview/gtk/menus.ui:49
-msgid "Zoom Out"
-msgstr "Zooma ut"
+#: src/libide/sourceview/gtk/menus.ui:51
+msgid "Zoom Out (Ctrl+-)"
+msgstr "Zooma ut (Ctrl+-)"
 
-#: src/libide/sourceview/gtk/menus.ui:55
-msgid "Reset Zoom"
-msgstr "Återställ zoomnivå"
+#: src/libide/sourceview/gtk/menus.ui:57
+msgid "Reset Zoom (Ctrl+0)"
+msgstr "Återställ zoomnivå (Ctrl+0)"
 
-#: src/libide/sourceview/gtk/menus.ui:61
-msgid "Zoom In"
-msgstr "Zooma in"
+#: src/libide/sourceview/gtk/menus.ui:63
+msgid "Zoom In (Ctrl++)"
+msgstr "Zooma in (Ctrl++)"
 
-#: src/libide/sourceview/gtk/menus.ui:69
+#: src/libide/sourceview/gtk/menus.ui:71
 msgid "_Selection"
 msgstr "_Markering"
 
-#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
 msgid "Formatting"
 msgstr "Format"
 
-#: src/libide/sourceview/gtk/menus.ui:81
+#: src/libide/sourceview/gtk/menus.ui:83
 msgid "All _Upper Case"
 msgstr "Alla _versaler"
 
-#: src/libide/sourceview/gtk/menus.ui:82
+#: src/libide/sourceview/gtk/menus.ui:84
 msgid "Convert the text selection to upper case"
 msgstr "Konvertera den markerade texten till versaler"
 
-#: src/libide/sourceview/gtk/menus.ui:88
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "All _Lower Case"
 msgstr "Alla _gemener"
 
-#: src/libide/sourceview/gtk/menus.ui:89
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "Convert the text selection to lower case"
 msgstr "Konvertera den markerade texten till gemener"
 
-#: src/libide/sourceview/gtk/menus.ui:95
+#: src/libide/sourceview/gtk/menus.ui:97
 msgid "In_vert Case"
 msgstr "In_vertera skiftläge"
 
-#: src/libide/sourceview/gtk/menus.ui:96
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "Invert case of the text selection"
 msgstr "Invertera skiftläget för textmarkeringen"
 
-#: src/libide/sourceview/gtk/menus.ui:102
+#: src/libide/sourceview/gtk/menus.ui:104
 msgid "_Title Case"
 msgstr "_Inledande versal"
 
-#: src/libide/sourceview/gtk/menus.ui:103
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "Convert the text selection to title case"
 msgstr "Konvertera den markerade texten så versal inleder ord"
 
-#: src/libide/sourceview/gtk/menus.ui:112
+#: src/libide/sourceview/gtk/menus.ui:114
 msgid "Select _Line"
 msgstr "Markera _rad"
 
-#: src/libide/sourceview/gtk/menus.ui:117
+#: src/libide/sourceview/gtk/menus.ui:119
 msgid "_Delete Line"
 msgstr "_Ta bort rad"
 
-#: src/libide/sourceview/gtk/menus.ui:122
+#: src/libide/sourceview/gtk/menus.ui:124
 msgid "_Join Lines"
 msgstr "_Slå samman rader"
 
-#: src/libide/sourceview/gtk/menus.ui:127
+#: src/libide/sourceview/gtk/menus.ui:129
 msgid "S_ort Lines"
 msgstr "S_ortera rader"
 
-#: src/libide/sourceview/gtk/menus.ui:133
+#: src/libide/sourceview/gtk/menus.ui:135
 msgid "D_uplicate Line"
 msgstr "D_uplicera rad"
 
-#: src/libide/sourceview/gtk/menus.ui:140
+#: src/libide/sourceview/gtk/menus.ui:142
 msgid "_Formatting"
 msgstr "_Format"
 
-#: src/libide/sourceview/gtk/menus.ui:151
+#: src/libide/sourceview/gtk/menus.ui:153
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Kodnavigering"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1471
+#: src/libide/sourceview/ide-source-view.c:1540
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Rad %u, kol %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1473
+#: src/libide/sourceview/ide-source-view.c:1542
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -1818,6 +1988,10 @@ msgstr "Rad %u, kol %u (mark: %u)"
 msgid "_Open Link"
 msgstr "Ö_ppna länk"
 
+#: src/libide/terminal/gtk/menus.ui:16
+msgid "_Copy"
+msgstr "K_opiera"
+
 #: src/libide/terminal/gtk/menus.ui:17
 msgid "Copy selection from terminal to clipboard"
 msgstr "Kopiera markering från terminal till urklipp"
@@ -1825,6 +1999,10 @@ msgstr "Kopiera markering från terminal till urklipp"
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "_Kopiera länk"
+
+#: src/libide/terminal/gtk/menus.ui:27
+msgid "_Paste"
+msgstr "_Klistra in"
 
 #: src/libide/terminal/gtk/menus.ui:28
 msgid "Paste from clipboard into the terminal"
@@ -1851,7 +2029,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Namnlös terminal"
 
@@ -1874,36 +2052,30 @@ msgstr "Namnlös terminal"
 msgid "Search runtimes"
 msgstr "Sök exekveringsmiljöer"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr "Visa eller dölj alternativ som skiftlägeskänslighet"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "Gå till föregående matchning"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Reguttr"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "Gå till nästa matchning"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Skiftlägeskänslig"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Matcha hela ord"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Börja om från början"
 
-#: src/libide/tree/ide-tree-node.c:1105 src/libide/tree/ide-tree-node.c:1468
-#: src/libide/tree/ide-tree-node.c:1497
-msgid "(Empty)"
-msgstr "(Tom)"
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr "Processen avslutades av signal %d"
 
-#: src/libide/tree/ide-tree-node.c:1466
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
-msgid "Loading…"
-msgstr "Läser in…"
+#: src/libide/tree/ide-tree-empty.c:207
+msgid "<i>Loading</i>"
+msgstr "<i>Läser in</i>"
+
+#: src/libide/tree/ide-tree-empty.c:209
+msgid "Empty"
+msgstr "Tom"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
@@ -1943,7 +2115,7 @@ msgstr "Ingen"
 msgid "Blank page"
 msgstr "Tom sida"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:130
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "Inställningar"
 
@@ -1976,7 +2148,7 @@ msgstr "Konfigurerar projekt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2038,14 +2210,18 @@ msgstr "Kopiera"
 msgid "Remove"
 msgstr "Ta bort"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "_Spara"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Byggutmatning"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
+msgid "Build Output (Shift+Ctrl+L)"
+msgstr "Byggutmatning (Skift+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
@@ -2205,7 +2381,6 @@ msgstr "Gör konfigurationen aktiv och läs in byggrörledningen på nytt"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
 msgid "Delete"
 msgstr "Ta bort"
 
@@ -2214,14 +2389,14 @@ msgid "Delete configuration"
 msgstr "Ta bort konfiguration"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
-msgid "Stop Building Project"
-msgstr "Stoppa bygge av projekt"
+msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
+msgstr "Stoppa bygge av projekt (Skift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Bygg projekt (Skift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Visa byggdiagnostik (Ctrl+Alt+?)"
 
@@ -2233,77 +2408,85 @@ msgstr "Konfigurera projekt…"
 msgid "Configure settings related to the project"
 msgstr "Konfigurera inställningar relaterade till projektet"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
-#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:53
-#: src/plugins/buildui/gtk/menus.ui:80 src/plugins/buildui/gtk/menus.ui:90
-#: src/plugins/buildui/gtk/menus.ui:104 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
+#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr "Kodhytta"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: src/plugins/buildui/gtk/menus.ui:17
+#: src/plugins/buildui/gtk/menus.ui:14
+msgid "Reload Configuration"
+msgstr "Läs in konfiguration igen"
+
+#: src/plugins/buildui/gtk/menus.ui:16
+msgid "Reload project configuration"
+msgstr "Läs in projektkonfiguration igen"
+
+#: src/plugins/buildui/gtk/menus.ui:22
 msgid "Select Build Target…"
 msgstr "Välj byggmål…"
 
-#: src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Change default build target"
 msgstr "Ändra standardbyggmål"
 
-#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:81
-#: src/plugins/buildui/gtk/menus.ui:91
+#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Building"
 msgstr "Bygge"
 
-#: src/plugins/buildui/gtk/menus.ui:26
+#: src/plugins/buildui/gtk/menus.ui:31
 msgid "_Build"
 msgstr "_Bygg"
 
-#: src/plugins/buildui/gtk/menus.ui:27
+#: src/plugins/buildui/gtk/menus.ui:32
 msgid "Build the project"
 msgstr "Bygg projektet"
 
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:38
 msgid "_Rebuild"
 msgstr "Bygg _om"
 
-#: src/plugins/buildui/gtk/menus.ui:34
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "Rebuild the project"
 msgstr "Bygg projektet på nytt"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Clean"
 msgstr "_Rensa"
 
-#: src/plugins/buildui/gtk/menus.ui:40
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Clean the project"
 msgstr "Rensa projektet"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Stop Building"
 msgstr "Stoppa bygge"
 
-#: src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Cancel the current build operation"
 msgstr "Avbryt den aktuella byggoperationen"
 
-#: src/plugins/buildui/gtk/menus.ui:54
+#: src/plugins/buildui/gtk/menus.ui:59
 msgid "Install & Deployment"
 msgstr "Installation och distribuering"
 
-#: src/plugins/buildui/gtk/menus.ui:58
+#: src/plugins/buildui/gtk/menus.ui:63
 msgid "Install the project"
 msgstr "Installera projektet"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "Deploy to Device…"
 msgstr "Distribuera till enhet…"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:69
 msgid "Deploy project to current device"
 msgstr "Distribuera projektet till aktuell enhet"
 
@@ -2311,87 +2494,107 @@ msgstr "Distribuera projektet till aktuell enhet"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "_Export"
 msgstr "_Exportera"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:80
 msgid "Export project"
 msgstr "Exportera projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Stop Build"
 msgstr "Stoppa bygge"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:90
 msgid "Stop building project"
 msgstr "Stoppa bygge av projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:93
-msgid "Show Build _Log"
-msgstr "Visa bygg_logg"
+#: src/plugins/buildui/gtk/menus.ui:98
+msgid "Show Bui_ld Output"
+msgstr "Visa by_ggutmatning"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr "Visa en panel som innehåller byggloggen"
 
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "Körning"
 
-#: src/plugins/buildui/gtk/menus.ui:107
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr "Välj körkommando…"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Kör"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr "Kör projektet"
 
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:134
+msgid "Restart Program"
+msgstr "Starta om program"
+
+#: src/plugins/buildui/gtk/menus.ui:137
+msgid "Restart the running program"
+msgstr "Starta om det körande programmet"
+
+#: src/plugins/buildui/gtk/menus.ui:143
+msgid "Stop Program"
+msgstr "Stoppa program"
+
+#: src/plugins/buildui/gtk/menus.ui:146
+msgid "Stop running the project"
+msgstr "Stoppa körning av projektet"
+
+#: src/plugins/buildui/gtk/menus.ui:151
+msgid "Debugging"
+msgstr "Felsökning"
+
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Enhetstester"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Följ systemets stil"
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:168
 msgid "Force Light"
 msgstr "Tvinga ljus"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Force Dark"
 msgstr "Tvinga mörk"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Accessibility"
 msgstr "Hjälpmedel"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "High Contrast"
 msgstr "Hög kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/menus.ui:188
 msgid "Text Direction"
 msgstr "Textriktning"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:190
 msgid "Left-to-Right"
 msgstr "Vänster-till-höger"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Right-to-Left"
 msgstr "Höger-till-vänster"
 
-#: src/plugins/buildui/gtk/menus.ui:183
-msgid "Tools"
-msgstr "Verktyg"
+#: src/plugins/buildui/gtk/menus.ui:211
+msgid "Show Inspector"
+msgstr "Visa inspektör"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
@@ -2467,8 +2670,9 @@ msgstr "Navigera med kontextfönster"
 msgid "Switch documents using a popover"
 msgstr "Växla mellan dokument med ett kontextfönster"
 
-#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
-#: src/plugins/shellcmd/tweaks.ui:21
+#: src/plugins/buildui/tweaks.ui:12
+#: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Kommandon"
 
@@ -2555,86 +2759,47 @@ msgstr "Rensa byggloggar"
 msgid "Clear the build log history when a new build begins"
 msgstr "Rensa byggloggshistoriken när ett nytt bygge påbörjas"
 
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:212
+msgid "Show Build Logs"
+msgstr "Visa byggloggar"
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr "Rensa byggloggen när ett nytt bygge påbörjas"
+
+#: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
 msgstr "Logga till konsol"
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr "Omdirigera felloggar från språkserver till standard fel"
 
-#: src/plugins/buildui/tweaks.ui:231
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr "Arbetare"
 
-#: src/plugins/buildui/tweaks.ui:235
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Antal arbetare att använda vid byggen"
 
-#: src/plugins/buildui/tweaks.ui:244
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Standard"
 
-#: src/plugins/buildui/tweaks.ui:250
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 per processor"
 
-#: src/plugins/buildui/tweaks.ui:256
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:262 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:268 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:274
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:280 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:286
-msgid "16"
-msgstr "16"
-
-#: src/plugins/buildui/tweaks.ui:292
-msgid "32"
-msgstr "32"
-
-#: src/plugins/buildui/tweaks.ui:298
-msgid "64"
-msgstr "64"
-
-#: src/plugins/buildui/tweaks.ui:304
-msgid "128"
-msgstr "128"
-
-#: src/plugins/buildui/tweaks.ui:310
-msgid "256"
-msgstr "256"
-
-#: src/plugins/buildui/tweaks.ui:316
-msgid "512"
-msgstr "512"
-
-#: src/plugins/buildui/tweaks.ui:330
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr "Verktyg"
 
-#: src/plugins/buildui/tweaks.ui:365
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr "Installationsprefix"
 
-#: src/plugins/buildui/tweaks.ui:366
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
@@ -2642,11 +2807,11 @@ msgstr ""
 "Projektet kommer installeras till denna katalog under byggrörledningens "
 "installationsfas."
 
-#: src/plugins/buildui/tweaks.ui:384
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Konfigurationsalternativ"
 
-#: src/plugins/buildui/tweaks.ui:397
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2654,11 +2819,28 @@ msgstr ""
 "Dessa alternativ används av byggsystemet för att konfigurera projektet under "
 "byggrörledningens konfigurationsfas"
 
-#: src/plugins/buildui/tweaks.ui:404
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr "Byggmiljö"
 
-#: src/plugins/buildui/tweaks.ui:420
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Plats"
+
+#: src/plugins/buildui/tweaks.ui:432
+msgid "Where your project builds"
+msgstr "Var ditt projekt byggs"
+
+#: src/plugins/buildui/tweaks.ui:449
+msgid "Inside Source Tree"
+msgstr "Inuti källkodsträd"
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr "Utanför källkodsträd"
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2666,19 +2848,32 @@ msgstr ""
 "SDK:n som används för att bygga ditt program identifieras automatiskt från "
 "exekveringsmiljön."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Hämta beroenden"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:237
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Bygg projekt"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo-körning"
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr "Clang-integrationsserver har avslutats"
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
+msgstr "Clang-integrationsserver har startats som process %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2728,7 +2923,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:227
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
 msgid "Configure project"
 msgstr "Konfigurera projekt"
 
@@ -2789,10 +2984,22 @@ msgstr ""
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:338
+#: src/plugins/code-index/ide-code-index-index.c:340
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
 msgstr "Deklarering"
+
+#: src/plugins/code-index/ide-code-index-search-provider.c:150
+msgid "Project Symbols"
+msgstr "Projektsymboler"
+
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Kopiera som bild"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy selected text as an image"
+msgstr "Kopiera markerad text som en bild"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -2811,6 +3018,11 @@ msgstr "Kodåtgärder"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
 msgstr "_Verkställ"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "Läser in…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
@@ -2945,15 +3157,15 @@ msgstr "Välj plats"
 msgid "Failed to Create Project"
 msgstr "Misslyckades med att skapa projekt"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:10
+#: src/plugins/create-project/gbp-create-project-widget.ui:13
 msgid "Project Name"
 msgstr "Projektnamn"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:16
+#: src/plugins/create-project/gbp-create-project-widget.ui:19
 msgid "A subdirectory with this name already exists"
 msgstr "Det finns redan en underkatalog med detta namn"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:26
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -2962,11 +3174,11 @@ msgstr ""
 "Ett unikt namn som används för projektmappen och andra resurser. Namnet ska "
 "vara i gemener utan blanksteg och får inte starta med en siffra."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:39
+#: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
 msgstr "Program-ID…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:45
+#: src/plugins/create-project/gbp-create-project-widget.ui:48
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -2974,29 +3186,28 @@ msgstr ""
 "Ett omvänt domännamn som används för att identifiera programmet, som ”org."
 "gnome.Builder”. Det får inte innehålla bindestreck."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:61
+#: src/plugins/create-project/gbp-create-project-widget.ui:64
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:151
 msgid "Location"
 msgstr "Plats"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:77
+#: src/plugins/create-project/gbp-create-project-widget.ui:80
 msgid "The project will be created in a new subdirectory."
 msgstr "Ditt projekt kommer att skapas i en ny underkatalog."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Licens"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:119
+#: src/plugins/create-project/gbp-create-project-widget.ui:122
 msgid "Template"
 msgstr "Mall"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:178
+#: src/plugins/create-project/gbp-create-project-widget.ui:181
 msgid "Create Project"
 msgstr "Skapa projekt"
 
@@ -3010,7 +3221,7 @@ msgstr "Skapa nytt projekt"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:30
+#: src/plugins/create-project/gtk/menus.ui:31
 msgid "Create New Project…"
 msgstr "Skapa nytt projekt…"
 
@@ -3050,35 +3261,84 @@ msgstr "CTags-sökväg"
 msgid "The path to the ctags executable"
 msgstr "Sökvägen till den körbara ctags-filen"
 
-#: src/plugins/debuggerui/gtk/menus.ui:10
+#: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
 msgstr "Kör med felsökare"
 
-#: src/plugins/debuggerui/gtk/menus.ui:13
+#: src/plugins/debuggerui/gtk/menus.ui:14
 msgid "Run the project with debugger"
 msgstr "Kör projektet med felsökare"
 
-#: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#: src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Felsökare"
 
-#: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
+#: src/plugins/debuggerui/gtk/menus.ui:25
+msgid "Toggle Breakpoint"
+msgstr "Växla brytpunkt"
+
+#: src/plugins/debuggerui/gtk/menus.ui:28
+msgid "Toggle breakpoint at current line"
+msgstr "Växla brytpunkt på aktuell rad"
+
+#: src/plugins/debuggerui/gtk/menus.ui:34
+msgid "Continue"
+msgstr "Fortsätt"
+
+#: src/plugins/debuggerui/gtk/menus.ui:37
+msgid "Continue debugging to next breakpoint"
+msgstr "Fortsätt felsöka till nästa brytpunkt"
+
+#: src/plugins/debuggerui/gtk/menus.ui:43
+msgid "Pause"
+msgstr "Pausa"
+
+#: src/plugins/debuggerui/gtk/menus.ui:46
+msgid "Pause debugger until continued"
+msgstr "Pausa felsökare tills den fortsätts"
+
+#: src/plugins/debuggerui/gtk/menus.ui:52
+msgid "Step Over"
+msgstr "Stega över"
+
+#: src/plugins/debuggerui/gtk/menus.ui:55
+msgid "Execute the current line, stepping over any function calls"
+msgstr "Kör aktuell rad, stega över eventuella funktionsanrop"
+
+#: src/plugins/debuggerui/gtk/menus.ui:61
+msgid "Step Into"
+msgstr "Stega in"
+
+#: src/plugins/debuggerui/gtk/menus.ui:64
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Kör aktuell rad, stega in i eventuella funktionsanrop"
+
+#: src/plugins/debuggerui/gtk/menus.ui:70
+msgid "Step Out"
+msgstr "Stega ut"
+
+#: src/plugins/debuggerui/gtk/menus.ui:73
+msgid "Run until the end of the function"
+msgstr "Kör till slutet på funktionen"
+
+#: src/plugins/debuggerui/gtk/menus.ui:83
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Brytpunkter"
 
-#: src/plugins/debuggerui/gtk/menus.ui:25
+#: src/plugins/debuggerui/gtk/menus.ui:85
 msgid "Automatically Break at Program Start"
 msgstr "Bryt automatiskt vid programstart"
 
-#: src/plugins/debuggerui/gtk/menus.ui:30
+#: src/plugins/debuggerui/gtk/menus.ui:90
 msgid "Automatically Break at Warnings"
 msgstr "Bryt automatiskt vid varningar"
 
-#: src/plugins/debuggerui/gtk/menus.ui:35
+#: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
 msgstr "Bryt automatiskt vid kritiska"
 
@@ -3118,24 +3378,24 @@ msgid "Expression"
 msgstr "Uttryck"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
-msgid "Interrupt the program"
-msgstr "Avbryt programmet"
+msgid "Pause the program (F6)"
+msgstr "Pausa programmet (F6)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
-msgid "Continue running the program"
-msgstr "Fortsätt köra programmet"
+msgid "Continue running the program (F5)"
+msgstr "Fortsätt köra programmet (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
-msgid "Execute the current line, stepping into any function calls"
-msgstr "Kör aktuell rad, stega in i eventuella funktionsanrop"
+msgid "Execute the current line, stepping into any function calls (F8)"
+msgstr "Kör aktuell rad, stega in i eventuella funktionsanrop (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
-msgid "Execute the current line, stepping over any function calls"
-msgstr "Kör aktuell rad, stega över eventuella funktionsanrop"
+msgid "Execute the current line, stepping over any function calls (F7)"
+msgstr "Kör aktuell rad, stega över eventuella funktionsanrop (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
-msgid "Run until the end of the function"
-msgstr "Kör till slutet på funktionen"
+msgid "Run until the end of the function (Shift+F8)"
+msgstr "Kör till slutet på funktionen (Skift+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -3202,19 +3462,19 @@ msgstr "Argument"
 msgid "Binary"
 msgstr "Binärt"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:234
 msgid "Threads"
 msgstr "Trådar"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
 msgid "Libraries"
 msgstr "Bibliotek"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:263
 msgid "Registers"
 msgstr "Register"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:268
 msgid "Console"
 msgstr "Konsol"
 
@@ -3283,6 +3543,15 @@ msgstr "Ingen fil tillhandahölls."
 msgid "Use minimal editor interface"
 msgstr "Använd minimalt redigerargränssnitt"
 
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr "Växla till %s-stil"
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
+msgstr "Växla program- och redigerartema"
+
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
 msgstr "Återställ"
@@ -3330,13 +3599,25 @@ msgstr "Indentera med blanksteg"
 msgid "Spaces per Tab"
 msgstr "Blanksteg per tabb"
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -3801,79 +4082,67 @@ msgstr "Maximalt antal kompletteringsförslag"
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Maximala antalet kompletteringsrader som kommer visas på en gång"
 
-#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
-msgid "Keyboard Theme"
-msgstr "Tangentbordstema"
-
-#: src/plugins/editorui/tweaks.ui:472
-msgid ""
-"Shortcut themes provide a keyboard experience similar to other IDEs and "
-"editors"
-msgstr ""
-"Kortkommandoteman tillhandahåller en tangentbordsupplevelse som liknar andra "
-"integrerade utvecklingsmiljöer och redigerare"
-
-#: src/plugins/editorui/tweaks.ui:491
+#: src/plugins/editorui/tweaks.ui:468
 msgid "Movements"
 msgstr "Förflyttningar"
 
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backsteg kommer ta bort extra blanktecken för att hålla dig justerad med din "
 "indentering"
 
-#: src/plugins/editorui/tweaks.ui:507
+#: src/plugins/editorui/tweaks.ui:484
 msgid "Navigate to non-space characters"
 msgstr "Navigera till tecken som inte är blanksteg"
 
-#: src/plugins/editorui/tweaks.ui:516
+#: src/plugins/editorui/tweaks.ui:493
 msgid "Before line boundaries"
 msgstr "Före radgränser"
 
-#: src/plugins/editorui/tweaks.ui:522
+#: src/plugins/editorui/tweaks.ui:499
 msgid "After line boundaries"
 msgstr "Efter radgränser"
 
 # Smarta home-end hoppar till första/sista tecken snarare än början/slut på rad.
-#: src/plugins/editorui/tweaks.ui:528
+#: src/plugins/editorui/tweaks.ui:505
 msgid "Instead of line boundaries"
 msgstr "I stället för radgränser"
 
-#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
+#: src/plugins/editorui/tweaks.ui:511 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Inaktiverat"
 
-#: src/plugins/editorui/tweaks.ui:546
+#: src/plugins/editorui/tweaks.ui:523
 msgid "Session Management"
 msgstr "Sessionshantering"
 
-#: src/plugins/editorui/tweaks.ui:550
+#: src/plugins/editorui/tweaks.ui:527
 msgid "Save & Restore"
 msgstr "Spara och återställ"
 
-#: src/plugins/editorui/tweaks.ui:553
+#: src/plugins/editorui/tweaks.ui:530
 msgid "Auto-Save"
 msgstr "Automatiskt sparande"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:531
 msgid "Regularly save the document as you type"
 msgstr "Spara regelbundet dokumentet medan du skriver"
 
-#: src/plugins/editorui/tweaks.ui:565
+#: src/plugins/editorui/tweaks.ui:542
 msgid "Auto-Save Delay"
 msgstr "Fördröjning för automatiskt sparande"
 
-#: src/plugins/editorui/tweaks.ui:566
+#: src/plugins/editorui/tweaks.ui:543
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "Fördröjningen i sekunder att vänta innan dokumentet sparas automatiskt"
 
-#: src/plugins/editorui/tweaks.ui:581
+#: src/plugins/editorui/tweaks.ui:558
 msgid "Format on Save"
 msgstr "Formatera vid sparning"
 
-#: src/plugins/editorui/tweaks.ui:582
+#: src/plugins/editorui/tweaks.ui:559
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -3881,36 +4150,41 @@ msgstr ""
 "Formatera källor på nytt vid sparande till disk. Kräver en registrerad "
 "formaterare för källspråket."
 
-#: src/plugins/editorui/tweaks.ui:597
+#: src/plugins/editorui/tweaks.ui:574
 msgid "Restore Cursor Position"
 msgstr "Återställ markörposition"
 
-#: src/plugins/editorui/tweaks.ui:598
+#: src/plugins/editorui/tweaks.ui:575
 msgid "Jump to the last position when re-opening a file"
 msgstr "Hoppa till den senaste positionen då en fil öppnas på nytt"
 
-#: src/plugins/file-search/gbp-file-search-index.c:401
+#: src/plugins/file-search/gbp-file-search-index.c:397
 msgid "Open file or folder"
 msgstr "Öppna fil eller mapp"
+
+#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/project-tree/gbp-project-tree-addin.c:211
+msgid "Files"
+msgstr "Filer"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Liknande filer (Ctrl+Skift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Installationen misslyckades"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Installationen är klar"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Klienten har stängts"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:741
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Misslyckades med att ta bort flatpak-manifest: %s"
@@ -3935,18 +4209,25 @@ msgstr ""
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Name"
 msgstr "Namn"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr "Arkitektur"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:804
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:113
+msgid "Resolving SDK Extensions"
+msgstr "Slår upp SDK-tillägg"
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:115
+msgid ""
+"Builder is locating the appropriate SDK extensions to build your project"
+msgstr "Builder söker lämpliga SDK-tillägg för att bygga ditt projekt"
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -3982,11 +4263,11 @@ msgstr "Skapar flatpak-bunt"
 msgid "Flatpak Application"
 msgstr "Flatpak-program"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
 msgid "Installing Necessary SDKs"
 msgstr "Installerar nödvändiga SDK:er"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4015,6 +4296,38 @@ msgstr ""
 msgid "Updating SDK Runtime"
 msgstr "Uppdaterar SDK-exekveringsmiljö"
 
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
+msgid "Flatpak installation for new SDKs"
+msgstr "Flatpak-installation för nya SDK:er"
+
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
+msgid "The Flatpak installation to use for new SDKs and SDK extensions."
+msgstr "Flatpak-installationen att använda för nya SDK:er och SDK-tillägg."
+
+#: src/plugins/flatpak/tweaks.ui:12
+msgid "Preferred Flatpak Installation"
+msgstr "Föredragen flatpak-installation"
+
+#: src/plugins/flatpak/tweaks.ui:13
+msgid ""
+"When installing SDKs and SDK extensions, Builder may prefer a specific "
+"Flatpak installation which contains the extension."
+msgstr ""
+"Vid installation av SDK:er och SDK-tillägg kan Builder föredra en specifik "
+"flatpak-installation som innehåller tillägget."
+
+#: src/plugins/flatpak/tweaks.ui:22
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: src/plugins/flatpak/tweaks.ui:28
+msgid "User"
+msgstr "Användare"
+
+#: src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "System"
+
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4036,12 +4349,12 @@ msgstr "Inget innehåll har ställts in för diff"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Operationen misslyckades. Det ursprungliga felet var ”%s”"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr "Operationen har avbrutits"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4065,6 +4378,15 @@ msgstr "Det går inte att signera incheckning utan GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "Det går inte att övervaka filer utanför arbetskatalogen"
 
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr "Integration med Git har startats som process %s"
+
+#: src/plugins/git/gbp-git-client.c:195
+msgid "Git integration has exited"
+msgstr "Integration med Git har avslutats"
+
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
 msgstr "Versionshanteringssystemet Git används inte"
@@ -4081,38 +4403,38 @@ msgstr "Initiera git-undermoduler"
 msgid "Network is not available, skipping submodule update"
 msgstr "Nätverket ej tillgängligt, hoppar över uppdatering av undermoduler"
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr "Sändes."
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Sänder referensen ”%s”"
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
 msgstr "Katalogen är inte i arkivet"
 
-#: src/plugins/git/gbp-git-vcs.c:536
+#: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
 msgstr "Git"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr "Inget arkiv kunde hittas på ”%s”."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr "Protokollet ”%s” stöds inte."
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr "Klonar arkiv"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:276
 msgid "A valid Git URL is required"
 msgstr "En giltig Git-URL krävs"
 
@@ -4120,16 +4442,20 @@ msgstr "En giltig Git-URL krävs"
 msgid "Authorship"
 msgstr "Upphovsmannaskap"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
 msgstr "E-post"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr "go-körning"
+
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Drar igång projekt"
 
-#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr "Gradle-körning"
 
@@ -4137,87 +4463,79 @@ msgstr "Gradle-körning"
 msgid "Display a new greeter window"
 msgstr "Visa ett nytt välkomstfönster"
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:763
 msgid "Match"
 msgstr "Sökträff"
 
-#: src/plugins/grep/gbp-grep-panel.c:768
+#: src/plugins/grep/gbp-grep-panel.c:775
 msgid "Path"
 msgstr "Sökväg"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:832
+#: src/plugins/grep/gbp-grep-panel.c:839
 #, c-format
 msgid "_Find in %s"
 msgstr "_Sök i %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:834
+#: src/plugins/grep/gbp-grep-panel.c:841
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Ersätt i %s"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5
-msgid "Find in Files (Ctrl+Alt+Shift+F)"
-msgstr "Sök i filer (Ctrl+Alt+skift+F)"
-
-#: src/plugins/grep/gbp-grep-panel.ui:46
-msgid "Find and Replace"
-msgstr "Sök och ersätt"
-
-#: src/plugins/grep/gbp-grep-panel.ui:65
-msgid "R_ecursive"
-msgstr "R_ekursiv"
-
-#: src/plugins/grep/gbp-grep-panel.ui:72
-msgid "Match _Case"
-msgstr "_Matcha skiftläge"
-
-#: src/plugins/grep/gbp-grep-panel.ui:78
-msgid "Match _Words"
-msgstr "Matcha _ord"
-
-#: src/plugins/grep/gbp-grep-panel.ui:84
-msgid "Regular E_xpressions"
-msgstr "Reguljära u_ttryck"
-
-#: src/plugins/grep/gbp-grep-panel.ui:93
-msgid "Close the panel (Escape key)"
-msgstr "Stäng panelen (Escape-tangenten)"
-
-#: src/plugins/grep/gbp-grep-panel.ui:124
-msgid "_Find in Project"
-msgstr "_Sök i projekt"
-
-#: src/plugins/grep/gbp-grep-panel.ui:144
-msgid "_Replace in Project"
-msgstr "_Ersätt i projekt"
-
-#: src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Sök i filer"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-panel.ui:6
+msgid "Find in Files (Shift+Ctrl+Alt+F)"
+msgstr "Sök i filer (Skift+Ctrl+Alt+F)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "_Recurse into Directories"
+msgstr "Gå _rekursivt in i kataloger"
+
+#: src/plugins/grep/gbp-grep-panel.ui:100
+msgid "Match Whole _Words"
+msgstr "Matcha hela _ord"
+
+#: src/plugins/grep/gbp-grep-panel.ui:106
+msgid "Use Regular _Expressions"
+msgstr "Använd r_eguljära uttryck"
+
+#: src/plugins/grep/gbp-grep-panel.ui:115
+msgid "Close the panel (Escape key)"
+msgstr "Stäng panelen (Escape-tangenten)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:137
+msgid "_Find in Project"
+msgstr "_Sök i projekt"
+
+#: src/plugins/grep/gbp-grep-panel.ui:170
+msgid "_Replace in Project"
+msgstr "_Ersätt i projekt"
+
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Sök efter…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Sök"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Sök _rekursivt genom mappar"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "_Gör skillnad på skiftläge vid sökning"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Matcha _hela ord"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Tillåt r_eguljära uttryck"
 
@@ -4225,7 +4543,7 @@ msgstr "Tillåt r_eguljära uttryck"
 msgid "_Find in Files"
 msgstr "_Sök i filer"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
 msgstr "Värdoperativsystem"
 
@@ -4281,9 +4599,13 @@ msgstr "Tomt Makefile-projekt"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Skapa ett nytt tomt projekt med en enkel Makefile"
 
-#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+#: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr "Maven-körning"
+
+#: src/plugins/menu-search/gbp-menu-search-provider.c:192
+msgid "Actions"
+msgstr "Åtgärder"
 
 #: src/plugins/menu-search/gtk/menus.ui:13
 msgid "Global Search"
@@ -4359,7 +4681,7 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Läs in Meson-introspektion"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:244
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
 msgid "Install project"
 msgstr "Installera projekt"
 
@@ -4373,12 +4695,10 @@ msgid "No Provided Tool"
 msgstr "Inget tillhandahållet verktyg"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
 msgstr "Ett namn att identifiera systemroten med."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
 msgstr "Systemarkitekturen för systemroten."
 
@@ -4462,49 +4782,87 @@ msgstr "Ta bort verktygskedja"
 msgid "Delete Tool"
 msgstr "Ta bort verktyg"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
 msgstr "GNOME-program"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Ett Meson-baserat projekt för GNOME som använder GTK 4 och libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
 msgstr "GTK 4-program"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr "Ett Meson-baserat projekt som använder GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
 msgstr "Delat bibliotek"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr "Ett Meson-baserat projekt för ett delat bibliotek"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
 msgstr "Kommandoradsverktyg"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr "Ett Meson-baserat projekt för ett kommandoradsprogram"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
 msgstr "Tomt Meson-projekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr "Ett tomt Meson-projektskelett"
+
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
+msgid "Debug"
+msgstr "Felsökning"
+
+#: src/plugins/messages/gbp-messages-panel.c:104
+msgid "Info"
+msgstr "Info"
+
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
+msgid "Message"
+msgstr "Meddelande"
+
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
+msgid "Warning"
+msgstr "Varning"
+
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
+msgid "Critical"
+msgstr "Kritiskt"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Meddelanden"
+
+#: src/plugins/messages/gbp-messages-panel.ui:25
+msgid "Time"
+msgstr "Tid"
+
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
+msgid "Severity"
+msgstr "Allvarsgrad"
+
+#: src/plugins/messages/gbp-messages-panel.ui:88
+msgid "Section"
+msgstr "Avsnitt"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -4659,12 +5017,12 @@ msgid "Drop Down"
 msgstr "Rullgardinslista"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:656
+#: src/plugins/podman/gbp-podman-runtime.c:661
 msgid "Containers/Toolbox"
 msgstr "Behållare/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:662
+#: src/plugins/podman/gbp-podman-runtime.c:667
 msgid "Containers/Podman"
 msgstr "Behållare/Podman"
 
@@ -4679,7 +5037,6 @@ msgid "A file with that name already exists."
 msgstr "Det finns redan en fil med det namnet."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "Filnamn"
@@ -4688,47 +5045,52 @@ msgstr "Filnamn"
 msgid "Folder Name"
 msgstr "Mappnamn"
 
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+msgid "New File Name"
+msgstr "Nytt filnamn"
+
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "S_kapa"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
-msgid "Files"
-msgstr "Filer"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:696
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopierar 1 fil"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:699
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopierar %s av %s filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
 msgid "Failed to copy files"
 msgstr "Misslyckades med att kopiera filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:745
 msgid "Files copied"
 msgstr "Filer kopierade"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Kopierade %s fil"
 msgstr[1] "Kopierade %s filer"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:940
 msgid "Copying files…"
 msgstr "Kopierar filer…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Files will be copied in a moment"
 msgstr "Filer kommer att kopieras om ett ögonblick"
+
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:99
+msgid "Filter"
+msgstr "Filter"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -4935,6 +5297,10 @@ msgstr ""
 "datakvot"
 
 #: src/plugins/sdkui/tweaks.ui:29
+msgid "Sources"
+msgstr "Källor"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr "Tillgängliga SDK:er"
 
@@ -4943,6 +5309,7 @@ msgid "Untitled Command"
 msgstr "Namnlöst kommando"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
 msgid "Set Shortcut"
 msgstr "Ställ in kortkommando"
 
@@ -5006,10 +5373,6 @@ msgstr "Använd underskal"
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Kör programmet från ett underskal som <tt>sh -c ''</tt>"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-msgid "Locality"
-msgstr "Plats"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
@@ -5108,6 +5471,46 @@ msgstr ""
 "mappa dem till en tangentbordsgenväg. De kan köras från olika miljöer som "
 "byggrörledningen, exekveringsmiljön eller värdoperativsystemet."
 
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:56
+msgid "No keyboard shortcut found"
+msgstr "Ingen tangentbordsgenväg hittades"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:57
+msgid "Try a different search"
+msgstr "Försök med en annan sökning"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
+msgid "_Reset All"
+msgstr "Åte_rställ alla"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:81
+msgid "Reset all actions to original keyboard shortcut"
+msgstr "Återställ alla åtgärder till ursprungliga tangentbordsgenvägar"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
+msgid "_Edit File"
+msgstr "R_edigera fil"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
+msgid "Open keybindings.json in editor"
+msgstr "Öppna keybindings.json i redigerare"
+
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+msgid "View and Customize Shortcuts…"
+msgstr "Visa och anpassa kortkommandon…"
+
+#: src/plugins/shortcutui/tweaks.ui:15
+msgid "Keyboard Theme"
+msgstr "Tangentbordstema"
+
+#: src/plugins/shortcutui/tweaks.ui:16
+msgid ""
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
+msgstr ""
+"Kortkommandoteman tillhandahåller en tangentbordsupplevelse som liknar andra "
+"integrerade utvecklingsmiljöer och redigerare"
+
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
 msgstr "Enchant 2"
@@ -5124,6 +5527,10 @@ msgstr "Ignorera"
 msgid "Languages"
 msgstr "Språk"
 
+#: src/plugins/swift/gbp-swift-run-command-provider.c:77
+msgid "swift run"
+msgstr "swift-körning"
+
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
 msgstr "Namnlös symbol"
@@ -5133,8 +5540,12 @@ msgstr "Namnlös symbol"
 msgid "Filter Symbols…"
 msgstr "Filtersymboler…"
 
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+msgid "Symbols in File"
+msgstr "Symboler i fil"
+
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
 msgid "In Page"
 msgstr "På sida"
 
@@ -5177,87 +5588,87 @@ msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
 msgstr "Öppna _Sysprof-fångst…"
 
-#: src/plugins/sysprof/gtk/menus.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:20
 msgid "Run with Profiler"
 msgstr "Kör med profilerare"
 
-#: src/plugins/sysprof/gtk/menus.ui:22
+#: src/plugins/sysprof/gtk/menus.ui:23
 msgid "Run the project with profiler"
 msgstr "Kör projektet med profilerare"
 
-#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
+#: src/plugins/sysprof/gtk/menus.ui:31 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profilerare"
 
-#: src/plugins/sysprof/gtk/menus.ui:32
+#: src/plugins/sysprof/gtk/menus.ui:33
 msgid "Thread Sampling"
 msgstr "Trådsampling"
 
-#: src/plugins/sysprof/gtk/menus.ui:34
+#: src/plugins/sysprof/gtk/menus.ui:35
 msgid "CPU Performance"
 msgstr "Processorprestanda"
 
-#: src/plugins/sysprof/gtk/menus.ui:39
+#: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Memory Allocations"
 msgstr "Minnesallokeringar"
 
-#: src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gtk/menus.ui:45
 msgid "Sample JavaScript Stacks"
 msgstr "Sampla Javascript-stackar"
 
-#: src/plugins/sysprof/gtk/menus.ui:50
+#: src/plugins/sysprof/gtk/menus.ui:51
 msgid "Graphics"
 msgstr "Grafik"
 
-#: src/plugins/sysprof/gtk/menus.ui:52
+#: src/plugins/sysprof/gtk/menus.ui:53
 msgid "Display Timings"
 msgstr "Visa tidsvärden"
 
-#: src/plugins/sysprof/gtk/menus.ui:58
+#: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Counters"
 msgstr "Räknare"
 
-#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:61 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "Processoranvändning"
 
-#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:66 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
 msgstr "Minnesanvändning"
 
-#: src/plugins/sysprof/gtk/menus.ui:70
+#: src/plugins/sysprof/gtk/menus.ui:71
 msgid "Storage I/O"
 msgstr "Lagrings-I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:75
+#: src/plugins/sysprof/gtk/menus.ui:76
 msgid "Network I/O"
 msgstr "Nätverks-I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:81
+#: src/plugins/sysprof/gtk/menus.ui:82
 msgid "Energy"
 msgstr "Energi"
 
-#: src/plugins/sysprof/gtk/menus.ui:83
+#: src/plugins/sysprof/gtk/menus.ui:84
 msgid "Consumption"
 msgstr "Förbrukning"
 
-#: src/plugins/sysprof/gtk/menus.ui:88
+#: src/plugins/sysprof/gtk/menus.ui:89
 msgid "Battery Charge"
 msgstr "Batteriladdning"
 
-#: src/plugins/sysprof/gtk/menus.ui:95
+#: src/plugins/sysprof/gtk/menus.ui:96
 msgid "Allow Application Integration"
 msgstr "Tillåt programintegration"
 
-#: src/plugins/sysprof/gtk/menus.ui:100
+#: src/plugins/sysprof/gtk/menus.ui:101
 msgid "Allow CPU Throttling"
 msgstr "Tillåt processorstrypning"
 
-#: src/plugins/sysprof/gtk/menus.ui:112
+#: src/plugins/sysprof/gtk/menus.ui:113
 msgid "Run with _Profiler"
 msgstr "Kör med _profilerare"
 
-#: src/plugins/sysprof/gtk/menus.ui:130
+#: src/plugins/sysprof/gtk/menus.ui:131
 msgid "Record Again…"
 msgstr "Spela in igen…"
 
@@ -5365,32 +5776,11 @@ msgstr ""
 "Tillhandahåll TRACE_FD-miljövariabel så att program kan leverera anpassade "
 "händelser"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
-msgid "An absolute file-system path to the sysroot."
-msgstr "En absolut filsökväg till systemroten."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
-msgid "Package Config Path"
-msgstr "Sökväg för paketkonfiguration"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
-msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr "En valfri kommaseparerad sökväg för att ange PKG_CONFIG_PATH."
-
-#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
-#, c-format
-msgid "%s (Sysroot SDK)"
-msgstr "%s (systemrots-SDK)"
-
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Programmet startades %s\r\n"
-
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-msgid "Application exited"
-msgstr "Programmet avslutades"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
@@ -5536,14 +5926,13 @@ msgstr "TODO/FIXME"
 msgid "Loading TODOs…"
 msgstr "Läser in TODO-kommentarer…"
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr "Uppdaterar beroenden…"
 
-# TODO: Is "Projects" Plural or singular (Project's)?
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-msgid "Builder is updating your projects configured dependencies."
-msgstr "Builder uppdaterar dina projekts konfigurerade beroenden."
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
+msgid "Builder is updating your project’s configured dependencies."
+msgstr "Builder uppdaterar ditt projekts konfigurerade beroenden."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -5581,51 +5970,51 @@ msgstr "Installera uppdateringar…"
 msgid "Install pending updates for Builder"
 msgstr "Installera väntande uppdateringar för Builder"
 
-#: src/plugins/valgrind/gtk/menus.ui:10
+#: src/plugins/valgrind/gtk/menus.ui:11
 msgid "Run with Leak Detector"
 msgstr "Kör med avkännare av läckor"
 
-#: src/plugins/valgrind/gtk/menus.ui:13
+#: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
 msgstr "Kör projektet med valgrind"
 
-#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
+#: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
 msgstr "Avkännare av läckor"
 
-#: src/plugins/valgrind/gtk/menus.ui:24
+#: src/plugins/valgrind/gtk/menus.ui:25
 msgid "Track Origin of Leaks"
 msgstr "Spåra ursprung till läckor"
 
-#: src/plugins/valgrind/gtk/menus.ui:30
+#: src/plugins/valgrind/gtk/menus.ui:31
 msgid "Report Leaks"
 msgstr "Rapportera läckor"
 
-#: src/plugins/valgrind/gtk/menus.ui:32
+#: src/plugins/valgrind/gtk/menus.ui:33
 msgid "Summary"
 msgstr "Sammandrag"
 
-#: src/plugins/valgrind/gtk/menus.ui:38
+#: src/plugins/valgrind/gtk/menus.ui:39
 msgid "Full"
 msgstr "Fullständigt"
 
-#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
+#: src/plugins/valgrind/gtk/menus.ui:52 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
 msgstr "Typer av läckor"
 
-#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
+#: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
 msgstr "Definitiva"
 
-#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
+#: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
 msgstr "Indirekta"
 
-#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
+#: src/plugins/valgrind/gtk/menus.ui:64 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
 msgstr "Möjliga"
 
-#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
+#: src/plugins/valgrind/gtk/menus.ui:69 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
 msgstr "Nåbara"
 
@@ -5669,37 +6058,37 @@ msgstr "Börja klona projekt från URI"
 msgid "A failure occurred while cloning the repository."
 msgstr "Ett fel uppstod under kloning av arkivet."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:15
 msgid "Repository URL"
 msgstr "Arkiv-URL"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
 msgid "Choose an alternate branch"
 msgstr "Välj en alternativ gren"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
 msgid "Branches"
 msgstr "Grenar"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr "Ange URL:en för källkodsarkivet för projektet som du vill klona."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Arkivet kommer klonas till en ny underkatalog."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Author Details"
 msgstr "Detaljer om upphovsman"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
 msgid "You may specify authorship information to override defaults."
 msgstr "Du kan ange upphovsmannainformation för att åsidosätta standardvärden."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
 msgid "Status"
 msgstr "Status"
 
@@ -5719,7 +6108,7 @@ msgstr "_Växla till gren"
 msgid "_Push to origin"
 msgstr "_Sänd till origin"
 
-#: src/plugins/vim/tweaks.ui:18
+#: src/plugins/vim/tweaks.ui:14
 msgid "Vim"
 msgstr "Vim"
 
@@ -5752,6 +6141,10 @@ msgstr "Fokusera plats"
 msgid "Focus the current page's location"
 msgstr "Fokusera den aktuella sidans plats"
 
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "Misslyckades med att tolka XML-dokument"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5760,6 +6153,85 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr "Visa eller dölj alternativ som skiftlägeskänslighet"
+
+#~ msgid "Regex"
+#~ msgstr "Reguttr"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Skiftlägeskänslig"
+
+#~ msgid "Match whole word"
+#~ msgstr "Matcha hela ord"
+
+#~ msgid "An absolute file-system path to the sysroot."
+#~ msgstr "En absolut filsökväg till systemroten."
+
+#~ msgid "Package Config Path"
+#~ msgstr "Sökväg för paketkonfiguration"
+
+#~ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+#~ msgstr "En valfri kommaseparerad sökväg för att ange PKG_CONFIG_PATH."
+
+#, c-format
+#~ msgid "%s (Sysroot SDK)"
+#~ msgstr "%s (systemrots-SDK)"
+
+#~ msgid "Find and Replace"
+#~ msgstr "Sök och ersätt"
+
+#~ msgid "R_ecursive"
+#~ msgstr "R_ekursiv"
+
+#~ msgid "Match _Case"
+#~ msgstr "_Matcha skiftläge"
+
+#~ msgid "Match _Words"
+#~ msgstr "Matcha _ord"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "Reguljära u_ttryck"
+
+#~ msgid "Stop Building Project"
+#~ msgstr "Stoppa bygge av projekt"
+
+#~ msgid "C_ut"
+#~ msgstr "Klipp _ut"
+
+#~ msgid "Redo"
+#~ msgstr "Gör om"
+
+#~ msgid "Debugger Breakpoint at g_warning()"
+#~ msgstr "Felsökningsbrytpunkt vid g_warning()"
+
+#~ msgid "Tools"
+#~ msgstr "Verktyg"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "16"
+#~ msgstr "16"
+
+#~ msgid "32"
+#~ msgstr "32"
+
+#~ msgid "64"
+#~ msgstr "64"
+
+#~ msgid "128"
+#~ msgstr "128"
+
+#~ msgid "256"
+#~ msgstr "256"
+
+#~ msgid "512"
+#~ msgstr "512"
 
 #~ msgid "Indexing PHP code"
 #~ msgstr "Indexerar PHP-kod"
@@ -6205,9 +6677,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "Percent"
 #~ msgstr "Procent"
 
-#~ msgid "Filters:"
-#~ msgstr "Filter:"
-
 #~ msgid "Select a filter that act on the colors or “None”."
 #~ msgstr "Välj ett filter som agerar på färgerna eller 'None'."
 
@@ -6288,9 +6757,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "SDK"
 #~ msgstr "SDK"
-
-#~ msgid "System"
-#~ msgstr "System"
 
 #~ msgid "follow"
 #~ msgstr "följ"
@@ -6843,9 +7309,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "Find and replace"
 #~ msgstr "Sök och ersätt"
 
-#~ msgid "Move to the previous match"
-#~ msgstr "Gå till föregående matchning"
-
 #~ msgid "Move to the next error"
 #~ msgstr "Gå till nästa fel"
 
@@ -6925,9 +7388,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "Switch surface"
 #~ msgstr "Växla yta"
 
-#~ msgid "Search your project"
-#~ msgstr "Sök ditt projekt"
-
 #~ msgid "Failed to locate runtime"
 #~ msgstr "Misslyckades med att hitta exekveringsmiljö"
 
@@ -6967,9 +7427,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Switch Surface"
 #~ msgstr "Växla yta"
-
-#~ msgid "GNOME Builder"
-#~ msgstr "GNOME Builder"
 
 #~ msgid "Learn more about GNOME Builder"
 #~ msgstr "Lär dig mer om GNOME Builder"
@@ -7167,14 +7624,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "Rensa färgmarkering"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Kopiera och klistra in"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Klipp ut markerad text till urklipp"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
@@ -7499,10 +7948,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgid "Close search bar (Escape key)"
 #~ msgstr "Stäng sökfältet (Escape-tangenten)"
 
-#, c-format
-#~ msgid "Connected to “%s”"
-#~ msgstr "Ansluten till ”%s”"
-
 #~ msgid "Object Path"
 #~ msgstr "Objektsökväg"
 
@@ -7652,10 +8097,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ "Aktivera användningen av eslint för att hitta ytterligare diagnostik i "
 #~ "JavaScript-filer. Detta kan leda till exekvering av kod i ditt projekt."
 
-#, c-format
-#~ msgid "Cloning project %s"
-#~ msgstr "Klonar projektet %s"
-
 #~ msgid "Downloading application sources…"
 #~ msgstr "Hämtar programkällor…"
 
@@ -7672,16 +8113,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "_View Design"
 #~ msgstr "_Visa design"
-
-#~ msgid "Switch to UI designer"
-#~ msgstr "Växla till användargränssnittsdesigner"
-
-#~ msgid "_View Source"
-#~ msgstr "_Visa källa"
-
-#, c-format
-#~ msgid "Failed to save glade document: %s"
-#~ msgstr "Misslyckades med att spara glade-dokument: %s"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Kortkommandon för Glade"
@@ -7703,9 +8134,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Växla till läge för att dra och ändra storlek"
-
-#~ msgid "Switch to margin editor"
-#~ msgstr "Växla till marginalredigerare"
 
 #~ msgid "Switch to alignment editor"
 #~ msgstr "Växla till justeringsredigerare"
@@ -7994,14 +8422,8 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ "Hjälploggfilen har skrivits till ”%s”. Tillhandahåll denna fil som en "
 #~ "bilaga till din felrapport eller supportförfrågan."
 
-#~ msgid "Symbols"
-#~ msgstr "Symboler"
-
 #~ msgid "Search symbols within document"
 #~ msgstr "Sök symboler i dokument"
-
-#~ msgid "Symbol"
-#~ msgstr "Symbol"
 
 #~ msgid "Document Outline"
 #~ msgstr "Dokumentöversikt"
