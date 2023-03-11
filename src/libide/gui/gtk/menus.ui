@@ -55,7 +55,7 @@
       <attribute name="page" translatable="yes">Application</attribute>
       <attribute name="group" translatable="yes">General</attribute>
       <item>
-        <attribute name="id">ide-primary-workspace-menu-quit</attribute>
+        <attribute name="id">org.gnome.builder.quit</attribute>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="description" translatable="yes">Quit without saving changes</attribute>
         <attribute name="action">app.quit</attribute>
