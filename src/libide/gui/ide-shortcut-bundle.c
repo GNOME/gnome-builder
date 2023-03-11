@@ -415,7 +415,11 @@ populate_from_object (IdeShortcutBundle  *self,
       !get_boolean_member (obj, "suppress", &suppress, error))
     return FALSE;
 
-  if (!(trigger = gtk_shortcut_trigger_parse_string (trigger_str)))
+  if (ide_str_empty0 (trigger_str))
+    {
+      trigger = g_object_ref (gtk_never_trigger_get ());
+    }
+  else if (!(trigger = gtk_shortcut_trigger_parse_string (trigger_str)))
     {
       g_set_error (error,
                    G_IO_ERROR,
