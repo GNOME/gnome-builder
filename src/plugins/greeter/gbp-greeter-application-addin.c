@@ -36,13 +36,38 @@ struct _GbpGreeterApplicationAddin
 };
 
 static void
+find_existing_greeter_workspace_cb (IdeWorkspace *workspace,
+                                    gpointer      data)
+{
+  IdeGreeterWorkspace **greeter = data;
+
+  if (*greeter != NULL)
+    return;
+
+  if (IDE_IS_GREETER_WORKSPACE (workspace))
+    *greeter = IDE_GREETER_WORKSPACE (workspace);
+}
+
+static void
+find_existing_greeter_cb (IdeWorkbench         *workbench,
+                          IdeGreeterWorkspace **greeter)
+{
+  if (*greeter != NULL)
+    return;
+
+  ide_workbench_foreach_workspace (workbench,
+                                   find_existing_greeter_workspace_cb,
+                                   greeter);
+}
+
+static void
 present_greeter_with_page (GSimpleAction *action,
                            GVariant      *param,
                            gpointer       user_data)
 {
   GbpGreeterApplicationAddin *self = user_data;
   g_autoptr(IdeWorkbench) workbench = NULL;
-  IdeGreeterWorkspace *workspace;
+  IdeGreeterWorkspace *workspace = NULL;
   const gchar *name;
 
   g_assert (!action || G_IS_SIMPLE_ACTION (action));
@@ -50,16 +75,26 @@ present_greeter_with_page (GSimpleAction *action,
   g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (self->application));
 
-  workbench = ide_workbench_new ();
-  ide_application_add_workbench (self->application, workbench);
+  ide_application_foreach_workbench (self->application,
+                                     (GFunc)find_existing_greeter_cb,
+                                     &workspace);
 
-  workspace = ide_greeter_workspace_new (self->application);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+  if (workspace == NULL)
+    {
+      workbench = ide_workbench_new ();
+      ide_application_add_workbench (self->application, workbench);
 
-  if (param != NULL && (name = g_variant_get_string (param, NULL)) && !ide_str_empty0 (name))
+      workspace = ide_greeter_workspace_new (self->application);
+      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+    }
+
+  if (param != NULL &&
+      (name = g_variant_get_string (param, NULL)) &&
+      !ide_str_empty0 (name))
     ide_greeter_workspace_set_page_name (workspace, name);
 
-  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+  ide_workbench_focus_workspace (ide_workspace_get_workbench (IDE_WORKSPACE (workspace)),
+                                 IDE_WORKSPACE (workspace));
 }
 
 static void
