@@ -698,3 +698,26 @@ ide_menu_manager_get_menu_ids (IdeMenuManager *self)
 
   return (const char * const *)self->cached_keys;
 }
+
+void
+ide_menu_manager_set_attribute_string (IdeMenuManager *self,
+                                       GMenu          *menu,
+                                       guint           position,
+                                       const char     *attribute,
+                                       const char     *value)
+{
+  g_autoptr(GMenuItem) item = NULL;
+
+  g_return_if_fail (IDE_IS_MENU_MANAGER (self));
+  g_return_if_fail (G_IS_MENU (menu));
+  g_return_if_fail (attribute != NULL);
+
+  item = g_menu_item_new (NULL, NULL);
+
+  model_copy_attributes_to_item (G_MENU_MODEL (menu), position, item);
+  model_copy_links_to_item (G_MENU_MODEL (menu), position, item);
+  g_menu_item_set_attribute (item, attribute, "s", value);
+
+  g_menu_remove (menu, position);
+  g_menu_insert_item (menu, position, item);
+}
