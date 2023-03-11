@@ -150,6 +150,9 @@ update_menus_cb (GHashTable *id_to_trigger)
             {
               g_autofree char *new_accel = gtk_shortcut_trigger_to_string (trigger);
 
+              if (ide_str_equal0 (new_accel, "never"))
+                new_accel[0] = 0;
+
               /* Save original accel for re-use later */
               if (original_accel == NULL && accel != NULL)
                 ide_menu_manager_set_attribute_string (app->menu_manager, menu, j, "original-accel", accel);
