@@ -26,6 +26,7 @@
 
 #include <libide-plugins.h>
 
+#include "ide-application-private.h"
 #include "ide-shortcut-bundle-private.h"
 #include "ide-shortcut-manager-private.h"
 #include "ide-shortcut-provider.h"
@@ -110,6 +111,61 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeShortcutManager, ide_shortcut_manager, IDE_TYP
 
 static GListStore *plugin_models;
 static IdeShortcutBundle *user_bundle;
+static guint update_menu_source;
+
+static gboolean
+update_menus_cb (GHashTable *id_to_trigger)
+{
+  IdeApplication *app = IDE_APPLICATION_DEFAULT;
+  const char * const *menu_ids;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (id_to_trigger != NULL);
+
+  update_menu_source = 0;
+
+  menu_ids = ide_menu_manager_get_menu_ids (app->menu_manager);
+
+  for (guint i = 0; menu_ids[i]; i++)
+    {
+      GMenu *menu = ide_menu_manager_get_menu_by_id (app->menu_manager, menu_ids[i]);
+      guint n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
+
+      for (guint j = 0; j < n_items; j++)
+        {
+          g_autofree char *shortcut_id = NULL;
+          g_autofree char *accel = NULL;
+          g_autofree char *original_accel = NULL;
+          GtkShortcutTrigger *trigger;
+
+          g_menu_model_get_item_attribute (G_MENU_MODEL (menu), j, "id", "s", &shortcut_id);
+
+          if (shortcut_id == NULL)
+            continue;
+
+          g_menu_model_get_item_attribute (G_MENU_MODEL (menu), j, "accel", "s", &accel);
+          g_menu_model_get_item_attribute (G_MENU_MODEL (menu), j, "original-accel", "s", &original_accel);
+
+          if ((trigger = g_hash_table_lookup (id_to_trigger, shortcut_id)))
+            {
+              g_autofree char *new_accel = gtk_shortcut_trigger_to_string (trigger);
+
+              /* Save original accel for re-use later */
+              if (original_accel == NULL && accel != NULL)
+                ide_menu_manager_set_attribute_string (app->menu_manager, menu, j, "original-accel", accel);
+
+              ide_menu_manager_set_attribute_string (app->menu_manager, menu, j, "accel", new_accel);
+            }
+          else
+            {
+              if (original_accel != NULL && !ide_str_equal0 (accel, original_accel))
+                ide_menu_manager_set_attribute_string (app->menu_manager, menu, j, "accel", original_accel);
+            }
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
 
 static GListModel *
 get_internal_shortcuts (void)
@@ -207,6 +263,12 @@ ide_shortcut_manager_update_overrides (IdeShortcutManager *self)
     }
 
   override_bundles (G_LIST_MODEL (self->plugin_models), id_to_trigger);
+
+  if (update_menu_source == 0)
+    update_menu_source = g_idle_add_full (G_PRIORITY_LOW,
+                                          (GSourceFunc)update_menus_cb,
+                                          g_hash_table_ref (id_to_trigger),
+                                          (GDestroyNotify)g_hash_table_unref);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
