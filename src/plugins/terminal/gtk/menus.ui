@@ -3,6 +3,7 @@
   <menu id="new-document-menu">
     <section id="new-terminal-section">
       <item>
+        <attribute name="id">org.gnome.builder.terminal.new-in-host</attribute>
         <attribute name="label" translatable="yes">New _Terminal</attribute>
         <attribute name="action">workspace.terminal.new-in-host</attribute>
         <attribute name="target" type="s">''</attribute>
@@ -11,6 +12,7 @@
         <attribute name="description" translatable="yes">Open a new terminal on the host operating system</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.terminal.new-in-pipeline</attribute>
         <attribute name="label" translatable="yes">New _Build Terminal</attribute>
         <attribute name="action">workspace.terminal.new-in-pipeline</attribute>
         <attribute name="target" type="s">''</attribute>
@@ -19,6 +21,7 @@
         <attribute name="description" translatable="yes">Open a new terminal in project's build pipeline</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.terminal.new-in-runtime</attribute>
         <attribute name="label" translatable="yes">New _Runtime Terminal</attribute>
         <attribute name="action">workspace.terminal.new-in-runtime</attribute>
         <attribute name="target" type="s">''</attribute>

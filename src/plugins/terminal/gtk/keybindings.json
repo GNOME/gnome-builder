@@ -1,7 +1,7 @@
 /* New Terminal Actions */
-{ "trigger" : "<Control><Shift>t", "action" : "workspace.terminal.new-in-host", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>t", "action" : "workspace.terminal.new-in-pipeline", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt>t", "action" : "workspace.terminal.new-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.terminal.new-in-host", "trigger" : "<Control><Shift>t", "action" : "workspace.terminal.new-in-host", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.terminal.new-in-pipeline", "trigger" : "<Control><Alt><Shift>t", "action" : "workspace.terminal.new-in-pipeline", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.terminal.new-in-runtime", "trigger" : "<Control><Alt>t", "action" : "workspace.terminal.new-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Control>Scroll_Lock", "action" : "workspace.terminal.new-in-subprocess", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
 
 /* IdeTerminal */
