@@ -416,7 +416,8 @@ ide_shortcut_window_new (GListModel *shortcuts)
           g_autofree char *accel = gtk_shortcut_trigger_to_string (trigger);
           const char *name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (action));
 
-          g_hash_table_insert (accel_map, g_strdup (name), g_steal_pointer (&accel));
+          if (!ide_str_equal0 (accel, "never"))
+            g_hash_table_insert (accel_map, g_strdup (name), g_steal_pointer (&accel));
         }
     }
 
@@ -566,7 +567,8 @@ ide_shortcut_info_foreach (GListModel          *shortcuts,
               g_autofree char *accel = gtk_shortcut_trigger_to_string (trigger);
               const char *name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (action));
 
-              g_hash_table_insert (accel_map, g_strdup (name), g_steal_pointer (&accel));
+              if (!ide_str_equal0 (accel, "never"))
+                g_hash_table_insert (accel_map, g_strdup (name), g_steal_pointer (&accel));
             }
           else if ((state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT")) &&
                    GTK_IS_NAMED_ACTION (state->action))
@@ -574,9 +576,10 @@ ide_shortcut_info_foreach (GListModel          *shortcuts,
               g_autofree char *accel = gtk_shortcut_trigger_to_string (trigger);
               const char *name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (state->action));
 
-              g_hash_table_insert (accel_map,
-                                   g_strdup (name),
-                                   g_steal_pointer (&accel));
+              if (!ide_str_equal0 (accel, "never"))
+                g_hash_table_insert (accel_map,
+                                     g_strdup (name),
+                                     g_steal_pointer (&accel));
             }
         }
     }
