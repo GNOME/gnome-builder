@@ -21,9 +21,13 @@
 { "id" : "org.gnome.builder.project.configure", "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
 { "id" : "org.gnome.builder.quit", "trigger" : "<Control>q", "action" : "app.quit", "phase" : "bubble" },
 { "id" : "org.gnome.builder.workspace.close-page", "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inPage()", "phase" : "bubble" },
-{ "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inTab()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.workspace.close-page", "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inTab()", "phase" : "bubble" },
 { "trigger" : "<Control>question", "action" : "workspace.show-help-overlay" },
 
 /* Toggle Panels */
 { "id" : "org.gnome.builder.workspace.panels.bottom.toggle", "trigger" : "<Control>F9", "action" : "workspace.panel.toggle-bottom", "when" : "canEdit()", "phase" : "capture" },
 { "id" : "org.gnome.builder.workspace.panels.left.toggle", "trigger" : "F9", "action" : "workspace.panel.toggle-start", "when" : "canEdit()", "phase" : "capture" },
+
+/* Some user-overridable commands */
+{ "id" : "org.gnome.builder.theme.dark", "action" : "app.dark", "phase" : "capture" },
+{ "id" : "org.gnome.builder.theme.light", "action" : "app.light", "phase" : "capture" },

@@ -9,5 +9,5 @@
 { "trigger" : "<Shift>F5", "action" : "context.run-manager.stop", "when" : "isRunning()", "phase" : "capture" },
 
 /* Errors and Warnings Popover */
-{ "trigger" : "<Control><Alt>question", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasProject()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.project.diagnostics.show", "trigger" : "<Control><Alt>question", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasProject()", "phase" : "capture" },
 

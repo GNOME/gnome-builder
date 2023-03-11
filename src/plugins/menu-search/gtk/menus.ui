@@ -10,6 +10,7 @@
       <attribute name="page" translatable="yes">Application</attribute>
       <attribute name="group" translatable="yes">Search</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.workspace.global-search</attribute>
         <attribute name="label" translatable="yes">Global Search</attribute>
         <attribute name="description" translatable="yes">Display the global search</attribute>
         <attribute name="action">context.workbench.global-search</attribute>
@@ -23,6 +24,7 @@
       <attribute name="page" translatable="yes">Application</attribute>
       <attribute name="group" translatable="yes">Panels</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.workspace.panels.left.toggle</attribute>
         <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
         <attribute name="description" translatable="yes">Toggle the left panel in or out of view</attribute>
         <!-- translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL -->
@@ -31,6 +33,7 @@
         <attribute name="accel">F9</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.workspace.panels.right.toggle</attribute>
         <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
         <attribute name="description" translatable="yes">Toggle the right panel in or out of view</attribute>
         <!-- translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL -->
@@ -38,6 +41,7 @@
         <attribute name="action">workspace.panel.toggle-end</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.workspace.panels.bottom.toggle</attribute>
         <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
         <attribute name="description" translatable="yes">Toggle the bottom panel in or out of view</attribute>
         <attribute name="verb-icon">panel-bottom-symbolic</attribute>
@@ -52,11 +56,13 @@
       <attribute name="page" translatable="yes">Application</attribute>
       <attribute name="group" translatable="yes">Style</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.theme.dark</attribute>
         <attribute name="label" translatable="yes">Switch to Dark Mode</attribute>
         <attribute name="description" translatable="yes">Change style-scheme to dark variant</attribute>
         <attribute name="action">app.dark</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.theme.light</attribute>
         <attribute name="label" translatable="yes">Switch to Light Mode</attribute>
         <attribute name="description" translatable="yes">Change style-scheme to light variant</attribute>
         <attribute name="action">app.light</attribute>
@@ -69,6 +75,7 @@
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Diagnostics</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.project.diagnostics.show</attribute>
         <attribute name="label" translatable="yes">Display Build Diagnostics</attribute>
         <attribute name="description" translatable="yes">Display errors and warnings found during build</attribute>
         <attribute name="action">workspace.buildui.status.show</attribute>

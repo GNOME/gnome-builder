@@ -3,22 +3,23 @@
   <menu id="ide-greeter-workspace-menu">
     <section id="ide-greeter-workspace-menu-projects">
       <item>
-        <attribute name="id">ide-greeter-workspace-menu-new</attribute>
+        <attribute name="id">org.gnome.builder.project.create</attribute>
         <attribute name="label" translatable="yes">Create New Project…</attribute>
         <attribute name="action">greeter.page</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="before">ide-greeter-workspace-menu-clone</attribute>
+        <attribute name="before">org.gnome.builder.project.clone</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;n</attribute>
       </item>
     </section>
   </menu>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-primary-workspace-menu-new</attribute>
+        <attribute name="id">org.gnome.builder.project.create</attribute>
         <attribute name="label" translatable="yes">Create New Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="after">ide-primary-workspace-menu-open</attribute>
+        <attribute name="after">org.gnome.builder.project.open</attribute>
         <attribute name="description" translatable="yes">Create a new project from template</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;n</attribute>
       </item>
@@ -27,11 +28,11 @@
   <menu id="ide-editor-workspace-menu">
     <section id="ide-editor-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-editor-workspace-menu-new</attribute>
+        <attribute name="id">org.gnome.builder.project.create</attribute>
         <attribute name="label" translatable="yes">Create New Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
-        <attribute name="after">ide-editor-workspace-menu-open</attribute>
+        <attribute name="after">org.gnome.builder.project.open</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;n</attribute>
       </item>
     </section>

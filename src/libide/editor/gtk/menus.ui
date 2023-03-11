@@ -14,7 +14,7 @@
       <attribute name="page">ignore</attribute>
       <attribute name="group">ignore</attribute>
       <item>
-        <attribute name="id">ide-editor-workspace-menu-open</attribute>
+        <attribute name="id">org.gnome.builder.workspace.open</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
         <attribute name="action">context.workbench.open</attribute>
         <attribute name="accel">&lt;primary&gt;o</attribute>
@@ -27,7 +27,7 @@
       <attribute name="page">ignore</attribute>
       <attribute name="group">ignore</attribute>
       <item>
-        <attribute name="id">ide-editor-workspace-menu-preferences</attribute>
+        <attribute name="id">org.gnome.builder.preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
         <attribute name="accel">&lt;primary&gt;comma</attribute>
@@ -55,7 +55,7 @@
       <attribute name="page">ignore</attribute>
       <attribute name="group">ignore</attribute>
       <item>
-        <attribute name="id">ide-editor-workspace-menu-quit</attribute>
+        <attribute name="id">org.gnome.builder.quit</attribute>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="action">app.quit</attribute>
       </item>

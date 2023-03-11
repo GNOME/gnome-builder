@@ -8,7 +8,7 @@
     </section>
     <section id="ide-greeter-workspace-menu-projects">
       <item>
-        <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
+        <attribute name="id">org.gnome.builder.project.clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">greeter.page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
@@ -25,10 +25,10 @@
       <attribute name="page">ignore</attribute>
       <attribute name="group">ignore</attribute>
       <item>
-        <attribute name="id">ide-greeter-workspace-menu-preferences</attribute>
+        <attribute name="id">org.gnome.builder.preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
-        <attribute name="accel">&lt;primary&gt;comma</attribute>
+        <attribute name="accel">&lt;control&gt;comma</attribute>
       </item>
       <item>
         <attribute name="id">ide-greeter-workspace-menu-shortcuts</attribute>
@@ -52,7 +52,7 @@
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-primary-workspace-menu-open</attribute>
+        <attribute name="id">org.gnome.builder.project.open</attribute>
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
@@ -60,7 +60,7 @@
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;o</attribute>
       </item>
       <item>
-        <attribute name="id">ide-primary-workspace-menu-clone</attribute>
+        <attribute name="id">org.gnome.builder.project.clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
@@ -73,14 +73,14 @@
     </section>
     <section id="ide-editor-workspace-menu-projects-section">
       <item>
-        <attribute name="id">ide-editor-workspace-menu-open</attribute>
+        <attribute name="id">org.gnome.builder.project.open</attribute>
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;o</attribute>
       </item>
       <item>
-        <attribute name="id">ide-editor-workspace-menu-clone</attribute>
+        <attribute name="id">org.gnome.builder.project.clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'clone'</attribute>

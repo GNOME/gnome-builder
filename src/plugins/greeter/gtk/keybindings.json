@@ -1,1 +1,2 @@
-{ "trigger" : "<Control><Alt>o", "action" : "app.present-greeter-with-page", "args" : "''", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.project.open", "trigger" : "<Control><Alt>o", "action" : "app.present-greeter-with-page", "args" : "''", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.project.clone", "action" : "app.present-greeter-with-page", "args" : "'clone'", "phase" : "bubble" },
