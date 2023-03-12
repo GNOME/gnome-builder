@@ -25,6 +25,7 @@
 
 #include <libide-gui.h>
 
+#include "ide-application-private.h"
 #include "ide-shortcut-bundle-private.h"
 
 #include "gbp-shortcutui-shortcut.h"
@@ -34,7 +35,11 @@
 struct _GbpShortcutuiShortcut
 {
   GObject      parent_instance;
+
   GtkShortcut *shortcut;
+
+  const char  *title;
+  const char  *subtitle;
 };
 
 G_DEFINE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, G_TYPE_OBJECT)
@@ -50,6 +55,37 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_shortcutui_shortcut_constructed (GObject *object)
+{
+  GbpShortcutuiShortcut *self = (GbpShortcutuiShortcut *)object;
+  g_autofree char *description = NULL;
+  g_autofree char *label = NULL;
+  IdeMenuManager *menu_manager;
+  const char *id;
+  GMenu *menu;
+  guint position;
+
+  G_OBJECT_CLASS (gbp_shortcutui_shortcut_parent_class)->constructed (object);
+
+  id = GET_INFO (self->shortcut)->id;
+  menu_manager = IDE_APPLICATION_DEFAULT->menu_manager;
+  menu = ide_menu_manager_find_item_by_id (menu_manager, id, &position);
+
+  if (menu == NULL)
+    {
+      g_warning ("No menu information found for shortcut id \"%s\". "
+                 "Add to menu-search.", id);
+      return;
+    }
+
+  g_menu_model_get_item_attribute (G_MENU_MODEL (menu), position, "label", "s", &label);
+  g_menu_model_get_item_attribute (G_MENU_MODEL (menu), position, "description", "s", &description);
+
+  self->title = g_intern_string (label);
+  self->subtitle = g_intern_string (description);
+}
 
 static void
 gbp_shortcutui_shortcut_dispose (GObject *object)
@@ -120,6 +156,7 @@ gbp_shortcutui_shortcut_class_init (GbpShortcutuiShortcutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gbp_shortcutui_shortcut_constructed;
   object_class->dispose = gbp_shortcutui_shortcut_dispose;
   object_class->get_property = gbp_shortcutui_shortcut_get_property;
   object_class->set_property = gbp_shortcutui_shortcut_set_property;
@@ -168,9 +205,7 @@ gbp_shortcutui_shortcut_get_title (GbpShortcutuiShortcut *self)
 {
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
 
-  /* TODO: Get from menu info */
-
-  return NULL;
+  return self->title;
 }
 
 const char *
@@ -178,9 +213,7 @@ gbp_shortcutui_shortcut_get_subtitle (GbpShortcutuiShortcut *self)
 {
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
 
-  /* TODO: Get from menu info */
-
-  return NULL;
+  return self->subtitle;
 }
 
 static GtkShortcutTrigger *
