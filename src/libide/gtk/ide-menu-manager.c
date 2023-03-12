@@ -1,6 +1,6 @@
 /* ide-menu-manager.c
  *
- * Copyright (C) 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright (C) 2015-2023 Christian Hergert <chergert@redhat.com>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -720,4 +720,54 @@ ide_menu_manager_set_attribute_string (IdeMenuManager *self,
 
   g_menu_remove (menu, position);
   g_menu_insert_item (menu, position, item);
+}
+
+/**
+ * ide_menu_manager_find_item_by_id:
+ * @self: a #IdeMenuManager
+ * @id: the identifier of the menu item
+ * @position: (out): the position within the resulting menu
+ *
+ * Locates a menu item that matches @id and sets the position within
+ * the resulting #GMenu to @position.
+ *
+ * If no match is found, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): a #GMenu if successful; otherwise
+ *   %NULL and @position is unset.
+ */
+GMenu *
+ide_menu_manager_find_item_by_id (IdeMenuManager *self,
+                                  const char     *id,
+                                  guint          *position)
+{
+  GHashTableIter iter;
+  GMenu *menu = NULL;
+
+  g_return_val_if_fail (IDE_IS_MENU_MANAGER (self), NULL);
+
+  if (id == NULL)
+    return NULL;
+
+  g_hash_table_iter_init (&iter, self->models);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&menu))
+    {
+      guint n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autofree char *item_id = NULL;
+
+          if (g_menu_model_get_item_attribute (G_MENU_MODEL (menu), i, "id", "s", &item_id) &&
+              ide_str_equal0 (id, item_id))
+            {
+              if (position != NULL)
+                *position = i;
+              return menu;
+            }
+        }
+    }
+
+  return NULL;
 }

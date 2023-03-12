@@ -61,5 +61,9 @@ void                ide_menu_manager_set_attribute_string (IdeMenuManager  *self
                                                            guint            position,
                                                            const char      *attribute,
                                                            const char      *value);
+IDE_AVAILABLE_IN_44
+GMenu              *ide_menu_manager_find_item_by_id      (IdeMenuManager  *self,
+                                                           const char      *id,
+                                                           guint           *position);
 
 G_END_DECLS
