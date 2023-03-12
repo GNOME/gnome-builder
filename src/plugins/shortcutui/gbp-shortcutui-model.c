@@ -28,6 +28,7 @@
 #include "ide-shortcut-manager-private.h"
 
 #include "gbp-shortcutui-model.h"
+#include "gbp-shortcutui-shortcut.h"
 
 struct _GbpShortcutuiModel
 {
@@ -106,7 +107,7 @@ map_func (gpointer item,
 
   g_assert (GTK_IS_SHORTCUT (shortcut));
 
-  return NULL;
+  return gbp_shortcutui_shortcut_new (shortcut);
 }
 
 static void

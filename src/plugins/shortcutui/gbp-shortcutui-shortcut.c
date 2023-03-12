@@ -23,6 +23,10 @@
 
 #include "config.h"
 
+#include <libide-gui.h>
+
+#include "ide-shortcut-bundle-private.h"
+
 #include "gbp-shortcutui-shortcut.h"
 
 #define GET_INFO(o) ((IdeShortcut*)g_object_get_data(G_OBJECT(GTK_SHORTCUT(o)), "IDE_SHORTCUT"))
@@ -40,18 +44,12 @@ enum {
   PROP_ACCELERATOR,
   PROP_HAS_OVERRIDE,
   PROP_SHORTCUT,
-  PROP_SUBTILE,
+  PROP_SUBTITLE,
   PROP_TITLE,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
-
-GbpShortcutuiShortcut *
-gbp_shortcutui_shortcut_new (void)
-{
-  return g_object_new (GBP_TYPE_SHORTCUTUI_SHORTCUT, NULL);
-}
 
 static void
 gbp_shortcutui_shortcut_dispose (GObject *object)
@@ -74,7 +72,7 @@ gbp_shortcutui_shortcut_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_ACCELERATOR:
-      g_value_take_string (gbp_shortcutui_shortcut_dup_accelerator (self));
+      g_value_take_string (value, gbp_shortcutui_shortcut_dup_accelerator (self));
       break;
 
     case PROP_HAS_OVERRIDE:
@@ -137,14 +135,14 @@ gbp_shortcutui_shortcut_class_init (GbpShortcutuiShortcutClass *klass)
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
-    g_param_spec_title ("title", NULL, NULL,
+    g_param_spec_string ("title", NULL, NULL,
                         NULL,
                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SUBTITLE] =
-    g_param_spec_subtitle ("subtitle", NULL, NULL,
-                           NULL,
-                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+    g_param_spec_string ("subtitle", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -170,7 +168,9 @@ gbp_shortcutui_shortcut_get_title (GbpShortcutuiShortcut *self)
 {
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
 
-  return GET_INFO (self->shortcut)->title;
+  /* TODO: Get from menu info */
+
+  return NULL;
 }
 
 const char *
@@ -178,7 +178,9 @@ gbp_shortcutui_shortcut_get_subtitle (GbpShortcutuiShortcut *self)
 {
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
 
-  return GET_INFO (self->shortcut)->subtitle;
+  /* TODO: Get from menu info */
+
+  return NULL;
 }
 
 static GtkShortcutTrigger *

@@ -30,7 +30,7 @@ G_DECLARE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, GBP, SHORT
 
 GbpShortcutuiShortcut *gbp_shortcutui_shortcut_new             (GtkShortcut           *shortcut);
 gboolean               gbp_shortcutui_shortcut_has_override    (GbpShortcutuiShortcut *self);
-const char            *gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut *self);
+char                  *gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut *self);
 void                   gbp_shortcutui_shortcut_set_accelerator (GbpShortcutuiShortcut *self,
                                                                 const char            *accelerator);
 const char            *gbp_shortcutui_shortcut_get_title       (GbpShortcutuiShortcut *self);

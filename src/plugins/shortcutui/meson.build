@@ -5,6 +5,7 @@ plugins_sources += files([
   'gbp-shortcutui-dialog.c',
   'gbp-shortcutui-model.c',
   'gbp-shortcutui-row.c',
+  'gbp-shortcutui-shortcut.c',
   'gbp-shortcutui-tweaks-addin.c',
 ])
 
