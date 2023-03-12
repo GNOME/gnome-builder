@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-06 12:58+0000\n"
-"PO-Revision-Date: 2023-03-06 22:26+0100\n"
+"POT-Creation-Date: 2023-03-12 21:45+0000\n"
+"PO-Revision-Date: 2023-03-13 00:21+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -835,8 +835,8 @@ msgstr "Documento"
 #: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplicación"
@@ -853,7 +853,7 @@ msgstr "Páxinas"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Editor de texto"
@@ -989,6 +989,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "Buscar e reemprazar (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Pechar a busca"
 
@@ -1001,15 +1002,18 @@ msgid "Replace _All"
 msgstr "Substituír _todo"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Usar _expresións regulares"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Coincidir maiúsculas e minúsculas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Coincidir coa palabra enteira"
 
@@ -1593,7 +1597,7 @@ msgstr "Navegando a web"
 #: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1678,7 +1682,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Trocar panel esquerdo (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Trocar panel dereito"
 
@@ -1784,7 +1788,7 @@ msgstr "Dispositivos e simuladores"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -2036,7 +2040,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Terminal sen título"
 
@@ -2057,24 +2061,15 @@ msgstr "Terminal sen título"
 msgid "Search runtimes"
 msgstr "Resultados runtimes"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
-"Mostrar ou ocultar as opcións de busca como a sensibilidade a maiúsculas"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "Moverse á anterior coincidencia"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Expresión regular"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "Ir á seguinte coincidencia"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Sensibilidade a maiúsculas"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Coincidir coa palabra enteira"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Volver ao inicio"
 
@@ -2162,7 +2157,7 @@ msgstr "Configurando o proxecto"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2609,7 +2604,7 @@ msgid "Show Inspector"
 msgstr "Mostrar Inspector"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Estilo"
 
@@ -3012,6 +3007,14 @@ msgstr "Declaración"
 msgid "Project Symbols"
 msgstr "Símbolos do proxecto"
 
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Copiar como imaxe"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy selected text as an image"
+msgstr "Cortar o texto seleccionado como unha imaxe"
+
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
@@ -3235,12 +3238,12 @@ msgid "Create New Project"
 msgstr "Crear novo proxecto"
 
 #: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:19
+#: src/plugins/create-project/gtk/menus.ui:32
 msgid "Create New Project…"
 msgstr "Crear novo proxecto…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:23
 msgid "Create a new project from template"
 msgstr "Crea un novo proxecto desde un modelo"
 
@@ -3552,9 +3555,8 @@ msgid "D-Bus Inspector…"
 msgstr "Inspector de D-Bus…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
-#, fuzzy
 msgid "Dub Run"
-msgstr "Execución ficticia"
+msgstr "frExecución ficticia"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
@@ -3674,7 +3676,7 @@ msgstr "Novo _ficheiro"
 msgid "_Open File…"
 msgstr "_Abrir ficheiro…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Abrir en novo marco"
 
@@ -4468,7 +4470,7 @@ msgstr "Correo electrónico"
 msgid "go run"
 msgstr "go run"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Inicializando o proxecto"
@@ -4477,7 +4479,7 @@ msgstr "Inicializando o proxecto"
 msgid "Gradle Run"
 msgstr "Execución de Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Mostra unha xanela de benvida"
 
@@ -4625,69 +4627,69 @@ msgstr "Execución de Maven"
 msgid "Actions"
 msgstr "Accións"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Busca global"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "Mostra a busca global"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Paneis"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Trocar panel esquerdo"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "Trocar panel esquerdo cara dentro ou fóra da vista"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "Trocar panel dereito cara dentro ou fóra da vista"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Trocar panel inferior"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Trocar panel inferior cara dentro ou fóra da vista"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Trocar ao modo escuro"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "Cambiar o esquema de estilo á variante escura"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Trocar ao modo claro"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "Cambiar o esquema de estilo á variante clara"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Mostrar diagnósticos da construción"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "Mostrar erros e avisos atopados durante a construción"
 
@@ -5104,7 +5106,7 @@ msgid "Files will be copied in a moment"
 msgstr "Copiaranse os ficheiros nun momento"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Filtro"
 
@@ -5804,31 +5806,31 @@ msgstr "Saída da aplicación"
 msgid "Process completed"
 msgstr "Proceso completado"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "_Novo Terminal"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "Abrir unha nova terminal no sistema operativo anfitrión"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "_Novo Terminal de construción"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "Abrir unha nova termina no cano de construción do proxecto"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "_Novo Terminal de construción"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Abrir unha nova terminal no ambiente de execución do proxecto"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Dividir"
 
@@ -6174,6 +6176,19 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr ""
+#~ "Mostrar ou ocultar as opcións de busca como a sensibilidade a maiúsculas"
+
+#~ msgid "Regex"
+#~ msgstr "Expresión regular"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Sensibilidade a maiúsculas"
+
+#~ msgid "Match whole word"
+#~ msgstr "Coincidir coa palabra enteira"
 
 #~ msgid "An absolute file-system path to the sysroot."
 #~ msgstr "Unha ruta de sistema de ficheiros absoluta ao sysroot."
@@ -7479,9 +7494,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~ msgid "Find and replace"
 #~ msgstr "Buscar e substituír"
 
-#~ msgid "Move to the previous match"
-#~ msgstr "Moverse á anterior coincidencia"
-
 #~ msgid "Move to the next error"
 #~ msgstr "Moverse ao seguinte erro"
 
@@ -7801,14 +7813,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "Limpar realzado"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Copiar e pegar"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Cortar o texto seleccionado ao portapapeis"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
