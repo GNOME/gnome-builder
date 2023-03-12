@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-03 01:14+0000\n"
-"PO-Revision-Date: 2023-03-03 08:51+0100\n"
+"POT-Creation-Date: 2023-03-10 15:41+0000\n"
+"PO-Revision-Date: 2023-03-12 20:47+0100\n"
 "Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -460,6 +460,8 @@ msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
+"Das Ausklappen von Schnipseln aus dem Editor heraus ermöglichen durch "
+"Drücken von »Tab« nach dem Schnipsel-Auslöser."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
@@ -548,7 +550,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
-msgstr ""
+msgstr "Der Oberflächenstil, um Seiten zu ändern"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
@@ -587,6 +589,8 @@ msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
+"Die Ketteninstallationsphase ausführen, bevor das Projekt ausgeführt wird. "
+"Verwenden Sie dies nur, wenn Sie wissen, was Sie mit Ihrem Projekt tun."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -627,6 +631,8 @@ msgstr "Ausführliche Protokollierung"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
+"Legt fest, ob »G_MESSAGES_DEBUG=all« verwendet werden soll, wenn die "
+"Zielanwendung ausgeführt wird"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -4884,10 +4890,9 @@ msgid "Cargo Command"
 msgstr "Cargo-Befehl"
 
 #: src/plugins/rust-analyzer/tweaks.ui:20
-#, fuzzy
-#| msgid "the default cargo command"
 msgid "The default cargo command to run with rust-analyzer"
-msgstr "Der vorgegebene Cargo-Befehl"
+msgstr ""
+"Der vorgegebene Cargo-Befehl, der mit »rust-analyzer« ausgeführt werden soll"
 
 #: src/plugins/rust-analyzer/tweaks.ui:45
 msgid "Features"
@@ -4899,7 +4904,7 @@ msgstr "Proc-Makros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the Proc Macros feature of rust-analyzer"
-msgstr ""
+msgstr "Aktiviert die Proc-Makros-Funktionen von »rust-analyzer«"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
 msgid "Cargo Build Scripts"
@@ -4907,17 +4912,20 @@ msgstr "Cargo-Erstellungsskripte"
 
 #: src/plugins/rust-analyzer/tweaks.ui:62
 msgid "Run build scripts (build.rs) for more precise code analysis"
-msgstr ""
+msgstr "Erstellungsskripte (build.rs) für eine genauere Codeanalyse ausführen"
 
 #: src/plugins/rust-analyzer/tweaks.ui:74
 msgid "Rustfmt Range Formatting"
-msgstr ""
+msgstr "Bereichsformatierung von »rustfmt«"
 
 #: src/plugins/rust-analyzer/tweaks.ui:75
 msgid ""
 "Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
 "option is unstable and only available on nightly builds of the Rust SDK."
 msgstr ""
+"Aktiviert die Verwendung der instabilen Bereichsformatierung von »rustfmt«. "
+"Diese Funktion von »rustfmt« ist instabil und nur in den »nightly«-"
+"Erstellungen des Rust-SDKs verfügbar."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
