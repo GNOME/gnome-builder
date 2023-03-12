@@ -75,50 +75,50 @@ transform_title_with_fallback (GBinding     *binding,
   return TRUE;
 }
 
-static gboolean
-transform_cairo_surface_to_gicon (GBinding     *binding,
-                                  const GValue *from_value,
-                                  GValue       *to_value,
-                                  gpointer      user_data)
+static GIcon *
+favicon_get_from_texture_scaled (GdkTexture *texture,
+                                 int         width,
+                                 int         height)
 {
-  IdeWebkitPage *self = user_data;
-  cairo_surface_t *surface;
-  GdkPixbuf *pixbuf;
+  g_autoptr (GdkPixbuf) pixbuf = NULL;
   int favicon_width;
   int favicon_height;
-  int width;
-  int height;
+
+  if (!texture)
+    return NULL;
+
+  /* A size of (0, 0) means the original size of the favicon. */
+  if (width == 0 && height == 0)
+    return G_ICON (g_object_ref (texture));
+
+  favicon_width = gdk_texture_get_width (texture);
+  favicon_height = gdk_texture_get_height (texture);
+  if (favicon_width == width && favicon_height == height)
+    return G_ICON (g_object_ref (texture));
+
+  pixbuf = gdk_pixbuf_get_from_texture (texture);
+  return G_ICON (gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR));
+}
+
+static gboolean
+transform_texture_to_gicon (GBinding     *binding,
+                            const GValue *from_value,
+                            GValue       *to_value,
+                            gpointer      user_data)
+{
+  IdeWebkitPage *self = user_data;
+  GdkTexture *texture;
 
   g_assert (G_IS_BINDING (binding));
-  g_assert (G_VALUE_HOLDS_POINTER (from_value));
+  g_assert (G_VALUE_HOLDS (from_value, GDK_TYPE_TEXTURE));
   g_assert (G_VALUE_HOLDS_OBJECT (to_value));
   g_assert (IDE_IS_WEBKIT_PAGE (self));
 
-  /* No ownership transfer */
-  surface = g_value_get_pointer (from_value);
-
-  if (surface == NULL)
-    {
-      g_value_take_object (to_value, g_themed_icon_new ("web-browser-symbolic"));
-      return TRUE;
-    }
-
-  width = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
-  height = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
-  favicon_width = cairo_image_surface_get_width (surface);
-  favicon_height = cairo_image_surface_get_height (surface);
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, favicon_width, favicon_height);
-
-  if ((favicon_width != width || favicon_height != height))
-    {
-      GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR);
-      g_object_unref (pixbuf);
-      pixbuf = scaled_pixbuf;
-    }
-
-  g_assert (!pixbuf || G_IS_ICON (pixbuf));
-
-  g_value_take_object (to_value, pixbuf);
+  if ((texture = g_value_get_object (from_value)))
+    g_value_take_object (to_value,
+                         favicon_get_from_texture_scaled (texture,
+                                                          16 * gtk_widget_get_scale_factor (GTK_WIDGET (self)),
+                                                          16 * gtk_widget_get_scale_factor (GTK_WIDGET (self))));
 
   return TRUE;
 }
@@ -470,7 +470,7 @@ ide_webkit_page_init (IdeWebkitPage *self)
                                transform_title_with_fallback,
                                NULL, self, NULL);
   g_object_bind_property_full (priv->web_view, "favicon", self, "icon", 0,
-                               transform_cairo_surface_to_gicon,
+                               transform_texture_to_gicon,
                                NULL, self, NULL);
 
   list = webkit_web_view_get_back_forward_list (priv->web_view);
