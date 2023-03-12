@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-03 21:35+0000\n"
-"PO-Revision-Date: 2023-03-04 21:51+0200\n"
+"POT-Creation-Date: 2023-03-10 19:19+0000\n"
+"PO-Revision-Date: 2023-03-12 22:06+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -961,6 +961,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "Ieškoti ir pakeisti (vald+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Užverti paiešką"
 
@@ -973,15 +974,18 @@ msgid "Replace _All"
 msgstr "Pakeisti _viską"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Naudoti re_guliariąsias išraiškas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Skirti _raidžių registrą"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Ieškoti pilnų žodžių"
 
@@ -2002,7 +2006,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Nepavadintas terminalas"
 
@@ -2023,23 +2027,15 @@ msgstr "Nepavadintas terminalas"
 msgid "Search runtimes"
 msgstr "Ieškoti vykdymo aplinkų"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr "Rodyti arba slėpti tokius parametrus kaip registro skyrimas"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "Eiti į ankstesnę atitiktį"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Reguliarusis reiškinys"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "Eiti į kitą atitiktį"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Skirti raidžių registrą"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Ieškoti pilnų žodžių"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Apsupti"
 
@@ -2127,7 +2123,7 @@ msgstr "Konfigūruojamas projektas"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2965,6 +2961,14 @@ msgstr "Aprašas"
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
 msgid "Project Symbols"
 msgstr "Projekto simboliai"
+
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Kopijuoti kaip paveikslėlį"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy selected text as an image"
+msgstr "Kopijuoti pažymėtą tekstą kaip paveikslėlį"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -4399,7 +4403,7 @@ msgstr "El. paštas"
 msgid "go run"
 msgstr "go run"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Vykdomos projekto pakopos"
@@ -4770,24 +4774,28 @@ msgstr "Tuščias Meson projektas"
 msgid "An empty Meson project skeleton"
 msgstr "Tuščio Meson projekto skeletas"
 
-#: src/plugins/messages/gbp-messages-panel.c:47
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
 msgid "Debug"
 msgstr "Derinti"
 
-#: src/plugins/messages/gbp-messages-panel.c:49
+#: src/plugins/messages/gbp-messages-panel.c:104
 msgid "Info"
 msgstr "Informacija"
 
-#: src/plugins/messages/gbp-messages-panel.c:51
-#: src/plugins/messages/gbp-messages-panel.ui:111
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
 msgstr "Pranešimas"
 
-#: src/plugins/messages/gbp-messages-panel.c:53
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
 msgid "Warning"
 msgstr "Įspėjimas"
 
-#: src/plugins/messages/gbp-messages-panel.c:55
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
 msgstr "Kritinė"
 
@@ -4795,15 +4803,16 @@ msgstr "Kritinė"
 msgid "Messages"
 msgstr "Pranešimai"
 
-#: src/plugins/messages/gbp-messages-panel.ui:21
+#: src/plugins/messages/gbp-messages-panel.ui:25
 msgid "Time"
 msgstr "Laikas"
 
-#: src/plugins/messages/gbp-messages-panel.ui:53
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
 msgstr "Rimtumas"
 
-#: src/plugins/messages/gbp-messages-panel.ui:83
+#: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
 msgstr "Skiltis"
 
@@ -5031,7 +5040,7 @@ msgid "Files will be copied in a moment"
 msgstr "Failai tuoj bus nukopijuoti"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Filtruoti"
 
@@ -6088,6 +6097,18 @@ msgstr "Nepavyko sukurti XML medžio."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr "Rodyti arba slėpti tokius parametrus kaip registro skyrimas"
+
+#~ msgid "Regex"
+#~ msgstr "Reguliarusis reiškinys"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Skirti raidžių registrą"
+
+#~ msgid "Match whole word"
+#~ msgstr "Ieškoti pilnų žodžių"
 
 #~ msgid "An absolute file-system path to the sysroot."
 #~ msgstr "Absoliutus failų sistemos kelias iki sysroot."
@@ -7297,14 +7318,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 #~ msgstr "Išvalyti paryškinimą"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Kopijuoti ir įdėti"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Iškirpti pažymėtą tekstą į iškarpinę"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
 #~ msgstr "Įdėti tekstą iš iškarpinės"
 
@@ -7549,9 +7562,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "Find and replace"
 #~ msgstr "Rasti ir pakeisti"
-
-#~ msgid "Move to the previous match"
-#~ msgstr "Peršokti į ankstesnį atitikmenį"
 
 #~ msgid "Move to the next error"
 #~ msgstr "Eiti prie kitos klaidos"
