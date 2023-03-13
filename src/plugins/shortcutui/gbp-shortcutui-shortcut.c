@@ -57,6 +57,19 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_shortcutui_shortcut_notify_trigger_cb (GbpShortcutuiShortcut *self,
+                                           GParamSpec            *pspec,
+                                           GtkShortcut           *shortcut)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHORTCUTUI_SHORTCUT (self));
+  g_assert (GTK_IS_SHORTCUT (shortcut));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_OVERRIDE]);
+}
+
+static void
 gbp_shortcutui_shortcut_constructed (GObject *object)
 {
   GbpShortcutuiShortcut *self = (GbpShortcutuiShortcut *)object;
@@ -68,6 +81,13 @@ gbp_shortcutui_shortcut_constructed (GObject *object)
   guint position;
 
   G_OBJECT_CLASS (gbp_shortcutui_shortcut_parent_class)->constructed (object);
+
+  if (self->shortcut == NULL)
+    {
+      g_critical ("Attempt to create %s without a shortcut!",
+                  G_OBJECT_TYPE_NAME (self));
+      return;
+    }
 
   id = GET_INFO (self->shortcut)->id;
   menu_manager = IDE_APPLICATION_DEFAULT->menu_manager;
@@ -85,6 +105,12 @@ gbp_shortcutui_shortcut_constructed (GObject *object)
 
   self->title = g_intern_string (label);
   self->subtitle = g_intern_string (description);
+
+  g_signal_connect_object (self->shortcut,
+                           "notify::trigger",
+                           G_CALLBACK (gbp_shortcutui_shortcut_notify_trigger_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -219,9 +245,12 @@ gbp_shortcutui_shortcut_get_subtitle (GbpShortcutuiShortcut *self)
 static GtkShortcutTrigger *
 get_trigger (GbpShortcutuiShortcut *self)
 {
-  /* TODO: Lookup override */
+  GtkShortcutTrigger *trigger = gtk_shortcut_get_trigger (self->shortcut);
 
-  return GET_INFO (self->shortcut)->trigger;
+  if (GTK_IS_NEVER_TRIGGER (trigger))
+    return NULL;
+
+  return trigger;
 }
 
 char *
