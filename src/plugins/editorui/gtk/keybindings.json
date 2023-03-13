@@ -6,3 +6,5 @@
 { "trigger" : "<Control>s", "action" : "page.save", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>s", "action" : "page.save-as", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Control>n", "action" : "workspace.editorui.page.new", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.editor.search.move-next", "trigger" : "<Control>g", "action" : "page.search.move-next", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.editor.search.move-previous", "trigger" : "<Control><Shift>g", "action" : "page.search.move-previous", "when" : "canEdit()", "phase" : "bubble" },
