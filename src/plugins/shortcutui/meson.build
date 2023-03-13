@@ -1,7 +1,5 @@
 plugins_sources += files([
   'shortcutui-plugin.c',
-  'gbp-shortcutui-action.c',
-  'gbp-shortcutui-action-model.c',
   'gbp-shortcutui-dialog.c',
   'gbp-shortcutui-model.c',
   'gbp-shortcutui-row.c',
