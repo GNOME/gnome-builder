@@ -38,8 +38,10 @@ struct _GbpShortcutuiShortcut
 
   GtkShortcut *shortcut;
 
-  const char  *title;
+  const char  *group;
+  const char  *page;
   const char  *subtitle;
+  const char  *title;
 };
 
 G_DEFINE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, G_TYPE_OBJECT)
@@ -47,7 +49,9 @@ G_DEFINE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, G_TYPE_OBJE
 enum {
   PROP_0,
   PROP_ACCELERATOR,
+  PROP_GROUP,
   PROP_HAS_OVERRIDE,
+  PROP_PAGE,
   PROP_SHORTCUT,
   PROP_SUBTITLE,
   PROP_TITLE,
@@ -137,8 +141,16 @@ gbp_shortcutui_shortcut_get_property (GObject    *object,
       g_value_take_string (value, gbp_shortcutui_shortcut_dup_accelerator (self));
       break;
 
+    case PROP_GROUP:
+      g_value_set_static_string (value, self->group);
+      break;
+
     case PROP_HAS_OVERRIDE:
       g_value_set_boolean (value, gbp_shortcutui_shortcut_has_override (self));
+      break;
+
+    case PROP_PAGE:
+      g_value_set_static_string (value, self->page);
       break;
 
     case PROP_TITLE:
@@ -168,6 +180,14 @@ gbp_shortcutui_shortcut_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_GROUP:
+      self->group = g_intern_string (g_value_get_string (value));
+      break;
+
+    case PROP_PAGE:
+      self->page = g_intern_string (g_value_get_string (value));
+      break;
+
     case PROP_SHORTCUT:
       self->shortcut = g_value_dup_object (value);
       break;
@@ -207,6 +227,16 @@ gbp_shortcutui_shortcut_class_init (GbpShortcutuiShortcutClass *klass)
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_PAGE] =
+    g_param_spec_string ("page", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_GROUP] =
+    g_param_spec_string ("group", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -216,12 +246,16 @@ gbp_shortcutui_shortcut_init (GbpShortcutuiShortcut *self)
 }
 
 GbpShortcutuiShortcut *
-gbp_shortcutui_shortcut_new (GtkShortcut *shortcut)
+gbp_shortcutui_shortcut_new (GtkShortcut *shortcut,
+                             const char  *page,
+                             const char  *group)
 {
   g_return_val_if_fail (GTK_IS_SHORTCUT (shortcut), NULL);
   g_return_val_if_fail (GET_INFO (shortcut) != NULL, NULL);
 
   return g_object_new (GBP_TYPE_SHORTCUTUI_SHORTCUT,
+                       "group", group,
+                       "page", page,
                        "shortcut", shortcut,
                        NULL);
 }

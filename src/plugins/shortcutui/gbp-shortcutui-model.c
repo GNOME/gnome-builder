@@ -36,7 +36,15 @@ struct _GbpShortcutuiModel
   IdeContext         *context;
   GtkFilterListModel *filter_model;
   GtkMapListModel    *map_model;
+  GHashTable         *id_to_section_info;
 };
+
+typedef struct _SectionInfo
+{
+  const char *id;
+  const char *page;
+  const char *group;
+} SectionInfo;
 
 enum {
   PROP_0,
@@ -104,10 +112,58 @@ map_func (gpointer item,
           gpointer user_data)
 {
   g_autoptr(GtkShortcut) shortcut = item;
+  GbpShortcutuiModel *self = user_data;
+  IdeShortcut *state;
+  SectionInfo *section_info;
+  const char *page = NULL;
+  const char *group = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_IS_SHORTCUT (shortcut));
+  g_assert (GBP_IS_SHORTCUTUI_MODEL (self));
 
-  return gbp_shortcutui_shortcut_new (shortcut);
+  state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT");
+
+  g_assert (state != NULL);
+  g_assert (state->id != NULL);
+
+  if ((section_info = g_hash_table_lookup (self->id_to_section_info, state->id)))
+    {
+      page = section_info->page;
+      group = section_info->group;
+    }
+
+  return gbp_shortcutui_shortcut_new (shortcut, page, group);
+}
+
+static void
+gbp_shortcutui_model_info_foreach_cb (const IdeShortcutInfo *info,
+                                      gpointer               user_data)
+{
+  GHashTable *id_to_section_info = user_data;
+  SectionInfo *section_info;
+  const char *id;
+  const char *page;
+  const char *group;
+
+  if (!(id = ide_shortcut_info_get_id (info)))
+    return;
+
+  if (!(section_info = g_hash_table_lookup (id_to_section_info, id)))
+    {
+      section_info = g_new0 (SectionInfo, 1);
+      section_info->id = g_intern_string (id);
+      g_hash_table_insert (id_to_section_info, (gpointer)section_info->id, section_info);
+    }
+
+  page = ide_shortcut_info_get_page (info);
+  group = ide_shortcut_info_get_group (info);
+
+  if (section_info->page == NULL && page != NULL)
+    section_info->page = g_intern_string (page);
+
+  if (section_info->group == NULL && group != NULL)
+    section_info->group = g_intern_string (group);
 }
 
 static void
@@ -122,7 +178,13 @@ gbp_shortcutui_model_constructed (GObject *object)
   if (self->context == NULL)
     return;
 
+  self->id_to_section_info = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
+
   shortcuts = ide_shortcut_manager_from_context (self->context);
+
+  ide_shortcut_info_foreach (G_LIST_MODEL (shortcuts),
+                             gbp_shortcutui_model_info_foreach_cb,
+                             self->id_to_section_info);
 
   custom = GTK_FILTER (gtk_custom_filter_new (filter_func, NULL, NULL));
   self->filter_model = gtk_filter_list_model_new (G_LIST_MODEL (shortcuts),
@@ -143,6 +205,7 @@ gbp_shortcutui_model_dispose (GObject *object)
 {
   GbpShortcutuiModel *self = (GbpShortcutuiModel *)object;
 
+  g_clear_pointer (&self->id_to_section_info, g_hash_table_unref);
   g_clear_object (&self->context);
   g_clear_object (&self->filter_model);
   g_clear_object (&self->map_model);

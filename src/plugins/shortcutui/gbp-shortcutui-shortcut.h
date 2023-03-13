@@ -28,7 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, GBP, SHORTCUTUI_SHORTCUT, GObject)
 
-GbpShortcutuiShortcut *gbp_shortcutui_shortcut_new             (GtkShortcut           *shortcut);
+GbpShortcutuiShortcut *gbp_shortcutui_shortcut_new             (GtkShortcut           *shortcut,
+                                                                const char            *page,
+                                                                const char            *group);
 gboolean               gbp_shortcutui_shortcut_has_override    (GbpShortcutuiShortcut *self);
 char                  *gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut *self);
 void                   gbp_shortcutui_shortcut_set_accelerator (GbpShortcutuiShortcut *self,
