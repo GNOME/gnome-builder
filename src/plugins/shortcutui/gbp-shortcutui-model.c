@@ -112,7 +112,7 @@ map_func (gpointer item,
           gpointer user_data)
 {
   g_autoptr(GtkShortcut) shortcut = item;
-  GbpShortcutuiModel *self = user_data;
+  GHashTable *id_to_section_info = user_data;
   IdeShortcut *state;
   SectionInfo *section_info;
   const char *page = NULL;
@@ -120,14 +120,14 @@ map_func (gpointer item,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_IS_SHORTCUT (shortcut));
-  g_assert (GBP_IS_SHORTCUTUI_MODEL (self));
+  g_assert (id_to_section_info != NULL);
 
   state = g_object_get_data (G_OBJECT (shortcut), "IDE_SHORTCUT");
 
   g_assert (state != NULL);
   g_assert (state->id != NULL);
 
-  if ((section_info = g_hash_table_lookup (self->id_to_section_info, state->id)))
+  if ((section_info = g_hash_table_lookup (id_to_section_info, state->id)))
     {
       page = section_info->page;
       group = section_info->group;
@@ -191,7 +191,9 @@ gbp_shortcutui_model_constructed (GObject *object)
                                                   g_steal_pointer (&custom));
 
   self->map_model = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (self->filter_model)),
-                                            map_func, NULL, NULL);
+                                            map_func,
+                                            g_hash_table_ref (self->id_to_section_info),
+                                            (GDestroyNotify)g_hash_table_unref);
 
   g_signal_connect_object (self->map_model,
                            "items-changed",
@@ -264,7 +266,7 @@ gbp_shortcutui_model_class_init (GbpShortcutuiModelClass *klass)
   properties[PROP_CONTEXT] =
     g_param_spec_object ("context", NULL, NULL,
                          IDE_TYPE_CONTEXT,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

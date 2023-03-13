@@ -32,8 +32,4 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GBP, SHORTCUTUI_DIALOG, GtkWindow)
 
-void gbp_shortcutui_dialog_set_model (GbpShortcutuiDialog *self,
-                                      GListModel          *model,
-                                      IdeShortcutObserver *observer);
-
 G_END_DECLS

@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 
 #include "ide-application-private.h"
@@ -38,11 +40,11 @@ struct _GbpShortcutuiShortcut
 
   GtkShortcut *shortcut;
   char        *search_text;
+  char        *title;
 
   const char  *group;
   const char  *page;
   const char  *subtitle;
-  const char  *title;
 };
 
 G_DEFINE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, G_TYPE_OBJECT)
@@ -73,6 +75,14 @@ gbp_shortcutui_shortcut_notify_trigger_cb (GbpShortcutuiShortcut *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_OVERRIDE]);
+}
+
+static char *
+strip_underline (const char *str)
+{
+  GString *gstr = g_string_new (str);
+  g_string_replace (gstr, "_", "", 0);
+  return g_string_free (gstr, FALSE);
 }
 
 static void
@@ -109,7 +119,7 @@ gbp_shortcutui_shortcut_constructed (GObject *object)
   g_menu_model_get_item_attribute (G_MENU_MODEL (menu), position, "label", "s", &label);
   g_menu_model_get_item_attribute (G_MENU_MODEL (menu), position, "description", "s", &description);
 
-  self->title = g_intern_string (label);
+  self->title = strip_underline (label);
   self->subtitle = g_intern_string (description);
   self->search_text = g_strdup_printf ("%s %s %s %s",
                                        self->page ? self->page : "",
@@ -131,6 +141,7 @@ gbp_shortcutui_shortcut_dispose (GObject *object)
 
   g_clear_object (&self->shortcut);
   g_clear_pointer (&self->search_text, g_free);
+  g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (gbp_shortcutui_shortcut_parent_class)->dispose (object);
 }
@@ -150,7 +161,7 @@ gbp_shortcutui_shortcut_get_property (GObject    *object,
       break;
 
     case PROP_GROUP:
-      g_value_set_static_string (value, self->group);
+      g_value_set_string (value, gbp_shortcutui_shortcut_get_group (self));
       break;
 
     case PROP_HAS_OVERRIDE:
@@ -158,7 +169,7 @@ gbp_shortcutui_shortcut_get_property (GObject    *object,
       break;
 
     case PROP_PAGE:
-      g_value_set_static_string (value, self->page);
+      g_value_set_string (value, gbp_shortcutui_shortcut_get_page (self));
       break;
 
     case PROP_TITLE:
@@ -218,6 +229,11 @@ gbp_shortcutui_shortcut_class_init (GbpShortcutuiShortcutClass *klass)
   object_class->dispose = gbp_shortcutui_shortcut_dispose;
   object_class->get_property = gbp_shortcutui_shortcut_get_property;
   object_class->set_property = gbp_shortcutui_shortcut_set_property;
+
+  properties [PROP_ACCELERATOR] =
+    g_param_spec_string ("accelerator", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SHORTCUT] =
     g_param_spec_object ("shortcut", NULL, NULL,
@@ -329,4 +345,53 @@ gbp_shortcutui_shortcut_has_override (GbpShortcutuiShortcut *self)
   trigger = get_trigger (self);
 
   return trigger != GET_INFO (self->shortcut)->trigger;
+}
+
+void
+gbp_shortcutui_shortcut_override (GbpShortcutuiShortcut *self,
+                                  const char            *accelerator)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self));
+
+  g_debug ("TODO: override %s to %s",
+           GET_INFO (self->shortcut)->id,
+           accelerator);
+
+  IDE_EXIT;
+}
+
+const char *
+gbp_shortcutui_shortcut_get_page (GbpShortcutuiShortcut *self)
+{
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
+
+  return self->page ? self->page : _("Other");
+}
+
+const char *
+gbp_shortcutui_shortcut_get_group (GbpShortcutuiShortcut *self)
+{
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), NULL);
+
+  return self->group ? self->group : _("Other");
+}
+
+int
+gbp_shortcutui_shortcut_compare (const GbpShortcutuiShortcut *a,
+                                 const GbpShortcutuiShortcut *b)
+{
+  const char *page_a = a->page ? a->page : _("Other");
+  const char *page_b = b->page ? b->page : _("Other");
+  const char *group_a = a->group ? a->group : _("Other");
+  const char *group_b = b->group ? b->group : _("Other");
+  int r;
+
+  r = g_strcmp0 (page_a, page_b);
+
+  if (r == 0)
+    r = g_strcmp0 (group_a, group_b);
+
+  return r;
 }

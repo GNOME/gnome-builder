@@ -2,8 +2,13 @@
 <interface>
   <template class="GbpShortcutuiRow" parent="AdwActionRow">
     <child type="suffix">
-      <object class="GtkShortcutLabel" id="shortcut">
+      <object class="GtkShortcutLabel" id="label">
         <property name="valign">center</property>
+        <binding name="accelerator">
+          <lookup name="accelerator" type="GbpShortcutuiShortcut">
+            <lookup name="shortcut">GbpShortcutuiRow</lookup>
+          </lookup>
+        </binding>
       </object>
     </child>
   </template>

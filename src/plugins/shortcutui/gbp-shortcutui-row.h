@@ -22,7 +22,7 @@
 
 #include <adwaita.h>
 
-#include "gbp-shortcutui-action.h"
+#include "gbp-shortcutui-shortcut.h"
 
 G_BEGIN_DECLS
 
@@ -30,9 +30,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiRow, gbp_shortcutui_row, GBP, SHORTCUTUI_ROW, AdwActionRow)
 
-const char          *gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self);
-GbpShortcutuiAction *gbp_shortcutui_row_get_action      (GbpShortcutuiRow *self);
-void                 gbp_shortcutui_row_update_header   (GbpShortcutuiRow *self,
-                                                         GbpShortcutuiRow *before);
+GbpShortcutuiRow      *gbp_shortcutui_row_new           (GbpShortcutuiShortcut *shortcut);
+GbpShortcutuiShortcut *gbp_shortcutui_row_get_shortcut  (GbpShortcutuiRow      *self);
+void                   gbp_shortcutui_row_update_header (GbpShortcutuiRow      *self,
+                                                         GbpShortcutuiRow      *before);
 
 G_END_DECLS

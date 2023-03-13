@@ -46,8 +46,6 @@ gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
 {
   g_autoptr(IdeShortcutManager) temp_manager = NULL;
   GbpShortcutuiDialog *dialog;
-  IdeShortcutObserver *observer;
-  IdeShortcutManager *manager;
   IdeContext *context;
   GtkRoot *root;
 
@@ -57,15 +55,10 @@ gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
   g_assert (ADW_IS_ACTION_ROW (row));
 
   context = ide_widget_get_context (GTK_WIDGET (row));
+
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  if (context != NULL)
-    manager = ide_shortcut_manager_from_context (context);
-  else
-    manager = temp_manager = g_object_new (IDE_TYPE_SHORTCUT_MANAGER, NULL);
-
-  observer = ide_shortcut_manager_get_observer (manager);
-  g_assert (IDE_IS_SHORTCUT_OBSERVER (observer));
+  g_print ("Context: %p\n", context);
 
   root = gtk_widget_get_root (GTK_WIDGET (row));
   dialog = g_object_new (GBP_TYPE_SHORTCUTUI_DIALOG,
@@ -74,9 +67,8 @@ gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
                          "title", _("Keyboard Shortcuts"),
                          "transient-for", root,
                          "modal", TRUE,
+                         "context", context,
                          NULL);
-
-  gbp_shortcutui_dialog_set_model (dialog, model, observer);
 
   gtk_window_present (GTK_WINDOW (dialog));
 

@@ -24,94 +24,40 @@
 
 #include <libide-gui.h>
 
-#include "ide-shortcut-observer-private.h"
-
-#include "gbp-shortcutui-action.h"
+#include "gbp-shortcutui-shortcut.h"
 #include "gbp-shortcutui-row.h"
 
 struct _GbpShortcutuiRow
 {
-  AdwActionRow parent_instance;
-  IdeShortcutObserver *observer;
-  GbpShortcutuiAction *action;
-  GtkWidget *shortcut;
+  AdwActionRow           parent_instance;
+
+  GbpShortcutuiShortcut *shortcut;
+
+  GtkWidget             *label;
 };
 
 G_DEFINE_FINAL_TYPE (GbpShortcutuiRow, gbp_shortcutui_row, ADW_TYPE_ACTION_ROW)
 
 enum {
   PROP_0,
-  PROP_ACTION,
-  PROP_OBSERVER,
+  PROP_SHORTCUT,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_shortcutui_row_set_action (GbpShortcutuiRow    *self,
-                               GbpShortcutuiAction *action)
-{
-  g_auto(GValue) title = G_VALUE_INIT;
-  g_auto(GValue) subtitle = G_VALUE_INIT;
-  g_auto(GValue) accelerator = G_VALUE_INIT;
-
-  g_assert (GBP_IS_SHORTCUTUI_ROW (self));
-  g_assert (GBP_IS_SHORTCUTUI_ACTION (action));
-
-  g_set_object (&self->action, action);
-
-  g_value_init (&title, G_TYPE_STRING);
-  g_value_init (&subtitle, G_TYPE_STRING);
-  g_value_init (&accelerator, G_TYPE_STRING);
-
-  g_object_get_property (G_OBJECT (action), "title", &title);
-  g_object_get_property (G_OBJECT (action), "subtitle", &subtitle);
-  g_object_get_property (G_OBJECT (action), "accelerator", &accelerator);
-
-  g_object_set_property (G_OBJECT (self), "title", &title);
-  g_object_set_property (G_OBJECT (self), "subtitle", &subtitle);
-  g_object_set_property (G_OBJECT (self->shortcut), "accelerator", &accelerator);
-}
-
-static void
-on_accel_changed_cb (GbpShortcutuiRow *self,
-                     const char       *action_name,
-                     const char       *accel)
-{
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_SHORTCUTUI_ROW (self));
-  g_assert (action_name != NULL);
-
-  g_debug ("Action \"%s\" changed to accel %s", action_name, accel);
-
-  g_object_set (self->shortcut,
-                "accelerator", accel,
-                NULL);
-
-  IDE_EXIT;
-}
-
-static void
 gbp_shortcutui_row_constructed (GObject *object)
 {
   GbpShortcutuiRow *self = (GbpShortcutuiRow *)object;
-  g_autofree char *detail = NULL;
-  const char *action_name;
 
   G_OBJECT_CLASS (gbp_shortcutui_row_parent_class)->constructed (object);
 
-  if (!(action_name = gbp_shortcutui_action_get_action_name (self->action)))
-    return;
-
-  detail = g_strdup_printf ("accel-changed::%s", action_name);
-
-  g_signal_connect_object (self->observer,
-                           detail,
-                           G_CALLBACK (on_accel_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  /* This just avoids bindings/expressions for something rather static */
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self),
+                                 gbp_shortcutui_shortcut_get_title (self->shortcut));
+  adw_action_row_set_subtitle (ADW_ACTION_ROW (self),
+                               gbp_shortcutui_shortcut_get_subtitle (self->shortcut));
 }
 
 static void
@@ -119,8 +65,7 @@ gbp_shortcutui_row_dispose (GObject *object)
 {
   GbpShortcutuiRow *self = (GbpShortcutuiRow *)object;
 
-  g_clear_object (&self->action);
-  g_clear_object (&self->observer);
+  g_clear_object (&self->shortcut);
 
   G_OBJECT_CLASS (gbp_shortcutui_row_parent_class)->dispose (object);
 }
@@ -135,8 +80,8 @@ gbp_shortcutui_row_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACTION:
-      g_value_set_object (value, self->action);
+    case PROP_SHORTCUT:
+      g_value_set_object (value, gbp_shortcutui_row_get_shortcut (self));
       break;
 
     default:
@@ -154,12 +99,8 @@ gbp_shortcutui_row_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACTION:
-      gbp_shortcutui_row_set_action (self, g_value_get_object (value));
-      break;
-
-    case PROP_OBSERVER:
-      self->observer = g_value_dup_object (value);
+    case PROP_SHORTCUT:
+      self->shortcut = g_value_dup_object (value);
       break;
 
     default:
@@ -173,25 +114,22 @@ gbp_shortcutui_row_class_init (GbpShortcutuiRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = gbp_shortcutui_row_constructed;
   object_class->dispose = gbp_shortcutui_row_dispose;
+  object_class->constructed = gbp_shortcutui_row_constructed;
   object_class->get_property = gbp_shortcutui_row_get_property;
   object_class->set_property = gbp_shortcutui_row_set_property;
 
-  properties [PROP_ACTION] =
-    g_param_spec_object ("action", NULL, NULL,
-                         GBP_TYPE_SHORTCUTUI_ACTION,
+  properties [PROP_SHORTCUT] =
+    g_param_spec_object ("shortcut", NULL, NULL,
+                         GBP_TYPE_SHORTCUTUI_SHORTCUT,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_OBSERVER] =
-    g_param_spec_object ("observer", NULL, NULL,
-                         IDE_TYPE_SHORTCUT_OBSERVER,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shortcutui/gbp-shortcutui-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiRow, shortcut);
+  gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiRow, label);
+
+  g_type_ensure (GBP_TYPE_SHORTCUTUI_SHORTCUT);
 }
 
 static void
@@ -209,14 +147,17 @@ gbp_shortcutui_row_update_header (GbpShortcutuiRow *self,
   g_return_if_fail (GBP_IS_SHORTCUTUI_ROW (self));
   g_return_if_fail (!before || GBP_IS_SHORTCUTUI_ROW (before));
 
-  if (self->action == NULL)
+  if (self->shortcut == NULL)
     return;
 
   if (before == NULL ||
-      !gbp_shortcutui_action_is_same_group (self->action, before->action))
+      !ide_str_equal0 (gbp_shortcutui_shortcut_get_page (self->shortcut),
+                       gbp_shortcutui_shortcut_get_page (before->shortcut)) ||
+      !ide_str_equal0 (gbp_shortcutui_shortcut_get_group (self->shortcut),
+                       gbp_shortcutui_shortcut_get_group (before->shortcut)))
     {
-      const char *page = gbp_shortcutui_action_get_page (self->action);
-      const char *group = gbp_shortcutui_action_get_group (self->action);
+      const char *page = gbp_shortcutui_shortcut_get_page (self->shortcut);
+      const char *group = gbp_shortcutui_shortcut_get_group (self->shortcut);
 
       if (page != NULL && group != NULL)
         {
@@ -240,18 +181,21 @@ gbp_shortcutui_row_update_header (GbpShortcutuiRow *self,
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (self), header);
 }
 
-const char *
-gbp_shortcutui_row_get_accelerator (GbpShortcutuiRow *self)
+GbpShortcutuiRow *
+gbp_shortcutui_row_new (GbpShortcutuiShortcut *shortcut)
 {
-  g_return_val_if_fail (GBP_IS_SHORTCUTUI_ROW (self), NULL);
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (shortcut), NULL);
 
-  return gbp_shortcutui_action_get_accelerator (self->action);
+  return g_object_new (GBP_TYPE_SHORTCUTUI_ROW,
+                       "activatable", TRUE,
+                       "shortcut", shortcut,
+                       NULL);
 }
 
-GbpShortcutuiAction *
-gbp_shortcutui_row_get_action (GbpShortcutuiRow *self)
+GbpShortcutuiShortcut *
+gbp_shortcutui_row_get_shortcut (GbpShortcutuiRow *self)
 {
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_ROW (self), NULL);
 
-  return self->action;
+  return self->shortcut;
 }
