@@ -25,7 +25,7 @@
 #include <libide-plugins.h>
 #include <libide-tweaks.h>
 
-#include "ide-application.h"
+#include "ide-application-private.h"
 #include "ide-application-tweaks.h"
 #include "ide-plugin-view.h"
 #include "ide-primary-workspace.h"
@@ -240,7 +240,16 @@ ide_show_tweaks (IdeContext *context,
   window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
                          "tweaks", tweaks,
                          NULL);
-  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
+
+  if (app->workbenches->len > 0)
+    {
+      IdeWorkbench *workbench = g_ptr_array_index (app->workbenches, 0);
+      gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (window));
+    }
+  else
+    {
+      gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
+    }
 
   /* Switch pages before we display if necessary */
   if (page != NULL)
