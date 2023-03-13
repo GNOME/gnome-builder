@@ -42,6 +42,7 @@ typedef struct _ShortcutInfo
   char *title;
   const char *group;
   const char *page;
+  const char *id;
 } ShortcutInfo;
 
 typedef struct _GroupInfo
@@ -162,6 +163,7 @@ populate_from_menu_model (GQueue     *queue,
 
   for (guint i = 0; i < n_items; i++)
     {
+      g_autofree char *id = NULL;
       g_autofree char *action = NULL;
       g_autofree char *icon_name = NULL;
       g_autofree char *item_group = NULL;
@@ -184,6 +186,7 @@ populate_from_menu_model (GQueue     *queue,
 
       target = g_menu_model_get_item_attribute_value (menu, i, "target", NULL);
 
+      g_menu_model_get_item_attribute (menu, i, "id", "s", &id);
       g_menu_model_get_item_attribute (menu, i, "description", "s", &subtitle);
       g_menu_model_get_item_attribute (menu, i, "verb-icon", "s", &icon_name);
       g_menu_model_get_item_attribute (menu, i, "page", "s", &item_page);
@@ -191,6 +194,7 @@ populate_from_menu_model (GQueue     *queue,
 
       si = g_slice_new0 (ShortcutInfo);
       si->link.data = si;
+      si->id = g_intern_string (id);
       si->accel = g_steal_pointer (&accel);
       si->icon_name = g_steal_pointer (&icon_name);
       si->subtitle = g_steal_pointer (&subtitle);
@@ -517,6 +521,7 @@ ide_shortcut_window_new (GListModel *shortcuts)
 
 struct _IdeShortcutInfo
 {
+  const char *id;
   const char *page;
   const char *group;
   const char *title;
@@ -607,6 +612,7 @@ ide_shortcut_info_foreach (GListModel          *shortcuts,
 
               remove_underline_and_ellipsis (shortcut_title);
 
+              info.id = si->id;
               info.title = shortcut_title;
               info.subtitle = si->subtitle;
               info.accel = si->accel;
@@ -679,4 +685,10 @@ const char *
 ide_shortcut_info_get_icon_name (const IdeShortcutInfo *self)
 {
   return self->icon_name;
+}
+
+const char *
+ide_shortcut_info_get_id (const IdeShortcutInfo *self)
+{
+  return self->id;
 }
