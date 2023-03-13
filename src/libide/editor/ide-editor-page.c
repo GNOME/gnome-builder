@@ -473,6 +473,26 @@ search_begin_replace_action (GtkWidget  *widget,
 }
 
 static void
+search_move_next_action (GtkWidget  *widget,
+                         const char *action_name,
+                         GVariant   *param)
+{
+  IdeEditorPage *self = IDE_EDITOR_PAGE (widget);
+
+  _ide_editor_search_bar_move_next (self->search_bar, FALSE);
+}
+
+static void
+search_move_previous_action (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *param)
+{
+  IdeEditorPage *self = IDE_EDITOR_PAGE (widget);
+
+  _ide_editor_search_bar_move_previous (self->search_bar, FALSE);
+}
+
+static void
 handle_print_result (IdeEditorPage           *self,
                      GtkPrintOperation       *operation,
                      GtkPrintOperationResult  result)
@@ -794,6 +814,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
+  panel_widget_class_install_action (panel_widget_class, "search.move-next", NULL, search_move_next_action);
+  panel_widget_class_install_action (panel_widget_class, "search.move-previous", NULL, search_move_previous_action);
   panel_widget_class_install_action (panel_widget_class, "editor.print", NULL, print_action);
   panel_widget_class_install_action (panel_widget_class, "editor.format-document", NULL, format_action);
   panel_widget_class_install_action (panel_widget_class, "editor.format-selection", NULL, format_action);
