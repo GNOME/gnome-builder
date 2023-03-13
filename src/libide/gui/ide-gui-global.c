@@ -166,6 +166,14 @@ ide_widget_get_context (GtkWidget *widget)
   if (IDE_IS_WORKSPACE (root))
     return ide_workspace_get_context (IDE_WORKSPACE (root));
 
+  if (GTK_IS_WINDOW (root))
+    {
+      GtkWindowGroup *group = gtk_window_get_group (GTK_WINDOW (root));
+
+      if (IDE_IS_WORKBENCH (group))
+        return ide_workbench_get_context (IDE_WORKBENCH (group));
+    }
+
   if (root != NULL)
     {
       GObjectClass *object_class = G_OBJECT_GET_CLASS (root);
