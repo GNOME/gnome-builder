@@ -37,6 +37,7 @@ struct _GbpShortcutuiShortcut
   GObject      parent_instance;
 
   GtkShortcut *shortcut;
+  char        *search_text;
 
   const char  *group;
   const char  *page;
@@ -52,6 +53,7 @@ enum {
   PROP_GROUP,
   PROP_HAS_OVERRIDE,
   PROP_PAGE,
+  PROP_SEARCH_TEXT,
   PROP_SHORTCUT,
   PROP_SUBTITLE,
   PROP_TITLE,
@@ -109,6 +111,11 @@ gbp_shortcutui_shortcut_constructed (GObject *object)
 
   self->title = g_intern_string (label);
   self->subtitle = g_intern_string (description);
+  self->search_text = g_strdup_printf ("%s %s %s %s",
+                                       self->page ? self->page : "",
+                                       self->group ? self->group : "",
+                                       self->title ? self->title : "",
+                                       self->subtitle ? self->subtitle : "");
 
   g_signal_connect_object (self->shortcut,
                            "notify::trigger",
@@ -123,6 +130,7 @@ gbp_shortcutui_shortcut_dispose (GObject *object)
   GbpShortcutuiShortcut *self = (GbpShortcutuiShortcut *)object;
 
   g_clear_object (&self->shortcut);
+  g_clear_pointer (&self->search_text, g_free);
 
   G_OBJECT_CLASS (gbp_shortcutui_shortcut_parent_class)->dispose (object);
 }
@@ -155,6 +163,10 @@ gbp_shortcutui_shortcut_get_property (GObject    *object,
 
     case PROP_TITLE:
       g_value_set_string (value, gbp_shortcutui_shortcut_get_title (self));
+      break;
+
+    case PROP_SEARCH_TEXT:
+      g_value_set_string (value, self->search_text);
       break;
 
     case PROP_SUBTITLE:
@@ -217,15 +229,20 @@ gbp_shortcutui_shortcut_class_init (GbpShortcutuiShortcutClass *klass)
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_TITLE] =
-    g_param_spec_string ("title", NULL, NULL,
-                        NULL,
-                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  properties [PROP_SEARCH_TEXT] =
+    g_param_spec_string ("search-text", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL,
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL,
+                        NULL,
+                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PAGE] =
     g_param_spec_string ("page", NULL, NULL,
