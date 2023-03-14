@@ -19,6 +19,7 @@
     <child>
       <object class="GtkLabel" id="info">
         <property name="xalign">1</property>
+        <property name="width-chars">6</property>
         <attributes>
           <attribute name="foreground-alpha" value="33000"/>
           <attribute name="font-features" value="tnum"/>
