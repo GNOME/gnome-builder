@@ -3,8 +3,8 @@
   <menu id="run-menu">
     <section id="run-menu-observation-section">
       <item>
-        <attribute name="id">valgrind-run-handler</attribute>
-        <attribute name="after">default-run-handler</attribute>
+        <attribute name="id">org.gnome.builder.valgrind.run</attribute>
+        <attribute name="after">org.gnome.builder.project.run</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'valgrind'</attribute>

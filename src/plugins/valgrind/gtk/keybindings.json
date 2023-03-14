@@ -1,1 +1,1 @@
-{ "trigger" : "<Control><Shift><Alt>v", "action" : "context.run-manager.run-with-handler", "args" : "'valgrind'", "when" : "canBuild()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.valgrind.run", "trigger" : "<Control><Shift><Alt>v", "action" : "context.run-manager.run-with-handler", "args" : "'valgrind'", "when" : "canBuild()", "phase" : "capture" },

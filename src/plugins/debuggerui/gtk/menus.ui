@@ -3,8 +3,8 @@
   <menu id="run-menu">
     <section id="run-menu-observation-section">
       <item>
-        <attribute name="id">debugger-run-handler</attribute>
-        <attribute name="after">default-run-handler</attribute>
+        <attribute name="id">org.gnome.builder.debugger.run</attribute>
+        <attribute name="after">org.gnome.builder.project.run</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'debuggerui'</attribute>
@@ -19,7 +19,7 @@
     <section id="run-menu-debug-section">
       <attribute name="label" translatable="yes">Debugger</attribute>
       <item>
-        <attribute name="id">debug-toggle-breakpoint</attribute>
+        <attribute name="id">org.gnome.builder.debugger.toggle-breakpoint</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">workspace.debuggerui.toggle-breakpoint</attribute>
         <attribute name="label" translatable="yes">Toggle Breakpoint</attribute>
@@ -28,7 +28,7 @@
         <attribute name="description" translatable="yes">Toggle breakpoint at current line</attribute>
       </item>
       <item>
-        <attribute name="id">debug-continue</attribute>
+        <attribute name="id">org.gnome.builder.debugger.continue</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">debugger.continue</attribute>
         <attribute name="label" translatable="yes">Continue</attribute>
@@ -37,7 +37,7 @@
         <attribute name="description" translatable="yes">Continue debugging to next breakpoint</attribute>
       </item>
       <item>
-        <attribute name="id">debug-pause</attribute>
+        <attribute name="id">org.gnome.builder.debugger.stop</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">debugger.stop</attribute>
         <attribute name="label" translatable="yes">Pause</attribute>
@@ -46,7 +46,7 @@
         <attribute name="description" translatable="yes">Pause debugger until continued</attribute>
       </item>
       <item>
-        <attribute name="id">debug-step-over</attribute>
+        <attribute name="id">org.gnome.builder.debugger.step-over</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">debugger.step-over</attribute>
         <attribute name="label" translatable="yes">Step Over</attribute>
@@ -55,7 +55,7 @@
         <attribute name="description" translatable="yes">Execute the current line, stepping over any function calls</attribute>
       </item>
       <item>
-        <attribute name="id">debug-step-into</attribute>
+        <attribute name="id">org.gnome.builder.debugger.step-in</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">debugger.step-in</attribute>
         <attribute name="label" translatable="yes">Step Into</attribute>
@@ -64,7 +64,7 @@
         <attribute name="description" translatable="yes">Execute the current line, stepping into any function calls</attribute>
       </item>
       <item>
-        <attribute name="id">debug-step-out</attribute>
+        <attribute name="id">org.gnome.builder.debugger.step-out</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">debugger.finish</attribute>
         <attribute name="label" translatable="yes">Step Out</attribute>
