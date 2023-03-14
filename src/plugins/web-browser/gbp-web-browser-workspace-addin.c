@@ -156,10 +156,18 @@ gbp_web_browser_workspace_addin_restore_session_item (IdeWorkspaceAddin *addin,
   if (!(data = g_variant_get_fixed_array (state_value, &n_elements, sizeof (guint8))))
     IDE_EXIT;
 
+  if (n_elements == 0)
+    IDE_EXIT;
+
   /* Make a copy of the bytes because we can't guarantee the lifetime of
    * the bytes and we don't want to possibly keep state_value alive.
    */
   bytes = g_bytes_new (data, n_elements);
+
+  g_assert (bytes != NULL);
+  g_assert (g_bytes_get_size (bytes) == n_elements);
+
+  IDE_DUMP_BYTES (state, data, n_elements);
 
   if (!(state = webkit_web_view_session_state_new (bytes)))
     IDE_EXIT;
