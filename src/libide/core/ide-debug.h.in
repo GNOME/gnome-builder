@@ -156,15 +156,56 @@ void ide_trace_function (const gchar *strfunc,
     }                                                                    \
     free (symnames);                                                     \
   } G_STMT_END
+#define IDE_DUMP_BYTES(_n, _b, _l)                                       \
+  G_STMT_START {                                                         \
+    GString *str, *astr;                                                 \
+    gsize _i;                                                            \
+    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE,                             \
+          "         %s = %p [%d]", #_n, _b, (gint)_l);                   \
+    str = g_string_sized_new (80);                                       \
+    astr = g_string_sized_new (16);                                      \
+    for (_i = 0; _i < _l; _i++)                                          \
+      {                                                                  \
+        if ((_i % 16) == 0)                                              \
+          g_string_append_printf (str, "%06x: ", (guint)_i);             \
+        g_string_append_printf (str, " %02x", _b[_i]);                   \
+                                                                         \
+        if (g_ascii_isprint(_b[_i]))                                     \
+          g_string_append_printf (astr, " %c", _b[_i]);                  \
+        else                                                             \
+          g_string_append (astr, " .");                                  \
+                                                                         \
+        if ((_i % 16) == 15)                                             \
+          {                                                              \
+            g_log (G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE,                    \
+                   "%s  %s", str->str, astr->str);                       \
+            str->str[0] = str->len = 0;                                  \
+            astr->str[0] = astr->len = 0;                                \
+          }                                                              \
+        else if ((_i % 16) == 7)                                         \
+          {                                                              \
+            g_string_append (str, " ");                                  \
+            g_string_append (astr, " ");                                 \
+          }                                                              \
+      }                                                                  \
+                                                                         \
+    if (_i != 16)                                                        \
+      g_log (G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE,                          \
+             "%-56s  %s", str->str, astr->str);                          \
+                                                                         \
+    g_string_free (str, TRUE);                                           \
+    g_string_free (astr, TRUE);                                          \
+  } G_STMT_END
 #else
-# define IDE_TODO(_msg)          G_STMT_START {            } G_STMT_END
-# define IDE_PROBE               G_STMT_START {            } G_STMT_END
-# define IDE_TRACE_MSG(fmt, ...) G_STMT_START {            } G_STMT_END
-# define IDE_ENTRY               G_STMT_START {            } G_STMT_END
-# define IDE_GOTO(_l)            G_STMT_START { goto _l;   } G_STMT_END
-# define IDE_EXIT                G_STMT_START { return;    } G_STMT_END
-# define IDE_RETURN(_r)          G_STMT_START { return _r; } G_STMT_END
-# define IDE_BACKTRACE           G_STMT_START {            } G_STMT_END
+# define IDE_TODO(_msg)             G_STMT_START {            } G_STMT_END
+# define IDE_PROBE                  G_STMT_START {            } G_STMT_END
+# define IDE_TRACE_MSG(fmt, ...)    G_STMT_START {            } G_STMT_END
+# define IDE_ENTRY                  G_STMT_START {            } G_STMT_END
+# define IDE_GOTO(_l)               G_STMT_START { goto _l;   } G_STMT_END
+# define IDE_EXIT                   G_STMT_START { return;    } G_STMT_END
+# define IDE_RETURN(_r)             G_STMT_START { return _r; } G_STMT_END
+# define IDE_BACKTRACE              G_STMT_START {            } G_STMT_END
+# define IDE_DUMP_BYTES(_n, _b, _l) G_STMT_START {            } G_STMT_END
 #endif
 
 #define _IDE_BUG(Component, Description, File, Line, Func, ...)                         \
