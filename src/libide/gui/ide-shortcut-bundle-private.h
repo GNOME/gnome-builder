@@ -49,7 +49,7 @@ gboolean           ide_shortcut_bundle_parse             (IdeShortcutBundle    *
                                                           GError              **error);
 const GError      *ide_shortcut_bundle_error             (IdeShortcutBundle    *self);
 void               ide_shortcut_bundle_override          (IdeShortcutBundle    *bundle,
-                                                          GtkShortcut          *shortcut,
+                                                          const char           *shortcut_id,
                                                           const char           *accelerator);
 gboolean           ide_shortcut_is_phase                 (GtkShortcut          *shortcut,
                                                           GtkPropagationPhase   phase);

@@ -781,3 +781,20 @@ ide_shortcut_bundle_override_triggers (IdeShortcutBundle *self,
         gtk_shortcut_set_trigger (shortcut, state->trigger);
     }
 }
+
+void
+ide_shortcut_bundle_override (IdeShortcutBundle *self,
+                              const char        *shortcut_id,
+                              const char        *accelerator)
+{
+  g_autoptr(GtkShortcutTrigger) trigger = NULL;
+
+  g_return_if_fail (IDE_IS_SHORTCUT_BUNDLE (self));
+  g_return_if_fail (self->is_user == TRUE);
+  g_return_if_fail (shortcut_id != NULL);
+
+  if (accelerator != NULL)
+    trigger = gtk_shortcut_trigger_parse_string (accelerator);
+
+  g_debug ("TODO: override %s to %s", shortcut_id, accelerator);
+}
