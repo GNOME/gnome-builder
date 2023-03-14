@@ -39,4 +39,5 @@
 # include "ide-shortcut-accel-dialog.h"
 # include "ide-tree-expander.h"
 # include "ide-truncate-model.h"
+# include "ide-unique-list-model.h"
 #undef IDE_GTK_INSIDE
