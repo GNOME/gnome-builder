@@ -137,7 +137,14 @@ shortcut_dialog_response_cb (GbpShortcutuiDialog    *self,
   g_assert (GBP_IS_SHORTCUTUI_SHORTCUT (shortcut));
 
   if (response_id == GTK_RESPONSE_ACCEPT)
-    gbp_shortcutui_shortcut_override (shortcut, accel);
+    {
+      g_autoptr(GError) error = NULL;
+
+      if (!gbp_shortcutui_shortcut_override (shortcut, accel, &error))
+        ide_object_warning (self->context,
+                            "Failed to override keyboard shortcut: %s",
+                            error->message);
+    }
 
   gtk_window_destroy (GTK_WINDOW (dialog));
 

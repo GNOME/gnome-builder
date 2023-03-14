@@ -348,19 +348,23 @@ gbp_shortcutui_shortcut_has_override (GbpShortcutuiShortcut *self)
   return trigger != GET_INFO (self->shortcut)->trigger;
 }
 
-void
-gbp_shortcutui_shortcut_override (GbpShortcutuiShortcut *self,
-                                  const char            *accelerator)
+gboolean
+gbp_shortcutui_shortcut_override (GbpShortcutuiShortcut  *self,
+                                  const char             *accelerator,
+                                  GError                **error)
 {
+  gboolean ret;
+
   IDE_ENTRY;
 
-  g_return_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self));
+  g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), FALSE);
 
-  ide_shortcut_bundle_override (ide_shortcut_manager_get_user_bundle (),
-                                GET_INFO (self->shortcut)->id,
-                                accelerator);
+  ret = ide_shortcut_bundle_override (ide_shortcut_manager_get_user_bundle (),
+                                      GET_INFO (self->shortcut)->id,
+                                      accelerator,
+                                      error);
 
-  IDE_EXIT;
+  IDE_RETURN (ret);
 }
 
 const char *

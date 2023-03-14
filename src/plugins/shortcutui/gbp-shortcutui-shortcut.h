@@ -28,20 +28,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShortcutuiShortcut, gbp_shortcutui_shortcut, GBP, SHORTCUTUI_SHORTCUT, GObject)
 
-GbpShortcutuiShortcut *gbp_shortcutui_shortcut_new             (GtkShortcut                 *shortcut,
-                                                                const char                  *page,
-                                                                const char                  *group);
-gboolean               gbp_shortcutui_shortcut_has_override    (GbpShortcutuiShortcut       *self);
-char                  *gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut       *self);
-void                   gbp_shortcutui_shortcut_set_accelerator (GbpShortcutuiShortcut       *self,
-                                                                const char                  *accelerator);
-const char            *gbp_shortcutui_shortcut_get_title       (GbpShortcutuiShortcut       *self);
-const char            *gbp_shortcutui_shortcut_get_subtitle    (GbpShortcutuiShortcut       *self);
-const char            *gbp_shortcutui_shortcut_get_page        (GbpShortcutuiShortcut       *self);
-const char            *gbp_shortcutui_shortcut_get_group       (GbpShortcutuiShortcut       *self);
-void                   gbp_shortcutui_shortcut_override        (GbpShortcutuiShortcut       *self,
-                                                                const char                  *accelerator);
-int                    gbp_shortcutui_shortcut_compare         (const GbpShortcutuiShortcut *a,
-                                                                const GbpShortcutuiShortcut *b);
+GbpShortcutuiShortcut *gbp_shortcutui_shortcut_new             (GtkShortcut                  *shortcut,
+                                                                const char                   *page,
+                                                                const char                   *group);
+gboolean               gbp_shortcutui_shortcut_has_override    (GbpShortcutuiShortcut        *self);
+char                  *gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut        *self);
+void                   gbp_shortcutui_shortcut_set_accelerator (GbpShortcutuiShortcut        *self,
+                                                                const char                   *accelerator);
+const char            *gbp_shortcutui_shortcut_get_title       (GbpShortcutuiShortcut        *self);
+const char            *gbp_shortcutui_shortcut_get_subtitle    (GbpShortcutuiShortcut        *self);
+const char            *gbp_shortcutui_shortcut_get_page        (GbpShortcutuiShortcut        *self);
+const char            *gbp_shortcutui_shortcut_get_group       (GbpShortcutuiShortcut        *self);
+gboolean               gbp_shortcutui_shortcut_override        (GbpShortcutuiShortcut        *self,
+                                                                const char                   *accelerator,
+                                                                GError                      **error);
+int                    gbp_shortcutui_shortcut_compare         (const GbpShortcutuiShortcut  *a,
+                                                                const GbpShortcutuiShortcut  *b);
 
 G_END_DECLS
