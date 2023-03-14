@@ -13,7 +13,7 @@ from gi.repository import Gtk, Gio{{if is_adwaita}}, Adw{{end}}
 from .window import {{PreFix}}Window
 
 
-class {{Prefix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
+class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
     """The main application singleton class."""
 
     def __init__(self):
@@ -77,5 +77,5 @@ class {{Prefix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
 
 def main(version):
     """The application's entry point."""
-    app = {{Prefix}}Application()
+    app = {{PreFix}}Application()
     return app.run(sys.argv)
