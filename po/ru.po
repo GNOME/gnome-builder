@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-03 22:20+0000\n"
-"PO-Revision-Date: 2023-03-04 13:00+0300\n"
+"POT-Creation-Date: 2023-03-14 03:31+0000\n"
+"PO-Revision-Date: 2023-03-14 11:49+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -638,7 +638,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Какое окружение использовать, когда запускаются модульные тесты"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:213 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Подробный журнал"
 
@@ -800,7 +800,7 @@ msgstr "Параметры"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Комбинации клавиш"
@@ -829,13 +829,15 @@ msgstr "Документ"
 #: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:90
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Приложение"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:91
 msgid "Pages"
 msgstr "Страницы"
 
@@ -847,7 +849,8 @@ msgstr "Страницы"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:104
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Текстовый редактор"
@@ -930,31 +933,31 @@ msgid "_Discard…"
 msgstr "_Отказаться…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Ошибка печати: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Не удалось форматировать выделение: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1013
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Сохранить файл"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -983,6 +986,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "Найти и заменить (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Закрыть поиск"
 
@@ -995,15 +999,18 @@ msgid "Replace _All"
 msgstr "Заменить _все"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Использовать регулярные выражения"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "_Учитывать регистр"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Только полные слова"
 
@@ -1493,7 +1500,7 @@ msgstr[0] "Около %u года назад"
 msgstr[1] "Около %u лет назад"
 msgstr[2] "Около %u лет назад"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:68
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Установить"
@@ -1507,6 +1514,7 @@ msgstr "%u из %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "Поиск"
 
@@ -1584,7 +1592,7 @@ msgstr "Навигация по интернету"
 #: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -1673,7 +1681,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Переключить левую панель (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Переключить правую панель"
 
@@ -1701,8 +1709,8 @@ msgstr "Остановить выполнение"
 msgid "Run project"
 msgstr "Запустить проект"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:254
+#: src/libide/gui/ide-shortcut-window.c:280
 msgid "Other"
 msgstr "Другое"
 
@@ -1720,7 +1728,7 @@ msgstr "Загрузка проекта \"%s\""
 msgid "There are unsaved documents"
 msgstr "Имеются несохранённые документы"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:168
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1780,7 +1788,7 @@ msgstr "Устройства и симуляторы"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Диагностика"
 
@@ -2030,7 +2038,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Безымянный терминал"
 
@@ -2053,24 +2061,15 @@ msgstr "Безымянный терминал"
 msgid "Search runtimes"
 msgstr "Поиск сред выполнения"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
-"Показать или скрыть параметры поиска, такие как чувствительность к регистру"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "Переместится к прошлому совпадению"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Регулярное выражение"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "Переместится к следующему совпадению"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Учитывать регистр"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "По слову целиком"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Обратный поиск"
 
@@ -2125,7 +2124,7 @@ msgstr "Нет"
 msgid "Blank page"
 msgstr "Пустая страница"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:166
 msgid "Settings"
 msgstr "Настройки"
 
@@ -2158,7 +2157,7 @@ msgstr "Настройка проекта"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2411,93 +2410,93 @@ msgstr "Собрать проект (Shift+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Показать диагностику сборки (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "Настроить проект…"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "Настроить параметры, связанные с проектом"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:21
+#: src/plugins/buildui/gtk/menus.ui:30 src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:93 src/plugins/buildui/gtk/menus.ui:103
+#: src/plugins/buildui/gtk/menus.ui:117 src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/buildui/gtk/menus.ui:162
 msgid "Code Foundry"
 msgstr "Работа с кодом"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:22
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "Перезагрузка конфигурации"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "Перезагрузка конфигурации проекта"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Select Build Target…"
 msgstr "Выбрать цель сборки…"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Change default build target"
 msgstr "Изменить цель сборки по умолчанию"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:31 src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Building"
 msgstr "Сборка"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "_Build"
 msgstr "_Собрать"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:35
 msgid "Build the project"
 msgstr "Собрать проект"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:42
 msgid "_Rebuild"
 msgstr "_Пересобрать"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:43
 msgid "Rebuild the project"
 msgstr "Пересобрать проект"
 
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "_Clean"
 msgstr "_Очистить"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Clean the project"
 msgstr "Очистить проект"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:56
 msgid "Stop Building"
 msgstr "Остановить сборку"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Cancel the current build operation"
 msgstr "Отменить текущую операцию сборки"
 
-#: src/plugins/buildui/gtk/menus.ui:59
+#: src/plugins/buildui/gtk/menus.ui:65
 msgid "Install & Deployment"
 msgstr "Установка и развертывание"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Install the project"
 msgstr "Установить проект"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Deploy to Device…"
 msgstr "Развернуть на устройство…"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy project to current device"
 msgstr "Развернуть проект на текущее устройство"
 
@@ -2505,110 +2504,110 @@ msgstr "Развернуть проект на текущее устройств
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "_Export"
 msgstr "_Экспортировать"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Export project"
 msgstr "Пустой проект"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Stop Build"
 msgstr "Остановить сборку"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop building project"
 msgstr "Остановить сборку проекта"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Show Bui_ld Output"
 msgstr "Показать результаты сб_орки"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:109
 msgid "Display panel containing the build log"
 msgstr "Показать панель содержащею журнал сборки"
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:127
 msgid "Running"
 msgstr "Выполнение"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:120
 msgid "Select Run Command…"
 msgstr "Выбрать команду запуска…"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Run"
 msgstr "Запустить"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:136
 msgid "Run the project"
 msgstr "Запустить проект"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Restart Program"
 msgstr "Перезапустить программу"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Restart the running program"
 msgstr "Перезапустить запущенную программу"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Stop Program"
 msgstr "Остановить программу"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:154
 msgid "Stop running the project"
 msgstr "Остановить запущенный проект"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:159
 msgid "Debugging"
 msgstr "Отладка"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:163 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Модульные тесты"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Follow System Style"
 msgstr "Использовать системный стиль"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Light"
 msgstr "Принудительно светлый"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:182
 msgid "Force Dark"
 msgstr "Принудительно тёмный"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Accessibility"
 msgstr "Доступность"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "High Contrast"
 msgstr "Высокий контраст"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Text Direction"
 msgstr "Направление текста"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Left-to-Right"
 msgstr "Слево-направо"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Right-to-Left"
 msgstr "Справа-налево"
 
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:219
 msgid "Show Inspector"
 msgstr "Показать инспектор"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Стиль"
 
@@ -3001,6 +3000,14 @@ msgstr "Объявление"
 msgid "Project Symbols"
 msgstr "Символы проекта"
 
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "Копировать как изображение"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy selected text as an image"
+msgstr "Копировать выделенный текст в виде изображения"
+
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
@@ -3221,12 +3228,12 @@ msgid "Create New Project"
 msgstr "Создать новый проект"
 
 #: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:19
+#: src/plugins/create-project/gtk/menus.ui:32
 msgid "Create New Project…"
 msgstr "Создать новый проект…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:23
 msgid "Create a new project from template"
 msgstr "Создать новый проект из шаблона"
 
@@ -3655,7 +3662,7 @@ msgstr "Новый _файл"
 msgid "_Open File…"
 msgstr "_Открыть файл…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Открыть в новой панели"
 
@@ -4448,7 +4455,7 @@ msgstr "Email"
 msgid "go run"
 msgstr "запустить"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Начальная настройка проекта"
@@ -4457,7 +4464,7 @@ msgstr "Начальная настройка проекта"
 msgid "Gradle Run"
 msgstr "Запуск Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Отобразить новое окно приветствия"
 
@@ -4605,71 +4612,95 @@ msgstr "Запуск Maven"
 msgid "Actions"
 msgstr "Действия"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Глобальный поиск"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "Показать глобальный поиск"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Панели"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Переключить левую панель"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "Включить или выключить левую панель"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "Включить или выключить правую панель"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Переключить нижнюю панель"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Включить или выключить нижнюю панель"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Переключиться на тёмный режим"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "Изменить цветовую схему на тёмную"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Переключиться на светлый режим"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "Изменить цветовую схему на светлую"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Показать диагностику сборки"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "Отобразить ошибки и предупреждения, обнаруженные во время сборки"
+
+#: src/plugins/menu-search/gtk/menus.ui:94
+msgid "Close Page"
+msgstr "Закрыть страницу"
+
+#: src/plugins/menu-search/gtk/menus.ui:95
+msgid "Close the current page"
+msgstr "Закрыть текущую страницу"
+
+#: src/plugins/menu-search/gtk/menus.ui:108
+msgid "Move to next search result"
+msgstr "Перейти к следующему результату поиска"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Move to and select the next available search result"
+msgstr "Перейти к следующему доступному результату поиска и выбрать его"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Move to previous search result"
+msgstr "Перейти к предыдущему результату поиска"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the previous search result"
+msgstr "Перейти к предыдущему результату поиска и выбрать его"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5085,7 +5116,7 @@ msgid "Files will be copied in a moment"
 msgstr "Файлы будут скопированы через мгновение"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -5305,7 +5336,7 @@ msgid "Untitled Command"
 msgstr "Безымянная команда"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:179
 msgid "Set Shortcut"
 msgstr "Установить комбинацию клавиш"
 
@@ -5493,7 +5524,7 @@ msgstr "_Редактировать файл"
 msgid "Open keybindings.json in editor"
 msgstr "Открыть keybindings.json в редакторе"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr "Просмотр и изменение комбинаций клавиш…"
 
@@ -5791,31 +5822,31 @@ msgstr "Вывод приложения"
 msgid "Process completed"
 msgstr "Процесс завершён"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "Новый _терминал"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "Открыть новый терминал в основной операционной системе"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "Новый терминал среды _сборки"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "Открыть новый терминал в конвейере сборки проекта"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "Новый терминал среды _выполнения"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Открыть новый терминал в среде выполнения проекта"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Разделить"
 
@@ -6159,6 +6190,20 @@ msgstr "Не удалось создать дерево XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл должен быть сохранен локально для разбора."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr ""
+#~ "Показать или скрыть параметры поиска, такие как чувствительность к "
+#~ "регистру"
+
+#~ msgid "Regex"
+#~ msgstr "Регулярное выражение"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Учитывать регистр"
+
+#~ msgid "Match whole word"
+#~ msgstr "По слову целиком"
 
 #~ msgid "An absolute file-system path to the sysroot."
 #~ msgstr "Абсолютный путь к корневому каталогу."
