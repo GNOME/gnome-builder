@@ -152,16 +152,9 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
 static void
 ide_search_entry_init (IdeSearchEntry *self)
 {
-  cairo_font_options_t *options;
-
   self->occurrence_position = -1;
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  options = cairo_font_options_create ();
-  cairo_font_options_set_variations (options, "tnum");
-  gtk_widget_set_font_options (GTK_WIDGET (self->info), options);
-  cairo_font_options_destroy (options);
 }
 
 static GtkEditable *

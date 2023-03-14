@@ -21,6 +21,7 @@
         <property name="xalign">1</property>
         <attributes>
           <attribute name="foreground-alpha" value="33000"/>
+          <attribute name="font-features" value="tnum"/>
         </attributes>
       </object>
     </child>
