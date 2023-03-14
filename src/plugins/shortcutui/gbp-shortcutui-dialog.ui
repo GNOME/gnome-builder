@@ -102,7 +102,7 @@
   <object class="GtkFilterListModel" id="filter_model">
     <signal name="notify::n-items" handler="gbp_shortcutui_dialog_queue_update" swapped="true" object="GbpShortcutuiDialog"/>
     <property name="incremental">false</property>
-    <property name="model">sort_model</property>
+    <property name="model">unique_model</property>
     <property name="filter">
       <object class="GtkStringFilter" id="string_filter">
         <signal name="notify::search" handler="gbp_shortcutui_dialog_queue_update" swapped="true" object="GbpShortcutuiDialog"/>
@@ -117,7 +117,7 @@
       </object>
     </property>
   </object>
-  <object class="GtkSortListModel" id="sort_model">
+  <object class="IdeUniqueListModel" id="unique_model">
     <property name="sorter">
       <object class="GtkCustomSorter" id="sorter"/>
     </property>

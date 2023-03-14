@@ -47,7 +47,7 @@ struct _GbpShortcutuiDialog
   AdwPreferencesGroup *empty;
   GtkStringFilter     *string_filter;
   GtkFilterListModel  *filter_model;
-  GtkSortListModel    *sort_model;
+  IdeUniqueListModel  *unique_model;
   GtkCustomSorter     *sorter;
 
   guint                update_source;
@@ -88,7 +88,7 @@ gbp_shortcutui_dialog_update_visible (gpointer user_data)
   self->update_source = 0;
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->search));
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->sort_model));
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->unique_model));
 
   if (ide_str_empty0 (text))
     {
@@ -319,15 +319,15 @@ gbp_shortcutui_dialog_constructed (GObject *object)
 
   model = gbp_shortcutui_model_new (self->context);
 
-  gtk_sort_list_model_set_incremental (self->sort_model, FALSE);
-  gtk_sort_list_model_set_model (self->sort_model, G_LIST_MODEL (model));
+  ide_unique_list_model_set_incremental (self->unique_model, FALSE);
+  ide_unique_list_model_set_model (self->unique_model, G_LIST_MODEL (model));
 
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->sort_model));
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->unique_model));
 
   /* Collect all our page/groups for the overview selection */
   for (guint i = 0; i < n_items; i++)
     {
-      g_autoptr(GbpShortcutuiShortcut) shortcut = g_list_model_get_item (G_LIST_MODEL (self->sort_model), i);
+      g_autoptr(GbpShortcutuiShortcut) shortcut = g_list_model_get_item (G_LIST_MODEL (self->unique_model), i);
       const char *page = gbp_shortcutui_shortcut_get_page (shortcut);
       const char *group = gbp_shortcutui_shortcut_get_group (shortcut);
 
@@ -447,7 +447,7 @@ gbp_shortcutui_dialog_class_init (GbpShortcutuiDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, results);
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, results_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, search);
-  gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, sort_model);
+  gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, unique_model);
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, sorter);
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiDialog, string_filter);
   gtk_widget_class_bind_template_callback (widget_class, gbp_shortcutui_dialog_queue_update);
