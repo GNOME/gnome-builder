@@ -59,6 +59,22 @@
                     <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
                     <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
                     <property name="placeholder-text" translatable="yes">Search for anything</property>
+                    <child>
+                      <object class="GtkShortcutController">
+                        <child>
+                          <object class="GtkShortcut">
+                            <property name='trigger'>Up</property>
+                            <property name='action'>signal(previous-match)</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkShortcut">
+                            <property name='trigger'>Down</property>
+                            <property name='action'>signal(next-match)</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child type="end">
