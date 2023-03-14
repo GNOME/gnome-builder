@@ -207,6 +207,9 @@ toggle_panel_action (gpointer    instance,
     g_object_set (self->dock.dock, property, TRUE, NULL);
   else
     g_object_set (self->dock.dock, property, FALSE, NULL);
+
+  if (!reveal)
+    gtk_widget_grab_focus (GTK_WIDGET (self->dock.grid));
 }
 
 static void

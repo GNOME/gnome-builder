@@ -1,6 +1,6 @@
 /* ide-primary-workspace.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -221,6 +221,9 @@ toggle_panel_action (gpointer    instance,
     g_object_set (self->dock.dock, property, TRUE, NULL);
   else
     g_object_set (self->dock.dock, property, FALSE, NULL);
+
+  if (!reveal)
+    gtk_widget_grab_focus (GTK_WIDGET (self->dock.grid));
 }
 
 static void
