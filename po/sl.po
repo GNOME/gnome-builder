@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Matej Urbančič <mateju@src.gnome.org>, 2015–2022.
+# Martin Srebotnjak <miles@filmsi.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-09 19:45+0000\n"
-"PO-Revision-Date: 2023-03-10 16:37+0100\n"
+"POT-Creation-Date: 2023-03-14 00:35+0000\n"
+"PO-Revision-Date: 2023-03-14 17:21+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -240,17 +241,14 @@ msgid "The path to the ctags executable on the system."
 msgstr "Pot do izvedljive datoteke ctags na sistemu."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
-#, fuzzy
-#| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at Main"
-msgstr "Prekinitvena točka razhroščevalnika na glavni funkciji"
+msgstr "Prekinitvena točka razhroščevalnika v glavni funkciji"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
-#, fuzzy
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr ""
-"Razhroščevalnik naj samodejno vstavi prekinitveno točko na glavno funkcijo."
+"Razhroščevalnik naj samodejno vstavi prekinitveno točko v glavno funkcijo "
+"main()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
 #, fuzzy
@@ -259,12 +257,11 @@ msgid "Debugger Breakpoint at Criticals"
 msgstr "Prekinitvena točka razhroščevalnika na glavni funkciji"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-#, fuzzy
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
-"Razhroščevalnik naj samodejno vstavi prekinitveno točko na glavno funkcijo."
+"Razhroščevalnik naj samodejno vstavi prekinitveno točko v funkcijo "
+"g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 #, fuzzy
@@ -475,10 +472,8 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
-#, fuzzy
-#| msgid "Interactive Completion"
 msgid "Select First Completion"
-msgstr "Odzivno dopolnjevanje"
+msgstr "Izberi prvo dokončanje"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
@@ -546,10 +541,8 @@ msgid "Restore Session"
 msgstr "Obnovi sejo"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-#, fuzzy
-#| msgid "Restore previously opened files when loading a project."
 msgid "Restores the projects previous session when loading."
-msgstr "Med nalaganjem projekta odpri predhodno odprte datoteke."
+msgstr "Obnovi projekte prejšnje seje pri nalaganju."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -588,8 +581,9 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
+#, fuzzy
 msgid "Preview Search Results"
-msgstr ""
+msgstr "Predogled rezultatov iskanja"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
@@ -658,7 +652,7 @@ msgid "What environment to use when running unit tests"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:213 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Shranjuj podroben izpis"
 
@@ -797,8 +791,6 @@ msgid "_Cancel"
 msgstr "_Prekliči"
 
 #: src/libide/debugger/ide-debug-manager.c:977
-#, fuzzy
-#| msgid "A suitable debugger was not found."
 msgid "A suitable debugger could not be found."
 msgstr "Ustreznega razhroščevalnika ni mogoče najti."
 
@@ -808,10 +800,8 @@ msgid "Open File…"
 msgstr "Odpri datoteko …"
 
 #: src/libide/editor/gtk/menus.ui:22
-#, fuzzy
-#| msgid "Open in New Workspace"
 msgid "Open a file in the workspace"
-msgstr "Odpri na novi delovni površini"
+msgstr "Odpri datoteko na delovni površini"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
 #: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
@@ -822,7 +812,7 @@ msgstr "Možnosti"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Tipkovne bližnjice"
@@ -851,13 +841,15 @@ msgstr "Dokument"
 #: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:90
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Program"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:91
 msgid "Pages"
 msgstr "Strani"
 
@@ -869,7 +861,8 @@ msgstr "Strani"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:104
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Urejevalnik besedil"
@@ -912,8 +905,9 @@ msgid "The file has been changed by another program."
 msgstr "Datoteka je bila spremenjena v drugem programu."
 
 #: src/libide/editor/ide-editor-info-bar.c:99
+#, fuzzy
 msgid "File Contains Encoding Errors"
-msgstr ""
+msgstr "Datoteka vsebuje napake pri kodiranju"
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
@@ -950,32 +944,31 @@ msgid "_Discard…"
 msgstr "_Zavrzi …"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Tiskanje je spodletelo: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
-#, fuzzy, c-format
-#| msgid "Failed to load directory: %s"
+#: src/libide/editor/ide-editor-page.c:590
+#, c-format
 msgid "Failed to format selection: %s"
-msgstr "Nalaganje datoteke je spodletelo: %s"
+msgstr "Oblikovanje izbora ni uspelo: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1013
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Shrani datoteko"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Shrani"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1149,12 +1142,14 @@ msgid "Pipeline started to clean build tree"
 msgstr ""
 
 #: src/libide/foundry/ide-pipeline.c:954
+#, fuzzy
 msgid "Pipeline started"
-msgstr ""
+msgstr "Cevovod se je zagnal"
 
 #: src/libide/foundry/ide-pipeline.c:980
+#, fuzzy
 msgid "Pipeline finished"
-msgstr ""
+msgstr "Cevovod končan"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1290,7 +1285,7 @@ msgstr "Poteka zaganjanje %s …"
 
 #: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
-msgstr ""
+msgstr "Postavitev na napravo ..."
 
 #: src/libide/foundry/ide-run-manager.c:1293
 #, fuzzy
@@ -1440,9 +1435,8 @@ msgid "Go back"
 msgstr "Skoči na predhodni pogled"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
-#, fuzzy
 msgid "Toggle selection mode"
-msgstr "Preklopi izbirni način"
+msgstr "Preklopi na izbirni način"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:51
 msgctxt "title"
@@ -1540,7 +1534,7 @@ msgstr[1] "Pred približno %u letomi"
 msgstr[2] "Pred približno %u letoma"
 msgstr[3] "Pred približno %u leti"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:68
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Namesti"
@@ -1554,6 +1548,7 @@ msgstr "%u od %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "Poišči"
 
@@ -1586,7 +1581,7 @@ msgstr "_Simboli"
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:392
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
-msgstr ""
+msgstr "Vnesite novo bližnjico za spremembo <b>%s</b>."
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:27
 msgid "_Set"
@@ -1594,7 +1589,7 @@ msgstr "_Nastavi"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:68
 msgid "Press Escape to cancel or Backspace to disable."
-msgstr ""
+msgstr "Pritisnite ubežnico (Esc) za preklic ali vračalko, da onemogočite."
 
 #: src/libide/gui/gtk/menus.ui:14
 msgid "Close Project"
@@ -1606,9 +1601,8 @@ msgid "General"
 msgstr "Splošno"
 
 #: src/libide/gui/gtk/menus.ui:27
-#, fuzzy
 msgid "Change application preferences"
-msgstr "Spremeni nastavitve aplikacije"
+msgstr "Spremeni lastnosti programa"
 
 #: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
@@ -1622,7 +1616,7 @@ msgstr "Poteka posodabljanje programa Builder"
 
 #: src/libide/gui/gtk/menus.ui:51
 msgid "Show information about Builder"
-msgstr ""
+msgstr "Pokaži podrobnosti o izgrajevalniku"
 
 #: src/libide/gui/gtk/menus.ui:60
 msgid "Quit without saving changes"
@@ -1635,7 +1629,7 @@ msgstr "Spletno brskanje"
 #: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1709,7 +1703,7 @@ msgstr "Novo okno terminala"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
-msgstr ""
+msgstr "Odpri meni programa (F10)"
 
 #: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
@@ -1720,14 +1714,13 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Preklopi levi pladenj (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Preklopi desni pladenj"
 
 #: src/libide/gui/ide-primary-workspace.ui:59
-#, fuzzy
 msgid "Search (Ctrl+Enter)"
-msgstr "Vsebinska _pomoč"
+msgstr "Poišči (krmilka+vnašalka)"
 
 #: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
@@ -1749,8 +1742,8 @@ msgstr "Zaustavi izvajanje"
 msgid "Run project"
 msgstr "Zaženi projekt"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:254
+#: src/libide/gui/ide-shortcut-window.c:280
 msgid "Other"
 msgstr "Drugo"
 
@@ -1768,7 +1761,7 @@ msgstr "Nalaganje projekta »%s«"
 msgid "There are unsaved documents"
 msgstr "Odprti so neshranjeni dokumenti"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:168
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1829,7 +1822,7 @@ msgstr "Naprave in simulatorji"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Diagnostika"
 
@@ -1858,10 +1851,8 @@ msgid "Web"
 msgstr "Splet"
 
 #: src/libide/plugins/ide-plugin.c:353
-#, fuzzy
-#| msgid "Language Syntax"
 msgid "Language Enablement"
-msgstr "Skladnja jezika"
+msgstr "Omogočanje jezika"
 
 #: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
@@ -2116,9 +2107,8 @@ msgid "Move to previous match"
 msgstr "Skoči na predhodni zadetek"
 
 #: src/libide/terminal/ide-terminal-search.ui:44
-#, fuzzy
 msgid "Move to next match"
-msgstr "Pomakni se na naslednji zadetek"
+msgstr "Premakni na naslednji zadetek"
 
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
@@ -2146,9 +2136,9 @@ msgid "Select Font"
 msgstr "Izbor pisave"
 
 #: src/libide/tweaks/ide-tweaks-window.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Builder — %s — Preferences"
-msgstr "Graditelj – %s – Nastavitve"
+msgstr "Izgrajevalnik – %s – možnosti"
 
 #: src/libide/tweaks/ide-tweaks-window.c:138
 msgid "Builder — Preferences"
@@ -2175,7 +2165,7 @@ msgstr "Brez"
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:166
 msgid "Settings"
 msgstr "Nastavitve"
 
@@ -2387,9 +2377,8 @@ msgstr "Deljeno"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 #, fuzzy
-#| msgid "Status:"
 msgid "Static"
-msgstr "Stanje:"
+msgstr "Statičen"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
@@ -2437,10 +2426,8 @@ msgid "Duplicate into new configuration"
 msgstr "Podvoji v novo prilagoditev"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
-#, fuzzy
-#| msgid "Make _Active"
 msgid "Make Active"
-msgstr "Nastavi kot _dejavno"
+msgstr "Nastavi kot dejavno"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
@@ -2467,97 +2454,95 @@ msgstr "Izgradi projekt (Shift+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "Prilagodi projekt …"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "Prilagodite nastavitve, povezane s projektom"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:21
+#: src/plugins/buildui/gtk/menus.ui:30 src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:93 src/plugins/buildui/gtk/menus.ui:103
+#: src/plugins/buildui/gtk/menus.ui:117 src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/buildui/gtk/menus.ui:162
 msgid "Code Foundry"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:22
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Nastavitve"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "Ponovno naloži prilagoditev"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "Ponovno naloži prilagoditev projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Select Build Target…"
 msgstr "Izberi cilj gradnje …"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Change default build target"
 msgstr "Spremenite privzeti cilj gradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:31 src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Building"
 msgstr "Izgradnja paketov"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "_Build"
 msgstr "_Izgradi"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:35
 msgid "Build the project"
 msgstr "Izgradi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:42
 msgid "_Rebuild"
 msgstr "_Ponovno izgradi"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:43
 msgid "Rebuild the project"
 msgstr "Ponovno izgradi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "_Clean"
 msgstr "_Počisti"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Clean the project"
 msgstr "Počisti projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:56
 msgid "Stop Building"
 msgstr "Ustavi gradnjo"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:57
 #, fuzzy
 #| msgid "Save the current page"
 msgid "Cancel the current build operation"
 msgstr "Shrani trenutno stran"
 
-#: src/plugins/buildui/gtk/menus.ui:59
-#, fuzzy
-#| msgid "Install project"
+#: src/plugins/buildui/gtk/menus.ui:65
 msgid "Install & Deployment"
-msgstr "Namesti projekt"
+msgstr "Namestitev in postavitev"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Install the project"
 msgstr "Namesti projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Deploy to Device…"
 msgstr "Pošlji na napravo …"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:77
 #, fuzzy
 #| msgid "Display the project creation guide"
 msgid "Deploy project to current device"
@@ -2567,116 +2552,113 @@ msgstr "Pokaži vodnik ustvarjanja projekta"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "_Export"
 msgstr "_Izvozi"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Export project"
 msgstr "Izvozi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Stop Build"
 msgstr "Ustavi gradnjo"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop building project"
 msgstr "Zaustavi izgradnjo projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Show Bui_ld Output"
 msgstr "Po_kaži odvod izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:109
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:127
 msgid "Running"
 msgstr "V teku"
 
-#: src/plugins/buildui/gtk/menus.ui:112
-#, fuzzy
-#| msgid "Delete Command"
+#: src/plugins/buildui/gtk/menus.ui:120
 msgid "Select Run Command…"
-msgstr "Izbriši ukaz"
+msgstr "Izbor ukaza za zagon …"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Run"
 msgstr "Zaženi"
 
-#: src/plugins/buildui/gtk/menus.ui:128
-#, fuzzy
+#: src/plugins/buildui/gtk/menus.ui:136
 msgid "Run the project"
-msgstr "Zaženite projekt"
+msgstr "Zaženi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:142
 #, fuzzy
 msgid "Restart Program"
 msgstr "Znova zaženi program"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:145
 #, fuzzy
 #| msgid "Continue running the program"
 msgid "Restart the running program"
 msgstr "Nadaljujte z izvajanjem programa"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Stop Program"
 msgstr "Ustavi program"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:154
 msgid "Stop running the project"
 msgstr "Zaustavi izvajanje projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:159
 msgid "Debugging"
 msgstr "Razhroščevanje"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:163 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Preizkusi enot"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Follow System Style"
 msgstr "Sledi slogu sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Light"
 msgstr "Vsili svetlo"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:182
 msgid "Force Dark"
 msgstr "Vsili temno"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Accessibility"
 msgstr "Dostopnost"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Text Direction"
 msgstr "Smer besedila"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Left-to-Right"
 msgstr "Z leve proti desni"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Right-to-Left"
 msgstr "Z desne proti levi"
 
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:219
 msgid "Show Inspector"
 msgstr "Pokaži inšpektorja"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Slog"
 
@@ -2723,7 +2705,7 @@ msgstr "Vedno"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "Zemljevid predogleda je vedno prikazan"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
 msgid "Auto"
@@ -3102,10 +3084,9 @@ msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Morebitna tipkarska napaka v »%s«. Ali ste mislili »%s«?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
-#, fuzzy, c-format
-#| msgid "Failed to load directory: %s"
+#, c-format
 msgid "Failed to format while saving document: %s"
-msgstr "Nalaganje datoteke je spodletelo: %s"
+msgstr "Med shranjevanje dokumenta ni bilo mogoče oblikovati: %s"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 #, fuzzy
@@ -3139,7 +3120,7 @@ msgstr "Simbol ni izbran"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
 msgid "A symbol to rename must be selected"
-msgstr ""
+msgstr "Izbrati morate simbol, ki ga želite preimenovati"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
@@ -3231,7 +3212,7 @@ msgstr "_Odstrani komentar kode"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
+msgstr "Odstrani komentarje iz izbrane izvorne kode"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3267,10 +3248,8 @@ msgid "Project Name"
 msgstr "Ime projekta"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:19
-#, fuzzy
-#| msgid "A folder with that name already exists."
 msgid "A subdirectory with this name already exists"
-msgstr "Mapa z enakim imenom že obstaja."
+msgstr "Podrejena mapa s tem imenom že obstaja"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:26
 #, fuzzy
@@ -3339,12 +3318,12 @@ msgid "Create New Project"
 msgstr "Ustvari nov projekt"
 
 #: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:19
+#: src/plugins/create-project/gtk/menus.ui:32
 msgid "Create New Project…"
 msgstr "Ustvari nov projekt …"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:23
 msgid "Create a new project from template"
 msgstr "Ustvari nov projekt iz predloge"
 
@@ -3414,9 +3393,8 @@ msgid "Continue debugging to next breakpoint"
 msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:43
-#, fuzzy
 msgid "Pause"
-msgstr "Naredi premor"
+msgstr "Premor"
 
 #: src/plugins/debuggerui/gtk/menus.ui:46
 msgid "Pause debugger until continued"
@@ -3453,22 +3431,16 @@ msgid "Breakpoints"
 msgstr "Prekinitvene točke"
 
 #: src/plugins/debuggerui/gtk/menus.ui:85
-#, fuzzy
-#| msgid "Automatically enable dark mode at night"
 msgid "Automatically Break at Program Start"
-msgstr "Samodejno omogoči temno temo v času noči"
+msgstr "Samodejno prekini ob začetku programa"
 
 #: src/plugins/debuggerui/gtk/menus.ui:90
-#, fuzzy
-#| msgid "Automatically enable dark mode at night"
 msgid "Automatically Break at Warnings"
-msgstr "Samodejno omogoči temno temo v času noči"
+msgstr "Samodejno prekini ob opozorilih"
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
-#, fuzzy
-#| msgid "Automatically enable dark mode at night"
 msgid "Automatically Break at Criticals"
-msgstr "Samodejno omogoči temno temo v času noči"
+msgstr "Samodejno prekini ob kritični napaki"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3654,9 +3626,8 @@ msgid "The device address"
 msgstr "Naslov naprave"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:49
-#, fuzzy
 msgid "The device port number"
-msgstr "Medpomnilnik besedila"
+msgstr "Številka vrat naprave"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
 #, fuzzy
@@ -3734,10 +3705,8 @@ msgid "Tabs"
 msgstr "Zavihki"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
-#, fuzzy
-#| msgid "_Go"
 msgid "Go"
-msgstr "_Pojdi"
+msgstr "Pojdi"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go to Line"
@@ -3748,10 +3717,8 @@ msgid "Indentation"
 msgstr "Zamikanje"
 
 #: src/plugins/editorui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Use Spaces"
 msgid "Indent Using Spaces"
-msgstr "Uporabi presledke"
+msgstr "Zamakni z uporabo presledkov"
 
 #: src/plugins/editorui/gtk/menus.ui:13
 msgid "Spaces per Tab"
@@ -3779,16 +3746,12 @@ msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation Size"
-msgstr "Zamikanje"
+msgstr "Velikost zamika"
 
 #: src/plugins/editorui/gtk/menus.ui:44
-#, fuzzy
-#| msgid "Tab Width"
 msgid "Same as Tab Width"
-msgstr "Širina tabulatorja"
+msgstr "Enako širini tabulatorja"
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
@@ -3814,7 +3777,7 @@ msgstr "_Nova datoteka"
 msgid "_Open File…"
 msgstr "_Odpri datoteko …"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Odpri v novem oknu"
 
@@ -3881,8 +3844,6 @@ msgid "Ensure files end with a newline"
 msgstr "Zagotovi končni prelom v novo vrstico"
 
 #: src/plugins/editorui/tweaks-language.ui:90
-#, fuzzy
-#| msgid "Trim trailing whitespace"
 msgid "Trim Trailing Space"
 msgstr "Obreži končne presledne znake"
 
@@ -3977,8 +3938,6 @@ msgid "Space before opening angles"
 msgstr "Presledek pred začetnim kotnikom"
 
 #: src/plugins/editorui/tweaks-language.ui:283
-#, fuzzy
-#| msgid "Prefer a space before colons"
 msgid "Prefer a space before colon"
 msgstr "Prednostno uporabi presledek pred dvopičjem"
 
@@ -4037,10 +3996,8 @@ msgid "Background Pattern"
 msgstr "Vzorec ozadja"
 
 #: src/plugins/editorui/tweaks.ui:112
-#, fuzzy
-#| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
-msgstr "Prikaže mrežni vzorec pod izvorno kodo"
+msgstr "Pokaži vzorec ozadja pod izvorno kodo"
 
 #: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
@@ -4073,10 +4030,8 @@ msgid "Prefer Scrollbars"
 msgstr "Prednost imajo drsniki"
 
 #: src/plugins/editorui/tweaks.ui:156
-#, fuzzy
-#| msgid "Always"
 msgid "Always On"
-msgstr "Vedno"
+msgstr "Vedno omogočeno"
 
 #: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
@@ -4166,19 +4121,16 @@ msgid "Non-breaking spaces"
 msgstr "Nedeljivi presledki"
 
 #: src/plugins/editorui/tweaks.ui:297
-#, fuzzy
-#| msgid "Draw a circle over space characters."
 msgid "Draw a mark at non-breaking space characters"
-msgstr "Izriši krožec prek preslednih znakov."
+msgstr "Izriši oznako pri neprelomnih znakih presledkov"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Leading"
 msgstr "Vodilno"
 
 #: src/plugins/editorui/tweaks.ui:314
-#, fuzzy
 msgid "Draw marks for leading spaces only"
-msgstr "Izriši krožec prek preslednih znakov."
+msgstr "Izriši sledi le za presledne znake na začetku"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Inside Text"
@@ -4193,9 +4145,8 @@ msgid "Trailing"
 msgstr "Sled"
 
 #: src/plugins/editorui/tweaks.ui:340
-#, fuzzy
 msgid "Draw marks for trailing spaces only"
-msgstr "Izriši krožec prek preslednih znakov."
+msgstr "Izriši sledi le za presledne znake na koncu"
 
 #: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
@@ -4210,10 +4161,8 @@ msgid "Selections"
 msgstr "Izbori"
 
 #: src/plugins/editorui/tweaks.ui:380
-#, fuzzy
-#| msgid "Minimum length for highlight"
 msgid "Minimum Characters to Highlight"
-msgstr "Najmanjša dolžina poudarjanja"
+msgstr "Najmanjše število znakov za poudarjanje"
 
 #: src/plugins/editorui/tweaks.ui:381
 #, fuzzy
@@ -4240,29 +4189,24 @@ msgid "Code Completion"
 msgstr "Dopolnjevanje kode"
 
 #: src/plugins/editorui/tweaks.ui:417
-#, fuzzy
-#| msgid "Completion Providers"
 msgid "Completion Proposals"
-msgstr "Ponudniki dopolnjevanja"
+msgstr "Predlogi dopolnjevanja"
 
 #: src/plugins/editorui/tweaks.ui:420
-#, fuzzy
 msgid "Suggest Code Completions"
 msgstr "Predlagaj dopolnjevanje kode"
 
 #: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "Samodejno predlagaj dokončanje kode med vnašanjem"
 
 #: src/plugins/editorui/tweaks.ui:432
-#, fuzzy
-#| msgid "Suggest Completions from Snippets"
 msgid "Select First Completion Proposal"
-msgstr "Predlagaj dopolnjevanje s Snippets"
+msgstr "Izbor prvega predloga dopolnjevanja"
 
 #: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
-msgstr ""
+msgstr "Samodejno izberi prvi predlog za dokončanje, ko je prikazan"
 
 #: src/plugins/editorui/tweaks.ui:448
 #, fuzzy
@@ -4295,15 +4239,15 @@ msgstr "Tipka HOME premakne položaj kazalke na prvi nepresledni znak"
 
 #: src/plugins/editorui/tweaks.ui:493
 msgid "Before line boundaries"
-msgstr ""
+msgstr "Pred mejami vrstic"
 
 #: src/plugins/editorui/tweaks.ui:499
 msgid "After line boundaries"
-msgstr ""
+msgstr "Za mejami vrstic"
 
 #: src/plugins/editorui/tweaks.ui:505
 msgid "Instead of line boundaries"
-msgstr ""
+msgstr "Namesto meja vrstic"
 
 #: src/plugins/editorui/tweaks.ui:511 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
@@ -4323,13 +4267,11 @@ msgstr "Samodejno shrani"
 
 #: src/plugins/editorui/tweaks.ui:531
 msgid "Regularly save the document as you type"
-msgstr ""
+msgstr "Redno shranjuj dokument med vnašanjem"
 
 #: src/plugins/editorui/tweaks.ui:542
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto-Save Delay"
-msgstr "Samodejno shranjevanje"
+msgstr "Zamik samodejnega shranjevanja"
 
 #: src/plugins/editorui/tweaks.ui:543
 #, fuzzy
@@ -4642,10 +4584,8 @@ msgid "A valid Git URL is required"
 msgstr "Zahtevan je veljaven naslov URL Git."
 
 #: src/plugins/git/tweaks.ui:13
-#, fuzzy
-#| msgid "Author Email"
 msgid "Authorship"
-msgstr "Elektronski naslov avtorja"
+msgstr "Avtorstvo"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
@@ -4664,7 +4604,7 @@ msgstr "Projekt začetnega nalagalnika"
 msgid "Gradle Run"
 msgstr ""
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Pokaži novo pozdravno okno"
 
@@ -4785,7 +4725,7 @@ msgstr "Spremenjeno"
 
 #: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
 msgid "With _Folder Listing"
-msgstr ""
+msgstr "S _seznamom map"
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
@@ -4821,88 +4761,101 @@ msgstr ""
 msgid "Actions"
 msgstr "Dejanja"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Splošno iskanje"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
-#, fuzzy
-#| msgid "Focus to the global search entry"
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
-msgstr "Osredotoči se na splošno iskanje"
+msgstr "Pokaži polje splošnega iskanja"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Pulti"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Preklopi levi pladenj"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
-msgstr "Preklopi levi pladenj"
+msgstr "Preklopi levi pladenj v in iz pogleda"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:35
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
-msgstr "Preklopi desni pladenj"
+msgstr "Preklopi desni pladenj v in iz pogleda"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:41
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Preklopi spodnji pladenj"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
-msgstr "Preklopi spodnji pladenj"
+msgstr "Preklopi spodnji pladenj v in iz pogleda"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Preklopi v temni način"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "Spremeni slogovno shemo v temno različico"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Preklopi v svetli način"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "Spremeni slogovno shemo v svetlo različico"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Prikaži diagnostiko gradnje"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "Pokaži napake in opozorila, zaznane med gradnjo"
+
+#: src/plugins/menu-search/gtk/menus.ui:94
+#, fuzzy
+#| msgid "Close Project"
+msgid "Close Page"
+msgstr "Zapri projekt"
+
+#: src/plugins/menu-search/gtk/menus.ui:95
+#, fuzzy
+#| msgid "Reload the current page"
+msgid "Close the current page"
+msgstr "Ponovno naloži trenutno stran"
+
+#: src/plugins/menu-search/gtk/menus.ui:108
+#, fuzzy
+msgid "Move to next search result"
+msgstr "Pomakni se na naslednji zadetek"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Move to and select the next available search result"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+#, fuzzy
+msgid "Move to previous search result"
+msgstr "Skoči na predhodni zadetek"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the previous search result"
+msgstr ""
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5050,10 +5003,8 @@ msgstr ""
 "Projekt, zasnovan v okolju Mason je naložen, okolja Ninja pa ni mogoče najti."
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:218
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Empty Meson Project"
-msgstr "Izprazni projekt"
+msgstr "Izprazni projekt Meson"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 #, fuzzy
@@ -5112,11 +5063,8 @@ msgid "Boxes"
 msgstr "Škatle"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-#, fuzzy
-#| msgid "A simple GNOME 3 application to access remote or virtual systems"
 msgid "A GNOME application to access remote or virtual systems"
-msgstr ""
-"Enostaven program GNOME 3 za dostop do oddaljenih ali navideznih sistemov"
+msgstr "Program GNOME za dostop do oddaljenih ali navideznih sistemov"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
@@ -5432,10 +5380,8 @@ msgid "Projects created with Builder will be placed within this directory"
 msgstr "Projekt bo ustvarjen znotraj nove podrejene mape."
 
 #: src/plugins/projectui/tweaks.ui:48
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "The default license when creating new projects"
-msgstr "Predpona za uporabo med nameščanjem projekta."
+msgstr "Privzeto dovoljenje pri ustvarjanju novih projektov"
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
@@ -5556,15 +5502,13 @@ msgid "Untitled Command"
 msgstr "Neimenovan ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:172
 msgid "Set Shortcut"
 msgstr "Nastavi tipkovno bližnjico"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
-#, fuzzy
-#| msgid "Select Project Directory"
 msgid "Select Working Directory"
-msgstr "Izbor mape projekta"
+msgstr "Izberite delovno mapo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
@@ -5615,7 +5559,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
-msgstr ""
+msgstr "Uporabi podlupino"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
@@ -5668,21 +5612,19 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
 msgid "These commands are specific to this project."
-msgstr ""
+msgstr "Ti ukazi so specifični za ta projekt."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
-msgstr ""
+msgstr "Ti ukazi se uporabljajo v vseh projektih."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
 msgstr "Prikazano ime"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
-#, fuzzy
-#| msgid "Keyboard Movement"
 msgid "Keyboard Accelerator"
-msgstr "Premikanje s tipkovnico"
+msgstr "Pospeševalna tipka"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
 msgid "Current Working Directory"
@@ -5736,16 +5678,14 @@ msgid "Reset all actions to original keyboard shortcut"
 msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
-#, fuzzy
-#| msgid "_Empty File"
 msgid "_Edit File"
-msgstr "_Prazna datoteka"
+msgstr "_Uredi datoteko"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
 msgid "Open keybindings.json in editor"
 msgstr "Odpri keybindings.json v urejevalniku"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr ""
 
@@ -5788,10 +5728,8 @@ msgid "Filter Symbols…"
 msgstr "FIltriraj simbole …"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
-#, fuzzy
-#| msgid "Symbols"
 msgid "Symbols in File"
-msgstr "Simboli"
+msgstr "Simboli v datoteki"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
@@ -5807,8 +5745,9 @@ msgid "Select Symbol…"
 msgstr "Izbor simbola …"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+#, fuzzy
 msgid "Select Symbol (Ctrl+Shift+K)"
-msgstr ""
+msgstr "Izberi simbol (krmilka+dvigalka+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 #, fuzzy
@@ -5849,7 +5788,6 @@ msgstr "Zaženi s programom Profiler"
 
 #: src/plugins/sysprof/gtk/menus.ui:23
 #, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run the project with profiler"
 msgstr "Zaženi s programom Profiler"
 
@@ -5899,7 +5837,7 @@ msgstr "Uporaba pomnilnika"
 
 #: src/plugins/sysprof/gtk/menus.ui:71
 msgid "Storage I/O"
-msgstr ""
+msgstr "V/I shrambe"
 
 #: src/plugins/sysprof/gtk/menus.ui:76
 msgid "Network I/O"
@@ -5986,7 +5924,7 @@ msgstr "Poraba energije"
 
 #: src/plugins/sysprof/tweaks.ui:100
 msgid "Record statistics about energy usage using RAPL"
-msgstr ""
+msgstr "Beleži statistiko o rabi energije z RAPL"
 
 #: src/plugins/sysprof/tweaks.ui:111
 msgid "Battery Usage"
@@ -5994,7 +5932,7 @@ msgstr "Uporaba baterije"
 
 #: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about battery charge and discharge rates"
-msgstr ""
+msgstr "Beleži statistiko o napolnjenosti baterije in merah njenega praznjenja"
 
 #: src/plugins/sysprof/tweaks.ui:127
 msgid "Network Usage"
@@ -6002,7 +5940,7 @@ msgstr "Uporaba omrežja"
 
 #: src/plugins/sysprof/tweaks.ui:128
 msgid "Record statistics about network usage"
-msgstr ""
+msgstr "Beleži statistiko o rabi omrežja"
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Disk Usage"
@@ -6056,48 +5994,45 @@ msgstr "Odvod programa"
 msgid "Process completed"
 msgstr "Preizkusi enot so končani"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "Novo okno _terminala"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 #, fuzzy
 #| msgid "Default (Host operating system)"
 msgid "Open a new terminal on the host operating system"
 msgstr "Privzeto (gostiteljski operacijski sistem)"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "_Nov terminal za izgradnjo"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
-msgstr ""
+msgstr "Odpri nov terminal v cevovodu za gradnjo projekta"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "_Novo izvajalno okno terminala"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 #, fuzzy
 #| msgid "Run in runtime environment"
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Zaženi v izvajalnem okolju"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Razdeli"
 
 #: src/plugins/terminal/tweaks.ui:14
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "The font used within terminals"
-msgstr "Najdi besedilo znotraj terminala"
+msgstr "Pisava, ki se uporablja v terminalih"
 
 #: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
-msgstr ""
+msgstr "Dovoli krepko besedilo"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
@@ -6116,8 +6051,6 @@ msgid "Scrolling"
 msgstr "Drsenje"
 
 #: src/plugins/terminal/tweaks.ui:58
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Output"
 msgstr "Drsenje ob dopolnjenem izpisu"
 
@@ -6126,14 +6059,12 @@ msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:70
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Keyboard Input"
-msgstr "Drsenje ob dopolnjenem izpisu"
+msgstr "Drsenje ob vpisu s tipkovnico"
 
 #: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
-msgstr ""
+msgstr "Vsebina samodejno zdrsi, ko je vneseno besedilo"
 
 #: src/plugins/terminal/tweaks.ui:87
 msgid "Limit Scrollback"
@@ -6142,17 +6073,17 @@ msgstr "Omeji drsanje"
 #: src/plugins/terminal/tweaks.ui:88
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
-msgstr ""
+msgstr "Omeji število vrstic, ki so shranjene v pomnilniku drsnika terminala"
 
 #: src/plugins/terminal/tweaks.ui:99
-#, fuzzy
-#| msgid "Limit Scrollback"
 msgid "Maximum Lines in Scrollback"
-msgstr "Omeji drsanje"
+msgstr "Število shranjenih vrstic zgodovine drsnika"
 
 #: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
+"Največje število vrstic, shranjenih v zgodovini pri omejevanju povratnega "
+"drsenja"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
@@ -6172,15 +6103,14 @@ msgstr "Shrani odvod preizkusa"
 
 #. Translators: %s is replaced with the time in the current locale
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
-#, fuzzy, c-format
-#| msgid "Run _all tests"
+#, c-format
 msgid "Running all unit tests at %s"
-msgstr "Zaženi _vse preizkuse"
+msgstr "Zaganjanje vseh preizkusov enot ob %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 #, c-format
 msgid "Unit tests completed in %lf seconds"
-msgstr ""
+msgstr "Preizkusi enot končani po %lf s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
 msgid "Unit tests completed"
@@ -6192,7 +6122,7 @@ msgstr "Zaženi _vse preizkuse"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr ""
+msgstr "Zahtevaj zagon vseh preizkusov enot"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
@@ -6214,16 +6144,12 @@ msgid "Builder is updating your project’s configured dependencies."
 msgstr "Program posodablja nastavljene odvisnosti projekta."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Updating Dependencies…"
 msgid "Update Dependencies…"
-msgstr "Poteka posodabljanje odvisnosti …"
+msgstr "Posodobi odvisnosti …"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Update project dependencies"
 msgid "Download updates to project dependencies"
-msgstr "Posodobi odvisnosti projekta"
+msgstr "Prejmi posodobitve odvisnosti projekta"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6249,30 +6175,24 @@ msgid "Install Updates…"
 msgstr "Namesti posodobitve …"
 
 #: src/plugins/update-manager/gtk/menus.ui:8
-#, fuzzy
-#| msgid "The default keybindings for Builder."
 msgid "Install pending updates for Builder"
-msgstr "Privzete tipkovne bližnjice za program Builder"
+msgstr "Namesti pripravljene posodobitve programa"
 
 #: src/plugins/valgrind/gtk/menus.ui:11
-#, fuzzy
-#| msgid "Run with Debugger"
 msgid "Run with Leak Detector"
-msgstr "Zaženi z razhroščevalnikom"
+msgstr "Zaženi z zaznavanjem uhajanja"
 
 #: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
 msgstr "Zaženi projekt z valgrind"
 
 #: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
-#, fuzzy
 msgid "Leak Detector"
-msgstr "Detektor uhajanja"
+msgstr "Zaznavanje uhajanja"
 
 #: src/plugins/valgrind/gtk/menus.ui:25
-#, fuzzy
 msgid "Track Origin of Leaks"
-msgstr "Sledite izvorom uhajanja"
+msgstr "Sledi izvoru uhajanja"
 
 #: src/plugins/valgrind/gtk/menus.ui:31
 msgid "Report Leaks"
@@ -6283,74 +6203,60 @@ msgid "Summary"
 msgstr "Povzetek"
 
 #: src/plugins/valgrind/gtk/menus.ui:39
-#, fuzzy
 msgid "Full"
-msgstr "Polno"
+msgstr "Polna"
 
 #: src/plugins/valgrind/gtk/menus.ui:52 src/plugins/valgrind/tweaks.ui:16
-#, fuzzy
 msgid "Leak Kinds"
 msgstr "Vrste uhajanja"
 
 #: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
-#, fuzzy
-#| msgid "Definition"
 msgid "Definite"
-msgstr "Definicija"
+msgstr "Določeno"
 
 #: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
-#, fuzzy
 msgid "Indirect"
-msgstr "Posredno"
+msgstr "Neposredno"
 
 #: src/plugins/valgrind/gtk/menus.ui:64 src/plugins/valgrind/tweaks.ui:31
-#, fuzzy
 msgid "Possible"
-msgstr "Morebitno"
+msgstr "Verjetno"
 
 #: src/plugins/valgrind/gtk/menus.ui:69 src/plugins/valgrind/tweaks.ui:55
-#, fuzzy
 msgid "Reachable"
-msgstr "Dosegljivo/Dostopno"
+msgstr "Dosegljivo"
 
 #: src/plugins/valgrind/tweaks.ui:20
-#, fuzzy
 msgid "Include definite leaks in report summary"
-msgstr "V povzetek poročila vključi zagotovo uhajanje"
+msgstr "Vključi določeno uhajanje v povzetek poročila"
 
 #: src/plugins/valgrind/tweaks.ui:32
-#, fuzzy
 msgid "Include possible leaks in report summary"
-msgstr "V povzetek poročila vključi morebitno uhajanje"
+msgstr "Vključi možno uhajanje v povzetek poročila"
 
 #: src/plugins/valgrind/tweaks.ui:44
-#, fuzzy
 msgid "Include indirect leaks in report summary"
-msgstr "V povzetek poročila vključi posredno uhajanja"
+msgstr "Vključi neposredno uhajanje v povzetek poročila"
 
 #: src/plugins/valgrind/tweaks.ui:56
-#, fuzzy
 msgid "Include reachable leaks in report summary"
-msgstr "V povzetek poročila vključi dostopno/dosegljivo uhajanje"
+msgstr "Vključi dosegljivo uhajanje v povzetek poročila"
 
 #: src/plugins/valgrind/tweaks.ui:71
-#, fuzzy
-#| msgid "Margins"
 msgid "Track Origins"
-msgstr "Robovi"
+msgstr "Sledi izvoru"
 
 #: src/plugins/valgrind/tweaks.ui:72
 msgid "Show origin of undefined values"
 msgstr "Pokaži izvor nedefiniranih vrednosti"
 
 #: src/plugins/valgrind/tweaks.ui:87
-#, fuzzy
 msgid "Leak Check"
 msgstr "Preverjanje uhajanja"
 
 #: src/plugins/valgrind/tweaks.ui:88
 msgid "Search for memory leaks at exit"
-msgstr ""
+msgstr "Ob izhodu preveri uhajanje pomnilnika"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
@@ -6366,7 +6272,7 @@ msgstr "Naslov URL skladišča"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
 msgid "Choose an alternate branch"
-msgstr ""
+msgstr "Izberite drugo vejo"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
 msgid "Branches"
@@ -6377,6 +6283,7 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"Vpišite naslov URL izvorne kode skladišča za projekt, ki ga želite klonirati."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
 msgid "The repository will be cloned into a new subdirectory."
@@ -6389,6 +6296,7 @@ msgstr "Podrobnosti avtorja"
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
 msgid "You may specify authorship information to override defaults."
 msgstr ""
+"Mogoče je določiti podrobnosti avtorstva za prepis privzetih vrednosti."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
 msgid "Status"
@@ -6420,7 +6328,7 @@ msgstr "Nova _stran brskalnika"
 
 #: src/plugins/web-browser/gtk/menus.ui:9
 msgid "Open a web browser in a new page"
-msgstr ""
+msgstr "Odpri spletni brskalnik na novi strani"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 #: src/plugins/web-browser/gtk/menus.ui:25
@@ -6432,28 +6340,20 @@ msgid "Reload the current page"
 msgstr "Ponovno naloži trenutno stran"
 
 #: src/plugins/web-browser/gtk/menus.ui:26
-#, fuzzy
-#| msgid "Reformat current file on save"
 msgid "Reload the current page ignoring cache"
-msgstr "Preoblikuj trenutno datoteko ob shranjevanju"
+msgstr "Ponovno naloži trenutno stran mimo predpomnilnika"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
-#, fuzzy
-#| msgid "Project Location"
 msgid "Focus Location"
-msgstr "Mesto projekta"
+msgstr "Postavi mesto v žarišče"
 
 #: src/plugins/web-browser/gtk/menus.ui:32
-#, fuzzy
-#| msgid "Save the current page"
 msgid "Focus the current page's location"
-msgstr "Shrani trenutno stran"
+msgstr "Postavi trenutno mesto strani v žarišče"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:133
-#, fuzzy
-#| msgid "Failed to save glade document: %s"
 msgid "Failed to parse XML document"
-msgstr "Shranjevanje dokumenta glade je spodletelo: »%s«"
+msgstr "Razčlenjevanje dokumenta XML ni uspelo"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
