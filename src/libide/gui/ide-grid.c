@@ -1,6 +1,6 @@
 /* ide-grid.c
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,10 +48,27 @@ ide_grid_real_create_frame (PanelGrid *grid)
   return PANEL_FRAME (ide_frame_new ());
 }
 
+static gboolean
+ide_grid_grab_focus (GtkWidget *widget)
+{
+  IdeGrid *self = IDE_GRID (widget);
+  PanelFrame *frame;
+
+  g_assert (IDE_IS_GRID (self));
+
+  if ((frame = panel_grid_get_most_recent_frame (PANEL_GRID (self))))
+    return gtk_widget_grab_focus (GTK_WIDGET (frame));
+
+  return FALSE;
+}
+
 static void
 ide_grid_class_init (IdeGridClass *klass)
 {
   PanelGridClass *grid_class = PANEL_GRID_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->grab_focus = ide_grid_grab_focus;
 
   grid_class->create_frame = ide_grid_real_create_frame;
 }
