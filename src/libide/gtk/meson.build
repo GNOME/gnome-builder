@@ -24,6 +24,7 @@ libide_gtk_public_headers = [
   'ide-shortcut-accel-dialog.h',
   'ide-tree-expander.h',
   'ide-truncate-model.h',
+  'ide-unique-list-model.h',
   'libide-gtk.h',
 ]
 
@@ -56,6 +57,7 @@ libide_gtk_public_sources = [
   'ide-shortcut-accel-dialog.c',
   'ide-tree-expander.c',
   'ide-truncate-model.c',
+  'ide-unique-list-model.c',
 ]
 
 libide_gtk_private_sources = [

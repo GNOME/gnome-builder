@@ -37,6 +37,7 @@
 #include "ide-shortcut-accel-dialog.h"
 #include "ide-tree-expander.h"
 #include "ide-truncate-model.h"
+#include "ide-unique-list-model.h"
 
 void
 _ide_gtk_init (void)
@@ -53,6 +54,7 @@ _ide_gtk_init (void)
   g_type_ensure (IDE_TYPE_SHORTCUT_ACCEL_DIALOG);
   g_type_ensure (IDE_TYPE_TREE_EXPANDER);
   g_type_ensure (IDE_TYPE_TRUNCATE_MODEL);
+  g_type_ensure (IDE_TYPE_UNIQUE_LIST_MODEL);
 
   g_resources_register (ide_gtk_get_resource ());
 }
