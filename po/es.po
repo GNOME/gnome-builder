@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-09 19:45+0000\n"
-"PO-Revision-Date: 2023-03-13 10:49+0100\n"
+"POT-Creation-Date: 2023-03-14 00:35+0000\n"
+"PO-Revision-Date: 2023-03-14 12:38+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -560,10 +560,8 @@ msgid "The default license to use for new projects"
 msgstr "La licencia predeterminada que usar para proyectos nuevos"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
-#, fuzzy
-#| msgid "Language Servers"
 msgid "Inherit Language Server stderr"
-msgstr "Servidores de idiomas"
+msgstr "Heredar salida de error estándar del servidores de lenguajes"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid ""
@@ -645,7 +643,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Qué entorno usar al ejecutar pruebas unitarias"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:213 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Registro detallado"
 
@@ -808,7 +806,7 @@ msgstr "Preferencias"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Atajo del teclado"
@@ -837,13 +835,15 @@ msgstr "Documento"
 #: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:90
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplicación"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:91
 msgid "Pages"
 msgstr "Páginas"
 
@@ -855,7 +855,8 @@ msgstr "Páginas"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:104
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Editor de texto"
@@ -939,31 +940,31 @@ msgid "_Discard…"
 msgstr "_Descartar…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Falló al imprimir: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Falló al formatear la selección : %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1013
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Guardar archivo"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Guardar"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1075,6 +1076,8 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
+"Falló al buscar la configuración de construcción «%s». Puede no ser válida o "
+"no estar correctamente formateada."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1068
@@ -1244,10 +1247,9 @@ msgstr "Prueba unitaria"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
 #: src/libide/foundry/ide-run-manager.c:185
-#, fuzzy, c-format
-#| msgid "Connected to “%s”"
+#, c-format
 msgid "User requested run tool “%s”"
-msgstr "Conectado a «%s»"
+msgstr "El usuario ha solicitado ejecutar la herramienta «%s»"
 
 #: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
@@ -1286,6 +1288,7 @@ msgstr "El usuario ha solicitado reiniciar la aplicación"
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
+"El usuario ha solicitado ejecutar la aplicación con la herramienta «%s»"
 
 #: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
@@ -1300,16 +1303,14 @@ msgid "Host System"
 msgstr "Equipo anfitrión"
 
 #: src/libide/foundry/ide-runtime-provider.c:147
-#, fuzzy, c-format
-#| msgid "Discovered device “%s”"
+#, c-format
 msgid "Discovered runtime “%s”"
-msgstr "Dispositivo «%s» descubierto"
+msgstr "Rutina «%s» descubierta"
 
 #: src/libide/foundry/ide-runtime-provider.c:170
-#, fuzzy, c-format
-#| msgid "Removing Files…"
+#, c-format
 msgid "Removing runtime “%s”"
-msgstr "Eliminando archivos…"
+msgstr "Quitando rutina «%s»"
 
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
@@ -1506,7 +1507,7 @@ msgid_plural "About %u years ago"
 msgstr[0] "Hace %u año aproximadamente"
 msgstr[1] "Hace %u años aproximadamente"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:68
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instalar"
@@ -1520,6 +1521,7 @@ msgstr "%u de %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "Buscar"
 
@@ -1597,7 +1599,7 @@ msgstr "Navegación web"
 #: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1608,7 +1610,7 @@ msgstr "Nuevas terminales"
 #: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
-"Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016\n"
+"Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2023\n"
 "Ian Hernandez <ihernandezs@openmailbox.org>, 2015"
 
 #: src/libide/gui/ide-application-actions.c:130
@@ -1684,7 +1686,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Conmutar panel izquierdo (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Conmutar panel derecho"
 
@@ -1712,8 +1714,8 @@ msgstr "Detener ejecución"
 msgid "Run project"
 msgstr "Ejecutar proyecto"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:254
+#: src/libide/gui/ide-shortcut-window.c:280
 msgid "Other"
 msgstr "Otra"
 
@@ -1731,7 +1733,7 @@ msgstr "Cargando proyecto «%s»"
 msgid "There are unsaved documents"
 msgstr "Hay documentos sin guardar"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:168
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1768,7 +1770,7 @@ msgstr "Servidores de lenguajes «%s» terminado"
 #: src/libide/lsp/ide-lsp-service.c:531
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr ""
+msgstr "Servidor de lenguajes «%s» lanzado como proceso %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
@@ -1790,7 +1792,7 @@ msgstr "Dispositivos y simuladores"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -2064,16 +2066,12 @@ msgid "Search runtimes"
 msgstr "Buscar rutinas"
 
 #: src/libide/terminal/ide-terminal-search.ui:34
-#, fuzzy
-#| msgid "Move to the previous match"
 msgid "Move to previous match"
 msgstr "Ir a la coincidencia anterior"
 
 #: src/libide/terminal/ide-terminal-search.ui:44
-#, fuzzy
-#| msgid "Move to next match (Ctrl+G)"
 msgid "Move to next match"
-msgstr "Moverse a la siguiente coincidencia (Ctrl+G)"
+msgstr "Ir a la siguiente coincidencia"
 
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
@@ -2082,21 +2080,19 @@ msgstr "Volver al principio"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr ""
+msgstr "Proceso terminado con señal %d"
 
 #: src/libide/tree/ide-tree-empty.c:207
 msgid "<i>Loading</i>"
 msgstr "<i>Cargando</i>"
 
 #: src/libide/tree/ide-tree-empty.c:209
-#, fuzzy
-#| msgid "(Empty)"
 msgid "Empty"
-msgstr "(Vacío)"
+msgstr "Vacío"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
-msgstr "%s — Carpeta"
+msgstr "Carpeta de proyectos"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2132,7 +2128,7 @@ msgstr "Ninguno"
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:166
 msgid "Settings"
 msgstr "Configuración"
 
@@ -2415,93 +2411,93 @@ msgstr "Construir el proyecto (Mayús+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Mostrar diagnósticos de construcción (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "Configurar proyecto…"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "Configuración relativa al proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:21
+#: src/plugins/buildui/gtk/menus.ui:30 src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:93 src/plugins/buildui/gtk/menus.ui:103
+#: src/plugins/buildui/gtk/menus.ui:117 src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/buildui/gtk/menus.ui:162
 msgid "Code Foundry"
 msgstr "Fundición de código"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:22
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Configuración"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "Volver a cargar la configuración"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "Volver a cargar la configuración del proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Select Build Target…"
 msgstr "Seleccionar objetivo de construcción…"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Change default build target"
 msgstr "Cambiar el objetivo de construcción predeterminado"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:31 src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Building"
 msgstr "Construyendo"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "_Build"
 msgstr "_Construir"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:35
 msgid "Build the project"
 msgstr "Construir el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:42
 msgid "_Rebuild"
 msgstr "_Reconstruir"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:43
 msgid "Rebuild the project"
 msgstr "volver a construir el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "_Clean"
 msgstr "_Limpiar"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Clean the project"
 msgstr "Limpiar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:56
 msgid "Stop Building"
 msgstr "Detener la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Cancel the current build operation"
 msgstr "Cancelar la operación de construcción actual"
 
-#: src/plugins/buildui/gtk/menus.ui:59
+#: src/plugins/buildui/gtk/menus.ui:65
 msgid "Install & Deployment"
 msgstr "Instalar y desplegar"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Install the project"
 msgstr "Instalar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Deploy to Device…"
 msgstr "Desplegar en dispositivo…"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy project to current device"
 msgstr "Desplegar proyecto en el dispositivo actual"
 
@@ -2509,112 +2505,110 @@ msgstr "Desplegar proyecto en el dispositivo actual"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "_Export"
 msgstr "_Exportar"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Export project"
 msgstr "Exportar proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Stop Build"
 msgstr "Detener la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop building project"
 msgstr "Detener la construcción del proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:98
-#, fuzzy
-#| msgid "Build Output"
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Show Bui_ld Output"
-msgstr "Salida de la construcción"
+msgstr "Mostrar la sa_lida de la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:109
 msgid "Display panel containing the build log"
 msgstr "Mostrar el panel que contiene le registro de la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:127
 msgid "Running"
 msgstr "Ejecutándose"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:120
 msgid "Select Run Command…"
 msgstr "Seleccionar comando de Run…"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:136
 msgid "Run the project"
 msgstr "Ejecutar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Restart Program"
 msgstr "Reiniciar programa"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Restart the running program"
 msgstr "Reiniciar el programa en ejecución"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Stop Program"
 msgstr "Detener programa"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:154
 msgid "Stop running the project"
 msgstr "Detener la ejecución del proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:159
 msgid "Debugging"
 msgstr "Depurando"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:163 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Pruebas unitarias"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Follow System Style"
 msgstr "Seguir el estilo del sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Light"
 msgstr "Forzar modo claro"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:182
 msgid "Force Dark"
 msgstr "Forzar modo oscuro"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "High Contrast"
 msgstr "Contraste alto"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Text Direction"
 msgstr "Dirección del texto"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:219
 msgid "Show Inspector"
 msgstr "Mostrar el inspector"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Estilo"
 
@@ -2785,10 +2779,8 @@ msgid "Show Build Logs"
 msgstr "Mostrar el registro de construcción"
 
 #: src/plugins/buildui/tweaks.ui:213
-#, fuzzy
-#| msgid "Clear the build log history when a new build begins"
 msgid "Show the build log when a new build begins"
-msgstr "Limpiar el registro de construcción al volver a construir"
+msgstr "Mostrar el registro de construcción al volver a construir"
 
 #: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
@@ -2797,6 +2789,8 @@ msgstr "Registro en la consola"
 #: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
 msgstr ""
+"Redireccionar los registros de error del servidor de lenguajes a la salida "
+"de error estándar"
 
 #: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
@@ -2856,14 +2850,12 @@ msgid "Where your project builds"
 msgstr "Dónde se construye su proyecto"
 
 #: src/plugins/buildui/tweaks.ui:449
-#, fuzzy
-#| msgid "Indexing Source Code"
 msgid "Inside Source Tree"
-msgstr "Indexando el código fuente"
+msgstr "Dentro de árbol de fuentes"
 
 #: src/plugins/buildui/tweaks.ui:455
 msgid "Outside Source Tree"
-msgstr ""
+msgstr "Fuera de árbol de fuentes"
 
 #: src/plugins/buildui/tweaks.ui:476
 msgid ""
@@ -2893,12 +2885,12 @@ msgstr "Cargo Run"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "El servidor de integración de Clang ha terminado"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "El servidor de integración de Clang ha iniciado un proceso %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -3026,11 +3018,8 @@ msgid "Copy as Image"
 msgstr "Copiar como imagen"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Cut selected text to clipboard"
 msgid "Copy selected text as an image"
-msgstr "Cortar el texto seleccionado al portapapeles"
+msgstr "Cortar el texto seleccionado como una imagen"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -3038,10 +3027,9 @@ msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Posible errata en «%s». ¿Quiso decir «%s»?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
-#, fuzzy, c-format
-#| msgid "Failed to format selection: %s"
+#, c-format
 msgid "Failed to format while saving document: %s"
-msgstr "Falló al formatear la selección : %s"
+msgstr "Falló al formatear cuando se guardaba el documento : %s"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
@@ -3061,10 +3049,8 @@ msgid "No code actions available"
 msgstr "No hay acciones del código disponibles"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
-#, fuzzy
-#| msgid "D-Bus Connection Failed"
 msgid "Code Action Failure"
-msgstr "Falló la conexión a D-Bus"
+msgstr "Fallo de la acción del código"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
 msgid "Symbol Not Selected"
@@ -3072,7 +3058,7 @@ msgstr "Símbolo no seleccionado"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
 msgid "A symbol to rename must be selected"
-msgstr ""
+msgstr "Se debe seleccionar el símbolo que se quiere renombrar"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
@@ -3086,6 +3072,8 @@ msgstr "No se han encontrado referencias"
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
+"La herramienta del lenguaje de programación puede no soportar las "
+"referencias de búsqueda"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
@@ -3121,16 +3109,15 @@ msgstr "Acciones del código…"
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
 msgstr ""
+"Mostrar una lista de posibles acciones de código para la posición del cursor"
 
 #: src/plugins/codeui/gtk/menus.ui:19
 msgid "_Go to Declaration"
 msgstr "_Ir a la declaración"
 
 #: src/plugins/codeui/gtk/menus.ui:20
-#, fuzzy
-#| msgid "Jump to file and location where item is defined"
 msgid "Jump to file and location where item is declared"
-msgstr "Saltar al archivo y a la ubicación cuando el elemento está definido"
+msgstr "Saltar al archivo y a la ubicación cuando el elemento está declarado"
 
 #: src/plugins/codeui/gtk/menus.ui:25
 msgid "_Go to Definition"
@@ -3256,12 +3243,12 @@ msgid "Create New Project"
 msgstr "_Crear proyecto nuevo"
 
 #: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:19
+#: src/plugins/create-project/gtk/menus.ui:32
 msgid "Create New Project…"
 msgstr "Crear un proyecto nuevo…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:23
 msgid "Create a new project from template"
 msgstr "Crear un proyecto nuevo desde una plantilla"
 
@@ -3317,10 +3304,8 @@ msgid "Toggle Breakpoint"
 msgstr "Conmutar puntos de interrupción"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
-#, fuzzy
-#| msgid "Debugger Breakpoint at Main"
 msgid "Toggle breakpoint at current line"
-msgstr "Punto de ruptura depurador en Main"
+msgstr "Conmutar el punto de ruptura en la línea actual"
 
 #: src/plugins/debuggerui/gtk/menus.ui:34
 msgid "Continue"
@@ -3328,7 +3313,7 @@ msgstr "Continuar"
 
 #: src/plugins/debuggerui/gtk/menus.ui:37
 msgid "Continue debugging to next breakpoint"
-msgstr ""
+msgstr "Seguir depurando hasta el siguiente punto de ruptura"
 
 #: src/plugins/debuggerui/gtk/menus.ui:43
 msgid "Pause"
@@ -3336,11 +3321,11 @@ msgstr "Pausar"
 
 #: src/plugins/debuggerui/gtk/menus.ui:46
 msgid "Pause debugger until continued"
-msgstr ""
+msgstr "Pausar el depurador hasta que continúe"
 
 #: src/plugins/debuggerui/gtk/menus.ui:52
 msgid "Step Over"
-msgstr ""
+msgstr "Pasar por encima"
 
 #: src/plugins/debuggerui/gtk/menus.ui:55
 msgid "Execute the current line, stepping over any function calls"
@@ -3348,7 +3333,7 @@ msgstr "Ejecutar la línea actual, saltando cualquier llamada de función"
 
 #: src/plugins/debuggerui/gtk/menus.ui:61
 msgid "Step Into"
-msgstr ""
+msgstr "Entrar"
 
 #: src/plugins/debuggerui/gtk/menus.ui:64
 msgid "Execute the current line, stepping into any function calls"
@@ -3356,7 +3341,7 @@ msgstr "Ejecutar la línea actual, entrando en cualquier llamada de función"
 
 #: src/plugins/debuggerui/gtk/menus.ui:70
 msgid "Step Out"
-msgstr ""
+msgstr "Salir"
 
 #: src/plugins/debuggerui/gtk/menus.ui:73
 msgid "Run until the end of the function"
@@ -3424,22 +3409,17 @@ msgid "Continue running the program (F5)"
 msgstr "Continuar ejecutando el programa (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
-#, fuzzy
-#| msgid "Execute the current line, stepping into any function calls"
 msgid "Execute the current line, stepping into any function calls (F8)"
-msgstr "Ejecutar la línea actual, entrando en cualquier llamada de función"
+msgstr ""
+"Ejecutar la línea actual, entrando en cualquier llamada de función (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
-#, fuzzy
-#| msgid "Execute the current line, stepping over any function calls"
 msgid "Execute the current line, stepping over any function calls (F7)"
-msgstr "Ejecutar la línea actual, saltando cualquier llamada de función"
+msgstr "Ejecutar la línea actual, saltando cualquier llamada de función (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
-#, fuzzy
-#| msgid "Run until the end of the function"
 msgid "Run until the end of the function (Shift+F8)"
-msgstr "Ejecutar hasta el final de la función"
+msgstr "Ejecutar hasta el final de la función (Mayús+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -3578,7 +3558,7 @@ msgstr "Inspector de D-Bus…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
-msgstr ""
+msgstr "Ejecutar Dub"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
@@ -3698,7 +3678,7 @@ msgstr "Archivo _nuevo"
 msgid "_Open File…"
 msgstr "_Abrir archivo…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Abrir en un marco nuevo"
 
@@ -4267,15 +4247,11 @@ msgid "Resolving SDK Extensions"
 msgstr "Resolviendo extensiones SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
-#, fuzzy
-#| msgid ""
-#| "Builder needs to install the following software development kits to build "
-#| "your project."
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
-"Builder necesita instalar los siguientes kits de desarrollo de software para "
-"construir su proyecto."
+"Builder está buscando las extensiones DSK adecuadas para construir su "
+"proyecto."
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
@@ -4348,21 +4324,23 @@ msgstr "Actualizando las rutinas SDK"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
 msgid "Flatpak installation for new SDKs"
-msgstr ""
+msgstr "Instalación Flatpak para nuevos SDK"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
-msgstr ""
+msgstr "La instalación de Flatpak usada para nuevos SDK y extensiones de SDK."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
-msgstr ""
+msgstr "Instalación Flatpak preferida"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
+"Al instalar SDK y extensiones de SDK Builder puede preferir una instalación "
+"Flatpak específica que contenga la extensión."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -4429,13 +4407,11 @@ msgstr "No se pueden monitorizar archivos fuera de la carpeta de trabajo."
 #: src/plugins/git/gbp-git-client.c:171
 #, c-format
 msgid "Git integration has started as process %s"
-msgstr ""
+msgstr "La integración con Git ha iniciado un proceso %s"
 
 #: src/plugins/git/gbp-git-client.c:195
-#, fuzzy
-#| msgid "Integration with Git"
 msgid "Git integration has exited"
-msgstr "Integración con Git"
+msgstr "La integración con Git ha terminado"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -4498,7 +4474,7 @@ msgstr "Correo-e"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
-msgstr ""
+msgstr "Ejecutar go"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4509,7 +4485,7 @@ msgstr "Inicializando proyecto"
 msgid "Gradle Run"
 msgstr "Gradle Run"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Mostrar una ventana de bienvenida nueva"
 
@@ -4542,16 +4518,12 @@ msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "Buscar en archivos (Ctrl+Alt+Shift+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#, fuzzy
-#| msgid "S_ort Directories First"
 msgid "_Recurse into Directories"
-msgstr "M_ostrar las carpetas primero"
+msgstr "Ent_rar en las carpetas"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
-#, fuzzy
-#| msgid "Match Whole Words"
 msgid "Match Whole _Words"
-msgstr "Coincidir con la palabra completa"
+msgstr "Coincidir con la palabra _completa"
 
 #: src/plugins/grep/gbp-grep-panel.ui:106
 msgid "Use Regular _Expressions"
@@ -4661,73 +4633,95 @@ msgstr "Maven Run"
 msgid "Actions"
 msgstr "Acciones"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Búsqueda global"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "Mostrar la búsqueda global"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Paneles"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Conmutar panel izquierdo"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "Conmutar panel izquierdo dentro o fuera de la vista"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "Conmutar panel derecho dentro o fuera de la vista"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Conmutar panel inferior"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Conmutar panel inferior dentro o fuera de la vista"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Cambiar a modo oscuro"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "Cambiar el estilo del esquema a la variante oscura"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Cambiar a modo claro"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "Cambiar el estilo del esquema a la variante clara"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Mostrar diagnósticos de construcción"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
-#, fuzzy
-#| msgid "Show errors and warnings provided by Vala"
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
-msgstr "Mostrar errores y advertencias proporcionadas por Vala"
+msgstr "Mostrar errores y advertencias encontradas durante la construcción"
+
+#: src/plugins/menu-search/gtk/menus.ui:94
+msgid "Close Page"
+msgstr "Cerrar página"
+
+#: src/plugins/menu-search/gtk/menus.ui:95
+msgid "Close the current page"
+msgstr "Cerrar la página actual"
+
+#: src/plugins/menu-search/gtk/menus.ui:108
+msgid "Move to next search result"
+msgstr "Moverse al siguiente resultado de búsqueda"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Move to and select the next available search result"
+msgstr "Moverse y seleccionar el siguiente resultado de búsqueda"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Move to previous search result"
+msgstr "Moverse al resultado de búsqueda anterior"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the previous search result"
+msgstr "Moverse y seleccionar el resultado de búsqueda anterior"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5361,7 +5355,7 @@ msgid "Untitled Command"
 msgstr "Comando sin título"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:172
 msgid "Set Shortcut"
 msgstr "Establecer atajo"
 
@@ -5534,10 +5528,8 @@ msgid "Try a different search"
 msgstr "Intentar una búsqueda diferente"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
-#, fuzzy
-#| msgid "Reset"
 msgid "_Reset All"
-msgstr "Reiniciar"
+msgstr "Reiniciar _todo"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:81
 msgid "Reset all actions to original keyboard shortcut"
@@ -5551,7 +5543,7 @@ msgstr "_Editar vacío"
 msgid "Open keybindings.json in editor"
 msgstr "Abrir keybindings.json en el editor"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr "Ver y personalizar atajos…"
 
@@ -5585,7 +5577,7 @@ msgstr "Idiomas"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
-msgstr ""
+msgstr "Ejecutar swift"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5849,31 +5841,31 @@ msgstr "Salida de la aplicación"
 msgid "Process completed"
 msgstr "Proceso completado"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "Nueva _terminal"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "Abrir una terminal nueva en el sistema operativo del equipo"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "Nueva terminal _construída"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "Abrir una terminal nueva en la la tubería de construcción del proyecto"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "_Nueva terminal en tiempo de ejecución"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Abrir una terminal nueva en entorno de tiempo de ejecución"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Dividir"
 
@@ -5993,11 +5985,9 @@ msgid "Updating Dependencies…"
 msgstr "Actualizando dependencias…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
-#, fuzzy
-#| msgid "Builder is updating your projects configured dependencies."
 msgid "Builder is updating your project’s configured dependencies."
 msgstr ""
-"Builder está actualizando las dependencias configuradas en sus proyectos."
+"Builder está actualizando las dependencias configuradas en su proyecto."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -6186,7 +6176,7 @@ msgstr "Nueva página del _navegador"
 
 #: src/plugins/web-browser/gtk/menus.ui:9
 msgid "Open a web browser in a new page"
-msgstr ""
+msgstr "Abrir un explorador web en una página nueva"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 #: src/plugins/web-browser/gtk/menus.ui:25
@@ -7857,9 +7847,6 @@ msgstr ""
 #~ msgid "Move to the next error"
 #~ msgstr "Ir al siguiente error"
 
-#~ msgid "Move to the previous error"
-#~ msgstr "Ir al error anterior"
-
 #~ msgid "_Reload"
 #~ msgstr "_Recargar"
 
@@ -8376,9 +8363,6 @@ msgstr ""
 
 #~ msgid "Move Page Right"
 #~ msgstr "Mover página a la derecha"
-
-#~ msgid "Close Frame"
-#~ msgstr "Cerrar marco"
 
 #~ msgid "Emacs"
 #~ msgstr "Emacs"
