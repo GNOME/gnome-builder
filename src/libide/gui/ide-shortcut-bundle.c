@@ -775,26 +775,165 @@ ide_shortcut_bundle_override_triggers (IdeShortcutBundle *self,
 
       trigger = g_hash_table_lookup (id_to_trigger, state->id);
 
-      if (trigger != NULL)
-        gtk_shortcut_set_trigger (shortcut, trigger);
-      else
-        gtk_shortcut_set_trigger (shortcut, state->trigger);
+      if (trigger == NULL)
+        {
+          if (state->trigger == NULL)
+            trigger = gtk_never_trigger_get ();
+          else
+            trigger = state->trigger;
+        }
+
+      g_assert (trigger != NULL);
+      g_assert (GTK_IS_SHORTCUT_TRIGGER (trigger));
+
+      gtk_shortcut_set_trigger (shortcut, g_object_ref (trigger));
     }
 }
 
-void
-ide_shortcut_bundle_override (IdeShortcutBundle *self,
-                              const char        *shortcut_id,
-                              const char        *accelerator)
+static void
+copy_object (JsonObject *object,
+             GString    *output)
+{
+  static const char *str_keys[] = { "id", "override", "trigger", "when", "args", "phase", "command", "action", };
+  static const char *bool_keys[] = { "supress" };
+
+  g_assert (object != NULL);
+  g_assert (output != NULL);
+
+  if (json_object_get_size (object) == 0)
+    return;
+
+  g_string_append (output, "{");
+
+  for (guint i = 0; i < G_N_ELEMENTS (str_keys); i++)
+    {
+      const char *value;
+
+      if (!json_object_has_member (object, str_keys[i]))
+        continue;
+
+      if (!(value = json_object_get_string_member (object, str_keys[i])))
+        continue;
+
+      if (ide_str_empty0 (value))
+        continue;
+
+      if (output->str[output->len-1] != '{')
+        g_string_append_c (output, ',');
+
+      g_string_append_printf (output, " \"%s\" : \"%s\"", str_keys[i], value);
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (bool_keys); i++)
+    {
+      gboolean value;
+
+      if (!json_object_has_member (object, bool_keys[i]))
+        continue;
+
+      value = json_object_get_boolean_member (object, bool_keys[i]);
+
+      if (output->str[output->len-1] != '{')
+        g_string_append_c (output, ',');
+
+      g_string_append_printf (output, " \"%s\" : %s", bool_keys[i], value ? "true" : "false");
+    }
+
+  g_string_append (output, " },\n");
+}
+
+gboolean
+ide_shortcut_bundle_override (IdeShortcutBundle  *self,
+                              const char         *shortcut_id,
+                              const char         *accelerator,
+                              GError            **error)
 {
   g_autoptr(GtkShortcutTrigger) trigger = NULL;
+  g_autoptr(JsonParser) parser = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GString) output = NULL;
+  g_autofree char *contents = NULL;
+  g_autofree char *adjusted = NULL;
+  JsonNode *root;
+  gboolean found = FALSE;
+  gsize len;
 
-  g_return_if_fail (IDE_IS_SHORTCUT_BUNDLE (self));
-  g_return_if_fail (self->is_user == TRUE);
-  g_return_if_fail (shortcut_id != NULL);
+  g_return_val_if_fail (IDE_IS_SHORTCUT_BUNDLE (self), FALSE);
+  g_return_val_if_fail (self->is_user == TRUE, FALSE);
+  g_return_val_if_fail (shortcut_id != NULL, FALSE);
+
+  /* The manager will take care of reloading our keybinding when the file
+   * changes so all we need to do here is to load the json file, find the
+   * corresponding id as "override" and either remove it (if accelerator NULL)
+   * or update it. If it is not found, then we need to add it.
+   */
 
   if (accelerator != NULL)
     trigger = gtk_shortcut_trigger_parse_string (accelerator);
 
-  g_debug ("TODO: override %s to %s", shortcut_id, accelerator);
+  file = g_file_new_build_filename (g_get_user_config_dir (),
+                                    "gnome-builder",
+                                    "keybindings.json",
+                                    NULL);
+
+  if (!g_file_load_contents (file, NULL, &contents, &len, NULL, NULL))
+    contents = g_strdup (""), len = 0;
+
+  g_strstrip (contents);
+  len = strlen (contents);
+
+  /* Very brittle, since json-glib doesn't support trailing ","
+   * but does allow comments.
+   */
+  adjusted = g_strdup_printf ("[%s%s{}]",
+                              contents,
+                              g_str_has_suffix (contents, ",") ? "" : ",");
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_data (parser, adjusted, -1, error))
+    return FALSE;
+
+  root = json_parser_get_root (parser);
+  output = g_string_new (NULL);
+
+  if (JSON_NODE_HOLDS_ARRAY (root))
+    {
+      JsonArray *root_ar = json_node_get_array (root);
+      guint root_ar_len = json_array_get_length (root_ar);
+
+      for (guint i = 0; i < root_ar_len; i++)
+        {
+          JsonNode *item = json_array_get_element (root_ar, i);
+          JsonObject *item_obj;
+          const char *str;
+
+          if (!JSON_NODE_HOLDS_OBJECT (item))
+            continue;
+
+          item_obj = json_node_get_object (item);
+
+          if (json_object_has_member (item_obj, "override") &&
+              (str = json_object_get_string_member (item_obj, "override")) &&
+              ide_str_equal0 (str, shortcut_id))
+            {
+              if (accelerator != NULL)
+                g_string_append_printf (output, "{ \"override\" : \"%s\", \"trigger\" : \"%s\" },\n", shortcut_id, accelerator);
+
+              found = TRUE;
+            }
+          else
+            {
+              copy_object (item_obj, output);
+            }
+        }
+    }
+
+  if (!found)
+    {
+      if (accelerator != NULL)
+        g_string_append_printf (output, "{ \"override\" : \"%s\", \"trigger\" : \"%s\" },\n", shortcut_id, accelerator);
+    }
+
+  return g_file_set_contents (g_file_peek_path (file), output->str, output->len, error);
 }
