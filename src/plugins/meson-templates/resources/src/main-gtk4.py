@@ -19,7 +19,7 @@ class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
     def __init__(self):
         super().__init__(application_id='{{appid}}',
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
-        self.create_action('quit', self.quit, ['<primary>q'])
+        self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
         self.create_action('preferences', self.on_preferences_action)
 
