@@ -43,6 +43,7 @@ struct _GbpShortcutuiShortcut
   char        *search_text;
   char        *title;
 
+  const char  *id;
   const char  *group;
   const char  *page;
   const char  *subtitle;
@@ -122,6 +123,7 @@ gbp_shortcutui_shortcut_constructed (GObject *object)
 
   self->title = strip_underline (label);
   self->subtitle = g_intern_string (description);
+  self->id = g_intern_string (id);
   self->search_text = g_strdup_printf ("%s %s %s %s",
                                        self->page ? self->page : "",
                                        self->group ? self->group : "",
@@ -397,6 +399,12 @@ gbp_shortcutui_shortcut_compare (const GbpShortcutuiShortcut *a,
 
   if (r == 0)
     r = g_strcmp0 (group_a, group_b);
+
+  if (ide_str_equal0 (a->id, b->id))
+    return 0;
+
+  if (r == 0)
+    r = g_strcmp0 (a->title, b->title);
 
   return r;
 }
