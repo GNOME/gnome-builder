@@ -29,6 +29,7 @@
 
 #include "ide-application-private.h"
 #include "ide-shortcut-bundle-private.h"
+#include "ide-shortcut-manager-private.h"
 
 #include "gbp-shortcutui-shortcut.h"
 
@@ -355,9 +356,9 @@ gbp_shortcutui_shortcut_override (GbpShortcutuiShortcut *self,
 
   g_return_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self));
 
-  g_debug ("TODO: override %s to %s",
-           GET_INFO (self->shortcut)->id,
-           accelerator);
+  ide_shortcut_bundle_override (ide_shortcut_manager_get_user_bundle (),
+                                GET_INFO (self->shortcut)->id,
+                                accelerator);
 
   IDE_EXIT;
 }
