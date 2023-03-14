@@ -58,8 +58,6 @@ gbp_shortcutui_tweaks_addin_row_activated_cb (GListModel   *model,
 
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  g_print ("Context: %p\n", context);
-
   root = gtk_widget_get_root (GTK_WIDGET (row));
   dialog = g_object_new (GBP_TYPE_SHORTCUTUI_DIALOG,
                          "default-width", 700,
