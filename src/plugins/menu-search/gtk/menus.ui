@@ -84,4 +84,39 @@
       </item>
     </section>
   </menu>
+
+  <menu id="menu-search-pages">
+    <section id="menu-search-pages-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Pages</attribute>
+      <item>
+        <attribute name="id">org.gnome.builder.workspace.close-page</attribute>
+        <attribute name="label" translatable="yes">Close Page</attribute>
+        <attribute name="description" translatable="yes">Close the current page</attribute>
+        <attribute name="action">frame.close-page-or-frame</attribute>
+        <attribute name="accel">&lt;control&gt;w</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="menu-search-editor">
+    <section id="menu-search-editor-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Search</attribute>
+      <item>
+        <attribute name="id">org.gnome.builder.editor.search.move-next</attribute>
+        <attribute name="label" translatable="yes">Move to next search result</attribute>
+        <attribute name="description" translatable="yes">Move to and select the next available search result</attribute>
+        <attribute name="action">page.search.move-next</attribute>
+        <attribute name="accel">&lt;control&gt;g</attribute>
+      </item>
+      <item>
+        <attribute name="id">org.gnome.builder.editor.search.move-previous</attribute>
+        <attribute name="label" translatable="yes">Move to previous search result</attribute>
+        <attribute name="description" translatable="yes">Move to and select the previous search result</attribute>
+        <attribute name="action">page.search.move-previous</attribute>
+        <attribute name="accel">&lt;control&gt;&gt;shift&lt;g</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

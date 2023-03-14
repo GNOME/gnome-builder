@@ -1,13 +1,18 @@
 /* Build Actions */
 { "trigger" : "<Control><Shift>l", "action" : "workspace.buildui.log.show", "when" : "hasProject()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>b", "action" : "context.build-manager.build", "when" : "hasProject()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>c", "action" : "context.build-manager.cancel", "when" : "hasProject()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.pipeline.build", "trigger" : "<Control><Alt><Shift>b", "action" : "context.build-manager.build", "when" : "hasProject()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.pipeline.stop", "trigger" : "<Control><Alt><Shift>c", "action" : "context.build-manager.cancel", "when" : "hasProject()", "phase" : "capture" },
 
 /* Run Actions */
-{ "trigger" : "<Control><Shift>space", "action" : "context.run-manager.restart", "when" : "isRunning()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
-{ "trigger" : "<Shift>F5", "action" : "context.run-manager.stop", "when" : "isRunning()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.project.run-again", "trigger" : "<Control><Shift>space", "action" : "context.run-manager.restart", "when" : "isRunning()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.project.run", "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.project.stop", "trigger" : "<Shift>F5", "action" : "context.run-manager.stop", "when" : "isRunning()", "phase" : "capture" },
 
 /* Errors and Warnings Popover */
 { "id" : "org.gnome.builder.project.diagnostics.show", "trigger" : "<Control><Alt>question", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasProject()", "phase" : "capture" },
 
+{ "id" : "org.gnome.builder.pipeline.reload", "action" : "context.build-manager.invalidate", "when" : "hasProject()" },
+{ "id" : "org.gnome.builder.pipeline.rebuild", "action" : "context.build-manager.rebuild", "when" : "hasProject()" },
+{ "id" : "org.gnome.builder.pipeline.clean", "action" : "context.build-manager.clean", "when" : "hasProject()" },
+{ "id" : "org.gnome.builder.pipeline.install", "action" : "context.build-manager.install", "when" : "hasProject()" },
+{ "id" : "org.gnome.builder.device.deploy", "action" : "context.device-manager.deploy", "when" : "hasProject()" },

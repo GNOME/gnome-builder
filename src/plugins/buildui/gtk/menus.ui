@@ -2,6 +2,7 @@
 <interface>
   <menu id="build-menu">
     <item>
+      <attribute name="id">org.gnome.builder.project.configure</attribute>
       <attribute name="label" translatable="yes">Configure Project…</attribute>
       <attribute name="action">context.workbench.configure</attribute>
       <attribute name="accel">&lt;alt&gt;comma</attribute>
@@ -11,6 +12,7 @@
       <attribute name="group" translatable="yes">Configuration</attribute>
     </item>
     <item>
+      <attribute name="id">org.gnome.builder.pipeline.reload</attribute>
       <attribute name="label" translatable="yes">Reload Configuration</attribute>
       <attribute name="action">context.build-manager.invalidate</attribute>
       <attribute name="description" translatable="yes">Reload project configuration</attribute>
@@ -28,6 +30,7 @@
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Building</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.pipeline.build</attribute>
         <attribute name="label" translatable="yes">_Build</attribute>
         <attribute name="description" translatable="yes">Build the project</attribute>
         <attribute name="action">context.build-manager.build</attribute>
@@ -35,18 +38,21 @@
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.pipeline.rebuild</attribute>
         <attribute name="label" translatable="yes">_Rebuild</attribute>
         <attribute name="description" translatable="yes">Rebuild the project</attribute>
         <attribute name="action">context.build-manager.rebuild</attribute>
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.pipeline.clean</attribute>
         <attribute name="label" translatable="yes">_Clean</attribute>
         <attribute name="description" translatable="yes">Clean the project</attribute>
         <attribute name="action">context.build-manager.clean</attribute>
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.pipeline.stop</attribute>
         <attribute name="label" translatable="yes">Stop Building</attribute>
         <attribute name="description" translatable="yes">Cancel the current build operation</attribute>
         <attribute name="action">context.build-manager.cancel</attribute>
@@ -58,12 +64,14 @@
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Install &amp; Deployment</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.pipeline.install</attribute>
         <attribute name="label" translatable="yes">_Install</attribute>
         <attribute name="action">context.build-manager.install</attribute>
         <attribute name="description" translatable="yes">Install the project</attribute>
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.device.deploy</attribute>
         <attribute name="label" translatable="yes">Deploy to Device…</attribute>
         <attribute name="action">context.device-manager.deploy</attribute>
         <attribute name="description" translatable="yes">Deploy project to current device</attribute>
@@ -118,7 +126,7 @@
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Running</attribute>
       <item>
-        <attribute name="id">default-run-handler</attribute>
+        <attribute name="id">org.gnome.builder.project.run</attribute>
         <attribute name="action">context.run-manager.run-with-handler</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="target" type="s">'run'</attribute>
@@ -128,7 +136,7 @@
         <attribute name="description" translatable="yes">Run the project</attribute>
       </item>
       <item>
-        <attribute name="id">restart-program</attribute>
+        <attribute name="id">org.gnome.builder.project.run-again</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">context.run-manager.restart</attribute>
         <attribute name="label" translatable="yes">Restart Program</attribute>
@@ -137,7 +145,7 @@
         <attribute name="description" translatable="yes">Restart the running program</attribute>
       </item>
       <item>
-        <attribute name="id">stop-running</attribute>
+        <attribute name="id">org.gnome.builder.project.stop</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="action">context.run-manager.stop</attribute>
         <attribute name="label" translatable="yes">Stop Program</attribute>
