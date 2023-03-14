@@ -288,6 +288,7 @@ src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml
 src/plugins/shellcmd/tweaks.ui
 src/plugins/shortcutui/gbp-shortcutui-dialog.c
 src/plugins/shortcutui/gbp-shortcutui-dialog.ui
+src/plugins/shortcutui/gbp-shortcutui-shortcut.c
 src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c
 src/plugins/shortcutui/tweaks.ui
 src/plugins/spellcheck/editor-enchant-spell-provider.c
