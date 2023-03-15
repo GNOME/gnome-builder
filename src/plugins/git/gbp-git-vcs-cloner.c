@@ -265,6 +265,9 @@ gbp_git_vcs_cloner_clone_async (IdeVcsCloner        *cloner,
     branch = "";
   g_variant_dict_remove (&dict, "branch");
 
+  if (branch != NULL && g_str_has_prefix (branch, "refs/heads/"))
+    branch += strlen ("refs/heads/");
+
   /* Make sure we have a real URI to connect to */
   uristr = g_strstrip (g_strdup (uri));
   location = g_file_new_for_path (destination);
