@@ -3848,8 +3848,8 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
 /**
  * ide_buffer_get_selection_bounds:
  * @self: an #IdeBuffer
- * @insert: (out): a #GtkTextIter to get the insert position
- * @selection: (out): a #GtkTextIter to get the selection position
+ * @insert: (out) (nullable): a #GtkTextIter to get the insert position
+ * @selection: (out) (nullable): a #GtkTextIter to get the selection position
  *
  * This function acts like gtk_text_buffer_get_selection_bounds() except that
  * it always places the location of the insert mark at @insert and the location
