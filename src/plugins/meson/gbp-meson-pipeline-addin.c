@@ -160,6 +160,8 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)addin;
+  g_autoptr(IdeSubprocessLauncher) devenv_launcher = NULL;
+  g_autoptr(IdePipelineStage) devenv_stage = NULL;
   g_autoptr(IdeRunCommand) build_command = NULL;
   g_autoptr(IdeRunCommand) clean_command = NULL;
   g_autoptr(IdeRunCommand) config_command = NULL;
@@ -167,6 +169,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   IdePipelineStage *stage;
   g_autofree char *build_dot_ninja = NULL;
   g_autofree char *crossbuild_file = NULL;
+  g_autofree char *devenv_file = NULL;
   g_autofree char *meson = NULL;
   g_autofree char *ninja = NULL;
   IdeBuildSystem *build_system;
@@ -249,6 +252,20 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                             IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
                             0,
                             IDE_PIPELINE_STAGE (self->introspection));
+  ide_pipeline_addin_track (addin, id);
+
+  /* Setup stage to extract "devenv" settings */
+  devenv_file = ide_pipeline_build_builddir_path (pipeline, ".gnome-builder-devenv", NULL);
+  devenv_launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_set_stdout_file_path (devenv_launcher, devenv_file);
+  ide_subprocess_launcher_push_args (devenv_launcher, IDE_STRV_INIT ("meson", "devenv", "--dump"));
+  devenv_stage = ide_pipeline_stage_launcher_new (ide_object_get_context (IDE_OBJECT (pipeline)), devenv_launcher);
+  ide_pipeline_stage_launcher_set_use_pty (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), FALSE);
+  ide_pipeline_stage_set_name (devenv_stage, _("Cache development environment"));
+  id = ide_pipeline_attach (pipeline,
+                            IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
+                            0,
+                            devenv_stage);
   ide_pipeline_addin_track (addin, id);
 
   IDE_EXIT;
