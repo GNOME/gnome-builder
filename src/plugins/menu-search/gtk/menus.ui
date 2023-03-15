@@ -115,7 +115,7 @@
         <attribute name="label" translatable="yes">Move to previous search result</attribute>
         <attribute name="description" translatable="yes">Move to and select the previous search result</attribute>
         <attribute name="action">page.search.move-previous</attribute>
-        <attribute name="accel">&lt;control&gt;&gt;shift&lt;g</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;g</attribute>
       </item>
     </section>
   </menu>
