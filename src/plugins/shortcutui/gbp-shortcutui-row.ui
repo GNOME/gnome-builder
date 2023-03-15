@@ -11,5 +11,23 @@
         </binding>
       </object>
     </child>
+    <child type="suffix">
+      <object class="GtkButton" id="clear">
+        <property name="valign">center</property>
+        <property name="icon-name">list-remove-symbolic</property>
+        <property name="action-name">shortcut.reset</property>
+        <property name="margin-start">6</property>
+        <property name="tooltip-text" translatable="yes">Reset shortcut</property>
+        <style>
+          <class name="circular"/>
+          <class name="flat"/>
+        </style>
+        <binding name="visible">
+          <lookup name="has-override" type="GbpShortcutuiShortcut">
+            <lookup name="shortcut">GbpShortcutuiRow</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </child>
   </template>
 </interface>

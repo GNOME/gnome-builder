@@ -47,6 +47,25 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_shortcutui_row_reset_action (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *params)
+{
+  GbpShortcutuiRow *self = (GbpShortcutuiRow *)widget;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHORTCUTUI_ROW (self));
+
+  if (!gbp_shortcutui_shortcut_override (self->shortcut, NULL, &error))
+    g_warning ("Failed to override shortcut: %s", error->message);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_shortcutui_row_constructed (GObject *object)
 {
   GbpShortcutuiRow *self = (GbpShortcutuiRow *)object;
@@ -128,6 +147,8 @@ gbp_shortcutui_row_class_init (GbpShortcutuiRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shortcutui/gbp-shortcutui-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiRow, label);
+
+  gtk_widget_class_install_action (widget_class, "shortcut.reset", NULL, gbp_shortcutui_row_reset_action);
 
   g_type_ensure (GBP_TYPE_SHORTCUTUI_SHORTCUT);
 }
