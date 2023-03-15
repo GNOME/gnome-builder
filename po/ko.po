@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-04 02:20+0000\n"
-"PO-Revision-Date: 2023-03-05 01:06+0900\n"
+"POT-Creation-Date: 2023-03-14 00:35+0000\n"
+"PO-Revision-Date: 2023-03-15 02:02+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -607,7 +607,7 @@ msgid "What environment to use when running unit tests"
 msgstr "단위 검사를 실행할 때 사용할 환경"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:213 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "자세히 로그 남기기"
 
@@ -765,7 +765,7 @@ msgstr "기본 설정"
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "키보드 바로 가기"
@@ -794,13 +794,15 @@ msgstr "문서"
 #: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:90
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "앱"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:91
 msgid "Pages"
 msgstr "페이지"
 
@@ -812,7 +814,8 @@ msgstr "페이지"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:104
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "텍스트 편집기"
@@ -895,31 +898,31 @@ msgid "_Discard…"
 msgstr "버리기(_D)…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "인쇄 실패: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "선택 내용 형식 재설정에 실패했습니다: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1013
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "파일 저장"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "저장"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -948,6 +951,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "검색해서 바꾸기 (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "검색 닫기"
 
@@ -960,15 +964,18 @@ msgid "Replace _All"
 msgstr "모두 바꾸기(_A)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "정규식 사용(_G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "대소문자 구별(_C)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "전체 단어와 일치"
 
@@ -1451,7 +1458,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "약 %u년 전"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:68
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "설치(_I)"
@@ -1465,6 +1472,7 @@ msgstr "%u, 전체 %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "검색"
 
@@ -1549,7 +1557,7 @@ msgstr "웹 브라우징"
 #: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "터미널"
 
@@ -1634,7 +1642,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "왼쪽 패널 토글 (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "오른쪽 패널 토글"
 
@@ -1662,8 +1670,8 @@ msgstr "실행 중지"
 msgid "Run project"
 msgstr "프로젝트 실행"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:254
+#: src/libide/gui/ide-shortcut-window.c:280
 msgid "Other"
 msgstr "기타"
 
@@ -1682,7 +1690,7 @@ msgstr "“%s” 프로젝트 읽어들이는 중"
 msgid "There are unsaved documents"
 msgstr "저장하지 않은 문서가 있습니다"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:168
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1740,7 +1748,7 @@ msgstr "장치 및 시뮬레이터"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "진단"
 
@@ -1990,7 +1998,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "이름 없는 터미널"
 
@@ -2011,23 +2019,15 @@ msgstr "이름 없는 터미널"
 msgid "Search runtimes"
 msgstr "런타임 검색"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr "대소문자 구별같은 검색 옵션을 보이거나 감춥니다"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "이전 일치하는 항목으로 이동"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "정규식"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "다음 일치하는 항목으로 이동"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "대소문자 구별"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "전체 단어와 일치"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "끝까지 가면 처음부터"
 
@@ -2082,7 +2082,7 @@ msgstr "없음"
 msgid "Blank page"
 msgstr "빈 페이지"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:166
 msgid "Settings"
 msgstr "설정"
 
@@ -2115,7 +2115,7 @@ msgstr "프로젝트 설정 중"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2364,95 +2364,95 @@ msgstr "프로젝트 빌드 (Shift+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "빌드 진단 표시 (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "프로젝트 설정…"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "프로젝트 관련 설정 구성"
 
 # builder에서 빌드 관련 기능의 모음, 일반적 용어 아님
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:21
+#: src/plugins/buildui/gtk/menus.ui:30 src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:93 src/plugins/buildui/gtk/menus.ui:103
+#: src/plugins/buildui/gtk/menus.ui:117 src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/buildui/gtk/menus.ui:162
 msgid "Code Foundry"
 msgstr "코드 파운드리"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:22
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "구성"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "구성 다시 읽어들이기"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "프로젝트 구성 다시 읽어들이기"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:24
 msgid "Select Build Target…"
 msgstr "빌드 타겟 선택…"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Change default build target"
 msgstr "기본 빌드 타겟을 바꿉니다"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:31 src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Building"
 msgstr "빌드 중"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "_Build"
 msgstr "빌드(_B)"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:35
 msgid "Build the project"
 msgstr "프로젝트 빌드"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:42
 msgid "_Rebuild"
 msgstr "다시 빌드(_R)"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:43
 msgid "Rebuild the project"
 msgstr "프로젝트 다시 빌드"
 
 # build clean
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "_Clean"
 msgstr "지우기(_C)"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:50
 msgid "Clean the project"
 msgstr "프로젝트 빌드 지우기"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:56
 msgid "Stop Building"
 msgstr "빌드 중지"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Cancel the current build operation"
 msgstr "현재 빌드 작업을 취소합니다"
 
-#: src/plugins/buildui/gtk/menus.ui:59
+#: src/plugins/buildui/gtk/menus.ui:65
 msgid "Install & Deployment"
 msgstr "설치 및 배포"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Install the project"
 msgstr "프로젝트를 설치합니다"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Deploy to Device…"
 msgstr "장치에 배포…"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy project to current device"
 msgstr "현재 장치에 프로젝트를 배포합니다"
 
@@ -2460,111 +2460,111 @@ msgstr "현재 장치에 프로젝트를 배포합니다"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "_Export"
 msgstr "내보내기(_E)"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "Export project"
 msgstr "프로젝트 내보내기"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Stop Build"
 msgstr "빌드 중지"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop building project"
 msgstr "프로젝트 빌드 중지"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Show Bui_ld Output"
 msgstr "빌드 출력 표시(_L)"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:109
 msgid "Display panel containing the build log"
 msgstr "빌드 기록이 들어 있는 패널 표시"
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:127
 msgid "Running"
 msgstr "실행 중"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:120
 msgid "Select Run Command…"
 msgstr "실행 명령 선택…"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Run"
 msgstr "실행"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:136
 msgid "Run the project"
 msgstr "프로젝트 실행"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Restart Program"
 msgstr "프로그램 다시 실행"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Restart the running program"
 msgstr "실행 중인 프로그램 다시 시작"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Stop Program"
 msgstr "프로그램 중지"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:154
 msgid "Stop running the project"
 msgstr "프로젝트 실행 중지"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:159
 msgid "Debugging"
 msgstr "디버깅"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:163 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "단위 검사"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Follow System Style"
 msgstr "시스템 스타일 따르기"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Light"
 msgstr "밝은 모드 강제"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:182
 msgid "Force Dark"
 msgstr "어두운 모드 강제"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Accessibility"
 msgstr "접근성"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "High Contrast"
 msgstr "고대비"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Text Direction"
 msgstr "텍스트 방향"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Left-to-Right"
 msgstr "왼쪽에서 오른쪽으로"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Right-to-Left"
 msgstr "오른쪽에서 왼쪽으로"
 
 # GtkInspector를 가리킴
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:219
 msgid "Show Inspector"
 msgstr "인스펙터 표시"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "모양"
 
@@ -2955,6 +2955,14 @@ msgstr "선언"
 msgid "Project Symbols"
 msgstr "프로젝트 심볼"
 
+#: src/plugins/codeshot/gtk/menus.ui:6
+msgid "Copy as Image"
+msgstr "이미지로 복사"
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+msgid "Copy selected text as an image"
+msgstr "선택한 텍스트를 이미지로 복사합니다"
+
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
@@ -3178,12 +3186,12 @@ msgid "Create New Project"
 msgstr "새 프로젝트 만들기"
 
 #: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:19
+#: src/plugins/create-project/gtk/menus.ui:32
 msgid "Create New Project…"
 msgstr "새 프로젝트 만들기…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:23
 msgid "Create a new project from template"
 msgstr "서식에서 새 프로젝트를 만듭니다"
 
@@ -3618,7 +3626,7 @@ msgstr "파일 새로 만들기(_F)"
 msgid "_Open File…"
 msgstr "파일 열기(_O)…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "새 프레임에서 열기"
 
@@ -4401,7 +4409,7 @@ msgstr "전자메일"
 msgid "go run"
 msgstr "고 실행"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "프로젝트 부트스트랩 중"
@@ -4410,7 +4418,7 @@ msgstr "프로젝트 부트스트랩 중"
 msgid "Gradle Run"
 msgstr "그레이들 실행"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "새 환영 창 표시"
 
@@ -4559,71 +4567,95 @@ msgstr "메이븐 실행"
 msgid "Actions"
 msgstr "동작"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "전체 검색"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "전체 검색을 표시합니다"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "패널"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "왼쪽 패널 토글"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "왼쪽 패널을 표시할지 토글"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "오른쪽 패널을 표시할지 토글"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "아래 패널 토글"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "아래 패널을 표시할지 토글"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "어두운 모드로 전환"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "스타일 방식을 어두운 버전으로 바꿉니다"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "밝은 모드로 전환"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "스타일 방식을 밝은 버전으로 바꿉니다"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "빌드 진단 표시"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "빌드 중에 발견된 오류 및 경고를 표시합니다"
+
+#: src/plugins/menu-search/gtk/menus.ui:94
+msgid "Close Page"
+msgstr "페이지 닫기"
+
+#: src/plugins/menu-search/gtk/menus.ui:95
+msgid "Close the current page"
+msgstr "현재 페이지 닫기"
+
+#: src/plugins/menu-search/gtk/menus.ui:108
+msgid "Move to next search result"
+msgstr "다음 검색 결과로 이동"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Move to and select the next available search result"
+msgstr "다음 검색 결과가 있으면 이동하고 선택합니다"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Move to previous search result"
+msgstr "이전 검색 결과로 이동"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the previous search result"
+msgstr "이전 결과로 이동하고 선택합니다"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5046,7 +5078,7 @@ msgid "Files will be copied in a moment"
 msgstr "파일을 곧 복사합니다"
 
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:96
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter"
 msgstr "필터"
 
@@ -5264,7 +5296,7 @@ msgid "Untitled Command"
 msgstr "이름 없는 명령"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:172
 msgid "Set Shortcut"
 msgstr "바로 가기 키 설정"
 
@@ -5448,7 +5480,7 @@ msgstr "파일 편집(_E)"
 msgid "Open keybindings.json in editor"
 msgstr "편집기에서 keybindings.json을 엽니다"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr "바로 가기 보기 및 사용자 정의…"
 
@@ -5744,31 +5776,31 @@ msgstr "앱 출력"
 msgid "Process completed"
 msgstr "프로세스가 실행을 마쳤습니다"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "새 터미널(_T)"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "호스트 운영 체제에서 새 터미널 열기"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "새 빌드 터미널(_B)"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "프로젝트의 빌드 파이프라인에서 새 터미널을 엽니다"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "새 런타임 터미널(_R)"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "프로젝트의 런타임 환경에서 새 터미널 열기"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "쪼개기"
 
@@ -6118,6 +6150,18 @@ msgstr "XML 트리를 만드는데 실패했습니다."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "파일을 파싱하려면 로컬에 저장해야 합니다."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr "대소문자 구별같은 검색 옵션을 보이거나 감춥니다"
+
+#~ msgid "Regex"
+#~ msgstr "정규식"
+
+#~ msgid "Case sensitive"
+#~ msgstr "대소문자 구별"
+
+#~ msgid "Match whole word"
+#~ msgstr "전체 단어와 일치"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "g_warning()에 디버거 중단점"
