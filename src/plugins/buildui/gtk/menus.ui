@@ -16,6 +16,8 @@
       <attribute name="label" translatable="yes">Reload Configuration</attribute>
       <attribute name="action">context.build-manager.invalidate</attribute>
       <attribute name="description" translatable="yes">Reload project configuration</attribute>
+      <attribute name="page" translatable="yes">Code Foundry</attribute>
+      <attribute name="group" translatable="yes">Configuration</attribute>
     </item>
     <section id="build-menu-target">
       <attribute name="page" translatable="yes">Code Foundry</attribute>
