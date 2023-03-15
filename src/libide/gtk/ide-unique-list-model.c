@@ -290,7 +290,13 @@ ide_unique_list_model_sorted_items_changed_cb (IdeUniqueListModel *self,
 
   if (added > 0)
     {
-      ide_unique_list_model_start_deduplicating (self, gtk_bitset_new_range (position, added));
+      gboolean has_tail = position + added < g_list_model_get_n_items (G_LIST_MODEL (sorted));
+
+      /* We have to look at the next item too so that we can be sure that only the first
+       * of the adjacent items are displayed.
+       */
+
+      ide_unique_list_model_start_deduplicating (self, gtk_bitset_new_range (position, added + has_tail));
       sorter_added = gtk_bitset_get_size_in_range (self->unique, position, position + added - 1);
     }
 
