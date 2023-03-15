@@ -662,6 +662,122 @@ reload_action (GtkWidget  *widget,
 }
 
 static void
+next_diagnostic_cb (guint                 line,
+                    IdeDiagnosticSeverity severity,
+                    gpointer              user_data)
+{
+  int *out_line = user_data;
+
+  if (*out_line == -1)
+    *out_line = line;
+}
+
+static void
+diagnostics_next_action (GtkWidget  *widget,
+                         const char *action_name,
+                         GVariant   *param)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  IdeDiagnostics *diagnostics;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  if ((diagnostics = ide_buffer_get_diagnostics (self->buffer)))
+    {
+      GtkTextIter insert;
+      GtkTextIter begin, end;
+      int line = -1;
+
+      ide_buffer_get_selection_bounds (self->buffer, &insert, NULL);
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+
+      ide_diagnostics_foreach_line_in_range (diagnostics,
+                                             ide_buffer_get_file (self->buffer),
+                                             gtk_text_iter_get_line (&insert) + 1,
+                                             gtk_text_iter_get_line (&end),
+                                             next_diagnostic_cb,
+                                             &line);
+
+      if (line == -1)
+        ide_diagnostics_foreach_line_in_range (diagnostics,
+                                               ide_buffer_get_file (self->buffer),
+                                               0,
+                                               gtk_text_iter_get_line (&insert),
+                                               next_diagnostic_cb,
+                                               &line);
+
+      if (line != -1)
+        {
+          gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &insert, line);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &insert, &insert);
+          ide_editor_page_scroll_to_insert (self, GTK_DIR_DOWN);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+previous_diagnostic_cb (guint                 line,
+                        IdeDiagnosticSeverity severity,
+                        gpointer              user_data)
+{
+  int *out_line = user_data;
+  *out_line = line;
+}
+
+static void
+diagnostics_previous_action (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *param)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  IdeDiagnostics *diagnostics;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  if ((diagnostics = ide_buffer_get_diagnostics (self->buffer)))
+    {
+      GtkTextIter insert;
+      GtkTextIter begin, end;
+      int line = -1;
+
+      ide_buffer_get_selection_bounds (self->buffer, &insert, NULL);
+      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+
+      ide_diagnostics_foreach_line_in_range (diagnostics,
+                                             ide_buffer_get_file (self->buffer),
+                                             0,
+                                             MAX (1, gtk_text_iter_get_line (&insert)) - 1,
+                                             previous_diagnostic_cb,
+                                             &line);
+
+      if (line == -1)
+        ide_diagnostics_foreach_line_in_range (diagnostics,
+                                               ide_buffer_get_file (self->buffer),
+                                               gtk_text_iter_get_line (&insert),
+                                               gtk_text_iter_get_line (&end),
+                                               previous_diagnostic_cb,
+                                               &line);
+
+      if (line != -1)
+        {
+          gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &insert, line);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &insert, &insert);
+          ide_editor_page_scroll_to_insert (self, GTK_DIR_UP);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_constructed (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -820,6 +936,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "editor.format-document", NULL, format_action);
   panel_widget_class_install_action (panel_widget_class, "editor.format-selection", NULL, format_action);
   panel_widget_class_install_action (panel_widget_class, "editor.reload", NULL, reload_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.diagnostics.next", NULL, diagnostics_next_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.diagnostics.previous", NULL, diagnostics_previous_action);
 
   g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
