@@ -444,6 +444,8 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
 
   pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
   vte_terminal_set_pty (self->terminal, pty);
+
+  gtk_widget_remove_css_class (GTK_WIDGET (self->uri_row), "error");
 }
 
 void
