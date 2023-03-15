@@ -195,4 +195,22 @@
       <attribute name="accel">&lt;shift&gt;&lt;alt&gt;f</attribute>
     </item>
   </menu>
+  <menu id="ide-source-view-popup-menu-jump-section">
+    <item>
+      <attribute name="id">org.gnome.builder.editor.diagnostics.previous</attribute>
+      <attribute name="label" translatable="yes">Previous Diagnostic</attribute>
+      <attribute name="description" translatable="yes">Move the insertion cursor to the previous diagnostic location</attribute>
+      <attribute name="action">page.editor.diagnostics.previous</attribute>
+      <attribute name="verb-icon">go-previous-symbolic</attribute>
+      <attribute name="accel">&lt;control&gt;&lt;shift&gt;less</attribute>
+    </item>
+    <item>
+      <attribute name="id">org.gnome.builder.editor.diagnostics.next</attribute>
+      <attribute name="label" translatable="yes">Next Diagnostic</attribute>
+      <attribute name="description" translatable="yes">Move the insertion cursor to the next diagnostic location</attribute>
+      <attribute name="action">page.editor.diagnostics.next</attribute>
+      <attribute name="verb-icon">go-next-symbolic</attribute>
+      <attribute name="accel">&lt;control&gt;&lt;shift&gt;greater</attribute>
+    </item>
+  </menu>
 </interface>

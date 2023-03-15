@@ -8,3 +8,5 @@
 { "trigger" : "<Control>n", "action" : "workspace.editorui.page.new", "when" : "canEdit()", "phase" : "bubble" },
 { "id" : "org.gnome.builder.editor.search.move-next", "trigger" : "<Control>g", "action" : "page.search.move-next", "when" : "canEdit()", "phase" : "bubble" },
 { "id" : "org.gnome.builder.editor.search.move-previous", "trigger" : "<Control><Shift>g", "action" : "page.search.move-previous", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.editor.diagnostics.next", "trigger" : "<Control><Shift>greater", "action" : "page.editor.diagnostics.next", "when" : "canEdit()", "phase" : "bubble" },
+{ "id" : "org.gnome.builder.editor.diagnostics.previous", "trigger" : "<Control><Shift>less", "action" : "page.editor.diagnostics.previous", "when" : "canEdit()", "phase" : "bubble" },
