@@ -467,6 +467,10 @@ gbp_shortcutui_dialog_init (GbpShortcutuiDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
   gtk_custom_sorter_set_sort_func (self->sorter,
                                    (GCompareDataFunc)gbp_shortcutui_shortcut_compare,
                                    NULL, NULL);

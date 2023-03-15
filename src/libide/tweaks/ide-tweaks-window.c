@@ -591,6 +591,10 @@ ide_tweaks_window_init (IdeTweaksWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", FALSE);
 
   self->muxer = ide_action_muxer_new ();
