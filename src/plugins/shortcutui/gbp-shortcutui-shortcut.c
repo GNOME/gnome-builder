@@ -341,13 +341,9 @@ gbp_shortcutui_shortcut_dup_accelerator (GbpShortcutuiShortcut *self)
 gboolean
 gbp_shortcutui_shortcut_has_override (GbpShortcutuiShortcut *self)
 {
-  GtkShortcutTrigger *trigger;
-
   g_return_val_if_fail (GBP_IS_SHORTCUTUI_SHORTCUT (self), FALSE);
 
-  trigger = get_trigger (self);
-
-  return trigger != GET_INFO (self->shortcut)->trigger;
+  return gtk_shortcut_get_trigger (self->shortcut) != GET_INFO (self->shortcut)->trigger;
 }
 
 gboolean
