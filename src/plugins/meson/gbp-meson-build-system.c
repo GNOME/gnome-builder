@@ -770,6 +770,76 @@ gbp_meson_build_system_supports_language (IdeBuildSystem *system,
   return FALSE;
 }
 
+static gboolean
+gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
+                                           const char * const  *argv,
+                                           const char * const  *env,
+                                           const char          *cwd,
+                                           IdeUnixFDMap        *unix_fd_map,
+                                           gpointer             user_data,
+                                           GError             **error)
+{
+  GbpMesonBuildSystem *self = user_data;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
+  const char *builddir;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    return FALSE;
+
+  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
+      (build_manager = ide_build_manager_from_context (context)) &&
+      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
+      (builddir = ide_pipeline_get_builddir (pipeline)))
+    {
+      ide_run_context_append_args (run_context, IDE_STRV_INIT ("meson", "devenv", "-C", builddir));
+
+      ide_run_context_set_cwd (run_context, cwd);
+
+      if (env != NULL && env[0] != NULL)
+        {
+          ide_run_context_append_argv (run_context, "env");
+          ide_run_context_append_args (run_context, env);
+        }
+
+      ide_run_context_append_args (run_context, argv);
+    }
+  else
+    {
+      ide_run_context_set_argv (run_context, argv);
+      ide_run_context_set_environ (run_context, env);
+      ide_run_context_set_cwd (run_context, cwd);
+    }
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+gbp_meson_build_system_prepare_tooling (IdeBuildSystem *build_system,
+                                        IdeRunContext  *run_context)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  ide_run_context_push (run_context,
+                        gbp_meson_build_system_prepare_tooling_cb,
+                        g_object_ref (self),
+                        g_object_unref);
+
+  IDE_EXIT;
+}
+
 static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
@@ -783,6 +853,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_builddir = gbp_meson_build_system_get_builddir;
   iface->get_srcdir = gbp_meson_build_system_get_srcdir;
   iface->get_project_version = gbp_meson_build_system_get_project_version;
+  iface->prepare_tooling = gbp_meson_build_system_prepare_tooling;
   iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
   iface->supports_language = gbp_meson_build_system_supports_language;
 }
