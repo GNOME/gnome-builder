@@ -809,6 +809,9 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
         }
 
       ide_run_context_append_args (run_context, argv);
+
+      if (!g_file_test (builddir, G_FILE_TEST_IS_DIR))
+        g_mkdir_with_parents (builddir, 750);
     }
   else
     {
