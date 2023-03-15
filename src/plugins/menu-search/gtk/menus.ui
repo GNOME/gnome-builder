@@ -73,7 +73,7 @@
   <menu id="menu-search-projects">
     <section id="menu-search-projects-section">
       <attribute name="page" translatable="yes">Text Editor</attribute>
-      <attribute name="group" translatable="yes">Diagnostics</attribute>
+      <attribute name="group" translatable="yes">Code Navigation</attribute>
       <item>
         <attribute name="id">org.gnome.builder.project.diagnostics.show</attribute>
         <attribute name="label" translatable="yes">Display Build Diagnostics</attribute>
@@ -81,6 +81,13 @@
         <attribute name="action">workspace.buildui.status.show</attribute>
         <attribute name="target" type="s">'errors'</attribute>
         <attribute name="accel">&lt;control&gt;&lt;alt&gt;question</attribute>
+      </item>
+      <item>
+        <attribute name="id">org.gnome.builder.editor.goto-line</attribute>
+        <attribute name="label" translatable="yes">Go to Line</attribute>
+        <attribute name="description" translatable="yes">Jump to a specific line or column</attribute>
+        <attribute name="action">workspace.editorui.page.go-to-line</attribute>
+        <attribute name="accel">&lt;control&gt;i</attribute>
       </item>
     </section>
   </menu>
@@ -102,7 +109,7 @@
   <menu id="menu-search-editor">
     <section id="menu-search-editor-section">
       <attribute name="page" translatable="yes">Text Editor</attribute>
-      <attribute name="group" translatable="yes">Search</attribute>
+      <attribute name="group" translatable="yes">Search &amp; Replace</attribute>
       <item>
         <attribute name="id">org.gnome.builder.editor.search.move-next</attribute>
         <attribute name="label" translatable="yes">Move to next search result</attribute>

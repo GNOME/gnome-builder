@@ -120,7 +120,7 @@
     <section id="new-document-section">
       <attribute name="id">new-document-section</attribute>
       <item>
-        <attribute name="id">new-file</attribute>
+        <attribute name="id">org.gnome.builder.editor.document.new</attribute>
         <attribute name="label" translatable="yes">New _File</attribute>
         <attribute name="action">workspace.editorui.page.new</attribute>
         <attribute name="accel">&lt;primary&gt;n</attribute>
@@ -153,11 +153,13 @@
       <attribute name="page" translatable="yes">Application</attribute>
       <attribute name="group" translatable="yes">Documents</attribute>
       <item>
+        <attribute name="id">org.gnome.builder.page.save</attribute>
         <attribute name="label" translatable="yes">Save</attribute>
         <attribute name="action">page.save</attribute>
         <attribute name="accel">&lt;ctrl&gt;s</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.page.save-as</attribute>
         <attribute name="label" translatable="yes">Save _As</attribute>
         <attribute name="action">page.save-as</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;s</attribute>
@@ -165,11 +167,13 @@
     </section>
     <section id="ide-editor-page-search-section">
       <item>
+        <attribute name="id">org.gnome.builder.editor.find</attribute>
         <attribute name="label" translatable="yes">Find…</attribute>
         <attribute name="action">page.search.begin-find</attribute>
         <attribute name="accel">&lt;ctrl&gt;f</attribute>
       </item>
       <item>
+        <attribute name="id">org.gnome.builder.editor.find-replace</attribute>
         <attribute name="label" translatable="yes">Find/Replace…</attribute>
         <attribute name="action">page.search.begin-replace</attribute>
         <attribute name="accel">&lt;ctrl&gt;h</attribute>
@@ -177,6 +181,7 @@
     </section>
     <section id="ide-editor-page-print-section">
       <item>
+        <attribute name="id">org.gnome.builder.editor.print</attribute>
         <attribute name="label" translatable="yes">Print…</attribute>
         <attribute name="action">page.editor.print</attribute>
         <attribute name="accel">&lt;control&gt;p</attribute>
@@ -185,11 +190,13 @@
   </menu>
   <menu id="ide-source-view-popup-menu-format-section">
     <item>
+      <attribute name="id">org.gnome.builder.editor.document.format</attribute>
       <attribute name="label" translatable="yes">Format Document</attribute>
       <attribute name="action">page.editor.format-document</attribute>
       <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;f</attribute>
     </item>
     <item>
+      <attribute name="id">org.gnome.builder.editor.selection.format</attribute>
       <attribute name="label" translatable="yes">Format Selection</attribute>
       <attribute name="action">page.editor.format-selection</attribute>
       <attribute name="accel">&lt;shift&gt;&lt;alt&gt;f</attribute>
