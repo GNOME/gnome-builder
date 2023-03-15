@@ -24,6 +24,8 @@
 
 #include <libide-threading.h>
 
+#include "ide-subprocess-launcher-private.h"
+
 #include "ide-build-log.h"
 #include "ide-pipeline.h"
 #include "ide-pipeline-stage-launcher.h"
@@ -234,7 +236,9 @@ ide_pipeline_stage_launcher_run (IdePipelineStage      *stage,
 
       /* Ensure we have access to stdin/stdout streams */
 
-      flags |= G_SUBPROCESS_FLAGS_STDOUT_PIPE;
+      if (!ide_subprocess_launcher_get_stdout_file_path (launcher))
+        flags |= G_SUBPROCESS_FLAGS_STDOUT_PIPE;
+
       flags |= G_SUBPROCESS_FLAGS_STDERR_PIPE;
 
       ide_subprocess_launcher_set_flags (launcher, flags);
