@@ -67,6 +67,8 @@ struct _IdeBuildSystemInterface
   gboolean    (*supports_language)                 (IdeBuildSystem       *self,
                                                     const char           *language);
   char       *(*get_srcdir)                        (IdeBuildSystem       *self);
+  void        (*prepare_tooling)                   (IdeBuildSystem       *self,
+                                                    IdeRunContext        *run_context);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -122,5 +124,8 @@ gboolean         ide_build_system_supports_toolchain               (IdeBuildSyst
 IDE_AVAILABLE_IN_ALL
 gboolean         ide_build_system_supports_language                (IdeBuildSystem       *self,
                                                                     const char           *language);
+IDE_AVAILABLE_IN_44
+void             ide_build_system_prepare_tooling                  (IdeBuildSystem       *self,
+                                                                    IdeRunContext        *run_context);
 
 G_END_DECLS

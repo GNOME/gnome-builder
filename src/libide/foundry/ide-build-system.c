@@ -37,6 +37,7 @@
 #include "ide-config.h"
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
+#include "ide-run-context.h"
 #include "ide-runtime.h"
 #include "ide-toolchain.h"
 
@@ -836,4 +837,23 @@ ide_build_system_supports_language (IdeBuildSystem *self,
     return IDE_BUILD_SYSTEM_GET_IFACE (self)->supports_language (self, language);
 
   return FALSE;
+}
+
+/**
+ * ide_build_system_prepare_tooling:
+ * @self: a #IdeBuildSystem
+ *
+ * This should prepare an environment for developer tooling such as a language server.
+ *
+ * Since: 44
+ */
+void
+ide_build_system_prepare_tooling (IdeBuildSystem *self,
+                                  IdeRunContext  *run_context)
+{
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->prepare_tooling)
+    IDE_BUILD_SYSTEM_GET_IFACE (self)->prepare_tooling (self, run_context);
 }
