@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-07 16:40+0000\n"
-"PO-Revision-Date: 2023-03-09 10:34+0700\n"
+"POT-Creation-Date: 2023-03-15 04:54+0000\n"
+"PO-Revision-Date: 2023-03-15 18:56+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -626,7 +626,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Lingkungan apa yang digunakan saat menjalankan pengujian unit"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Log Verbose"
 
@@ -779,31 +779,31 @@ msgstr "Buka Berkas…"
 msgid "Open a file in the workspace"
 msgstr "Buka berkas dalam ruang kerja"
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
-#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Preferensi"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
-#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
 
-#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
-#: src/libide/gui/gtk/menus.ui:42 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:45 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Bantuan"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
-#: src/libide/gui/gtk/menus.ui:49
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
+#: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
 msgstr "Tentang Builder"
 
-#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:59
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "_Keluar"
 
@@ -812,18 +812,22 @@ msgid "Document"
 msgstr "Dokumen"
 
 #: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
-#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
-#: src/libide/gui/gtk/menus.ui:55 src/libide/gui/gtk/menus.ui:68
-#: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
-#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10
+#: src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
+#: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:90
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplikasi"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:91
 msgid "Pages"
 msgstr "Halaman"
 
@@ -835,7 +839,8 @@ msgstr "Halaman"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:104
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Penyunting Teks"
@@ -844,8 +849,8 @@ msgstr "Penyunting Teks"
 msgid "Search & Replace"
 msgstr "Cari & Ganti"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:69
-#: src/libide/gui/gtk/menus.ui:73 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72
+#: src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "Dokumen"
 
@@ -918,31 +923,31 @@ msgid "_Discard…"
 msgstr "_Buang…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Gagal mencetak: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Gagal memformat pilihan: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1013
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Simpan Berkas"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Simpan"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1016
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -971,6 +976,7 @@ msgid "Search & Replace (Ctrl+H)"
 msgstr "Cari & Ganti (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Tutup pencarian"
 
@@ -983,15 +989,18 @@ msgid "Replace _All"
 msgstr "Ganti Semu_a"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr "Gunakan Ekspresi Re_guler"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Peka Huruf Be_sar Kecil"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr "Cocokkan Seluruh Kata"
 
@@ -1295,28 +1304,34 @@ msgstr "Mengirim sinyal %d ke subproses %s"
 msgid "Default (Host operating system)"
 msgstr "Bawaan (Sistem operasi host)"
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:64
-#: src/libide/greeter/gtk/menus.ui:84
+#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Proyek"
+
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
+#: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "_Klon Repositori…"
 
-#: src/libide/greeter/gtk/menus.ui:20
+#: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
 #: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
 msgid "Close"
 msgstr "Tutup"
 
-#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:77
+#: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
 msgstr "Buka _Proyek…"
 
-#: src/libide/greeter/gtk/menus.ui:59
+#: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
 msgstr "Membuka proyek baru atau yang sudah ada"
 
-#: src/libide/greeter/gtk/menus.ui:67
+#: src/libide/greeter/gtk/menus.ui:69
 msgid "Create a new project by cloning a repository"
 msgstr "Membuat proyek baru dengan mengkloning repositori"
 
@@ -1476,13 +1491,13 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Sekitar %u tahun yang lalu"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Pasang"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:191
+#: src/libide/gtk/ide-search-entry.c:184
 #, c-format
 msgid "%u of %u"
 msgstr "%u dari %u"
@@ -1490,6 +1505,7 @@ msgstr "%u dari %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "Cari"
 
@@ -1497,23 +1513,23 @@ msgstr "Cari"
 msgid "Search for anything"
 msgstr "Cari apa pun"
 
-#: src/libide/gui/ide-search-popover.ui:230
+#: src/libide/gui/ide-search-popover.ui:246
 msgid "_Everything"
 msgstr "S_emuanya"
 
-#: src/libide/gui/ide-search-popover.ui:237
+#: src/libide/gui/ide-search-popover.ui:253
 msgid "_Actions"
 msgstr "_Aksi"
 
-#: src/libide/gui/ide-search-popover.ui:244
+#: src/libide/gui/ide-search-popover.ui:260
 msgid "_Commands"
 msgstr "_Perintah"
 
-#: src/libide/gui/ide-search-popover.ui:251
+#: src/libide/gui/ide-search-popover.ui:267
 msgid "_Files"
 msgstr "_Berkas"
 
-#: src/libide/gui/ide-search-popover.ui:258
+#: src/libide/gui/ide-search-popover.ui:274
 msgid "_Symbols"
 msgstr "_Simbol"
 
@@ -1531,56 +1547,56 @@ msgstr "A_tur"
 msgid "Press Escape to cancel or Backspace to disable."
 msgstr "Tekan Escape untuk membatalkan atau Backspace untuk menonaktifkan."
 
-#: src/libide/gui/gtk/menus.ui:14
+#: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
 msgstr "Tutup Proyek"
 
-#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Umum"
 
-#: src/libide/gui/gtk/menus.ui:27
+#: src/libide/gui/gtk/menus.ui:30
 msgid "Change application preferences"
 msgstr "Ubah preferensi aplikasi"
 
-#: src/libide/gui/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:38
 msgid "Find keyboard shortcuts"
 msgstr "Temukan pintasan papan tik"
 
-#: src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46
 msgid "Get help with using Builder"
 msgstr "Dapatkan bantuan untuk menggunakan Builder"
 
-#: src/libide/gui/gtk/menus.ui:51
+#: src/libide/gui/gtk/menus.ui:54
 msgid "Show information about Builder"
 msgstr "Tampilkan informasi tentang Builder"
 
-#: src/libide/gui/gtk/menus.ui:60
+#: src/libide/gui/gtk/menus.ui:63
 msgid "Quit without saving changes"
 msgstr "Keluar tanpa menyimpan perubahan"
 
-#: src/libide/gui/gtk/menus.ui:77 src/plugins/web-browser/gtk/menus.ui:17
+#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:17
 msgid "Web Browsing"
 msgstr "Penjelajahan Web"
 
-#: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
+#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/libide/gui/gtk/menus.ui:81
+#: src/libide/gui/gtk/menus.ui:84
 msgid "New Terminals"
 msgstr "Terminal Baru"
 
 #: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
-"Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2023.\n"
-"Sucipto <sucipto@pm.me>, 2020."
+"Arief Mulya Utama <arief_mulya@yahoo.com>, 2003.\n"
+"Andika Triwidada <andika@gmail.com>, 2012, 2013, 2021.\n"
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2022."
 
 #: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
@@ -1656,7 +1672,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Jungkitkan Panel Kiri (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Jungkitkan Panel Kanan"
 
@@ -1684,8 +1700,14 @@ msgstr "Berhenti jalankan"
 msgid "Run project"
 msgstr "Jalankan proyek"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:259
+#: src/libide/gui/ide-shortcut-window.c:285
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "Lainnya"
 
@@ -1703,7 +1725,7 @@ msgstr "Memuat proyek \"%s\""
 msgid "There are unsaved documents"
 msgstr "Ada dokumen yang belum disimpan"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1730,13 +1752,13 @@ msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:492
+#: src/libide/lsp/ide-lsp-service.c:517
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "Peladen bahasa \"%s\" keluar"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:531
+#: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "Peladen bahasa “%s” muncul sebagai proses %s"
@@ -1761,7 +1783,7 @@ msgstr "Perangkat & Simulator"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
+#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
@@ -1820,11 +1842,6 @@ msgstr "Berkas tujuan mesti di dalam pohon proyek."
 #: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
 msgstr "Berkas mesti di dalam pohon proyek."
-
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "Proyek"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
@@ -2011,7 +2028,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Terminal tanpa judul"
 
@@ -2032,25 +2049,15 @@ msgstr "Terminal Tanpa Judul"
 msgid "Search runtimes"
 msgstr "Cari runtime"
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
-msgstr ""
-"Tampilkan atau sembunyikan opsi pencarian seperti misalnya peka huruf besar "
-"kecil"
+#: src/libide/terminal/ide-terminal-search.ui:34
+msgid "Move to previous match"
+msgstr "Pindah ke cocok sebelumnya"
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Regex"
+#: src/libide/terminal/ide-terminal-search.ui:44
+msgid "Move to next match"
+msgstr "Pindah ke cocok berikutnya"
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Peka huruf besar kecil"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Cocokkan seluruh kata"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Melipat"
 
@@ -2105,7 +2112,7 @@ msgstr "Nihil"
 msgid "Blank page"
 msgstr "Halaman kosong"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
 msgid "Settings"
 msgstr "Pengaturan"
 
@@ -2138,7 +2145,7 @@ msgstr "Mengkonfigurasi proyek"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2388,93 +2395,94 @@ msgstr "Bangun Proyek (Shift+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Tampilkan Diagnostik Bangun (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "Konfigurasikan Proyek…"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "Konfigurasikan pengaturan yang terkait dengan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Code Foundry"
 msgstr "Code Foundry"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
-#: src/plugins/projectui/tweaks.ui:218
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Konfigurasi"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "Muat Ulang Konfigurasi"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "Muat ulang konfigurasi proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
 msgstr "Pilih Target Bangun…"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
 msgstr "Ubah target bangun bawaan"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Membangun"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:36
 msgid "_Build"
 msgstr "_Bangun"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:37
 msgid "Build the project"
 msgstr "Bangun proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
 msgstr "Bangun _Ulang"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Rebuild the project"
 msgstr "Bangun kembali proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "_Clean"
 msgstr "_Bersihkan"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
 msgstr "Bangun proyekBersihkan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:58
 msgid "Stop Building"
 msgstr "Berhenti Membangun"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:59
 msgid "Cancel the current build operation"
 msgstr "Membatalkan operasi bangun saat ini"
 
-#: src/plugins/buildui/gtk/menus.ui:59
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
 msgstr "Pasang & Gelar"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:72
 msgid "Install the project"
 msgstr "Pasang proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy to Device…"
 msgstr "Deploy ke Perangkat…"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
 msgstr "Deploy proyek ke perangkat saat ini"
 
@@ -2482,110 +2490,110 @@ msgstr "Deploy proyek ke perangkat saat ini"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "_Export"
 msgstr "_Ekspor"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
 msgstr "Ekspor proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop Build"
 msgstr "Berhenti Membangun"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Stop building project"
 msgstr "Berhenti membangun proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr "Tampi_lkan Keluaran Bangun"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:111
 msgid "Display panel containing the build log"
 msgstr "Panel tampilan yang berisi log bangun"
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
 msgid "Running"
 msgstr "Berjalan"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:122
 msgid "Select Run Command…"
 msgstr "Pilih Jalankan Perintah…"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:135
 msgid "Run"
 msgstr "Jalankan"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:138
 msgid "Run the project"
 msgstr "Jalankan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:144
 msgid "Restart Program"
 msgstr "Mulai Ulang Program"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Restart the running program"
 msgstr "Mulai ulang program yang sedang berjalan"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Stop Program"
 msgstr "Hentikan Program"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:156
 msgid "Stop running the project"
 msgstr "Berhenti menjalankan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Debugging"
 msgstr "Pengawakutuan"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Pengujian Unit"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:172
 msgid "Follow System Style"
 msgstr "Ikuti Gaya Sistem"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "Force Light"
 msgstr "Paksa Terang"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:184
 msgid "Force Dark"
 msgstr "Paksa Gelap"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Accessibility"
 msgstr "Aksesibilitas"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:193
 msgid "High Contrast"
 msgstr "Kontras Tinggi"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Text Direction"
 msgstr "Arah Teks"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:200
 msgid "Left-to-Right"
 msgstr "Kiri ke Kanan"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Right-to-Left"
 msgstr "Kanan ke Kiri"
 
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:221
 msgid "Show Inspector"
 msgstr "Tampilkan Pemeriksa"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Gaya"
 
@@ -2988,8 +2996,8 @@ msgid "Copy as Image"
 msgstr "Salin sebagai Gambar"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
-msgid "Copy seleted text as an image"
-msgstr "Salin teks terpisah sebagai gambar"
+msgid "Copy selected text as an image"
+msgstr "Salin teks yang dipilih sebagai gambar"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
@@ -3210,13 +3218,13 @@ msgstr "Buat _Proyek Baru…"
 msgid "Create New Project"
 msgstr "Buat Proyek Baru"
 
-#: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:9
+#: src/plugins/create-project/gtk/menus.ui:21
+#: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
 msgstr "Buat Proyek Baru…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "Buat proyek baru dari templat"
 
@@ -3645,7 +3653,7 @@ msgstr "B_erkas Baru"
 msgid "_Open File…"
 msgstr "B_uka Berkas…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Buka dalam Bingkai Baru"
 
@@ -4424,7 +4432,7 @@ msgstr "Protokol \"%s\" tidak didukung."
 msgid "Cloning repository"
 msgstr "Mengkloning Repositori"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:276
+#: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "Sebuah URL Git yang valid diperlukan"
 
@@ -4440,7 +4448,7 @@ msgstr "Surel"
 msgid "go run"
 msgstr "go run"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Mem-bootstrap proyek"
@@ -4449,7 +4457,7 @@ msgstr "Mem-bootstrap proyek"
 msgid "Gradle Run"
 msgstr "Jalankan Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Tampilkan jendela greeter baru"
 
@@ -4597,75 +4605,99 @@ msgstr "Jalankan Maven"
 msgid "Actions"
 msgstr "Aksi"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Pencarian Global"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "Tampilkan pencarian global"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Panel"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Jungkitkan Panel Kiri"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "Jungkitkan panel kiri ke dalam atau di luar tampilan"
 
 # Nama ikon
 # https://gitlab.gnome.org/Teams/Translation/id/-/issues/1
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "Jungkitkan panel kanan ke dalam atau di luar tampilan"
 
 # Nama ikon
 # https://gitlab.gnome.org/Teams/Translation/id/-/issues/1
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Jungkitkan Panel Bawah"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Jungkitkan panel bawah ke dalam atau di luar tampilan"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Beralih ke Mode Gelap"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "Ubah skema gaya ke varian gelap"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Beralih ke Mode Terang"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "Ubah skema gaya ke varian terang"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Tampilkan Diagnostik Bangun"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "Tampilkan galat dan peringatan yang disediakan oleh Vala"
+
+#: src/plugins/menu-search/gtk/menus.ui:94
+msgid "Close Page"
+msgstr "Tutup Halaman"
+
+#: src/plugins/menu-search/gtk/menus.ui:95
+msgid "Close the current page"
+msgstr "Tutup halaman saat ini"
+
+#: src/plugins/menu-search/gtk/menus.ui:108
+msgid "Move to next search result"
+msgstr "Pindah ke hasil pencarian berikutnya"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Move to and select the next available search result"
+msgstr "Pindah ke hasil pencarian berikutnya yang tersedia dan pilih"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Move to previous search result"
+msgstr "Pindah ke hasil pencarian sebelumnya"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the previous search result"
+msgstr "Pindah ke hasil pencarian sebelumnya dan pilih"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5300,7 +5332,7 @@ msgid "Untitled Command"
 msgstr "Perintah Tanpa Judul"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:179
 msgid "Set Shortcut"
 msgstr "Atur Pintasan"
 
@@ -5486,7 +5518,7 @@ msgstr "Sunting B_erkas"
 msgid "Open keybindings.json in editor"
 msgstr "Buka keybindings.json di penyunting"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr "Tampilkan dan Ubah Pintasan…"
 
@@ -5781,31 +5813,31 @@ msgstr "Keluaran Aplikasi"
 msgid "Process completed"
 msgstr "Proses selesai"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "_Terminal Baru"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "Buka terminal baru pada sistem operasi host"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "Terminal _Bangun Baru"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "Membuka terminal baru di pipa bangun proyek"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "Terminal _Runtime Baru"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Buka terminal baru di lingkungan runtime proyek"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Belah"
 
@@ -6146,6 +6178,20 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Show or hide search options such as case sensitivity"
+#~ msgstr ""
+#~ "Tampilkan atau sembunyikan opsi pencarian seperti misalnya peka huruf "
+#~ "besar kecil"
+
+#~ msgid "Regex"
+#~ msgstr "Regex"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Peka huruf besar kecil"
+
+#~ msgid "Match whole word"
+#~ msgstr "Cocokkan seluruh kata"
 
 #~ msgid "An absolute file-system path to the sysroot."
 #~ msgstr "Path sistem berkas absolut ke sysroot."
@@ -7393,9 +7439,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Find and replace"
 #~ msgstr "Cari dan ganti"
 
-#~ msgid "Move to the previous match"
-#~ msgstr "Ke cocok sebelumnya"
-
 #~ msgid "Move to the next error"
 #~ msgstr "Ke kesalahan selanjutnya"
 
@@ -8167,9 +8210,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Move Page Right"
 #~ msgstr "Pindahkan Halaman ke Kanan"
-
-#~ msgid "Close Frame"
-#~ msgstr "Tutup Bingkai"
 
 #~ msgid "Emacs"
 #~ msgstr "Emacs"
