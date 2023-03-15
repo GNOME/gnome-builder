@@ -103,12 +103,22 @@ ide_search_popover_activate (IdeSearchPopover *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (IDE_IS_SEARCH_RESULT (result));
 
-  /* We want GtkWindow:focus-widget because we don't care that the
-   * popover has a GtkText focused for text entry. We want what was
-   * last focused in the parent workspace window.
+  /* To make this all more predictable, we use the most recent page. That
+   * means that panels need to expose their actions more globally if they
+   * want to be accessible from the action search provider.
+   *
+   * This is much more predictable than trying to apply from random widgets
+   * which might have had focus before we displayed the popover.
+   *
+   * Additionally, it means that you need to make your page actions available
+   * properly on the page, not just within a widget inside them.
    */
+
   if ((workspace = ide_widget_get_workspace (GTK_WIDGET (self))))
-    last_focus = gtk_window_get_focus (GTK_WINDOW (workspace));
+    last_focus = GTK_WIDGET (ide_workspace_get_most_recent_page (workspace));
+
+  if (last_focus == NULL)
+    last_focus = GTK_WIDGET (workspace);
 
   gtk_popover_popdown (GTK_POPOVER (self));
 
