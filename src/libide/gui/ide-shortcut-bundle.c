@@ -887,7 +887,7 @@ ide_shortcut_bundle_override (IdeShortcutBundle  *self,
    */
   adjusted = g_strdup_printf ("[%s%s{}]",
                               contents,
-                              g_str_has_suffix (contents, ",") ? "" : ",");
+                              *contents == 0 || g_str_has_suffix (contents, ",") ? "" : ",");
 
   parser = json_parser_new ();
 
