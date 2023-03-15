@@ -179,7 +179,12 @@ populate_from_menu_model (GQueue     *queue,
 
       if (!(accel = find_accel_for_action (accel_map, action)) &&
           !g_menu_model_get_item_attribute (menu, i, "accel", "s", &accel))
-        continue;
+        {
+          /* Do nothing, we want to still know about it even if we
+           * don't have an accel so we can get page/group info from
+           * various utilities.
+           */
+        }
 
       if (!g_menu_model_get_item_attribute (menu, i, "label", "s", &title))
         continue;
@@ -463,8 +468,14 @@ ide_shortcut_window_new (GListModel *shortcuts)
           for (const GList *siter = gi->shortcuts.head; siter; siter = siter->next)
             {
               ShortcutInfo *si = siter->data;
-              g_autofree char *accel = g_markup_escape_text (si->accel, -1);
-              g_autofree char *shortcut_title = g_markup_escape_text (si->title, -1);
+              g_autofree char *accel = NULL;
+              g_autofree char *shortcut_title = NULL;
+
+              if (si->accel == NULL)
+                continue;
+
+              accel = g_markup_escape_text (si->accel, -1);
+              shortcut_title = g_markup_escape_text (si->title, -1);
 
               remove_underline_and_ellipsis (shortcut_title);
 
