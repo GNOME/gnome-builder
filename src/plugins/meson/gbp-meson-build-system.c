@@ -781,6 +781,7 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
 {
   GbpMesonBuildSystem *self = user_data;
   IdeBuildManager *build_manager;
+  g_autofree char *build_ninja = NULL;
   IdePipeline *pipeline;
   IdeContext *context;
   const char *builddir;
@@ -796,7 +797,10 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
   if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
       (build_manager = ide_build_manager_from_context (context)) &&
       (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
-      (builddir = ide_pipeline_get_builddir (pipeline)))
+      (builddir = ide_pipeline_get_builddir (pipeline)) &&
+      g_file_test (builddir, G_FILE_TEST_IS_DIR) &&
+      (build_ninja = g_build_filename (builddir, "build.ninja", NULL)) &&
+      g_file_test (build_ninja, G_FILE_TEST_EXISTS))
     {
       ide_run_context_append_args (run_context, IDE_STRV_INIT ("meson", "devenv", "-C", builddir));
 
@@ -809,9 +813,6 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
         }
 
       ide_run_context_append_args (run_context, argv);
-
-      if (!g_file_test (builddir, G_FILE_TEST_IS_DIR))
-        g_mkdir_with_parents (builddir, 750);
     }
   else
     {
