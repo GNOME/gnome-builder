@@ -457,8 +457,23 @@ ide_shortcut_window_new (GListModel *shortcuts)
         {
           GroupInfo *gi = giter->data;
           g_autofree char *group_title = g_markup_escape_text (gi->title, -1);
+          gboolean has_at_least_one = FALSE;
 
           if (g_str_equal (gi->title, "ignore"))
+            continue;
+
+          for (const GList *siter = gi->shortcuts.head; siter; siter = siter->next)
+            {
+              const ShortcutInfo *si = siter->data;
+
+              if (si->accel != NULL)
+                {
+                  has_at_least_one = TRUE;
+                  break;
+                }
+            }
+
+          if (!has_at_least_one)
             continue;
 
           g_string_append        (xml, "        <child>\n");
