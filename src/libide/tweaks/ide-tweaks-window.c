@@ -597,6 +597,9 @@ ide_tweaks_window_init (IdeTweaksWindow *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "settings",
                                   G_ACTION_GROUP (self->muxer));
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "app",
+                                  G_ACTION_GROUP (g_application_get_default ()));
 }
 
 GtkWidget *
