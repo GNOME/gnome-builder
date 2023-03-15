@@ -152,6 +152,12 @@
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Code Navigation</attribute>
     </section>
+    <section id="ide-source-view-popup-menu-diagnostics-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Code Navigation</attribute>
+      <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="label" translatable="yes">Diagnostics</attribute>
+    </section>
     <section id="ide-source-view-popup-menu-foundry-section"/>
     <section id="ide-source-view-popup-menu-files-section"/>
   </menu>
