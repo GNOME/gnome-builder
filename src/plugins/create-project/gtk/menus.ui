@@ -2,6 +2,8 @@
 <interface>
   <menu id="ide-greeter-workspace-menu">
     <section id="ide-greeter-workspace-menu-projects">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Projects</attribute>
       <item>
         <attribute name="id">org.gnome.builder.project.create</attribute>
         <attribute name="label" translatable="yes">Create New Project…</attribute>

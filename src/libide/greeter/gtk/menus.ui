@@ -7,6 +7,8 @@
       </item>
     </section>
     <section id="ide-greeter-workspace-menu-projects">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Projects</attribute>
       <item>
         <attribute name="id">org.gnome.builder.project.clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>

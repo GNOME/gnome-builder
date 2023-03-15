@@ -6,7 +6,10 @@
         <attribute name="custom">theme_selector</attribute>
       </item>
     </section>
-    <section id="ide-primary-workspace-menu-projects-section"/>
+    <section id="ide-primary-workspace-menu-projects-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Projects</attribute>
+    </section>
     <section id="ide-primary-workspace-menu-placeholder1"/>
     <section id="ide-primary-workspace-menu-close-section">
       <item>
