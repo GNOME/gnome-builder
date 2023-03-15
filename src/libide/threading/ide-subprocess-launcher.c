@@ -40,7 +40,7 @@
 #include "ide-environment-variable.h"
 #include "ide-flatpak-subprocess-private.h"
 #include "ide-simple-subprocess-private.h"
-#include "ide-subprocess-launcher.h"
+#include "ide-subprocess-launcher-private.h"
 #include "ide-unix-fd-map.h"
 
 /* This comes from libide-io but we need access to it */
@@ -977,6 +977,16 @@ ide_subprocess_launcher_set_stdout_file_path (IdeSubprocessLauncher *self,
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
   g_set_str (&priv->stdout_file_path, stdout_file_path);
+}
+
+const char *
+ide_subprocess_launcher_get_stdout_file_path (IdeSubprocessLauncher *self)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
+
+  return priv->stdout_file_path;
 }
 
 void
