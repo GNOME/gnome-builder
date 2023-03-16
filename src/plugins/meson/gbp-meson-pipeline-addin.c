@@ -261,6 +261,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   ide_subprocess_launcher_push_args (devenv_launcher, IDE_STRV_INIT ("meson", "devenv", "--dump"));
   devenv_stage = ide_pipeline_stage_launcher_new (ide_object_get_context (IDE_OBJECT (pipeline)), devenv_launcher);
   ide_pipeline_stage_launcher_set_use_pty (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), FALSE);
+  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), TRUE);
   ide_pipeline_stage_set_name (devenv_stage, _("Cache development environment"));
   id = ide_pipeline_attach (pipeline,
                             IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
