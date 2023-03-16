@@ -49,6 +49,14 @@
         </item>
       </submenu>
     </section>
+    <section id="project-tree-menu-clipboard-section">
+      <item>
+        <attribute name="id">project-tree-menu-copy</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="label" translatable="yes">Copy</attribute>
+        <attribute name="action">project-tree.copy</attribute>
+      </item>
+    </section>
     <section id="project-tree-menu-find-section">
     </section>
     <section id="project-tree-menu-destructive-section">
