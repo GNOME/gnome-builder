@@ -1168,12 +1168,20 @@ char *
 gbp_meson_build_system_locate_meson (GbpMesonBuildSystem *self,
                                      IdePipeline         *pipeline)
 {
+  IdeContext *context;
   IdeConfig *config;
 
   g_return_val_if_fail (!self || GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline), NULL);
 
-  if ((config = ide_pipeline_get_config (pipeline)))
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  if (pipeline == NULL)
+    config = ide_config_manager_get_current (ide_config_manager_from_context (context));
+  else
+    config = ide_pipeline_get_config (pipeline);
+
+  if (config != NULL)
     {
       const char *envvar = ide_config_getenv (config, "MESON");
 
