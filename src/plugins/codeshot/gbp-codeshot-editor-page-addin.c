@@ -37,30 +37,60 @@ struct _GbpCodeshotEditorPageAddin
 
 static void
 fill_background (cairo_t              *cr,
-                 GtkSourceStyleScheme *scheme)
+                 GtkSourceStyleScheme *scheme,
+                 guint                 width,
+                 guint                 height)
 {
-  GtkSourceStyle *style;
+  cairo_rectangle (cr, 0, 0, width, height);
 
-  if (scheme != NULL &&
-      (style = gtk_source_style_scheme_get_style (scheme, "selection")))
+  if (scheme != NULL)
     {
-      g_autofree char *background = NULL;
-      gboolean background_set = FALSE;
+      GtkSourceStyle *bg_style = gtk_source_style_scheme_get_style (scheme, "selection");
       GdkRGBA rgba;
 
-      g_object_get (style,
-                    "background", &background,
-                    "background-set", &background_set,
-                    NULL);
-
-      if (background_set &&
-          background != NULL &&
-          gdk_rgba_parse (&rgba, background))
+      if (bg_style != NULL)
         {
-          rgba.alpha = 1;
-          gdk_cairo_set_source_rgba (cr, &rgba);
-          cairo_fill (cr);
-          return;
+          GtkSourceStyle *gradient_style = gtk_source_style_scheme_get_style (scheme, "right-margin");
+          g_autofree char *background = NULL;
+          gboolean background_set = FALSE;
+          GdkRGBA end;
+
+          g_object_get (bg_style,
+                        "background", &background,
+                        "background-set", &background_set,
+                        NULL);
+
+          if (background_set && background != NULL && gdk_rgba_parse (&rgba, background))
+            {
+              rgba.alpha = 1;
+              gdk_cairo_set_source_rgba (cr, &rgba);
+              cairo_fill (cr);
+            }
+
+          g_clear_pointer (&background, g_free);
+          background_set = FALSE;
+
+          if (gradient_style != NULL)
+            {
+              g_object_get (gradient_style,
+                            "background", &background,
+                            "background-set", &background_set,
+                            NULL);
+
+              if (background_set && background != NULL && gdk_rgba_parse (&end, background))
+                {
+                  cairo_pattern_t *pattern = cairo_pattern_create_linear (0, 0, width, 0);
+
+                  cairo_pattern_add_color_stop_rgba (pattern, 0, rgba.red, rgba.green, rgba.blue, 1);
+                  cairo_pattern_add_color_stop_rgba (pattern, width, end.red, end.green, end.blue, .3);
+
+                  cairo_rectangle (cr, 0, 0, width, height);
+                  cairo_set_source (cr, pattern);
+                  cairo_fill (cr);
+
+                  cairo_pattern_destroy (pattern);
+                }
+            }
         }
     }
 
@@ -144,10 +174,10 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
   cairo_surface_set_device_scale (surface, 2, 2);
 
   cr = cairo_create (surface);
-  cairo_rectangle (cr, 0, 0,
+  fill_background (cr,
+                   gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer)),
                    gdk_surface_get_width (gdk_surface),
                    gdk_surface_get_height (gdk_surface));
-  fill_background (cr, gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer)));
   cairo_translate (cr,
                    transform_x / scale_factor,
                    transform_y / scale_factor);
