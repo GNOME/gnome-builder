@@ -31,7 +31,6 @@
 #include "ide-private.h"
 
 #include "ide-run-context.h"
-#include "ide-run-context-private.h"
 
 typedef struct
 {
@@ -351,7 +350,7 @@ ide_run_context_push_host (IdeRunContext *self)
 typedef struct
 {
   char *shell;
-  guint login : 1;
+  IdeRunContextShell kind : 2;
 } Shell;
 
 static void
@@ -388,8 +387,10 @@ ide_run_context_shell_handler (IdeRunContext       *self,
     ide_run_context_set_cwd (self, cwd);
 
   ide_run_context_append_argv (self, shell->shell);
-  if (shell->login)
+  if (shell->kind == IDE_RUN_CONTEXT_SHELL_LOGIN)
     ide_run_context_append_argv (self, "-l");
+  else if (shell->kind == IDE_RUN_CONTEXT_SHELL_INTERACTIVE)
+    ide_run_context_append_argv (self, "-i");
   ide_run_context_append_argv (self, "-c");
 
   str = g_string_new (NULL);
@@ -426,49 +427,59 @@ ide_run_context_shell_handler (IdeRunContext       *self,
 /**
  * ide_run_context_push_shell:
  * @self: a #IdeRunContext
- * @login: if a login shell should be used
+ * @shell: the kind of shell to be used
  *
  * Pushes a shell which can run the upper layer command with -c.
  */
 void
-ide_run_context_push_shell (IdeRunContext *self,
-                            gboolean       login)
+ide_run_context_push_shell (IdeRunContext      *self,
+                            IdeRunContextShell  shell)
 {
-  Shell *shell;
+  Shell *state;
 
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
 
-  shell = g_slice_new0 (Shell);
-  shell->shell = g_strdup ("/bin/sh");
-  shell->login = !!login;
+  state = g_slice_new0 (Shell);
+  state->shell = g_strdup ("/bin/sh");
+  state->kind = shell;
 
-  ide_run_context_push (self,
-                        ide_run_context_shell_handler,
-                        shell, shell_free);
+  ide_run_context_push (self, ide_run_context_shell_handler, state, shell_free);
 }
 
 void
-_ide_run_context_push_user_shell (IdeRunContext *self,
-                                  gboolean       login)
+ide_run_context_push_user_shell (IdeRunContext      *self,
+                                 IdeRunContextShell  shell)
 {
   const char *user_shell;
-  Shell *shell;
+  Shell *state;
 
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
 
   user_shell = ide_get_user_shell ();
 
-  if (!ide_shell_supports_dash_c (user_shell) ||
-      (login && !ide_shell_supports_dash_login (user_shell)))
+  if (!ide_shell_supports_dash_c (user_shell))
     user_shell = "/bin/sh";
 
-  shell = g_slice_new0 (Shell);
-  shell->shell = g_strdup (user_shell);
-  shell->login = !!login;
+  switch (shell)
+    {
+    default:
+    case IDE_RUN_CONTEXT_SHELL_DEFAULT:
+      break;
 
-  ide_run_context_push (self,
-                        ide_run_context_shell_handler,
-                        shell, shell_free);
+    case IDE_RUN_CONTEXT_SHELL_LOGIN:
+      if (!ide_shell_supports_dash_login (user_shell))
+        user_shell = "/bin/sh";
+      break;
+
+    case IDE_RUN_CONTEXT_SHELL_INTERACTIVE:
+      break;
+    }
+
+  state = g_slice_new0 (Shell);
+  state->shell = g_strdup (user_shell);
+  state->kind = shell;
+
+  ide_run_context_push (self, ide_run_context_shell_handler, state, shell_free);
 }
 
 static gboolean

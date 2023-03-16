@@ -24,7 +24,7 @@
 
 #include <libide-foundry.h>
 
-#include "ide-run-context-private.h"
+#include "ide-run-context.h"
 
 #include "gbp-host-runtime.h"
 #include "gbp-noop-runtime.h"
@@ -69,7 +69,7 @@ gbp_noop_runtime_prepare_to_build (IdeRuntime    *runtime,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   ide_run_context_add_minimal_environment (run_context);
-  _ide_run_context_push_user_shell (run_context, TRUE);
+  ide_run_context_push_user_shell (run_context, IDE_RUN_CONTEXT_SHELL_LOGIN);
 
   IDE_EXIT;
 }

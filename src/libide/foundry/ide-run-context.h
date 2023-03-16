@@ -36,6 +36,21 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRunContext, ide_run_context, IDE, RUN_CONTEXT, GObject)
 
 /**
+ * IdeRunContextShell:
+ * @IDE_RUN_CONTEXT_SHELL_DEFAULT: A basic shell with no user scripts
+ * @IDE_RUN_CONTEXT_SHELL_LOGIN: A user login shell similar to `bash -l`
+ * @IDE_RUN_CONTEXT_SHELL_INTERACTIVE: A user interactive shell similar to `bash -i`
+ *
+ * Describes the type of shell to be used within the context.
+ */
+typedef enum _IdeRunContextShell
+{
+  IDE_RUN_CONTEXT_SHELL_DEFAULT     = 0,
+  IDE_RUN_CONTEXT_SHELL_LOGIN       = 1,
+  IDE_RUN_CONTEXT_SHELL_INTERACTIVE = 2,
+} IdeRunContextShell;
+
+/**
  * IdeRunContextHandler:
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error must be set.
@@ -67,7 +82,10 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_host               (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_shell              (IdeRunContext         *self,
-                                                                gboolean               login);
+                                                                IdeRunContextShell     shell);
+IDE_AVAILABLE_IN_44
+void                   ide_run_context_push_user_shell         (IdeRunContext         *self,
+                                                                IdeRunContextShell     shell);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_expansion          (IdeRunContext         *self,
                                                                 const char * const    *environ);
