@@ -770,52 +770,6 @@ gbp_meson_build_system_supports_language (IdeBuildSystem *system,
   return FALSE;
 }
 
-static void
-ensure_braces (IdeRunContext  *run_context,
-               const char     *key,
-               char          **value)
-{
-  GString *gstr;
-
-  g_assert (IDE_IS_RUN_CONTEXT (run_context));
-  g_assert (key != NULL);
-  g_assert (value != NULL);
-  g_assert (*value != NULL);
-
-  if (strchr (*value, '$') == NULL)
-    return;
-
-  gstr = g_string_new (NULL);
-
-  for (const char *iter = *value; *iter; iter = g_utf8_next_char (iter))
-    {
-      if (*iter == '\\' && iter[1] != 0)
-        {
-          g_string_append_c (gstr, '\\');
-          g_string_append_unichar (gstr, g_utf8_get_char (g_utf8_next_char (iter)));
-          iter++;
-          continue;
-        }
-
-      if (*iter == '$' && g_str_has_prefix (&iter[1], key))
-        {
-          const char *endptr = iter + 1 + strlen (key);
-
-          /* Handle various "path separators" only */
-          if (*endptr == 0 || *endptr == ':' || *endptr == ';' || *endptr == ',' || *endptr == '"' || *endptr == '\'')
-            {
-              g_string_append_printf (gstr, "${%s}", key);
-              iter = --endptr;
-              continue;
-            }
-        }
-
-      g_string_append_unichar (gstr, g_utf8_get_char (iter));
-    }
-
-  g_set_str (value, g_string_free (gstr, FALSE));
-}
-
 static gboolean
 gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
                                            const char * const  *argv,
@@ -825,75 +779,54 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
                                            gpointer             user_data,
                                            GError             **error)
 {
-  GbpMesonBuildSystem *self = user_data;
-  IdeBuildManager *build_manager;
-  g_autofree char *devenv_file = NULL;
-  g_autofree char *devenv = NULL;
-  IdePipeline *pipeline;
-  IdeContext *context;
-  const char *builddir;
-  gsize devenv_len;
+  const char *devenv_file = user_data;
+  g_autofree char *devenv_file_quoted = NULL;
+  g_autoptr(GString) argv0 = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (devenv_file != NULL);
 
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
     return FALSE;
 
-  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
-      (build_manager = ide_build_manager_from_context (context)) &&
-      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
-      (builddir = ide_pipeline_get_builddir (pipeline)) &&
-      (devenv_file = g_build_filename (builddir, ".gnome-builder-devenv", NULL)) &&
-      g_file_get_contents (devenv_file, &devenv, &devenv_len, NULL))
+  devenv_file_quoted = g_shell_quote (devenv_file);
+
+  argv0 = g_string_new (NULL);
+  g_string_append_printf (argv0, ". %s\n", devenv_file_quoted);
+
+  if (!ide_str_empty0 (cwd))
     {
-      g_autoptr(GPtrArray) to_add = g_ptr_array_new_with_free_func (g_free);
-      IdeLineReader reader;
-      char *line;
-      gsize line_len;
+      g_autofree char *quoted = g_shell_quote (cwd);
+      g_string_append_printf (argv0, "cd %s\n", quoted);
+    }
 
-      ide_run_context_set_cwd (run_context, cwd);
-
-      ide_run_context_append_args (run_context, IDE_STRV_INIT ("env", "-S"));
-      ide_line_reader_init (&reader, devenv, devenv_len);
-      while ((line = ide_line_reader_next (&reader, &line_len)))
-        {
-          g_autofree char *key = NULL;
-          g_autofree char *value = NULL;
-
-          line[line_len] = 0;
-
-          if (g_str_has_prefix (line, "export ") || !ide_environ_parse (line, &key, &value))
-            continue;
-
-          ensure_braces (run_context, key, &value);
-
-          if (ide_str_equal0 (key, "PATH"))
-            ide_run_context_append_formatted (run_context, "%s=%s", key, value);
-          else
-            g_ptr_array_add (to_add, g_strdup_printf ("%s=%s", key, value));
-        }
-
-      if (to_add->len > 0)
-        {
-          g_ptr_array_add (to_add, NULL);
-          ide_run_context_append_args (run_context,
-                                       (const char * const *)to_add->pdata);
-        }
+  if (env != NULL && env[0] != NULL)
+    {
+      g_string_append (argv0, "env ");
 
       for (guint i = 0; env[i]; i++)
-        ide_run_context_append_argv (run_context, env[i]);
+        {
+          g_autofree char *quoted = g_shell_quote (env[i]);
 
-      ide_run_context_append_args (run_context, argv);
+          g_string_append (argv0, quoted);
+          g_string_append_c (argv0, ' ');
+        }
     }
-  else
+
+  for (guint i = 0; argv[i]; i++)
     {
-      ide_run_context_set_argv (run_context, argv);
-      ide_run_context_set_environ (run_context, env);
-      ide_run_context_set_cwd (run_context, cwd);
+      g_autofree char *quoted = g_shell_quote (argv[i]);
+
+      g_string_append (argv0, quoted);
+      g_string_append_c (argv0, ' ');
     }
+
+  g_string_append (argv0, "\n");
+
+  ide_run_context_set_argv (run_context, IDE_STRV_INIT ("/bin/sh", "-c", argv0->str));
 
   IDE_RETURN (TRUE);
 }
@@ -903,6 +836,11 @@ gbp_meson_build_system_prepare_tooling (IdeBuildSystem *build_system,
                                         IdeRunContext  *run_context)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+  g_autofree char *devenv_file = NULL;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
+  const char *builddir;
 
   IDE_ENTRY;
 
@@ -910,10 +848,22 @@ gbp_meson_build_system_prepare_tooling (IdeBuildSystem *build_system,
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  ide_run_context_push (run_context,
-                        gbp_meson_build_system_prepare_tooling_cb,
-                        g_object_ref (self),
-                        g_object_unref);
+  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
+      (build_manager = ide_build_manager_from_context (context)) &&
+      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
+      (builddir = ide_pipeline_get_builddir (pipeline)) &&
+      (devenv_file = g_build_filename (builddir, ".gnome-builder-devenv", NULL)) &&
+      g_file_test (devenv_file, G_FILE_TEST_EXISTS))
+    {
+      ide_run_context_push (run_context,
+                            gbp_meson_build_system_prepare_tooling_cb,
+                            g_steal_pointer (&devenv_file),
+                            g_free);
+
+      IDE_EXIT;
+    }
+
+  g_debug ("Pipeline is not configured far enough to use meson devenv");
 
   IDE_EXIT;
 }
