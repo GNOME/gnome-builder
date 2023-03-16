@@ -1,1 +1,4 @@
-{ "trigger" : "<Alt>period", "action" : "page.codeui.goto-declaration", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.editor.code-actions", "action" : "page.codeui.code-actions", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.editor.goto-declaration", "trigger" : "<Alt>period", "action" : "page.codeui.goto-declaration", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.editor.goto-definition", "action" : "page.codeui.goto-definition", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.editor.find-references", "action" : "page.codeui.find-references", "when" : "canEdit()", "phase" : "capture" },
