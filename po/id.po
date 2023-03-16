@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-15 04:54+0000\n"
-"PO-Revision-Date: 2023-03-15 18:56+0700\n"
+"POT-Creation-Date: 2023-03-16 00:40+0000\n"
+"PO-Revision-Date: 2023-03-16 13:16+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -821,13 +821,13 @@ msgstr "Dokumen"
 #: src/plugins/menu-search/gtk/menus.ui:10
 #: src/plugins/menu-search/gtk/menus.ui:24
 #: src/plugins/menu-search/gtk/menus.ui:56
-#: src/plugins/menu-search/gtk/menus.ui:90
+#: src/plugins/menu-search/gtk/menus.ui:97
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplikasi"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
-#: src/plugins/menu-search/gtk/menus.ui:91
+#: src/plugins/menu-search/gtk/menus.ui:98
 msgid "Pages"
 msgstr "Halaman"
 
@@ -838,14 +838,15 @@ msgstr "Halaman"
 #: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:156
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:104
+#: src/plugins/menu-search/gtk/menus.ui:111
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Penyunting Teks"
 
-#: src/libide/editor/gtk/menus.ui:77
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
 msgid "Search & Replace"
 msgstr "Cari & Ganti"
 
@@ -934,20 +935,20 @@ msgstr "Gagal mencetak: %s"
 msgid "Failed to format selection: %s"
 msgstr "Gagal memformat pilihan: %s"
 
-#: src/libide/editor/ide-editor-page.c:1013
+#: src/libide/editor/ide-editor-page.c:1131
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Simpan Berkas"
 
-#: src/libide/editor/ide-editor-page.c:1016
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Simpan"
 
-#: src/libide/editor/ide-editor-page.c:1016
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1505,7 +1506,6 @@ msgstr "%u dari %u"
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
-#: src/plugins/menu-search/gtk/menus.ui:105
 msgid "Search"
 msgstr "Cari"
 
@@ -1781,9 +1781,8 @@ msgstr "Peladen Bahasa"
 msgid "Devices & Simulators"
 msgstr "Perangkat & Simulator"
 
-#: src/libide/plugins/ide-plugin.c:344
+#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:76
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
@@ -1966,6 +1965,8 @@ msgid "_Formatting"
 msgstr "Pem_formatan"
 
 #: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Navigasi Kode"
@@ -2853,7 +2854,7 @@ msgstr "Ambil dependensi"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Bangun proyek"
@@ -2921,7 +2922,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
 msgid "Configure project"
 msgstr "Konfigurasikan proyek"
 
@@ -3585,6 +3586,7 @@ msgid "Go"
 msgstr "Pergi"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Ke Baris"
 
@@ -3661,29 +3663,45 @@ msgstr "Buka dalam Bingkai Baru"
 msgid "Open in New Workspace…"
 msgstr "Buka di Ruang Kerja Baru…"
 
-#: src/plugins/editorui/gtk/menus.ui:161
+#: src/plugins/editorui/gtk/menus.ui:163
 msgid "Save _As"
 msgstr "Simpan Seb_agai"
 
-#: src/plugins/editorui/gtk/menus.ui:168
+#: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find…"
 msgstr "Cari…"
 
-#: src/plugins/editorui/gtk/menus.ui:173
+#: src/plugins/editorui/gtk/menus.ui:177
 msgid "Find/Replace…"
 msgstr "Cari/Ganti…"
 
-#: src/plugins/editorui/gtk/menus.ui:180
+#: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
 msgstr "Cetak…"
 
-#: src/plugins/editorui/gtk/menus.ui:188
+#: src/plugins/editorui/gtk/menus.ui:194
 msgid "Format Document"
 msgstr "Format Dokumen"
 
-#: src/plugins/editorui/gtk/menus.ui:193
+#: src/plugins/editorui/gtk/menus.ui:200
 msgid "Format Selection"
 msgstr "Pemilihan Format"
+
+#: src/plugins/editorui/gtk/menus.ui:208
+msgid "Move to Previous Diagnostic"
+msgstr "Pindah ke Diagnostik Sebelumnya"
+
+#: src/plugins/editorui/gtk/menus.ui:209
+msgid "Move the insertion cursor to the previous diagnostic location"
+msgstr "Pindahkan kursor penyisipan ke lokasi diagnostik sebelumnya"
+
+#: src/plugins/editorui/gtk/menus.ui:216
+msgid "Move to Next Diagnostic"
+msgstr "Pindah ke Diagnostik Berikutnya"
+
+#: src/plugins/editorui/gtk/menus.ui:217
+msgid "Move the insertion cursor to the next diagnostic location"
+msgstr "Pindahkan kursor penyisipan ke lokasi diagnostik berikutnya"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -4675,27 +4693,31 @@ msgstr "Tampilkan Diagnostik Bangun"
 msgid "Display errors and warnings found during build"
 msgstr "Tampilkan galat dan peringatan yang disediakan oleh Vala"
 
-#: src/plugins/menu-search/gtk/menus.ui:94
+#: src/plugins/menu-search/gtk/menus.ui:88
+msgid "Jump to a specific line or column"
+msgstr "Lompat ke baris atau kolom tertentu"
+
+#: src/plugins/menu-search/gtk/menus.ui:101
 msgid "Close Page"
 msgstr "Tutup Halaman"
 
-#: src/plugins/menu-search/gtk/menus.ui:95
+#: src/plugins/menu-search/gtk/menus.ui:102
 msgid "Close the current page"
 msgstr "Tutup halaman saat ini"
 
-#: src/plugins/menu-search/gtk/menus.ui:108
+#: src/plugins/menu-search/gtk/menus.ui:115
 msgid "Move to next search result"
 msgstr "Pindah ke hasil pencarian berikutnya"
 
-#: src/plugins/menu-search/gtk/menus.ui:109
+#: src/plugins/menu-search/gtk/menus.ui:116
 msgid "Move to and select the next available search result"
 msgstr "Pindah ke hasil pencarian berikutnya yang tersedia dan pilih"
 
-#: src/plugins/menu-search/gtk/menus.ui:115
+#: src/plugins/menu-search/gtk/menus.ui:122
 msgid "Move to previous search result"
 msgstr "Pindah ke hasil pencarian sebelumnya"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:123
 msgid "Move to and select the previous search result"
 msgstr "Pindah ke hasil pencarian sebelumnya dan pilih"
 
@@ -4707,9 +4729,13 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Muat Introspeksi Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
 msgid "Install project"
 msgstr "Pasang proyek"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+msgid "Cache development environment"
+msgstr "Lingkungan pengembangan singgahan"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
@@ -5517,6 +5543,10 @@ msgstr "Sunting B_erkas"
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
 msgid "Open keybindings.json in editor"
 msgstr "Buka keybindings.json di penyunting"
+
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+msgid "Reset shortcut"
+msgstr "Setel ulang pintasan"
 
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
@@ -7847,14 +7877,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgctxt "shortcut window"
 #~ msgid "Move to previous error in file"
 #~ msgstr "Ke kesalahan sebelumnya dalam berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous edit location"
-#~ msgstr "Ke lokasi sunting sebelumnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next edit location"
-#~ msgstr "Ke lokasi sunting selanjutnya"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Jump to definition of symbol"
