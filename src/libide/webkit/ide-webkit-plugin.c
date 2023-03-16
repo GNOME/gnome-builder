@@ -35,7 +35,9 @@ _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 void
 _ide_webkit_register_types (PeasObjectModule *module)
 {
+#if !WEBKIT_CHECK_VERSION(2, 39, 6)
   WebKitWebContext *context;
+#endif
   g_autoptr(GError) error = NULL;
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
@@ -47,9 +49,13 @@ _ide_webkit_register_types (PeasObjectModule *module)
                               0, &error))
     g_warning ("%s", error->message);
 
+#if !WEBKIT_CHECK_VERSION(2, 39, 6)
   context = webkit_web_context_get_default ();
+#endif
 #if !WEBKIT_CHECK_VERSION(2, 39, 5)
   webkit_web_context_set_sandbox_enabled (context, TRUE);
 #endif
+#if !WEBKIT_CHECK_VERSION(2, 39, 6)
   webkit_web_context_set_favicon_database_directory (context, NULL);
+#endif
 }
