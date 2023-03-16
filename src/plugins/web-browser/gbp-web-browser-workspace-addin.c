@@ -1,6 +1,6 @@
 /* gbp-web-browser-workspace-addin.c
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,12 +161,22 @@ gbp_web_browser_workspace_addin_restore_session_item (IdeWorkspaceAddin *addin,
    */
   bytes = g_bytes_new (data, n_elements);
 
-  if (!(state = webkit_web_view_session_state_new (bytes)))
-    IDE_EXIT;
-
-  position = ide_session_item_get_position (item);
+  /* Create the WebkitWebView _BEFORE_ we deserialize the session state or
+   * we risk Webkit assertions due to RunLoop::isMain() failure simply due
+   * to missing initialization paths.
+   *
+   * See #2005 and https://bugs.webkit.org/show_bug.cgi?id=253858
+   */
   page = ide_webkit_page_new ();
   view = ide_webkit_page_get_view (page);
+
+  if (!(state = webkit_web_view_session_state_new (bytes)))
+    {
+      g_object_unref (page);
+      IDE_EXIT;
+    }
+
+  position = ide_session_item_get_position (item);
 
   webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (view), state);
 
