@@ -451,6 +451,38 @@ gbp_project_tree_pane_actions_open (GSimpleAction *action,
 }
 
 static void
+gbp_project_tree_pane_actions_copy (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
+  IdeProjectFile *project_file;
+  g_autoptr(GFile) file = NULL;
+  g_auto(GValue) value = G_VALUE_INIT;
+  GdkClipboard *clipboard;
+  IdeTreeNode *selected;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+
+  if (!(selected = ide_tree_get_selected_node (self->tree)) ||
+      !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
+      !(project_file = ide_tree_node_get_item (selected)) ||
+      !(file = ide_project_file_ref_file (project_file)))
+    IDE_EXIT;
+
+  g_value_init (&value, G_TYPE_FILE);
+  g_value_set_object (&value, file);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self->tree));
+  gdk_clipboard_set_value (clipboard, &value);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_project_tree_pane_actions_rename_cb (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
@@ -782,6 +814,7 @@ static const GActionEntry entries[] = {
   { "open-in-terminal", gbp_project_tree_pane_actions_open_in_terminal },
   { "rename", gbp_project_tree_pane_actions_rename },
   { "trash", gbp_project_tree_pane_actions_trash },
+  { "copy", gbp_project_tree_pane_actions_copy },
 };
 
 void
@@ -869,6 +902,9 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
                   "enabled", is_file,
                   NULL);
   action_map_set (G_ACTION_MAP (self->actions), "open-in-terminal",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "copy",
                   "enabled", is_file,
                   NULL);
 }
