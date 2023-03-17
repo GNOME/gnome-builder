@@ -831,16 +831,42 @@ gbp_meson_build_system_prepare_tooling_cb (IdeRunContext       *run_context,
   IDE_RETURN (TRUE);
 }
 
+static gboolean
+devenv_sanity_check (char *contents,
+                     gsize len)
+{
+  IdeLineReader reader;
+  char *line;
+  gsize line_len;
+
+  /* Failures tend to have an empty first line */
+  if (*contents == '\n')
+    return FALSE;
+
+  ide_line_reader_init (&reader, contents, len);
+  while ((line = ide_line_reader_next (&reader, &line_len)))
+    {
+      line[line_len] = 0;
+
+      if (g_str_has_prefix (line, "ERROR:"))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gbp_meson_build_system_prepare_tooling (IdeBuildSystem *build_system,
                                         IdeRunContext  *run_context)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
   g_autofree char *devenv_file = NULL;
+  g_autofree char *devenv_contents = NULL;
   IdeBuildManager *build_manager;
   IdePipeline *pipeline;
   IdeContext *context;
   const char *builddir;
+  gsize len;
 
   IDE_ENTRY;
 
@@ -853,7 +879,8 @@ gbp_meson_build_system_prepare_tooling (IdeBuildSystem *build_system,
       (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
       (builddir = ide_pipeline_get_builddir (pipeline)) &&
       (devenv_file = g_build_filename (builddir, ".gnome-builder-devenv", NULL)) &&
-      g_file_test (devenv_file, G_FILE_TEST_EXISTS))
+      g_file_get_contents (devenv_file, &devenv_contents, &len, NULL) &&
+      devenv_sanity_check (devenv_contents, len))
     {
       ide_run_context_push (run_context,
                             gbp_meson_build_system_prepare_tooling_cb,
