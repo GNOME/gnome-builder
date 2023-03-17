@@ -1180,7 +1180,7 @@ ide_run_context_end (IdeRunContext  *self,
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
   g_return_val_if_fail (self->ended == FALSE, NULL);
 
-#if 0
+#ifdef IDE_ENABLE_TRACE
   {
     guint j = 0;
     for (const GList *iter = self->layers.head;
@@ -1189,17 +1189,14 @@ ide_run_context_end (IdeRunContext  *self,
       {
         IdeRunContextLayer *layer = iter->data;
 
-        g_print ("[%d]:    CWD: %s\n", j++, layer->cwd);
-        g_print ("        N FDS: %u\n", ide_unix_fd_map_get_length (layer->unix_fd_map));
-        g_print ("  Environment: ");
+        IDE_TRACE_MSG ("[%d]:    CWD: %s", j++, layer->cwd);
+        IDE_TRACE_MSG ("        N FDS: %u", ide_unix_fd_map_get_length (layer->unix_fd_map));
+        IDE_TRACE_MSG ("  Environment:");
         for (guint i = 0; i < layer->env->len; i++)
-          g_print ("%s ", g_array_index (layer->env, char *, i));
-        g_print ("\n");
-        g_print ("  Arguments: ");
+          IDE_TRACE_MSG ("  [%02u]: %s", i, g_array_index (layer->env, char *, i));
+        IDE_TRACE_MSG ("  Arguments:");
         for (guint i = 0; i < layer->argv->len; i++)
-          g_print ("%s ", g_array_index (layer->argv, char *, i));
-        g_print ("\n");
-
+          IDE_TRACE_MSG ("  [%02u]: %s ", i, g_array_index (layer->argv, char *, i));
       }
   }
 #endif
