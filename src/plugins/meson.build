@@ -174,6 +174,7 @@ status += [
   'Cargo ................................ : @0@'.format(get_option('plugin_cargo')),
   'Clang Format ......................... : @0@'.format(get_option('plugin_clang_format')),
   'CMake ................................ : @0@'.format(get_option('plugin_cmake')),
+  'Codeshot ............................. : @0@'.format(get_option('plugin_codeshot')),
   'Codespell ............................ : @0@'.format(get_option('plugin_codespell')),
   'Code Index ........................... : @0@'.format(get_option('plugin_code_index')),
   'Code Search .......................... : @0@'.format(get_option('plugin_codesearch')),
