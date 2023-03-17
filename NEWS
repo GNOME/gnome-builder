@@ -1,3 +1,40 @@
+# GNOME Builder 44.0
+
+Builder 44.0 is finally here! Thanks to everyone who helped over the past 6 months
+to make this release happen!
+
+Changes since 44.rc
+
+ * Improvements to IdeRunContext
+ * Gradle now checks to see if gradle wrapper already exists
+ * Todo plugin got style improvements
+ * A new "codeshot" plugin to take stylized screenshots of code
+ * Many shortcuts can now be modified by users in preferences
+ * Meson template updates
+ * The gdb plugin will now use --cd to change directories instead of
+   -ex to execute the command
+ * The terminal plugin has received style and UI updates
+ * Builder will now enforce a `.xml` suffix when installing style schemes
+   for users to ensure they are picked up by GtkSourceView
+ * An existing greeter will be used when possible when trying to perform
+   operations which require a greeter window
+ * Updates for recent WebKit ABI breaks and work around a crash in paths
+   where WebKit does not properly initialize itself.
+ * Make more menu items searchable and their shortcuts overridable.
+ * Make menu shortcuts update the accelerator label when overridden by
+   users with the new shortcut infrastructure.
+ * Improve shortcut groupings in the shortcut overlay window.
+ * Remove initial "error" CSS style when displaying the clone dialog.
+ * Run LSPs within a `meson devenv` when possible. This requires that your
+   project has configured before the LSP starts.
+ * New keyboard shortcuts to move between diagnostics within a file.
+ * You can now copy a file from the project tree context menu.
+ * Various fixes for changes in GIO.
+ * Keyboard shortcuts to move between search results.
+ * The flatpak plugin now sets the GTK 4 settings instead of GTK 3.
+ * Track deprecation changes in libadwaita.
+ * Translation updates
+
 # GNOME Builder 44.rc
 
 Changes in this release:
