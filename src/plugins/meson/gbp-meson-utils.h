@@ -41,5 +41,6 @@ const gchar *gbp_meson_get_toolchain_language           (const gchar  *meson_too
 const gchar *gbp_meson_get_tool_display_name            (const gchar  *tool_id);
 const gchar *gbp_meson_get_tool_binary_name             (const gchar  *tool_id);
 const gchar *gbp_meson_get_tool_id_from_binary          (const gchar  *meson_tool_name);
+gboolean     gbp_meson_devenv_sanity_check              (const gchar  *path);
 
 G_END_DECLS

@@ -31,6 +31,7 @@
 #include "gbp-meson-build-target.h"
 #include "gbp-meson-introspection.h"
 #include "gbp-meson-pipeline-addin.h"
+#include "gbp-meson-utils.h"
 
 struct _GbpMesonPipelineAddin
 {
@@ -155,13 +156,49 @@ attach_run_command (GbpMesonPipelineAddin *self,
   return stage;
 }
 
+static int
+is_newer (const char *old,
+          const char *new)
+{
+  g_autoptr(GFile) file_a = g_file_new_for_path (old);
+  g_autoptr(GFile) file_b = g_file_new_for_path (new);
+  g_autoptr(GFileInfo) info_a = g_file_query_info (file_a, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
+  g_autoptr(GFileInfo) info_b = g_file_query_info (file_b, G_FILE_ATTRIBUTE_TIME_MODIFIED, 0, NULL, NULL);
+  guint64 mtime_a;
+  guint64 mtime_b;
+
+  if (info_a == NULL || info_b == NULL)
+    return FALSE;
+
+  mtime_a = g_file_info_get_attribute_uint64 (info_a, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+  mtime_b = g_file_info_get_attribute_uint64 (info_b, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+  return mtime_b > mtime_a;
+}
+
 static void
 devenv_query_cb (IdePipelineStage *stage,
                  IdePipeline      *pipeline,
                  GPtrArray        *targets,
                  GCancellable     *cancellable)
 {
-  ide_pipeline_stage_set_completed (stage, FALSE);
+  g_autofree char *devenv_file = NULL;
+  g_autofree char *build_ninja = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  devenv_file = ide_pipeline_build_builddir_path (pipeline, ".gnome-builder-devenv", NULL);
+  build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
+
+  /* If the build.ninja is newer than our devenv file, it needs to be
+   * regenerated to get updated configuration.
+   */
+  if (!is_newer (build_ninja, devenv_file) ||
+      !gbp_meson_devenv_sanity_check (devenv_file))
+    ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
 static void

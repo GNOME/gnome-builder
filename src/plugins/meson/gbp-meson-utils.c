@@ -139,3 +139,39 @@ gbp_meson_get_tool_id_from_binary (const gchar *meson_tool_name)
   else
     return IDE_TOOLCHAIN_TOOL_CC;
 }
+
+static gboolean
+devenv_sanity_check (char *contents,
+                     gsize len)
+{
+  IdeLineReader reader;
+  char *line;
+  gsize line_len;
+
+  /* Failures tend to have an empty first line */
+  if (*contents == '\n')
+    return FALSE;
+
+  ide_line_reader_init (&reader, contents, len);
+  while ((line = ide_line_reader_next (&reader, &line_len)))
+    {
+      line[line_len] = 0;
+
+      if (g_str_has_prefix (line, "ERROR:"))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gbp_meson_devenv_sanity_check (const gchar *path)
+{
+  g_autofree char *contents = NULL;
+  gsize len;
+
+  if (!g_file_get_contents (path, &contents, &len, NULL))
+    return FALSE;
+
+  return devenv_sanity_check (contents, len);
+}
