@@ -373,7 +373,9 @@ handle_preflight_cb (GFile     *file,
   else if (file_type == G_FILE_TYPE_REGULAR)
     {
       stat_buf->n_files_total++;
-      stat_buf->n_bytes_total += g_file_info_get_size (child_info);
+
+      if (g_file_info_has_attribute (child_info, G_FILE_ATTRIBUTE_STANDARD_SIZE))
+        stat_buf->n_bytes_total += g_file_info_get_size (child_info);
     }
 
   IDE_EXIT;
