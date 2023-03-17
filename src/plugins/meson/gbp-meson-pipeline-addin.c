@@ -156,6 +156,15 @@ attach_run_command (GbpMesonPipelineAddin *self,
 }
 
 static void
+devenv_query_cb (IdePipelineStage *stage,
+                 IdePipeline      *pipeline,
+                 GPtrArray        *targets,
+                 GCancellable     *cancellable)
+{
+  ide_pipeline_stage_set_completed (stage, FALSE);
+}
+
+static void
 gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
@@ -264,6 +273,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   ide_pipeline_stage_launcher_set_use_pty (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), FALSE);
   ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), TRUE);
   ide_pipeline_stage_set_name (devenv_stage, _("Cache development environment"));
+  g_signal_connect (devenv_stage, "query", G_CALLBACK (devenv_query_cb), NULL);
   id = ide_pipeline_attach (pipeline,
                             IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
                             0,
