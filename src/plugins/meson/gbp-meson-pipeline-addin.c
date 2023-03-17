@@ -259,6 +259,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   devenv_launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_stdout_file_path (devenv_launcher, devenv_file);
   ide_subprocess_launcher_push_args (devenv_launcher, IDE_STRV_INIT ("meson", "devenv", "--dump"));
+  ide_subprocess_launcher_set_cwd (devenv_launcher, ide_pipeline_get_builddir (pipeline));
   devenv_stage = ide_pipeline_stage_launcher_new (ide_object_get_context (IDE_OBJECT (pipeline)), devenv_launcher);
   ide_pipeline_stage_launcher_set_use_pty (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), FALSE);
   ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), TRUE);
