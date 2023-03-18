@@ -37,7 +37,7 @@ pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-
 glib_req_version = '2.75.0'
 gtk_req_version = '4.8'
 gtksourceview_req_version = '5.7.2'
-libadwaita_req_version = '1.2.0'
+libadwaita_req_version = '1.3.0'
 libdex_req_version = '0.1.1'
 
 glib_req = '>= @0@'.format(glib_req_version)
@@ -50,6 +50,8 @@ glib_major = glib_req_version.split('.')[0].to_int()
 glib_minor = glib_req_version.split('.')[1].to_int()
 gtk_major = gtk_req_version.split('.')[0].to_int()
 gtk_minor = gtk_req_version.split('.')[1].to_int()
+adw_major = libadwaita_req_version.split('.')[0].to_int()
+adw_minor = libadwaita_req_version.split('.')[1].to_int()
 gtksourceview_major = gtksourceview_req_version.split('.')[0].to_int()
 gtksourceview_minor = gtksourceview_req_version.split('.')[1].to_int()
 
@@ -150,6 +152,8 @@ global_c_args = [
   '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major, glib_minor),
   '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
   '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
+  '-DADW_VERSION_MIN_REQUIRED=ADW_VERSION_@0@_@1@'.format(adw_major, adw_minor),
+  '-DADW_VERSION_MAX_ALLOWED=ADW_VERSION_@0@_@1@'.format(adw_major, adw_minor),
   '-DGTK_SOURCE_VERSION_MIN_REQUIRED=GTK_SOURCE_VERSION_@0@_@1@'.format(gtksourceview_major, gtksourceview_minor),
   '-DGTK_SOURCE_VERSION_MAX_ALLOWED=GTK_SOURCE_VERSION_@0@_@1@'.format(gtksourceview_major, gtksourceview_minor),
 ]
