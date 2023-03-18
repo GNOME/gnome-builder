@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-09 19:45+0000\n"
-"PO-Revision-Date: 2023-03-10 10:00+0100\n"
+"POT-Creation-Date: 2023-03-16 00:40+0000\n"
+"PO-Revision-Date: 2023-03-18 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -580,7 +580,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Zein ingurune erabiliko den unitate-probak exekutatzean"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:205 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Egunkari xehea"
 
@@ -728,31 +728,31 @@ msgstr "Ireki fitxategia…"
 msgid "Open a file in the workspace"
 msgstr "Ireki fitxategi bat laneko arean"
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
-#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Hobespenak"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
-#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:74
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
 
-#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
-#: src/libide/gui/gtk/menus.ui:42 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:45 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Laguntza"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
-#: src/libide/gui/gtk/menus.ui:49
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
+#: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
 msgstr "Builder aplikazioari buruz"
 
-#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:59
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "I_rten"
 
@@ -761,18 +761,22 @@ msgid "Document"
 msgstr "Dokumentua"
 
 #: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
-#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
-#: src/libide/gui/gtk/menus.ui:55 src/libide/gui/gtk/menus.ui:68
-#: src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
-#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10
+#: src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
+#: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:97
 #: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Aplikazioa"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:98
 msgid "Pages"
 msgstr "Orriak"
 
@@ -783,18 +787,20 @@ msgstr "Orriak"
 #: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:156
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:111
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Testu-editorea"
 
-#: src/libide/editor/gtk/menus.ui:77
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
 msgid "Search & Replace"
 msgstr "Bilatu eta ordeztu"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:69
-#: src/libide/gui/gtk/menus.ui:73 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72
+#: src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "Dokumentuak"
 
@@ -865,31 +871,31 @@ msgid "_Discard…"
 msgstr "_Baztertu…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:494
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Inprimatzeak huts egin du: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:570
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Huts egin du hautapenaren formatuak: %s"
 
-#: src/libide/editor/ide-editor-page.c:991
+#: src/libide/editor/ide-editor-page.c:1131
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Gorde fitxategia"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:124
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Gorde"
 
-#: src/libide/editor/ide-editor-page.c:994
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1244,28 +1250,34 @@ msgstr "%d seinalea %s azpiprozesuari bidaltzen"
 msgid "Default (Host operating system)"
 msgstr "Lehenetsia (ostalari-sistema eragilea)"
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:64
-#: src/libide/greeter/gtk/menus.ui:84
+#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Proiektuak"
+
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
+#: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "_Klonatu biltegia…"
 
-#: src/libide/greeter/gtk/menus.ui:20
+#: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
 #: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
 msgid "Close"
 msgstr "Itxi"
 
-#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:77
+#: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
 msgstr "Ireki _proiektu bat…"
 
-#: src/libide/greeter/gtk/menus.ui:59
+#: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
 msgstr "Ireki proiektu berria edo lehendik dagoena"
 
-#: src/libide/greeter/gtk/menus.ui:67
+#: src/libide/greeter/gtk/menus.ui:69
 msgid "Create a new project by cloning a repository"
 msgstr "SOrtu proiektu berria biltegi bat klonatuz"
 
@@ -1425,13 +1437,13 @@ msgid_plural "About %u years ago"
 msgstr[0] "Duela urte %u inguru"
 msgstr[1] "Duela %u urte inguru"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:61
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instalatu"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:191
+#: src/libide/gtk/ide-search-entry.c:184
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -1446,23 +1458,23 @@ msgstr "Bilatu"
 msgid "Search for anything"
 msgstr "Bilatu edozer"
 
-#: src/libide/gui/ide-search-popover.ui:230
+#: src/libide/gui/ide-search-popover.ui:246
 msgid "_Everything"
 msgstr "_Dena"
 
-#: src/libide/gui/ide-search-popover.ui:237
+#: src/libide/gui/ide-search-popover.ui:253
 msgid "_Actions"
 msgstr "_Ekintzak"
 
-#: src/libide/gui/ide-search-popover.ui:244
+#: src/libide/gui/ide-search-popover.ui:260
 msgid "_Commands"
 msgstr "_Komandoak"
 
-#: src/libide/gui/ide-search-popover.ui:251
+#: src/libide/gui/ide-search-popover.ui:267
 msgid "_Files"
 msgstr "_Fitxategiak"
 
-#: src/libide/gui/ide-search-popover.ui:258
+#: src/libide/gui/ide-search-popover.ui:274
 msgid "_Symbols"
 msgstr "_Ikurrak"
 
@@ -1480,47 +1492,47 @@ msgstr "_Ezarri"
 msgid "Press Escape to cancel or Backspace to disable."
 msgstr "Sakatu Esc tekla bertan behera uzteko edo atzera-tekla desgaitzeko."
 
-#: src/libide/gui/gtk/menus.ui:14
+#: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
 msgstr "Itxi proiektua"
 
-#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:56
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Orokorra"
 
-#: src/libide/gui/gtk/menus.ui:27
+#: src/libide/gui/gtk/menus.ui:30
 msgid "Change application preferences"
 msgstr "Aldatu aplikazioaren hobespenak"
 
-#: src/libide/gui/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:38
 msgid "Find keyboard shortcuts"
 msgstr "Aurkitu lasterbideak"
 
-#: src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46
 msgid "Get help with using Builder"
 msgstr "Eskuratu Builder aplikazioari buruzko laguntza"
 
-#: src/libide/gui/gtk/menus.ui:51
+#: src/libide/gui/gtk/menus.ui:54
 msgid "Show information about Builder"
 msgstr "Erakutsi Builder aplikazioari buruzko informazioa"
 
-#: src/libide/gui/gtk/menus.ui:60
+#: src/libide/gui/gtk/menus.ui:63
 msgid "Quit without saving changes"
 msgstr "Irten aldaketak gorde gabe"
 
-#: src/libide/gui/gtk/menus.ui:77 src/plugins/web-browser/gtk/menus.ui:17
+#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:17
 msgid "Web Browsing"
 msgstr "Web arakatzea"
 
-#: src/libide/gui/gtk/menus.ui:80 src/libide/gui/tweaks.ui:32
+#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminala"
 
-#: src/libide/gui/gtk/menus.ui:81
+#: src/libide/gui/gtk/menus.ui:84
 msgid "New Terminals"
 msgstr "Terminal berriak"
 
@@ -1601,7 +1613,7 @@ msgid "Toggle Left Panel (F9)"
 msgstr "Txandakatu ezkerreko panela (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Txandakatu eskuineko panela"
 
@@ -1629,8 +1641,14 @@ msgstr "Gelditu exekuzioa"
 msgid "Run project"
 msgstr "Exekutatu proiektua"
 
-#: src/libide/gui/ide-shortcut-window.c:250
-#: src/libide/gui/ide-shortcut-window.c:276
+#: src/libide/gui/ide-shortcut-window.c:259
+#: src/libide/gui/ide-shortcut-window.c:285
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "Bestelakoa"
 
@@ -1648,7 +1666,7 @@ msgstr "\"%s” proiektu kargatzen"
 msgid "There are unsaved documents"
 msgstr "Gorde gabeko dokumentuak daude"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1676,13 +1694,13 @@ msgid "Failed to initialize language server: %s"
 msgstr "Huts egin du lengoaia-zerbitzariak hasieratzeak: %s"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:492
+#: src/libide/lsp/ide-lsp-service.c:517
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "\"%s\" lengoaia-zerbitzaria itxi da"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:531
+#: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "\"%s\" lengoaia-zerbitzaria %s prozesu gisa abiarazi da"
@@ -1705,9 +1723,8 @@ msgstr "Lengoaia-zerbitzariak"
 msgid "Devices & Simulators"
 msgstr "Gailuak eta simulatzaileak"
 
-#: src/libide/plugins/ide-plugin.c:344
+#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Diagnostikoa"
 
@@ -1766,11 +1783,6 @@ msgstr "Helburuko fitxategiak proiektuaren zuhaitzean egon behar du."
 #: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
 msgstr "Fitxategiak proiektuaren zuhaitzean egon behar du."
-
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "Proiektuak"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
@@ -1895,6 +1907,8 @@ msgid "_Formatting"
 msgstr "_Formateatu"
 
 #: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Kode-nabigazioa"
@@ -2039,7 +2053,7 @@ msgstr "Bat ere ez"
 msgid "Blank page"
 msgstr "Orri hutsa"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
 msgid "Settings"
 msgstr "Ezarpenak"
 
@@ -2319,93 +2333,94 @@ msgstr "Eraiki proiektua  (⇧+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Bistaratu eraikuntza-diagnostikoak (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:5
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr "Konfiguratu proiektua…"
 
-#: src/plugins/buildui/gtk/menus.ui:8
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr "Konfiguratu proiektuaren ezarpenak"
 
-#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:19
-#: src/plugins/buildui/gtk/menus.ui:28 src/plugins/buildui/gtk/menus.ui:58
-#: src/plugins/buildui/gtk/menus.ui:85 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Code Foundry"
 msgstr "Kode-galdategia"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:20
-#: src/plugins/projectui/tweaks.ui:218
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Konfigurazioa"
 
-#: src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:16
 msgid "Reload Configuration"
 msgstr "Birkargatu konfigurazioa"
 
-#: src/plugins/buildui/gtk/menus.ui:16
+#: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
 msgstr "Birkargatu proiektuaren konfigurazioa"
 
-#: src/plugins/buildui/gtk/menus.ui:22
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
 msgstr "Hautatu eraikuntza-helburua…"
 
-#: src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
 msgstr "Aldatu eraikuntza-helburu lehenetsia"
 
-#: src/plugins/buildui/gtk/menus.ui:29 src/plugins/buildui/gtk/menus.ui:86
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Eraikitzea"
 
-#: src/plugins/buildui/gtk/menus.ui:31
+#: src/plugins/buildui/gtk/menus.ui:36
 msgid "_Build"
 msgstr "E_raiki"
 
-#: src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:37
 msgid "Build the project"
 msgstr "Eraiki proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:38
+#: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
 msgstr "_Berreraiki"
 
-#: src/plugins/buildui/gtk/menus.ui:39
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Rebuild the project"
 msgstr "Berreraiki proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "_Clean"
 msgstr "_Garbitu"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
 msgstr "Garbitu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:50
+#: src/plugins/buildui/gtk/menus.ui:58
 msgid "Stop Building"
 msgstr "Gelditu eraikuntza"
 
-#: src/plugins/buildui/gtk/menus.ui:51
+#: src/plugins/buildui/gtk/menus.ui:59
 msgid "Cancel the current build operation"
 msgstr "Utzi bertan behera uneko eraikuntza-eragiketa"
 
-#: src/plugins/buildui/gtk/menus.ui:59
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
 msgstr "Instalatu eta banatu"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:72
 msgid "Install the project"
 msgstr "Instalatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy to Device…"
 msgstr "Instalatu gailuan…"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
 msgstr "Instalatu proiektua uneko gailuan"
 
@@ -2413,110 +2428,110 @@ msgstr "Instalatu proiektua uneko gailuan"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:78
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "_Export"
 msgstr "_Esportatu"
 
-#: src/plugins/buildui/gtk/menus.ui:80
+#: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
 msgstr "Esportatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop Build"
 msgstr "Gelditu eraikuntza"
 
-#: src/plugins/buildui/gtk/menus.ui:90
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Stop building project"
 msgstr "Gelditu proiektuaren eraikuntza"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr "Erakutsi eraikuntzaren i_rteera"
 
-#: src/plugins/buildui/gtk/menus.ui:101
+#: src/plugins/buildui/gtk/menus.ui:111
 msgid "Display panel containing the build log"
 msgstr "Bistaratu eraikuntza-egunkaria duen panela"
 
-#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
 msgid "Running"
 msgstr "Exekutatzen"
 
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:122
 msgid "Select Run Command…"
 msgstr "Hautatu exekuzio-komandoa…"
 
-#: src/plugins/buildui/gtk/menus.ui:125
+#: src/plugins/buildui/gtk/menus.ui:135
 msgid "Run"
 msgstr "Exekutatu"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:138
 msgid "Run the project"
 msgstr "Exekutatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:144
 msgid "Restart Program"
 msgstr "Berrabiarazi programa"
 
-#: src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Restart the running program"
 msgstr "Berrabiarazi exekutatzen ari den programa"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Stop Program"
 msgstr "Gelditu programa"
 
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:156
 msgid "Stop running the project"
 msgstr "Gelditu proiektuaren exekuzioa"
 
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Debugging"
 msgstr "Arazketa"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Unitate-probak"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:172
 msgid "Follow System Style"
 msgstr "Jarraitu sistemaren estiloa"
 
-#: src/plugins/buildui/gtk/menus.ui:168
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "Force Light"
 msgstr "Behartu argia"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:184
 msgid "Force Dark"
 msgstr "Behartu iluna"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Accessibility"
 msgstr "Erabilerraztasuna"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:193
 msgid "High Contrast"
 msgstr "Kontraste handia"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Text Direction"
 msgstr "Testuaren norabidea"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:200
 msgid "Left-to-Right"
 msgstr "Ezkerretik eskuinera"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Right-to-Left"
 msgstr "Eskuinetik ezkerrera"
 
-#: src/plugins/buildui/gtk/menus.ui:211
+#: src/plugins/buildui/gtk/menus.ui:221
 msgid "Show Inspector"
 msgstr "Erakutsi ikuskatzailea"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Estiloa"
 
@@ -2765,7 +2780,7 @@ msgstr "Atzitu mendekotasunak"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:236
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Eraiki proiektua"
@@ -2830,7 +2845,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:226
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
 msgid "Configure project"
 msgstr "Konfiguratu proiektua"
 
@@ -3120,13 +3135,13 @@ msgstr "Sortu proiektu _berria…"
 msgid "Create New Project"
 msgstr "Sortu proiektu berria"
 
-#: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:31
+#: src/plugins/create-project/gtk/menus.ui:9
+#: src/plugins/create-project/gtk/menus.ui:21
+#: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
 msgstr "Sortu proiektu berria…"
 
-#: src/plugins/create-project/gtk/menus.ui:22
+#: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "Sortu proiektu berria txantiloitik"
 
@@ -3482,6 +3497,7 @@ msgid "Go"
 msgstr "Joan"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Joan lerrora"
 
@@ -3550,7 +3566,7 @@ msgstr "_Fitxategi berria"
 msgid "_Open File…"
 msgstr "Ireki _fitxategia…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Ireki marko berrian"
 
@@ -3558,29 +3574,45 @@ msgstr "Ireki marko berrian"
 msgid "Open in New Workspace…"
 msgstr "Ireki laneko area berrian…"
 
-#: src/plugins/editorui/gtk/menus.ui:161
+#: src/plugins/editorui/gtk/menus.ui:163
 msgid "Save _As"
 msgstr "Gorde _honela"
 
-#: src/plugins/editorui/gtk/menus.ui:168
+#: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find…"
 msgstr "Bilatu…"
 
-#: src/plugins/editorui/gtk/menus.ui:173
+#: src/plugins/editorui/gtk/menus.ui:177
 msgid "Find/Replace…"
 msgstr "Bilatu/ordeztu…"
 
-#: src/plugins/editorui/gtk/menus.ui:180
+#: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
 msgstr "Inprimatu…"
 
-#: src/plugins/editorui/gtk/menus.ui:188
+#: src/plugins/editorui/gtk/menus.ui:194
 msgid "Format Document"
 msgstr "Formateatu dokumentua"
 
-#: src/plugins/editorui/gtk/menus.ui:193
+#: src/plugins/editorui/gtk/menus.ui:200
 msgid "Format Selection"
 msgstr "Formateatu hautapena"
+
+#: src/plugins/editorui/gtk/menus.ui:208
+msgid "Move to Previous Diagnostic"
+msgstr "Joan aurreko diagnostikora"
+
+#: src/plugins/editorui/gtk/menus.ui:209
+msgid "Move the insertion cursor to the previous diagnostic location"
+msgstr "Eraman txertatze-kurtsorea aurreko diagnostikoaren kokalekura"
+
+#: src/plugins/editorui/gtk/menus.ui:216
+msgid "Move to Next Diagnostic"
+msgstr "Joan hurrengo diagnostikora"
+
+#: src/plugins/editorui/gtk/menus.ui:217
+msgid "Move the insertion cursor to the next diagnostic location"
+msgstr "Eraman txertatze-kurtsorea hurrengo diagnostikoaren kokalekura"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -4298,7 +4330,7 @@ msgstr "“%s” protokoloa ez da onartzen."
 msgid "Cloning repository"
 msgstr "Biltegia klonatzen"
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:276
+#: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "Baliozko Git URLa behar da"
 
@@ -4323,7 +4355,7 @@ msgstr "Proiektua kargatzen"
 msgid "Gradle Run"
 msgstr "Gradle exekuzioa"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr "Bistaratu ongietorriko leiho berria"
 
@@ -4471,71 +4503,99 @@ msgstr "Maven exekuzioa"
 msgid "Actions"
 msgstr "Ekintzak"
 
-#: src/plugins/menu-search/gtk/menus.ui:13
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Bilaketa globala"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr "Erakutsi bilaketa globala"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Panelak"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr "Txandakatu ezkerreko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:27
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr "Erakutsi/ezkutatu ezkerreko panela"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:35
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr "Erakutsi/ezkutatu eskuineko panela"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:41
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr "Txandakatu beheko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:42
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Erakutsi/ezkutatu beheko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:55
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr "Aldatu modu ilunera"
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr "Aldatu estilo-eskema aldagai ilunera"
 
-#: src/plugins/menu-search/gtk/menus.ui:60
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr "Aldatu modu argira"
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr "Aldatu estilo-eskema aldagai argira"
 
-#: src/plugins/menu-search/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr "Bistaratu eraikuntza-diagnostikoak"
 
-#: src/plugins/menu-search/gtk/menus.ui:73
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr "Bistaratu eraikuntzan zehar aurkitutako erroreak eta abisuak"
+
+#: src/plugins/menu-search/gtk/menus.ui:88
+msgid "Jump to a specific line or column"
+msgstr "Joan lerro edo zutabe zehatz batera"
+
+#: src/plugins/menu-search/gtk/menus.ui:101
+msgid "Close Page"
+msgstr "Itxi orria"
+
+#: src/plugins/menu-search/gtk/menus.ui:102
+msgid "Close the current page"
+msgstr "Itxi uneko orria"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Move to next search result"
+msgstr "Joan bilaketaren hurrengo emaitzara"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the next available search result"
+msgstr "Joan bilaketaren hurrengo emaitza erabilgarrira eta hautatu hura"
+
+#: src/plugins/menu-search/gtk/menus.ui:122
+msgid "Move to previous search result"
+msgstr "Joan bilaketaren aurreko emaitzara"
+
+#: src/plugins/menu-search/gtk/menus.ui:123
+msgid "Move to and select the previous search result"
+msgstr "Joan bilaketaren aurreko emaitzara eta hautatu hura"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -4545,9 +4605,13 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Kargatu Meson introspekzioa"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:243
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
 msgid "Install project"
 msgstr "Instalatu proiektua"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+msgid "Cache development environment"
+msgstr "Sartu cachean garapen-ingurunea"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
@@ -5165,7 +5229,7 @@ msgid "Untitled Command"
 msgstr "Izenik gabeko komandoa"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:208
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:179
 msgid "Set Shortcut"
 msgstr "Ezarri laster-tekla"
 
@@ -5341,7 +5405,11 @@ msgstr "_Editatu fitxategia"
 msgid "Open keybindings.json in editor"
 msgstr "Ireki keybindings.json editorean"
 
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:101
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+msgid "Reset shortcut"
+msgstr "Leheneratu lasterbidea"
+
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
 msgstr "Ikusi eta pertsonalizatu lasterbideak…"
 
@@ -5631,31 +5699,31 @@ msgstr "Aplikazioaren irteera"
 msgid "Process completed"
 msgstr "Prozesua osatu da"
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "_Terminal berria"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr "Ireki terminal berria sistema eragile ostalarian"
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "_Eraikuntza-terminal berria"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr "Ireki terminal berria proiektuaren eraikuntza-kanalizazioan"
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr "E_xekuzio-terminal berria"
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Ireki terminal berria proiektuaren exekuzio-denborako ingurunean"
 
-#: src/plugins/terminal/gtk/menus.ui:40
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Banandu"
 
@@ -7337,14 +7405,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgstr "Joan fitxategiko aurreko errorera"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Move to previous edit location"
-#~ msgstr "Joan aurreko edizioaren kokalekura"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next edit location"
-#~ msgstr "Joan hurrengo edizioaren kokalekura"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Jump to definition of symbol"
 #~ msgstr "Joan ikurraren definiziora"
 
@@ -7527,9 +7587,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Move to the next error"
 #~ msgstr "Joan hurrengo errorera"
-
-#~ msgid "Move to the previous error"
-#~ msgstr "Joan aurreko errorera"
 
 #~ msgid ""
 #~ "Builder has discovered that this file has been modified externally. Would "
@@ -8031,9 +8088,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Move Page Right"
 #~ msgstr "Eraman orrialdea eskuinera"
-
-#~ msgid "Close Frame"
-#~ msgstr "Itxi markoa"
 
 #~ msgid "Emacs"
 #~ msgstr "Emacs"
