@@ -62,7 +62,7 @@ create_plugin_toggle (IdeTweaksWidget *instance,
                       "subtitle", ide_plugin_get_description (plugin),
                       "show-enable-switch", FALSE,
                       NULL);
-  adw_expander_row_add_suffix (row, GTK_WIDGET (toggle));
+  adw_expander_row_add_action (row, GTK_WIDGET (toggle));
 
   view = g_object_new (IDE_TYPE_PLUGIN_VIEW,
                        "plugin", plugin,
