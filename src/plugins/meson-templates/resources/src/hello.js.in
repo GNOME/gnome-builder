@@ -1,7 +1,6 @@
 #!@GJS@ -m
 
-import GLib from "gi://GLib";
-import { exit } from "system";
+import { exit, programArgs, programInvocationName } from "system";
 
 imports.package.init({
   name: "@PACKAGE_NAME@",
@@ -11,15 +10,6 @@ imports.package.init({
   datadir: "@datadir@",
 });
 
-const loop = new GLib.MainLoop(null, false);
-import("resource://@resource_path@/js/main.js")
-  .then((main) => {
-    GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-      loop.quit();
-      const exitCode = imports.package.run(main);
-      exit(exitCode);
-      return GLib.SOURCE_REMOVE;
-    });
-  })
-  .catch(logError);
-loop.run();
+const { main } = await import("resource://@resource_path@/js/main.js");
+const exit_code = await main([programInvocationName, ...programArgs]);
+exit(exit_code);

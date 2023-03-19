@@ -72,5 +72,5 @@ export const {{PreFix}}Application = GObject.registerClass(
 
 export function main(argv) {
     const application = new {{PreFix}}Application();
-    return application.run(argv);
+    return application.runAsync(argv);
 }
