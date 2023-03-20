@@ -1,5 +1,20 @@
 # GNOME Builder 44.0
 
+Builder 44.1 is a followup to 44.0 with fixes for a few issues that were found
+shortly after release.
+
+Changes since 44.0:
+
+ * Fix use of unstable libadwaita API
+ * The GJS template now uses runAsync to run the application main loop
+ * Many symbolic PNGs were regenerated from SVG sources to reduce the need
+   for runtime generation of icons
+ * Add status message for codeshot plugin missing from configuration overview
+ * Bundle `info-symbolic` icon which is missing from some desktops such as
+   Elementary OS.
+
+# GNOME Builder 44.0
+
 Builder 44.0 is finally here! Thanks to everyone who helped over the past 6 months
 to make this release happen!
 
