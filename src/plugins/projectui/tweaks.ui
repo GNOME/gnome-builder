@@ -107,7 +107,7 @@
         <child>
           <object class="IdeTweaksPage" id="overview_page">
             <property name="title" translatable="yes">Overview</property>
-            <property name="icon-name">info-symbolic</property>
+            <property name="icon-name">builder-info-symbolic</property>
             <child>
               <object class="IdeTweaksGroup" id="overview_id_group">
                 <child>
