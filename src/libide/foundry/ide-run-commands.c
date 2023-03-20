@@ -117,8 +117,9 @@ ide_run_commands_list_commands_cb (GObject      *object,
   if (!(model = ide_run_command_provider_list_commands_finish (provider, result, &error)))
     {
       /* Just keep the old one around until things succeed */
-      g_debug ("Failed to list run commands from %s: %s",
-               G_OBJECT_TYPE_NAME (provider), error->message);
+      if (!ide_error_ignore (error))
+        g_debug ("Failed to list run commands from %s: %s",
+                 G_OBJECT_TYPE_NAME (provider), error->message);
       IDE_EXIT;
     }
 
