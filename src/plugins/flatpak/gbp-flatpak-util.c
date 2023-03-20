@@ -188,3 +188,51 @@ gbp_flatpak_get_config_dir (void)
 
   return config_dir;
 }
+
+static char *
+_gbp_flatpak_get_a11y_bus (void)
+{
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GDBusConnection) bus = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  g_autofree char *a11y_bus = NULL;
+
+  if (!(bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error)))
+    {
+      g_critical ("%s", error->message);
+      return NULL;
+    }
+
+  ret = g_dbus_connection_call_sync (bus,
+                                     "org.a11y.Bus",
+                                     "/org/a11y/bus",
+                                     "org.a11y.Bus",
+                                     "GetAddress",
+                                     NULL,
+                                     G_VARIANT_TYPE ("(s)"),
+                                     G_DBUS_CALL_FLAGS_NONE,
+                                     -1,
+                                     NULL,
+                                     &error);
+
+  if (error != NULL)
+    {
+      g_critical ("%s", error->message);
+      return NULL;
+    }
+
+  g_variant_get (ret, "(s)", &a11y_bus);
+
+  return g_steal_pointer (&a11y_bus);
+}
+
+const char *
+gbp_flatpak_get_a11y_bus (void)
+{
+  static char *a11y_bus;
+
+  if (a11y_bus == NULL)
+    a11y_bus = _gbp_flatpak_get_a11y_bus ();
+
+  return a11y_bus;
+}

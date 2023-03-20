@@ -248,12 +248,29 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
       ide_run_context_append_argv (run_context, "--socket=wayland");
     }
 
+  /* Give access to portals */
   ide_run_context_append_argv (run_context, "--talk-name=org.freedesktop.portal.*");
-  ide_run_context_append_argv (run_context, "--talk-name=org.a11y.Bus");
 
   /* Layering violation, but always give access to profiler */
   ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
   ide_run_context_append_argv (run_context, "--system-talk-name=org.freedesktop.PolicyKit1");
+
+  /* Make A11y bus available to the application */
+  {
+    const char *a11y_bus = gbp_flatpak_get_a11y_bus ();
+
+    ide_run_context_append_argv (run_context, "--talk-name=org.a11y.Bus");
+
+    if (a11y_bus != NULL &&
+        g_str_has_prefix (a11y_bus, "unix:path="))
+      {
+        const char *ally_bus_path = a11y_bus + strlen ("unix:path=");
+
+        ide_run_context_append_formatted (run_context,
+                                          "--bind-mount=/run/flatpak/at-spi-bus=%s", ally_bus_path);
+        ide_run_context_append_argv (run_context, "--env=AT_SPI_BUS_ADDRESS=unix:path=/run/flatpak/at-spi-bus");
+      }
+  }
 
   /* And last, before our child command, is the staging directory */
   ide_run_context_append_argv (run_context, staging_dir);

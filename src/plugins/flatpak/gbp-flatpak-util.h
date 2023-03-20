@@ -24,6 +24,7 @@
 
 G_BEGIN_DECLS
 
+const char *gbp_flatpak_get_a11y_bus     (void);
 const char *gbp_flatpak_get_config_dir   (void);
 const char *gbp_flatpak_get_default_arch (IdeObject         *object);
 gboolean    gbp_flatpak_is_ignored       (const gchar       *name);
