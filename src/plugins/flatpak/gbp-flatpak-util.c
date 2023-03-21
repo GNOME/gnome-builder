@@ -192,38 +192,44 @@ gbp_flatpak_get_config_dir (void)
 static char *
 _gbp_flatpak_get_a11y_bus (void)
 {
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GDBusConnection) bus = NULL;
-  g_autoptr(GVariant) ret = NULL;
+  g_autofree char *stdout_buf = NULL;
   g_autofree char *a11y_bus = NULL;
+  g_autoptr(GVariant) variant = NULL;
 
-  if (!(bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error)))
-    {
-      g_critical ("%s", error->message);
-      return NULL;
-    }
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_push_args (launcher,
+                                     IDE_STRV_INIT ("gdbus",
+                                                    "call",
+                                                    "--session",
+                                                    "--dest=org.a11y.Bus",
+                                                    "--object-path=/org/a11y/bus",
+                                                    "--method=org.a11y.Bus.GetAddress"));
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
 
-  ret = g_dbus_connection_call_sync (bus,
-                                     "org.a11y.Bus",
-                                     "/org/a11y/bus",
-                                     "org.a11y.Bus",
-                                     "GetAddress",
-                                     NULL,
-                                     G_VARIANT_TYPE ("(s)"),
-                                     G_DBUS_CALL_FLAGS_NONE,
-                                     -1,
-                                     NULL,
-                                     &error);
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    goto handle_error;
 
-  if (error != NULL)
-    {
-      g_critical ("%s", error->message);
-      return NULL;
-    }
+  if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, &error))
+    goto handle_error;
 
-  g_variant_get (ret, "(s)", &a11y_bus);
+  if (!(variant = g_variant_parse (G_VARIANT_TYPE ("(s)"), stdout_buf, NULL, NULL, &error)))
+    goto handle_error;
+
+  g_variant_take_ref (variant);
+  g_variant_get (variant, "(s)", &a11y_bus, NULL);
+
+  g_debug ("Accessibility bus discovered at %s", a11y_bus);
 
   return g_steal_pointer (&a11y_bus);
+
+handle_error:
+  g_critical ("Failed to detect a11y bus on host: %s", error->message);
+
+  return NULL;
 }
 
 const char *
