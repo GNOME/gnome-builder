@@ -1,3 +1,20 @@
+# GNOME Builder 43.7
+
+Changes since 43.6
+
+ * Update webkit support for recent 6.0 ABI changes
+ * Various meson template fixes
+ * Various gobject snippet fixes
+ * Fixes for uncommon podman configurations
+ * Fix running on host by including PATH in target environment
+ * Fix refiltering of ctags completion results
+ * Ignore ctags completion in strings/paths/docs unless user-requested
+ * Fix `o` in Vim normal mode with indentation
+ * Fix va_list side-effects on some platforms
+ * Fix various memory leaks
+ * Reuse existing search panels instead of creating new panels
+ * Translation updates
+
 # GNOME Builder 43.6
 
 Changes since 43.5
