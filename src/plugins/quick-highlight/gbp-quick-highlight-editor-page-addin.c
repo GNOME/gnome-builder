@@ -26,6 +26,7 @@
 #include "gbp-quick-highlight-editor-page-addin.h"
 
 #define HIGHLIGHT_STYLE_NAME "quick-highlight-match"
+#define SELECTION_STYLE_NAME "selection"
 
 struct _GbpQuickHighlightEditorPageAddin
 {
@@ -103,8 +104,12 @@ do_delayed_quick_highlight (GbpQuickHighlightEditorPageAddin *self)
       GtkSourceStyle *style = NULL;
 
       style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+
       if (style_scheme != NULL)
-        style = gtk_source_style_scheme_get_style (style_scheme, HIGHLIGHT_STYLE_NAME);
+        {
+          if (!(style = gtk_source_style_scheme_get_style (style_scheme, HIGHLIGHT_STYLE_NAME)))
+            style = gtk_source_style_scheme_get_style (style_scheme, SELECTION_STYLE_NAME);
+        }
 
       settings = g_object_new (GTK_SOURCE_TYPE_SEARCH_SETTINGS,
                                "at-word-boundaries", FALSE,
