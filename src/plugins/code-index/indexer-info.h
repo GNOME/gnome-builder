@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 G_BEGIN_DECLS
 

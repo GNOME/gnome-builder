@@ -28,7 +28,7 @@
 #include <libide-foundry.h>
 #include <libide-projects.h>
 #include <libide-vcs.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-code-index-executor.h"
 #include "gbp-code-index-plan.h"
@@ -549,15 +549,19 @@ gbp_code_index_service_buffer_saved_cb (GbpCodeIndexService *self,
   if ((lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
     {
       const gchar *lang_id = gtk_source_language_get_id (lang);
-      const GList *list = peas_engine_get_plugin_list (peas_engine_get_default ());
+      PeasEngine *engine = peas_engine_get_default ();
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
 
-      for (const GList *iter = list; iter; iter = iter->next)
+      for (guint i = 0; i < n_items; i++)
         {
-          PeasPluginInfo *plugin_info = iter->data;
-          const gchar *languages = peas_plugin_info_get_external_data (plugin_info,
-                                                                       "Code-Indexer-Languages");
+          g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), i);
+          const gchar *languages;
+
+          if (!peas_plugin_info_is_loaded (plugin_info))
+            continue;
 
           /* Not exact check, but good enough for now */
+          languages = peas_plugin_info_get_external_data (plugin_info, "Code-Indexer-Languages");
           if (languages != NULL && strstr (languages, lang_id) != NULL)
             {
               gbp_code_index_service_queue_index (self);
@@ -906,7 +910,7 @@ create_indexer (GbpCodeIndexService *self,
   if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)) &&
       peas_plugin_info_is_loaded (plugin_info))
     {
-      PeasExtension *exten;
+      GObject *exten;
 
       exten = peas_engine_create_extension (peas_engine_get_default (),
                                             plugin_info,

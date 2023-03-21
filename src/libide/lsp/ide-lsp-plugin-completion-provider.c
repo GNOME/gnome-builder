@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-lsp-completion-provider.h"
 #include "ide-lsp-plugin-private.h"

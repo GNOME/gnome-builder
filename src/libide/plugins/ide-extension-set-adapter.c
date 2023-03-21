@@ -122,7 +122,7 @@ ide_extension_set_adapter_repr (IdeObject *object)
 static void
 add_extension (IdeExtensionSetAdapter *self,
                PeasPluginInfo         *plugin_info,
-               PeasExtension          *exten)
+               GObject          *exten)
 {
   guint position;
 
@@ -156,7 +156,7 @@ add_extension (IdeExtensionSetAdapter *self,
 static void
 remove_extension (IdeExtensionSetAdapter *self,
                   PeasPluginInfo         *plugin_info,
-                  PeasExtension          *exten)
+                  GObject          *exten)
 {
   g_autoptr(GObject) hold = NULL;
   guint position;
@@ -234,7 +234,7 @@ watch_extension (IdeExtensionSetAdapter *self,
 static void
 ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
 {
-  const GList *plugins;
+  guint n_items;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
@@ -251,12 +251,12 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
       g_ptr_array_remove_index (self->settings, self->settings->len - 1);
     }
 
-  plugins = peas_engine_get_plugin_list (self->engine);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->engine));
 
-  for (; plugins; plugins = plugins->next)
+  for (guint i = 0; i < n_items; i++)
     {
-      PeasPluginInfo *plugin_info = plugins->data;
-      gint priority;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (self->engine), i);
+      int priority;
 
       if (!peas_plugin_info_is_loaded (plugin_info))
         continue;
@@ -275,7 +275,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
         {
           if (!g_hash_table_contains (self->extensions, plugin_info))
             {
-              PeasExtension *exten;
+              GObject *exten;
 
               exten = ide_extension_new (self->engine,
                                          plugin_info,
@@ -288,7 +288,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
         }
       else
         {
-          PeasExtension *exten;
+          GObject *exten;
 
           if ((exten = g_hash_table_lookup (self->extensions, plugin_info)))
             remove_extension (self, plugin_info, exten);
@@ -345,7 +345,7 @@ ide_extension_set_adapter_unload_plugin (IdeExtensionSetAdapter *self,
                                          PeasPluginInfo         *plugin_info,
                                          PeasEngine             *engine)
 {
-  PeasExtension *exten;
+  GObject *exten;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
@@ -427,7 +427,7 @@ ide_extension_set_adapter_destroy (IdeObject *object)
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       PeasPluginInfo *plugin_info = key;
-      PeasExtension *exten = value;
+      GObject *exten = value;
 
       remove_extension (self, plugin_info, exten);
       g_hash_table_iter_remove (&iter);
@@ -577,7 +577,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
                   G_TYPE_NONE,
                   2,
                   PEAS_TYPE_PLUGIN_INFO | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  PEAS_TYPE_EXTENSION | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  G_TYPE_OBJECT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [EXTENSION_ADDED],
                               G_TYPE_FROM_CLASS (klass),
                               ide_marshal_VOID__BOXED_OBJECTv);
@@ -592,7 +592,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
                   G_TYPE_NONE,
                   2,
                   PEAS_TYPE_PLUGIN_INFO | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  PEAS_TYPE_EXTENSION | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  G_TYPE_OBJECT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (signals [EXTENSION_REMOVED],
                               G_TYPE_FROM_CLASS (klass),
                               ide_marshal_VOID__BOXED_OBJECTv);
@@ -703,7 +703,7 @@ ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
                                    IdeExtensionSetAdapterForeachFunc  foreach_func,
                                    gpointer                           user_data)
 {
-  const GList *list;
+  guint n_items;
 
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_return_if_fail (foreach_func != NULL);
@@ -713,12 +713,12 @@ ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
    * dependencies of plugins.
    */
 
-  list = peas_engine_get_plugin_list (self->engine);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->engine));
 
-  for (const GList *iter = list; iter; iter = iter->next)
+  for (guint i = 0; i < n_items; i++)
     {
-      PeasPluginInfo *plugin_info = iter->data;
-      PeasExtension *exten = g_hash_table_lookup (self->extensions, plugin_info);
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (self->engine), i);
+      GObject *exten = g_hash_table_lookup (self->extensions, plugin_info);
 
       if (exten != NULL)
         foreach_func (self, plugin_info, exten, user_data);
@@ -728,7 +728,7 @@ ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
 typedef struct
 {
   PeasPluginInfo *plugin_info;
-  PeasExtension  *exten;
+  GObject  *exten;
   gint            priority;
 } SortedInfo;
 
@@ -786,7 +786,7 @@ ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter           
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       PeasPluginInfo *plugin_info = key;
-      PeasExtension *exten = value;
+      GObject *exten = value;
       const gchar *priostr = peas_plugin_info_get_external_data (plugin_info, prio_key);
       gint prio = priostr ? atoi (priostr) : 0;
       SortedInfo info = { plugin_info, exten, prio };
@@ -859,9 +859,9 @@ ide_extension_set_adapter_new (IdeObject   *parent,
  *
  * Locates the extension owned by @plugin_info if such extension exists.
  *
- * Returns: (transfer none) (nullable): a #PeasExtension or %NULL
+ * Returns: (transfer none) (nullable): a #GObject or %NULL
  */
-PeasExtension *
+GObject *
 ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,
                                          PeasPluginInfo         *plugin_info)
 {

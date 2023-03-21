@@ -270,7 +270,7 @@ ide_editor_page_focus_enter_cb (IdeEditorPage           *self,
 static void
 ide_editor_page_notify_frame_set (IdeExtensionSetAdapter *set,
                                   PeasPluginInfo         *plugin_info,
-                                  PeasExtension          *exten,
+                                  GObject          *exten,
                                   gpointer                user_data)
 {
   IdeFrame *frame = user_data;
@@ -287,7 +287,7 @@ ide_editor_page_notify_frame_set (IdeExtensionSetAdapter *set,
 static void
 ide_editor_page_addin_added (IdeExtensionSetAdapter *set,
                              PeasPluginInfo         *plugin_info,
-                             PeasExtension          *exten,
+                             GObject          *exten,
                              gpointer                user_data)
 {
   IdeEditorPage *self = user_data;
@@ -310,7 +310,7 @@ ide_editor_page_addin_added (IdeExtensionSetAdapter *set,
 static void
 ide_editor_page_addin_removed (IdeExtensionSetAdapter *set,
                                PeasPluginInfo         *plugin_info,
-                               PeasExtension          *exten,
+                               GObject          *exten,
                                gpointer                user_data)
 {
   IdeEditorPage *self = user_data;

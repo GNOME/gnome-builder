@@ -28,8 +28,7 @@
 
 #include <gtk/gtk.h>
 
-#include <libpeas/peas.h>
-#include <libpeas/peas-autocleanups.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 #include <libide-plugins.h>
@@ -146,7 +145,7 @@ ide_run_manager_set_run_tool_from_plugin_info (IdeRunManager  *self,
                                                PeasPluginInfo *plugin_info)
 {
   g_autoptr(IdeRunTool) no_tool = NULL;
-  PeasExtension *exten = NULL;
+  GObject *exten = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
@@ -159,7 +158,7 @@ ide_run_manager_set_run_tool_from_plugin_info (IdeRunManager  *self,
       if (IDE_IS_NO_TOOL (self->run_tool))
         return;
       no_tool = ide_no_tool_new ();
-      exten = (PeasExtension *)no_tool;
+      exten = (GObject *)no_tool;
     }
 
   if (g_set_object (&self->run_tool, IDE_RUN_TOOL (exten)))
@@ -1479,7 +1478,7 @@ ide_run_manager_list_commands_cb (GObject      *object,
 static void
 ide_run_manager_list_commands_foreach_cb (IdeExtensionSetAdapter *set,
                                           PeasPluginInfo         *plugin_info,
-                                          PeasExtension          *exten,
+                                          GObject          *exten,
                                           gpointer                user_data)
 {
   IdeRunCommandProvider *provider = (IdeRunCommandProvider *)exten;

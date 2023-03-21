@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-context.h"
 #include "ide-context-private.h"
@@ -175,7 +175,7 @@ ide_context_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+  loaded_plugins = peas_engine_dup_loaded_plugins (engine);
 
   for (guint i = 0; loaded_plugins[i]; i++)
     {

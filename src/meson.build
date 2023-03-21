@@ -22,6 +22,7 @@ test_gi_typelib_path = ['@0@/src'.format(meson.project_build_root())]
 test_typelib_deps = [
   libadwaita_dep,
   libgio_dep,
+  libgir_dep,
   libgtk_dep,
   libgtksource_dep,
   libjson_glib_dep,

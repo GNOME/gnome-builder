@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <libide-foundry.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-qemu-device-provider.h"
 

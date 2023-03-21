@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 G_BEGIN_DECLS
 
@@ -34,7 +34,7 @@ PeasExtensionSet *ide_extension_set_new            (PeasEngine     *engine,
                                                     GType           type,
                                                     const gchar    *first_property,
                                                     ...);
-PeasExtension    *ide_extension_new                (PeasEngine     *engine,
+GObject    *ide_extension_new                (PeasEngine     *engine,
                                                     PeasPluginInfo *plugin_info,
                                                     GType           interface_type,
                                                     const gchar    *first_property,

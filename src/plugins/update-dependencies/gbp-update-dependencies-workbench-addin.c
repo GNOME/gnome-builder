@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-foundry.h>
 #include <libide-gui.h>
@@ -90,7 +90,7 @@ update_dependencies_cb (GObject      *object,
 static void
 update_dependencies_foreach_cb (PeasExtensionSet *set,
                                 PeasPluginInfo   *plugin_info,
-                                PeasExtension    *exten,
+                                GObject    *exten,
                                 gpointer          user_data)
 {
   IdeDependencyUpdater *updater = (IdeDependencyUpdater *)exten;

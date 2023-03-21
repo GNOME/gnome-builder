@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-marshal.h"
 
@@ -576,7 +576,7 @@ ide_project_list_similar_cb (GObject      *object,
 static void
 ide_project_list_similar_foreach_cb (IdeExtensionSetAdapter *set,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   IdeSimilarFileLocator *locator = (IdeSimilarFileLocator *)exten;

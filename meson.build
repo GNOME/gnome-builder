@@ -39,12 +39,14 @@ gtk_req_version = '4.10'
 gtksourceview_req_version = '5.8'
 libadwaita_req_version = '1.4'
 libdex_req_version = '0.2'
+gobject_introspection_req_version = '1.74'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
 gtksourceview_req = '>= @0@'.format(gtksourceview_req_version)
 libadwaita_req = '>= @0@'.format(libadwaita_req_version)
 libdex_req = '>= @0@'.format(libdex_req_version)
+gobject_introspection_req = '>= @0@'.format(gobject_introspection_req_version)
 
 glib_major = glib_req_version.split('.')[0].to_int()
 glib_minor = glib_req_version.split('.')[1].to_int()
@@ -301,13 +303,14 @@ libglib_dep = dependency('glib-2.0', version: glib_req)
 libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
 libgtk_dep = dependency('gtk4', version: gtk_req)
+libgir_dep = dependency('gobject-introspection-1.0', version: gobject_introspection_req)
 libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
 libpanel_dep = dependency('libpanel-1', version: '>= 1.1.2')
 libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.43.0')
 libm_dep = cc.find_library('m', required: false)
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.34.0')
+libpeas_dep = dependency('libpeas-2', version: '>= 1.99.0')
 libportal_dep = dependency('libportal-gtk4', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.36.1')
 libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.70.0')

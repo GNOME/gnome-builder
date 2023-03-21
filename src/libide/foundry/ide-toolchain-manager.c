@@ -26,7 +26,7 @@
 
 #include <glib/gi18n.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-build-private.h"
 #include "ide-pipeline.h"
@@ -182,7 +182,7 @@ provider_disconnect (IdeToolchainManager  *self,
 static void
 ide_toolchain_manager_extension_added (PeasExtensionSet *set,
                                        PeasPluginInfo   *plugin_info,
-                                       PeasExtension    *exten,
+                                       GObject    *exten,
                                        gpointer          user_data)
 {
   IdeToolchainManager *self = user_data;
@@ -205,7 +205,7 @@ ide_toolchain_manager_extension_added (PeasExtensionSet *set,
 static void
 ide_toolchain_manager_extension_removed (PeasExtensionSet *set,
                                          PeasPluginInfo   *plugin_info,
-                                         PeasExtension    *exten,
+                                         GObject    *exten,
                                          gpointer          user_data)
 {
   IdeToolchainManager *self = user_data;
@@ -263,7 +263,7 @@ ide_toolchain_manager_init_load_cb (GObject      *object,
 static void
 ide_toolchain_manager_collect_providers (PeasExtensionSet *set,
                                          PeasPluginInfo   *plugin_info,
-                                         PeasExtension    *exten,
+                                         GObject    *exten,
                                          gpointer          user_data)
 {
   IdeToolchainProvider *provider = (IdeToolchainProvider *)exten;

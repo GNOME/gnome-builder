@@ -21,7 +21,7 @@
 #pragma once
 
 #include <libide-plugins.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-buffer.h"
 #include "ide-buffer-addin.h"
@@ -48,35 +48,35 @@ typedef struct
 
 void _ide_buffer_addin_load_cb                 (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_unload_cb               (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_file_loaded_cb          (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_save_file_cb            (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_file_saved_cb           (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_language_set_cb         (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_change_settled_cb       (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 void _ide_buffer_addin_style_scheme_changed_cb (IdeExtensionSetAdapter *set,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data);
 
 G_END_DECLS

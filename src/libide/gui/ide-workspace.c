@@ -172,7 +172,7 @@ ide_workspace_get_focus_page (IdeWorkspace *self)
 static void
 ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
                               PeasPluginInfo         *plugin_info,
-                              PeasExtension          *exten,
+                              GObject          *exten,
                               gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
@@ -207,7 +207,7 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
 static void
 ide_workspace_addin_removed_cb (IdeExtensionSetAdapter *set,
                                 PeasPluginInfo         *plugin_info,
-                                PeasExtension          *exten,
+                                GObject          *exten,
                                 gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
@@ -232,7 +232,7 @@ ide_workspace_addin_removed_cb (IdeExtensionSetAdapter *set,
 static void
 ide_workspace_addin_page_changed_cb (IdeExtensionSetAdapter *set,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
@@ -1018,7 +1018,7 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
 {
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (workspace);
   PeasPluginInfo *plugin_info;
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
   PeasEngine *engine;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);

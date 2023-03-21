@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <libide-foundry.h>
 
 #include "ide-codespell-diagnostic-provider.h"

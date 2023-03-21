@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-tweaks-addin.h"
 #include "ide-tweaks-item-private.h"
@@ -255,7 +255,7 @@ ide_tweaks_window_clear (IdeTweaksWindow *self)
 static void
 ide_tweaks_window_addin_added_cb (PeasExtensionSet *set,
                                   PeasPluginInfo   *plugin_info,
-                                  PeasExtension    *exten,
+                                  GObject    *exten,
                                   gpointer          user_data)
 {
   IdeTweaksWindow *self = user_data;
@@ -273,7 +273,7 @@ ide_tweaks_window_addin_added_cb (PeasExtensionSet *set,
 static void
 ide_tweaks_window_addin_removed_cb (PeasExtensionSet *set,
                                     PeasPluginInfo   *plugin_info,
-                                    PeasExtension    *exten,
+                                    GObject    *exten,
                                     gpointer          user_data)
 {
   IdeTweaksWindow *self = user_data;

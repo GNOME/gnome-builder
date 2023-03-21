@@ -32,7 +32,7 @@
 static void
 ide_workbench_addin_restore_session_cb (PeasExtensionSet *set,
                                         PeasPluginInfo   *plugin_info,
-                                        PeasExtension    *exten,
+                                        GObject    *exten,
                                         gpointer          user_data)
 {
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;

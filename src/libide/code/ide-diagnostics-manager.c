@@ -421,7 +421,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
 static void
 ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
                                         PeasPluginInfo         *plugin_info,
-                                        PeasExtension          *exten,
+                                        GObject          *exten,
                                         gpointer                user_data)
 {
   IdeDiagnosticProvider *provider = (IdeDiagnosticProvider *)exten;
@@ -727,7 +727,7 @@ ide_diagnostics_manager_provider_invalidated (IdeDiagnosticsManager *self,
 static void
 ide_diagnostics_manager_extension_added (IdeExtensionSetAdapter *adapter,
                                          PeasPluginInfo         *plugin_info,
-                                         PeasExtension          *exten,
+                                         GObject          *exten,
                                          gpointer                user_data)
 {
   IdeDiagnosticProvider *provider = (IdeDiagnosticProvider *)exten;
@@ -825,7 +825,7 @@ ide_diagnostics_manager_clear_by_provider (IdeDiagnosticsManager *self,
 static void
 ide_diagnostics_manager_extension_removed (IdeExtensionSetAdapter *adapter,
                                            PeasPluginInfo         *plugin_info,
-                                           PeasExtension          *exten,
+                                           GObject          *exten,
                                            gpointer                user_data)
 {
   IdeDiagnosticProvider *provider = (IdeDiagnosticProvider *)exten;

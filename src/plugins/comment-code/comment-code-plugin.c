@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <libide-editor.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-comment-code-editor-page-addin.h"
 

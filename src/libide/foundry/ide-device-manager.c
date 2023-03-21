@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-plugins.h>
 #include <libide-threading.h>
@@ -249,7 +249,7 @@ ide_device_manager_provider_load_cb (GObject      *object,
 static void
 ide_device_manager_provider_added_cb (IdeExtensionSetAdapter *set,
                                       PeasPluginInfo         *plugin_info,
-                                      PeasExtension          *exten,
+                                      GObject          *exten,
                                       gpointer                user_data)
 {
   IdeDeviceManager *self = user_data;
@@ -300,7 +300,7 @@ ide_device_manager_provider_added_cb (IdeExtensionSetAdapter *set,
 static void
 ide_device_manager_provider_removed_cb (IdeExtensionSetAdapter *set,
                                         PeasPluginInfo         *plugin_info,
-                                        PeasExtension          *exten,
+                                        GObject          *exten,
                                         gpointer                user_data)
 {
   IdeDeviceManager *self = user_data;
@@ -906,7 +906,7 @@ ide_device_manager_init_provider_load_cb (GObject      *object,
 static void
 ide_device_manager_init_provider_cb (IdeExtensionSetAdapter *set,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   IdeDeviceProvider *provider = (IdeDeviceProvider *)exten;

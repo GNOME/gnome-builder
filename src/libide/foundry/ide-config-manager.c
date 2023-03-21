@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-threading.h>
 
@@ -162,7 +162,7 @@ ide_config_manager_actions_delete (IdeConfigManager *self,
 static void
 ide_config_manager_collect_providers (PeasExtensionSet *set,
                                       PeasPluginInfo   *plugin_info,
-                                      PeasExtension    *exten,
+                                      GObject    *exten,
                                       gpointer          user_data)
 {
   IdeConfigProvider *provider = (IdeConfigProvider *)exten;
@@ -761,7 +761,7 @@ provider_disconnect (IdeConfigManager  *self,
 static void
 ide_config_manager_provider_added (PeasExtensionSet *set,
                                    PeasPluginInfo   *plugin_info,
-                                   PeasExtension    *exten,
+                                   GObject    *exten,
                                    gpointer          user_data)
 {
   IdeConfigManager *self = user_data;
@@ -785,7 +785,7 @@ ide_config_manager_provider_added (PeasExtensionSet *set,
 static void
 ide_config_manager_provider_removed (PeasExtensionSet *set,
                                      PeasPluginInfo   *plugin_info,
-                                     PeasExtension    *exten,
+                                     GObject    *exten,
                                      gpointer          user_data)
 {
   IdeConfigManager *self = user_data;

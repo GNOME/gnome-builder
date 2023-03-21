@@ -314,7 +314,7 @@ ide_shortcut_manager_items_changed_cb (IdeShortcutManager *self,
 static void
 on_provider_added_cb (IdeExtensionSetAdapter *set,
                       PeasPluginInfo         *plugin_info,
-                      PeasExtension          *exten,
+                      GObject          *exten,
                       gpointer                user_data)
 {
   IdeShortcutProvider *provider = (IdeShortcutProvider *)exten;
@@ -345,7 +345,7 @@ on_provider_added_cb (IdeExtensionSetAdapter *set,
 static void
 on_provider_removed_cb (IdeExtensionSetAdapter *set,
                         PeasPluginInfo         *plugin_info,
-                        PeasExtension          *exten,
+                        GObject          *exten,
                         gpointer                user_data)
 {
   IdeShortcutProvider *provider = (IdeShortcutProvider *)exten;

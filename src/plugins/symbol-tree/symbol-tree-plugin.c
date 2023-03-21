@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-gui.h>
 #include <libide-search.h>

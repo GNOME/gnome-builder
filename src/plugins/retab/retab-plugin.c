@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <libide-editor.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-retab-editor-page-addin.h"
 

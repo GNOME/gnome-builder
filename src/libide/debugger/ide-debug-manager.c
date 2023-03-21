@@ -237,7 +237,7 @@ ide_debug_manager_load_supported_languages (IdeDebugManager *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+  loaded_plugins = peas_engine_dup_loaded_plugins (engine);
 
   for (guint i = 0; loaded_plugins[i] != NULL; i++)
     {
@@ -730,7 +730,7 @@ ide_debug_manager_init (IdeDebugManager *self)
 static void
 debugger_lookup (PeasExtensionSet *set,
                  PeasPluginInfo   *plugin_info,
-                 PeasExtension    *exten,
+                 GObject    *exten,
                  gpointer          user_data)
 {
   DebuggerLookup *lookup = user_data;

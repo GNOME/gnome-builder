@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <libide-core.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <gtksourceview/gtksource.h>
 #include <string.h>
 
@@ -43,19 +43,19 @@ collect_indexer_info (void)
 {
   GtkSourceLanguageManager *manager;
   g_autoptr(GPtrArray) indexers = NULL;
-  const GList *plugins;
   PeasEngine *engine;
+  guint n_items;
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
   manager = gtk_source_language_manager_get_default ();
   engine = peas_engine_get_default ();
-  plugins = peas_engine_get_plugin_list (engine);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
   indexers = g_ptr_array_new_with_free_func ((GDestroyNotify)indexer_info_free);
 
-  for (; plugins != NULL; plugins = plugins->next)
+  for (guint p = 0; p < n_items; p++)
     {
-      const PeasPluginInfo *plugin_info = plugins->data;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), p);
       const gchar *module_name;
       g_autofree gchar *str = NULL;
       g_auto(GStrv) split = NULL;

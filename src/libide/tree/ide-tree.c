@@ -93,7 +93,7 @@ typedef struct
 static void
 ide_tree_node_activated_cb (IdeExtensionSetAdapter *addins,
                             PeasPluginInfo         *plugin_info,
-                            PeasExtension          *extension,
+                            GObject          *extension,
                             gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)extension;
@@ -154,7 +154,7 @@ ide_tree_notify_selected_cb (IdeTree            *self,
 static void
 ide_tree_extension_added_cb (IdeExtensionSetAdapter *addins,
                              PeasPluginInfo         *plugin_info,
-                             PeasExtension          *extension,
+                             GObject          *extension,
                              gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)extension;
@@ -171,7 +171,7 @@ ide_tree_extension_added_cb (IdeExtensionSetAdapter *addins,
 static void
 ide_tree_extension_removed_cb (IdeExtensionSetAdapter *addins,
                                PeasPluginInfo         *plugin_info,
-                               PeasExtension          *extension,
+                               GObject          *extension,
                                gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)extension;
@@ -319,7 +319,7 @@ ide_tree_click_released_cb (GtkGestureClick *click,
 static void
 ide_tree_drag_source_prepare_addin_cb (IdeExtensionSetAdapter *adapter,
                                        PeasPluginInfo         *plugin_info,
-                                       PeasExtension          *exten,
+                                       GObject          *exten,
                                        gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)exten;
@@ -439,7 +439,7 @@ ide_tree_drag_source_drag_end_cb (IdeTree       *self,
 static void
 ide_tree_drop_target_accept_foreach_cb (IdeExtensionSetAdapter *adapter,
                                         PeasPluginInfo         *plugin_info,
-                                        PeasExtension          *exten,
+                                        GObject          *exten,
                                         gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)exten;
@@ -675,7 +675,7 @@ ide_tree_drop_target_drop_addin_cb (GObject      *object,
 static void
 ide_tree_drop_target_drop_foreach_cb (IdeExtensionSetAdapter *set,
                                       PeasPluginInfo         *plugin_info,
-                                      PeasExtension          *exten,
+                                      GObject          *exten,
                                       gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)exten;
@@ -1429,7 +1429,7 @@ ide_tree_set_selected_node (IdeTree     *self,
 static void
 ide_tree_rebuild_node_cb (IdeExtensionSetAdapter *set,
                           PeasPluginInfo         *plugin_info,
-                          PeasExtension          *exten,
+                          GObject          *exten,
                           gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)exten;

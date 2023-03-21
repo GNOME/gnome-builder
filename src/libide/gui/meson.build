@@ -138,6 +138,7 @@ libide_gui_deps = [
   cc.find_library('m', required: false),
 
   libgio_dep,
+  libgir_dep,
   libgtk_dep,
   libgtksource_dep,
   libadwaita_dep,

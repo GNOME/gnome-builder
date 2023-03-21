@@ -122,7 +122,7 @@ IdeEditorPageAddin *
 ide_editor_page_addin_find_by_module_name (IdeEditorPage *page,
                                            const gchar   *module_name)
 {
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
   PeasPluginInfo *plugin_info;
 
   g_return_val_if_fail (IDE_IS_EDITOR_PAGE (page), NULL);

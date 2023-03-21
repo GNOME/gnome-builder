@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-session.h"
 #include "ide-workbench.h"

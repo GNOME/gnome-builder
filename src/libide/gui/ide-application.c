@@ -28,7 +28,8 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas-autocleanups.h>
+#include <girepository.h>
+#include <libpeas.h>
 
 #include "ide-language-defaults.h"
 
@@ -257,7 +258,7 @@ ide_application_shutdown (GApplication *app)
 static void
 ide_application_activate_cb (PeasExtensionSet *set,
                              PeasPluginInfo   *plugin_info,
-                             PeasExtension    *exten,
+                             GObject    *exten,
                              gpointer          user_data)
 {
   g_assert (PEAS_IS_EXTENSION_SET (set));
@@ -293,7 +294,7 @@ ide_application_activate (GApplication *app)
 static void
 ide_application_open_cb (PeasExtensionSet *set,
                          PeasPluginInfo   *plugin_info,
-                         PeasExtension    *exten,
+                         GObject    *exten,
                          gpointer          user_data)
 {
   IdeApplicationAddin *app_addin = (IdeApplicationAddin*) exten;
@@ -641,7 +642,7 @@ _ide_application_new (gboolean standalone)
 static void
 ide_application_add_workbench_cb (PeasExtensionSet *set,
                                   PeasPluginInfo   *plugin_info,
-                                  PeasExtension    *exten,
+                                  GObject    *exten,
                                   gpointer          user_data)
 {
   g_assert (PEAS_IS_EXTENSION_SET (set));
@@ -669,7 +670,7 @@ ide_application_add_workbench (IdeApplication *self,
 static void
 ide_application_remove_workbench_cb (PeasExtensionSet *set,
                                      PeasPluginInfo   *plugin_info,
-                                     PeasExtension    *exten,
+                                     GObject    *exten,
                                      gpointer          user_data)
 {
   g_assert (PEAS_IS_EXTENSION_SET (set));
@@ -844,8 +845,8 @@ ide_application_find_workbench_for_file (IdeApplication *self,
   /* TODO: If a file is installed, but was installed by a workspace that
    *       we have open, we want to switch to that file instead of the
    *       installed version. For example, something installed to
-   *       /app/include/libpeas-1.0/libpeas/peas-engine.h should really open
-   *       libpeas/peas-engine.h from the project. This will require querying
+   *       /app/include/libpeas-1.0/libpeas-engine.h should really open
+   *       libpeas-engine.h from the project. This will require querying
    *       the pipeline/build-system for installed files to reverse-map the
    *       filename.
    */

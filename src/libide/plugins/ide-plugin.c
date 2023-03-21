@@ -59,11 +59,7 @@ ide_plugin_dispose (GObject *object)
 {
   IdePlugin *self = (IdePlugin *)object;
 
-  if (self->info != NULL)
-    {
-      g_boxed_free (PEAS_TYPE_PLUGIN_INFO, self->info);
-      self->info = NULL;
-    }
+  g_clear_object (&self->info);
 
   G_OBJECT_CLASS (ide_plugin_parent_class)->dispose (object);
 }
@@ -145,7 +141,7 @@ ide_plugin_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_INFO:
-      self->info = g_value_dup_boxed (value);
+      self->info = g_value_dup_object (value);
       break;
 
     default:
@@ -183,7 +179,7 @@ ide_plugin_class_init (IdePluginClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_INFO] =
-    g_param_spec_boxed ("info", NULL, NULL,
+    g_param_spec_object ("info", NULL, NULL,
                          PEAS_TYPE_PLUGIN_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
@@ -366,18 +362,18 @@ plugin_list_changed_cb (PeasEngine *engine,
                         GParamSpec *pspec,
                         GListStore *store)
 {
-  const GList *plugins;
+  guint n_items;
 
   g_assert (PEAS_IS_ENGINE (engine));
   g_assert (G_IS_LIST_STORE (store));
 
   g_list_store_remove_all (store);
 
-  plugins = peas_engine_get_plugin_list (peas_engine_get_default ());
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
 
-  for (const GList *iter = plugins; iter; iter = iter->next)
+  for (guint i = 0; i < n_items; i++)
     {
-      const PeasPluginInfo *plugin_info = iter->data;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), i);
       g_autoptr(IdePlugin) plugin = NULL;
 
       if (peas_plugin_info_is_hidden (plugin_info))
