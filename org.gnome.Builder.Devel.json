@@ -261,7 +261,6 @@
         {
             "name" : "libgit2-glib",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized"
             ],
             "buildsystem" : "meson",
@@ -290,6 +289,8 @@
             "name" : "vte",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dglade=false",
+                "-Dgtk3=false",
                 "-Dgtk4=true",
                 "-Dvapi=false"
             ],
@@ -304,10 +305,10 @@
         {
             "name" : "libpeas",
             "buildsystem" : "meson",
-            "cleanup" : [
-                "/bin/*",
-                "/lib/peas-demo",
-                "/lib/libpeas-gtk*"
+            "config-opts" : [
+            	"-Ddemos=false",
+            	"-Dglade_catalog=false",
+            	"-Dwidgetry=false"
             ],
             "sources" : [
                 {
@@ -320,8 +321,8 @@
         {
             "name" : "template-glib",
             "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=debugoptimized",
+                "-Dtests=false"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -336,8 +337,8 @@
         {
             "name" : "jsonrpc-glib",
             "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
+                "--buildtype=debugoptimized",
+                "-Denable_tests=false"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -352,11 +353,13 @@
         {
             "name" : "sysprof",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
+                "-Dagent=true",
+                "-Dexamples=false",
                 "-Dgtk=true",
                 "-Dsysprofd=host",
-                "-Dagent=true"
+                "-Dtests=false",
+                "-Dtools=false"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -411,7 +414,6 @@
         {
             "name" : "libxmlb",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
                 "-Dgtkdoc=false",
                 "-Dintrospection=false",
@@ -442,7 +444,6 @@
         {
             "name" : "appstream",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
                 "-Dgir=false",
                 "-Dapidocs=false",
@@ -494,8 +495,11 @@
         },
         {
             "name" : "flatpak-builder",
+            "buildsystem" : "meson",
+            "builddir" : true,
             "config-opts" : [
-                "--with-system-debugedit"
+                "-Ddocs=disabled",
+                "-Dtests=false"
             ],
             "sources" : [
                 {
@@ -543,7 +547,6 @@
         {
             "name" : "deviced",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
                 "-Ddaemon=false",
                 "-Dtools=false"
@@ -561,9 +564,10 @@
         {
             "name" : "libportal",
             "config-opts" : [
-                "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Dbackends=gtk4"
+                "-Dbackends=gtk4",
+                "-Ddocs=false",
+                "-Dtests=false"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -613,6 +617,9 @@
             "name" : "libpanel",
             "buildsystem" : "meson",
             "builddir" : true,
+            "config-opts" : [
+            	"-Ddocs=disabled"
+            ],
             "sources" : [
                 {
                     "type" : "git",
@@ -647,7 +654,6 @@
             "name" : "gtksourceview",
             "buildsystem" : "meson",
             "config-opts" : [
-                "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Dsysprof=true"
             ],
@@ -676,7 +682,6 @@
             "name" : "libdex",
             "buildsystem" : "meson",
             "config-opts" : [
-                "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Ddocs=false",
                 "-Dintrospection=enabled",
@@ -697,7 +702,6 @@
             "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
-                "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
                 "-Ddevelopment=true",
