@@ -233,12 +233,41 @@ handle_error:
 }
 
 const char *
-gbp_flatpak_get_a11y_bus (void)
+gbp_flatpak_get_a11y_bus (const char **out_unix_path,
+                          const char **out_address_suffix)
 {
   static char *a11y_bus;
+  static char *a11y_bus_path;
+  static const char *a11y_bus_suffix;
 
-  if (a11y_bus == NULL)
-    a11y_bus = _gbp_flatpak_get_a11y_bus ();
+  if (g_once_init_enter (&a11y_bus))
+    {
+      char *address = _gbp_flatpak_get_a11y_bus ();
+
+      if (address != NULL && g_str_has_prefix (address, "unix:path="))
+        {
+          const char *skip = address + strlen ("unix:path=");
+
+          if ((a11y_bus_suffix = strchr (skip, ',')))
+            a11y_bus_path = g_strndup (skip, a11y_bus_suffix - skip);
+          else
+            a11y_bus_path = g_strdup (skip);
+        }
+
+      g_once_init_leave (&a11y_bus, address);
+    }
+
+#if 0
+  g_print ("a11y_bus=%s\n", a11y_bus);
+  g_print ("a11y_bus_path=%s\n", a11y_bus_path);
+  g_print ("a11y_bus_suffix=%s\n", a11y_bus_suffix);
+#endif
+
+  if (out_unix_path != NULL)
+    *out_unix_path = a11y_bus_path;
+
+  if (out_address_suffix != NULL)
+    *out_address_suffix = a11y_bus_suffix;
 
   return a11y_bus;
 }
