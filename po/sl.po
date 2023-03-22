@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-06 12:16+0000\n"
-"PO-Revision-Date: 2023-03-10 16:40+0100\n"
+"POT-Creation-Date: 2023-03-21 17:35+0000\n"
+"PO-Revision-Date: 2023-03-22 16:17+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -258,15 +258,12 @@ msgid "Debugger Breakpoint at Warnings and Criticals"
 msgstr "Prekinitvena točka razhroščevalnika v funkciji g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-#, fuzzy
-#| msgid ""
-#| "Debugger should automatically insert breakpoint at g_warning() function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
 msgstr ""
-"Razhroščevalnik naj samodejno vstavi prekinitveno točko v funkcijo "
-"g_warning()."
+"Razhroščevalnik naj samodejno vstavi prekinitveno točko k funkcijama "
+"g_warning() in g_critical."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -1534,11 +1531,8 @@ msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 
 #: src/libide/gui/ide-primary-workspace.ui:17
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel (F9)"
-msgstr "Preklopi levi pladenj"
+msgstr "Preklopi levi pladenj (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
 #: src/plugins/menu-search/gtk/menus.ui:34
@@ -2010,10 +2004,8 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-#, fuzzy
-#| msgid "Remove environment variable"
 msgid "Use KEY=VALUE to set an environment variable"
-msgstr "Odstrani okoljsko spremenljivko"
+msgstr "Uporabi KLJUČ=VREDNOST za nastavitev spremenljivke okolja"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
@@ -3255,7 +3247,7 @@ msgstr "Ponastavi"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr ""
+msgstr "Povrne jezikovne nastavitve na privzete nastavitve programa"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
@@ -3673,7 +3665,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:271
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "Nariši oznako, ki predstavlja tabulatorje"
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
@@ -3681,7 +3673,7 @@ msgstr "Nove vrstice"
 
 #: src/plugins/editorui/tweaks.ui:284
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "Nariši oznako na koncu vrstic"
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Non-breaking spaces"
@@ -3705,7 +3697,7 @@ msgstr "Znotraj besedila"
 
 #: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "Nariši oznake samo v vrsticah besedila"
 
 #: src/plugins/editorui/tweaks.ui:339
 msgid "Trailing"
@@ -5012,7 +5004,7 @@ msgstr "Lupinski ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "Za parametre lahko uporabite enojne ali dvojne narekovaje."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
@@ -5037,7 +5029,6 @@ msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-#, fuzzy
 msgid "Locality"
 msgstr "Krajevnost"
 
