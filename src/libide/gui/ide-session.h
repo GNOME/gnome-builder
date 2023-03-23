@@ -1,6 +1,6 @@
 /* ide-session.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022-2023 Christian Hergert <chergert@redhat.com>
  *
  * This file is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,33 +38,33 @@ G_DECLARE_FINAL_TYPE (IdeSession, ide_session, IDE, SESSION, GObject)
 IDE_AVAILABLE_IN_ALL
 IdeSession     *ide_session_new              (void);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_append           (IdeSession      *self,
-                                               IdeSessionItem  *item);
+void            ide_session_append           (IdeSession      *self,
+                                              IdeSessionItem  *item);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_prepend          (IdeSession      *self,
-                                               IdeSessionItem  *item);
+void            ide_session_prepend          (IdeSession      *self,
+                                              IdeSessionItem  *item);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_insert           (IdeSession      *self,
-                                               guint             position,
-                                               IdeSessionItem  *item);
+void            ide_session_insert           (IdeSession      *self,
+                                              guint            position,
+                                              IdeSessionItem  *item);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_remove           (IdeSession      *self,
-                                               IdeSessionItem  *item);
+void            ide_session_remove           (IdeSession      *self,
+                                              IdeSessionItem  *item);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_remove_at        (IdeSession      *self,
-                                               guint             position);
+void            ide_session_remove_at        (IdeSession      *self,
+                                              guint            position);
 IDE_AVAILABLE_IN_ALL
-guint            ide_session_get_n_items      (IdeSession      *self);
+guint           ide_session_get_n_items      (IdeSession      *self);
 IDE_AVAILABLE_IN_ALL
-IdeSessionItem *ide_session_get_item          (IdeSession      *self,
-                                               guint             position);
+IdeSessionItem *ide_session_get_item         (IdeSession      *self,
+                                              guint            position);
 IDE_AVAILABLE_IN_ALL
-IdeSession     *ide_session_new_from_variant (GVariant         *variant,
-                                              GError          **error);
+IdeSession     *ide_session_new_from_variant (GVariant        *variant,
+                                              GError         **error);
 IDE_AVAILABLE_IN_ALL
-GVariant        *ide_session_to_variant       (IdeSession      *self);
+GVariant       *ide_session_to_variant       (IdeSession      *self);
 IDE_AVAILABLE_IN_44
-IdeSessionItem  *ide_session_lookup_by_id     (IdeSession      *self,
-                                               const char      *id);
+IdeSessionItem *ide_session_lookup_by_id     (IdeSession      *self,
+                                              const char      *id);
 
 G_END_DECLS
