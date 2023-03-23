@@ -48,6 +48,7 @@ IDE_AVAILABLE_IN_ALL
 void                    ide_property_action_group_add           (IdePropertyActionGroup *self,
                                                                  const char             *action_name,
                                                                  const char             *property_name);
+IDE_AVAILABLE_IN_ALL
 void                    ide_property_action_group_add_string    (IdePropertyActionGroup *self,
                                                                  const char             *action_name,
                                                                  const char             *property_name,
