@@ -58,7 +58,7 @@ gnome_builder_pkg_requires = [
   'vte-2.91-gtk4',
   'gtksourceview-5',
   'template-glib-1.0',
-  'libpeas-1.0',
+  'libpeas-2',
 ]
 
 gnome_builder_gir_includes = [

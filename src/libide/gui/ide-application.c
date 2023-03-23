@@ -845,8 +845,8 @@ ide_application_find_workbench_for_file (IdeApplication *self,
   /* TODO: If a file is installed, but was installed by a workspace that
    *       we have open, we want to switch to that file instead of the
    *       installed version. For example, something installed to
-   *       /app/include/libpeas-1.0/libpeas-engine.h should really open
-   *       libpeas-engine.h from the project. This will require querying
+   *       /app/include/libpeas-2/peas-engine.h should really open
+   *       peas-engine.h from the project. This will require querying
    *       the pipeline/build-system for installed files to reverse-map the
    *       filename.
    */
