@@ -68,7 +68,7 @@ gnome_builder_gir_includes = [
   'Gtk-4.0',
   'GtkSource-5',
   'Panel-1',
-  'Peas-1.0',
+  'Peas-2',
   'Template-1.0',
   'Vte-3.91',
 ]

@@ -7,7 +7,7 @@ authors = "Christian Hergert"
 logo_url = "org.gnome.Builder.svg"
 license = "GPL-3.0-or-later"
 description = "An IDE for GNOME"
-dependencies = [ "GObject-2.0", "Gtk-3.0", "Dazzle-1.0", "GLib-2.0", "Json-GLib-1.0", "GtkSource-4", "Peas-1.0" ]
+dependencies = [ "GObject-2.0", "Gtk-3.0", "Dazzle-1.0", "GLib-2.0", "Json-GLib-1.0", "GtkSource-4", "Peas-2" ]
 devhelp = true
 search_index = true
 
@@ -40,7 +40,7 @@ search_index = true
   description = "A GNOME library that extends GtkTextView"
   docs_url = "https://developer-old.gnome.org/gtksourceview/stable/"
 
-  [dependencies."Peas-1.0"]
+  [dependencies."Peas-2"]
   name = "Libpeas"
   description = "A GObject based plugin engine"
   docs_url = "https://developer-old.gnome.org/libpeas/stable/"
