@@ -240,15 +240,15 @@ static void     ide_buffer_on_tag_added            (IdeBuffer              *self
                                                     GtkTextTagTable        *table);
 static void     ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
                                                     PeasPluginInfo         *plugin_info,
-                                                    PeasExtension          *extension,
+                                                    GObject          *extension,
                                                     gpointer                user_data);
 static void     ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
                                                     PeasPluginInfo         *plugin_info,
-                                                    PeasExtension          *extension,
+                                                    GObject          *extension,
                                                     gpointer                user_data);
 static void     ide_buffer_symbol_resolver_added   (IdeExtensionSetAdapter *adapter,
                                                     PeasPluginInfo         *plugin_info,
-                                                    PeasExtension          *extension,
+                                                    GObject          *extension,
                                                     gpointer                user_data);
 static gboolean ide_buffer_can_do_newline_hack     (IdeBuffer              *self,
                                                     guint                   len);
@@ -1176,7 +1176,7 @@ ide_buffer_code_action_provider_notify_extension (IdeBuffer           *self,
 static void
 ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
                                   PeasPluginInfo         *plugin_info,
-                                  PeasExtension          *extension,
+                                  GObject          *extension,
                                   gpointer                user_data)
 {
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
@@ -1202,7 +1202,7 @@ ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
 static void
 ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
                                     PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *extension,
+                                    GObject          *extension,
                                     gpointer                user_data)
 {
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
@@ -3884,7 +3884,7 @@ ide_buffer_get_selection_bounds (IdeBuffer   *self,
 static void
 ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
                                     PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *extension,
+                                    GObject          *extension,
                                     gpointer                user_data)
 {
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
@@ -4173,7 +4173,7 @@ settle_cb (GObject      *object,
 static void
 settle_foreach_cb (IdeExtensionSetAdapter *set,
                    PeasPluginInfo         *plugin_info,
-                   PeasExtension          *extension,
+                   GObject          *extension,
                    gpointer                user_data)
 {
   IdeBufferAddin *addin = (IdeBufferAddin *)extension;

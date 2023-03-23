@@ -25,7 +25,7 @@
 #include <gdk/gdk.h>
 
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-vcs-cloner.h"
 
@@ -183,7 +183,7 @@ ide_vcs_cloner_clone_simple_clone_cb (GObject      *object,
 static gboolean
 ide_vcs_cloner_clone_simple_idle_cb (CloneSimple *state)
 {
-  g_autoptr(PeasExtension) exten = NULL;
+  g_autoptr(GObject) exten = NULL;
   g_autoptr(GVariant) options = NULL;
   PeasPluginInfo *plugin_info;
   PeasEngine *engine;

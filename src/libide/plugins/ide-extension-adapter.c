@@ -136,10 +136,10 @@ ide_extension_adapter_set_extension (IdeExtensionAdapter *self,
 static void
 ide_extension_adapter_reload (IdeExtensionAdapter *self)
 {
-  const GList *plugins;
   PeasPluginInfo *best_match = NULL;
-  PeasExtension *extension = NULL;
-  gint best_match_priority = G_MININT;
+  GObject *extension = NULL;
+  guint n_items;
+  int best_match_priority = G_MININT;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
@@ -151,12 +151,12 @@ ide_extension_adapter_reload (IdeExtensionAdapter *self)
       return;
     }
 
-  plugins = peas_engine_get_plugin_list (self->engine);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->engine));
 
-  for (; plugins; plugins = plugins->next)
+  for (guint i = 0; i < n_items; i++)
     {
-      PeasPluginInfo *plugin_info = plugins->data;
-      gint priority = 0;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (self->engine), i);
+      int priority = 0;
 
       if (ide_extension_util_can_use_plugin (self->engine,
                                              plugin_info,

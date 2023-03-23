@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-debugger.h>
 #include <libide-gtk.h>
@@ -261,7 +261,7 @@ ide_workbench_addin_removed_workspace_cb (IdeWorkspace      *workspace,
 static void
 ide_workbench_addin_added_cb (PeasExtensionSet *set,
                               PeasPluginInfo   *plugin_info,
-                              PeasExtension    *exten,
+                              GObject    *exten,
                               gpointer          user_data)
 {
   IdeWorkbench *self = user_data;
@@ -307,7 +307,7 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
 static void
 ide_workbench_addin_removed_cb (PeasExtensionSet *set,
                                 PeasPluginInfo   *plugin_info,
-                                PeasExtension    *exten,
+                                GObject    *exten,
                                 gpointer          user_data)
 {
   IdeWorkbench *self = user_data;
@@ -556,7 +556,7 @@ ide_workbench_init (IdeWorkbench *self)
 static void
 collect_addins_cb (PeasExtensionSet *set,
                    PeasPluginInfo   *plugin_info,
-                   PeasExtension    *exten,
+                   GObject    *exten,
                    gpointer          user_data)
 {
   GPtrArray *ar = user_data;
@@ -582,7 +582,7 @@ ide_workbench_find_addin (IdeWorkbench *self,
 {
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
-  PeasExtension *exten = NULL;
+  GObject *exten = NULL;
 
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
   g_return_val_if_fail (hint != NULL, NULL);
@@ -946,7 +946,7 @@ ide_workbench_focus_workspace (IdeWorkbench *self,
 static void
 ide_workbench_project_loaded_foreach_cb (PeasExtensionSet *set,
                                          PeasPluginInfo   *plugin_info,
-                                         PeasExtension    *exten,
+                                         GObject    *exten,
                                          gpointer          user_data)
 {
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
@@ -2355,7 +2355,7 @@ ide_workbench_activate (IdeWorkbench *self)
 static void
 ide_workbench_propagate_vcs_cb (PeasExtensionSet *set,
                                 PeasPluginInfo   *plugin_info,
-                                PeasExtension    *exten,
+                                GObject    *exten,
                                 gpointer          user_data)
 {
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
@@ -2638,7 +2638,7 @@ ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
                                          const gchar  *module_name)
 {
   PeasPluginInfo *plugin_info;
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
   PeasEngine *engine;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);

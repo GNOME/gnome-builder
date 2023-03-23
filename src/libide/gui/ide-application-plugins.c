@@ -91,9 +91,9 @@ ide_application_can_load_plugin (IdeApplication *self,
                                  GHashTable     *circular)
 {
   PeasEngine *engine = peas_engine_get_default ();
-  const gchar *module_name;
-  const gchar *module_dir;
-  const gchar **deps;
+  const char *module_name;
+  const char *module_dir;
+  const char * const *deps;
   GSettings *settings;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -297,10 +297,15 @@ ide_application_plugins_unload_plugin_after_cb (IdeApplication *self,
 void
 _ide_application_load_plugins_for_startup (IdeApplication *self)
 {
-  PeasEngine *engine = peas_engine_get_default ();
-  const GList *plugins;
+  PeasEngine *engine;
+  guint n_items;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
+
+  engine = peas_engine_get_default ();
 
   g_signal_connect_object (engine,
                            "load-plugin",
@@ -319,9 +324,9 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
    * ensures that only embedded plugins can be used at startup,
    * saving us some precious disk I/O.
    */
-  peas_engine_prepend_search_path (engine,
-                                   "resource:///plugins",
-                                   "resource:///plugins");
+  peas_engine_add_search_path (engine,
+                               "resource:///plugins",
+                               "resource:///plugins");
 
   /* If we are within the Flatpak, then load any extensions we've
    * found merged into the extensions directory.
@@ -339,15 +344,17 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
    * greeter may handle command-line options and then show the
    * greeter workspace.
    */
-  plugins = peas_engine_get_plugin_list (engine);
-  for (const GList *iter = plugins; iter; iter = iter->next)
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
+  for (guint i = 0; i < n_items; i++)
     {
-      PeasPluginInfo *plugin_info = iter->data;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), i);
 
       if (!peas_plugin_info_is_loaded (plugin_info) &&
           peas_plugin_info_get_external_data (plugin_info, "At-Startup"))
         _ide_application_load_plugin (self, plugin_info);
     }
+
+  IDE_EXIT;
 }
 
 /**
@@ -361,8 +368,8 @@ void
 _ide_application_load_plugins (IdeApplication *self)
 {
   g_autofree gchar *user_plugins_dir = NULL;
-  const GList *plugins;
   PeasEngine *engine;
+  guint n_items;
 
   g_assert (IDE_IS_APPLICATION (self));
 
@@ -372,9 +379,9 @@ _ide_application_load_plugins (IdeApplication *self)
    * embedded into the gnome-builder executable, we can enable the
    * system plugins that are loaded from disk.
    */
-  peas_engine_prepend_search_path (engine,
-                                   PACKAGE_LIBDIR"/gnome-builder/plugins",
-                                   PACKAGE_DATADIR"/gnome-builder/plugins");
+  peas_engine_add_search_path (engine,
+                               PACKAGE_LIBDIR"/gnome-builder/plugins",
+                               PACKAGE_DATADIR"/gnome-builder/plugins");
 
   if (ide_is_flatpak ())
     {
@@ -387,7 +394,7 @@ _ide_application_load_plugins (IdeApplication *self)
                                       "gnome-builder",
                                       "plugins",
                                       NULL);
-      peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
+      peas_engine_add_search_path (engine, plugins_dir, plugins_dir);
 
       extensions_plugins_dir = g_build_filename ("/app",
                                                  "extensions",
@@ -395,25 +402,25 @@ _ide_application_load_plugins (IdeApplication *self)
                                                  "gnome-builder",
                                                  "plugins",
                                                  NULL);
-      peas_engine_prepend_search_path (engine, extensions_plugins_dir, extensions_plugins_dir);
+      peas_engine_add_search_path (engine, extensions_plugins_dir, extensions_plugins_dir);
     }
 
   user_plugins_dir = g_build_filename (g_get_user_data_dir (),
                                        "gnome-builder",
                                        "plugins",
                                        NULL);
-  peas_engine_prepend_search_path (engine, user_plugins_dir, NULL);
+  peas_engine_add_search_path (engine, user_plugins_dir, NULL);
 
   if (self->loaded_typelibs)
-    peas_engine_enable_loader (engine, "python3");
+    peas_engine_enable_loader (engine, "python");
 
   peas_engine_rescan_plugins (engine);
 
-  plugins = peas_engine_get_plugin_list (engine);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
 
-  for (const GList *iter = plugins; iter; iter = iter->next)
+  for (guint i = 0; i < n_items; i++)
     {
-      PeasPluginInfo *plugin_info = iter->data;
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), i);
 
       if (!peas_plugin_info_is_loaded (plugin_info))
         _ide_application_load_plugin (self, plugin_info);
@@ -423,7 +430,7 @@ _ide_application_load_plugins (IdeApplication *self)
 static void
 ide_application_addin_added_cb (PeasExtensionSet *set,
                                 PeasPluginInfo   *plugin_info,
-                                PeasExtension    *exten,
+                                GObject    *exten,
                                 gpointer          user_data)
 {
   IdeApplicationAddin *addin = (IdeApplicationAddin *)exten;
@@ -441,7 +448,7 @@ ide_application_addin_added_cb (PeasExtensionSet *set,
 static void
 ide_application_addin_removed_cb (PeasExtensionSet *set,
                                   PeasPluginInfo   *plugin_info,
-                                  PeasExtension    *exten,
+                                  GObject    *exten,
                                   gpointer          user_data)
 {
   IdeApplicationAddin *addin = (IdeApplicationAddin *)exten;

@@ -27,7 +27,7 @@
 #include <libide-projects.h>
 #include <libide-search.h>
 #include <libide-vcs.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-file-search-provider.h"
 #include "gbp-file-search-index.h"

@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-gui.h>
 

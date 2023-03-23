@@ -26,7 +26,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <vte/vte.h>
 
 #include <libide-core.h>
@@ -985,7 +985,7 @@ ide_pipeline_real_finished (IdePipeline *self,
 static void
 ide_pipeline_extension_prepare (IdeExtensionSetAdapter *set,
                                 PeasPluginInfo         *plugin_info,
-                                PeasExtension          *exten,
+                                GObject          *exten,
                                 gpointer                user_data)
 {
   IdePipeline *self = user_data;
@@ -1006,7 +1006,7 @@ ide_pipeline_extension_prepare (IdeExtensionSetAdapter *set,
 static void
 ide_pipeline_extension_added (IdeExtensionSetAdapter *set,
                               PeasPluginInfo         *plugin_info,
-                              PeasExtension          *exten,
+                              GObject          *exten,
                               gpointer                user_data)
 {
   IdePipeline *self = user_data;
@@ -1032,7 +1032,7 @@ ide_pipeline_extension_added (IdeExtensionSetAdapter *set,
 static void
 ide_pipeline_extension_removed (IdeExtensionSetAdapter *set,
                                 PeasPluginInfo         *plugin_info,
-                                PeasExtension          *exten,
+                                GObject          *exten,
                                 gpointer                user_data)
 {
   IdePipeline *self = user_data;
@@ -1165,7 +1165,7 @@ register_post_install_commands_stage (IdePipeline *self,
 static void
 collect_pipeline_addins (IdeExtensionSetAdapter *set,
                          PeasPluginInfo         *plugin_info,
-                         PeasExtension          *exten,
+                         GObject          *exten,
                          gpointer                user_data)
 {
   GPtrArray *addins = user_data;
@@ -1210,7 +1210,7 @@ ide_pipeline_deploy_strategy_load_cb (GObject      *object,
 static void
 ide_pipeline_deploy_strategy_added_cb (IdeExtensionSetAdapter *set,
                                        PeasPluginInfo         *plugin_info,
-                                       PeasExtension          *exten,
+                                       GObject          *exten,
                                        gpointer                user_data)
 {
   IdePipeline *self = user_data;
@@ -4490,7 +4490,7 @@ ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
                                         const gchar *module_name)
 {
   PeasPluginInfo *plugin_info;
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
   PeasEngine *engine;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);

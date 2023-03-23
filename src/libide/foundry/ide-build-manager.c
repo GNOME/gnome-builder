@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 #include <libide-code.h>
@@ -2084,7 +2084,7 @@ ide_build_manager_list_targets_cb (GObject      *object,
 static void
 ide_build_manager_list_targets_foreach_cb (IdeExtensionSetAdapter *set,
                                            PeasPluginInfo         *plugin_info,
-                                           PeasExtension          *exten,
+                                           GObject          *exten,
                                            gpointer                user_data)
 {
   IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)exten;

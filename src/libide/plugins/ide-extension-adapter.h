@@ -24,7 +24,7 @@
 # error "Only <libide-plugins.h> can be included directly."
 #endif
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 

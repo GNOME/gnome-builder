@@ -35,7 +35,7 @@
 static void
 add_option_entries_foreach_cb (PeasExtensionSet *set,
                                PeasPluginInfo   *plugin_info,
-                               PeasExtension    *exten,
+                               GObject    *exten,
                                gpointer          user_data)
 {
   IdeApplicationAddin *addin = (IdeApplicationAddin *)exten;
@@ -79,7 +79,7 @@ _ide_application_add_option_entries (IdeApplication *self)
 static void
 command_line_foreach_cb (PeasExtensionSet *set,
                          PeasPluginInfo   *plugin_info,
-                         PeasExtension    *exten,
+                         GObject    *exten,
                          gpointer          user_data)
 {
   IdeApplicationAddin *addin = (IdeApplicationAddin *)exten;

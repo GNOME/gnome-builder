@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 
 #include <adwaita.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 #include <libide-threading.h>
@@ -68,7 +68,7 @@ static GParamSpec *properties[N_PROPS];
 static void
 ide_frame_notify_addin_of_page (PeasExtensionSet *set,
                                 PeasPluginInfo   *plugin_info,
-                                PeasExtension    *exten,
+                                GObject    *exten,
                                 gpointer          user_data)
 {
   IdeFrameAddin *addin = (IdeFrameAddin *)exten;
@@ -101,7 +101,7 @@ ide_frame_notify_visible_child (IdeFrame   *self,
 static void
 ide_frame_addin_added (PeasExtensionSet *set,
                        PeasPluginInfo   *plugin_info,
-                       PeasExtension    *exten,
+                       GObject    *exten,
                        gpointer          user_data)
 {
   IdeFrameAddin *addin = (IdeFrameAddin *)exten;
@@ -124,7 +124,7 @@ ide_frame_addin_added (PeasExtensionSet *set,
 static void
 ide_frame_addin_removed (PeasExtensionSet *set,
                          PeasPluginInfo   *plugin_info,
-                         PeasExtension    *exten,
+                         GObject    *exten,
                          gpointer          user_data)
 {
   IdeFrameAddin *addin = (IdeFrameAddin *)exten;
@@ -322,7 +322,7 @@ IdeFrameAddin *
 ide_frame_addin_find_by_module_name (IdeFrame    *frame,
                                      const gchar *module_name)
 {
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
   PeasPluginInfo *plugin_info;
 
   g_return_val_if_fail (IDE_IS_FRAME (frame), NULL);

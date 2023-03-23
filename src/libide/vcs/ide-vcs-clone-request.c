@@ -386,7 +386,7 @@ ide_vcs_clone_request_set_module_name (IdeVcsCloneRequest *self,
 
   if (g_set_str (&self->module_name, module_name))
     {
-      g_autoptr(PeasExtension) exten = NULL;
+      g_autoptr(GObject) exten = NULL;
 
       if (module_name != NULL)
         {

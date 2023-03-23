@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-buffer.h"
 #include "ide-buffer-addin.h"
@@ -266,7 +266,7 @@ ide_buffer_addin_find_by_module_name (IdeBuffer   *buffer,
 {
   PeasPluginInfo *plugin_info;
   IdeExtensionSetAdapter *set;
-  PeasExtension *ret = NULL;
+  GObject *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
@@ -291,7 +291,7 @@ ide_buffer_addin_find_by_module_name (IdeBuffer   *buffer,
 void
 _ide_buffer_addin_load_cb (IdeExtensionSetAdapter *set,
                            PeasPluginInfo         *plugin_info,
-                           PeasExtension          *exten,
+                           GObject          *exten,
                            gpointer                user_data)
 {
   IdeBuffer *buffer = user_data;
@@ -319,7 +319,7 @@ _ide_buffer_addin_load_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_unload_cb (IdeExtensionSetAdapter *set,
                              PeasPluginInfo         *plugin_info,
-                             PeasExtension          *exten,
+                             GObject          *exten,
                              gpointer                user_data)
 {
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -333,7 +333,7 @@ _ide_buffer_addin_unload_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_file_loaded_cb (IdeExtensionSetAdapter *set,
                                   PeasPluginInfo         *plugin_info,
-                                  PeasExtension          *exten,
+                                  GObject          *exten,
                                   gpointer                user_data)
 {
   IdeBufferFileLoad *load = user_data;
@@ -351,7 +351,7 @@ _ide_buffer_addin_file_loaded_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_save_file_cb (IdeExtensionSetAdapter *set,
                                 PeasPluginInfo         *plugin_info,
-                                PeasExtension          *exten,
+                                GObject          *exten,
                                 gpointer                user_data)
 {
   IdeBufferFileSave *save = user_data;
@@ -369,7 +369,7 @@ _ide_buffer_addin_save_file_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_file_saved_cb (IdeExtensionSetAdapter *set,
                                  PeasPluginInfo         *plugin_info,
-                                 PeasExtension          *exten,
+                                 GObject          *exten,
                                  gpointer                user_data)
 {
   IdeBufferFileSave *save = user_data;
@@ -387,7 +387,7 @@ _ide_buffer_addin_file_saved_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_language_set_cb (IdeExtensionSetAdapter *set,
                                    PeasPluginInfo         *plugin_info,
-                                   PeasExtension          *exten,
+                                   GObject          *exten,
                                    gpointer                user_data)
 {
   IdeBufferLanguageSet *lang = user_data;
@@ -404,7 +404,7 @@ _ide_buffer_addin_language_set_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_change_settled_cb (IdeExtensionSetAdapter *set,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (set));
@@ -418,7 +418,7 @@ _ide_buffer_addin_change_settled_cb (IdeExtensionSetAdapter *set,
 void
 _ide_buffer_addin_style_scheme_changed_cb (IdeExtensionSetAdapter *set,
                                            PeasPluginInfo         *plugin_info,
-                                           PeasExtension          *exten,
+                                           GObject          *exten,
                                            gpointer                user_data)
 {
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (set));

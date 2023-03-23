@@ -24,7 +24,7 @@
 
 #include <libide-gui.h>
 #include <libide-tree.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-project-tree-addin.h"
 #include "gbp-project-tree-frame-addin.h"

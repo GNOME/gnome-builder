@@ -202,7 +202,7 @@ ide_run_commands_provider_invalidated_cb (IdeRunCommands        *self,
 static void
 ide_run_commands_provider_added_cb (IdeExtensionSetAdapter *set,
                                     PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *exten,
+                                    GObject          *exten,
                                     gpointer                user_data)
 {
   IdeRunCommandProvider *provider = (IdeRunCommandProvider *)exten;
@@ -230,7 +230,7 @@ ide_run_commands_provider_added_cb (IdeExtensionSetAdapter *set,
 static void
 ide_run_commands_provider_removed_cb (IdeExtensionSetAdapter *set,
                                       PeasPluginInfo         *plugin_info,
-                                      PeasExtension          *exten,
+                                      GObject          *exten,
                                       gpointer                user_data)
 {
   IdeRunCommandProvider *provider = (IdeRunCommandProvider *)exten;

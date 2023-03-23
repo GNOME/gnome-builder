@@ -21,7 +21,7 @@
 #define G_LOG_DOMAIN "cindent"
 
 #include <glib/gi18n.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <libide-sourceview.h>
 
 #include "c-parse-helper.h"

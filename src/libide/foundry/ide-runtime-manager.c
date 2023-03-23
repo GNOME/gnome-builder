@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-pipeline.h"
 #include "ide-build-private.h"
@@ -101,7 +101,7 @@ ide_runtime_manager_provider_load_cb (DexFuture *future,
 static void
 ide_runtime_manager_extension_added (IdeExtensionSetAdapter *set,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;
@@ -153,7 +153,7 @@ ide_runtime_manager_provider_unload_cb (DexFuture *future,
 static void
 ide_runtime_manager_extension_removed (IdeExtensionSetAdapter *set,
                                        PeasPluginInfo         *plugin_info,
-                                       PeasExtension          *exten,
+                                       GObject          *exten,
                                        gpointer                user_data)
 {
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;

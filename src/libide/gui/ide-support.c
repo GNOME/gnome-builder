@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <string.h>
 
 #include <libide-gui.h>
@@ -35,7 +35,6 @@ gchar *
 ide_get_support_log (void)
 {
   PeasEngine *engine = peas_engine_get_default ();
-  const GList *plugins;
   GListModel *monitors;
   GChecksum *checksum;
   GDateTime *now;
@@ -43,7 +42,7 @@ ide_get_support_log (void)
   GString *str;
   gchar *tmp;
   gchar **env;
-  guint i;
+  guint n_items;
   GdkDisplay *display;
   guint n_monitors;
 
@@ -130,7 +129,7 @@ ide_get_support_log (void)
   monitors = gdk_display_get_monitors (display);
   n_monitors = g_list_model_get_n_items (monitors);
   g_string_append_printf (str, "n_monitors = %u\n", n_monitors);
-  for (i = 0; i < n_monitors; i++)
+  for (guint i = 0; i < n_monitors; i++)
     {
       g_autoptr(GdkMonitor) monitor = g_list_model_get_item (monitors, i);
       GdkRectangle geom;
@@ -145,10 +144,10 @@ ide_get_support_log (void)
    * Log the list of plugins and if they are enabled.
    */
   g_string_append (str, "[runtime.plugins]\n");
-  plugins = peas_engine_get_plugin_list (engine);
-  for (const GList *iter = plugins; iter; iter = iter->next)
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
+  for (guint i = 0; i < n_items; i++)
     {
-      const PeasPluginInfo *info = iter->data;
+      g_autoptr(PeasPluginInfo) info = g_list_model_get_item (G_LIST_MODEL (engine), i);
       const gchar *name = peas_plugin_info_get_module_name (info);
 
       g_string_append_printf (str, "%s = %s\n",
@@ -162,7 +161,7 @@ ide_get_support_log (void)
    */
   g_string_append (str, "[runtime.environ]\n");
   env = g_get_environ ();
-  for (i = 0; env [i]; i++)
+  for (guint i = 0; env [i]; i++)
     {
       const gchar *value;
       gchar *escape;

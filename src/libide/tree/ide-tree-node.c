@@ -1156,7 +1156,7 @@ expand_free (Expand *state)
 static void
 ide_tree_node_build_node_cb (IdeExtensionSetAdapter *addins,
                              PeasPluginInfo         *plugin_info,
-                             PeasExtension          *extension,
+                             GObject          *extension,
                              gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)extension;
@@ -1218,7 +1218,7 @@ ide_tree_node_expand_build_children_cb (GObject      *object,
 static void
 ide_tree_node_expand_foreach_cb (IdeExtensionSetAdapter *adapter,
                                  PeasPluginInfo         *plugin_info,
-                                 PeasExtension          *extension,
+                                 GObject          *extension,
                                  gpointer                user_data)
 {
   IdeTreeAddin *addin = (IdeTreeAddin *)extension;

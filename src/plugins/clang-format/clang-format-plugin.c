@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <libide-editor.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gb-clang-format-buffer-addin.h"
 

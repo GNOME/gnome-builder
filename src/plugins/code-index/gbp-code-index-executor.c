@@ -26,7 +26,7 @@
 #include <libide-code.h>
 #include <libide-foundry.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-code-index-builder.h"
 #include "gbp-code-index-executor.h"

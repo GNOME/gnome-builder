@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-threading.h>
 #include <libide-vcs.h>
@@ -210,7 +210,7 @@ template_filter_func (gpointer item,
 static void
 foreach_template_provider_cb (PeasExtensionSet *set,
                               PeasPluginInfo   *plugin_info,
-                              PeasExtension    *exten,
+                              GObject    *exten,
                               gpointer          user_data)
 {
   IdeTemplateProvider *provider = (IdeTemplateProvider *)exten;

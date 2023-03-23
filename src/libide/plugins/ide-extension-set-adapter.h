@@ -24,7 +24,7 @@
 # error "Only <libide-plugins.h> can be included directly."
 #endif
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 
@@ -37,7 +37,7 @@ G_DECLARE_FINAL_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE, EX
 
 typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
                                                    PeasPluginInfo         *plugin_info,
-                                                   PeasExtension          *extension,
+                                                   GObject          *extension,
                                                    gpointer                user_data);
 
 IDE_AVAILABLE_IN_ALL
@@ -71,7 +71,7 @@ void                    ide_extension_set_adapter_foreach_by_priority (IdeExtens
                                                                        IdeExtensionSetAdapterForeachFunc  foreach_func,
                                                                        gpointer                           user_data);
 IDE_AVAILABLE_IN_ALL
-PeasExtension          *ide_extension_set_adapter_get_extension       (IdeExtensionSetAdapter            *self,
+GObject          *ide_extension_set_adapter_get_extension       (IdeExtensionSetAdapter            *self,
                                                                        PeasPluginInfo                    *plugin_info);
 
 G_END_DECLS

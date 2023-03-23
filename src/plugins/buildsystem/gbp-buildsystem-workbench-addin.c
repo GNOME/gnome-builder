@@ -26,7 +26,7 @@
 #include <libide-foundry.h>
 #include <libide-plugins.h>
 #include <libide-threading.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-buildsystem-workbench-addin.h"
 
@@ -59,7 +59,7 @@ discovery_free (Discovery *state)
 static void
 discovery_foreach_cb (IdeExtensionSetAdapter *set,
                       PeasPluginInfo         *plugin_info,
-                      PeasExtension          *exten,
+                      GObject          *exten,
                       gpointer                user_data)
 {
   IdeBuildSystemDiscovery *addin = (IdeBuildSystemDiscovery *)exten;

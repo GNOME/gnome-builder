@@ -29,7 +29,7 @@
 static void
 ide_source_view_completion_provider_added_cb (IdeExtensionSetAdapter *adapter,
                                               PeasPluginInfo         *plugin_info,
-                                              PeasExtension          *exten,
+                                              GObject          *exten,
                                               gpointer                user_data)
 {
   GtkSourceCompletionProvider *provider = (GtkSourceCompletionProvider *)exten;
@@ -56,7 +56,7 @@ ide_source_view_completion_provider_added_cb (IdeExtensionSetAdapter *adapter,
 static void
 ide_source_view_completion_provider_removed_cb (IdeExtensionSetAdapter *adapter,
                                                 PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
+                                                GObject          *exten,
                                                 gpointer                user_data)
 {
   GtkSourceCompletionProvider *provider = (GtkSourceCompletionProvider *)exten;
@@ -83,7 +83,7 @@ ide_source_view_completion_provider_removed_cb (IdeExtensionSetAdapter *adapter,
 static void
 ide_source_view_hover_provider_added_cb (IdeExtensionSetAdapter *adapter,
                                          PeasPluginInfo         *plugin_info,
-                                         PeasExtension          *exten,
+                                         GObject          *exten,
                                          gpointer                user_data)
 {
   GtkSourceHoverProvider *provider = (GtkSourceHoverProvider *)exten;
@@ -110,7 +110,7 @@ ide_source_view_hover_provider_added_cb (IdeExtensionSetAdapter *adapter,
 static void
 ide_source_view_hover_provider_removed_cb (IdeExtensionSetAdapter *adapter,
                                            PeasPluginInfo         *plugin_info,
-                                           PeasExtension          *exten,
+                                           GObject          *exten,
                                            gpointer                user_data)
 {
   GtkSourceHoverProvider *provider = (GtkSourceHoverProvider *)exten;
@@ -139,7 +139,7 @@ on_indenter_extension_changed_cb (IdeSourceView       *self,
                                   GParamSpec          *pspec,
                                   IdeExtensionAdapter *adapter)
 {
-  PeasExtension *indenter;
+  GObject *indenter;
 
   IDE_ENTRY;
 

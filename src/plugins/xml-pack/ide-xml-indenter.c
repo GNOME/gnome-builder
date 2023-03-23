@@ -21,7 +21,7 @@
 #define G_LOG_DOMAIN "ide-xml-indenter"
 
 #include <gtksourceview/gtksource.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <libide-code.h>
 #include <libide-sourceview.h>
 #include <string.h>

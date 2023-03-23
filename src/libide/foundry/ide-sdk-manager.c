@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-sdk.h"
 #include "ide-sdk-manager.h"
@@ -82,7 +82,7 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_sdk_manager_extension_added_cb (PeasExtensionSet *set,
                                     PeasPluginInfo   *plugin_info,
-                                    PeasExtension    *exten,
+                                    GObject    *exten,
                                     gpointer          user_data)
 {
   IdeSdkProvider *provider = (IdeSdkProvider *)exten;
@@ -99,7 +99,7 @@ ide_sdk_manager_extension_added_cb (PeasExtensionSet *set,
 static void
 ide_sdk_manager_extension_removed_cb (PeasExtensionSet *set,
                                       PeasPluginInfo   *plugin_info,
-                                      PeasExtension    *exten,
+                                      GObject    *exten,
                                       gpointer          user_data)
 {
   IdeSdkProvider *provider = (IdeSdkProvider *)exten;

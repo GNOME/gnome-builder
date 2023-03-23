@@ -24,7 +24,7 @@
 #include <libide-gtk.h>
 #include <libide-tweaks.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-application.h"
 

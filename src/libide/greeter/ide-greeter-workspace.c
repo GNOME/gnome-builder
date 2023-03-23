@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-marshal.h"
 
@@ -134,7 +134,7 @@ ide_greeter_workspace_has_match (IdeGreeterWorkspace *self)
 static void
 ide_greeter_workspace_filter_sections (PeasExtensionSet *set,
                                        PeasPluginInfo   *plugin_info,
-                                       PeasExtension    *exten,
+                                       GObject    *exten,
                                        gpointer          user_data)
 {
   IdeGreeterWorkspace *self = user_data;
@@ -243,7 +243,7 @@ stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
 static void
 ide_greeter_workspace_addin_added_cb (PeasExtensionSet *set,
                                       PeasPluginInfo   *plugin_info,
-                                      PeasExtension    *exten,
+                                      GObject    *exten,
                                       gpointer          user_data)
 {
   IdeGreeterSection *section = (IdeGreeterSection *)exten;
@@ -266,7 +266,7 @@ ide_greeter_workspace_addin_added_cb (PeasExtensionSet *set,
 static void
 ide_greeter_workspace_addin_removed_cb (PeasExtensionSet *set,
                                         PeasPluginInfo   *plugin_info,
-                                        PeasExtension    *exten,
+                                        GObject    *exten,
                                         gpointer          user_data)
 {
   IdeGreeterSection *section = (IdeGreeterSection *)exten;
@@ -674,15 +674,17 @@ ide_greeter_workspace_open_action (GtkWidget  *widget,
   g_autoptr(GFile) projects_dir = NULL;
   GtkFileChooserDialog *dialog;
   GtkFileFilter *all_filter;
-  const GList *list;
+  PeasEngine *engine;
   gint64 last_priority = G_MAXINT64;
+  guint n_items;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (param == NULL);
 
-  list = peas_engine_get_plugin_list (peas_engine_get_default ());
+  engine = peas_engine_get_default ();
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (engine));
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
                          "action", GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -708,21 +710,21 @@ ide_greeter_workspace_open_action (GtkWidget  *widget,
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
   /* For testing with no plugins */
-  if (list == NULL)
+  if (n_items == 0)
     gtk_file_filter_add_pattern (all_filter, "*");
 
-  for (; list != NULL; list = list->next)
+  for (guint j = 0; j < n_items; j++)
     {
-      PeasPluginInfo *plugin_info = list->data;
-      const gchar *module_name = peas_plugin_info_get_module_name (plugin_info);
+      g_autoptr(PeasPluginInfo) plugin_info = g_list_model_get_item (G_LIST_MODEL (engine), j);
+      const char *module_name = peas_plugin_info_get_module_name (plugin_info);
       GtkFileFilter *filter;
-      const gchar *pattern;
-      const gchar *content_type;
-      const gchar *name;
-      const gchar *priority;
-      gchar **patterns;
-      gchar **content_types;
-      gint i;
+      const char *pattern;
+      const char *content_type;
+      const char *name;
+      const char *priority;
+      char **patterns;
+      char **content_types;
+      int i;
 
       if (!peas_plugin_info_is_loaded (plugin_info))
         continue;

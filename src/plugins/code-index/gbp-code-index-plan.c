@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-core.h>
 #include <libide-foundry.h>

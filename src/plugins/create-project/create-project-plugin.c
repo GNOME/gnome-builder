@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <libide-greeter.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "gbp-create-project-application-addin.h"
 #include "gbp-create-project-workspace-addin.h"

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
@@ -104,7 +104,7 @@ ide_omni_bar_notification_stack_changed_cb (IdeOmniBar           *self,
 static void
 ide_omni_bar_extension_added_cb (PeasExtensionSet *set,
                                  PeasPluginInfo   *plugin_info,
-                                 PeasExtension    *exten,
+                                 GObject    *exten,
                                  gpointer          user_data)
 {
   IdeOmniBarAddin *addin = (IdeOmniBarAddin *)exten;
@@ -121,7 +121,7 @@ ide_omni_bar_extension_added_cb (PeasExtensionSet *set,
 static void
 ide_omni_bar_extension_removed_cb (PeasExtensionSet *set,
                                    PeasPluginInfo   *plugin_info,
-                                   PeasExtension    *exten,
+                                   GObject    *exten,
                                    gpointer          user_data)
 {
   IdeOmniBarAddin *addin = (IdeOmniBarAddin *)exten;

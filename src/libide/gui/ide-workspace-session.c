@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-plugins.h>
 
@@ -77,7 +77,7 @@ dump_position (PanelPosition *position)
 static void
 ide_workspace_addin_save_session_cb (IdeExtensionSetAdapter *adapter,
                                      PeasPluginInfo         *plugin_info,
-                                     PeasExtension          *exten,
+                                     GObject          *exten,
                                      gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
@@ -251,7 +251,7 @@ _ide_workspace_save_session_simple (IdeWorkspace     *self,
 static void
 ide_workspace_addin_restore_session_cb (IdeExtensionSetAdapter *adapter,
                                         PeasPluginInfo         *plugin_info,
-                                        PeasExtension          *exten,
+                                        GObject          *exten,
                                         gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;

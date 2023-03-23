@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#include <libpeas.h>
 
 #include <libide-editor.h>
 #include <libide-gui.h>

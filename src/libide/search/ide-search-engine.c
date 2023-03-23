@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <libide-plugins.h>
-#include <libpeas/peas.h>
+#include <libpeas.h>
 #include <libide-core.h>
 #include <libide-threading.h>
 
@@ -106,7 +106,7 @@ request_destroy (Request *r)
 static void
 on_extension_added_cb (IdeExtensionSetAdapter *set,
                        PeasPluginInfo         *plugin_info,
-                       PeasExtension          *exten,
+                       GObject          *exten,
                        gpointer                user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
@@ -125,7 +125,7 @@ on_extension_added_cb (IdeExtensionSetAdapter *set,
 static void
 on_extension_removed_cb (IdeExtensionSetAdapter *set,
                          PeasPluginInfo         *plugin_info,
-                         PeasExtension          *exten,
+                         GObject          *exten,
                          gpointer                user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
@@ -373,7 +373,7 @@ _provider_search_async (IdeSearchProvider *provider,
 static void
 ide_search_engine_search_foreach (IdeExtensionSetAdapter *set,
                                   PeasPluginInfo   *plugin_info,
-                                  PeasExtension    *exten,
+                                  GObject    *exten,
                                   gpointer          user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
