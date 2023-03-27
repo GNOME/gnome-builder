@@ -306,9 +306,7 @@
             "name" : "libpeas",
             "buildsystem" : "meson",
             "config-opts" : [
-            	"-Ddemos=false",
-            	"-Dglade_catalog=false",
-            	"-Dwidgetry=false"
+            	"-Dlua51=false"
             ],
             "sources" : [
                 {
