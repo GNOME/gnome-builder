@@ -1,15 +1,15 @@
 # Polish translation for gnome-builder.
-# Copyright © 2015-2022 the gnome-builder authors.
+# Copyright © 2015-2023 the gnome-builder authors.
 # This file is distributed under the same license as the gnome-builder package.
-# Piotr Drąg <piotrdrag@gmail.com>, 2015-2022.
-# Aviary.pl <community-poland@mozilla.org>, 2015-2022.
+# Piotr Drąg <piotrdrag@gmail.com>, 2015-2023.
+# Aviary.pl <community-poland@mozilla.org>, 2015-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-03-12 16:22+0100\n"
+"PO-Revision-Date: 2023-04-02 14:59+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -188,7 +188,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Allow network when metered"
-msgstr "Używanie sieci na mierzonym połączeniu"
+msgstr "Używanie sieci na połączeniu taryfowym"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid ""
@@ -196,7 +196,7 @@ msgid ""
 "dependencies when connection is metered."
 msgstr ""
 "Automatyczne pobieranie środowisk programistycznych i zależności podczas "
-"budowania, kiedy połączenie jest mierzone."
+"budowania, kiedy połączenie jest taryfowe."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Debugger Breakpoint on Main"
@@ -1393,7 +1393,7 @@ msgstr "Przygotowywanie…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr "Nie można pobierać na mierzonym połączeniu"
+msgstr "Nie można pobierać na połączeniu taryfowym"
 
 #: src/libide/foundry/ide-run-manager.c:387
 msgid "Cannot run target, another target is running"
@@ -1645,8 +1645,8 @@ msgstr "GNOME Builder"
 #: src/libide/gui/ide-application-actions.c:150
 msgid "translator-credits"
 msgstr ""
-"Piotr Drąg <piotrdrag@gmail.com>, 2015-2022\n"
-"Aviary.pl <community-poland@mozilla.org>, 2015-2022"
+"Piotr Drąg <piotrdrag@gmail.com>, 2015-2023\n"
+"Aviary.pl <community-poland@mozilla.org>, 2015-2023"
 
 #: src/libide/gui/ide-application-actions.c:154
 msgid "Learn more about GNOME Builder"
@@ -2259,14 +2259,14 @@ msgstr "Sieć"
 
 #: src/libide/gui/ide-preferences-builtin.c:422
 msgid "Allow downloads over metered connections"
-msgstr "Pobieranie na mierzonych połączeniach"
+msgstr "Pobieranie na połączeniach taryfowych"
 
 #: src/libide/gui/ide-preferences-builtin.c:422
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
-"Używanie mierzonych połączeń sieciowych podczas automatycznego pobierania "
+"Używanie taryfowych połączeń sieciowych podczas automatycznego pobierania "
 "zależności"
 
 #: src/libide/gui/ide-preferences-builtin.c:424
