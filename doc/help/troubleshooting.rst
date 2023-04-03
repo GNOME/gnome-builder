@@ -40,6 +40,6 @@ File a Bug
 We can help you troubleshoot!
 File a bug if you're stuck and we can help you help us.
 
-See the `Builder Bugzilla`_ for creating a bug report.
+Report a bug using the `Builder's Gitlab project`_.
 
-.. _`Builder Bugzilla`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder&component=general
+.. _`Builder's Gitlab project`: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues

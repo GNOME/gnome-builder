@@ -44,7 +44,7 @@ Currently, JHBuild is how we recommend contributing to Builder.
 We do expect this to change very soon in that you'll be able to easily contribute to Builder from our flatpak-version of Builder.
 
 .. _`Builder IRC channel`: irc://irc.gnome.org/#gnome-builder
-.. _`Builder Bug Tracker`: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder
-.. _`newcomer bugs`: https://bugzilla.gnome.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&columnlist=component%2Cchangeddate%2Cbug_severity%2Cpriority%2Cshort_desc&keywords=newcomers&list_id=193415&order=changeddate%20DESC%2Ccomponent&product=gnome-builder&resolution=---
-.. _`GNOME Newcomers Tutorial`: https://wiki.gnome.org/Newcomers/BuildGnome
-.. _`git repository`: https://git.gnome.org/browse/gnome-builder/tree
+.. _`Builder Bug Tracker`: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues
+.. _`newcomer bugs`: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/?label_name%5B%5D=4.%20Newcomers
+.. _`GNOME Newcomers Tutorial`: https://wiki.gnome.org/action/show/Newcomers
+.. _`git repository`: https://gitlab.gnome.org/GNOME/gnome-builder
