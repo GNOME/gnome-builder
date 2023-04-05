@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-11-24 21:47+0000\n"
+"POT-Creation-Date: 2023-03-22 15:18+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
 "Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
@@ -9,7 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -22,12 +21,12 @@ msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "An IDE for GNOME"
-msgstr ""
+msgstr "IDE  GNOME азы"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
 #: src/libide/gui/ide-application-actions.c:115
 msgid "Christian Hergert, et al."
-msgstr ""
+msgstr "Кристиан Хергерт уб. егь.."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
 msgid ""
@@ -45,15 +44,15 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid "Features:"
-msgstr ""
+msgstr "Аҷыдара"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
 msgid "Built in syntax highlighting for many languages"
-msgstr ""
+msgstr "Асинтаксис иҭаргылоу арлашара зхыԥхьаӡара рацәаӡоу абызшәақәа рзы"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "Акырынтә иҟаҵоу акод аредактор"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Multi-monitor support"
@@ -61,11 +60,11 @@ msgstr "Ԥыҭк амониторқәа рыдкылара"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
 msgid "Code overview mini-map"
-msgstr ""
+msgstr "Алаԥшхагаратә ахсаала хәыҷы акод"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Integration with Git"
-msgstr ""
+msgstr "Git аидылара"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid ""
@@ -215,7 +214,7 @@ msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
@@ -224,12 +223,13 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
@@ -734,7 +734,7 @@ msgstr "_Ахырқәшара"
 
 #: src/libide/editor/gtk/menus.ui:66
 msgid "Document"
-msgstr ""
+msgstr "Адокумент"
 
 #: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
 #: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
@@ -782,7 +782,7 @@ msgstr "_Алкаара"
 
 #: src/libide/editor/gtk/menus.ui:89
 msgid "Printing"
-msgstr ""
+msgstr "Акьыԥхра"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -841,7 +841,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.ui:37
 msgid "_Retry"
-msgstr ""
+msgstr "Аиҭаҟаҵара"
 
 #: src/libide/editor/ide-editor-info-bar.ui:44
 msgid "Open As _Administrator"
@@ -893,7 +893,7 @@ msgstr "Аԥыхры"
 
 #: src/libide/editor/ide-editor-search-bar.ui:30
 msgid "Replace"
-msgstr ""
+msgstr "Аԥсахра"
 
 #: src/libide/editor/ide-editor-search-bar.ui:46
 msgid "Move to previous match (Ctrl+Shift+G)"
@@ -982,7 +982,7 @@ msgstr ""
 
 #: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
-msgstr ""
+msgstr "Аиҿартәырақәа"
 
 #: src/libide/foundry/ide-device-manager.c:709
 msgid "Cannot deploy to device, build pipeline is not initialized"
@@ -997,13 +997,13 @@ msgstr ""
 #: src/libide/foundry/ide-local-device.c:140
 #, c-format
 msgid "My Computer (%s)"
-msgstr ""
+msgstr "Скомпиутер(%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
-msgstr ""
+msgstr "Скомпиутер(%s)-%s"
 
 #: src/libide/foundry/ide-pipeline.c:835
 msgid "The build pipeline is in a failed state"
@@ -1017,67 +1017,67 @@ msgstr ""
 #: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
 msgid "Build (%s)"
-msgstr ""
+msgstr "Аизгара (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1137
 #, c-format
 msgid "Post-install (%s)"
-msgstr ""
+msgstr "Ашьақәыргылара ашьҭахь (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3077
 #: src/libide/foundry/ide-pipeline.c:3116
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr ""
+msgstr "Амцтерминал аԥҵараан иҟалеит агха.Атерминал алшарақәа ԥкхоит"
 
 #: src/libide/foundry/ide-pipeline.c:3313
 msgid "Cleaning…"
-msgstr ""
+msgstr "Арыцқьара..."
 
 #: src/libide/foundry/ide-pipeline.c:3317
 #: src/libide/foundry/ide-pipeline.c:3374
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
-msgstr ""
+msgstr "Иманшәаламкәа"
 
 #: src/libide/foundry/ide-pipeline.c:3319
 #: src/libide/foundry/ide-pipeline.c:3382
 msgid "Ready"
-msgstr ""
+msgstr "Ихиоуп"
 
 #: src/libide/foundry/ide-pipeline.c:3334
 msgid "Downloading…"
-msgstr ""
+msgstr "Аҭагалара"
 
 #: src/libide/foundry/ide-pipeline.c:3338
 msgid "Building dependencies…"
-msgstr ""
+msgstr "Ахьыԥшызаарақәа рыргылара..."
 
 #: src/libide/foundry/ide-pipeline.c:3342
 msgid "Bootstrapping…"
-msgstr ""
+msgstr "Аханатәтәи аҭагалара..."
 
 #: src/libide/foundry/ide-pipeline.c:3346
 msgid "Configuring…"
-msgstr ""
+msgstr "Архиаракәа..."
 
 #: src/libide/foundry/ide-pipeline.c:3350
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
-msgstr ""
+msgstr "Аизгара..."
 
 #: src/libide/foundry/ide-pipeline.c:3354
 msgid "Installing…"
-msgstr ""
+msgstr "Ашьақәыргылара..."
 
 #: src/libide/foundry/ide-pipeline.c:3358
 msgid "Committing…"
-msgstr ""
+msgstr "Акоммит аԥҵара..."
 
 #: src/libide/foundry/ide-pipeline.c:3362
 msgid "Exporting…"
-msgstr ""
+msgstr "Аекспорт..."
 
 #: src/libide/foundry/ide-pipeline.c:3366
 #: src/libide/foundry/ide-pipeline.c:3370
@@ -1093,56 +1093,56 @@ msgstr "Аҽазыҟаҵара..."
 #: src/libide/foundry/ide-pipeline.c:3734
 #, c-format
 msgid "Removing %s"
-msgstr ""
+msgstr "Аныхра %s"
 
 #: src/libide/foundry/ide-pipeline.c:3793
 msgid "Removing build directories…"
-msgstr ""
+msgstr "Аизгара аизакхьӡынҵа аныхра..."
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr ""
+msgstr "Аиагара аныхуп алимиттә еимадараан"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
 msgid "Untitled command"
-msgstr ""
+msgstr "Ихьӡыдоу адҵа"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
-msgstr ""
+msgstr "Амодультә ԥышәа"
 
 #: src/libide/foundry/ide-run-manager.c:505
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "Ахықәкы анагӡара залшом, инагӡахоит даҽа хықәкык"
 
 #. translators: %s is replaced with the name of the users run command
 #: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Running %s…"
-msgstr ""
+msgstr "Анагӡара %s..."
 
 #: src/libide/foundry/ide-run-manager.c:996
 msgid "Deploying to device…"
-msgstr ""
+msgstr "Аиҿартәыра ахь аиҵыхра"
 
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
-msgstr ""
+msgstr "Ахост аоперациатә система"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
-msgstr ""
+msgstr "Ишыҟоу еиԥш (аоперациатә система)"
 
 #: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
 #: src/libide/greeter/gtk/menus.ui:82
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
-msgstr ""
+msgstr "Арепозитори_аклонхыхра..."
 
 #: src/libide/greeter/gtk/menus.ui:20
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
@@ -1153,7 +1153,7 @@ msgstr "Аркра"
 
 #: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
 msgid "Open a _Project…"
-msgstr ""
+msgstr "Апрект–аартра..."
 
 #: src/libide/greeter/gtk/menus.ui:59
 msgid "Open a new or existing project"
@@ -1161,15 +1161,15 @@ msgstr "Иҿыцу, мамзар  иҟоу апроект"
 
 #: src/libide/greeter/gtk/menus.ui:66
 msgid "Create a new project by cloning a repository"
-msgstr ""
+msgstr "Арепозитори аклон ахыхра ашьҭахь апроект ҿыц аԥҵара"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr ""
+msgstr "Аҭаӡ_алхра..."
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
-msgstr ""
+msgstr "Аизакхьӡынҵа"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
 #: src/libide/gui/ide-workbench.c:347 src/libide/gui/ide-workbench.c:852
@@ -1179,7 +1179,7 @@ msgstr "Builder — %s"
 
 #: src/libide/greeter/ide-greeter-workspace.c:346
 msgid "Failed to load the project"
-msgstr ""
+msgstr "Апроект аҭагалара залымшеит"
 
 #: src/libide/greeter/ide-greeter-workspace.c:348
 #: src/plugins/create-project/gbp-create-project-widget.c:261
@@ -1189,24 +1189,26 @@ msgstr "_Аркра"
 
 #: src/libide/greeter/ide-greeter-workspace.c:542
 msgid "Delete Project Sources?"
-msgstr ""
+msgstr "Ианыхтәума апроектқәа рхалагаратә фаилқәа?"
 
 #: src/libide/greeter/ide-greeter-workspace.c:543
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
+"Апроект ахалагаратә код аныхра иара хаҭа шәкомпиутер ианнахоит.Ари аоперациа "
+"аԥыхра ҟалаӡом."
 
 #: src/libide/greeter/ide-greeter-workspace.c:546
 msgid "_Delete Project Sources"
-msgstr ""
+msgstr "Апроектқәа рхалагаратә фаилқәа рныхра"
 
 #: src/libide/greeter/ide-greeter-workspace.c:641
 #: src/libide/greeter/ide-greeter-workspace.c:678
 msgid "Select Project Folder"
-msgstr ""
+msgstr "Апроект аҭаӡ алхра"
 
 #: src/libide/greeter/ide-greeter-workspace.c:646
 msgid "Select Project File"
-msgstr ""
+msgstr "Апроект афаил алхра"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
 #: src/libide/gui/ide-workbench.c:1516
@@ -1215,7 +1217,7 @@ msgstr "_Аартра"
 
 #: src/libide/greeter/ide-greeter-workspace.c:694
 msgid "All Project Types"
-msgstr ""
+msgstr "Апроектқәа рыхкқәа зегьы"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:21
 msgid "Go back"
@@ -1223,7 +1225,7 @@ msgstr "Ахынҳәра"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
 msgid "Toggle selection mode"
-msgstr ""
+msgstr "Алхра арежим аиагара"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:51
 msgctxt "title"
@@ -1232,11 +1234,11 @@ msgstr ""
 
 #: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Search all Builder projects…"
-msgstr ""
+msgstr "Builder апроектқәа зегьы рыԥшаара..."
 
 #: src/libide/greeter/ide-greeter-workspace.ui:97
 msgid "No Projects Found"
-msgstr ""
+msgstr "Апроектқәа ԥшааӡам"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:130
 msgid "_Remove Projects"
@@ -1244,22 +1246,22 @@ msgstr "_Апроектқәа рныхра"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:141
 msgid "Remove Projects and Sources…"
-msgstr ""
+msgstr "Апроект ахалагаратә код аццаны аныхра..."
 
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr ""
+msgstr "Изалшом %s акласс %s аҟны аҷыдаҟазшьа аилкаара"
 
 #: src/libide/gtk/ide-animation.c:997
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr ""
+msgstr "Изалшом аҷыдаҟазшьа %s %s аҟны аԥшаара"
 
 #: src/libide/gtk/ide-animation.c:1006
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr ""
+msgstr "Аҵакы аиура залымшеит va_list: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
@@ -1277,28 +1279,28 @@ msgstr "Алхра"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:448
 msgid "Browse…"
-msgstr ""
+msgstr "Ахәаԥшра..."
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
-msgstr ""
+msgstr "Афаил ахь иҟам амҩа"
 
 #: src/libide/gtk/ide-file-manager.c:108 src/libide/gtk/ide-file-manager.c:119
 msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
+msgstr "Иҟалеит агха афаилUTF-8  ахьӡ аиҭакра «wide char» ахь"
 
 #: src/libide/gtk/ide-file-manager.c:127
 msgid "ILCreateFromPath() failed"
-msgstr ""
+msgstr "Аиԥҟьара ILCreateFromPath()"
 
 #: src/libide/gtk/ide-file-manager.c:164
 #, c-format
 msgid "Cannot convert “%s” into a valid NSURL."
-msgstr ""
+msgstr "Изалымшеит аиҭакра «%s» ииашоу  NSURL ахь"
 
 #: src/libide/gtk/ide-gtk.c:453
 msgid "Just now"
-msgstr ""
+msgstr "Уажәыцәҟьа"
 
 #: src/libide/gtk/ide-gtk.c:455
 msgid "An hour ago"
@@ -1310,7 +1312,7 @@ msgstr "Иацы"
 
 #: src/libide/gtk/ide-gtk.c:463
 msgid "About a year ago"
-msgstr ""
+msgstr "Шықәсык аҟара иааҵуаны"
 
 #: src/libide/gtk/ide-gtk.c:467
 #, c-format
@@ -1328,7 +1330,7 @@ msgstr "_Ашьақәыргылара"
 #: src/libide/gtk/ide-search-entry.c:199
 #, c-format
 msgid "%u of %u"
-msgstr ""
+msgstr "%u аҟынтә %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
@@ -1339,7 +1341,7 @@ msgstr "Аҧшаара"
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:394
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
-msgstr ""
+msgstr "Иҭажәыҩ арыдқәа реилаҵа ҿыц аԥсахразы <b>%s</b>"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:27
 msgid "_Set"
@@ -1347,27 +1349,27 @@ msgstr "_Ашьақәыргылара"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:68
 msgid "Press Escape to cancel or Backspace to disable."
-msgstr ""
+msgstr "Шәықәыӷәӷәа Escape аԥыхразы, мамзар Backspace аҿыхразы."
 
 #: src/libide/gui/gtk/menus.ui:14
 msgid "Close Project"
-msgstr ""
+msgstr "Апроект аҿыхра"
 
 #: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
-msgstr ""
+msgstr "Аԥшьы ахышәарақәа рыԥсахра"
 
 #: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
-msgstr ""
+msgstr "Арыдқәа реилаҵа рыԥшаара"
 
 #: src/libide/gui/gtk/menus.ui:52
 msgid "Show information about Builder"
-msgstr ""
+msgstr "Builde иазкц аинформациа арбара"
 
 #: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
-msgstr ""
+msgstr "Аинтернет ахь  ахырхарҭарбара"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
@@ -1386,15 +1388,15 @@ msgstr "Нанба Наала <naala-nanba@rambler.ru>, 2022"
 
 #: src/libide/gui/ide-application-actions.c:129
 msgid "Funded By"
-msgstr ""
+msgstr "Ифинанскркуп"
 
 #: src/libide/gui/ide-application-command-line.c:62
 msgid "Show the application preferences"
-msgstr ""
+msgstr "Аԥшьы ахышәарақәа рырбара"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "Open project in new workbench"
-msgstr ""
+msgstr "Апроект иҿыцу аусуратә иужьраҟны аартра"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
@@ -1407,32 +1409,32 @@ msgstr "Аверисиа иазкны аинформациа аарԥшны аҭ
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:66
 msgid "Increase log verbosity (may be repeated)"
-msgstr ""
+msgstr "Ажурнал акылкаара ардура (еиҭаҟалалар алшоит)"
 
 #: src/libide/gui/ide-application-command-line.c:116
 #, c-format
 msgid "Failed to open project: %s"
-msgstr ""
+msgstr "Апроект аартра залымшеит : %s"
 
 #: src/libide/gui/ide-environment-editor.c:73
 msgid "New variable…"
-msgstr ""
+msgstr "Аиҭас ҿыц..."
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
-msgstr ""
+msgstr "Аиҭас акәша аныхра"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
-msgstr ""
+msgstr "Афаил мамзар атерминал аартра"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
-msgstr ""
+msgstr "Шәхы иашәырхәа адаҟьақәа риагага хыхьла, мамзар адҵақәа руак:"
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
-msgstr ""
+msgstr "Апроект агантәи апанель"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
@@ -1440,48 +1442,48 @@ msgstr "Афаил аартра"
 
 #: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:114
 msgid "New Terminal"
-msgstr ""
+msgstr "Атерминал ҿыц"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
-msgstr ""
+msgstr "Аԥшьы амениу аартра(F10)"
 
-#: src/libide/gui/ide-marked-view.c:421
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
-msgstr ""
+msgstr "Изалымшеит аҭагалара HTML.Иҟаӡам адкылара  WebKit"
 
 #: src/libide/gui/ide-primary-workspace.ui:17
 msgid "Toggle Left Panel (F9)"
-msgstr ""
+msgstr "Арымарахьтәи апанель аиагара (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
 #: src/plugins/menu-search/gtk/menus.ui:34
 msgid "Toggle Right Panel"
-msgstr ""
+msgstr "Арыӷьарахьтәи апанель аиагара"
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
-msgstr ""
+msgstr "Аԥшаара (Ctrl+Enter)"
 
 #: src/libide/gui/ide-primary-workspace.ui:105
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr ""
+msgstr "Ҵаҟатәи апанель аиагара (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
-msgstr ""
+msgstr "Апроект аус арура(Shift+Ctrl+Пробел)"
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
-msgstr ""
+msgstr "Аус зыру апроект аанкылара"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
-msgstr ""
+msgstr "Анагӡара аанкылара"
 
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
-msgstr ""
+msgstr "Апроект аус арура"
 
 #: src/libide/gui/ide-shortcut-window.c:239
 #: src/libide/gui/ide-shortcut-window.c:265
@@ -1490,7 +1492,7 @@ msgstr "Егьырҭ"
 
 #: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
-msgstr ""
+msgstr "Иҟоуп еиқәырхам адокументқәа"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1500,7 +1502,7 @@ msgstr "Аԥшра"
 
 #: src/libide/gui/tweaks.ui:63
 msgid "Configurations"
-msgstr ""
+msgstr "Аиҭарҽеирақәа"
 
 #: src/libide/gui/tweaks.ui:75
 msgid "Plugins"
@@ -1517,13 +1519,13 @@ msgstr[1] ""
 #: src/libide/lsp/ide-lsp-client.c:1522
 #, c-format
 msgid "Failed to initialize language server: %s"
-msgstr ""
+msgstr "Абызшәа амаҵура асервер аинциалҟаҵара залымшеит:%s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
-msgstr ""
+msgstr "Аверсиа агәаҭара"
 
 #: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
@@ -1565,7 +1567,7 @@ msgstr "Аредакциа азуреи, аформатркреи"
 
 #: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
-msgstr ""
+msgstr "Авеб-браузер"
 
 #: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
@@ -1593,7 +1595,7 @@ msgstr "Веб-асаит"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "Афаил азкызаара ыҟазароуп апроект аҵла иҭагӡаны"
 
 #: src/libide/projects/ide-project.c:435
 msgid "File must be within the project tree."
@@ -1672,7 +1674,7 @@ msgstr "Хыхьтәи_арегистр ахь"
 
 #: src/libide/sourceview/gtk/menus.ui:82
 msgid "Convert the text selection to upper case"
-msgstr ""
+msgstr "Иалкаау атекст хахьтәи аихшага ахь аиҭакра"
 
 #: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
@@ -1680,15 +1682,15 @@ msgstr "_Ҵаҟатәи аихшага ахь"
 
 #: src/libide/sourceview/gtk/menus.ui:89
 msgid "Convert the text selection to lower case"
-msgstr ""
+msgstr "Иалкаау атекст ҵаҟатәи  аихшага ахь аиҭакра"
 
 #: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
-msgstr ""
+msgstr "Аихшага _аркшара"
 
 #: src/libide/sourceview/gtk/menus.ui:96
 msgid "Invert case of the text selection"
-msgstr ""
+msgstr "Атекст алкаара аихшага ар_кшара"
 
 #: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
@@ -1696,7 +1698,7 @@ msgstr "_Ажәақәа зегьы набан дула рылагара"
 
 #: src/libide/sourceview/gtk/menus.ui:103
 msgid "Convert the text selection to title case"
-msgstr ""
+msgstr "Иалкаау атекст аҟны ажәақәа зегьы алагоит нбан дула"
 
 #: src/libide/sourceview/gtk/menus.ui:112
 msgid "Select _Line"
@@ -1724,7 +1726,7 @@ msgid "Code Navigation"
 msgstr "Ахырхарҭарбара акод ала"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1579
+#: src/libide/sourceview/ide-source-view.c:1629
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1736,7 +1738,7 @@ msgstr "_Азхьарԥш аартра"
 
 #: src/libide/terminal/gtk/menus.ui:17
 msgid "Copy selection from terminal to clipboard"
-msgstr ""
+msgstr "Иалкаау атерминал аҟынтәи аԥсахра абуфер ахь ахкьыԥхьаара"
 
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
@@ -1748,7 +1750,7 @@ msgstr "Аиҭныԥсахларатә буфер аҟынтә атермина�
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
-msgstr ""
+msgstr "Атерминал аҟны атекст зегьы алкаара аҭаргьежьра алаҵаны"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -1756,11 +1758,12 @@ msgstr "А_лхра аԥыхра"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:272
 msgid "Save Terminal Content As"
-msgstr ""
+msgstr "Атерминал аҭаҵа абас еиԥш аиқәырхара:"
 
 #: src/libide/terminal/ide-terminal-page.c:117
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
+"Апроцесс аус арура залымшеит.Иҟалап шәара шәыпроект еиҭа аизгара шәақәшәар."
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
@@ -1771,11 +1774,12 @@ msgstr "Ихьӡыдоу атерминал"
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:124
 msgid "Exited"
-msgstr ""
+msgstr "Ихырқәшоуп"
 
 #: src/libide/terminal/ide-terminal-page.c:144
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
+"Апроцессеиҵа аус арура апрограмма гхала ихырқәшахеит ханатәгьы аус арухаӡом"
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
@@ -1783,15 +1787,17 @@ msgstr "Ихьӡыдоу атерминал"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
-msgstr ""
+msgstr "Анагӡара алагылақәа рыԥшаара"
 
 #: src/libide/terminal/ide-terminal-search.ui:66
 msgid "Show or hide search options such as case sensitivity"
 msgstr ""
+"Аԥшаара ахышәарақәа рырбара мамзар рыҵәахра, аихшага ахь ацәанырралшара еиԥш "
+"иҟоу."
 
 #: src/libide/terminal/ide-terminal-search.ui:106
 msgid "Regex"
-msgstr ""
+msgstr "Еснагьтәи аҳәахьа"
 
 #: src/libide/terminal/ide-terminal-search.ui:115
 msgid "Case sensitive"
@@ -1851,7 +1857,7 @@ msgstr "Мап"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
-msgstr ""
+msgstr "Иҭацәу адаҟьа"
 
 #: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
@@ -1896,13 +1902,13 @@ msgstr "Апроект аҿеизнагоит"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr ""
+msgstr "Аизагара адҵақәа акершрыркра"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
 #, c-format
 msgid "%s (Copy)"
-msgstr ""
+msgstr "%s (ахкьыԥхьаа)"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
@@ -1916,22 +1922,24 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
-msgstr ""
+msgstr "Ацаԥхақәа апхьаӡац ала иалагар ҟалаӡом "
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
 msgid "Keys may only contain alpha-numerics or underline."
 msgstr ""
+"Ацаԥхақәа ирымазар ҟалоит анбан-ԥхьаӡацтә символқәа , мамзар аҵшьра "
+"асимволқәа"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
-msgstr ""
+msgstr "_Аиҭас ацҵара"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
-msgstr ""
+msgstr "Аиҭас ацҵара"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
@@ -1953,7 +1961,7 @@ msgstr "_Аиқәырхара"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:359
 msgid "Build Output"
-msgstr ""
+msgstr "Аизгара алҵшәа алкаа"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
@@ -1983,7 +1991,7 @@ msgstr "Аизгара апрофиль"
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
 msgid "Runtime"
-msgstr ""
+msgstr "Инагӡахо абиблиотека"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:107
 msgid "Device"
@@ -1991,7 +1999,7 @@ msgstr "Аиҿартәыра"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr ""
+msgstr "Изаамҭанытәиу аизгара аконфигурациа иамоу ауадаҩрақәа"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
@@ -2082,15 +2090,15 @@ msgstr "Хықәкқәак рахь анеира залымшар ҟалоит �
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
-msgstr ""
+msgstr "Автоматла аарԥшра"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Ари алхра азин анаҭоит Builder иреиӷьӡоу акандидат иалхра"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr ""
+msgstr "Аконтеинер , шәыԥшьы аизагареи аус аруреи рзы"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2098,7 +2106,7 @@ msgstr "Ахкьыԥхьаара аԥҵара"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
 msgid "Duplicate into new configuration"
-msgstr ""
+msgstr "Аконфигурациа ҿыц адубльҟаҵара"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
 msgid "Make Active"
@@ -2106,7 +2114,7 @@ msgstr "Активациа азура"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
-msgstr ""
+msgstr "Аконфигурациа активтәны иҟаҵаны аизгара аконвеир аиҭаҿакра"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
@@ -2116,7 +2124,7 @@ msgstr "Delete"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
 msgid "Delete configuration"
-msgstr ""
+msgstr "Аконфигурациа аныхра"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
@@ -2234,7 +2242,7 @@ msgstr "Аибыҭара ажурнал змоу апанель арбара"
 
 #: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
-msgstr ""
+msgstr "Иаҿакуп"
 
 #: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
@@ -2293,7 +2301,7 @@ msgstr "Амаругақәа"
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
-msgstr ""
+msgstr "Астиль"
 
 #: src/plugins/buildui/gtk/preferences.ui:40
 #: src/plugins/platformui/tweaks.ui:10
@@ -2306,7 +2314,7 @@ msgstr "Аредактор ашрифт"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
-msgstr ""
+msgstr "Ахалагаратә код аредактор аҟны ахархәара змоу ашрифт"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
@@ -2350,19 +2358,19 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "Ахырхарҭарбара агәылаҵақәа рыцхыраарала"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Агәылаҵақәа шәхы иархәаны адокументқәа риагара"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "Апоповер шәхы иархәаны ахырхарҭарбара"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr ""
+msgstr "Апоповер шәхы иархәаны адокументқәа риагара"
 
 #: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
 #: src/plugins/shellcmd/tweaks.ui:21
@@ -2375,7 +2383,7 @@ msgstr "Адҵа аус арура"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr ""
+msgstr "Шәыпроект аус аруразы ахархәара зауо адҵа"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2383,7 +2391,7 @@ msgstr "Аус аруреи аангылареи"
 
 #: src/plugins/buildui/tweaks.ui:58
 msgid "Install Before Running"
-msgstr ""
+msgstr "Аус арура аԥхьа ашьақәыргылара"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
@@ -2393,7 +2401,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
-msgstr ""
+msgstr "Аангылар асигнал"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
@@ -2427,7 +2435,7 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:357
 msgid "General"
 msgstr "Зегьы ирзаку"
 
@@ -2467,82 +2475,35 @@ msgstr "default:mm"
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr "1"
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:275
-msgid "32"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:281
-msgid "64"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:325
 msgid "Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:348
+#: src/plugins/buildui/tweaks.ui:360
 msgid "Installation Prefix"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:361
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:379
 msgid "Configure Options"
 msgstr "Аконфигурациатәра ахышәарақәа"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:392
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:399
 msgid "Build Environment"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:415
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -2852,21 +2813,21 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
-msgstr ""
+msgstr "Апроект_ҿыц аԥҵара..."
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
 msgid "Create New Project"
-msgstr ""
+msgstr "Апроект ҿыц аԥҵара"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
 #: src/plugins/create-project/gtk/menus.ui:30
 msgid "Create New Project…"
-msgstr ""
+msgstr "Апрокт ҿыц аԥҵара..."
 
 #: src/plugins/create-project/gtk/menus.ui:22
 msgid "Create a new project from template"
-msgstr ""
+msgstr "Ахсаалаҟынтә апроект ҿыц аԥҵара"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -2910,25 +2871,25 @@ msgstr ""
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
-msgstr ""
+msgstr "Арҽеиҩы"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
-msgstr ""
+msgstr "Аангылара аҭыԥқәа"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Automatically Break at Program Start"
-msgstr ""
+msgstr "Автоматла аимҟьара апрограмма аус арураан"
 
 #: src/plugins/debuggerui/gtk/menus.ui:30
 msgid "Automatically Break at Warnings"
-msgstr ""
+msgstr "Автоматла аимҟьара агәҽанҵарааан"
 
 #: src/plugins/debuggerui/gtk/menus.ui:35
 msgid "Automatically Break at Criticals"
-msgstr ""
+msgstr "Автоматла аимҟьара аҭагылазаашьа аншәарҭахалаак "
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -2937,16 +2898,16 @@ msgstr "ID"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
 msgid "File"
-msgstr ""
+msgstr "Афаил"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:46
 msgid "Line"
-msgstr ""
+msgstr "Ацәаҳәа"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:70
 msgid "Function"
-msgstr ""
+msgstr "Афункциа"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:70
 msgid "Address"
@@ -2959,7 +2920,7 @@ msgstr "Ахкы"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
 msgid "Hits"
-msgstr ""
+msgstr "Ақәшәарақәа"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
@@ -2967,11 +2928,11 @@ msgstr "Аҳәахьа"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
 msgid "Interrupt the program"
-msgstr ""
+msgstr "Апрограмма аиԥырҟьара"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
 msgid "Continue running the program"
-msgstr ""
+msgstr "Апрограмма аус ура аццара"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
 msgid "Execute the current line, stepping into any function calls"
@@ -2991,15 +2952,15 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "Аанымгылра"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
-msgstr ""
+msgstr "Аангылара аҭыԥ"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "Аиқәыԥхьаӡара аҭыԥ"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -3007,11 +2968,11 @@ msgstr "Абиблиотека"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
 msgid "Address Range"
-msgstr ""
+msgstr "Аҭыӡҭыԥқәа рҵакыра"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:312
 msgid "Locals"
-msgstr ""
+msgstr "Илокалу аиҭас"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:367
 msgid "Parameters"
@@ -3019,7 +2980,7 @@ msgstr "Ахышәарақәа"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:16
 msgid "Variable"
-msgstr ""
+msgstr "Аиҭас"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
@@ -3028,7 +2989,7 @@ msgstr "Аҵакы"
 
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
-msgstr ""
+msgstr "Аихшага"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:17
 msgid "Group"
@@ -3036,11 +2997,11 @@ msgstr "Агәыԥ"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:38
 msgid "Thread"
-msgstr ""
+msgstr "Аишьҭаҵа"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:58
 msgid "Frame"
-msgstr ""
+msgstr "Апанель"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:82
 msgid "Arguments"
@@ -3052,7 +3013,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
-msgstr ""
+msgstr "Аишьҭаҵақәа"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
@@ -3060,15 +3021,15 @@ msgstr "Абиблиотекақәа"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
-msgstr ""
+msgstr "Аихшагақәа"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
-msgstr ""
+msgstr "Аконсоль"
 
 #: src/plugins/debuggerui/tweaks.ui:19
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "Апрограмма аус арура ашьҭахь аанкылара"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
@@ -3092,7 +3053,7 @@ msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
-msgstr ""
+msgstr "Аиҿартәыра аҭыӡҭыԥ"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:49
 msgid "The device port number"
@@ -3163,28 +3124,40 @@ msgstr "Ацәаҳәа ахь аиасра"
 
 #: src/plugins/editorui/gtk/menus.ui:5
 msgid "Indentation"
-msgstr ""
+msgstr "Ахьаҵ"
 
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
-msgstr ""
+msgstr "Ибжьашәыргыл абжьажь шәхы иархәаны"
 
 #: src/plugins/editorui/gtk/menus.ui:13
 msgid "Spaces per Tab"
 msgstr ""
 
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
+
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
 
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
 
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
+
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
 msgid "Indentation Size"
-msgstr ""
+msgstr "Ахьаҵ"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
@@ -3192,7 +3165,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
-msgstr ""
+msgstr "Ацәаҳәа анҵәамҭа"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
@@ -3208,7 +3181,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:124
 msgid "New _File"
-msgstr ""
+msgstr "Афаил_ҿыц"
 
 #: src/plugins/editorui/gtk/menus.ui:133
 msgid "_Open File…"
@@ -3232,7 +3205,7 @@ msgstr "Аҧшаара…"
 
 #: src/plugins/editorui/gtk/menus.ui:173
 msgid "Find/Replace…"
-msgstr ""
+msgstr "Аԥшаара/Аԥсахра..."
 
 #: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
@@ -3347,19 +3320,19 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
-msgstr ""
+msgstr "Абжьажь иаартхо игьежьу ахыцқәа раԥхьа"
 
 #: src/plugins/editorui/tweaks-language.ui:262
 msgid "Space before opening brackets"
-msgstr ""
+msgstr "Абжьажь иаартхо аквадраттә хыцқәа раԥхьа"
 
 #: src/plugins/editorui/tweaks-language.ui:269
 msgid "Space before opening braces"
-msgstr ""
+msgstr "Абжьажь иаартхо аԥшынратә хыцқәа раԥхьа"
 
 #: src/plugins/editorui/tweaks-language.ui:276
 msgid "Space before opening angles"
-msgstr ""
+msgstr "Абжьажь иаартхо акәакьтә хыцқәа раԥхьа"
 
 #: src/plugins/editorui/tweaks-language.ui:283
 msgid "Prefer a space before colon"
@@ -3403,15 +3376,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
-msgstr ""
+msgstr "Абжьажьқәа рҟны"
 
 #: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
-msgstr ""
+msgstr "Иахьабалазаалак аҭыԥ аҟны"
 
 #: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
-msgstr ""
+msgstr "Адыԥшылахәтә сахьа"
 
 #: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
@@ -3419,19 +3392,19 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
-msgstr ""
+msgstr "Сахьада"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
-msgstr ""
+msgstr "Аихша"
 
 #: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
-msgstr ""
+msgstr "Аҭаргьежьга ацәаҳәақәа"
 
 #: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
-msgstr ""
+msgstr "Ахалагаратә код ахәаԥшра"
 
 #: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
@@ -3439,7 +3412,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "Аҭаргьежьга ацәаҳәақәа реиӷьашьара"
 
 #: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
@@ -3451,7 +3424,7 @@ msgstr "Автоматикала"
 
 #: src/plugins/editorui/tweaks.ui:172
 msgid "Line Numbers"
-msgstr ""
+msgstr "Ацәаҳәақәа рномер"
 
 #: src/plugins/editorui/tweaks.ui:175
 msgid "Show Line Numbers"
@@ -3459,7 +3432,7 @@ msgstr "_ Ацәаҳәақәа рномер"
 
 #: src/plugins/editorui/tweaks.ui:176
 msgid "Display line numbers next to each line of code"
-msgstr ""
+msgstr "Ацәаҳәақәа рномер акод ацәаҳәацыԥхьаӡа ааигәара аарԥшра"
 
 #: src/plugins/editorui/tweaks.ui:187
 msgid "Use Relative Line Numbers"
@@ -3924,7 +3897,7 @@ msgstr ""
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
 msgid "Email"
-msgstr ""
+msgstr "Аел. пошьҭа"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -3977,7 +3950,7 @@ msgstr ""
 
 #: src/plugins/grep/gbp-grep-panel.ui:78
 msgid "Match _Words"
-msgstr ""
+msgstr "Еибгоу ажәақәа _рымацара"
 
 #: src/plugins/grep/gbp-grep-panel.ui:84
 msgid "Regular E_xpressions"
@@ -3995,31 +3968,31 @@ msgstr "_Апроект  аҟны аҧшаара"
 msgid "_Replace in Project"
 msgstr "_Апроект аҟны аҧсахра"
 
-#: src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
-msgstr ""
+msgstr "Афаилқәа рҟны рыԥшаара"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
-msgstr ""
+msgstr "Аԥшаара"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Аҧшаара"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr ""
 
@@ -4060,7 +4033,7 @@ msgstr ""
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
-msgstr ""
+msgstr "Иҭоу аҭаӡ аартра"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
 msgid "With File _Browser…"
@@ -4084,65 +4057,65 @@ msgstr ""
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:198
 msgid "Maven Run"
-msgstr ""
+msgstr " Maven аус арура "
 
 #: src/plugins/menu-search/gtk/menus.ui:13
 msgid "Global Search"
-msgstr ""
+msgstr "Аглобалтә ԥшаара "
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Display the global search"
-msgstr ""
+msgstr "Аглобалтә ԥшаара арбара"
 
 #: src/plugins/menu-search/gtk/menus.ui:24
 msgid "Panels"
-msgstr ""
+msgstr "Апанельқәа"
 
 #: src/plugins/menu-search/gtk/menus.ui:26
 msgid "Toggle Left Panel"
-msgstr ""
+msgstr "Арымаратәи апанель аиагара"
 
 #: src/plugins/menu-search/gtk/menus.ui:27
 msgid "Toggle the left panel in or out of view"
-msgstr ""
+msgstr "Ирымарахьтәи апанель аҿакра"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
-msgstr ""
+msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:35
 msgid "Toggle the right panel in or out of view"
-msgstr ""
+msgstr "Арыӷьарахьтәи апанель аҿакра мамзар аҿыхра"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
-msgstr ""
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
-msgstr ""
+msgstr "Ҵаҟатәи апанель аиагара"
 
 #: src/plugins/menu-search/gtk/menus.ui:42
 msgid "Toggle the bottom panel in or out of view"
-msgstr ""
+msgstr "Ҵаҟатәи апанель аҿакра мамзар аҿыхра"
 
 #: src/plugins/menu-search/gtk/menus.ui:55
 msgid "Switch to Dark Mode"
-msgstr ""
+msgstr "Илашьҵоу арежим ахь аиагара"
 
 #: src/plugins/menu-search/gtk/menus.ui:56
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "Аԥштәытә хсаала илашьцоу ахь аиагара"
 
 #: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Light Mode"
-msgstr ""
+msgstr "Илашоу арежим ахь аиасра"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "Аԥштәытә хсаала илашоу ахь аиагара"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
 msgid "Display Build Diagnostics"
@@ -4171,7 +4144,7 @@ msgstr "%s (Meson)"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
 msgid "No Provided Tool"
-msgstr ""
+msgstr "Амаругақәа ыҟаӡам"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
@@ -4190,12 +4163,12 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Compiler"
-msgstr ""
+msgstr "Акомпитиатор"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
 #: src/plugins/meson/gbp-meson-utils.c:100
 msgid "Preprocessor"
-msgstr ""
+msgstr "Апроцессор"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:102
@@ -4205,7 +4178,7 @@ msgstr "архивтәга"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Linker"
-msgstr ""
+msgstr "Аидкылага"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:106
@@ -4224,7 +4197,7 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
 msgid "Any language"
-msgstr ""
+msgstr "Иарбанзаалакгьы абызшәа"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
 msgid "C"
@@ -4252,63 +4225,63 @@ msgstr "D"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
 msgid "Add Tool"
-msgstr ""
+msgstr "Амаруга ацҵара "
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
-msgstr ""
+msgstr "Амаругақәа реизга аныхра"
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
-msgstr ""
+msgstr "Амаруга аныхра"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:168
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "GNOME Application"
-msgstr ""
+msgstr "Аԥшьы GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:169
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:183
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "GTK 4 Application"
-msgstr ""
+msgstr "Аԥшьы GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:184
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:198
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "Shared Library"
-msgstr ""
+msgstr "Еиҟәшахо абиблиотека"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:199
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
 msgid "A Meson-based project for a shared library"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "Command Line Tool"
-msgstr ""
+msgstr "Адҵатә цәаҳәа амаруга"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
 msgid "An Meson-based project for a command-line program"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "Empty Meson Project"
-msgstr ""
+msgstr "Иҭацәу апроект Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
 msgid "An empty Meson project skeleton"
 msgstr ""
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
-msgstr ""
+msgstr "Ацҳамҭақәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
-msgstr ""
+msgstr "GNOME апроектқәа руак шәҽазышәшәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
@@ -4324,19 +4297,19 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Calendar"
-msgstr ""
+msgstr "Амзар"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr ""
+msgstr "Амзар аԥшьы GNOME азы"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
-msgstr ""
+msgstr "Асааҭақәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "A clock application for GNOME"
-msgstr ""
+msgstr "Имариоу асааҭқәа рыԥшьы GNOME азы"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
@@ -4348,11 +4321,11 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
 msgid "Maps"
-msgstr ""
+msgstr "Ахсаалақәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
 msgid "A GNOME maps application"
-msgstr ""
+msgstr "Имариоу ахсаалақәа рыԥшьв GNOME азы"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
@@ -4364,11 +4337,11 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
-msgstr ""
+msgstr "Афаиқәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
-msgstr ""
+msgstr "Афаилқәа рменеджер ишыҟоу еиԥш GNOME азы"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Photos"
@@ -4376,7 +4349,7 @@ msgstr "Афотосахьақәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Access, organize and share your photos on GNOME"
-msgstr ""
+msgstr "Аԥшранҵақәа рахь анеиреи , анапхгара рыҭареи, урт реиҭныԥсахлареи"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
@@ -4396,30 +4369,30 @@ msgstr ""
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
-msgstr ""
+msgstr "Аизгара қәҿиарала ииасит "
 
 #: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr ""
+msgstr "Апроект «%s» аизгара хырқәшоуп"
 
 #: src/plugins/notification/ide-notification-addin.c:128
 #: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
-msgstr ""
+msgstr "Аизгара хырқәшахеит агха аманы"
 
 #: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr ""
+msgstr "Апроект «%s» аизгараан иҟалеит агха"
 
 #: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
-msgstr ""
+msgstr "Аизгара қәҿиарала  ииасит"
 
 #: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
-msgstr ""
+msgstr "Аизгара архиарақәа хырқәшоуп"
 
 #: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
@@ -4427,15 +4400,15 @@ msgstr ""
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
-msgstr ""
+msgstr " npm ахьыԥшызаарақәа рҭагалара"
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
 msgid "_External Program…"
-msgstr ""
+msgstr "_Адәахьтәи апрограмма..."
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
-msgstr ""
+msgstr "Асистематә ахархәара"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
@@ -4443,49 +4416,49 @@ msgstr "Илашоу"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
-msgstr ""
+msgstr "Илашьцоу"
 
 #: src/plugins/platformui/tweaks.ui:22
 msgid "Document Navigation"
-msgstr ""
+msgstr "Адокумент ахырхарҭа"
 
 #: src/plugins/platformui/tweaks.ui:31
 msgid "Tab Bar"
-msgstr ""
+msgstr "Агәылаҵақәа рпанель"
 
 #: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
-msgstr ""
+msgstr "Иалшәо амениу"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:657
+#: src/plugins/podman/gbp-podman-runtime.c:664
 msgid "Containers/Toolbox"
-msgstr ""
+msgstr "Аконтеинерқәа/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:663
+#: src/plugins/podman/gbp-podman-runtime.c:670
 msgid "Containers/Podman"
-msgstr ""
+msgstr "Аконтеинерқәа/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
-msgstr ""
+msgstr "Аҭаӡ ари аҩыза ахьӡ аманы шьҭа иҟоуп"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:130
 #: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
-msgstr ""
+msgstr "Афаил ари аҩыза ахьӡ аманы шьҭа иҟоуп"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
 #: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
-msgstr ""
+msgstr "Афаил ахьӡ"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:356
 msgid "Folder Name"
-msgstr ""
+msgstr "Аҭаӡ ахьӡ"
 
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
@@ -4498,21 +4471,21 @@ msgstr "Афаилқәа"
 #: src/plugins/project-tree/gbp-project-tree-addin.c:682
 #, c-format
 msgid "Copying 1 file"
-msgstr ""
+msgstr "1 фаилк ахкьыԥхьаара"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:685
 #, c-format
 msgid "Copying %s of %s files"
-msgstr ""
+msgstr "Ахкьыԥхьаара  %s афаилқәа  %s рҟынтә"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Failed to copy files"
-msgstr ""
+msgstr "Афаилқәа рыхкьыԥхьаара залымшеит"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:731
 msgid "Files copied"
-msgstr ""
+msgstr "Афаилқәа ахкьыԥхьаара рызуп"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:735
 #, c-format
@@ -4523,7 +4496,7 @@ msgstr[1] ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:928
 msgid "Copying files…"
-msgstr ""
+msgstr "Афаилқәа рыхкьыԥхьаара "
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:929
 msgid "Files will be copied in a moment"
@@ -4532,20 +4505,20 @@ msgstr ""
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
-msgstr ""
+msgstr "Апроект аҵла"
 
 #: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
-msgstr ""
+msgstr "Ахьӡ аԥсахра %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
-msgstr ""
+msgstr " _афаил аԥҵара..."
 
 #: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New F_older…"
-msgstr ""
+msgstr " _аҭаӡ аԥҵара..."
 
 #: src/plugins/project-tree/gtk/menus.ui:22
 msgid "O_pen"
@@ -4561,7 +4534,7 @@ msgstr ""
 
 #: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Open _Containing Folder"
-msgstr ""
+msgstr "_аобиект змоу афаил аартра"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
 msgid "With _Terminal…"
@@ -4569,7 +4542,7 @@ msgstr ""
 
 #: src/plugins/project-tree/gtk/menus.ui:64
 msgid "_Move to Trash"
-msgstr ""
+msgstr "Акаҵкәыр _ахь ашьҭра"
 
 #: src/plugins/project-tree/gtk/menus.ui:70
 msgid "_Display Options"
@@ -4581,15 +4554,15 @@ msgstr ""
 
 #: src/plugins/project-tree/gtk/menus.ui:79
 msgid "S_ort Directories First"
-msgstr ""
+msgstr "раԥхьа иргыланы _аизакхьӡынҵақәа"
 
 #: src/plugins/project-tree/gtk/menus.ui:91
 msgid "Reveal in Project Tree"
-msgstr ""
+msgstr "Апроект аҵла аҟны арбара"
 
 #: src/plugins/project-tree/gtk/menus.ui:100
 msgid "Reveal in Project _Tree"
-msgstr ""
+msgstr "Апроект аҵлаҟны арбара"
 
 #: src/plugins/project-tree/tweaks.ui:14
 msgid "Display icons next to files within the project tree"
@@ -4605,11 +4578,11 @@ msgstr ""
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
-msgstr ""
+msgstr "Аверсиа агәаҭара ыҟаӡам"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
-msgstr ""
+msgstr "Иаԥхьааиуа асесиа абжьаргылара"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
@@ -4617,7 +4590,7 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
-msgstr ""
+msgstr "Апроект аԥҵара"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
@@ -4629,7 +4602,7 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
-msgstr ""
+msgstr "Алицензиа ыҟаӡам"
 
 #: src/plugins/projectui/tweaks.ui:109
 msgid "Overview"
@@ -4647,11 +4620,11 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
-msgstr ""
+msgstr "Аизгара асистема"
 
 #: src/plugins/projectui/tweaks.ui:140
 msgid "Source Directory"
-msgstr ""
+msgstr "Ахалагаратә код змоу аизакхьӡынҵа"
 
 #: src/plugins/projectui/tweaks.ui:160
 msgid "Current Configuration"
@@ -4670,21 +4643,21 @@ msgstr ""
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
-msgstr ""
+msgstr "Емулиациа Aarch64"
 
 #: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
-msgstr ""
+msgstr "Емулиациа Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
-msgstr ""
+msgstr "Скомпиутер (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
-msgstr ""
+msgstr "Ианыху афаилқәа"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:289
@@ -4695,11 +4668,11 @@ msgstr ""
 
 #: src/plugins/recent/gbp-recent-section.c:424
 msgid "Removing Files…"
-msgstr ""
+msgstr "Афаилқәа рныхра..."
 
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
-msgstr ""
+msgstr "Ааигәатәи апроектқәа"
 
 #: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat Tabs"
@@ -4711,7 +4684,7 @@ msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:16
 msgid "Cargo"
-msgstr ""
+msgstr "Cargo"
 
 #: src/plugins/rust-analyzer/tweaks.ui:19
 msgid "Cargo Command"
@@ -4723,7 +4696,7 @@ msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:45
 msgid "Features"
-msgstr ""
+msgstr "Аҷыдарақәа"
 
 #: src/plugins/rust-analyzer/tweaks.ui:48
 msgid "Proc Macros"
@@ -4761,7 +4734,7 @@ msgstr ""
 
 #: src/plugins/sdkui/tweaks.ui:12
 msgid "Downloads"
-msgstr ""
+msgstr "Аҭагаларақәа"
 
 #: src/plugins/sdkui/tweaks.ui:15
 msgid "Download on Metered Connections"
@@ -4796,7 +4769,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
-msgstr ""
+msgstr "Аԥ_ҵара"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
 msgid "Edit Command"
@@ -4804,11 +4777,11 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
 msgid "S_ave"
-msgstr ""
+msgstr "А_иқәырхара"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
 msgid "Keyboard Shortcut"
-msgstr ""
+msgstr "Арыдқәа реилаҵа"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
 msgid "An optional shortcut to run the command"
@@ -4964,17 +4937,17 @@ msgstr ""
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
 msgid "In Page"
-msgstr ""
+msgstr "Адаҟьаҟны "
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
-msgstr ""
+msgstr "Асимвол алхра..."
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
-msgstr ""
+msgstr "Асимвол алхра (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
@@ -5423,11 +5396,11 @@ msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:32
 msgid "Summary"
-msgstr ""
+msgstr "Аизак"
 
 #: src/plugins/valgrind/gtk/menus.ui:38
 msgid "Full"
-msgstr ""
+msgstr "Инаӡоу "
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
@@ -5443,7 +5416,7 @@ msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
-msgstr ""
+msgstr "Иҟалар ҟало"
 
 #: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
@@ -5554,7 +5527,7 @@ msgstr ""
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 msgid "Reload the current page"
-msgstr ""
+msgstr "Шәызҭоу адаҟьа арҿыцра"
 
 #: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload the current page ignoring cache"
@@ -5576,3 +5549,4040 @@ msgstr ""
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr ""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, fuzzy
