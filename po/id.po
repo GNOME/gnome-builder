@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-16 00:40+0000\n"
-"PO-Revision-Date: 2023-03-16 13:16+0700\n"
+"POT-Creation-Date: 2023-04-07 10:31+0000\n"
+"PO-Revision-Date: 2023-04-09 17:09+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -751,7 +751,7 @@ msgstr "Tanpa Judul"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:558
-#: src/libide/greeter/ide-greeter-workspace.c:695
+#: src/libide/greeter/ide-greeter-workspace.c:697
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1531
@@ -785,7 +785,7 @@ msgid "Preferences"
 msgstr "Preferensi"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
-#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
@@ -839,6 +839,7 @@ msgstr "Halaman"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -1226,50 +1227,50 @@ msgid "Unit Test"
 msgstr "Pengujian Unit"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:185
+#: src/libide/foundry/ide-run-manager.c:184
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Pengguna meminta menjalankan alat “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:546
+#: src/libide/foundry/ide-run-manager.c:545
 msgid "Cannot run target, another target is running"
 msgstr "Tidak bisa menjalankan target, target lain sedang berjalan"
 
-#: src/libide/foundry/ide-run-manager.c:806
+#: src/libide/foundry/ide-run-manager.c:805
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplikasi keluar dengan galat: %s"
 
-#: src/libide/foundry/ide-run-manager.c:809
+#: src/libide/foundry/ide-run-manager.c:808
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Aplikasi keluar"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:997
+#: src/libide/foundry/ide-run-manager.c:996
 #, c-format
 msgid "Running %s…"
 msgstr "Menjalankan %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1064
+#: src/libide/foundry/ide-run-manager.c:1063
 msgid "Deploying to device…"
 msgstr "Deploy ke perangkat…"
 
-#: src/libide/foundry/ide-run-manager.c:1293
+#: src/libide/foundry/ide-run-manager.c:1292
 msgid "User requested application to run"
 msgstr "Pengguna meminta aplikasi untuk dijalankan"
 
-#: src/libide/foundry/ide-run-manager.c:1325
+#: src/libide/foundry/ide-run-manager.c:1324
 msgid "User requested application to restart"
 msgstr "Pengguna meminta aplikasi untuk memulai ulang"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1355
+#: src/libide/foundry/ide-run-manager.c:1354
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Pengguna meminta aplikasi untuk dijalankan dengan alat “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1375
+#: src/libide/foundry/ide-run-manager.c:1374
 msgid "User requested application to stop"
 msgstr "Pengguna meminta aplikasi untuk berhenti"
 
@@ -1374,7 +1375,7 @@ msgid "_Delete Project Sources"
 msgstr "_Hapus Sumber Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:654
-#: src/libide/greeter/ide-greeter-workspace.c:691
+#: src/libide/greeter/ide-greeter-workspace.c:693
 msgid "Select Project Folder"
 msgstr "Pilih Folder Proyek"
 
@@ -1382,12 +1383,12 @@ msgstr "Pilih Folder Proyek"
 msgid "Select Project File"
 msgstr "Pilih Berkas Proyek"
 
-#: src/libide/greeter/ide-greeter-workspace.c:696
+#: src/libide/greeter/ide-greeter-workspace.c:698
 #: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "B_uka"
 
-#: src/libide/greeter/ide-greeter-workspace.c:707
+#: src/libide/greeter/ide-greeter-workspace.c:709
 msgid "All Project Types"
 msgstr "Semua Jenis Proyek"
 
@@ -1504,7 +1505,7 @@ msgid "%u of %u"
 msgstr "%u dari %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Cari"
@@ -1594,9 +1595,9 @@ msgstr "Terminal Baru"
 #: src/libide/gui/ide-application-actions.c:125
 msgid "translator-credits"
 msgstr ""
-"Arief Mulya Utama <arief_mulya@yahoo.com>, 2003.\n"
-"Andika Triwidada <andika@gmail.com>, 2012, 2013, 2021.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2022."
+"Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2023.\n"
+"Sucipto <sucipto@pm.me>, 2020."
 
 #: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
@@ -1763,62 +1764,62 @@ msgstr "Peladen bahasa \"%s\" keluar"
 msgid "Language server “%s” spawned as process %s"
 msgstr "Peladen bahasa “%s” muncul sebagai proses %s"
 
-#: src/libide/plugins/ide-plugin.c:340
+#: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Kendali Versi"
 
-#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Peladen Bahasa"
 
-#: src/libide/plugins/ide-plugin.c:343
+#: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
 msgstr "Perangkat & Simulator"
 
-#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
-#: src/libide/plugins/ide-plugin.c:345
+#: src/libide/plugins/ide-plugin.c:341
 msgid "Build Systems"
 msgstr "Bangun Sistem"
 
-#: src/libide/plugins/ide-plugin.c:346
+#: src/libide/plugins/ide-plugin.c:342
 msgid "Compilers"
 msgstr "Kompiler"
 
-#: src/libide/plugins/ide-plugin.c:347
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Debuggers"
 msgstr "Pengawakutu"
 
-#: src/libide/plugins/ide-plugin.c:348
+#: src/libide/plugins/ide-plugin.c:344
 msgid "Templates"
 msgstr "Templat"
 
-#: src/libide/plugins/ide-plugin.c:349
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Editing & Formatting"
 msgstr "Penyuntingan & Pemformatan"
 
-#: src/libide/plugins/ide-plugin.c:352
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
 msgstr "Web"
 
-#: src/libide/plugins/ide-plugin.c:353
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
 msgstr "Pemberdayaan Bahasa"
 
-#: src/libide/plugins/ide-plugin.c:354
+#: src/libide/plugins/ide-plugin.c:350
 msgid "Desktop Integration"
 msgstr "Integrasi Destop"
 
-#: src/libide/plugins/ide-plugin.c:355
+#: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
 msgstr "Tambahan"
 
@@ -1966,6 +1967,7 @@ msgstr "Pem_formatan"
 
 #: src/libide/sourceview/gtk/menus.ui:153
 #: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2201,6 +2203,7 @@ msgid "_Add"
 msgstr "T_ambah"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Salin"
 
@@ -2854,7 +2857,7 @@ msgstr "Ambil dependensi"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Bangun proyek"
@@ -2922,7 +2925,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
 msgid "Configure project"
 msgstr "Konfigurasikan proyek"
 
@@ -3063,7 +3066,7 @@ msgstr "Ubah Nama Simbol"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "_Ubah Nama"
 
@@ -3087,23 +3090,23 @@ msgstr "Tindakan Kode…"
 msgid "Display a list of possible code actions from the cursor position"
 msgstr "Tampilkan daftar kemungkinan aksi kode dari posisi kursor"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
 msgstr "Per_gi ke Deklarasi"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
 msgstr "Loncat ke berkas dan lokasi tempat item dideklarasikan"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Ke Definisi"
 
-#: src/plugins/codeui/gtk/menus.ui:26
+#: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
 msgstr "Loncat ke berkas dan lokasi di mana butir ditentukanitem"
 
-#: src/plugins/codeui/gtk/menus.ui:31
+#: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
 msgstr "Temukan Re_ferensi"
 
@@ -4721,7 +4724,7 @@ msgstr "Pindah ke hasil pencarian sebelumnya"
 msgid "Move to and select the previous search result"
 msgstr "Pindah ke hasil pencarian sebelumnya dan pilih"
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
@@ -4729,11 +4732,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Muat Introspeksi Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
 msgid "Install project"
 msgstr "Pasang proyek"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
 msgid "Cache development environment"
 msgstr "Lingkungan pengembangan singgahan"
 
@@ -5179,27 +5182,27 @@ msgstr "Buka Folder _Pemuat"
 msgid "With _Terminal…"
 msgstr "Dengan _Terminal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "Buang ke Tong Sa_mpah"
 
-#: src/plugins/project-tree/gtk/menus.ui:70
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "Opsi Tam_pilan"
 
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "Tam_pilkan Berkas yang Diabaikan"
 
-#: src/plugins/project-tree/gtk/menus.ui:79
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "Urutkan Direkt_ori Di Awal"
 
-#: src/plugins/project-tree/gtk/menus.ui:91
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Ungkapkan dalam Pohon Proyek"
 
-#: src/plugins/project-tree/gtk/menus.ui:100
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr "Ungkapkan dalam _Pohon Proyek"
 
@@ -7836,7 +7839,7 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle opacity of completion window"
-#~ msgstr "Jungkitkan kegelapan (opacity)dari jendela pelengkapan"
+#~ msgstr "Jungkitkan kelegapan dari jendela pelengkapan"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle overwrite"
