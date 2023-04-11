@@ -50,6 +50,7 @@ static const struct {
   { "pom.xml", "text-makefile-symbolic" },
   { "build.gradle", "text-makefile-symbolic" },
   { "Cargo.toml", "text-makefile-symbolic" },
+  { "go.mod", "text-makefile-symbolic" },
   { "wscript", "text-makefile-symbolic" },
 };
 
@@ -97,6 +98,7 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_content_type, "text-rust-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-sql-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-authors-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-go-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-changelog-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-chdr-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-copying-symbolic", NULL);
@@ -224,3 +226,4 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
 
   return g_steal_pointer (&icon);
 }
+
