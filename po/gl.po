@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-16 00:40+0000\n"
-"PO-Revision-Date: 2023-03-16 09:30+0100\n"
+"POT-Creation-Date: 2023-04-02 12:56+0000\n"
+"PO-Revision-Date: 2023-04-13 19:00+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -857,6 +857,7 @@ msgstr "Páxinas"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -1989,6 +1990,7 @@ msgstr "_Formatando"
 
 #: src/libide/sourceview/gtk/menus.ui:153
 #: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2225,6 +2227,7 @@ msgid "_Add"
 msgstr "_Engadir"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Copiar"
 
@@ -2885,7 +2888,7 @@ msgstr "Obter as dependencias"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Construír proxecto"
@@ -2954,7 +2957,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
 msgid "Configure project"
 msgstr "Configurar proxecto"
 
@@ -3095,7 +3098,7 @@ msgstr "Renomear símbolo"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "_Renomear"
 
@@ -3120,23 +3123,23 @@ msgid "Display a list of possible code actions from the cursor position"
 msgstr ""
 "Mostra unha lista das posíbeis accións de código desde a posición do cursor"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
 msgstr "_Ir á declaración"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
 msgstr "Saltar ao ficheiro e localización onde está declarado o elemento"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Ir á definición"
 
-#: src/plugins/codeui/gtk/menus.ui:26
+#: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
 msgstr "Saltar ao ficheiro e localización onde está definido o elemento"
 
-#: src/plugins/codeui/gtk/menus.ui:31
+#: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
 msgstr "_Buscar referencias"
 
@@ -3570,9 +3573,8 @@ msgid "D-Bus Inspector…"
 msgstr "Inspector de D-Bus…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
-#, fuzzy
 msgid "Dub Run"
-msgstr "Execución ficticia"
+msgstr "Executar Dub"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
@@ -4754,7 +4756,7 @@ msgstr "Moverse ao anterior resultado da busca"
 msgid "Move to and select the previous search result"
 msgstr "Mover o cursor de inserción ao seguinte resultado da busca"
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
@@ -4762,11 +4764,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Cargar introspección de Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
 msgid "Install project"
 msgstr "Instalando o proxecto"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
 msgid "Cache development environment"
 msgstr "Caché do ambiente de desenvolvemento"
 
@@ -5213,27 +5215,27 @@ msgstr "Abrir cartafol _contedor"
 msgid "With _Terminal…"
 msgstr "Con _Terminal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "_Mover ao lixo"
 
-#: src/plugins/project-tree/gtk/menus.ui:70
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "_Opcións de visualización"
 
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "_Mostrar ficheiros ignorados"
 
-#: src/plugins/project-tree/gtk/menus.ui:79
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "_Ordenar cartafoles primeiro"
 
-#: src/plugins/project-tree/gtk/menus.ui:91
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Revelar no Árbore do proxecto"
 
-#: src/plugins/project-tree/gtk/menus.ui:100
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr "Revelar no _árbore do proxecto"
 
