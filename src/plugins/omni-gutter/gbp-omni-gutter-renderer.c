@@ -853,7 +853,8 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
   g_assert (self->diag_size > 0);
 
   /* Now calculate the size based on enabled features */
-  size = 2;
+  size = self->show_line_diagnostics || self->show_line_numbers || self->show_line_changes ? 2 : 0;
+
   if (self->show_line_diagnostics)
     size += self->diag_size + 2;
   if (self->show_line_numbers)
@@ -1266,6 +1267,7 @@ gbp_omni_gutter_renderer_snapshot (GtkWidget   *widget,
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)widget;
   int width = gtk_widget_get_width (widget);
   int height = gtk_widget_get_height (widget);
+
 
   gtk_snapshot_append_color (snapshot,
                              &self->view.bg,
