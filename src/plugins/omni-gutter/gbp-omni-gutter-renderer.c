@@ -238,6 +238,16 @@ static GParamSpec *properties [N_PROPS];
 static GQuark selection_quark;
 static PangoAttrList *bold_attrs;
 
+static inline gboolean
+lookup_color (GtkStyleContext *context,
+              const char      *name,
+              GdkRGBA         *color)
+{
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  return gtk_style_context_lookup_color (context, name, color);
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
 static int
 int_to_string (guint         value,
                const gchar **outstr)
@@ -490,24 +500,26 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (view == NULL)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
   gtk_style_context_get_color (context, &fg);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (!get_style_rgba (scheme, "text", BACKGROUND, &self->view.bg))
     {
-      if (!gtk_style_context_lookup_color (context, "view_bg_color", &self->view.bg))
+      if (!lookup_color (context, "view_bg_color", &self->view.bg))
         self->view.bg.alpha = .0;
     }
 
   if (!get_style_rgba (scheme, "text", FOREGROUND, &self->view.fg))
     {
-      if (!gtk_style_context_lookup_color (context, "view_fg_color", &self->view.fg))
+      if (!lookup_color (context, "view_fg_color", &self->view.fg))
         self->view.fg = fg;
     }
 
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
     {
-      if (!gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
+      if (!lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
         self->sel.fg = fg;
     }
   else
@@ -517,8 +529,8 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
     {
-      if (!gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
-        gtk_style_context_lookup_color (context, "accent_bg_color", &self->sel.bg);
+      if (!lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
+        lookup_color (context, "accent_bg_color", &self->sel.bg);
       /* Make selection like libadwaita would */
       self->sel.bg.alpha = .3;
     }
