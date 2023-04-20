@@ -32,6 +32,7 @@
 #include "ide-buffer-private.h"
 #include "ide-tree-private.h"
 
+#include "gbp-project-tree.h"
 #include "gbp-project-tree-addin.h"
 
 struct _GbpProjectTreeAddin
@@ -984,6 +985,14 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
   iface->node_dropped_finish = gbp_project_tree_addin_node_dropped_finish;
 }
 
+static gboolean
+invalidate_in_idle_cb (GbpProjectTree *tree)
+{
+  ide_tree_invalidate_all (IDE_TREE (tree));
+  gbp_project_tree_expand_files (tree);
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gbp_project_tree_addin_settings_changed (GbpProjectTreeAddin *self,
                                          const gchar         *key,
@@ -996,7 +1005,10 @@ gbp_project_tree_addin_settings_changed (GbpProjectTreeAddin *self,
   self->show_ignored_files = g_settings_get_boolean (self->settings, "show-ignored-files");
 
   if (self->tree != NULL)
-    ide_tree_invalidate_all (self->tree);
+    g_idle_add_full (G_PRIORITY_LOW,
+                     (GSourceFunc) invalidate_in_idle_cb,
+                     g_object_ref (self->tree),
+                     g_object_unref);
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpProjectTreeAddin, gbp_project_tree_addin, G_TYPE_OBJECT,
