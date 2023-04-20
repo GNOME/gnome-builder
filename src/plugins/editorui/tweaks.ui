@@ -206,6 +206,18 @@
                             </property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_changes">
+                            <property name="title" translatable="yes">Show Line Changes</property>
+                            <property name="subtitle" translatable="yes">Highlight changed lines next to the line number</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">show-line-changes</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
