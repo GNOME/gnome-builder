@@ -1429,7 +1429,6 @@ ide_tree_set_selected_node (IdeTree     *self,
 void
 ide_tree_invalidate_all (IdeTree *self)
 {
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   IdeTreeNode *root;
 
   IDE_ENTRY;
