@@ -539,6 +539,8 @@ ide_clang_class_init (IdeClangClass *klass)
 
   unsupported_by_clang = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_add (unsupported_by_clang, (char *)"-Wstrict-null-sentinel");
+  g_hash_table_add (unsupported_by_clang, (char *)"-Wlogical-op");
+  g_hash_table_add (unsupported_by_clang, (char *)"-Wno-dangling-pointer");
 
   auto_suffixes = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_add (auto_suffixes, (char *)"_auto");
