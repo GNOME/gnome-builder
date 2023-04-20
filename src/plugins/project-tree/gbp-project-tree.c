@@ -51,6 +51,28 @@ locate_project_files (IdeTreeNode *node,
   return IDE_TREE_NODE_VISIT_CONTINUE;
 }
 
+void
+gbp_project_tree_expand_files (GbpProjectTree *self)
+{
+  IdeTreeNode *root;
+  IdeTreeNode *node = NULL;
+
+  g_return_if_fail (GBP_IS_PROJECT_TREE (self));
+
+  if (!(root = ide_tree_get_root (IDE_TREE (self))))
+    return;
+
+  ide_tree_node_traverse (root,
+                          G_PRE_ORDER,
+                          G_TRAVERSE_ALL,
+                          1,
+                          locate_project_files,
+                          &node);
+
+  if (node != NULL)
+    ide_tree_expand_node (IDE_TREE (self), node);
+}
+
 static void
 gbp_project_tree_expand_cb (GObject      *object,
                             GAsyncResult *result,
@@ -66,19 +88,7 @@ gbp_project_tree_expand_cb (GObject      *object,
   g_assert (IDE_IS_TREE_NODE (root));
 
   if (ide_tree_expand_node_finish (IDE_TREE (self), result, &error))
-    {
-      IdeTreeNode *node = NULL;
-
-      ide_tree_node_traverse (root,
-                              G_PRE_ORDER,
-                              G_TRAVERSE_ALL,
-                              1,
-                              locate_project_files,
-                              &node);
-
-      if (node != NULL)
-        ide_tree_expand_node (IDE_TREE (self), node);
-    }
+    gbp_project_tree_expand_files (self);
 }
 
 static void
