@@ -46,10 +46,14 @@ static const struct {
   { "AUTHORS", "text-x-authors-symbolic" },
   { "MAINTAINERS", "text-x-authors-symbolic" },
   { "Dockerfile", "text-makefile-symbolic" },
+  { "Containerfile", "text-makefile-symbolic" },
   { "package.json", "text-makefile-symbolic" },
   { "pom.xml", "text-makefile-symbolic" },
   { "build.gradle", "text-makefile-symbolic" },
   { "Cargo.toml", "text-makefile-symbolic" },
+  { "pyproject.toml", "text-makefile-symbolic" },
+  { "requirements.txt", "text-makefile-symbolic" },
+  { "go.mod", "text-makefile-symbolic" },
   { "wscript", "text-makefile-symbolic" },
 };
 
