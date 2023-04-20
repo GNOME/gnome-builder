@@ -171,9 +171,13 @@ ide_buffer_manager_remove (IdeObject *object,
   g_autoptr(IdeBuffer) buffer = NULL;
   guint position;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (IDE_IS_OBJECT_BOX (child));
+
+  IDE_TRACE_MSG ("Request to remove buffer from manager");
 
   buffer = ide_object_box_ref_object (IDE_OBJECT_BOX (child));
   g_signal_emit (self, signals [BUFFER_UNLOADED], 0, buffer);
@@ -181,6 +185,8 @@ ide_buffer_manager_remove (IdeObject *object,
   position = ide_object_get_position (child);
   IDE_OBJECT_CLASS (ide_buffer_manager_parent_class)->remove (object, child);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+
+  IDE_EXIT;
 }
 
 static void
