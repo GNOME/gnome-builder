@@ -29,7 +29,7 @@ struct _IdeNotificationView
   AdwBin           parent_instance;
 
   IdeNotification *notification;
-  IdeBindingGroup *bindings;
+  GBindingGroup   *bindings;
 
   GtkLabel        *label;
   GtkBox          *buttons;
@@ -230,9 +230,9 @@ ide_notification_view_init (IdeNotificationView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->bindings = ide_binding_group_new ();
+  self->bindings = g_binding_group_new ();
 
-  ide_binding_group_bind (self->bindings, "title", self->label, "label", G_BINDING_SYNC_CREATE);
+  g_binding_group_bind (self->bindings, "title", self->label, "label", G_BINDING_SYNC_CREATE);
 }
 
 /**
@@ -276,7 +276,7 @@ ide_notification_view_set_notification (IdeNotificationView *self,
 
   if (g_set_object (&self->notification, notification))
     {
-      ide_binding_group_set_source (self->bindings, notification);
+      g_binding_group_set_source (self->bindings, notification);
       connect_notification (self, notification);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NOTIFICATION]);
     }

@@ -37,9 +37,9 @@ struct _IdeVcsMonitor
 
   GFile                   *root;
   IdeVcs                  *vcs;
-  IdeSignalGroup          *vcs_signals;
+  GSignalGroup            *vcs_signals;
   IdeRecursiveFileMonitor *monitor;
-  IdeSignalGroup          *monitor_signals;
+  GSignalGroup            *monitor_signals;
   GHashTable              *status_by_file;
 
   guint                    cache_source;
@@ -309,7 +309,7 @@ ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
 
   if (self->monitor)
     {
-      ide_signal_group_set_target (self->monitor_signals, NULL);
+      g_signal_group_set_target (self->monitor_signals, NULL);
       ide_recursive_file_monitor_set_ignore_func (self->monitor, NULL, NULL, NULL);
       ide_recursive_file_monitor_cancel (self->monitor);
       g_clear_object (&self->monitor);
@@ -321,7 +321,7 @@ ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
       ide_recursive_file_monitor_set_ignore_func (self->monitor,
                                                   ide_vcs_monitor_ignore_func,
                                                   self, NULL);
-      ide_signal_group_set_target (self->monitor_signals, self->monitor);
+      g_signal_group_set_target (self->monitor_signals, self->monitor);
       ide_recursive_file_monitor_start_async (self->monitor,
                                               NULL,
                                               ide_vcs_monitor_start_cb,
@@ -346,8 +346,8 @@ ide_vcs_monitor_destroy (IdeObject *object)
       g_clear_object (&self->monitor);
     }
 
-  ide_signal_group_set_target (self->monitor_signals, NULL);
-  ide_signal_group_set_target (self->vcs_signals, NULL);
+  g_signal_group_set_target (self->monitor_signals, NULL);
+  g_signal_group_set_target (self->vcs_signals, NULL);
 
   g_clear_object (&self->vcs);
 
@@ -498,17 +498,17 @@ ide_vcs_monitor_init (IdeVcsMonitor *self)
 {
   self->last_change_seq = 1;
 
-  self->monitor_signals = ide_signal_group_new (IDE_TYPE_RECURSIVE_FILE_MONITOR);
+  self->monitor_signals = g_signal_group_new (IDE_TYPE_RECURSIVE_FILE_MONITOR);
 
-  ide_signal_group_connect_object (self->monitor_signals,
+  g_signal_group_connect_object (self->monitor_signals,
                                    "changed",
                                    G_CALLBACK (ide_vcs_monitor_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->vcs_signals = ide_signal_group_new (IDE_TYPE_VCS);
+  self->vcs_signals = g_signal_group_new (IDE_TYPE_VCS);
 
-  ide_signal_group_connect_object (self->vcs_signals,
+  g_signal_group_connect_object (self->vcs_signals,
                                    "changed",
                                    G_CALLBACK (ide_vcs_monitor_vcs_changed_cb),
                                    self,
@@ -622,7 +622,7 @@ ide_vcs_monitor_set_vcs (IdeVcsMonitor *self,
   ide_object_lock (IDE_OBJECT (self));
   if (g_set_object (&self->vcs, vcs))
     {
-      ide_signal_group_set_target (self->vcs_signals, vcs);
+      g_signal_group_set_target (self->vcs_signals, vcs);
       ide_object_notify_by_pspec (self, properties [PROP_VCS]);
       ide_vcs_monitor_maybe_reload_locked (self);
     }

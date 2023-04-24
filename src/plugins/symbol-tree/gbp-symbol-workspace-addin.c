@@ -47,7 +47,7 @@ struct _GbpSymbolWorkspaceAddin
   GtkImage         *menu_image;
   GbpSymbolPopover *popover;
 
-  IdeSignalGroup   *buffer_signals;
+  GSignalGroup     *buffer_signals;
   guint             nearest_scope_timeout_source;
   guint             symbol_tree_timeout_source;
 };
@@ -128,7 +128,7 @@ gbp_symbol_workspace_addin_find_nearest_scope_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
-  if ((gpointer)buffer != ide_signal_group_get_target (self->buffer_signals))
+  if ((gpointer)buffer != _g_signal_group_get_target (self->buffer_signals))
     IDE_GOTO (failure);
 
   gbp_symbol_workspace_addin_set_symbol (self, symbol);
@@ -139,7 +139,7 @@ gbp_symbol_workspace_addin_find_nearest_scope_cb (GObject      *object,
 failure:
 
   /* Raced against another query or cleanup and lost, just bail */
-  if (ide_signal_group_get_target (self->buffer_signals) != buffer)
+  if (_g_signal_group_get_target (self->buffer_signals) != buffer)
     IDE_EXIT;
 
   gbp_symbol_workspace_addin_set_symbol (self, NULL);
@@ -171,7 +171,7 @@ gbp_symbol_workspace_addin_get_symbol_tree_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
-  if ((gpointer)buffer != ide_signal_group_get_target (self->buffer_signals))
+  if ((gpointer)buffer != _g_signal_group_get_target (self->buffer_signals))
     IDE_GOTO (failure);
 
   gbp_symbol_popover_set_symbol_tree (self->popover, tree);
@@ -181,7 +181,7 @@ gbp_symbol_workspace_addin_get_symbol_tree_cb (GObject      *object,
 failure:
 
   /* Raced against another query and lost, just bail */
-  if ((gpointer)buffer != ide_signal_group_get_target (self->buffer_signals))
+  if ((gpointer)buffer != _g_signal_group_get_target (self->buffer_signals))
     IDE_EXIT;
 
   gbp_symbol_popover_set_symbol_tree (self->popover, NULL);
@@ -239,11 +239,11 @@ gbp_symbol_workspace_addin_update_symbol_tree (GbpSymbolWorkspaceAddin *self,
 static void
 gbp_symbol_workspace_addin_buffer_bind_cb (GbpSymbolWorkspaceAddin *self,
                                            IdeBuffer               *buffer,
-                                           IdeSignalGroup          *signal_group)
+                                           GSignalGroup            *signal_group)
 {
   g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
+  g_assert (G_IS_SIGNAL_GROUP (signal_group));
 
   gbp_symbol_workspace_addin_update_nearest_scope (self, buffer);
   gbp_symbol_workspace_addin_update_symbol_tree (self, buffer);
@@ -261,7 +261,7 @@ gbp_symbol_workspace_addin_nearest_scope_timeout (gpointer data)
 
   self->nearest_scope_timeout_source = 0;
 
-  if ((buffer = ide_signal_group_get_target (self->buffer_signals)))
+  if ((buffer = _g_signal_group_get_target (self->buffer_signals)))
     gbp_symbol_workspace_addin_update_nearest_scope (self, buffer);
   else
     gtk_widget_hide (GTK_WIDGET (self->menu_button));
@@ -294,7 +294,7 @@ gbp_symbol_workspace_addin_symbol_tree_timeout (gpointer data)
 
   self->symbol_tree_timeout_source = 0;
 
-  if ((buffer = ide_signal_group_get_target (self->buffer_signals)))
+  if ((buffer = _g_signal_group_get_target (self->buffer_signals)))
     gbp_symbol_workspace_addin_update_symbol_tree (self, buffer);
   else
     gbp_symbol_popover_set_symbol_tree (self->popover, NULL);
@@ -371,7 +371,7 @@ gbp_symbol_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (PANEL_IS_STATUSBAR (self->statusbar));
   g_assert (workspace == self->workspace);
 
-  ide_signal_group_set_target (self->buffer_signals, NULL);
+  g_signal_group_set_target (self->buffer_signals, NULL);
 
   g_clear_handle_id (&self->nearest_scope_timeout_source, g_source_remove);
   g_clear_handle_id (&self->symbol_tree_timeout_source, g_source_remove);
@@ -406,7 +406,7 @@ gbp_symbol_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   if (IDE_IS_EDITOR_PAGE (page))
     buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
 
-  ide_signal_group_set_target (self->buffer_signals, buffer);
+  g_signal_group_set_target (self->buffer_signals, buffer);
 
   IDE_EXIT;
 }
@@ -444,18 +444,18 @@ gbp_symbol_workspace_addin_class_init (GbpSymbolWorkspaceAddinClass *klass)
 static void
 gbp_symbol_workspace_addin_init (GbpSymbolWorkspaceAddin *self)
 {
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
   g_signal_connect_object (self->buffer_signals,
                            "bind",
                            G_CALLBACK (gbp_symbol_workspace_addin_buffer_bind_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
                                    G_CALLBACK (gbp_symbol_workspace_addin_buffer_cursor_moved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "changed",
                                    G_CALLBACK (gbp_symbol_workspace_addin_buffer_changed_cb),
                                    self,
@@ -479,5 +479,5 @@ gbp_symbol_workspace_addin_get_buffer (GbpSymbolWorkspaceAddin *self)
 {
   g_return_val_if_fail (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self), NULL);
 
-  return ide_signal_group_get_target (self->buffer_signals);
+  return _g_signal_group_get_target (self->buffer_signals);
 }

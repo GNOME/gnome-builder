@@ -34,7 +34,7 @@ struct _IdeDebuggerThreadsView
   AdwBin               parent_instance;
 
   /* Owned references */
-  IdeSignalGroup      *debugger_signals;
+  GSignalGroup        *debugger_signals;
 
   /* Template References */
   GtkTreeView         *frames_tree_view;
@@ -317,7 +317,7 @@ ide_debugger_threads_view_list_frames_cb (GObject      *object,
 static void
 ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
                                 IdeDebugger            *debugger,
-                                IdeSignalGroup         *debugger_signals)
+                                GSignalGroup           *debugger_signals)
 {
   GListModel *thread_groups;
   GListModel *threads;
@@ -325,7 +325,7 @@ ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
 
   g_assert (IDE_IS_DEBUGGER_THREADS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (G_IS_SIGNAL_GROUP (debugger_signals));
 
   /* Add any thread groups already loaded by the debugger */
 
@@ -356,10 +356,10 @@ ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
 
 static void
 ide_debugger_threads_view_unbind (IdeDebuggerThreadsView *self,
-                                  IdeSignalGroup         *debugger_signals)
+                                  GSignalGroup           *debugger_signals)
 {
   g_assert (IDE_IS_DEBUGGER_THREADS_VIEW (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (G_IS_SIGNAL_GROUP (debugger_signals));
 
   gtk_list_store_clear (self->thread_groups_store);
   gtk_list_store_clear (self->threads_store);
@@ -469,7 +469,7 @@ binary_property_cell_data_func (GtkCellLayout   *cell_layout,
   g_assert (GTK_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
 
-  debugger = ide_signal_group_get_target (self->debugger_signals);
+  debugger = _g_signal_group_get_target (self->debugger_signals);
   if (debugger == NULL)
     return;
 
@@ -559,7 +559,7 @@ ide_debugger_threads_view_threads_row_activated (IdeDebuggerThreadsView *self,
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
   model = gtk_tree_view_get_model (tree_view);
-  debugger = ide_signal_group_get_target (self->debugger_signals);
+  debugger = _g_signal_group_get_target (self->debugger_signals);
 
   if (debugger == NULL)
     return;
@@ -721,34 +721,34 @@ ide_debugger_threads_view_init (IdeDebuggerThreadsView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_threads_view_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_threads_view_stopped),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-group-added",
                                     G_CALLBACK (ide_debugger_threads_view_thread_group_added),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-group-removed",
                                     G_CALLBACK (ide_debugger_threads_view_thread_group_removed),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-added",
                                     G_CALLBACK (ide_debugger_threads_view_thread_added),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-removed",
                                     G_CALLBACK (ide_debugger_threads_view_thread_removed),
                                     self);
@@ -815,7 +815,7 @@ ide_debugger_threads_view_get_debugger (IdeDebuggerThreadsView *self)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER_THREADS_VIEW (self), NULL);
 
-  return ide_signal_group_get_target (self->debugger_signals);
+  return _g_signal_group_get_target (self->debugger_signals);
 }
 
 void
@@ -825,5 +825,5 @@ ide_debugger_threads_view_set_debugger (IdeDebuggerThreadsView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_THREADS_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  ide_signal_group_set_target (self->debugger_signals, debugger);
+  g_signal_group_set_target (self->debugger_signals, debugger);
 }

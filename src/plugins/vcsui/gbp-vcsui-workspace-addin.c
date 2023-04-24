@@ -39,7 +39,7 @@ struct _GbpVcsuiWorkspaceAddin
 
   GtkMenuButton       *branch_button;
   GtkLabel            *branch_label;
-  IdeBindingGroup     *vcs_bindings;
+  GBindingGroup       *vcs_bindings;
 };
 
 static gboolean
@@ -143,8 +143,8 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
       panel_statusbar_add_prefix (statusbar, G_MININT, GTK_WIDGET (box));
 #endif
 
-      self->vcs_bindings = ide_binding_group_new ();
-      ide_binding_group_bind (self->vcs_bindings, "branch-name",
+      self->vcs_bindings = g_binding_group_new ();
+      g_binding_group_bind (self->vcs_bindings, "branch-name",
                               self->branch_label, "label",
                               G_BINDING_SYNC_CREATE);
       g_object_bind_property (workbench, "vcs",

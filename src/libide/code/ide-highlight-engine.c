@@ -48,7 +48,7 @@ struct _IdeHighlightEngine
 
   GWeakRef             buffer_wref;
 
-  IdeSignalGroup      *signal_group;
+  GSignalGroup        *signal_group;
   IdeHighlighter      *highlighter;
   GSettings           *settings;
 
@@ -688,7 +688,7 @@ ide_highlight_engine_delete_after_cb (IdeBuffer *buffer,
 static void
 ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
                                       IdeBuffer          *buffer,
-                                      IdeSignalGroup     *group)
+                                      GSignalGroup       *group)
 {
   GtkTextBuffer *text_buffer = (GtkTextBuffer *)buffer;
 
@@ -696,7 +696,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_SIGNAL_GROUP (group));
+  g_assert (G_IS_SIGNAL_GROUP (group));
 
   g_weak_ref_set (&self->buffer_wref, buffer);
 
@@ -718,7 +718,7 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
 static void
 ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
-                                        IdeSignalGroup      *group)
+                                        GSignalGroup        *group)
 {
   g_autoptr(GtkTextBuffer) text_buffer = NULL;
   gsize length;
@@ -726,7 +726,7 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (group));
+  g_assert (G_IS_SIGNAL_GROUP (group));
 
   text_buffer = g_weak_ref_get (&self->buffer_wref);
 
@@ -786,7 +786,7 @@ ide_highlight_engine_set_buffer (IdeHighlightEngine *self,
   /* We can get GtkSourceBuffer intermittently here. */
   if (!buffer || IDE_IS_BUFFER (buffer))
     {
-      ide_signal_group_set_target (self->signal_group, buffer);
+      g_signal_group_set_target (self->signal_group, buffer);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
     }
 }
@@ -958,17 +958,17 @@ ide_highlight_engine_init (IdeHighlightEngine *self)
 
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
-  self->signal_group = ide_signal_group_new (IDE_TYPE_BUFFER);
+  self->signal_group = g_signal_group_new (IDE_TYPE_BUFFER);
 
   self->region = _cjh_text_region_new (NULL, NULL);
 
-  ide_signal_group_connect_object (self->signal_group,
+  g_signal_group_connect_object (self->signal_group,
                                    "notify::language",
                                    G_CALLBACK (ide_highlight_engine__notify_language_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->signal_group,
+  g_signal_group_connect_object (self->signal_group,
                                    "notify::style-scheme",
                                    G_CALLBACK (ide_highlight_engine__notify_style_scheme_cb),
                                    self,
@@ -1152,7 +1152,7 @@ ide_highlight_engine_pause (IdeHighlightEngine *self)
 {
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  ide_signal_group_block (self->signal_group);
+  g_signal_group_block (self->signal_group);
 }
 
 void
@@ -1163,7 +1163,7 @@ ide_highlight_engine_unpause (IdeHighlightEngine *self)
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_return_if_fail (self->signal_group != NULL);
 
-  ide_signal_group_unblock (self->signal_group);
+  g_signal_group_unblock (self->signal_group);
 
   buffer = g_weak_ref_get (&self->buffer_wref);
 

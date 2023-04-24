@@ -60,8 +60,8 @@ struct _IdeDebuggerWorkspaceAddin
 {
   GObject                     parent_instance;
 
-  IdeSignalGroup             *debug_manager_signals;
-  IdeSignalGroup             *debugger_signals;
+  GSignalGroup               *debug_manager_signals;
+  GSignalGroup               *debugger_signals;
 
   IdeWorkspace               *workspace;
   IdeWorkbench               *workbench;
@@ -120,7 +120,7 @@ debug_manager_notify_debugger (IdeDebuggerWorkspaceAddin *self,
   ide_debugger_threads_view_set_debugger (self->threads_view, debugger);
   ide_debugger_log_view_set_debugger (self->log_view, debugger);
 
-  ide_signal_group_set_target (self->debugger_signals, debugger);
+  g_signal_group_set_target (self->debugger_signals, debugger);
 }
 
 static void
@@ -297,31 +297,31 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   ide_debugger_workspace_addin_add_ui (self);
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "log",
                                     G_CALLBACK (ide_debugger_log_view_debugger_log),
                                     self->log_view);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (debugger_stopped),
                                     self);
 
-  self->debug_manager_signals = ide_signal_group_new (IDE_TYPE_DEBUG_MANAGER);
+  self->debug_manager_signals = g_signal_group_new (IDE_TYPE_DEBUG_MANAGER);
 
-  ide_signal_group_connect_swapped (self->debug_manager_signals,
+  g_signal_group_connect_swapped (self->debug_manager_signals,
                                     "notify::active",
                                     G_CALLBACK (debug_manager_notify_active),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debug_manager_signals,
+  g_signal_group_connect_swapped (self->debug_manager_signals,
                                     "notify::debugger",
                                     G_CALLBACK (debug_manager_notify_debugger),
                                     self);
 
-  ide_signal_group_set_target (self->debug_manager_signals, debug_manager);
+  g_signal_group_set_target (self->debug_manager_signals, debug_manager);
 
   IDE_EXIT;
 }
@@ -526,7 +526,7 @@ ide_debugger_workspace_addin_navigate_to_address (IdeDebuggerWorkspaceAddin *sel
   g_return_if_fail (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
   g_return_if_fail (address != IDE_DEBUGGER_ADDRESS_INVALID);
 
-  if (NULL == (debugger = ide_signal_group_get_target (self->debugger_signals)))
+  if (NULL == (debugger = _g_signal_group_get_target (self->debugger_signals)))
     IDE_EXIT;
 
   if (address < 0x80)

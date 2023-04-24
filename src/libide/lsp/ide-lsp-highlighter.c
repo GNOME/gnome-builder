@@ -43,7 +43,7 @@ typedef struct
 
   IdeLspClient       *client;
   IdeHighlightIndex  *index;
-  IdeSignalGroup     *buffer_signals;
+  GSignalGroup       *buffer_signals;
 
   const gchar        *style_map[IDE_SYMBOL_KIND_LAST];
 
@@ -354,7 +354,7 @@ ide_lsp_highlighter_init (IdeLspHighlighter *self)
 {
   IdeLspHighlighterPrivate *priv = ide_lsp_highlighter_get_instance_private (self);
 
-  priv->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  priv->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
 
   /*
    * We sort of cheat here by using ::line-flags-changed instead of :;changed
@@ -364,7 +364,7 @@ ide_lsp_highlighter_init (IdeLspHighlighter *self)
    * where the language server gives us an empty set back (or at least with
    * the rust language server).
    */
-  ide_signal_group_connect_object (priv->buffer_signals,
+  g_signal_group_connect_object (priv->buffer_signals,
                                    "line-flags-changed",
                                    G_CALLBACK (ide_lsp_highlighter_buffer_line_flags_changed),
                                    self,
@@ -535,14 +535,14 @@ ide_lsp_highlighter_set_engine (IdeHighlighter     *highlighter,
 
   priv->engine = engine;
 
-  ide_signal_group_set_target (priv->buffer_signals, NULL);
+  g_signal_group_set_target (priv->buffer_signals, NULL);
 
   if (engine != NULL)
     {
       IdeBuffer *buffer;
 
       buffer = ide_highlight_engine_get_buffer (engine);
-      ide_signal_group_set_target (priv->buffer_signals, buffer);
+      g_signal_group_set_target (priv->buffer_signals, buffer);
       ide_lsp_highlighter_queue_update (self);
     }
 

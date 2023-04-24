@@ -71,8 +71,8 @@ struct _GbpOmniGutterRenderer
 
   GArray *lines;
 
-  IdeSignalGroup *view_signals;
-  IdeSignalGroup *buffer_signals;
+  GSignalGroup   *view_signals;
+  GSignalGroup   *buffer_signals;
 
   GdkPaintable *note;
   GdkPaintable *warning;
@@ -1625,7 +1625,7 @@ gbp_omni_gutter_renderer_change_buffer (GtkSourceGutterRenderer *renderer,
   g_assert (!old_buffer || GTK_SOURCE_IS_BUFFER (old_buffer));
 
   buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
-  ide_signal_group_set_target (self->buffer_signals, buffer);
+  g_signal_group_set_target (self->buffer_signals, buffer);
 
   gbp_omni_gutter_renderer_reload (self);
 
@@ -1647,7 +1647,7 @@ gbp_omni_gutter_renderer_change_view (GtkSourceGutterRenderer *renderer,
   GTK_SOURCE_GUTTER_RENDERER_CLASS (gbp_omni_gutter_renderer_parent_class)->change_view (renderer, old_view);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  ide_signal_group_set_target (self->view_signals, view);
+  g_signal_group_set_target (self->view_signals, view);
 
   gbp_omni_gutter_renderer_reload (self);
 
@@ -1797,48 +1797,48 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
 
   self->lines = g_array_new (FALSE, FALSE, sizeof (LineInfo));
 
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::file",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::change-monitor",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "notify::diagnostics",
                                    G_CALLBACK (gtk_widget_queue_draw),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "notify::has-selection",
                                    G_CALLBACK (gtk_widget_queue_draw),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (gbp_omni_gutter_renderer_cursor_moved),
                                     self);
 
-  self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
-  ide_signal_group_connect_swapped (self->view_signals,
+  self->view_signals = g_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
                                     self);
-  ide_signal_group_connect_swapped (self->view_signals,
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-scale",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
                                     self);
-  ide_signal_group_connect_swapped (self->view_signals,
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::highlight-current-line",
                                     G_CALLBACK (gtk_widget_queue_draw),
                                     self);

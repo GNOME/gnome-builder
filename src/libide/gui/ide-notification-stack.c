@@ -33,8 +33,8 @@ struct _IdeNotificationStack
   GtkWidget        parent_instance;
   GtkStack        *stack;
   GPtrArray       *pages;
-  IdeSignalGroup  *signals;
-  IdeBindingGroup *bindings;
+  GSignalGroup    *signals;
+  GBindingGroup   *bindings;
   GListModel      *model;
   gdouble          progress;
   guint            carousel_source;
@@ -170,7 +170,7 @@ ide_notification_stack_notify_visible_child (IdeNotificationStack *self,
   self->progress = 0.0;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
 
-  ide_binding_group_set_source (self->bindings,
+  g_binding_group_set_source (self->bindings,
                                 ide_notification_stack_get_visible (self));
 
   g_signal_emit (self, signals [CHANGED], 0);
@@ -185,13 +185,13 @@ ide_notification_stack_dispose (GObject *object)
 
   if (self->signals != NULL)
     {
-      ide_signal_group_set_target (self->signals, NULL);
+      g_signal_group_set_target (self->signals, NULL);
       g_clear_object (&self->signals);
     }
 
   if (self->bindings != NULL)
     {
-      ide_binding_group_set_source (self->bindings, NULL);
+      g_binding_group_set_source (self->bindings, NULL);
       g_clear_object (&self->bindings);
     }
 
@@ -238,15 +238,15 @@ ide_notification_stack_init (IdeNotificationStack *self)
 {
   self->pages = g_ptr_array_new ();
 
-  self->signals = ide_signal_group_new (G_TYPE_LIST_MODEL);
-  ide_signal_group_connect_object (self->signals,
+  self->signals = g_signal_group_new (G_TYPE_LIST_MODEL);
+  g_signal_group_connect_object (self->signals,
                                    "items-changed",
                                    G_CALLBACK (ide_notification_stack_items_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->bindings = ide_binding_group_new ();
-  ide_binding_group_bind (self->bindings, "progress",
+  self->bindings = g_binding_group_new ();
+  g_binding_group_bind (self->bindings, "progress",
                           self, "progress",
                           G_BINDING_SYNC_CREATE);
 
@@ -286,7 +286,7 @@ ide_notification_stack_bind_model (IdeNotificationStack *self,
           gtk_stack_remove (self->stack, gtk_stack_page_get_child (page));
         }
 
-      ide_signal_group_set_target (self->signals, model);
+      g_signal_group_set_target (self->signals, model);
 
       if (n_items > 0)
         ide_notification_stack_items_changed_cb (self, 0, 0, n_items, model);

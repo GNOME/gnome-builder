@@ -35,7 +35,7 @@ struct _IdeExtensionAdapter
   gchar          *key;
   gchar          *value;
   GObject        *extension;
-  IdeSignalGroup *settings_signals;
+  GSignalGroup   *settings_signals;
   GSettings      *settings;
 
   PeasPluginInfo *plugin_info;
@@ -95,13 +95,13 @@ ide_extension_adapter_monitor (IdeExtensionAdapter *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
 
-  ide_signal_group_set_target (self->settings_signals, NULL);
+  g_signal_group_set_target (self->settings_signals, NULL);
   g_clear_object (&self->settings);
 
   if (plugin_info != NULL)
     {
       self->settings = ide_extension_adapter_get_settings (self, plugin_info);
-      ide_signal_group_set_target (self->settings_signals, self->settings);
+      g_signal_group_set_target (self->settings_signals, self->settings);
     }
 }
 
@@ -469,8 +469,8 @@ ide_extension_adapter_init (IdeExtensionAdapter *self)
 {
   self->interface_type = G_TYPE_INVALID;
 
-  self->settings_signals = ide_signal_group_new (G_TYPE_SETTINGS);
-  ide_signal_group_connect_object (self->settings_signals,
+  self->settings_signals = g_signal_group_new (G_TYPE_SETTINGS);
+  g_signal_group_connect_object (self->settings_signals,
                                    "changed::disabled",
                                    G_CALLBACK (ide_extension_adapter__changed_disabled),
                                    self,

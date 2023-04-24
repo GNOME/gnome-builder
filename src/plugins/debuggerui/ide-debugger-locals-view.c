@@ -34,7 +34,7 @@ struct _IdeDebuggerLocalsView
   AdwBin          parent_instance;
 
   /* Owned references */
-  IdeSignalGroup *debugger_signals;
+  GSignalGroup   *debugger_signals;
 
   /* Template references */
   GtkTreeStore        *tree_store;
@@ -222,14 +222,14 @@ ide_debugger_locals_view_init (IdeDebuggerLocalsView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_locals_view_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_locals_view_stopped),
                                     self);
@@ -266,7 +266,7 @@ ide_debugger_locals_view_get_debugger (IdeDebuggerLocalsView *self)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self), NULL);
 
-  return ide_signal_group_get_target (self->debugger_signals);
+  return _g_signal_group_get_target (self->debugger_signals);
 }
 
 void
@@ -276,7 +276,7 @@ ide_debugger_locals_view_set_debugger (IdeDebuggerLocalsView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  ide_signal_group_set_target (self->debugger_signals, debugger);
+  g_signal_group_set_target (self->debugger_signals, debugger);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 }
 

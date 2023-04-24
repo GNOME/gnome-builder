@@ -38,8 +38,8 @@ struct _IdeEditorPage
   IdeGutter               *gutter;
 
   /* Settings Management */
-  IdeBindingGroup         *buffer_file_settings;
-  IdeBindingGroup         *view_file_settings;
+  GBindingGroup           *buffer_file_settings;
+  GBindingGroup           *view_file_settings;
 
   /* Template widgets */
   IdeSourceView           *view;

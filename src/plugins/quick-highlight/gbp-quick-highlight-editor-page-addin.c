@@ -36,8 +36,8 @@ struct _GbpQuickHighlightEditorPageAddin
 
   IdeEditorPage          *view;
 
-  IdeSignalGroup         *buffer_signals;
-  IdeSignalGroup         *search_signals;
+  GSignalGroup           *buffer_signals;
+  GSignalGroup           *search_signals;
   GtkSourceSearchContext *search_context;
 
   guint                   queued_match_source;
@@ -222,28 +222,28 @@ gbp_quick_highlight_editor_page_addin_load (IdeEditorPageAddin *addin,
 
   self->settings = g_settings_new ("org.gnome.builder.editor");
 
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::has-selection",
                                     G_CALLBACK (buffer_notify_has_selection),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::style-scheme",
                                     G_CALLBACK (buffer_notify_style_scheme),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (buffer_cursor_moved),
                                     self);
-  ide_signal_group_set_target (self->buffer_signals, ide_editor_page_get_buffer (view));
+  g_signal_group_set_target (self->buffer_signals, ide_editor_page_get_buffer (view));
 
 #if 0
-  self->search_signals = ide_signal_group_new (IDE_TYPE_EDITOR_SEARCH);
-  ide_signal_group_connect_swapped (self->search_signals,
+  self->search_signals = g_signal_group_new (IDE_TYPE_EDITOR_SEARCH);
+  g_signal_group_connect_swapped (self->search_signals,
                                     "notify::active",
                                     G_CALLBACK (search_notify_active),
                                     self);
-  ide_signal_group_set_target (self->search_signals, ide_editor_page_get_search (view));
+  g_signal_group_set_target (self->search_signals, ide_editor_page_get_search (view));
 #endif
 }
 
@@ -259,11 +259,11 @@ gbp_quick_highlight_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_clear_object (&self->search_context);
   g_clear_handle_id (&self->queued_match_source, g_source_remove);
 
-  ide_signal_group_set_target (self->buffer_signals, NULL);
+  g_signal_group_set_target (self->buffer_signals, NULL);
   g_clear_object (&self->buffer_signals);
 
 #if 0
-  ide_signal_group_set_target (self->search_signals, NULL);
+  g_signal_group_set_target (self->search_signals, NULL);
   g_clear_object (&self->search_signals);
 #endif
 

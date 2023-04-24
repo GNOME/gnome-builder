@@ -34,7 +34,7 @@ struct _IdeXmlHighlighter
 {
   IdeObject           parent_instance;
   IdeHighlightEngine *engine;
-  IdeSignalGroup     *buffer_signals;
+  GSignalGroup       *buffer_signals;
   guint               highlight_timeout;
   guint               has_tags : 1;
 };
@@ -158,9 +158,9 @@ ide_xml_highlighter_class_init (IdeXmlHighlighterClass *klass)
 static void
 ide_xml_highlighter_init (IdeXmlHighlighter *self)
 {
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
 
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
                                    G_CALLBACK (ide_xml_highlighter_cursor_moved),
                                    self,
@@ -185,7 +185,7 @@ ide_xml_highlighter_real_set_engine (IdeHighlighter     *highlighter,
       ide_xml_highlighter_cursor_moved (self, buffer);
     }
 
-  ide_signal_group_set_target (self->buffer_signals, buffer);
+  g_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static void

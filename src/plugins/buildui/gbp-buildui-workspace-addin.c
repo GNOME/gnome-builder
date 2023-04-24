@@ -53,7 +53,7 @@ struct _GbpBuilduiWorkspaceAddin
   GtkMenuButton             *status_button;
 
   /* Owned references */
-  IdeSignalGroup           *build_manager_signals;
+  GSignalGroup             *build_manager_signals;
 };
 
 static void
@@ -156,12 +156,12 @@ gbp_buildui_workspace_addin_notify_busy (GbpBuilduiWorkspaceAddin *self,
 static void
 gbp_buildui_workspace_addin_bind_build_manager (GbpBuilduiWorkspaceAddin *self,
                                                 IdeBuildManager          *build_manager,
-                                                IdeSignalGroup           *signals)
+                                                GSignalGroup             *signals)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   gbp_buildui_workspace_addin_notify_busy (self, NULL, build_manager);
   gbp_buildui_workspace_addin_notify_pipeline (self, NULL, build_manager);
@@ -363,38 +363,38 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->pane = g_object_new (GBP_TYPE_BUILDUI_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), pane_position);
 
-  self->build_manager_signals = ide_signal_group_new (IDE_TYPE_BUILD_MANAGER);
+  self->build_manager_signals = g_signal_group_new (IDE_TYPE_BUILD_MANAGER);
   g_signal_connect_object (self->build_manager_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_workspace_addin_bind_build_manager),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::error-count",
                                    G_CALLBACK (gbp_buildui_workspace_addin_notify_error_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::warning-count",
                                    G_CALLBACK (gbp_buildui_workspace_addin_notify_warning_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::pipeline",
                                    G_CALLBACK (gbp_buildui_workspace_addin_notify_pipeline),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::busy",
                                    G_CALLBACK (gbp_buildui_workspace_addin_notify_busy),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "build-started",
                                    G_CALLBACK (gbp_buildui_workspace_addin_build_started),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_set_target (self->build_manager_signals, build_manager);
+  g_signal_group_set_target (self->build_manager_signals, build_manager);
 }
 
 static void
@@ -417,7 +417,7 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   if (self->diag_box)
     gtk_widget_unparent (GTK_WIDGET (self->diag_box));
 
-  ide_signal_group_set_target (self->build_manager_signals, NULL);
+  g_signal_group_set_target (self->build_manager_signals, NULL);
   g_clear_object (&self->build_manager_signals);
 
   self->workspace = NULL;

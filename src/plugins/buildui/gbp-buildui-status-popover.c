@@ -35,7 +35,7 @@ struct _GbpBuilduiStatusPopover
   GtkPopover       parent_instance;
 
   /* Owned references */
-  IdeSignalGroup  *pipeline_signals;
+  GSignalGroup    *pipeline_signals;
   GHashTable      *deduplicator;
 
   /* Template references */
@@ -111,13 +111,13 @@ gbp_buildui_status_popover_add_diagnsotic (GbpBuilduiStatusPopover *self,
 static void
 gbp_buildui_status_popover_bind_pipeline (GbpBuilduiStatusPopover *self,
                                           IdePipeline             *pipeline,
-                                          IdeSignalGroup          *signal_group)
+                                          GSignalGroup            *signal_group)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_BUILDUI_STATUS_POPOVER (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
+  g_assert (G_IS_SIGNAL_GROUP (signal_group));
 
   gbp_buildui_status_popover_clear (self);
 
@@ -126,12 +126,12 @@ gbp_buildui_status_popover_bind_pipeline (GbpBuilduiStatusPopover *self,
 
 static void
 gbp_buildui_status_popover_unbind_pipeline (GbpBuilduiStatusPopover *self,
-                                            IdeSignalGroup          *signal_group)
+                                            GSignalGroup            *signal_group)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_BUILDUI_STATUS_POPOVER (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
+  g_assert (G_IS_SIGNAL_GROUP (signal_group));
 
   IDE_EXIT;
 }
@@ -244,7 +244,7 @@ gbp_buildui_status_popover_init (GbpBuilduiStatusPopover *self)
                                               (GEqualFunc)ide_diagnostic_equal,
                                               g_object_unref,
                                               NULL);
-  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = g_signal_group_new (IDE_TYPE_PIPELINE);
   g_signal_connect_object (self->pipeline_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_status_popover_bind_pipeline),
@@ -255,12 +255,12 @@ gbp_buildui_status_popover_init (GbpBuilduiStatusPopover *self)
                            G_CALLBACK (gbp_buildui_status_popover_unbind_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (gbp_buildui_status_popover_add_diagnsotic),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (gbp_buildui_status_popover_clear),
                                    self,
