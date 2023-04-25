@@ -10,6 +10,7 @@ option('profiling', type: 'boolean', value: false, description: 'Enable profilin
 option('tcmalloc', type: 'boolean', value: false, description: 'Use tcmalloc for dynamic allocations')
 option('with_safe_path', type: 'string', value: '', description: 'PATH variable to run build commands (default: platform-specific)')
 option('gnome_sdk_version', type: 'string', value: 'master', description: 'The GNOME SDK release to use for templates')
+option('freedesktop_sdk_version', type: 'string', value: '22.08', description: 'The Freedesktop SDK release to use for templates')
 option('help', type: 'boolean', value: false)
 option('docs', type: 'boolean', value: false)
 option('network_tests', type: 'boolean', value: true, description: 'Allow networking in unit-tests')
