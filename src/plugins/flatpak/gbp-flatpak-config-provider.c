@@ -512,7 +512,10 @@ gbp_flatpak_config_provider_load_client_cb (GObject      *object,
                            G_CONNECT_SWAPPED);
 
   ide_g_file_find_with_depth_async (workdir,
-                                    "*.json",
+                                    /* expect a.b.json at least, if not
+                                     * a.b.c.json or a.b.c.d.json or more.
+                                     */
+                                    "*.*.json",
                                     DISCOVERY_MAX_DEPTH,
                                     ide_task_get_cancellable (task),
                                     load_find_files_cb,
