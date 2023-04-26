@@ -156,10 +156,27 @@ _ide_tree_node_collapsed (IdeTreeNode *self)
 
   if (self->reset_on_collapse)
     {
+      g_autolist(IdeTreeNode) children = NULL;
+      guint length;
+
       self->children_built = FALSE;
 
-      while (self->children.head != NULL)
-        ide_tree_node_unparent (g_queue_peek_head (&self->children));
+      children = g_list_copy (self->children.head);
+      length = self->children.length;
+
+      self->children = (GQueue) { NULL, NULL, 0 };
+
+      for (const GList *iter = children; iter; iter = iter->next)
+        {
+          IdeTreeNode *child = iter->data;
+
+          child->parent = NULL;
+          child->link.prev = NULL;
+          child->link.next = NULL;
+        }
+
+      if (children != NULL)
+        g_list_model_items_changed (G_LIST_MODEL (self), 0, length, 0);
     }
 }
 
