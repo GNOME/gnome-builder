@@ -30,6 +30,7 @@
 #include "gbp-flatpak-manifest.h"
 
 #define DISCOVERY_MAX_DEPTH 3
+#define MAX_MANIFEST_SIZE_IN_BYTES (1024L*256L) /* 256kb */
 
 struct _GbpFlatpakConfigProvider
 {
@@ -315,12 +316,21 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
     {
       GFile *file = g_ptr_array_index (files, i);
       g_autoptr(GbpFlatpakManifest) manifest = NULL;
+      g_autoptr(GFileInfo) info = NULL;
       g_autoptr(GError) error = NULL;
       g_autofree gchar *name = NULL;
 
       g_assert (G_IS_FILE (file));
 
       name = g_file_get_basename (file);
+
+      if (!(info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, cancellable, NULL)) ||
+          g_file_info_get_size (info) > MAX_MANIFEST_SIZE_IN_BYTES)
+        {
+          g_debug ("Ignoring %s as potential manifest, file size too large", name);
+          continue;
+        }
+
       manifest = gbp_flatpak_manifest_new (file, name);
       ide_object_append (IDE_OBJECT (self), IDE_OBJECT (manifest));
 
