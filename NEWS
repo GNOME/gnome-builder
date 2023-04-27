@@ -1,3 +1,13 @@
+# GNOME Builder 44.2
+
+Builder 44.2 contains a number of bug fixes.
+
+ * Expose session a11y bus when running a project
+ * Style fixes for quick-highlight
+ * Project tree robustness fixes
+ * Fixes to `meson devenv` to ensure a proper environment is
+   created for projects.
+
 # GNOME Builder 44.1
 
 Builder 44.1 is a followup to 44.0 with fixes for a few issues that were found
