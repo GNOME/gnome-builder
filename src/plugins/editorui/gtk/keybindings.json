@@ -1,5 +1,5 @@
 { "id" : "org.gnome.builder.editor.goto-line", "trigger" : "<Control>i", "action" : "workspace.editorui.page.go-to-line", "when" : "canEdit()", "phase" : "capture" },
-{ "id" : "org.gnome.builder.editor.document.format", "trigger" : "<Control><Shift><Alt>f", "action": "page.editor.format-document", "when" : "canEdit()", "phase" : "capture" },
+{ "id" : "org.gnome.builder.editor.document.format", "trigger" : "<Control><Shift>f", "action": "page.editor.format-document", "when" : "canEdit()", "phase" : "capture" },
 { "id" : "org.gnome.builder.editor.selection.format", "trigger" : "<Shift><Alt>f", "action": "page.editor.format-selection", "when" : "canEdit()", "phase" : "capture" },
 { "id" : "org.gnome.builder.editor.find", "trigger" : "<Control>f", "action" : "page.search.begin-find", "when" : "canEdit()", "phase" : "bubble" },
 { "id" : "org.gnome.builder.editor.find-replace", "trigger" : "<Control>h", "action" : "page.search.begin-replace", "when" : "canEdit()", "phase" : "bubble" },
