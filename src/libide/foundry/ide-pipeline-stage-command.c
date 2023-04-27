@@ -115,7 +115,8 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
 
   run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
 
-  _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
+  if (priv->stdout_path == NULL)
+    _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
 
   if (!(launcher = ide_run_context_end (run_context, &error)))
     IDE_GOTO (handle_error);
