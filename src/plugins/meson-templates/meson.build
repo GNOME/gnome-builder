@@ -8,6 +8,7 @@ plugins_sources += files([
 
 flatpak_json_data = configuration_data()
 flatpak_json_data.set('gnome_sdk_version', get_option('gnome_sdk_version'))
+flatpak_json_data.set('freedesktop_sdk_version', get_option('freedesktop_sdk_version'))
 flatpak_json = configure_file(
   input: 'resources/flatpak.json.in',
   output: 'flatpak.json',
