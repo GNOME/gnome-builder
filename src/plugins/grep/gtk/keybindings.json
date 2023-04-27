@@ -1,1 +1,1 @@
-{ "trigger" : "<control><shift><alt>f", "action" : "workspace.grep.panel.show", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<control><alt><shift>f", "action" : "workspace.grep.panel.show", "when" : "canEdit()", "phase" : "capture" },
