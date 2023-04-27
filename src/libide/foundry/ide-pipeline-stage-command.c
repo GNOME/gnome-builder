@@ -328,7 +328,7 @@ ide_pipeline_stage_command_set_property (GObject      *object,
       break;
 
     case PROP_IGNORE_EXIT_STATUS:
-      priv->ignore_exit_status = g_value_get_boolean (value);
+      ide_pipeline_stage_command_set_ignore_exit_status (self, g_value_get_boolean (value));
       break;
 
     case PROP_STDOUT_PATH:
@@ -375,7 +375,7 @@ ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
   properties [PROP_IGNORE_EXIT_STATUS] =
     g_param_spec_boolean ("ignore-exit-status", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_STDOUT_PATH] =
     g_param_spec_string ("stdout-path", NULL, NULL,
@@ -439,4 +439,21 @@ ide_pipeline_stage_command_set_stdout_path (IdePipelineStageCommand *self,
 
   if (g_set_str (&priv->stdout_path, stdout_path))
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STDOUT_PATH]);
+}
+
+void
+ide_pipeline_stage_command_set_ignore_exit_status (IdePipelineStageCommand *self,
+                                                   gboolean                 ignore_exit_status)
+{
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  ignore_exit_status = !!ignore_exit_status;
+
+  if (priv->ignore_exit_status != ignore_exit_status)
+    {
+      priv->ignore_exit_status = ignore_exit_status;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IGNORE_EXIT_STATUS]);
+    }
 }
