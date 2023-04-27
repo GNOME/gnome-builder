@@ -53,5 +53,8 @@ void              ide_pipeline_stage_command_set_clean_command      (IdePipeline
 IDE_AVAILABLE_IN_45
 void              ide_pipeline_stage_command_set_stdout_path        (IdePipelineStageCommand *self,
                                                                      const char              *stdout_path);
+IDE_AVAILABLE_IN_45
+void              ide_pipeline_stage_command_set_ignore_exit_status (IdePipelineStageCommand *self,
+                                                                     gboolean                 ignore_exit_status);
 
 G_END_DECLS
