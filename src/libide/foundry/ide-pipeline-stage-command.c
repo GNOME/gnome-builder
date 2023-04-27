@@ -33,6 +33,7 @@ typedef struct
 {
   IdeRunCommand *build_command;
   IdeRunCommand *clean_command;
+  char *stdout_path;
   guint ignore_exit_status : 1;
 } IdePipelineStageCommandPrivate;
 
@@ -41,6 +42,7 @@ enum {
   PROP_BUILD_COMMAND,
   PROP_CLEAN_COMMAND,
   PROP_IGNORE_EXIT_STATUS,
+  PROP_STDOUT_PATH,
   N_PROPS
 };
 
@@ -117,6 +119,9 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
 
   if (!(launcher = ide_run_context_end (run_context, &error)))
     IDE_GOTO (handle_error);
+
+  if (priv->stdout_path != NULL)
+    ide_subprocess_launcher_set_stdout_file_path (launcher, priv->stdout_path);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (handle_error);
@@ -294,6 +299,10 @@ ide_pipeline_stage_command_get_property (GObject    *object,
       g_value_set_boolean (value, priv->ignore_exit_status);
       break;
 
+    case PROP_STDOUT_PATH:
+      g_value_set_string (value, priv->stdout_path);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -320,6 +329,10 @@ ide_pipeline_stage_command_set_property (GObject      *object,
 
     case PROP_IGNORE_EXIT_STATUS:
       priv->ignore_exit_status = g_value_get_boolean (value);
+      break;
+
+    case PROP_STDOUT_PATH:
+      ide_pipeline_stage_command_set_stdout_path (self, g_value_get_string (value));
       break;
 
     default:
@@ -363,6 +376,11 @@ ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
     g_param_spec_boolean ("ignore-exit-status", NULL, NULL,
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_STDOUT_PATH] =
+    g_param_spec_string ("stdout-path", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -409,4 +427,16 @@ ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
 
   if (g_set_object (&priv->clean_command, clean_command))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_COMMAND]);
+}
+
+void
+ide_pipeline_stage_command_set_stdout_path (IdePipelineStageCommand *self,
+                                            const char              *stdout_path)
+{
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  if (g_set_str (&priv->stdout_path, stdout_path))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STDOUT_PATH]);
 }
