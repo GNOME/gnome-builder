@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-27 19:01+0000\n"
-"PO-Revision-Date: 2023-03-26 11:24+0800\n"
+"POT-Creation-Date: 2023-04-13 17:01+0000\n"
+"PO-Revision-Date: 2023-04-22 12:00+0800\n"
 "Last-Translator: Nanling <neithern@outlook.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -715,7 +715,7 @@ msgstr "无标题"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:558
-#: src/libide/greeter/ide-greeter-workspace.c:697
+#: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1531
@@ -749,7 +749,7 @@ msgid "Preferences"
 msgstr "首选项"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
-#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:464
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
@@ -1188,50 +1188,50 @@ msgid "Unit Test"
 msgstr "单元测试"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:185
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "用户已要求运行“%s”"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "无法运行目标，因为另一个目标正在运行"
 
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:806
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "应用程序以错误状态退出：%s"
 
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:809
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "应用程序已退出"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "正在运行 %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "正在部署至设备…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1293
 msgid "User requested application to run"
 msgstr "用户要求应用程序运行"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1325
 msgid "User requested application to restart"
 msgstr "用户要求应用程序重新启动"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1355
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "用户要求应用程序使用工具运行 “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
 msgstr "用户要求应用程序停止"
 
@@ -1335,7 +1335,7 @@ msgid "_Delete Project Sources"
 msgstr "删除工程源代码(_D)"
 
 #: src/libide/greeter/ide-greeter-workspace.c:654
-#: src/libide/greeter/ide-greeter-workspace.c:693
+#: src/libide/greeter/ide-greeter-workspace.c:691
 msgid "Select Project Folder"
 msgstr "选择工程文件夹"
 
@@ -1343,12 +1343,12 @@ msgstr "选择工程文件夹"
 msgid "Select Project File"
 msgstr "选择工程文件"
 
-#: src/libide/greeter/ide-greeter-workspace.c:698
+#: src/libide/greeter/ide-greeter-workspace.c:696
 #: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: src/libide/greeter/ide-greeter-workspace.c:709
+#: src/libide/greeter/ide-greeter-workspace.c:707
 msgid "All Project Types"
 msgstr "所有工程类型"
 
@@ -1465,7 +1465,7 @@ msgid "%u of %u"
 msgstr "%2$u 的 %1$u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "搜索"
@@ -1726,62 +1726,62 @@ msgstr "语言服务器 %s 已退出"
 msgid "Language server “%s” spawned as process %s"
 msgstr "语言服务器 %s 已进程 %s 启动"
 
-#: src/libide/plugins/ide-plugin.c:336
+#: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "版本控制"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "语言服务器"
 
-#: src/libide/plugins/ide-plugin.c:339
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
 msgstr "设备和模拟器"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "诊断"
 
-#: src/libide/plugins/ide-plugin.c:341
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Build Systems"
 msgstr "构建系统"
 
-#: src/libide/plugins/ide-plugin.c:342
+#: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
 msgstr "编译器"
 
-#: src/libide/plugins/ide-plugin.c:343
+#: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
 msgstr "调试器"
 
-#: src/libide/plugins/ide-plugin.c:344
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Templates"
 msgstr "模板"
 
-#: src/libide/plugins/ide-plugin.c:345
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
 msgstr "编辑和格式化"
 
-#: src/libide/plugins/ide-plugin.c:348
+#: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
 msgstr "网络"
 
-#: src/libide/plugins/ide-plugin.c:349
+#: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
 msgstr "语言启用"
 
-#: src/libide/plugins/ide-plugin.c:350
+#: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
 msgstr "桌面集成"
 
-#: src/libide/plugins/ide-plugin.c:351
+#: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
 msgstr "附加"
 
@@ -3034,7 +3034,7 @@ msgstr "显示一个从光标位置开始的可能的代码命令列表"
 
 #: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
-msgstr "跳转至定义(_G)"
+msgstr "跳转至声明(_G)"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
@@ -4818,7 +4818,7 @@ msgstr "严重程度"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
-msgstr ""
+msgstr "章节"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
