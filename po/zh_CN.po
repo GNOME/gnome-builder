@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-27 19:01+0000\n"
-"PO-Revision-Date: 2023-03-26 11:24+0800\n"
-"Last-Translator: Nanling <neithern@outlook.com>\n"
+"POT-Creation-Date: 2023-04-20 19:49+0000\n"
+"PO-Revision-Date: 2023-04-28 13:50-0400\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -186,7 +186,7 @@ msgstr "构建时显示日志"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "If enabled, the build log will be raised when a build starts"
-msgstr "如果启用，构建日志将在重新构建时清空。"
+msgstr "如果启用，构建日志将在重新构建时清空"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -311,7 +311,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "如果启用，编辑器将显示相关的行号。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:471
+#: src/plugins/editorui/tweaks.ui:483
 msgid "Smart Backspace"
 msgstr "智能退格"
 
@@ -322,7 +322,7 @@ msgid ""
 msgstr "退格键将会移除多余的空格来保持对齐到缩进尺寸。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:483
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Home/End"
 msgstr "智能 Home/End 键"
 
@@ -347,7 +347,7 @@ msgid "When the overview map should be displayed."
 msgstr "何时应显示概览图。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:254
+#: src/plugins/editorui/tweaks.ui:266
 msgid "Draw Spaces"
 msgstr "绘制空格"
 
@@ -634,7 +634,7 @@ msgid ""
 msgstr "如果启用，工程树将把文件夹排列在普通文件前面。"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:375
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "拼写检查"
@@ -751,7 +751,7 @@ msgstr "首选项"
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:464
+#: src/plugins/editorui/tweaks.ui:476
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -3510,13 +3510,13 @@ msgstr "纯文本"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:257
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Spaces"
 msgstr "空格"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Tabs"
 msgstr "制表符"
 
@@ -3725,7 +3725,7 @@ msgid "The desired maximum line length"
 msgstr "最大行长度"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:356
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Behavior"
 msgstr "行为"
 
@@ -3877,218 +3877,226 @@ msgstr "显示诊断"
 msgid "Display diagnostics next to the line number"
 msgstr "在行号旁显示诊断"
 
-#: src/plugins/editorui/tweaks.ui:213
+#: src/plugins/editorui/tweaks.ui:211
+msgid "Show Line Changes"
+msgstr "显示行变化"
+
+#: src/plugins/editorui/tweaks.ui:212
+msgid "Highlight changed lines next to the line number"
+msgstr "在行号旁高亮显示变更的行"
+
+#: src/plugins/editorui/tweaks.ui:225
 msgid "Highlighting"
 msgstr "高亮"
 
-#: src/plugins/editorui/tweaks.ui:216
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Highlight Current Line"
 msgstr "高亮当前行"
 
-#: src/plugins/editorui/tweaks.ui:217
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Make the current line stand out with highlights"
 msgstr "用高亮突出当前行"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Matching Brackets"
 msgstr "高亮匹配括号"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr "使用光标位置来高亮匹配的方括号、大括号、圆括号和更多"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Semantic Highlighting"
 msgstr "语法高亮"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr "使用符号信息来高亮源代码中的命名空间、函数和变量"
 
-#: src/plugins/editorui/tweaks.ui:258
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
 msgstr "绘制一个表现正常空格的标记"
 
-#: src/plugins/editorui/tweaks.ui:271
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw a mark representing tabs"
 msgstr "绘制一个表现制表符的标记"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Newlines"
 msgstr "新行"
 
-#: src/plugins/editorui/tweaks.ui:284
+#: src/plugins/editorui/tweaks.ui:296
 msgid "Draw a mark at the end of lines"
 msgstr "在行尾绘制一个标记"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Non-breaking spaces"
 msgstr "连续空格"
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:309
 msgid "Draw a mark at non-breaking space characters"
 msgstr "在非换行空白字符处绘制标记"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Leading"
 msgstr "行首"
 
-#: src/plugins/editorui/tweaks.ui:314
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw marks for leading spaces only"
 msgstr "仅为行首空格绘制标记"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Inside Text"
 msgstr "行内"
 
-#: src/plugins/editorui/tweaks.ui:327
+#: src/plugins/editorui/tweaks.ui:339
 msgid "Draw marks inside a line of text only"
 msgstr "仅在文本行内部绘制标记"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Trailing"
 msgstr "行尾"
 
-#: src/plugins/editorui/tweaks.ui:340
+#: src/plugins/editorui/tweaks.ui:352
 msgid "Draw marks for trailing spaces only"
 msgstr "仅为行尾空格绘制标记"
 
-#: src/plugins/editorui/tweaks.ui:360
+#: src/plugins/editorui/tweaks.ui:372
 msgid "Spelling"
 msgstr "拼写"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:376
 msgid "Underline potential spelling mistakes as you type"
 msgstr "随着您的键入用下划线标注可能的拼写错误"
 
-#: src/plugins/editorui/tweaks.ui:377
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Selections"
 msgstr "选区"
 
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Minimum Characters to Highlight"
 msgstr "高亮的最少字符"
 
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:393
 msgid "The minimum selection length before highlighting matches"
 msgstr "在高亮匹配项前的最小选区长度"
 
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Snippets"
 msgstr "片段"
 
-#: src/plugins/editorui/tweaks.ui:397
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Expand Snippets"
 msgstr "扩展片段"
 
-#: src/plugins/editorui/tweaks.ui:398
+#: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "在编辑器中使用“Tab”键展开已配置片段"
 
-#: src/plugins/editorui/tweaks.ui:413
+#: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
 msgstr "代码补全"
 
-#: src/plugins/editorui/tweaks.ui:417
+#: src/plugins/editorui/tweaks.ui:429
 msgid "Completion Proposals"
 msgstr "补全建议"
 
-#: src/plugins/editorui/tweaks.ui:420
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Suggest Code Completions"
 msgstr "提示代码补全"
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically suggest code completions while typing"
 msgstr "在键入时自动提示代码补全"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Select First Completion Proposal"
 msgstr "选择首个补全建议"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "显示时自动选择首个补全建议"
 
-#: src/plugins/editorui/tweaks.ui:448
+#: src/plugins/editorui/tweaks.ui:460
 msgid "Maximum Completion Proposals"
 msgstr "最大补全建议数量"
 
-#: src/plugins/editorui/tweaks.ui:449
+#: src/plugins/editorui/tweaks.ui:461
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "一次显示的最大补全行数"
 
-#: src/plugins/editorui/tweaks.ui:468
+#: src/plugins/editorui/tweaks.ui:480
 msgid "Movements"
 msgstr "动作"
 
-#: src/plugins/editorui/tweaks.ui:472
+#: src/plugins/editorui/tweaks.ui:484
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "退格键将会移除多余的空格来保持对齐到您的缩进宽度"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid "Navigate to non-space characters"
 msgstr "导航至非空格字符"
 
-#: src/plugins/editorui/tweaks.ui:493
+#: src/plugins/editorui/tweaks.ui:505
 msgid "Before line boundaries"
 msgstr "行边界前"
 
-#: src/plugins/editorui/tweaks.ui:499
+#: src/plugins/editorui/tweaks.ui:511
 msgid "After line boundaries"
 msgstr "行边界后"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Instead of line boundaries"
 msgstr "替代行边界"
 
-#: src/plugins/editorui/tweaks.ui:511 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "已禁用"
 
-#: src/plugins/editorui/tweaks.ui:523
+#: src/plugins/editorui/tweaks.ui:535
 msgid "Session Management"
 msgstr "会话管理"
 
-#: src/plugins/editorui/tweaks.ui:527
+#: src/plugins/editorui/tweaks.ui:539
 msgid "Save & Restore"
 msgstr "保存和恢复"
 
-#: src/plugins/editorui/tweaks.ui:530
+#: src/plugins/editorui/tweaks.ui:542
 msgid "Auto-Save"
 msgstr "自动保存"
 
-#: src/plugins/editorui/tweaks.ui:531
+#: src/plugins/editorui/tweaks.ui:543
 msgid "Regularly save the document as you type"
 msgstr "随着您的键入常规地保存文档"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save Delay"
 msgstr "自动保存延时"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "自动保存文档前等待的按秒计的延时"
 
-#: src/plugins/editorui/tweaks.ui:558
+#: src/plugins/editorui/tweaks.ui:570
 msgid "Format on Save"
 msgstr "保存时格式化"
 
-#: src/plugins/editorui/tweaks.ui:559
+#: src/plugins/editorui/tweaks.ui:571
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr "保存到磁盘时重新格式化源代码。需要一个源代码语言的已注册格式化工具。"
 
-#: src/plugins/editorui/tweaks.ui:574
+#: src/plugins/editorui/tweaks.ui:586
 msgid "Restore Cursor Position"
 msgstr "恢复光标位置"
 
-#: src/plugins/editorui/tweaks.ui:575
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Jump to the last position when re-opening a file"
 msgstr "重新打开文件时跳转到上次位置"
 
@@ -4097,7 +4105,7 @@ msgid "Open file or folder"
 msgstr "打开文件或文件夹"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:211
+#: src/plugins/project-tree/gbp-project-tree-addin.c:212
 msgid "Files"
 msgstr "文件"
 
@@ -4157,7 +4165,7 @@ msgstr "解决 SDK 扩展的问题"
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
-msgstr "构建器正在定位适当的 SDK 扩展以构建您的工程。"
+msgstr "构建器正在定位适当的 SDK 扩展以构建您的工程"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
@@ -4818,7 +4826,7 @@ msgstr "严重程度"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
-msgstr ""
+msgstr "章节"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -5008,36 +5016,36 @@ msgstr "新文件名"
 msgid "_Create"
 msgstr "创建(_C)"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:697
 #, c-format
 msgid "Copying 1 file"
 msgstr "正在复制 1 个文件"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:699
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "正在复制 %2$s 个中第 %1$s 个文件"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:736
 msgid "Failed to copy files"
 msgstr "复制文件失败"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:745
+#: src/plugins/project-tree/gbp-project-tree-addin.c:746
 msgid "Files copied"
 msgstr "文件已复制"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:749
+#: src/plugins/project-tree/gbp-project-tree-addin.c:750
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "已复制 %s 个文件"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:940
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Copying files…"
 msgstr "正在复制文件…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:942
 msgid "Files will be copied in a moment"
 msgstr "文件将马上被复制完毕"
 
@@ -6752,9 +6760,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Show line numbers relative to the cursor line"
 #~ msgstr "显示光标行相应的行号"
-
-#~ msgid "Line changes"
-#~ msgstr "行变化"
 
 #~ msgid "Show if a line was added or modified next to line number"
 #~ msgstr "在行号附近显示此行是否被添加或修改过"
