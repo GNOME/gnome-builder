@@ -11,6 +11,7 @@
   <homepage rdf:resource="https://wiki.gnome.org/Apps/Builder" />
   <download-page rdf:resource="https://download.gnome.org/sources/gnome-builder/" />
   <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gnome-builder/issues" />
+  <developer-forum rdf:resource="https://discourse.gnome.org/tag/builder" />
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
   <programming-language>C</programming-language>
