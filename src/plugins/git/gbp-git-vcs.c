@@ -581,9 +581,21 @@ vcs_iface_init (IdeVcsInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitVcs, gbp_git_vcs, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS, vcs_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_git_vcs_destroy (IdeObject *object)
+{
+  GbpGitVcs *self = (GbpGitVcs *)object;
+
+  g_rw_lock_writer_lock (&self->ignored_rw_lock);
+  g_hash_table_remove_all (self->ignored_cache);
+  g_rw_lock_writer_unlock (&self->ignored_rw_lock);
+
+  IDE_OBJECT_CLASS (gbp_git_vcs_parent_class)->destroy (object);
+}
 
 static void
 gbp_git_vcs_finalize (GObject *object)
@@ -625,9 +637,12 @@ static void
 gbp_git_vcs_class_init (GbpGitVcsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_git_vcs_finalize;
   object_class->get_property = gbp_git_vcs_get_property;
+
+  i_object_class->destroy = gbp_git_vcs_destroy;
 
   properties [PROP_BRANCH_NAME] =
     g_param_spec_string ("branch-name",
