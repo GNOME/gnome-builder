@@ -591,7 +591,9 @@ gbp_git_vcs_finalize (GObject *object)
   GbpGitVcs *self = (GbpGitVcs *)object;
 
   g_clear_object (&self->repository);
+  g_clear_object (&self->workdir);
   g_rw_lock_clear (&self->ignored_rw_lock);
+  g_clear_pointer (&self->ignored_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_git_vcs_parent_class)->finalize (object);
 }
