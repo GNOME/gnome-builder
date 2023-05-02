@@ -273,6 +273,7 @@ ide_pipeline_stage_command_finalize (GObject *object)
 
   g_clear_object (&priv->build_command);
   g_clear_object (&priv->clean_command);
+  g_clear_pointer (&priv->stdout_path, g_free);
 
   G_OBJECT_CLASS (ide_pipeline_stage_command_parent_class)->finalize (object);
 }
