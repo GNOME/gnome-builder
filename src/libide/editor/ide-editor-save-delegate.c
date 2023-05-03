@@ -313,6 +313,9 @@ ide_editor_save_delegate_new (IdeEditorPage *page)
                                ret, "subtitle",
                                G_BINDING_SYNC_CREATE,
                                map_file_to_subtitle, NULL, ret, NULL);
+  g_object_bind_property (buffer, "is-temporary",
+                          ret, "is-draft",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (page, "icon", ret, "icon", G_BINDING_SYNC_CREATE);
 
   return PANEL_SAVE_DELEGATE (ret);
