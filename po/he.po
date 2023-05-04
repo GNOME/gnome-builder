@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-04-13 17:01+0000\n"
-"PO-Revision-Date: 2023-04-21 12:54+0300\n"
+"POT-Creation-Date: 2023-05-02 21:05+0000\n"
+"PO-Revision-Date: 2023-05-04 12:34+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3)\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
+"3);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -83,8 +83,8 @@ msgstr "שילוב עם Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid ""
-"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
-"PHPize, and Waf"
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
+"and Waf"
 msgstr ""
 "משתלב עם Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize ו־Waf"
 
@@ -254,11 +254,11 @@ msgstr "Debugger Breakpoint at Warnings and Criticals"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() and "
-"g_critical function."
+"Debugger should automatically insert breakpoint at g_warning() and g_critical "
+"function."
 msgstr ""
-"Debugger should automatically insert breakpoint at g_warning() and "
-"g_critical function."
+"Debugger should automatically insert breakpoint at g_warning() and g_critical "
+"function."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -491,7 +491,7 @@ msgstr "Window maximized state"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Style Variant"
-msgstr "Style Variant"
+msgstr "הגוון סגנון"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid ""
@@ -514,7 +514,7 @@ msgstr "תיקיית המיזמים"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:29
 msgid "Directory for all Builder projects."
-msgstr "Directory for all Builder projects."
+msgstr "תיקייה לכל המיזמים של Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
@@ -522,7 +522,7 @@ msgstr "שחזור הפעלה"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr "Restores the projects previous session when loading."
+msgstr "משחזר את ההפעלה האחרונה של המיזמים בעת הטעינה."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -662,8 +662,7 @@ msgid "Sort Directories First"
 msgstr "סידור תיקיות לפני קבצים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
+msgid "If enabled, the project tree will sort directories before regular files."
 msgstr ""
 "If enabled, the project tree will sort directories before regular files."
 
@@ -785,8 +784,7 @@ msgstr "העדפות"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
-#: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:464
+#: src/libide/tweaks/ide-tweaks-window.ui:139 src/plugins/editorui/tweaks.ui:464
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -800,7 +798,7 @@ msgstr "עזרה"
 #: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
 #: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
-msgstr "על אודות Builder"
+msgstr "על Builder"
 
 #: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:62
 msgid "_Quit"
@@ -816,8 +814,7 @@ msgstr "מסמך"
 #: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
 #: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
-#: src/plugins/editorui/gtk/menus.ui:153
-#: src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/menu-search/gtk/menus.ui:10
 #: src/plugins/menu-search/gtk/menus.ui:24
 #: src/plugins/menu-search/gtk/menus.ui:56
 #: src/plugins/menu-search/gtk/menus.ui:97
@@ -835,10 +832,8 @@ msgstr "דפים"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
 #: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
-#: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
+#: src/libide/sourceview/gtk/menus.ui:144 src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:156 src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -892,6 +887,7 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
+"הקידוד ששימש לטעינת הקובץ זיהה שגיאות. אפשר לבחור קידוד אחר משורת המצב ולרענן."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1113,15 +1109,15 @@ msgstr "ארע כשל בהגדרת הבנייה"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "רצף הפעילות החל כדי לנקות את עץ הבנייה"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "רצף הפעולות החל"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "רצף הפעולות הסתיים"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1135,8 +1131,7 @@ msgstr "בנייה (%s)"
 msgid "Post-install (%s)"
 msgstr "אוחר־התקנה (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3113
-#: src/libide/foundry/ide-pipeline.c:3152
+#: src/libide/foundry/ide-pipeline.c:3113 src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "יצירת מסוף דמה נכשלה. יכולות המסוף תוגבלנה."
 
@@ -1144,14 +1139,12 @@ msgstr "יצירת מסוף דמה נכשלה. יכולות המסוף תוגב�
 msgid "Cleaning…"
 msgstr "מנקה…"
 
-#: src/libide/foundry/ide-pipeline.c:3353
-#: src/libide/foundry/ide-pipeline.c:3410
+#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "נכשל"
 
-#: src/libide/foundry/ide-pipeline.c:3355
-#: src/libide/foundry/ide-pipeline.c:3418
+#: src/libide/foundry/ide-pipeline.c:3355 src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "מוכן"
 
@@ -1189,8 +1182,7 @@ msgstr "בהגשה…"
 msgid "Exporting…"
 msgstr "בתהליך ייצוא…"
 
-#: src/libide/foundry/ide-pipeline.c:3402
-#: src/libide/foundry/ide-pipeline.c:3406
+#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "הצלחה"
@@ -1427,7 +1419,7 @@ msgstr "לא ניתן למצוא את התכונה %s במחלקה %s"
 #: src/libide/gtk/ide-animation.c:997
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr "מציאת התכונה %s ב־%s נכשלה."
+msgstr "מציאת התכונה %s ב־%s נכשלה"
 
 #: src/libide/gtk/ide-animation.c:1006
 #, c-format
@@ -1769,7 +1761,7 @@ msgstr "שרת השפה „%s” יצא"
 #: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr ""
+msgstr "שרת השפה „%s” ייצר את התהליך %s"
 
 #: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
@@ -1972,8 +1964,7 @@ msgstr "ש_כפול שורה"
 msgid "_Formatting"
 msgstr "_עיצוב"
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:153 src/libide/sourceview/gtk/menus.ui:157
 #: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
@@ -2072,13 +2063,13 @@ msgstr "גלישה מסביב"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr ""
+msgstr "התהליך הושמד על ידי האות %d"
 
-#: src/libide/tree/ide-tree-empty.c:207
+#: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
 msgstr "<i>בטעינה</i>"
 
-#: src/libide/tree/ide-tree-empty.c:209
+#: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
 msgstr "ריק"
 
@@ -2164,7 +2155,7 @@ msgstr "מיזם בבנייה"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr ""
+msgstr "פקודות הבנייה נשמרות במטמון"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
@@ -2173,17 +2164,13 @@ msgid "%s (Copy)"
 msgstr "‫%s (עותק)"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
-#, fuzzy
-#| msgid "A Meson-based project is loaded but meson could not be found."
 msgid "BuildStream project in use but “bst” executable could not be found."
-msgstr "נטען מיזם מבוסס Meson, אך meson לא נמצא."
+msgstr "נעשה שימוש במיזם BuildStream, אך קובץ ההפעלה „bst” לא נמצא."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-#, fuzzy
-#| msgid "Remove environment variable"
 msgid "Use KEY=VALUE to set an environment variable"
-msgstr "הסרת משתנה סביבתי"
+msgstr "יש להשתמש בערך=מפתח כדי להגדיר משתנה סביבתי"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
@@ -2192,9 +2179,8 @@ msgstr "מפתחות לא יכולים להתחיל במספר"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
-#, fuzzy
 msgid "Keys may only contain alpha-numerics or underline."
-msgstr "מפתחות יכולים להכיל אותיות אלפבית לטיני ("
+msgstr "מפתחות יכולים להכיל אותיות אלפבית לטיניות או קווים תחתיים."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2341,10 +2327,9 @@ msgstr "ניתן להרצה"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
-#, fuzzy, c-format
-#| msgid "Failed to locate a build target"
+#, c-format
 msgid "Failed to list build targets: %s"
-msgstr "ארע כשל באיתור מטרת הבנייה"
+msgstr "הצגת יעדי הבנייה נכשלה: %s"
 
 # פועלי בניין
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
@@ -2357,9 +2342,8 @@ msgid "Available Build Targets"
 msgstr "מטרות בנייה זמינות"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
-msgid ""
-"Some targets may not be available until the project has been configured."
-msgstr ""
+msgid "Some targets may not be available until the project has been configured."
+msgstr "חלק מהיעדים עלולים שלא להיות זמינים עד להגדרת המיזם."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -2368,7 +2352,7 @@ msgstr "זיהוי אוטומטי"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "הבחירה מאפשרת ל־Builder לבחור את המועמד הטוב ביותר."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
@@ -2511,7 +2495,7 @@ msgstr "פריסת המיזם בהתקן הנוכחי"
 #. the output is the same as using flatpak-builder from Flathub, etc.
 #: src/plugins/buildui/gtk/menus.ui:88
 msgid "_Export"
-msgstr "_ייצוא"
+msgstr "יי_צוא"
 
 #: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
@@ -2616,8 +2600,7 @@ msgstr "הצגת מפקח"
 msgid "Style"
 msgstr "סגנון Stylelint"
 
-#: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:10
+#: src/plugins/buildui/gtk/preferences.ui:40 src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
 msgstr "ממשק"
 
@@ -2712,8 +2695,8 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"התקנת היישום לפני הרצה. זה נדרש במרבים המיזמים אלא אם פקודה הרצה מותאמת "
-"נמצאת בשימוש."
+"התקנת היישום לפני הרצה. זה נדרש במרבים המיזמים אלא אם פקודה הרצה מותאמת נמצאת "
+"בשימוש."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2761,7 +2744,7 @@ msgstr "ניקוי פלט ישן"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr "פלט שאינו בתוקף ינוקה כאשר תהליך הבנייה יחל"
+msgstr "פלט שאינו בתוקף ינוקה כאשר Builder יופעל"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
@@ -2814,8 +2797,8 @@ msgstr "תחילית התקנה"
 
 #: src/plugins/buildui/tweaks.ui:390
 msgid ""
-"The project will be installed to this directory during the installation "
-"phase of the build pipeline."
+"The project will be installed to this directory during the installation phase "
+"of the build pipeline."
 msgstr "המיזם יותקן לתיקייה זו במהלך שלב ההתקנה בצינור הבנייה."
 
 #: src/plugins/buildui/tweaks.ui:408
@@ -2828,7 +2811,7 @@ msgid ""
 "the configure phase of the build pipeline"
 msgstr ""
 "אפשרויות אלו משמשות על ידי מערכת הבנייה להגדרת המיזם במהלך שלב ההגדרה בצינור "
-"הבנייה."
+"הבנייה"
 
 #: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
@@ -2868,7 +2851,7 @@ msgstr "עדכון תלויות"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "בניית מייזם"
@@ -2879,12 +2862,12 @@ msgstr "הרצת Cargo"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "שרת השילוב מול Clang יצא"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "שרת השילוב מול Cland הופעל בתור תהליך %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2935,7 +2918,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "הגדרת מיזם"
 
@@ -2966,16 +2949,14 @@ msgid "Failed to load flags for plan: %s"
 msgstr "נכשלה טעינת דגלונים לתכנית: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#, c-format
 msgid "Failed to cull index plan: %s"
-msgstr "נכשל בטעינת הקובץ: %s: %s"
+msgstr "ליקוט תוכנית מפתח נכשל: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
-#, fuzzy, c-format
-#| msgid "Failed to locate template \"%s\""
+#, c-format
 msgid "Failed to populate index plan: %s"
-msgstr "איתור התבנית „%s” נכשל."
+msgstr "אכלוס תוכנית מפתח נכשל: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
@@ -2991,8 +2972,7 @@ msgstr "קוד המקור מסודר באינדקס"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr ""
-"החיפוש, הניתוח וההשלמה האוטומטית עשויים להיות מוגבלים עד להשלמת התהליך."
+msgstr "החיפוש, הניתוח וההשלמה האוטומטית עשויים להיות מוגבלים עד להשלמת התהליך."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3006,13 +2986,13 @@ msgstr "הצהרה"
 msgid "Project Symbols"
 msgstr "סמלי מיזם"
 
-#: src/plugins/codeshot/gtk/menus.ui:6
 # msgctxt "shortcut window"
+#: src/plugins/codeshot/gtk/menus.ui:6
 msgid "Copy as Image"
 msgstr "העתקה כתמונה"
 
-#: src/plugins/codeshot/gtk/menus.ui:7
 # msgctxt "shortcut window"
+#: src/plugins/codeshot/gtk/menus.ui:7
 msgid "Copy selected text as an image"
 msgstr "העתקת הטקסט הנבחר כתמונה"
 
@@ -3022,10 +3002,9 @@ msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "יתכן וטעית בהקלדת „%s”. האם התכוונת ל־„%s”?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
-#, fuzzy, c-format
-#| msgid "Failed to format selection: %s"
+#, c-format
 msgid "Failed to format while saving document: %s"
-msgstr "נכשל בעיצוב הבחירה: %s"
+msgstr "העיצוב בעת שמירת המסמך נכשל: %s"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
@@ -3187,8 +3166,8 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים נוספים. עליו להכיל אותיות קטנות "
-"ללא רווחים, וכן לא יכול להתחיל במספר."
+"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים נוספים. עליו להכיל אותיות קטנות ללא "
+"רווחים, וכן לא יכול להתחיל במספר."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
@@ -3285,8 +3264,7 @@ msgstr "הרצה עם מנפה שגיאות"
 msgid "Run the project with debugger"
 msgstr "הרצת המיזם עם מנפה שגיאות"
 
-#: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
@@ -3533,11 +3511,11 @@ msgstr "היישום להרצה"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "PTY למתווך דו־כיווני להתקן"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "מספר השניות להמתנה להופעת עמית ה־deviced"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -3708,18 +3686,18 @@ msgstr "תבנית בחירה"
 msgid "Move to Previous Diagnostic"
 msgstr "מעבר לאבחון הקודם"
 
-#: src/plugins/editorui/gtk/menus.ui:209
 # msgctxt "shortcut window"
+#: src/plugins/editorui/gtk/menus.ui:209
 msgid "Move the insertion cursor to the previous diagnostic location"
 msgstr "העברת סמן ההקלדה למיקום האבחון הקודם"
 
-#: src/plugins/editorui/gtk/menus.ui:216
 # msgctxt "shortcut window"
+#: src/plugins/editorui/gtk/menus.ui:216
 msgid "Move to Next Diagnostic"
 msgstr "מעבר לאבחון הבא"
 
-#: src/plugins/editorui/gtk/menus.ui:217
 # msgctxt "shortcut window"
+#: src/plugins/editorui/gtk/menus.ui:217
 msgid "Move the insertion cursor to the next diagnostic location"
 msgstr "העברת סמן ההקלדה למיקום האבחון הבא"
 
@@ -3732,8 +3710,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
-"הגדרות המסופקות על ידי ‎.editorconfig ומצבי שורה בקוד מקבלים עדיפות על פני "
-"אלה למטה."
+"הגדרות המסופקות על ידי ‎.editorconfig ומצבי שורה בקוד מקבלים עדיפות על פני אלה "
+"למטה."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -3985,7 +3963,7 @@ msgid ""
 "more"
 msgstr ""
 "שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים "
-"ועוד "
+"ועוד"
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
@@ -4168,8 +4146,8 @@ msgstr "סידור הקוד ברגע השמירה"
 
 #: src/plugins/editorui/tweaks.ui:559
 msgid ""
-"Reformat sources when saving to disk. Requires a registered formatter for "
-"the source language."
+"Reformat sources when saving to disk. Requires a registered formatter for the "
+"source language."
 msgstr "סידור הקוד מחדש בזמן השמירה לכונן. דורש רישום מעצב לקוד של השפה."
 
 #: src/plugins/editorui/tweaks.ui:574
@@ -4185,7 +4163,7 @@ msgid "Open file or folder"
 msgstr "פתיחת קובץ או תיקייה"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:211
+#: src/plugins/project-tree/gbp-project-tree-addin.c:212
 msgid "Files"
 msgstr "קבצים"
 
@@ -4207,10 +4185,9 @@ msgid "The client has been closed"
 msgstr "הלקוח נסגר"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:741
-#, fuzzy, c-format
-#| msgid "Failed to create translation unit: %s"
+#, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Failed to create translation unit: %s"
+msgstr "הסרת מניפסט flatpak נכשלה: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
@@ -4244,8 +4221,7 @@ msgid "Resolving SDK Extensions"
 msgstr "לפתור הרחבות ערכת פיתוח (SDK)"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
-msgid ""
-"Builder is locating the appropriate SDK extensions to build your project"
+msgid "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "‏Builder מאתר את הרחבות ערכת פיתוח התכנה המתאימות לבניית את המיזם שלך"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:839
@@ -4274,7 +4250,7 @@ msgstr "מסיים בניית flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
 msgid "Exporting staging directory"
-msgstr ""
+msgstr "תיקיית ההכנות מיוצאת"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
 msgid "Creating flatpak bundle"
@@ -4376,8 +4352,7 @@ msgstr "הפעולה בוטלה"
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
-"Builder failed to provide appropriate credentials when cloning the "
-"repository."
+"Builder failed to provide appropriate credentials when cloning the repository."
 msgstr "‏Builder נכשל במציאת אישורים מתאימים בעת שיבוט המאגר."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:619
@@ -4425,10 +4400,9 @@ msgid "Pushed."
 msgstr "נדחף."
 
 #: src/plugins/git/gbp-git-vcs.c:266
-#, fuzzy, c-format
-#| msgid "Insert “%s”"
+#, c-format
 msgid "Pushing ref “%s”"
-msgstr "הכנסת „%s”"
+msgstr "הסימוכין „%s” נדחף"
 
 #: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
@@ -4466,7 +4440,7 @@ msgstr "דוא״ל"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
-msgstr ""
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4512,10 +4486,8 @@ msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "חיפוש בקבצים (Shift+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#, fuzzy
-#| msgid "S_ort Directories First"
 msgid "_Recurse into Directories"
-msgstr "_סידור תיקיות לפני קבצים"
+msgstr "_נסיגה לתוך התיקיות"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
 msgid "Match Whole _Words"
@@ -4575,10 +4547,8 @@ msgstr "מערכת הפעלה מארחת"
 
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Bundled with Builder"
-msgstr "הרצה עם מאפיין"
+msgstr "מאוגד כחלק מ־Builder"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4735,18 +4705,16 @@ msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "טעינת חקירה של Meson"
 
 # כריית מיזמים
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "התקנת מיזם"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
-#, fuzzy
-#| msgid "Command Environment"
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
-msgstr "Command Environment"
+msgstr "שמירת סביבת הפיתוח במטמון"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
@@ -5114,26 +5082,26 @@ msgstr "שם קובץ חדש"
 msgid "_Create"
 msgstr "י_צירה"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:697
 #, c-format
 msgid "Copying 1 file"
 msgstr "מעתיק קובץ אחד"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:699
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "מעתיק %s מתוך %s קבצים"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:736
 msgid "Failed to copy files"
 msgstr "ארע כשל בהעתקה הקבצים"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:745
+#: src/plugins/project-tree/gbp-project-tree-addin.c:746
 msgid "Files copied"
 msgstr "קבצים מועתקים"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:749
+#: src/plugins/project-tree/gbp-project-tree-addin.c:750
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -5142,11 +5110,11 @@ msgstr[1] "הועתקו %s קבצים"
 msgstr[2] "הועתקו %s קבצים"
 msgstr[3] "הועתקו %s קבצים"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:940
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Copying files…"
 msgstr "קבצים מועתקים…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:942
 msgid "Files will be copied in a moment"
 msgstr "הקבצים יועתקו בעוד רגע"
 
@@ -5419,8 +5387,8 @@ msgstr "תיקיית עבודה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "הפקודה תרוץ ממיקום זה. יש להשתמש ב־<tt>$BUILDDIR</tt>‎, <tt>$SRCDIR</tt>‎ ‏או "
 "<tt>$HOME</tt>‎ על מנת להגדיר נתיב יחסי."
@@ -5466,7 +5434,7 @@ msgstr "כמטרת היישום"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
-msgstr "מריץ את הפקודה כאילו היא מטרת היישום"
+msgstr "מריץ את הפקודה כאילו היא מטרת היישום."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
@@ -5588,7 +5556,7 @@ msgstr "שפות"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
-msgstr ""
+msgstr "swift run"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5622,10 +5590,8 @@ msgid "Navigate to a symbol within the current page"
 msgstr "ניווט לסמל בעמוד הנוכחי"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
-#, fuzzy
-#| msgid "Application ID…"
 msgid "Profiling Application…"
-msgstr "מזהה יישום…"
+msgstr "מתבצע אפיון של היישום…"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:308
 msgid "Symbol decoding will begin after application exits"
@@ -5661,10 +5627,8 @@ msgid "Profiler"
 msgstr "מאפיין"
 
 #: src/plugins/sysprof/gtk/menus.ui:33
-#, fuzzy
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "בדיקת _איות"
+msgstr "דגימת תהליכים"
 
 #: src/plugins/sysprof/gtk/menus.ui:35
 msgid "CPU Performance"
@@ -5675,10 +5639,8 @@ msgid "Memory Allocations"
 msgstr "הקצאות זיכרון"
 
 #: src/plugins/sysprof/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Allow JavaScript"
 msgid "Sample JavaScript Stacks"
-msgstr "לאפשר JavaScript"
+msgstr "דגימת מחסניות JavaScript"
 
 #: src/plugins/sysprof/gtk/menus.ui:51
 msgid "Graphics"
@@ -5726,7 +5688,7 @@ msgstr "לאפשר שילוב יישום"
 
 #: src/plugins/sysprof/gtk/menus.ui:101
 msgid "Allow CPU Throttling"
-msgstr ""
+msgstr "לאפשר האטת מעבד"
 
 #: src/plugins/sysprof/gtk/menus.ui:113
 msgid "Run with _Profiler"
@@ -5745,18 +5707,16 @@ msgid "Records CPU usage and CPU frequency statistics"
 msgstr "הקלטת שימוש במעבד וסטטיסטיקת תדירות המעבד"
 
 #: src/plugins/sysprof/tweaks.ui:31
-#, fuzzy
-#| msgid "Allow JavaScript"
 msgid "Sample Callstacks"
-msgstr "לאפשר JavaScript"
+msgstr "דגימת מחסניות קריאה"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
-msgstr ""
+msgstr "הקלטת מעקבי מחסנית על בסיס קבוע ובנייה של תרשים קריאות"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "CPU Governor"
-msgstr ""
+msgstr "מושל מעבד"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Force performance mode while profiling"
@@ -5764,7 +5724,7 @@ msgstr "לכפות מצב ביצועים עם יצירת פרופיל"
 
 #: src/plugins/sysprof/tweaks.ui:53
 msgid "Don't Change Governor"
-msgstr ""
+msgstr "לא להחליף מושל"
 
 #: src/plugins/sysprof/tweaks.ui:59
 msgid "Force Performance Mode"
@@ -5838,7 +5798,7 @@ msgstr "מעקב יישום"
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
-msgstr ""
+msgstr "אספקת המשתנה הסביבתי TRACE_FD ליישום כדי להעביר אירועים בהתאמה אישית"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
@@ -5992,10 +5952,8 @@ msgid "Updating Dependencies…"
 msgstr "מעדכן תלויות…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
-#, fuzzy
-#| msgid "Builder is updating your projects configured dependencies."
 msgid "Builder is updating your project’s configured dependencies."
-msgstr "‏Builder מעדכן את התלויות המוגדרות על ידי המיזם שלך."
+msgstr "Builder מעדכן את התלויות שמוגדרות למיזם שלך."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -6133,8 +6091,8 @@ msgstr "ענפים"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
 msgid ""
-"Enter the URL of the source code repository for the project you would like "
-"to clone."
+"Enter the URL of the source code repository for the project you would like to "
+"clone."
 msgstr "יש להזין את כתובת מאגר קוד המקור עבור המיזם שברצונך לשבט."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
@@ -6562,8 +6520,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הוספת נקודת עצירה בתחילת היישומון"
 
 #~ msgid ""
-#~ "Automatically stop execution at the start of the applications main "
-#~ "function"
+#~ "Automatically stop execution at the start of the applications main function"
 #~ msgstr "עצירה אוטומטית בהרצה של הפונקציה הראשית (main) של היישום"
 
 # לדעתי אין מדובר ב„שולחן עבודה” של המעטפת כאן
@@ -6627,8 +6584,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "בחירת תצורה זו כתצורה הפעילה."
 
 #~ msgid ""
-#~ "Duplicating the configuration allows making changes without modifying "
-#~ "this configuration."
+#~ "Duplicating the configuration allows making changes without modifying this "
+#~ "configuration."
 #~ msgstr "שכפול התצורה מאפשר ביצוע שינויים ללא שינוי הגדרות אלו."
 
 #~ msgid "_Remove"
@@ -7498,8 +7455,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "נא להמתין בזמן סריקת המיזם שלך"
 
 #~ msgid "The number of pixels to include above and below lines in the editor."
-#~ msgstr ""
-#~ "The number of pixels to include above and below lines in the editor."
+#~ msgstr "The number of pixels to include above and below lines in the editor."
 
 #~ msgid "Window position"
 #~ msgstr "Window position"
@@ -7845,10 +7801,9 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הוצאת קוד מהערה"
 
 #~ msgid ""
-#~ "When saving a file Builder will automatically update copyright "
-#~ "information for you"
-#~ msgstr ""
-#~ "בעת שמירת קובץ, Builder יעדכן באופן אוטומטי את זכויות היוצרים בשבילך"
+#~ "When saving a file Builder will automatically update copyright information "
+#~ "for you"
+#~ msgstr "בעת שמירת קובץ, Builder יעדכן באופן אוטומטי את זכויות היוצרים בשבילך"
 
 #~ msgid "update copyright save"
 #~ msgstr "עדכון זכויות יוצרים שמירה לשמור לעדכן"
@@ -8206,9 +8161,9 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "quick highlight words matching current selection minimum length"
 #~ msgstr ""
-#~ "quick highlight words matching current selection minimum length חיפוש "
-#~ "מהיר הדגשה מילה מילים נוכחי בחירה תואם מתאים מתאימה תואמת מינימום הכרחי "
-#~ "אורך תו תווים "
+#~ "quick highlight words matching current selection minimum length חיפוש מהיר "
+#~ "הדגשה מילה מילים נוכחי בחירה תואם מתאים מתאימה תואמת מינימום הכרחי אורך תו "
+#~ "תווים "
 
 #~ msgid "Rust Analyzer: Cargo command for diagnostics"
 #~ msgstr "מנתח Rust: פקודת Cargo לניתוח"
@@ -8348,8 +8303,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #, c-format
 #~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file "
-#~ "as an attachment on your bug report or support request."
+#~ "The support log file has been written to “%s”. Please provide this file as "
+#~ "an attachment on your bug report or support request."
 #~ msgstr ""
 #~ "קובץ יומן התמיכה נכתב אל „%s”. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
 #~ "בבקשת תמיכה."
@@ -8850,8 +8805,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הצגת השלמות בעת הקלדה בהתבסס על מילים שנמצאו באיזה מסמך פתוח"
 
 #~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
+#~ "Create and manages a Ctags database for completing class names, functions, "
+#~ "and more"
 #~ msgstr "יצירה וניהול מסד נתוני Ctags עבור השלמת שמות מחלקה, פונקציות ועוד"
 
 #~ msgid "Suggest completions using Clang (Experimental)"
