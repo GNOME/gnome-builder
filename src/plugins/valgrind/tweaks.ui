@@ -78,6 +78,18 @@
                             </property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSpin">
+                            <property name="title" translatable="yes">Number of Callers</property>
+                            <property name="subtitle" translatable="yes">Set the limit to the number of entries in stack traces</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">num-callers</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
