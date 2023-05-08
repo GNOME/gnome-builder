@@ -16,6 +16,10 @@
     <key name="track-origins" type="b">
       <default>true</default>
     </key>
+    <key name="num-callers" type="u">
+      <range min="1" max="500"/>
+      <default>12</default>
+    </key>
     <key name="leak-check" type="s">
       <choices>
         <choice value="no"/>
