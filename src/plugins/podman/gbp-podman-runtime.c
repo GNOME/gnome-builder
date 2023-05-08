@@ -120,11 +120,22 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
   if (has_tty)
     ide_run_context_append_argv (run_context, "--tty");
 
-  /* Specify working directory inside the container */
+  /* Specify working directory inside the container. If one is not provided,
+   * synthesize one as the user's home directory so that we have the same
+   * behavior as the "host" runtime. We run the risk of a container not having
+   * the same home directory, but given that we're generally supporting toolbox
+   * here, that can be assumed.
+   *
+   * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2042
+   */
   if (cwd != NULL)
     {
       g_autofree char *cwd_absolute = g_canonicalize_filename (cwd, NULL);
       ide_run_context_append_formatted (run_context, "--workdir=%s", cwd_absolute);
+    }
+  else
+    {
+      ide_run_context_append_formatted (run_context, "--workdir=%s", g_get_home_dir ());
     }
 
   /* From podman-exec(1):
