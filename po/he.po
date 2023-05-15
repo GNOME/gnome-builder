@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-04-21 09:56+0000\n"
-"PO-Revision-Date: 2023-04-21 12:58+0300\n"
+"POT-Creation-Date: 2023-05-04 09:35+0000\n"
+"PO-Revision-Date: 2023-05-04 12:34+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3)\n"
-"X-Generator: Gtranslator 42.0\n"
+"2 : 3);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -329,7 +329,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "If enabled, the editor will show relative line numbers."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+#: src/plugins/editorui/tweaks.ui:471
 msgid "Smart Backspace"
 msgstr "מקש Backspace חכם"
 
@@ -342,7 +342,7 @@ msgstr ""
 "indentation size."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:483
 msgid "Smart Home/End"
 msgstr "מקשי Home ו־End חכמים"
 
@@ -367,7 +367,7 @@ msgid "When the overview map should be displayed."
 msgstr "When the overview map should be displayed."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
 msgstr "ציור רווחים"
 
@@ -491,7 +491,7 @@ msgstr "Window maximized state"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Style Variant"
-msgstr "Style Variant"
+msgstr "הגוון סגנון"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid ""
@@ -514,7 +514,7 @@ msgstr "תיקיית המיזמים"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:29
 msgid "Directory for all Builder projects."
-msgstr "Directory for all Builder projects."
+msgstr "תיקייה לכל המיזמים של Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
@@ -522,7 +522,7 @@ msgstr "שחזור הפעלה"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr "Restores the projects previous session when loading."
+msgstr "משחזר את ההפעלה האחרונה של המיזמים בעת הטעינה."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -668,7 +668,7 @@ msgstr ""
 "If enabled, the project tree will sort directories before regular files."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
+#: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "בדיקת איות"
@@ -714,7 +714,7 @@ msgid "The current language lacks a symbol resolver."
 msgstr "לשפה הנוכחית חסר מאחזר סמלים."
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:397
+#: src/libide/code/ide-buffer-manager.c:391
 #, c-format
 msgid "unsaved file %u"
 msgstr "קובץ שלא נשמר %u"
@@ -749,7 +749,7 @@ msgstr "ללא כותרת"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:558
-#: src/libide/greeter/ide-greeter-workspace.c:697
+#: src/libide/greeter/ide-greeter-workspace.c:695
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1531
@@ -784,9 +784,9 @@ msgid "Preferences"
 msgstr "העדפות"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
-#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:464
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -800,7 +800,7 @@ msgstr "עזרה"
 #: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
 #: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
-msgstr "על אודות Builder"
+msgstr "על Builder"
 
 #: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:62
 msgid "_Quit"
@@ -892,6 +892,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
+"הקידוד ששימש לטעינת הקובץ זיהה שגיאות. אפשר לבחור קידוד אחר משורת המצב "
+"ולרענן."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1113,15 +1115,15 @@ msgstr "ארע כשל בהגדרת הבנייה"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "רצף הפעילות החל כדי לנקות את עץ הבנייה"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "רצף הפעולות החל"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "רצף הפעולות הסתיים"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1224,52 +1226,52 @@ msgid "Unit Test"
 msgstr "יחידת בדיקה"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:185
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "דרישת משתמש להרצת הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:546
 msgid "Cannot run target, another target is running"
 msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:806
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "היישום יצא עם שגיאה: %s"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:809
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "היישום יצא"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:997
 #, c-format
 msgid "Running %s…"
 msgstr "מריץ %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1064
 msgid "Deploying to device…"
 msgstr "פורס להתקן…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1293
 msgid "User requested application to run"
 msgstr "דרישת משתמש להרצת היישום"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1325
 msgid "User requested application to restart"
 msgstr "דרישת משתמש להפעלה מחדש את היישום"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1355
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "דרישת משתמש להרצת היישום עם הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1375
 msgid "User requested application to stop"
 msgstr "דרישת משתמש לעצירת היישום"
 
@@ -1373,7 +1375,7 @@ msgid "_Delete Project Sources"
 msgstr "_מחיקת מקורות המיזם"
 
 #: src/libide/greeter/ide-greeter-workspace.c:654
-#: src/libide/greeter/ide-greeter-workspace.c:693
+#: src/libide/greeter/ide-greeter-workspace.c:691
 msgid "Select Project Folder"
 msgstr "בחירת תיקיית מיזם"
 
@@ -1381,12 +1383,12 @@ msgstr "בחירת תיקיית מיזם"
 msgid "Select Project File"
 msgstr "בחירת קובץ מיזם"
 
-#: src/libide/greeter/ide-greeter-workspace.c:698
+#: src/libide/greeter/ide-greeter-workspace.c:696
 #: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_פתיחה"
 
-#: src/libide/greeter/ide-greeter-workspace.c:709
+#: src/libide/greeter/ide-greeter-workspace.c:707
 msgid "All Project Types"
 msgstr "כל סוגי המיזמים"
 
@@ -1427,7 +1429,7 @@ msgstr "לא ניתן למצוא את התכונה %s במחלקה %s"
 #: src/libide/gtk/ide-animation.c:997
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr "מציאת התכונה %s ב־%s נכשלה."
+msgstr "מציאת התכונה %s ב־%s נכשלה"
 
 #: src/libide/gtk/ide-animation.c:1006
 #, c-format
@@ -1507,7 +1509,7 @@ msgid "%u of %u"
 msgstr "%u מתוך %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "חיפוש"
@@ -1769,64 +1771,64 @@ msgstr "שרת השפה „%s” יצא"
 #: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr ""
+msgstr "שרת השפה „%s” ייצר את התהליך %s"
 
-#: src/libide/plugins/ide-plugin.c:336
+#: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "בקרת גרסות"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr "ספריות תכנה"
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "שרתי שפה"
 
-#: src/libide/plugins/ide-plugin.c:339
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
 msgstr "התקנים ומדמים"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "אבחון"
 
-#: src/libide/plugins/ide-plugin.c:341
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Build Systems"
 msgstr "מערכות בנייה"
 
-#: src/libide/plugins/ide-plugin.c:342
+#: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
 msgstr "מהדרים"
 
-#: src/libide/plugins/ide-plugin.c:343
+#: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
 msgstr "מנפי שגיאות"
 
-#: src/libide/plugins/ide-plugin.c:344
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Templates"
 msgstr "תבניות"
 
-#: src/libide/plugins/ide-plugin.c:345
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
 msgstr "עריכה ותבניות"
 
-#: src/libide/plugins/ide-plugin.c:348
+#: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
 msgstr "דפדפן"
 
-#: src/libide/plugins/ide-plugin.c:349
+#: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
 msgstr "שפת הפעלה"
 
-#: src/libide/plugins/ide-plugin.c:350
+#: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
 msgstr "שילוב שולחן עבודה"
 
-#: src/libide/plugins/ide-plugin.c:351
+#: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
 msgstr "נוספים"
 
@@ -2072,13 +2074,13 @@ msgstr "גלישה מסביב"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr ""
+msgstr "התהליך הושמד על ידי האות %d"
 
-#: src/libide/tree/ide-tree-empty.c:207
+#: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
 msgstr "<i>בטעינה</i>"
 
-#: src/libide/tree/ide-tree-empty.c:209
+#: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
 msgstr "ריק"
 
@@ -2164,7 +2166,7 @@ msgstr "מיזם בבנייה"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr ""
+msgstr "פקודות הבנייה נשמרות במטמון"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
@@ -2173,17 +2175,13 @@ msgid "%s (Copy)"
 msgstr "‫%s (עותק)"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
-#, fuzzy
-#| msgid "A Meson-based project is loaded but meson could not be found."
 msgid "BuildStream project in use but “bst” executable could not be found."
-msgstr "נטען מיזם מבוסס Meson, אך meson לא נמצא."
+msgstr "נעשה שימוש במיזם BuildStream, אך קובץ ההפעלה „bst” לא נמצא."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
-#, fuzzy
-#| msgid "Remove environment variable"
 msgid "Use KEY=VALUE to set an environment variable"
-msgstr "הסרת משתנה סביבתי"
+msgstr "יש להשתמש בערך=מפתח כדי להגדיר משתנה סביבתי"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
@@ -2192,9 +2190,8 @@ msgstr "מפתחות לא יכולים להתחיל במספר"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
-#, fuzzy
 msgid "Keys may only contain alpha-numerics or underline."
-msgstr "מפתחות יכולים להכיל אותיות אלפבית לטיני ("
+msgstr "מפתחות יכולים להכיל אותיות אלפבית לטיניות או קווים תחתיים."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -2341,10 +2338,9 @@ msgstr "ניתן להרצה"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
-#, fuzzy, c-format
-#| msgid "Failed to locate a build target"
+#, c-format
 msgid "Failed to list build targets: %s"
-msgstr "ארע כשל באיתור מטרת הבנייה"
+msgstr "הצגת יעדי הבנייה נכשלה: %s"
 
 # פועלי בניין
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
@@ -2359,7 +2355,7 @@ msgstr "מטרות בנייה זמינות"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
 "Some targets may not be available until the project has been configured."
-msgstr ""
+msgstr "חלק מהיעדים עלולים שלא להיות זמינים עד להגדרת המיזם."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -2368,7 +2364,7 @@ msgstr "זיהוי אוטומטי"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "הבחירה מאפשרת ל־Builder לבחור את המועמד הטוב ביותר."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
@@ -2511,7 +2507,7 @@ msgstr "פריסת המיזם בהתקן הנוכחי"
 #. the output is the same as using flatpak-builder from Flathub, etc.
 #: src/plugins/buildui/gtk/menus.ui:88
 msgid "_Export"
-msgstr "_ייצוא"
+msgstr "יי_צוא"
 
 #: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
@@ -2761,7 +2757,7 @@ msgstr "ניקוי פלט ישן"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr "פלט שאינו בתוקף ינוקה כאשר תהליך הבנייה יחל"
+msgstr "פלט שאינו בתוקף ינוקה כאשר Builder יופעל"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
@@ -2828,7 +2824,7 @@ msgid ""
 "the configure phase of the build pipeline"
 msgstr ""
 "אפשרויות אלו משמשות על ידי מערכת הבנייה להגדרת המיזם במהלך שלב ההגדרה בצינור "
-"הבנייה."
+"הבנייה"
 
 #: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
@@ -2868,7 +2864,7 @@ msgstr "עדכון תלויות"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "בניית מייזם"
@@ -2879,12 +2875,12 @@ msgstr "הרצת Cargo"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "שרת השילוב מול Clang יצא"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "שרת השילוב מול Cland הופעל בתור תהליך %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2935,7 +2931,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "הגדרת מיזם"
 
@@ -2966,16 +2962,14 @@ msgid "Failed to load flags for plan: %s"
 msgstr "נכשלה טעינת דגלונים לתכנית: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s: %s"
+#, c-format
 msgid "Failed to cull index plan: %s"
-msgstr "נכשל בטעינת הקובץ: %s: %s"
+msgstr "ליקוט תוכנית מפתח נכשל: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
-#, fuzzy, c-format
-#| msgid "Failed to locate template \"%s\""
+#, c-format
 msgid "Failed to populate index plan: %s"
-msgstr "איתור התבנית „%s” נכשל."
+msgstr "אכלוס תוכנית מפתח נכשל: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
@@ -3022,10 +3016,9 @@ msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "יתכן וטעית בהקלדת „%s”. האם התכוונת ל־„%s”?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
-#, fuzzy, c-format
-#| msgid "Failed to format selection: %s"
+#, c-format
 msgid "Failed to format while saving document: %s"
-msgstr "נכשל בעיצוב הבחירה: %s"
+msgstr "העיצוב בעת שמירת המסמך נכשל: %s"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
@@ -3533,11 +3526,11 @@ msgstr "היישום להרצה"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "PTY למתווך דו־כיווני להתקן"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "מספר השניות להמתנה להופעת עמית ה־deviced"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -3585,13 +3578,13 @@ msgstr "טקסט פשוט"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "רווחים"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "טאב"
 
@@ -3808,7 +3801,7 @@ msgid "The desired maximum line length"
 msgstr "אורך שורה מרבי רצוי"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Behavior"
 msgstr "התנהגות"
 
@@ -3963,228 +3956,220 @@ msgstr "הצגת אבחון"
 msgid "Display diagnostics next to the line number"
 msgstr "הצגת אבחון לצד מספר השורה"
 
-#: src/plugins/editorui/tweaks.ui:211
-msgid "Show Line Changes"
-msgstr "הדגשת שורות שהשתנו"
-
-#: src/plugins/editorui/tweaks.ui:212
-msgid "Highlight changed lines next to the line number"
-msgstr "הדגשת שורות שהשתנו לצד מספר השורה"
-
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:213
 msgid "Highlighting"
 msgstr "הדגשה"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:216
 msgid "Highlight Current Line"
 msgstr "הדגשת השורה הנוכחית"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Make the current line stand out with highlights"
 msgstr "הבלטת השורה הנוכחית באמצעות הדגשה"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Highlight Matching Brackets"
 msgstr "הדגשת סוגרים מתאימים"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:229
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 "שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים "
-"ועוד "
+"ועוד"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
 msgstr "הדגשה תחבירית"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr "שימוש במידע על סמלים להדגשת שמות מתחם, פונקציות ומשתנים בתוך קוד המקור"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:258
 msgid "Draw a mark representing normal spaces"
 msgstr "ציור סימן המייצג רווחים רגילים"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:271
 msgid "Draw a mark representing tabs"
 msgstr "ציור סימן המייצג טאבים"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
 msgstr "שורות חדשות"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:284
 msgid "Draw a mark at the end of lines"
 msgstr "ציור סימן בסוף כל שורה"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:296
 msgid "Non-breaking spaces"
 msgstr "רווחים קשיחים"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:297
 msgid "Draw a mark at non-breaking space characters"
 msgstr "ציור סימן בתווי רווחים קשיחים"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Leading"
 msgstr "מובילים"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
 msgstr "ציור סימן עבור רווחים מובילים בלבד"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Inside Text"
 msgstr "בתוך הטקסט"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
 msgstr "ציור סימן בתוך שורת טקסט בלבד"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:339
 msgid "Trailing"
 msgstr "נגררים"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:340
 msgid "Draw marks for trailing spaces only"
 msgstr "ציור סימן עבור רווחים נגררים בלבד"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
 msgstr "בדיקת איות"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
 msgstr "סימון קו מתחת לטעויות איות אפשריות בזמן ההקלדה"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:377
 msgid "Selections"
 msgstr "בחירות"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Minimum Characters to Highlight"
 msgstr "מספר תווים מזערי להדגשה"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
 msgstr "אורך הבחירה המזערי להדגשת התאמות"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
 msgstr "קטעי קוד"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:397
 msgid "Expand Snippets"
 msgstr "הרחבת קטעי קוד"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "שימוש ב„טאב” להרחבת הגדרות קטעי קוד בעורך הטקסט"
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
 msgstr "השלמת קוד"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:417
 msgid "Completion Proposals"
 msgstr "הצעות השלמה"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
 msgstr "הצעת השלמות קוד"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
 msgstr "הצעת השלמות באופן אוטומטי בזמן הקלדה"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Select First Completion Proposal"
 msgstr "בחירת הצעת ההשלמה הראשונה"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "בחירה אוטומטית של הצעת ההשלמה הראשונה בהצגה"
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
 msgstr "מספר הצעות השלמה מרבי"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:449
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "המספר המרבי של שורות השלמה שיוצגו בבת אחת"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:468
 msgid "Movements"
 msgstr "מעברים"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור את היישור עם רוחב ההזחה שלך"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:484
 msgid "Navigate to non-space characters"
 msgstr "ניווט לתו הראשון שאינו רווח"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:493
 msgid "Before line boundaries"
 msgstr "לפני גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:499
 msgid "After line boundaries"
 msgstr "אחרי גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:505
 msgid "Instead of line boundaries"
 msgstr "במקום גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:511 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "מושבת"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:523
 msgid "Session Management"
 msgstr "ניהול הפעלה"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:527
 msgid "Save & Restore"
 msgstr "שמירה ושחזור"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:530
 msgid "Auto-Save"
 msgstr "שמירה אוטומטית"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:531
 msgid "Regularly save the document as you type"
 msgstr "שמירת המסמך באופן קבוע עם הקלדה שלך"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:542
 msgid "Auto-Save Delay"
 msgstr "השהייה לשמירה אוטומטית"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:543
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "זמן השהייה בשניות להמתנה לפני שמירה אוטומטית של המסמך"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:558
 msgid "Format on Save"
 msgstr "סידור הקוד ברגע השמירה"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:559
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr "סידור הקוד מחדש בזמן השמירה לכונן. דורש רישום מעצב לקוד של השפה."
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:574
 msgid "Restore Cursor Position"
 msgstr "שחזור מיקום הסמן"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:575
 msgid "Jump to the last position when re-opening a file"
 msgstr "קפיצה למיקום האחרון עם פתיחה מחודשת של קובץ"
 
@@ -4215,10 +4200,9 @@ msgid "The client has been closed"
 msgstr "הלקוח נסגר"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:741
-#, fuzzy, c-format
-#| msgid "Failed to create translation unit: %s"
+#, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Failed to create translation unit: %s"
+msgstr "הסרת מניפסט flatpak נכשלה: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
@@ -4282,7 +4266,7 @@ msgstr "מסיים בניית flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
 msgid "Exporting staging directory"
-msgstr ""
+msgstr "תיקיית ההכנות מיוצאת"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
 msgid "Creating flatpak bundle"
@@ -4433,10 +4417,9 @@ msgid "Pushed."
 msgstr "נדחף."
 
 #: src/plugins/git/gbp-git-vcs.c:266
-#, fuzzy, c-format
-#| msgid "Insert “%s”"
+#, c-format
 msgid "Pushing ref “%s”"
-msgstr "הכנסת „%s”"
+msgstr "הסימוכין „%s” נדחף"
 
 #: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
@@ -4474,7 +4457,7 @@ msgstr "דוא״ל"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
-msgstr ""
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4520,10 +4503,8 @@ msgid "Find in Files (Shift+Ctrl+Alt+F)"
 msgstr "חיפוש בקבצים (Shift+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#, fuzzy
-#| msgid "S_ort Directories First"
 msgid "_Recurse into Directories"
-msgstr "_סידור תיקיות לפני קבצים"
+msgstr "_נסיגה לתוך התיקיות"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
 msgid "Match Whole _Words"
@@ -4583,10 +4564,8 @@ msgstr "מערכת הפעלה מארחת"
 
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Bundled with Builder"
-msgstr "הרצה עם מאפיין"
+msgstr "מאוגד כחלק מ־Builder"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4743,18 +4722,16 @@ msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "טעינת חקירה של Meson"
 
 # כריית מיזמים
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "התקנת מיזם"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
-#, fuzzy
-#| msgid "Command Environment"
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
-msgstr "Command Environment"
+msgstr "שמירת סביבת הפיתוח במטמון"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
@@ -5427,8 +5404,8 @@ msgstr "תיקיית עבודה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "הפקודה תרוץ ממיקום זה. יש להשתמש ב־<tt>$BUILDDIR</tt>‎, <tt>$SRCDIR</tt>‎ ‏או "
 "<tt>$HOME</tt>‎ על מנת להגדיר נתיב יחסי."
@@ -5474,7 +5451,7 @@ msgstr "כמטרת היישום"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
-msgstr "מריץ את הפקודה כאילו היא מטרת היישום"
+msgstr "מריץ את הפקודה כאילו היא מטרת היישום."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
@@ -5596,7 +5573,7 @@ msgstr "שפות"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
-msgstr ""
+msgstr "swift run"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5630,10 +5607,8 @@ msgid "Navigate to a symbol within the current page"
 msgstr "ניווט לסמל בעמוד הנוכחי"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
-#, fuzzy
-#| msgid "Application ID…"
 msgid "Profiling Application…"
-msgstr "מזהה יישום…"
+msgstr "מתבצע אפיון של היישום…"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:308
 msgid "Symbol decoding will begin after application exits"
@@ -5669,10 +5644,8 @@ msgid "Profiler"
 msgstr "מאפיין"
 
 #: src/plugins/sysprof/gtk/menus.ui:33
-#, fuzzy
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "בדיקת _איות"
+msgstr "דגימת תהליכים"
 
 #: src/plugins/sysprof/gtk/menus.ui:35
 msgid "CPU Performance"
@@ -5683,10 +5656,8 @@ msgid "Memory Allocations"
 msgstr "הקצאות זיכרון"
 
 #: src/plugins/sysprof/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Allow JavaScript"
 msgid "Sample JavaScript Stacks"
-msgstr "לאפשר JavaScript"
+msgstr "דגימת מחסניות JavaScript"
 
 #: src/plugins/sysprof/gtk/menus.ui:51
 msgid "Graphics"
@@ -5734,7 +5705,7 @@ msgstr "לאפשר שילוב יישום"
 
 #: src/plugins/sysprof/gtk/menus.ui:101
 msgid "Allow CPU Throttling"
-msgstr ""
+msgstr "לאפשר האטת מעבד"
 
 #: src/plugins/sysprof/gtk/menus.ui:113
 msgid "Run with _Profiler"
@@ -5753,18 +5724,16 @@ msgid "Records CPU usage and CPU frequency statistics"
 msgstr "הקלטת שימוש במעבד וסטטיסטיקת תדירות המעבד"
 
 #: src/plugins/sysprof/tweaks.ui:31
-#, fuzzy
-#| msgid "Allow JavaScript"
 msgid "Sample Callstacks"
-msgstr "לאפשר JavaScript"
+msgstr "דגימת מחסניות קריאה"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
-msgstr ""
+msgstr "הקלטת מעקבי מחסנית על בסיס קבוע ובנייה של תרשים קריאות"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "CPU Governor"
-msgstr ""
+msgstr "מושל מעבד"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Force performance mode while profiling"
@@ -5772,7 +5741,7 @@ msgstr "לכפות מצב ביצועים עם יצירת פרופיל"
 
 #: src/plugins/sysprof/tweaks.ui:53
 msgid "Don't Change Governor"
-msgstr ""
+msgstr "לא להחליף מושל"
 
 #: src/plugins/sysprof/tweaks.ui:59
 msgid "Force Performance Mode"
@@ -5846,7 +5815,7 @@ msgstr "מעקב יישום"
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
-msgstr ""
+msgstr "אספקת המשתנה הסביבתי TRACE_FD ליישום כדי להעביר אירועים בהתאמה אישית"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
@@ -6000,10 +5969,8 @@ msgid "Updating Dependencies…"
 msgstr "מעדכן תלויות…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
-#, fuzzy
-#| msgid "Builder is updating your projects configured dependencies."
 msgid "Builder is updating your project’s configured dependencies."
-msgstr "‏Builder מעדכן את התלויות המוגדרות על ידי המיזם שלך."
+msgstr "Builder מעדכן את התלויות שמוגדרות למיזם שלך."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -6453,6 +6420,9 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "Show line number at beginning of each line"
 #~ msgstr "הצגת מספר השורה בתחילת כל שורה"
+
+#~ msgid "Line changes"
+#~ msgstr "שינויי שורות"
 
 #~ msgid "Show if a line was added or modified next to line number"
 #~ msgstr "הצגת סימן לצד מספר השורה המורה אם שורה נוספה או שונתה"
