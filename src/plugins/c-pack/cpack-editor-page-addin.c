@@ -62,6 +62,8 @@ format_decls_cb (GSimpleAction *action,
       gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, output, -1);
       gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
     }
+
+  gtk_widget_grab_focus (GTK_WIDGET (view));
 }
 
 static GActionEntry entries[] = {
