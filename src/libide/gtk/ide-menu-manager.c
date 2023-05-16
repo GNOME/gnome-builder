@@ -79,6 +79,7 @@ ide_menu_manager_dispose (GObject *object)
   IdeMenuManager *self = (IdeMenuManager *)object;
 
   g_clear_pointer (&self->models, g_hash_table_unref);
+  g_clear_pointer (&self->cached_keys, g_strfreev);
 
   G_OBJECT_CLASS (ide_menu_manager_parent_class)->dispose (object);
 }
