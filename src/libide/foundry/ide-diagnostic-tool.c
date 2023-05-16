@@ -112,6 +112,7 @@ ide_diagnostic_tool_real_prepare_run_context (IdeDiagnosticTool  *self,
   const char *bundled_program_path;
   const char *program_name;
   g_autofree char *program_path = NULL;
+  g_autofree char *found = NULL;
   IdeRuntimeManager *runtime_manager;
   IdeRuntime *host = NULL;
   IdePipeline *pipeline = NULL;
@@ -195,7 +196,7 @@ ide_diagnostic_tool_real_prepare_run_context (IdeDiagnosticTool  *self,
     program_path = g_strdup (bundled_program_path);
 
   /* See if Builder itself has bundled the program */
-  if (program_path || g_find_program_in_path (program_name))
+  if (program_path || (found = g_find_program_in_path (program_name)))
     IDE_GOTO (setup_launcher);
 
   g_set_error (error,
