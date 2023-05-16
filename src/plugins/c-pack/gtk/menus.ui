@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="c-pack-menu-search">
+    <item>
+      <attribute name="id">org.gnome.builder.workspace.c-pack.format</attribute>
+      <attribute name="label" translatable="yes">Reformat Function Prototypes</attribute>
+      <attribute name="action">page.c-pack.format</attribute>
+    </item>
+  </menu>
+</interface>
