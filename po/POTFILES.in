@@ -106,7 +106,6 @@ src/libide/webkit/ide-webkit-page.ui
 src/main.c
 src/plugins/autotools/ide-autotools-makecache-stage.c
 src/plugins/autotools/ide-autotools-pipeline-addin.c
-src/plugins/blueprint/blueprint.lang
 src/plugins/buildconfig/ide-buildconfig-config-provider.c
 src/plugins/buildstream/gbp-buildstream-pipeline-addin.c
 src/plugins/buildui/gbp-buildui-environment-editor.c
@@ -153,6 +152,7 @@ src/plugins/codeui/gtk/menus.ui
 src/plugins/comment-code/gtk/menus.ui
 src/plugins/copyright/org.gnome.builder.copyright.gschema.xml
 src/plugins/copyright/tweaks.ui
+src/plugins/c-pack/gtk/menus.ui
 src/plugins/create-project/gbp-create-project-application-addin.c
 src/plugins/create-project/gbp-create-project-widget.c
 src/plugins/create-project/gbp-create-project-widget.ui
