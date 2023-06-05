@@ -457,24 +457,6 @@
             ]
         },
         {
-            "name" : "appstream",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Dgir=false",
-                "-Dapidocs=false",
-                "-Dinstall-docs=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/ximion/appstream.git",
-                    "commit" : "565ff2f3bcf4497c7ffbd298c95c24ad0b7c3d1e"
-                }
-            ]
-        },
-        {
             "name" : "flatpak",
             "config-opts" : [
                 "--disable-documentation",
