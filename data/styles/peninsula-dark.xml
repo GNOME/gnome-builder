@@ -21,7 +21,7 @@
 
   <metadata>
     <property name="variant">dark</property>
-    <property name="dark-variant">peninsula-light</property>
+    <property name="light-variant">peninsula</property>
   </metadata>
 
   <style name="text"                        foreground="#dfdfe0" background="#292a30"/>
