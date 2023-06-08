@@ -1526,3 +1526,19 @@ gbp_flatpak_manifest_get_x_run_args (GbpFlatpakManifest *self)
 
   return (const char * const *)self->x_run_args;
 }
+
+const char *
+gbp_flatpak_manifest_get_base (GbpFlatpakManifest *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  return self->base;
+}
+
+const char *
+gbp_flatpak_manifest_get_base_version (GbpFlatpakManifest *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  return self->base_version;
+}
