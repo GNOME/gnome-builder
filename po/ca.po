@@ -1512,7 +1512,7 @@ msgstr "Obre un fitxer o un terminal"
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
 msgstr ""
-"Utilitza el commutador de la pàgina a dalt o useu una de les opcions "
+"Useu el commutador a dalt de la pàgina o una de les opcions "
 "següents:"
 
 #: src/libide/gui/ide-frame.ui:36
