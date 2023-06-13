@@ -746,6 +746,8 @@ ide_application_network_changed_cb (IdeApplication  *self,
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (G_IS_NETWORK_MONITOR (monitor));
 
+  g_debug ("Network available has changed to %d", available);
+
   self->has_network = !!available;
 }
 
