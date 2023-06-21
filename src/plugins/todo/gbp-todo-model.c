@@ -113,6 +113,7 @@ static GRegex *line2;
 static const char *exclude_dirs[] = {
   ".bzr",
   ".flatpak-builder",
+  "_build",
   ".git",
   ".svn",
   "node_modules",
@@ -432,6 +433,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   ide_subprocess_launcher_push_argv (launcher, "-I");
   ide_subprocess_launcher_push_argv (launcher, "-H");
   ide_subprocess_launcher_push_argv (launcher, "-n");
+  ide_subprocess_launcher_push_argv (launcher, "-w");
 
   if (!m->use_git_grep)
     ide_subprocess_launcher_push_argv (launcher, "-r");
@@ -462,11 +464,9 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   for (guint i = 0; i < G_N_ELEMENTS (keywords); i++)
     {
       const char *keyword = keywords[i];
-      g_autofree char *arg = NULL;
 
-      arg = g_strdup_printf ("%s(:| )", keyword);
       ide_subprocess_launcher_push_argv (launcher, "-e");
-      ide_subprocess_launcher_push_argv (launcher, arg);
+      ide_subprocess_launcher_push_argv (launcher, keyword);
 
       if (m->use_git_grep)
         {
