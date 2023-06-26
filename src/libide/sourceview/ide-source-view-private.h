@@ -76,6 +76,10 @@ struct _IdeSourceView
   double click_x;
   double click_y;
 
+  /* Tracking if we're in undo and/or redo */
+  guint undo_recurse_count;
+  guint redo_recurse_count;
+
   /* Bitfield values go here */
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;

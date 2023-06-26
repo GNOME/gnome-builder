@@ -380,7 +380,14 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
       return;
     }
 
+  /* Ignore anything odd that we won't be able to process or is outside
+   * of a key-press event (such as buffer changes from plugins).
+   */
   if (length != 1 || !self->in_key_press)
+    return;
+
+  /* Ignore if we are in an undo/redo operation */
+  if (self->undo_recurse_count > 0 || self->redo_recurse_count > 0)
     return;
 
   ide_buffer_get_selection_bounds (buffer, &insert, NULL);
@@ -462,7 +469,9 @@ ide_source_view_delete_range_cb (IdeSourceView *self,
 
   if (!self->in_key_press ||
       !self->in_backspace ||
-      !self->insert_matching_brace)
+      !self->insert_matching_brace ||
+      self->undo_recurse_count ||
+      self->redo_recurse_count)
     return;
 
   gtk_text_iter_order (begin, end);
@@ -482,6 +491,46 @@ ide_source_view_delete_range_cb (IdeSourceView *self,
   /* Remove matching }])"' */
   if (match && gtk_text_iter_get_char (end) == match)
     gtk_text_iter_forward_char (end);
+}
+
+static void
+ide_source_view_buffer_before_undo_cb (IdeSourceView *self,
+                                       IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->undo_recurse_count++;
+}
+
+static void
+ide_source_view_buffer_after_undo_cb (IdeSourceView *self,
+                                      IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->undo_recurse_count--;
+}
+
+static void
+ide_source_view_buffer_before_redo_cb (IdeSourceView *self,
+                                       IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->redo_recurse_count++;
+}
+
+static void
+ide_source_view_buffer_after_redo_cb (IdeSourceView *self,
+                                      IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->redo_recurse_count--;
 }
 
 static void
@@ -534,6 +583,28 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Track when we're within an undo/redo operation */
+  g_signal_connect_object (buffer,
+                           "undo",
+                           G_CALLBACK (ide_source_view_buffer_before_undo_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (buffer,
+                           "undo",
+                           G_CALLBACK (ide_source_view_buffer_after_undo_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (buffer,
+                           "redo",
+                           G_CALLBACK (ide_source_view_buffer_before_redo_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (buffer,
+                           "redo",
+                           G_CALLBACK (ide_source_view_buffer_after_redo_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
   /* Load addins immediately */
   language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
   _ide_source_view_addins_init (self, language);
@@ -546,6 +617,19 @@ ide_source_view_disconnect_buffer (IdeSourceView *self)
 
   if (self->buffer == NULL)
     return;
+
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_before_undo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_after_undo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_before_redo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_after_redo_cb),
+                                        self);
 
   _ide_source_view_addins_shutdown (self);
 
