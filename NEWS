@@ -1,3 +1,38 @@
+# GNOME Builder 45.alpha
+
+This release is intended for early testing for GNOME 45.
+
+ * Plugins may now be written using modern JavaScript powered by
+   libpeas-2 and GJS. See GJS documentation for how to write modern
+   GObjects using JavaScript modules. An example is provided in the
+   src/plugins/examples/ directory.
+
+   Distributors, this means that we no longer depend on pygobject and
+   instead depend on libgjs and libpeas-2.
+
+ * TODO plugin now does word regex selection to avoid matching
+   symbols containing TODO (or similar).
+
+ * Various LSP improvements to more closely adhere to LSP protocol.
+
+ * Builder will now disable text-modifiers during undo/redo operations
+   to avoid confusing the text history stack.
+
+ * Improvements to style schemes to better match libadwaita.
+
+ * The valgrind plugin has gained the option to set number of callers
+   to record in stack traces.
+
+ * Fixes for PHP Intelephense language server integration.
+
+ * Ctrl+Q will now unload workbenches before exiting to ensure that
+   session state may be saved.
+
+ * Improvements for SourceKit-LSP integration.
+
+ * newline-type is properly respected from IdeFileSettings, fixing
+   the initial state found in the statusbar.
+
 # GNOME Builder 44.1
 
 Builder 44.1 is a followup to 44.0 with fixes for a few issues that were found
