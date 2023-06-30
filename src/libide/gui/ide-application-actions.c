@@ -62,19 +62,69 @@ ide_application_actions_tweaks (GSimpleAction *action,
 }
 
 static void
+ide_application_actions_quit_unload_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeWorkbench *workbench = (IdeWorkbench *)object;
+  g_autoptr(GPtrArray) workbenches = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (workbenches != NULL);
+  g_assert (workbenches->len > 0);
+  g_assert (g_ptr_array_find (workbenches, workbench, NULL));
+
+  if (!ide_workbench_unload_finish (workbench, result, &error))
+    g_warning ("Failed to unload workbench: %s", error->message);
+
+  g_ptr_array_remove (workbenches, workbench);
+
+  if (workbenches->len == 0)
+    g_application_quit (G_APPLICATION (IDE_APPLICATION_DEFAULT));
+
+  IDE_EXIT;
+}
+
+static void
+ide_application_actions_quit_unload_foreach_cb (IdeWorkbench *workbench,
+                                                GPtrArray    *workbenches)
+{
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (workbenches != NULL);
+
+  g_ptr_array_add (workbenches, g_object_ref (workbench));
+
+  ide_workbench_unload_async (workbench,
+                              NULL,
+                              ide_application_actions_quit_unload_cb,
+                              g_ptr_array_ref (workbenches));
+}
+
+static void
 ide_application_actions_quit (GSimpleAction *action,
                               GVariant      *param,
                               gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  g_autoptr(GPtrArray) workbenches = NULL;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  /* TODO: Ask all workbenches to cleanup */
+  workbenches = g_ptr_array_new_with_free_func (g_object_unref);
+  ide_application_foreach_workbench (self,
+                                     (GFunc)ide_application_actions_quit_unload_foreach_cb,
+                                     workbenches);
 
-  g_application_quit (G_APPLICATION (self));
+  if (workbenches->len == 0)
+    g_application_quit (G_APPLICATION (self));
 
   IDE_EXIT;
 }
