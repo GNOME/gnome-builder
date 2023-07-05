@@ -57,6 +57,9 @@
         "/share/pkgconfig",
 {{if language == "vala"}}
         "/share/vala",
+{{else if language == "python"}}
+        "*.pyc",
+        "__pycache__",
 {{end}}
         "*.la",
         "*.a"
