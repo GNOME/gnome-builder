@@ -344,6 +344,21 @@ ide_greeter_row_get_search_text (IdeGreeterRow *self)
   g_string_append_printf (str, "%s ", gtk_label_get_text (priv->title) ?: "");
   g_string_append_printf (str, "%s ", gtk_label_get_text (priv->subtitle) ?: "");
 
+  if (priv->project_info)
+    {
+      const char * const *languages = ide_project_info_get_languages (priv->project_info);
+      const gchar *build_system = ide_project_info_get_build_system_name (priv->project_info);
+
+      if (build_system != NULL)
+        g_string_append_printf (str, "%s ", build_system);
+
+      if (languages != NULL)
+        {
+          for (guint i = 0; languages[i]; i++)
+            g_string_append_printf (str, "%s ", languages[i]);
+        }
+    }
+
   return g_string_free (g_steal_pointer (&str), FALSE);
 }
 
