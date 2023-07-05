@@ -187,23 +187,24 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
 
       root_node = json_parser_get_root (parser);
 
-      if (NULL != (root_object = json_node_get_object (root_node)) &&
-          NULL != (app_id = json_object_get_member (root_object, "app-id")) &&
+      if ((root_object = json_node_get_object (root_node)) &&
+          ((app_id = json_object_get_member (root_object, "id")) ||
+           (app_id = json_object_get_member (root_object, "app-id"))) &&
           JSON_NODE_HOLDS_VALUE (app_id) &&
-          NULL != (app_id_str = json_node_get_string (app_id)) &&
+          (app_id_str = json_node_get_string (app_id)) &&
           g_str_has_prefix (base, app_id_str) &&
-          NULL != (modules_node = json_object_get_member (root_object, "modules")) &&
+          (modules_node = json_object_get_member (root_object, "modules")) &&
           JSON_NODE_HOLDS_ARRAY (modules_node) &&
-          NULL != (modules_array = json_node_get_array (modules_node)) &&
+          (modules_array = json_node_get_array (modules_node)) &&
           /* TODO: Discovery matching source element */
           (len = json_array_get_length (modules_array)) > 0 &&
-          NULL != (source_node = json_array_get_element (modules_array, len - 1)) &&
+          (source_node = json_array_get_element (modules_array, len - 1)) &&
           JSON_NODE_HOLDS_OBJECT (source_node) &&
-          NULL != (source_object = json_node_get_object (source_node)) &&
+          (source_object = json_node_get_object (source_node)) &&
           json_object_has_member (source_object, "buildsystem") &&
-          NULL != (buildsystem_node = json_object_get_member (source_object, "buildsystem")) &&
+          (buildsystem_node = json_object_get_member (source_object, "buildsystem")) &&
           JSON_NODE_HOLDS_VALUE (buildsystem_node) &&
-          NULL != (buildsystem = json_node_get_string (buildsystem_node)) &&
+          (buildsystem = json_node_get_string (buildsystem_node)) &&
           *buildsystem != '\0')
         {
           gchar *ret;
