@@ -1788,7 +1788,21 @@ ide_lsp_client_start (IdeLspClient *self)
    */
 
   params = JSONRPC_MESSAGE_NEW (
+#if 0
+    /* Some LSPs will monitor the PID of the editor and exit when they
+     * detect the editor has exited. Since we are likely in a different
+     * PID namespace than the LSP, there is a PID mismatch and it will
+     * probably get PID 2 (from Flatpak) and not be of any use.
+     *
+     * Just ignore it as the easiest solution.
+     *
+     * If this causes problems elsewhere, we might need to try to setup
+     * a quirk handler for some LSPs.
+     *
+     * https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2050
+     */
     "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
+#endif
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "clientInfo", "{",
       "name", JSONRPC_MESSAGE_PUT_STRING (PACKAGE_NAME),
