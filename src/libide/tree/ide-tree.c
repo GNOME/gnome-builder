@@ -950,19 +950,19 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
 
   ide_tree_expander_set_list_row (expander, row);
 
-#define BIND_PROPERTY(name) \
+#define BIND_PROPERTY(name, to) \
   G_STMT_START { \
-    GBinding *binding = g_object_bind_property (node, name, expander, name, G_BINDING_SYNC_CREATE); \
-    g_object_set_data_full (G_OBJECT (expander), "BINDING_" name, g_object_ref (binding), g_object_unref); \
+    GBinding *binding = g_object_bind_property (node, name, expander, to, G_BINDING_SYNC_CREATE); \
+    g_object_set_data_full (G_OBJECT (expander), "BINDING_" name to, g_object_ref (binding), g_object_unref); \
   } G_STMT_END
 
-  BIND_PROPERTY ("expanded-icon");
-  BIND_PROPERTY ("icon");
-  BIND_PROPERTY ("title");
-  BIND_PROPERTY ("use-markup");
+  BIND_PROPERTY ("expanded-icon", "expanded-icon");
+  BIND_PROPERTY ("icon", "icon");
+  BIND_PROPERTY ("title", "title");
+  BIND_PROPERTY ("use-markup", "use-markup");
 
   g_object_set_data_full (G_OBJECT (expander),
-                          "BINDING_flags",
+                          "BINDING_flagsflags",
                           g_object_ref (g_object_bind_property_full (node, "flags",
                                                                      suffix, "gicon",
                                                                      G_BINDING_SYNC_CREATE,
@@ -1010,7 +1010,7 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
                                         G_CALLBACK (ide_tree_row_notify_expanded_cb),
                                         self);
 
-#define UNBIND_PROPERTY(name) \
+#define UNBIND_PROPERTY(name, to) \
   G_STMT_START { \
     GBinding *binding = g_object_steal_data (G_OBJECT (expander), "BINDING_" name); \
     if (binding != NULL) \
@@ -1020,11 +1020,11 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
       } \
   } G_STMT_END
 
-  UNBIND_PROPERTY ("expanded-icon");
-  UNBIND_PROPERTY ("icon");
-  UNBIND_PROPERTY ("title");
-  UNBIND_PROPERTY ("use-markup");
-  UNBIND_PROPERTY ("flags");
+  UNBIND_PROPERTY ("expanded-icon", "expanded-icon");
+  UNBIND_PROPERTY ("icon", "icon");
+  UNBIND_PROPERTY ("title", "title");
+  UNBIND_PROPERTY ("use-markup", "use-markup");
+  UNBIND_PROPERTY ("flags", "flags");
 
 #undef UNBIND_PROPERTY
 
