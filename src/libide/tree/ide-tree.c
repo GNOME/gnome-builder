@@ -753,6 +753,7 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
   expander = g_object_new (IDE_TYPE_TREE_EXPANDER,
                            "suffix", image,
+                           "has-tooltip", TRUE,
                            NULL);
   gtk_list_item_set_child (item, GTK_WIDGET (expander));
 
@@ -959,6 +960,7 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
   BIND_PROPERTY ("expanded-icon", "expanded-icon");
   BIND_PROPERTY ("icon", "icon");
   BIND_PROPERTY ("title", "title");
+  BIND_PROPERTY ("title", "tooltip-text");
   BIND_PROPERTY ("use-markup", "use-markup");
 
   g_object_set_data_full (G_OBJECT (expander),
@@ -1023,6 +1025,7 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
   UNBIND_PROPERTY ("expanded-icon", "expanded-icon");
   UNBIND_PROPERTY ("icon", "icon");
   UNBIND_PROPERTY ("title", "title");
+  UNBIND_PROPERTY ("title", "tooltip-text");
   UNBIND_PROPERTY ("use-markup", "use-markup");
   UNBIND_PROPERTY ("flags", "flags");
 
