@@ -385,6 +385,21 @@
             ]
         },
         {
+            "name" : "libpanel",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "-Ddocs=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "sysprof",
             "config-opts" : [
                 "--buildtype=debugoptimized",
@@ -625,21 +640,6 @@
                     "type" : "git",
                     "url" : "https://github.com/commonmark/cmark",
                     "branch" : "master"
-                }
-            ]
-        },
-        {
-            "name" : "libpanel",
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "config-opts" : [
-            	"-Ddocs=disabled"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
-                    "branch" : "main"
                 }
             ]
         },
