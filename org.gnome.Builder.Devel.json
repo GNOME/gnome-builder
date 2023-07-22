@@ -369,12 +369,11 @@
             "name" : "sysprof",
             "config-opts" : [
                 "--buildtype=debugoptimized",
-                "-Dagent=true",
                 "-Dexamples=false",
                 "-Dgtk=true",
                 "-Dsysprofd=host",
-                "-Dtests=false",
-                "-Dtools=false"
+                "-Dtests=true",
+                "-Dtools=true"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
