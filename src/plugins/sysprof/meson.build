@@ -3,12 +3,10 @@ if get_option('plugin_sysprof')
 sysprof_req_version = '3.46.0'
 sysprof_req = '>= @0@'.format(sysprof_req_version)
 
-libsysprof_dep = dependency('sysprof-4', version: sysprof_req)
-libsysprof_ui_dep = dependency('sysprof-ui-5', version: sysprof_req)
+libsysprof_dep = dependency('sysprof-6', version: sysprof_req)
 
 plugins_deps += [
   libsysprof_dep,
-  libsysprof_ui_dep,
 ]
 
 ipc_sysprof_src = gnome.gdbus_codegen('ipc-sysprof',
@@ -21,7 +19,6 @@ plugins_sources += ipc_sysprof_src
 
 plugins_sources += files([
   'sysprof-plugin.c',
-  'gbp-sysprof-page.c',
   'gbp-sysprof-tool.c',
   'gbp-sysprof-tweaks-addin.c',
   'gbp-sysprof-workbench-addin.c',

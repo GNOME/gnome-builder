@@ -31,7 +31,6 @@
 
 #include "ipc-sysprof.h"
 
-#include "gbp-sysprof-page.h"
 #include "gbp-sysprof-tool.h"
 
 struct _GbpSysprofTool
@@ -66,13 +65,19 @@ gbp_sysprof_tool_get_capture_file (GbpSysprofTool *self)
 
   if (self->capture_file == NULL)
     {
-      char tmpl[] = "gnome-builder-sysprof-XXXXXX.syscap";
-      int fd = g_mkstemp (tmpl);
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      g_autoptr(GDateTime) now = NULL;
+      g_autoptr(GFile) file = NULL;
+      g_autofree char *now_str = NULL;
+      g_autofree char *initial_name = NULL;
+      g_autofree char *filename = NULL;
 
-      self->capture_file = g_strdup (tmpl);
-
-      if (fd != -1)
-        close (fd);
+      now = g_date_time_new_now_local ();
+      now_str = g_date_time_format (now, "%Y-%m-%d %H:%M:%S");
+      initial_name = g_strdup_printf (_("System Capture from %s.syscap"), now_str);
+      g_strdelimit (initial_name, G_DIR_SEPARATOR_S, '-');
+      file = ide_context_build_file (context, initial_name);
+      self->capture_file = g_file_get_path (file);
     }
 
   return self->capture_file;
@@ -376,18 +381,16 @@ gbp_sysprof_tool_stopped (IdeRunTool *run_tool)
   if (self->capture_file != NULL)
     {
       g_autoptr(GFile) file = g_file_new_for_path (self->capture_file);
-      GbpSysprofPage *page = gbp_sysprof_page_new_for_file (file);
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
       IdeWorkbench *workbench = ide_workbench_from_context (context);
-      IdeWorkspace *workspace = ide_workbench_get_current_workspace (workbench);
-      g_autoptr(PanelPosition) position = panel_position_new ();
 
-      ide_workspace_add_page (workspace, IDE_PAGE (page), position);
+      ide_workbench_open_async (workbench,
+                                file,
+                                "open-with-external",
+                                IDE_BUFFER_OPEN_FLAGS_NONE,
+                                NULL,
+                                NULL, NULL, NULL);
 
-      /* Now that the page has the file open, we can unlink our temporary
-       * file and it can continue using it's open FD.
-       */
-      g_unlink (self->capture_file);
       g_clear_pointer (&self->capture_file, g_free);
     }
 
