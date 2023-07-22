@@ -366,6 +366,25 @@
             ]
         },
         {
+            "name" : "libdex",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "--buildtype=debugoptimized",
+                "-Ddocs=false",
+                "-Dintrospection=enabled",
+                "-Dexamples=false",
+                "-Dtests=false",
+                "-Dsysprof=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/libdex.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "sysprof",
             "config-opts" : [
                 "--buildtype=debugoptimized",
@@ -671,25 +690,6 @@
                     "type" : "git",
                     "url" : "https://github.com/axboe/liburing.git",
                     "branch" : "master"
-                }
-            ]
-        },
-        {
-            "name" : "libdex",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Ddocs=false",
-                "-Dintrospection=enabled",
-                "-Dexamples=false",
-                "-Dtests=false",
-                "-Dsysprof=true"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/libdex.git",
-                    "branch" : "main"
                 }
             ]
         },
