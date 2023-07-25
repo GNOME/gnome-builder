@@ -205,5 +205,5 @@ gbp_valgrind_tool_class_init (GbpValgrindToolClass *klass)
 static void
 gbp_valgrind_tool_init (GbpValgrindTool *self)
 {
-  ide_run_tool_set_icon_name (IDE_RUN_TOOL (self), "system-run-symbolic");
+  ide_run_tool_set_icon_name (IDE_RUN_TOOL (self), "builder-valgrind-symbolic");
 }
