@@ -53,7 +53,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "flatpak.json",                                        "{{appid}}.json" },
   { "README.md",                                           "README.md" },
   { "data/hello.desktop.in",                               "data/{{appid}}.desktop.in" },
-  { "data/hello.appdata.xml.in",                           "data/{{appid}}.appdata.xml.in" },
+  { "data/hello.metainfo.xml.in",                          "data/{{appid}}.metainfo.xml.in" },
   { "data/hello.gschema.xml",                              "data/{{appid}}.gschema.xml" },
   { "data/meson.build",                                    "data/meson.build" },
   { "data/icons/meson.build",                              "data/icons/meson.build" },
