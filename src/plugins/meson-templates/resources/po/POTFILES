@@ -1,5 +1,5 @@
 data/{{appid}}.desktop.in
-data/{{appid}}.appdata.xml.in
+data/{{appid}}.metainfo.xml.in
 data/{{appid}}.gschema.xml
 {{if language == "c"}}
 src/main.c
