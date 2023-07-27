@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-16 00:40+0000\n"
-"PO-Revision-Date: 2023-03-16 01:56+0100\n"
+"POT-Creation-Date: 2023-07-22 00:30+0000\n"
+"PO-Revision-Date: 2023-07-28 00:30+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:113 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -34,7 +34,7 @@ msgid "An IDE for GNOME"
 msgstr "Integrált fejlesztői környezet a GNOME-hoz"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:118
+#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -335,7 +335,7 @@ msgstr ""
 "Ha engedélyezve van, akkor a szerkesztő megjeleníti a relatív sorszámokat."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:471
+#: src/plugins/editorui/tweaks.ui:483
 msgid "Smart Backspace"
 msgstr "Okos visszatörlés"
 
@@ -347,7 +347,7 @@ msgstr ""
 "A Visszatörlés kitörli a felesleges szóközöket a behúzásnak megfelelően."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:483
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Home/End"
 msgstr "Okos Home/End"
 
@@ -374,7 +374,7 @@ msgid "When the overview map should be displayed."
 msgstr "Mikor jelenjen meg az áttekintő térkép."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:254
+#: src/plugins/editorui/tweaks.ui:266
 msgid "Draw Spaces"
 msgstr "Szóközök kirajzolása"
 
@@ -680,7 +680,7 @@ msgstr ""
 "jeleníti meg."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:375
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Helyesírás-ellenőrzés"
@@ -721,12 +721,12 @@ msgstr "Új szerkesztő munkaterület"
 msgid "D-Bus Inspector"
 msgstr "D-Bus vizsgáló"
 
-#: src/libide/code/ide-buffer.c:3779
+#: src/libide/code/ide-buffer.c:3810
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó."
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:391
+#: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "%u. mentetlen fájl"
@@ -761,7 +761,7 @@ msgstr "Névtelen"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:558
-#: src/libide/greeter/ide-greeter-workspace.c:695
+#: src/libide/greeter/ide-greeter-workspace.c:697
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1531
@@ -795,9 +795,9 @@ msgid "Preferences"
 msgstr "Beállítások"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
-#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:350
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:464
+#: src/plugins/editorui/tweaks.ui:476
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -849,6 +849,7 @@ msgstr "Oldalak"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -964,7 +965,6 @@ msgstr "Mentés"
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "Mégse"
@@ -1240,50 +1240,50 @@ msgid "Unit Test"
 msgstr "Egységteszt"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:185
+#: src/libide/foundry/ide-run-manager.c:184
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Felhasználó által kért futtatási eszköz: „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:546
+#: src/libide/foundry/ide-run-manager.c:545
 msgid "Cannot run target, another target is running"
 msgstr "A cél nem futtatható, egy másik cél már fut"
 
-#: src/libide/foundry/ide-run-manager.c:806
+#: src/libide/foundry/ide-run-manager.c:805
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Az alkalmazás hibával lépett ki: %s"
 
-#: src/libide/foundry/ide-run-manager.c:809
+#: src/libide/foundry/ide-run-manager.c:808
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Az alkalmazás kilépett"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:997
+#: src/libide/foundry/ide-run-manager.c:996
 #, c-format
 msgid "Running %s…"
 msgstr "%s futtatása…"
 
-#: src/libide/foundry/ide-run-manager.c:1064
+#: src/libide/foundry/ide-run-manager.c:1063
 msgid "Deploying to device…"
 msgstr "Telepítés az eszközre…"
 
-#: src/libide/foundry/ide-run-manager.c:1293
+#: src/libide/foundry/ide-run-manager.c:1292
 msgid "User requested application to run"
 msgstr "A felhasználó az alkalmazás futtatását kérte"
 
-#: src/libide/foundry/ide-run-manager.c:1325
+#: src/libide/foundry/ide-run-manager.c:1324
 msgid "User requested application to restart"
 msgstr "A felhasználó az alkalmazás újraindítását kérte"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1355
+#: src/libide/foundry/ide-run-manager.c:1354
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "A felhasználó az alkalmazás „%s” eszközzel történő futtatását kérte"
 
-#: src/libide/foundry/ide-run-manager.c:1375
+#: src/libide/foundry/ide-run-manager.c:1374
 msgid "User requested application to stop"
 msgstr "A felhasználó az alkalmazás leállítását kérte"
 
@@ -1387,7 +1387,7 @@ msgid "_Delete Project Sources"
 msgstr "Projektforrások _törlése"
 
 #: src/libide/greeter/ide-greeter-workspace.c:654
-#: src/libide/greeter/ide-greeter-workspace.c:691
+#: src/libide/greeter/ide-greeter-workspace.c:693
 msgid "Select Project Folder"
 msgstr "Válasszon projektmappát"
 
@@ -1395,12 +1395,12 @@ msgstr "Válasszon projektmappát"
 msgid "Select Project File"
 msgstr "Válasszon projektfájlt"
 
-#: src/libide/greeter/ide-greeter-workspace.c:696
+#: src/libide/greeter/ide-greeter-workspace.c:698
 #: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_Megnyitás"
 
-#: src/libide/greeter/ide-greeter-workspace.c:707
+#: src/libide/greeter/ide-greeter-workspace.c:709
 msgid "All Project Types"
 msgstr "Minden projekttípus"
 
@@ -1450,7 +1450,6 @@ msgstr "A va_list érték lekérése sikertelen: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Megnyitás"
 
@@ -1518,7 +1517,7 @@ msgid "%u of %u"
 msgstr "%u / %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Keresés"
@@ -1607,13 +1606,13 @@ msgstr "Terminál"
 msgid "New Terminals"
 msgstr "Új terminálok"
 
-#: src/libide/gui/ide-application-actions.c:125
+#: src/libide/gui/ide-application-actions.c:175
 msgid "translator-credits"
 msgstr ""
 "Kelemen Gábor <kelemeng at ubuntu dot com>\n"
 "Meskó Balázs <mesko dot balazs at fsf dot hu>"
 
-#: src/libide/gui/ide-application-actions.c:130
+#: src/libide/gui/ide-application-actions.c:180
 msgid "Funded By"
 msgstr "Támogatta"
 
@@ -1778,62 +1777,62 @@ msgstr "A(z) „%s” nyelvi kiszolgáló kilépett"
 msgid "Language server “%s” spawned as process %s"
 msgstr "A(z) „%s” nyelvi kiszolgáló a következő folyamatként indult el: %s"
 
-#: src/libide/plugins/ide-plugin.c:340
+#: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Verziókövetés"
 
-#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr "SDK-k"
 
-#: src/libide/plugins/ide-plugin.c:342 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr "Nyelvi kiszolgálók"
 
-#: src/libide/plugins/ide-plugin.c:343
+#: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
 msgstr "Eszközök és szimulátorok"
 
-#: src/libide/plugins/ide-plugin.c:344 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "Diagnosztika"
 
-#: src/libide/plugins/ide-plugin.c:345
+#: src/libide/plugins/ide-plugin.c:341
 msgid "Build Systems"
 msgstr "Összeállító rendszerek"
 
-#: src/libide/plugins/ide-plugin.c:346
+#: src/libide/plugins/ide-plugin.c:342
 msgid "Compilers"
 msgstr "Fordítók"
 
-#: src/libide/plugins/ide-plugin.c:347
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Debuggers"
 msgstr "Hibakeresők"
 
-#: src/libide/plugins/ide-plugin.c:348
+#: src/libide/plugins/ide-plugin.c:344
 msgid "Templates"
 msgstr "Sablonok"
 
-#: src/libide/plugins/ide-plugin.c:349
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Editing & Formatting"
 msgstr "Szerkesztés és formázás"
 
-#: src/libide/plugins/ide-plugin.c:352
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
 msgstr "Web"
 
-#: src/libide/plugins/ide-plugin.c:353
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
 msgstr "Nyelvi támogatás"
 
-#: src/libide/plugins/ide-plugin.c:354
+#: src/libide/plugins/ide-plugin.c:350
 msgid "Desktop Integration"
 msgstr "Asztali integráció"
 
-#: src/libide/plugins/ide-plugin.c:355
+#: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
 msgstr "Továbbiak"
 
@@ -1981,20 +1980,21 @@ msgstr "_Formázás"
 
 #: src/libide/sourceview/gtk/menus.ui:153
 #: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Kódnavigáció"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1540
+#: src/libide/sourceview/ide-source-view.c:1624
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "%u. sor, %u. oszlop"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1542
+#: src/libide/sourceview/ide-source-view.c:1626
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2082,11 +2082,11 @@ msgstr "Körkörös keresés"
 msgid "Process terminated by signal %d"
 msgstr "A folyamat megszakítva a következő szignállal: %d"
 
-#: src/libide/tree/ide-tree-empty.c:207
+#: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
 msgstr "<i>Betöltés</i>"
 
-#: src/libide/tree/ide-tree-empty.c:209
+#: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
 msgstr "Üres"
 
@@ -2216,6 +2216,7 @@ msgid "_Add"
 msgstr "Hozzá_adás"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Másolás"
 
@@ -2878,7 +2879,7 @@ msgstr "Függőségek lekérése"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Projekt összeállítása"
@@ -2947,7 +2948,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "Projekt beállítása"
 
@@ -3089,7 +3090,7 @@ msgstr "Szimbólum átnevezése"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "Á_tnevezés"
 
@@ -3114,23 +3115,23 @@ msgid "Display a list of possible code actions from the cursor position"
 msgstr ""
 "A lehetséges kódműveletek listájának megjelenítése a kurzor pozíciójától"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
 msgstr "_Ugrás a deklarációhoz"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
 msgstr "Ugrás az elem deklarációjának fájljára és pozíciójára"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Ugrás a definícióra"
 
-#: src/plugins/codeui/gtk/menus.ui:26
+#: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
 msgstr "Ugrás az elem definíciójának fájljára és pozíciójára"
 
-#: src/plugins/codeui/gtk/menus.ui:31
+#: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
 msgstr "_Hivatkozások keresése"
 
@@ -3171,6 +3172,10 @@ msgstr "Szerzői jogi megjegyzés frissítése"
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
 msgstr "Szerzői jogi fejlécek frissítése a dokumentumok mentésekor"
+
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr "Függvény prototípusainak újraformázása"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3596,13 +3601,13 @@ msgstr "Egyszerű szöveg"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:257
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Spaces"
 msgstr "Szóközök"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Tabs"
 msgstr "Tabulátorok"
 
@@ -3713,7 +3718,6 @@ msgid "Format Selection"
 msgstr "Kijelölés formázása"
 
 #: src/plugins/editorui/gtk/menus.ui:208
-#| msgid "Move to previous match"
 msgid "Move to Previous Diagnostic"
 msgstr "Ugrás az előző diagnosztikához"
 
@@ -3722,7 +3726,6 @@ msgid "Move the insertion cursor to the previous diagnostic location"
 msgstr "A beszúrási kurzor áthelyezése az előző diagnosztikai helyre"
 
 #: src/plugins/editorui/gtk/menus.ui:216
-#| msgid "Move to next match"
 msgid "Move to Next Diagnostic"
 msgstr "Ugrás a következő diagnosztikához"
 
@@ -3820,7 +3823,7 @@ msgid "The desired maximum line length"
 msgstr "A kívánt legnagyobb sorhossz"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:356
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Behavior"
 msgstr "Viselkedés"
 
@@ -3972,34 +3975,44 @@ msgstr "Diagnosztika megjelenítése"
 msgid "Display diagnostics next to the line number"
 msgstr "Diagnosztika megjelenítése a sor száma mellett"
 
-#: src/plugins/editorui/tweaks.ui:213
+#: src/plugins/editorui/tweaks.ui:211
+#| msgid "Show Line Numbers"
+msgid "Show Line Changes"
+msgstr "Sorok változtatásainak megjelenítése"
+
+#: src/plugins/editorui/tweaks.ui:212
+#| msgid "Display diagnostics next to the line number"
+msgid "Highlight changed lines next to the line number"
+msgstr "Megváltoztatott sorok kiemelése a sor száma mellett"
+
+#: src/plugins/editorui/tweaks.ui:225
 msgid "Highlighting"
 msgstr "Kiemelés"
 
-#: src/plugins/editorui/tweaks.ui:216
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Highlight Current Line"
 msgstr "Jelenlegi sor kiemelése"
 
-#: src/plugins/editorui/tweaks.ui:217
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Make the current line stand out with highlights"
 msgstr "A jelenlegi sor kiemelése"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Matching Brackets"
 msgstr "Zárójelpárok kiemelése"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 "Kurzorpozíció használata a idéző- és zárójelpárok és továbbiak kiemeléséhez"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Semantic Highlighting"
 msgstr "Szemantikus kiemelés"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4007,179 +4020,179 @@ msgstr ""
 "Szimbóluminformációk használata a névterek, függvények és változók "
 "kiemeléséhez a forráskódban"
 
-#: src/plugins/editorui/tweaks.ui:258
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
 msgstr "Normál szóközöket jelző jelek rajzolása"
 
-#: src/plugins/editorui/tweaks.ui:271
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw a mark representing tabs"
 msgstr "Tabulátorokat jelző jelek rajzolása"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Newlines"
 msgstr "Soremelések"
 
-#: src/plugins/editorui/tweaks.ui:284
+#: src/plugins/editorui/tweaks.ui:296
 msgid "Draw a mark at the end of lines"
 msgstr "Jelzések rajzolása a sorok végén"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Non-breaking spaces"
 msgstr "Nem-törő szóközök"
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:309
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Jelzések rajzolása a nem törő szóköz karaktereknél"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Leading"
 msgstr "Soreleji"
 
-#: src/plugins/editorui/tweaks.ui:314
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw marks for leading spaces only"
 msgstr "Jelzések rajzolása csak a soreleji szóközök esetén"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Inside Text"
 msgstr "Szövegen belül"
 
-#: src/plugins/editorui/tweaks.ui:327
+#: src/plugins/editorui/tweaks.ui:339
 msgid "Draw marks inside a line of text only"
 msgstr "Jelzések rajzolása csak a szöveg során belül"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Trailing"
 msgstr "Sorvégi"
 
-#: src/plugins/editorui/tweaks.ui:340
+#: src/plugins/editorui/tweaks.ui:352
 msgid "Draw marks for trailing spaces only"
 msgstr "Jelzések rajzolása csak a sorvégi szóközök esetén"
 
-#: src/plugins/editorui/tweaks.ui:360
+#: src/plugins/editorui/tweaks.ui:372
 msgid "Spelling"
 msgstr "Helyesírás"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:376
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Lehetséges helyesírási hibák aláhúzása gépelés közben"
 
-#: src/plugins/editorui/tweaks.ui:377
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Selections"
 msgstr "Kijelölések"
 
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Minimum Characters to Highlight"
 msgstr "Legkisebb karakterszám a kiemeléshez"
 
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:393
 msgid "The minimum selection length before highlighting matches"
 msgstr "A kijelölés legkisebb hossza, mielőtt a kiemelés egyezést keres"
 
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Snippets"
 msgstr "Töredékek"
 
-#: src/plugins/editorui/tweaks.ui:397
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Expand Snippets"
 msgstr "Töredékek kiegészítése"
 
-#: src/plugins/editorui/tweaks.ui:398
+#: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Tabulátor használata a beállított töredékek kibontásához a szerkesztőben"
 
-#: src/plugins/editorui/tweaks.ui:413
+#: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
 msgstr "Kódkiegészítés"
 
-#: src/plugins/editorui/tweaks.ui:417
+#: src/plugins/editorui/tweaks.ui:429
 msgid "Completion Proposals"
 msgstr "Kiegészítési javaslatok"
 
-#: src/plugins/editorui/tweaks.ui:420
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Suggest Code Completions"
 msgstr "Kiegészítési javaslatok tétele"
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically suggest code completions while typing"
 msgstr "Automatikus kódkiegészítési javaslatok gépelés közben"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Select First Completion Proposal"
 msgstr "Első kiegészítési javaslat kiválasztása"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 "Az első kiegészítési javaslat automatikus kiválasztása, amikor megjelenik"
 
-#: src/plugins/editorui/tweaks.ui:448
+#: src/plugins/editorui/tweaks.ui:460
 msgid "Maximum Completion Proposals"
 msgstr "Kiegészítési javaslatok legnagyobb száma"
 
-#: src/plugins/editorui/tweaks.ui:449
+#: src/plugins/editorui/tweaks.ui:461
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Az egyszerre megjelenített kiegészítési sorok legnagyobb száma"
 
-#: src/plugins/editorui/tweaks.ui:468
+#: src/plugins/editorui/tweaks.ui:480
 msgid "Movements"
 msgstr "Mozgások"
 
-#: src/plugins/editorui/tweaks.ui:472
+#: src/plugins/editorui/tweaks.ui:484
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "A Backspace kitörli a felesleges szóközöket a behúzáshoz igazodva"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid "Navigate to non-space characters"
 msgstr "Navigálás a nem üres karakterekhez"
 
-#: src/plugins/editorui/tweaks.ui:493
+#: src/plugins/editorui/tweaks.ui:505
 msgid "Before line boundaries"
 msgstr "Sorhatárok előtt"
 
-#: src/plugins/editorui/tweaks.ui:499
+#: src/plugins/editorui/tweaks.ui:511
 msgid "After line boundaries"
 msgstr "Sorhatárok után"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Instead of line boundaries"
 msgstr "Sorhatárok helyett"
 
-#: src/plugins/editorui/tweaks.ui:511 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Letiltva"
 
-#: src/plugins/editorui/tweaks.ui:523
+#: src/plugins/editorui/tweaks.ui:535
 msgid "Session Management"
 msgstr "Munkamenet-kezelés"
 
-#: src/plugins/editorui/tweaks.ui:527
+#: src/plugins/editorui/tweaks.ui:539
 msgid "Save & Restore"
 msgstr "Mentés és helyreállítás"
 
-#: src/plugins/editorui/tweaks.ui:530
+#: src/plugins/editorui/tweaks.ui:542
 msgid "Auto-Save"
 msgstr "Automatikus mentés"
 
-#: src/plugins/editorui/tweaks.ui:531
+#: src/plugins/editorui/tweaks.ui:543
 msgid "Regularly save the document as you type"
 msgstr "A dokumentum rendszeres mentése gépelés közben"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save Delay"
 msgstr "Automatikus mentés késleltetése"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "A várakozási késleltetés másodpercben a dokumentum automatikus mentése előtt"
 
-#: src/plugins/editorui/tweaks.ui:558
+#: src/plugins/editorui/tweaks.ui:570
 msgid "Format on Save"
 msgstr "Formázás mentéskor"
 
-#: src/plugins/editorui/tweaks.ui:559
+#: src/plugins/editorui/tweaks.ui:571
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4187,11 +4200,11 @@ msgstr ""
 "A források újraformázása a lemezre mentéskor. Egy regisztrált formázót "
 "igényel a forrásnyelvhez."
 
-#: src/plugins/editorui/tweaks.ui:574
+#: src/plugins/editorui/tweaks.ui:586
 msgid "Restore Cursor Position"
 msgstr "Kurzorpozíció helyreállítása"
 
-#: src/plugins/editorui/tweaks.ui:575
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Jump to the last position when re-opening a file"
 msgstr "A legutóbbi pozícióra ugrás a fájl újranyitásakor"
 
@@ -4200,7 +4213,7 @@ msgid "Open file or folder"
 msgstr "Fájl vagy mappa megnyitása"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:211
+#: src/plugins/project-tree/gbp-project-tree-addin.c:212
 msgid "Files"
 msgstr "Fájlok"
 
@@ -4221,7 +4234,7 @@ msgstr "Telepítés kész"
 msgid "The client has been closed"
 msgstr "A kliens be lett zárva"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:741
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "A flatpak leíró eltávolítása sikertelen: %s"
@@ -4738,7 +4751,7 @@ msgstr "Ugrás az előző keresési találatra"
 msgid "Move to and select the previous search result"
 msgstr "Ugrás az előző keresési találatra és annak kijelölése"
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
@@ -4746,12 +4759,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Meson önelemzés betöltése"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "Projekt telepítése"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
-#| msgid "Command Environment"
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
 msgstr "Fejlesztői környezet gyorsítótárazása"
 
@@ -4851,43 +4863,43 @@ msgstr "Eszközlánc törlése"
 msgid "Delete Tool"
 msgstr "Eszköz törlése"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
 msgid "GNOME Application"
 msgstr "GNOME alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Egy Meson-alapú projekt a GNOME-hoz GTK 4 és libadwaita használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
 msgid "GTK 4 Application"
 msgstr "GTK 4-es alkalmazás"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "A Meson-based project using GTK 4"
 msgstr "Egy Meson-alapú projekt GTK 4 használatával"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
 msgid "Shared Library"
 msgstr "Megosztott programkönyvtár"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "A Meson-based project for a shared library"
 msgstr "Egy Meson-alapú projekt egy megosztott programkönyvtárhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
 msgid "Command Line Tool"
 msgstr "Parancssoros eszköz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "An Meson-based project for a command-line program"
 msgstr "Egy Meson-alapú projekt egy parancssori programhoz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
 msgid "Empty Meson Project"
 msgstr "Üres Meson projekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "An empty Meson project skeleton"
 msgstr "Egy üres Meson projektváz"
 
@@ -5085,12 +5097,12 @@ msgid "Drop Down"
 msgstr "Legördülő"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:661
+#: src/plugins/podman/gbp-podman-runtime.c:672
 msgid "Containers/Toolbox"
 msgstr "Konténerek/Eszköztár"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:667
+#: src/plugins/podman/gbp-podman-runtime.c:678
 msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
@@ -5121,37 +5133,37 @@ msgstr "Új fájlnév"
 msgid "_Create"
 msgstr "_Létrehozás"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:697
 #, c-format
 msgid "Copying 1 file"
 msgstr "1 fájl másolása"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:699
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "%s / %s fájl másolása"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:736
 msgid "Failed to copy files"
 msgstr "Fájlok másolása sikertelen"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:745
+#: src/plugins/project-tree/gbp-project-tree-addin.c:746
 msgid "Files copied"
 msgstr "Fájlok másolva"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:749
+#: src/plugins/project-tree/gbp-project-tree-addin.c:750
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s fájl átmásolva"
 msgstr[1] "%s fájl átmásolva"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:940
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Copying files…"
 msgstr "Fájlok másolása…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:942
 msgid "Files will be copied in a moment"
 msgstr "A fájlok egy pillanat múlva át lesznek másolva"
 
@@ -5198,27 +5210,27 @@ msgstr "_Tartalmazó mappa megnyitása"
 msgid "With _Terminal…"
 msgstr "_Terminállal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "Áthelyezés a _Kukába"
 
-#: src/plugins/project-tree/gtk/menus.ui:70
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "Meg_jelenítési beállítások"
 
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "Figyelmen kívül _hagyott fájlok megjelenítése"
 
-#: src/plugins/project-tree/gtk/menus.ui:79
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "Mappák _előre sorolása"
 
-#: src/plugins/project-tree/gtk/menus.ui:91
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Megjelenítés a projektfában"
 
-#: src/plugins/project-tree/gtk/menus.ui:100
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr "Megjelenítés a projekt_fában"
 
@@ -5570,7 +5582,6 @@ msgid "Open keybindings.json in editor"
 msgstr "A keybindings.json megnyitása a szerkesztőben"
 
 #: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
-#| msgid "Set Shortcut"
 msgid "Reset shortcut"
 msgstr "Gyorsbillentyű visszaállítása"
 
@@ -5641,25 +5652,19 @@ msgstr "Szimbólum kiválasztása (Ctrl+Shift+K)"
 msgid "Navigate to a symbol within the current page"
 msgstr "Ugrás egy szimbólumhoz a jelenlegi lapon"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:307
+#: src/plugins/sysprof/gbp-sysprof-tool.c:77
+#, c-format
+#| msgid "Sysprof Capture (*.syscap)"
+msgid "System Capture from %s.syscap"
+msgstr "Rendszer rögzítése %s.syscap fájlból"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:312
 msgid "Profiling Application…"
 msgstr "Alkalmazás profilozása…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:308
+#: src/plugins/sysprof/gbp-sysprof-tool.c:313
 msgid "Symbol decoding will begin after application exits"
 msgstr "A szimbólumdekódolás az alkalmazás kilépése után kezdődik"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
-msgid "Open Sysprof Capture…"
-msgstr "Sysprof rögzítés megnyitása…"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Sysprof Capture (*.syscap)"
-msgstr "Sysprof rögzítés (*.syscap)"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
-msgid "All Files"
-msgstr "Minden fájl"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
@@ -6122,11 +6127,19 @@ msgstr "Eredetek követése"
 msgid "Show origin of undefined values"
 msgstr "A nem meghatározott értékek eredetének megjelenítése"
 
-#: src/plugins/valgrind/tweaks.ui:87
+#: src/plugins/valgrind/tweaks.ui:83
+msgid "Number of Callers"
+msgstr "Meghívók száma"
+
+#: src/plugins/valgrind/tweaks.ui:84
+msgid "Set the limit to the number of entries in stack traces"
+msgstr "A korlát beállítása a veremkiíratásokban lévő bejegyzések számára"
+
+#: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
 msgstr "Szivárgás-ellenőrzés"
 
-#: src/plugins/valgrind/tweaks.ui:88
+#: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
 msgstr "Memóriaszivárgások keresése kilépéskor"
 
