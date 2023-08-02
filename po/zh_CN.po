@@ -5,15 +5,15 @@
 # Mingye Wang (Arthur2e5) <arthur200126@gmail.com>, 2015.
 # Bin Li <binli@gnome.org>, 2015-2016.
 # Tong Hui <tonghuix@gmail.com>, 2017.
-# lumingzh <lumingzh@qq.com>, 2016-2022.
 # Nanling <neithern@outlook.com>, 2023.
+# lumingzh <lumingzh@qq.com>, 2016-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-04-20 19:49+0000\n"
-"PO-Revision-Date: 2023-04-28 13:50-0400\n"
+"POT-Creation-Date: 2023-07-28 17:56+0000\n"
+"PO-Revision-Date: 2023-08-02 14:43-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:113 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -37,7 +37,7 @@ msgid "An IDE for GNOME"
 msgstr "GNOME 的集成开发环境"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:118
+#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert 等人"
 
@@ -675,12 +675,12 @@ msgstr "新建编辑器工作区"
 msgid "D-Bus Inspector"
 msgstr "D-Bus 检测"
 
-#: src/libide/code/ide-buffer.c:3779
+#: src/libide/code/ide-buffer.c:3810
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:391
+#: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "未保存文件 %u"
@@ -918,7 +918,6 @@ msgstr "保存"
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "取消"
@@ -1398,7 +1397,6 @@ msgstr "获取 va_list 值失败：%s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "打开"
 
@@ -1552,7 +1550,7 @@ msgstr "终端"
 msgid "New Terminals"
 msgstr "新建终端"
 
-#: src/libide/gui/ide-application-actions.c:125
+#: src/libide/gui/ide-application-actions.c:175
 msgid "translator-credits"
 msgstr ""
 "ChenYang Li <18032773381@163.com>, 2015\n"
@@ -1560,9 +1558,9 @@ msgstr ""
 "Bin Li <binli@gnome.org>, 2015-2016\n"
 "Tong Hui <tonghuix@gmail.com>, 2017\n"
 "Mingcong Bai <jeffbai@aosc.xyz>, 2015, 2018\n"
-"lumingzh <lumingzh@qq.com>, 2016-2022"
+"lumingzh <lumingzh@qq.com>, 2016-2023"
 
-#: src/libide/gui/ide-application-actions.c:130
+#: src/libide/gui/ide-application-actions.c:180
 msgid "Funded By"
 msgstr "赞助"
 
@@ -1936,14 +1934,14 @@ msgid "Code Navigation"
 msgstr "代码导航"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1540
+#: src/libide/sourceview/ide-source-view.c:1624
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "行 %u，列 %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1542
+#: src/libide/sourceview/ide-source-view.c:1626
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2029,11 +2027,11 @@ msgstr "折行"
 msgid "Process terminated by signal %d"
 msgstr "进程因信号 %d 而终止"
 
-#: src/libide/tree/ide-tree-empty.c:207
+#: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
 msgstr "<i>正在加载</i>"
 
-#: src/libide/tree/ide-tree-empty.c:209
+#: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
 msgstr "（空）"
 
@@ -2804,7 +2802,7 @@ msgstr "获取依赖"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "构建工程"
@@ -2869,7 +2867,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "配置工程"
 
@@ -3087,6 +3085,10 @@ msgstr "更新版权"
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
 msgstr "保存文档时更新版权题头"
+
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr "重新格式化函数原型"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -4126,7 +4128,7 @@ msgstr "安装完成"
 msgid "The client has been closed"
 msgstr "客户端已被关闭"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:741
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "移除 flatpak manifest 失败：%s"
@@ -4642,11 +4644,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "加载 Meson 检查"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "安装工程"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
 msgstr "缓存开发环境"
 
@@ -4746,43 +4748,43 @@ msgstr "删除工具链"
 msgid "Delete Tool"
 msgstr "删除工具"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
 msgid "GNOME Application"
 msgstr "GNOME 应用程序"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "基于 Meson 使用 GTK4 和 libadwaita 为 GNOME 开发的工程"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
 msgid "GTK 4 Application"
 msgstr "GTK4 应用程序"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "A Meson-based project using GTK 4"
 msgstr "基于 Meson 使用 GTK4 开发的工程"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
 msgid "Shared Library"
 msgstr "共享库"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "A Meson-based project for a shared library"
 msgstr "基于 Meson 用于共享库的工程"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "An Meson-based project for a command-line program"
 msgstr "基于 Meson 用于命令行程序的工程"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
 msgid "Empty Meson Project"
 msgstr "空白 Meson 工程"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "An empty Meson project skeleton"
 msgstr "空白的 Meson 工程骨架"
 
@@ -4980,12 +4982,12 @@ msgid "Drop Down"
 msgstr "下拉"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:661
+#: src/plugins/podman/gbp-podman-runtime.c:672
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:667
+#: src/plugins/podman/gbp-podman-runtime.c:678
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
@@ -5514,25 +5516,18 @@ msgstr "选择符号（Ctrl+Shift+K）"
 msgid "Navigate to a symbol within the current page"
 msgstr "导航到当前页面内的符号"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:307
+#: src/plugins/sysprof/gbp-sysprof-tool.c:77
+#, c-format
+msgid "System Capture from %s.syscap"
+msgstr "来自 %s.syscap 的系统捕获"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:312
 msgid "Profiling Application…"
 msgstr "剖析应用程序…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:308
+#: src/plugins/sysprof/gbp-sysprof-tool.c:313
 msgid "Symbol decoding will begin after application exits"
 msgstr "符号解码将在应用程序退出后开始"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
-msgid "Open Sysprof Capture…"
-msgstr "打开 Sysprof 捕获…"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Sysprof Capture (*.syscap)"
-msgstr "Sysprof 捕获文件 (*.syscap)"
-
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
-msgid "All Files"
-msgstr "所有文件"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
@@ -5986,11 +5981,19 @@ msgstr "追踪原点"
 msgid "Show origin of undefined values"
 msgstr "显示未定义值的原点"
 
-#: src/plugins/valgrind/tweaks.ui:87
+#: src/plugins/valgrind/tweaks.ui:83
+msgid "Number of Callers"
+msgstr "调用者数量"
+
+#: src/plugins/valgrind/tweaks.ui:84
+msgid "Set the limit to the number of entries in stack traces"
+msgstr "设置堆栈追踪中的条目数量限制"
+
+#: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
 msgstr "泄漏检测"
 
-#: src/plugins/valgrind/tweaks.ui:88
+#: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
 msgstr "退出时搜索内存泄漏"
 
@@ -6097,6 +6100,12 @@ msgstr "无法创建 XML 树。"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
+
+#~ msgid "Open Sysprof Capture…"
+#~ msgstr "打开 Sysprof 捕获…"
+
+#~ msgid "All Files"
+#~ msgstr "所有文件"
 
 #~ msgid "Debugger Breakpoint at g_warning()"
 #~ msgstr "g_warning() 上的调试器断点"
@@ -6870,9 +6879,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Prefer a space before colons"
 #~ msgstr "偏好在冒号前加空格"
-
-#~ msgid "Number of CPU"
-#~ msgstr "CPU 数量"
 
 #~ msgid "Build"
 #~ msgstr "构建"
