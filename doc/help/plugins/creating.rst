@@ -10,7 +10,7 @@ Builder supports writing extensions in C, Vala, or Python.
 We will be using Python for our examples in this tutorial because it is both succinct and easy to get started with.
 
 First, we will look at our extension meta-data file.
-The file should have the file-suffix of ".plugin" and it's format is familiar.
+The file should have the file-suffix of ".plugin" and its format is familiar.
 It starts with a line containing "[Plugin]" indicating this is extension metadata.
 Then it is followed by a series of "Key=Value" key-pairs.
 
@@ -50,7 +50,7 @@ Now we can create a simple plugin that will print "hello" when Builder starts an
 
 In the python file above, we define a new extension called ``MyAppAddin``.
 It inherits from ``GObject.Object`` (which is our base object) and implements the interface ``Ide.ApplicationAddin``.
-We wont get too much into objects and interfaces here, but the plugin manager uses this information to determine when and how to load our extension.
+We won't get too much into objects and interfaces here, but the plugin manager uses this information to determine when and how to load our extension.
 
 The ``Ide.ApplicationAddin`` requires that two methods are implemented.
 The first is called ``do_load`` and is executed when the extension should load.

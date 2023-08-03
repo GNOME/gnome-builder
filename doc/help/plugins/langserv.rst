@@ -18,7 +18,7 @@ to our ``Ide.LspClient`` for dispatching of messages between client and server.
 
       @GObject.Property(type=Ide.LspClient)
       def client(self):
-         return self._client = value
+         return self._client
 
       @client.setter
       def client(self, value):
@@ -30,10 +30,10 @@ to our ``Ide.LspClient`` for dispatching of messages between client and server.
             self._has_started = True
             launcher = Ide.SubprocessLauncher()
             launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
-            launcher.push_argv("my_language_server_executable")
+            launcher.push_argv('my_language_server_executable')
 
             supervisor = Ide.SubprocessSupervisor()
-            supervisor.connect('spawned', lsp_spawned)
+            supervisor.connect('spawned', self.lsp_spawned)
             supervisor.set_launcher(launcher)
             supervisor.start()
 
