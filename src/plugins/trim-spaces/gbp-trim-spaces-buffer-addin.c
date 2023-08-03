@@ -33,6 +33,20 @@ struct _GbpTrimSpacesBufferAddin
   GObject parent_instance;
 };
 
+static gboolean
+move_to_line_end (GtkTextIter *iter)
+{
+  GtkTextIter before = *iter;
+  gboolean moved;
+
+  moved = gtk_text_iter_forward_to_line_end (iter);
+
+  if (moved == FALSE)
+    moved = !gtk_text_iter_equal (iter, &before);
+
+  return moved;
+}
+
 static void
 trim_trailing_whitespace (GtkTextBuffer *buffer,
                           GtkTextIter   *iter)
@@ -51,7 +65,7 @@ trim_trailing_whitespace (GtkTextBuffer *buffer,
    * Move to the first character at the end of the line (skipping the newline)
    * and progress to trip if it is white space.
    */
-  if (gtk_text_iter_forward_to_line_end (iter) &&
+  if (move_to_line_end (iter) &&
       !gtk_text_iter_starts_line (iter) &&
       gtk_text_iter_backward_char (iter) &&
       TEXT_ITER_IS_SPACE (iter))
