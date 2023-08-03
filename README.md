@@ -4,7 +4,7 @@ Develop software for GNOME
 
 ## Helpful Links
 
- * [Read the documentation](http://builder.readthedocs.io/en/latest/)
+ * [Read the documentation](https://builder.readthedocs.io/)
  * [File a Bug in GitLab](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
  * [Download a Release Tarball](https://download.gnome.org/sources/gnome-builder/)
  * [Browse source code in Git version control](https://gitlab.gnome.org/GNOME/gnome-builder)
@@ -39,7 +39,7 @@ sudo ninja -C build install
 ```
 
 For more information on building and installing Builder,
-[read our installation guide](http://builder.readthedocs.io/en/latest/installation.html)
+[read our installation guide](https://builder.readthedocs.io/installation.html)
 to help you through the process.
 
 ----
