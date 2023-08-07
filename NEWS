@@ -1,3 +1,18 @@
+# GNOME Builder 45.beta
+
+ * Fix build system discovery with Flatpak
+ * Increase keywords in the greeter to improve app filtering
+ * Build system cleanups
+ * Remove use of libsysprof-gtk, no defunct
+ * Fix space trimming on last line of file
+ * Improve tooltips
+ * Fix some immediate exit of LSPs due to processId pid-namespace
+   mismatches.
+ * Updated valgrind icon
+ * Add support for meson-lsp and swift-lsp
+ * Update templates to use metainfo
+ * Documentation updates
+
 # GNOME Builder 45.alpha
 
 This release is intended for early testing for GNOME 45.
