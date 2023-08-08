@@ -2,23 +2,24 @@
 # Copyright (C) 2017 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Stas Solovey <whats_up@tut.by>, 2017.
 #
+# Stas Solovey <whats_up@tut.by>, 2017.
+# Дронова Юлия <juliette.tux@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-16 00:40+0000\n"
-"PO-Revision-Date: 2023-03-16 15:10+0300\n"
-"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
-"Language-Team: Русский <gnome-cyr@gnome.org>\n"
+"POT-Creation-Date: 2023-04-13 17:01+0000\n"
+"PO-Revision-Date: 2023-08-08 17:18+0300\n"
+"Last-Translator: Дронова Юлия <juliette.tux@gmail.com>\n"
+"Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -851,6 +852,7 @@ msgstr "Страницы"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -1985,6 +1987,7 @@ msgstr "_Форматирование"
 
 #: src/libide/sourceview/gtk/menus.ui:153
 #: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2225,6 +2228,7 @@ msgid "_Add"
 msgstr "_Добавить"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Копировать"
 
@@ -2877,7 +2881,7 @@ msgstr "Получить зависимости"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:285
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Собрать проект"
@@ -2942,7 +2946,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:275
 msgid "Configure project"
 msgstr "Конфигурация проекта"
 
@@ -3031,7 +3035,7 @@ msgstr "Не удалось выполнить форматирование пр
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
-msgstr "Коды операций"
+msgstr "Действия с кодом"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
@@ -3044,7 +3048,7 @@ msgstr "Загрузка…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
-msgstr "Нет доступных кодов операций"
+msgstr "Нет доступных действий с кодом"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
 msgid "Code Action Failure"
@@ -3082,7 +3086,7 @@ msgstr "Переименовать символ"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "_Переименовать"
 
@@ -3100,29 +3104,29 @@ msgstr "П_ереименовать символ…"
 
 #: src/plugins/codeui/gtk/menus.ui:12
 msgid "Code Actions…"
-msgstr "Коды операций…"
+msgstr "Действия с кодом…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
-msgstr "Отображение списка возможных кодов операций с позиции курсора"
+msgstr "Показать список возможных действий с кодом с позиции курсора"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
 msgstr "_Перейти к объявлению"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
 msgstr "Перейти к файлу и месту, где объявлен элемент"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Перейти к описанию"
 
-#: src/plugins/codeui/gtk/menus.ui:26
+#: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
 msgstr "Перейти к файлу и месту, где определён элемент"
 
-#: src/plugins/codeui/gtk/menus.ui:31
+#: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
 msgstr "_Найти упоминания"
 
@@ -4734,7 +4738,7 @@ msgstr "Перейти к предыдущему результату поиск
 msgid "Move to and select the previous search result"
 msgstr "Перейти к предыдущему результату поиска и выбрать его"
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
@@ -4742,11 +4746,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Загрузить интроспекцию Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:292
 msgid "Install project"
 msgstr "Установить проект"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:312
 msgid "Cache development environment"
 msgstr "Кэш среды разработки"
 
@@ -5194,27 +5198,27 @@ msgstr "Открыть папку с_одержащую объект"
 msgid "With _Terminal…"
 msgstr "С _терминалом…"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "_Отправить в корзину"
 
-#: src/plugins/project-tree/gtk/menus.ui:70
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "Параметры ото_бражения"
 
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "Показывать про_игнорированные файлы"
 
-#: src/plugins/project-tree/gtk/menus.ui:79
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "Сначала _каталоги"
 
-#: src/plugins/project-tree/gtk/menus.ui:91
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Показать в дереве проекта"
 
-#: src/plugins/project-tree/gtk/menus.ui:100
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr "Показать в _дереве проекта"
 
