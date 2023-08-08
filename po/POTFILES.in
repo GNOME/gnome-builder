@@ -79,6 +79,7 @@ src/libide/gui/ide-workspace.c
 src/libide/gui/tweaks.ui
 src/libide/io/ide-pkcon-transfer.c
 src/libide/lsp/ide-lsp-client.c
+src/libide/lsp/ide-lsp-code-action-provider.c
 src/libide/lsp/ide-lsp-service.c
 src/libide/plugins/ide-plugin.c
 src/libide/plugins/ide-plugin-view.ui

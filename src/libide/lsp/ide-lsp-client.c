@@ -166,7 +166,7 @@ pending_message_fail (PendingMessage *message)
   ide_task_return_new_error (message->task,
                              G_IO_ERROR,
                              G_IO_ERROR_CANCELLED,
-                             "The operation has been cancelled");
+                             _("The operation has been cancelled"));
 
   g_clear_object (&message->task);
   g_clear_object (&message->cancellable);
@@ -2127,7 +2127,7 @@ ide_lsp_client_call_async (IdeLspClient        *self,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_CONNECTED,
-                                 "No connection to language server");
+                                 _("No connection to language server"));
       IDE_EXIT;
     }
 
@@ -2237,7 +2237,7 @@ ide_lsp_client_send_notification_async (IdeLspClient        *self,
     ide_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
-                               "No connection to language server");
+                               _("No connection to language server"));
   else
     jsonrpc_client_send_notification_async (priv->rpc_client,
                                             method,
