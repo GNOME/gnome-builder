@@ -2,23 +2,24 @@
 # Copyright (C) 2017 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Stas Solovey <whats_up@tut.by>, 2017.
 #
+# Stas Solovey <whats_up@tut.by>, 2017.
+# Дронова Юлия <juliette.tux@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-28 17:56+0000\n"
-"PO-Revision-Date: 2023-07-29 12:00+0300\n"
-"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
-"Language-Team: Русский <gnome-cyr@gnome.org>\n"
+"POT-Creation-Date: 2023-08-03 15:57+0000\n"
+"PO-Revision-Date: 2023-08-08 17:18+0300\n"
+"Last-Translator: Дронова Юлия <juliette.tux@gmail.com>\n"
+"Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -3032,7 +3033,7 @@ msgstr "Не удалось выполнить форматирование пр
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
-msgstr "Коды операций"
+msgstr "Действия с кодом"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
@@ -3045,7 +3046,7 @@ msgstr "Загрузка…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
-msgstr "Нет доступных кодов операций"
+msgstr "Нет доступных действий с кодом"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
 msgid "Code Action Failure"
@@ -3101,11 +3102,11 @@ msgstr "П_ереименовать символ…"
 
 #: src/plugins/codeui/gtk/menus.ui:12
 msgid "Code Actions…"
-msgstr "Коды операций…"
+msgstr "Действия с кодом…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
-msgstr "Отображение списка возможных кодов операций с позиции курсора"
+msgstr "Показать список возможных действий с кодом с позиции курсора"
 
 #: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
