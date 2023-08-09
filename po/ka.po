@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-07-28 07:26+0200\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-09 18:14+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -694,7 +694,7 @@ msgstr "ნაგულისხმები მნიშვნელობე�
 #: src/libide/code/ide-unsaved-files.c:253
 #, c-format
 msgid "Failed to save draft: %s"
-msgstr ""
+msgstr "მონახაზის შენახვა ჩავარდა: %s"
 
 #: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
@@ -1686,10 +1686,22 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u პაკეტის დაყენება"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr "ოპერაცია გაუქმდა"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
+msgstr ""
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr ""
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
 msgstr ""
 
 #. translators: %s is replaced with the name of the language server
