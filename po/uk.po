@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-07-28 20:54+0300\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-09 14:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1771,11 +1771,26 @@ msgstr[1] "Встановлюємо %u пакунки"
 msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+#| msgid "The operation has been canceled"
+msgid "The operation has been cancelled"
+msgstr "Виконання дії було скасовано"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+#| msgid "Lost Connection to Bus"
+msgid "No connection to language server"
+msgstr "Немає з'єднання із мовним сервером"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+#| msgid "No code actions available"
+msgid "No LSP client connection is available"
+msgstr "Немає доступного клієнтського з'єднання LSP"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -3990,12 +4005,10 @@ msgid "Display diagnostics next to the line number"
 msgstr "Показувати діагностику поряд із номером рядка"
 
 #: src/plugins/editorui/tweaks.ui:211
-#| msgid "Line changes"
 msgid "Show Line Changes"
 msgstr "Показати зміни у рядках"
 
 #: src/plugins/editorui/tweaks.ui:212
-#| msgid "Display diagnostics next to the line number"
 msgid "Highlight changed lines next to the line number"
 msgstr "Підсвічувати змінені рядки поряд із номером рядка"
 
@@ -5673,7 +5686,6 @@ msgstr "Перейти до пункту на поточній сторінці"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
-#| msgid "Sysprof Capture (*.syscap)"
 msgid "System Capture from %s.syscap"
 msgstr "Захоплення системи з %s.syscap"
 
@@ -6151,7 +6163,6 @@ msgid "Show origin of undefined values"
 msgstr "Показувати походження невизначених значень"
 
 #: src/plugins/valgrind/tweaks.ui:83
-#| msgid "Number of CPU"
 msgid "Number of Callers"
 msgstr "Кількість джерел виклику"
 
@@ -8446,9 +8457,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Operation Timed Out"
 #~ msgstr "Перевищено час очікування на результати дії"
-
-#~ msgid "Lost Connection to Bus"
-#~ msgstr "Розірвано з'єднання із шиною"
 
 #~ msgid "Connect"
 #~ msgstr "З'єднатися"
