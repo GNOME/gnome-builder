@@ -4,22 +4,21 @@
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2021-2023.
-# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-08-08 07:36+0200\n"
-"Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-09 12:40+0200\n"
+"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 42.0\n"
+"X-Generator: Gtranslator 45.alpha0\n"
 "X-DL-Team: es\n"
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: master\n"
@@ -1768,11 +1767,23 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr "La operación se ha cancelado"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el servidor de lenguajes: %s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr "No hay conexión al servidor de lenguajes"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
+msgstr "No hay ninguna conexión a un cliente LSP disponible"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -5456,11 +5467,11 @@ msgstr "Carpeta de trabajo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"El comando se ejecutará desde esta ubicación. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, o <tt>$HOME</tt> para definir una ruta relativa."
+"El comando se ejecutará desde esta ubicación. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, o <tt>$HOME</tt> para definir una ruta relativa."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -8357,9 +8368,6 @@ msgstr ""
 #~ msgid "Operation Timed Out"
 #~ msgstr "La operación ha caducado"
 
-#~ msgid "Lost Connection to Bus"
-#~ msgstr "Se ha perdido la conexión con el bus"
-
 #~ msgid "Connect"
 #~ msgstr "Conectar"
 
@@ -9178,8 +9186,8 @@ msgstr ""
 #~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
 #~ "with profiler</a> from the run menu to begin"
 #~ msgstr ""
-#~ "Seleccione <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Ejecutar con perfilador</a> desde el menú Ejecutar para empezar"
+#~ "Seleccione <a href=\"action://run-manager.run-with-handler::"
+#~ "profiler\">Ejecutar con perfilador</a> desde el menú Ejecutar para empezar"
 
 #~ msgid "Pid"
 #~ msgstr "PID"
