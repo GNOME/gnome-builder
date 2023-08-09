@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-28 17:56+0000\n"
-"PO-Revision-Date: 2023-08-02 14:43-0400\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-09 17:22+0800\n"
+"Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -1706,11 +1706,23 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "正在安装 %u 个软件包"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr "操作已被取消"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "无法初始化语言服务器：%s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr "未与语言服务器连接"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
+msgstr "无可用 LSP 客户端连接"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -1722,7 +1734,7 @@ msgstr "语言服务器 %s 已退出"
 #: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr "语言服务器 %s 已进程 %s 启动"
+msgstr "语言服务器 %s 已作为进程 %s 产生"
 
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
@@ -5318,8 +5330,8 @@ msgstr "工作目录"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "命令将从该位置运行。使用 <tt>$BUILDDIR</tt>、<tt>$SRCDIR</tt> 或 <tt>$HOME</"
 "tt> 来定义关联路径。"
@@ -8044,9 +8056,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Operation Timed Out"
 #~ msgstr "操作超时"
-
-#~ msgid "Lost Connection to Bus"
-#~ msgstr "丢失与总线的连接"
 
 #~ msgid "Connect"
 #~ msgstr "连接"
