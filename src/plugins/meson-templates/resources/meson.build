@@ -20,7 +20,7 @@ config_h = configuration_data()
 config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 {{if enable_i18n}}
 config_h.set_quoted('GETTEXT_PACKAGE', '{{name}}')
-config_h.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+config_h.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
 {{end}}
 configure_file(output: 'config.h', configuration: config_h)
 add_project_arguments(['-I' + meson.project_build_root()], language: 'c')

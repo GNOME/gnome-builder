@@ -1,4 +1,4 @@
-pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
+pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 gnome = import('gnome')
 
 gnome.compile_resources('{{name}}',
@@ -11,7 +11,7 @@ gnome.compile_resources('{{name}}',
 conf = configuration_data()
 conf.set_quoted('VERSION', meson.project_version())
 conf.set_quoted('GETTEXT_PACKAGE', '{{name}}')
-conf.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+conf.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 
 configure_file(
@@ -23,8 +23,8 @@ configure_file(
 # Copy the config.rs output to the source directory.
 run_command(
   'cp',
-  join_paths(meson.project_build_root(), 'src', 'config.rs'),
-  join_paths(meson.project_source_root(), 'src', 'config.rs'),
+  meson.project_build_root() / 'src' / 'config.rs',
+  meson.project_source_root() / 'src' / 'config.rs',
   check: true
 )
 
