@@ -9,7 +9,11 @@ struct _{{PreFix}}Window
 	{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow  parent_instance;
 
 	/* Template widgets */
+{{if is_adwaita}}
+	AdwHeaderBar        *header_bar;
+{{else}}
 	GtkHeaderBar        *header_bar;
+{{end}}
 	GtkLabel            *label;
 };
 

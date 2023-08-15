@@ -9,10 +9,9 @@
     <property name="default-height">300</property>
 {{if is_adwaita}}
     <property name="content">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkHeaderBar" id="header_bar">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar" id="header_bar">
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="icon-name">open-menu-symbolic</property>
@@ -21,15 +20,14 @@
             </child>
           </object>
         </child>
-        <child>
+        <property name="content">
           <object class="GtkLabel" id="label">
             <property name="label">Hello, World!</property>
-            <property name="vexpand">true</property>
             <style>
               <class name="title-1"/>
             </style>
           </object>
-        </child>
+        </property>
       </object>
     </property>
 {{else}}
