@@ -14,7 +14,9 @@
           <object class="AdwHeaderBar" id="header_bar">
             <child type="end">
               <object class="GtkMenuButton">
+                <property name="primary">True</property>
                 <property name="icon-name">open-menu-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Menu</property>
                 <property name="menu-model">primary_menu</property>
               </object>
             </child>
@@ -35,7 +37,9 @@
       <object class="GtkHeaderBar" id="header_bar">
         <child type="end">
           <object class="GtkMenuButton">
+            <property name="primary">True</property>
             <property name="icon-name">open-menu-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Menu</property>
             <property name="menu-model">primary_menu</property>
           </object>
         </child>
