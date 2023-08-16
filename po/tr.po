@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-07-29 18:06+0300\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-10 17:07+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -1746,11 +1746,23 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u paket kuruluyor"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr "İşlem iptal edildi"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirilemedi: %s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr "Dil sunucusuna bağlantı yok"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
+msgstr "Kullanılabilir LSP istemci bağlantısı yok"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -5618,7 +5630,6 @@ msgstr "Geçerli sayfadaki simgeye git"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
-#| msgid "Sysprof Capture (*.syscap)"
 msgid "System Capture from %s.syscap"
 msgstr "Sistem yakalama %s.syscap"
 
