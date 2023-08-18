@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-07-28 09:02+0300\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-18 09:45+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -1753,11 +1753,23 @@ msgstr[1] "מותקנות שתי חבילות"
 msgstr[2] "מותקנות %u חבילות"
 msgstr[3] "מותקנות %u חבילות"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr "הפעולה בוטלה"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "ארע כשל באתחול שרת השפה: %s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr "אין חיבור לשרת השפה"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
+msgstr "אין התחברות זמינה ללקוח LSP"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -5617,10 +5629,9 @@ msgid "Navigate to a symbol within the current page"
 msgstr "ניווט לסמל בעמוד הנוכחי"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
-#, fuzzy, c-format
-#| msgid "Sysprof Capture (*.syscap)"
+#, c-format
 msgid "System Capture from %s.syscap"
-msgstr "לוכד Sysprof‏ ‏‎(*.syscap)"
+msgstr "לוכד מערכת מ־%s.syscap"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:312
 msgid "Profiling Application…"
@@ -7973,9 +7984,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "Operation Timed Out"
 #~ msgstr "תם הזמן לפעולה"
-
-#~ msgid "Lost Connection to Bus"
-#~ msgstr "החיבור עם האפיק אבד"
 
 #~ msgid "Connect"
 #~ msgstr "התחברות"
