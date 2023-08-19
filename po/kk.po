@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 21:19+0000\n"
-"PO-Revision-Date: 2022-09-18 09:59+0600\n"
+"POT-Creation-Date: 2023-08-08 19:03+0000\n"
+"PO-Revision-Date: 2023-08-19 12:19+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:114 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:481
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Құрастырушы"
 
@@ -32,7 +32,7 @@ msgid "An IDE for GNOME"
 msgstr "GNOME үшін IDE"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:115
+#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -163,7 +163,7 @@ msgid "Use the minimap to see more of the file"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:217
+#: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr ""
 
@@ -182,10 +182,19 @@ msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
-msgid "Allow network when metered"
+msgid "Show Log When Building"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#| msgid "If enabled, the sidebar will be visible in the editor workspace."
+msgid "If enabled, the build log will be raised when a build starts"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
+msgid "Allow network when metered"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
@@ -226,7 +235,7 @@ msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-msgid "Debugger Breakpoint at g_critical()"
+msgid "Debugger Breakpoint at Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
@@ -235,12 +244,13 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-msgid "Debugger Breakpoint at g_warning()"
+msgid "Debugger Breakpoint at Warnings and Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
@@ -307,7 +317,7 @@ msgstr ""
 "Іске қосылған болса, түзеткіш жолдардың салыстырмалы нөмірлерін көрсетеді."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:494
+#: src/plugins/editorui/tweaks.ui:483
 msgid "Smart Backspace"
 msgstr "Ақылды Backspace"
 
@@ -320,8 +330,7 @@ msgstr ""
 "өшіретін болады."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:506
-#| msgid "Smart Home and End"
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Home/End"
 msgstr ""
 
@@ -342,12 +351,11 @@ msgid "Overview Map Policy"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:87
-#| msgid "If enabled, the right panel will be displayed."
 msgid "When the overview map should be displayed."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:254
+#: src/plugins/editorui/tweaks.ui:266
 msgid "Draw Spaces"
 msgstr "Бос аралықтарды салу"
 
@@ -426,7 +434,6 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
-#| msgid "Builder Word Completion"
 msgid "Select First Completion"
 msgstr ""
 
@@ -494,12 +501,13 @@ msgid "Directory for all Builder projects."
 msgstr "Барлық Builder жобалары үшін бума."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-msgid "Restore Previous Files"
-msgstr "Алдыңғы файлдарды қалпына келтіру"
+msgid "Restore Session"
+msgstr "Сессияны қалпына келтіру"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
-msgid "Restore previously opened files when loading a project."
-msgstr "Жобаны жүктеу кезінде алдында ашылған файлдарды қалпына келтіру."
+#| msgid "Restore previously opened files when loading a project."
+msgid "Restores the projects previous session when loading."
+msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -514,12 +522,28 @@ msgid "The interface style to change pages"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
-#| msgid "Default"
 msgid "Default License"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:69
+msgid "Inherit Language Server stderr"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:70
+msgid ""
+"If enabled, stderr of language servers will be redirected to the console."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:74
+msgid "Preview Search Results"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:75
+msgid "If previews for search results should be automatically displayed"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
@@ -541,7 +565,6 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
-#| msgid "Install project"
 msgid "Install Project Before Running"
 msgstr ""
 
@@ -552,12 +575,10 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
-#| msgid "Delete Command"
 msgid "Default Run Command"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
-#| msgid "the default cargo command"
 msgid "The id of the default run command"
 msgstr ""
 
@@ -573,7 +594,6 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
-#| msgid "Unit Test Output"
 msgid "Unit Test Locality"
 msgstr ""
 
@@ -582,7 +602,7 @@ msgid "What environment to use when running unit tests"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
 
@@ -621,13 +641,12 @@ msgid ""
 msgstr "Іске қосылған болса, жоба ағашы бумаларды файлдарға дейін көрсетеді."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:375
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Емлені тексеру"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
-#| msgid "Automatically hide map when editor loses focus"
 msgid "Automatically check spelling within documents"
 msgstr ""
 
@@ -649,7 +668,7 @@ msgid "Start New Project"
 msgstr "Жаңа жобаны бастау"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:282
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
 msgstr "Репозиторийді клондау"
@@ -663,12 +682,12 @@ msgstr "Жаңа өңдегіш жұмыс кеңістігі"
 msgid "D-Bus Inspector"
 msgstr "D-Bus инспекторы"
 
-#: src/libide/code/ide-buffer.c:3674
+#: src/libide/code/ide-buffer.c:3810
 msgid "The current language lacks a symbol resolver."
 msgstr ""
 
 #. translators: %u is replaced with an incrementing number
-#: src/libide/code/ide-buffer-manager.c:381
+#: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "сақталаған файл %u"
@@ -697,64 +716,65 @@ msgstr ""
 msgid "Failed to save draft: %s"
 msgstr ""
 
-#: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:843
+#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
 msgid "Untitled"
 msgstr "Атаусыз"
 
-#: src/libide/core/ide-transfer.c:547
-#: src/libide/greeter/ide-greeter-workspace.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/core/ide-transfer.c:545
+#: src/libide/greeter/ide-greeter-workspace.c:558
+#: src/libide/greeter/ide-greeter-workspace.c:697
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1479
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/libide/gui/ide-workbench.c:1531
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
 #: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
 #: src/libide/debugger/ide-debug-manager.c:977
-#| msgid "The device “%s” could not be found."
 msgid "A suitable debugger could not be found."
 msgstr ""
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1475
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
+#: src/libide/gui/ide-workbench.c:1527
 msgid "Open File…"
 msgstr "Файлды ашу…"
 
 #: src/libide/editor/gtk/menus.ui:22
-#| msgid "Open a file by path"
 msgid "Open a file in the workspace"
 msgstr ""
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
-#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Баптаулар"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
-#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:464
+#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
+#: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Пернетақта жарлықтары"
 
-#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
-#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
-#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
-#: src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:45 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Көмек"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
-#: src/libide/gui/gtk/menus.ui:50
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
+#: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
 msgstr ""
 
-#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:62
 msgid "_Quit"
 msgstr "_Шығу"
 
@@ -763,47 +783,52 @@ msgid "Document"
 msgstr "Құжат"
 
 #: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
-#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
-#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
-#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
-#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
-#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10
+#: src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
+#: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153
 #: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:23
-#: src/plugins/menu-search/gtk/menus.ui:52
-#: src/plugins/web-browser/gtk/menus.ui:15
+#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:97
+#: src/plugins/web-browser/gtk/menus.ui:16
 msgid "Application"
 msgstr "Қолданба"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:98
 msgid "Pages"
 msgstr "Беттер"
 
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
-#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
-#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:139
-#: src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
+#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
+#: src/libide/sourceview/gtk/menus.ui:144
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:69
+#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:111
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Мәтін түзетушісі"
 
-#: src/libide/editor/gtk/menus.ui:77
-#| msgid "Search Bus Names"
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
 msgid "Search & Replace"
 msgstr ""
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
-#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72
+#: src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "Құжаттар"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "Selection"
 msgstr "Таңдалған"
 
@@ -814,11 +839,11 @@ msgstr "Баспаға шығару"
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to open file: %s"
 msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.c:85
+#: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
 msgstr "Өзгерістерді е_лемеу және қайта жүктеу"
 
@@ -830,33 +855,14 @@ msgstr "Дискідегі файл өзгерді"
 msgid "The file has been changed by another program."
 msgstr "Файл басқа бағдарламамен өзгертілді."
 
+#: src/libide/editor/ide-editor-info-bar.c:99
+msgid "File Contains Encoding Errors"
+msgstr ""
+
 #: src/libide/editor/ide-editor-info-bar.c:100
-msgid "Save _As…"
-msgstr "Қал_айша сақтау…"
-
-#: src/libide/editor/ide-editor-info-bar.c:102
-msgid "Buffer Restored"
-msgstr ""
-
-#: src/libide/editor/ide-editor-info-bar.c:103
-msgid "Unsaved buffer has been restored."
-msgstr ""
-
-#: src/libide/editor/ide-editor-info-bar.c:109
-msgid "_Save…"
-msgstr "_Сақтау…"
-
-#: src/libide/editor/ide-editor-info-bar.c:111
-#: src/libide/editor/ide-editor-info-bar.ui:81
-msgid "_Discard…"
-msgstr "_Елемеу…"
-
-#: src/libide/editor/ide-editor-info-bar.c:113
-msgid "Draft Changes Restored"
-msgstr "Жобалық өзгерістер қалпына келтірілді"
-
-#: src/libide/editor/ide-editor-info-bar.c:114
-msgid "Unsaved changes to the buffer have been restored."
+msgid ""
+"The encoding used to load the file detected errors. You may select an "
+"alternate encoding from the statusbar and reload."
 msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
@@ -883,83 +889,88 @@ msgstr "Құжат қалпына келтірілді"
 msgid "Unsaved document has been restored."
 msgstr "Сақталмаған құжат қалпына келтірілді."
 
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Елемеу…"
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:452
+#: src/libide/editor/ide-editor-page.c:514
 #, c-format
 msgid "Print failed: %s"
 msgstr "Баспаға шығару сәтсіз аяқталды: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:528
+#: src/libide/editor/ide-editor-page.c:590
 #, c-format
-#| msgid "Failed to load directory: %s"
 msgid "Failed to format selection: %s"
 msgstr ""
 
-#: src/libide/editor/ide-editor-page.c:943
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/libide/editor/ide-editor-page.c:1131
+#: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Файлды сақтау"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:124
 msgid "Save"
 msgstr "Сақтау"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Cancel"
 msgstr "Бас тарту"
 
-#: src/libide/editor/ide-editor-search-bar.ui:30
+#: src/libide/editor/ide-editor-search-bar.ui:32
+#: src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Алмастыру"
 
-#: src/libide/editor/ide-editor-search-bar.ui:46
+#: src/libide/editor/ide-editor-search-bar.ui:48
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Алдыңғы сәйкестікке жылжу (Ctrl+Shift+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:57
+#: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
 msgstr "Келесі сәйкестікке жылжу (Ctrl+G)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:72
+#: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Іздеу және алмастыру (Ctrl+H)"
 
-#: src/libide/editor/ide-editor-search-bar.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:105
+#: src/libide/terminal/ide-terminal-search.ui:77
 msgid "Close search"
 msgstr "Іздеуді жабу"
 
-#: src/libide/editor/ide-editor-search-bar.ui:120
+#: src/libide/editor/ide-editor-search-bar.ui:122
 msgid "_Replace"
 msgstr "А_лмастыру"
 
-#: src/libide/editor/ide-editor-search-bar.ui:132
+#: src/libide/editor/ide-editor-search-bar.ui:134
 msgid "Replace _All"
 msgstr "Б_арлығын алмастыру"
 
-#: src/libide/editor/ide-editor-search-bar.ui:146
-#| msgid "Regular E_xpressions"
+#: src/libide/editor/ide-editor-search-bar.ui:148
+#: src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
 msgstr ""
 
-#: src/libide/editor/ide-editor-search-bar.ui:150
-#| msgid "_Case sensitive"
+#: src/libide/editor/ide-editor-search-bar.ui:152
+#: src/libide/terminal/ide-terminal-search.ui:99
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr ""
 
-#: src/libide/editor/ide-editor-search-bar.ui:154
-#| msgid "Match _whole words"
+#: src/libide/editor/ide-editor-search-bar.ui:156
+#: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
 msgstr ""
 
@@ -988,23 +999,42 @@ msgid "Line Ending:"
 msgstr "Жолдың аяқталуы:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:101
+#: src/plugins/create-project/gbp-create-project-widget.ui:96
 msgid "Language"
 msgstr "Тіл"
 
-#: src/libide/foundry/ide-build-manager.c:470
+#: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr ""
 
-#: src/libide/foundry/ide-build-manager.c:611
+#: src/libide/foundry/ide-build-manager.c:623
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Құрылғы ақпаратын алу сәтсіз аяқталды: %s"
 
-#: src/libide/foundry/ide-config-manager.c:529
-#| msgid "Configure Options"
+#: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
+msgstr ""
+
+#: src/libide/foundry/ide-config-manager.c:626
+#, c-format
+#| msgid "Configuration"
+msgid "Configuration %s changed"
+msgstr ""
+
+#. translators: %s will be replaced with the build configuration identifier
+#: src/libide/foundry/ide-config-manager.c:872
+#, c-format
+msgid ""
+"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
+"formatted."
+msgstr ""
+
+#. translators: %s is set to the identifier of the build configuration
+#: src/libide/foundry/ide-config-manager.c:1068
+#, c-format
+msgid "Active configuration set to “%s”"
 msgstr ""
 
 #. translators: %s is replaced with the external device name
@@ -1017,7 +1047,13 @@ msgstr ""
 msgid "Devices"
 msgstr "Құрылғылар"
 
-#: src/libide/foundry/ide-device-manager.c:709
+#: src/libide/foundry/ide-device-manager.c:643
+#, c-format
+#| msgid "Devices"
+msgid "Device set to %s"
+msgstr ""
+
+#: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 
@@ -1038,99 +1074,109 @@ msgstr "Менің компьютерім (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "Менің компьютерім (%s) — (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:834
+#: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:844
+#: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
 msgstr ""
 
+#: src/libide/foundry/ide-pipeline.c:952
+msgid "Pipeline started to clean build tree"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:954
+msgid "Pipeline started"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:980
+msgid "Pipeline finished"
+msgstr ""
+
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1095
+#: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
-#| msgid "Builder — %s"
 msgid "Build (%s)"
 msgstr ""
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1136
+#: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
-#| msgid "Installed %s"
 msgid "Post-install (%s)"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3065
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3262
+#: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: src/libide/foundry/ide-pipeline.c:3266
-#: src/libide/foundry/ide-pipeline.c:3323
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: src/libide/foundry/ide-pipeline.c:3268
-#: src/libide/foundry/ide-pipeline.c:3331
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Дайын"
 
-#: src/libide/foundry/ide-pipeline.c:3283
+#: src/libide/foundry/ide-pipeline.c:3370
 msgid "Downloading…"
 msgstr "Жүктелуде…"
 
-#: src/libide/foundry/ide-pipeline.c:3287
+#: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
 msgstr "Тәуелділіктерді құрастыру…"
 
-#: src/libide/foundry/ide-pipeline.c:3291
+#: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
 msgstr "Ортаны дайындау…"
 
-#: src/libide/foundry/ide-pipeline.c:3295
+#: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
 msgstr "Баптау…"
 
-#: src/libide/foundry/ide-pipeline.c:3299
+#: src/libide/foundry/ide-pipeline.c:3386
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Жинау…"
 
-#: src/libide/foundry/ide-pipeline.c:3303
+#: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
 msgstr "Орнату…"
 
-#: src/libide/foundry/ide-pipeline.c:3307
+#: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3311
+#: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: src/libide/foundry/ide-pipeline.c:3315
-#: src/libide/foundry/ide-pipeline.c:3319
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
-#: src/libide/foundry/ide-pipeline.c:3327
+#: src/libide/foundry/ide-pipeline.c:3414
 msgid "Preparing…"
 msgstr "Дайындау…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3683
+#: src/libide/foundry/ide-pipeline.c:3770
 #, c-format
-#| msgid "Removing %s\n"
 msgid "Removing %s"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3742
-#| msgid "Removing Files…"
+#: src/libide/foundry/ide-pipeline.c:3829
 msgid "Removing build directories…"
 msgstr ""
 
@@ -1141,62 +1187,124 @@ msgstr ""
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
-#| msgid "Untitled Terminal"
 msgid "Untitled command"
-msgstr ""
+msgstr "Атаусыз команда"
 
 #: src/libide/foundry/ide-run-command.c:237
-#| msgid "Unit Tests"
 msgid "Unit Test"
+msgstr "Юниттест"
+
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
+#: src/libide/foundry/ide-run-manager.c:184
+#, c-format
+#| msgid "Connected to “%s”"
+msgid "User requested run tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:505
+#: src/libide/foundry/ide-run-manager.c:545
 msgid "Cannot run target, another target is running"
 msgstr ""
 
+#: src/libide/foundry/ide-run-manager.c:805
+#, c-format
+msgid "Application exited with error: %s"
+msgstr "Қолданба өз жұмысын қатемен аяқтады: %s"
+
+#: src/libide/foundry/ide-run-manager.c:808
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+msgid "Application exited"
+msgstr "Қолданба өз жұмысын аяқтады"
+
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:996
 #, c-format
 msgid "Running %s…"
-msgstr ""
+msgstr "Жөнелтуде %s…"
 
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1063
 msgid "Deploying to device…"
 msgstr ""
 
-#: src/libide/foundry/ide-runtime.c:413
-#: src/plugins/host/gbp-host-runtime-provider.c:53
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/libide/foundry/ide-run-manager.c:1292
+msgid "User requested application to run"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:1324
+msgid "User requested application to restart"
+msgstr ""
+
+#. translators: %s is replaced with the name of the tool
+#: src/libide/foundry/ide-run-manager.c:1354
+#, c-format
+msgid "User requested application to run with tool “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:1374
+msgid "User requested application to stop"
+msgstr ""
+
+#: src/libide/foundry/ide-runtime.c:406
+#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Host System"
+msgstr "Хост жүйесі"
+
+#: src/libide/foundry/ide-runtime-provider.c:147
+#, c-format
+#| msgid "Connected to “%s”"
+msgid "Discovered runtime “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-runtime-provider.c:170
+#, c-format
+#| msgid "Removing Files…"
+msgid "Removing runtime “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr ""
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
 msgstr ""
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
-#: src/libide/greeter/gtk/menus.ui:82
+#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Жобалар"
+
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
+#: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:22
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
 msgid "Close"
 msgstr "Жабу"
 
-#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
+#: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:59
-#| msgid "Scan your computer for existing projects"
+#: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:66
-#| msgid "Create a new project with a shared library"
+#: src/libide/greeter/gtk/menus.ui:69
 msgid "Create a new project by cloning a repository"
 msgstr ""
 
@@ -1208,51 +1316,49 @@ msgstr "Бу_маны таңдау…"
 msgid "Directory"
 msgstr "Бума"
 
-#: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
+#: src/libide/greeter/ide-greeter-workspace.c:230
+#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:346
+#: src/libide/greeter/ide-greeter-workspace.c:349
 msgid "Failed to load the project"
 msgstr "Жобаны жүктеу сәтсіз аяқталды"
 
-#: src/libide/greeter/ide-greeter-workspace.c:348
+#: src/libide/greeter/ide-greeter-workspace.c:351
 #: src/plugins/create-project/gbp-create-project-widget.c:261
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Жабу"
 
-#: src/libide/greeter/ide-greeter-workspace.c:542
-#| msgid "Select Project Folder"
+#: src/libide/greeter/ide-greeter-workspace.c:555
 msgid "Delete Project Sources?"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:543
+#: src/libide/greeter/ide-greeter-workspace.c:556
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:546
-#| msgid "Select Project Folder"
+#: src/libide/greeter/ide-greeter-workspace.c:559
 msgid "_Delete Project Sources"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:641
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:654
+#: src/libide/greeter/ide-greeter-workspace.c:693
 msgid "Select Project Folder"
 msgstr "Жоба бумасын таңдау"
 
-#: src/libide/greeter/ide-greeter-workspace.c:646
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project File"
 msgstr "Жоба файлын таңдау"
 
-#: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1478
+#: src/libide/greeter/ide-greeter-workspace.c:698
+#: src/libide/gui/ide-workbench.c:1530
 msgid "_Open"
 msgstr "_Ашу"
 
-#: src/libide/greeter/ide-greeter-workspace.c:694
+#: src/libide/greeter/ide-greeter-workspace.c:709
 msgid "All Project Types"
 msgstr "Барлық жобалар түрлері"
 
@@ -1261,8 +1367,6 @@ msgid "Go back"
 msgstr "Артқа өту"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
-#| msgctxt "shortcut window"
-#| msgid "Toggle Focus Mode"
 msgid "Toggle selection mode"
 msgstr ""
 
@@ -1281,11 +1385,11 @@ msgstr "Жобалар табылмады"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:130
 msgid "_Remove Projects"
-msgstr ""
+msgstr "Жобаларды өші_ру"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:141
 msgid "Remove Projects and Sources…"
-msgstr ""
+msgstr "Жобалар мен бастапқы кодтарды өшіру…"
 
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
@@ -1304,15 +1408,14 @@ msgstr "va_list мәнін алу сәтсіз аяқталды: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Ашу"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Select"
 msgstr "Таңдау"
 
@@ -1359,24 +1462,52 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Шамамен %u жыл бұрын"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Орнату"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
-#: src/libide/gtk/ide-search-entry.c:199
+#: src/libide/gtk/ide-search-entry.c:184
 #, c-format
 msgid "%u of %u"
 msgstr "%u, барлығы %u"
 
-#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Іздеу"
 
+#: src/libide/gui/ide-search-popover.ui:61
+#| msgid "Search for…"
+msgid "Search for anything"
+msgstr "Бірнәрсе іздеу"
+
+#: src/libide/gui/ide-search-popover.ui:246
+msgid "_Everything"
+msgstr "_Барлығы"
+
+#: src/libide/gui/ide-search-popover.ui:253
+msgid "_Actions"
+msgstr "Әр_екеттер"
+
+#: src/libide/gui/ide-search-popover.ui:260
+#| msgid "Command Bar"
+msgid "_Commands"
+msgstr "_Командалар"
+
+#: src/libide/gui/ide-search-popover.ui:267
+msgid "_Files"
+msgstr "_Файлдар"
+
+#: src/libide/gui/ide-search-popover.ui:274
+#| msgid "Symbols"
+msgid "_Symbols"
+msgstr "_Символдар"
+
 #. Translators: <b>%s</b> is used to show the provided text in bold
-#: src/libide/gtk/ide-shortcut-accel-dialog.c:394
+#: src/libide/gtk/ide-shortcut-accel-dialog.c:392
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
 msgstr ""
@@ -1389,45 +1520,56 @@ msgstr "_Орнату"
 msgid "Press Escape to cancel or Backspace to disable."
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:14
+#: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
 msgstr "Жобаны жабу"
 
-#: src/libide/gui/gtk/menus.ui:27
-#| msgid "Configure build preferences"
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
+msgid "General"
+msgstr "Жалпы"
+
+#: src/libide/gui/gtk/menus.ui:30
 msgid "Change application preferences"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:35
-#| msgid "Keyboard Shortcuts"
+#: src/libide/gui/gtk/menus.ui:38
 msgid "Find keyboard shortcuts"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:52
+#: src/libide/gui/gtk/menus.ui:46
+#| msgid "Updating Builder"
+msgid "Get help with using Builder"
+msgstr ""
+
+#: src/libide/gui/gtk/menus.ui:54
 msgid "Show information about Builder"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
-msgid "Web Browsing"
+#: src/libide/gui/gtk/menus.ui:63
+msgid "Quit without saving changes"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:17
+msgid "Web Browsing"
+msgstr "Веб шолу"
+
+#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
-#: src/plugins/terminal/gtk/menus.ui:33
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Терминал"
 
-#: src/libide/gui/gtk/menus.ui:82
-#| msgid "_New Terminal"
+#: src/libide/gui/gtk/menus.ui:84
 msgid "New Terminals"
-msgstr ""
+msgstr "Жаңа терминалдар"
 
-#: src/libide/gui/ide-application-actions.c:122
+#: src/libide/gui/ide-application-actions.c:175
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:129
+#: src/libide/gui/ide-application-actions.c:180
 msgid "Funded By"
 msgstr "Демеушілер"
 
@@ -1443,16 +1585,18 @@ msgstr ""
 msgid "FILE"
 msgstr "FILE"
 
-#: src/libide/gui/ide-application-command-line.c:64
+#. The following are handled in main(), but needed here so that --help
+#. * will display them to the user (which is handled later on).
+#.
+#: src/libide/gui/ide-application-command-line.c:68
 msgid "Print version information and exit"
 msgstr "Нұсқа ақпаратын шығару және шығу"
 
-#. Verbose is handled in main(), but we need to add to --help here
-#: src/libide/gui/ide-application-command-line.c:66
+#: src/libide/gui/ide-application-command-line.c:69
 msgid "Increase log verbosity (may be repeated)"
 msgstr ""
 
-#: src/libide/gui/ide-application-command-line.c:116
+#: src/libide/gui/ide-application-command-line.c:119
 #, c-format
 msgid "Failed to open project: %s"
 msgstr ""
@@ -1473,54 +1617,32 @@ msgstr "Файл немесе терминалды ашу"
 msgid "Use the page switcher above or use one of the following:"
 msgstr ""
 
-#: src/libide/gui/ide-frame.ui:26
-msgid "Ctrl+Enter"
-msgstr ""
-
 #: src/libide/gui/ide-frame.ui:36
-#| msgid "Project sidebar"
 msgid "Project Sidebar"
-msgstr ""
-
-#: src/libide/gui/ide-frame.ui:46
-msgid "F9"
-msgstr ""
+msgstr "Жобаның бүйір панелі"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
 msgstr "Файлды ашу"
 
-#: src/libide/gui/ide-frame.ui:66
-msgid "Ctrl+O"
-msgstr ""
-
-#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
-#| msgid "_New Terminal"
+#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:114
 msgid "New Terminal"
-msgstr ""
-
-#: src/libide/gui/ide-frame.ui:86
-msgid "Ctrl+Shift+T"
-msgstr ""
+msgstr "Жаңа терминал"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
 msgstr ""
 
-#: src/libide/gui/ide-marked-view.c:414
+#: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr ""
 
 #: src/libide/gui/ide-primary-workspace.ui:17
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel (F9)"
 msgstr ""
 
 #: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:34
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr ""
 
@@ -1528,9 +1650,7 @@ msgstr ""
 msgid "Search (Ctrl+Enter)"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:105
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
+#: src/libide/gui/ide-primary-workspace.ui:106
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr ""
 
@@ -1539,7 +1659,6 @@ msgid "Run Project (Shift+Ctrl+Space)"
 msgstr ""
 
 #: src/libide/gui/ide-run-button.c:68
-#| msgid "Stop running"
 msgid "Stop Running Project"
 msgstr ""
 
@@ -1548,31 +1667,47 @@ msgid "Stop running"
 msgstr "Орындалуын тоқтату"
 
 #: src/libide/gui/ide-run-button.c:151
-#| msgid "Build project"
 msgid "Run project"
-msgstr ""
+msgstr "Жобаны орындау"
 
-#: src/libide/gui/ide-shortcut-window.c:239
-#: src/libide/gui/ide-shortcut-window.c:265
+#: src/libide/gui/ide-shortcut-window.c:259
+#: src/libide/gui/ide-shortcut-window.c:285
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "Басқа"
 
-#: src/libide/gui/ide-workspace.c:1741
+#: src/libide/gui/ide-workbench.c:1076
+#| msgid "Project Name"
+msgid "Project loaded"
+msgstr "Жоба жүктелді"
+
+#. translators: %s is replaced with the project name
+#: src/libide/gui/ide-workbench.c:1246
+#, c-format
+#| msgid "Building project…"
+msgid "Loading project “%s”"
+msgstr ""
+
+#: src/libide/gui/ide-workspace.c:1713
 msgid "There are unsaved documents"
 msgstr "Сақталмаған құжаттар бар"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Сыртқы түрі"
 
-#: src/libide/gui/tweaks.ui:63
-#| msgid "Configure Options"
+#: src/libide/gui/tweaks.ui:66
 msgid "Configurations"
-msgstr ""
+msgstr "Баптаулар"
 
-#: src/libide/gui/tweaks.ui:75
+#: src/libide/gui/tweaks.ui:78
 msgid "Plugins"
 msgstr "Плагиндер"
 
@@ -1582,76 +1717,94 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u дестені орнату"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+msgid "The operation has been cancelled"
+msgstr ""
+
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1522
+#: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/create-project/gbp-create-project-widget.ui:115
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr ""
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+msgid "No LSP client connection is available"
+msgstr ""
+
+#. translators: %s is replaced with the name of the language server
+#: src/libide/lsp/ide-lsp-service.c:517
+#, c-format
+msgid "Language server “%s” exited"
+msgstr ""
+
+#. translators: the first %s is replaced with the language server name, second %s with PID
+#: src/libide/lsp/ide-lsp-service.c:556
+#, c-format
+msgid "Language server “%s” spawned as process %s"
+msgstr ""
+
+#: src/libide/plugins/ide-plugin.c:336
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Нұсқаларды басқару"
 
-#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:342
-#| msgid "Install Language Server"
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
 msgid "Language Servers"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:343
+#: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:344
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
-#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Диагностика"
 
-#: src/libide/plugins/ide-plugin.c:345
-#| msgid "Build System"
+#: src/libide/plugins/ide-plugin.c:341
 msgid "Build Systems"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:346
-#| msgid "Compiler"
+#: src/libide/plugins/ide-plugin.c:342
 msgid "Compilers"
-msgstr ""
+msgstr "Компиляторлар"
 
-#: src/libide/plugins/ide-plugin.c:347
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Debuggers"
 msgstr "Жөндеушілер"
 
-#: src/libide/plugins/ide-plugin.c:348
+#: src/libide/plugins/ide-plugin.c:344
 msgid "Templates"
 msgstr "Үлгілер"
 
-#: src/libide/plugins/ide-plugin.c:349
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Editing & Formatting"
-msgstr ""
+msgstr "Түзету және пішімдеу"
 
-#: src/libide/plugins/ide-plugin.c:352
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
 msgstr "Веб"
 
-#: src/libide/plugins/ide-plugin.c:353
-#| msgid "Language Syntax"
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
-msgstr ""
+msgstr "Тілдер қолдауы"
 
-#: src/libide/plugins/ide-plugin.c:354
+#: src/libide/plugins/ide-plugin.c:350
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Жұмыс үстелімен интеграция"
 
-#: src/libide/plugins/ide-plugin.c:355
-#| msgid "Dictionary"
+#: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
-msgstr ""
+msgstr "Қосымша"
 
 #: src/libide/plugins/ide-plugin-view.ui:35
 msgid "Authors"
@@ -1665,18 +1818,13 @@ msgstr "Нұсқасы"
 msgid "Website"
 msgstr "Веб сайт"
 
-#: src/libide/projects/ide-project.c:198
+#: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
 msgstr "Мақсат файлы жоба ағашының ішінде болуы тиіс."
 
-#: src/libide/projects/ide-project.c:435
+#: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
 msgstr "Файл жоба ағашының ішінде болуы тиіс."
-
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "Жобалар"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
@@ -1689,169 +1837,164 @@ msgid "Clipboard"
 msgstr "Алмасу буфері"
 
 #: src/libide/sourceview/gtk/menus.ui:10
-msgid "C_ut"
-msgstr "Қ_иып алу"
+msgid "C_ut (Ctrl+X)"
+msgstr "Қ_иып алу (Ctrl+X)"
 
-#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
-msgid "_Copy"
-msgstr "_Көшіріп алу"
+#: src/libide/sourceview/gtk/menus.ui:16
+msgid "_Copy (Ctrl+C)"
+msgstr "_Көшіріп алу (Ctrl+C)"
 
-#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
-msgid "_Paste"
-msgstr "Кірі_стіру"
+#: src/libide/sourceview/gtk/menus.ui:22
+msgid "_Paste (Ctrl+V)"
+msgstr "Кі_рістіру (Ctrl+V)"
 
-#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
+#: src/libide/sourceview/gtk/menus.ui:29
 msgid "Undo"
 msgstr "Болдырмау"
 
 #: src/libide/sourceview/gtk/menus.ui:31
-#| msgctxt "shortcut window"
-#| msgid "Undo and Redo"
 msgid "Undo & Redo"
-msgstr ""
+msgstr "Болдырмау және қайталау"
 
-#: src/libide/sourceview/gtk/menus.ui:38
-msgid "Redo"
-msgstr "Қайтару"
+#: src/libide/sourceview/gtk/menus.ui:33
+msgid "Undo (Ctrl+Z)"
+msgstr "Болдырмау (Ctrl+Z)"
 
-#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
+#: src/libide/sourceview/gtk/menus.ui:39
+msgid "Redo (Shift+Ctrl+Z)"
+msgstr "Қайталау (Shift+Ctrl+Z)"
+
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom"
 msgstr "Үлкейту"
 
-#: src/libide/sourceview/gtk/menus.ui:49
-msgid "Zoom Out"
-msgstr "Кішірейту"
+#: src/libide/sourceview/gtk/menus.ui:51
+#| msgid "Zoom Out"
+msgid "Zoom Out (Ctrl+-)"
+msgstr "Кішірейту (Ctrl+-)"
 
-#: src/libide/sourceview/gtk/menus.ui:55
-msgid "Reset Zoom"
-msgstr "Масштабты тастау"
+#: src/libide/sourceview/gtk/menus.ui:57
+#| msgid "Reset Zoom"
+msgid "Reset Zoom (Ctrl+0)"
+msgstr "Масштабты тастау (Ctrl+0)"
 
-#: src/libide/sourceview/gtk/menus.ui:61
-msgid "Zoom In"
-msgstr "Үлкейту"
+#: src/libide/sourceview/gtk/menus.ui:63
+#| msgid "Zoom In"
+msgid "Zoom In (Ctrl++)"
+msgstr "Үлкейту (Ctrl++)"
 
-#: src/libide/sourceview/gtk/menus.ui:69
+#: src/libide/sourceview/gtk/menus.ui:71
 msgid "_Selection"
 msgstr "_Таңдалған"
 
-#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
 msgstr "Барлығын _таңдау"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
-#| msgid "Format Strings"
+#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
 msgid "Formatting"
-msgstr ""
+msgstr "Пішімдеу"
 
-#: src/libide/sourceview/gtk/menus.ui:81
+#: src/libide/sourceview/gtk/menus.ui:83
 msgid "All _Upper Case"
 msgstr "Барлығын _бас әріпті қылу"
 
-#: src/libide/sourceview/gtk/menus.ui:82
-#| msgctxt "shortcut window"
-#| msgid "Invert selection case"
+#: src/libide/sourceview/gtk/menus.ui:84
 msgid "Convert the text selection to upper case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:88
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "All _Lower Case"
 msgstr "Барлығын _кіші әріпті қылу"
 
-#: src/libide/sourceview/gtk/menus.ui:89
-#| msgctxt "shortcut window"
-#| msgid "Invert selection case"
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "Convert the text selection to lower case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:95
+#: src/libide/sourceview/gtk/menus.ui:97
 msgid "In_vert Case"
 msgstr "Регистрді т_ерістеу"
 
-#: src/libide/sourceview/gtk/menus.ui:96
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "Invert case of the text selection"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:102
+#: src/libide/sourceview/gtk/menus.ui:104
 msgid "_Title Case"
 msgstr "_Бас Әріптерден"
 
-#: src/libide/sourceview/gtk/menus.ui:103
-#| msgctxt "shortcut window"
-#| msgid "Invert selection case"
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "Convert the text selection to title case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:112
-#| msgid "Select _None"
+#: src/libide/sourceview/gtk/menus.ui:114
 msgid "Select _Line"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:117
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
+#: src/libide/sourceview/gtk/menus.ui:119
 msgid "_Delete Line"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:122
+#: src/libide/sourceview/gtk/menus.ui:124
 msgid "_Join Lines"
 msgstr "Жолдарды бірі_ктіру"
 
-#: src/libide/sourceview/gtk/menus.ui:127
+#: src/libide/sourceview/gtk/menus.ui:129
 msgid "S_ort Lines"
 msgstr "Жолдарды сұр_ыптау"
 
-#: src/libide/sourceview/gtk/menus.ui:133
-#| msgid "_Duplicate"
+#: src/libide/sourceview/gtk/menus.ui:135
 msgid "D_uplicate Line"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:142
+msgid "_Formatting"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
+#: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
-#| msgctxt "shortcut window"
-#| msgid "Navigation"
 msgid "Code Navigation"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "Анықтамасына ө_ту"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-#| msgid "Jump to the last position when reopening a file"
-msgid "Jump to file and location where item is defined"
-msgstr ""
-
-#: src/libide/sourceview/gtk/menus.ui:156
-#| msgctxt "shortcut window"
-#| msgid "Find references"
-msgid "_Find References"
-msgstr ""
-
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1550
-#: src/plugins/editorui/gbp-editorui-position-label.c:77
+#: src/libide/sourceview/ide-source-view.c:1624
+#: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Жол %u, Бағ %u"
+
+#. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
+#: src/libide/sourceview/ide-source-view.c:1626
+#: src/plugins/editorui/gbp-editorui-position-label.c:82
+#, c-format
+#| msgid "Ln %u, Col %u"
+msgid "Ln %u, Col %u (Sel: %u)"
+msgstr ""
 
 #: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
 msgstr "Сі_лтемені ашу"
 
+#: src/libide/terminal/gtk/menus.ui:16
+msgid "_Copy"
+msgstr "_Көшіріп алу"
+
 #: src/libide/terminal/gtk/menus.ui:17
-#| msgctxt "shortcut window"
-#| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
 msgstr ""
 
 #: src/libide/terminal/gtk/menus.ui:22
-#| msgid "_Copy Link Address"
 msgid "_Copy Link"
-msgstr ""
+msgstr "Сі_лтемені көшіріп алу"
+
+#: src/libide/terminal/gtk/menus.ui:27
+msgid "_Paste"
+msgstr "Кірі_стіру"
 
 #: src/libide/terminal/gtk/menus.ui:28
-#| msgctxt "shortcut window"
-#| msgid "Paste text from clipboard"
 msgid "Paste from clipboard into the terminal"
 msgstr ""
 
@@ -1873,7 +2016,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Атаусыз терминал"
 
@@ -1894,37 +2037,35 @@ msgstr "Атаусыз терминал"
 msgid "Search runtimes"
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-search.ui:66
-msgid "Show or hide search options such as case sensitivity"
+#: src/libide/terminal/ide-terminal-search.ui:34
+#| msgctxt "shortcut window"
+#| msgid "Find the previous match"
+msgid "Move to previous match"
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-search.ui:106
-msgid "Regex"
-msgstr "Тұрақты өрнек"
+#: src/libide/terminal/ide-terminal-search.ui:44
+#| msgid "Move to next match (Ctrl+G)"
+msgid "Move to next match"
+msgstr ""
 
-#: src/libide/terminal/ide-terminal-search.ui:115
-msgid "Case sensitive"
-msgstr "Регистрді ескеру"
-
-#: src/libide/terminal/ide-terminal-search.ui:124
-msgid "Match whole word"
-msgstr "Тек толық сөзді сәйкестеу"
-
-#: src/libide/terminal/ide-terminal-search.ui:133
+#: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Соңына жеткенде басына өту"
 
-#: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
-#: src/libide/tree/ide-tree-node.c:1499
-msgid "(Empty)"
-msgstr "(Бос)"
+#: src/libide/threading/ide-subprocess.c:164
+#, c-format
+msgid "Process terminated by signal %d"
+msgstr ""
 
-#: src/libide/tree/ide-tree-node.c:1468
-msgid "Loading…"
-msgstr "Жүктеу…"
+#: src/libide/tree/ide-tree-empty.c:257
+msgid "<i>Loading</i>"
+msgstr ""
+
+#: src/libide/tree/ide-tree-empty.c:259
+msgid "Empty"
+msgstr "Бос"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:137
-#| msgid "Projects directory"
 msgid "Projects Directory"
 msgstr ""
 
@@ -1934,7 +2075,6 @@ msgstr "Қаріпті таңдау"
 
 #: src/libide/tweaks/ide-tweaks-window.c:134
 #, c-format
-#| msgid "Builder — Preferences"
 msgid "Builder — %s — Preferences"
 msgstr ""
 
@@ -1943,7 +2083,6 @@ msgid "Builder — Preferences"
 msgstr "Builder — Баптаулар"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:35
-#| msgid "Preferences"
 msgid "All Preferences"
 msgstr ""
 
@@ -1964,7 +2103,7 @@ msgstr "Ешнәрсе"
 msgid "Blank page"
 msgstr "Бос бет"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
 msgid "Settings"
 msgstr "Баптаулар"
 
@@ -1972,7 +2111,11 @@ msgstr "Баптаулар"
 msgid "Allow JavaScript"
 msgstr ""
 
-#: src/main.c:154
+#: src/libide/webkit/ide-webkit-page.ui:104
+msgid "Print"
+msgstr "Print"
+
+#: src/main.c:128
 msgid "Run a new instance of Builder"
 msgstr ""
 
@@ -1993,7 +2136,7 @@ msgstr ""
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
 #: src/plugins/make/gbp-make-pipeline-addin.c:142
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:91
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
@@ -2006,25 +2149,37 @@ msgid "Caching build commands"
 msgstr ""
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Көшірме)"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
-#| msgid "A Meson-based project is loaded but meson could not be found."
 msgid "BuildStream project in use but “bst” executable could not be found."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+msgid "Use KEY=VALUE to set an environment variable"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+msgid "Keys may not start with a number"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+msgid "Keys may only contain alpha-numerics or underline."
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
-#| msgid "Variable"
 msgid "Add _Variable"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
-#| msgid "Variable"
 msgid "Add Variable"
 msgstr ""
 
@@ -2034,6 +2189,7 @@ msgid "_Add"
 msgstr "Қ_осу"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Көшіру"
 
@@ -2041,14 +2197,19 @@ msgstr "Көшіру"
 msgid "Remove"
 msgstr "Өшіру"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+#: src/plugins/buildui/gbp-buildui-log-pane.c:356
 msgid "Build Output"
 msgstr "Құрастыру шығысы"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:357
+#| msgid "Build Output"
+msgid "Build Output (Shift+Ctrl+L)"
+msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
@@ -2108,10 +2269,9 @@ msgstr "Қателер"
 msgid "Warnings"
 msgstr "Ескертулер"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:345
+#: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
-#| msgid "Build Profile"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
 msgstr ""
 
@@ -2135,41 +2295,34 @@ msgstr "—"
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
 #, c-format
-#| msgid "Warnings"
 msgid "Warnings (%u)"
 msgstr ""
 
 #. translators: %u is replaced with the number of errors
 #: src/plugins/buildui/gbp-buildui-status-popover.c:76
 #, c-format
-#| msgid "Errors"
 msgid "Errors (%u)"
-msgstr ""
+msgstr "Қателер (%u)"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
-#| msgid "Shared Library"
 msgid "Shared"
-msgstr ""
+msgstr "Бөлісетін"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
-#| msgid "Status:"
 msgid "Static"
-msgstr ""
+msgstr "Статикалық"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
-#| msgid "Execute"
 msgid "Executable"
-msgstr ""
+msgstr "Орындалатын файл"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to list build targets: %s"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
-#| msgid "Select a Bus Name"
 msgid "Select Build Target"
 msgstr ""
 
@@ -2184,7 +2337,6 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
-#| msgid "Automatically indent"
 msgid "Automatically Discover"
 msgstr ""
 
@@ -2197,13 +2349,10 @@ msgid "The container used to build and run your application"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
-#| msgid "_Duplicate"
 msgid "Duplicate"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#| msgctxt "shortcut window"
-#| msgid "Duplicate current line or selection"
 msgid "Duplicate into new configuration"
 msgstr ""
 
@@ -2217,7 +2366,6 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
 msgid "Delete"
 msgstr "Өшіру"
 
@@ -2226,108 +2374,107 @@ msgid "Delete configuration"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
-#| msgid "Building project"
-msgid "Stop Building Project"
+msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr ""
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
-msgid "_Build"
-msgstr "Құр_астыру"
-
-#: src/plugins/buildui/gtk/menus.ui:14
-msgid "R_ebuild"
-msgstr "Қайта құраст_ыру"
-
-#: src/plugins/buildui/gtk/menus.ui:20
-msgid "_Run"
-msgstr "О_рындау"
-
-#: src/plugins/buildui/gtk/menus.ui:25
-msgid "R_un With…"
-msgstr "Көмегімен жөн_елту…"
-
-#: src/plugins/buildui/gtk/menus.ui:33
-#| msgid "Configure project"
+#: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
-#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
-#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
-#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Code Foundry"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
-#: src/plugins/projectui/tweaks.ui:218
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Баптаулар"
 
-#: src/plugins/buildui/gtk/menus.ui:45
-#| msgid "_Select Widget…"
+#: src/plugins/buildui/gtk/menus.ui:16
+#| msgid "Configuration"
+msgid "Reload Configuration"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:18
+msgid "Reload project configuration"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
-#: src/plugins/buildui/gtk/menus.ui:112
-#| msgid "Building…"
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "_Build"
+msgstr "Құр_астыру"
+
+#: src/plugins/buildui/gtk/menus.ui:37
 msgid "Build the project"
 msgstr "Жобаны құрастыру"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
 msgstr "Қа_йта құрастыру"
 
-#: src/plugins/buildui/gtk/menus.ui:62
-#| msgid "Build the project"
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Rebuild the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "_Clean"
 msgstr "Та_зарту"
 
-#: src/plugins/buildui/gtk/menus.ui:68
-#| msgid "Build the project"
+#: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:75
-#| msgid "Install project"
+#: src/plugins/buildui/gtk/menus.ui:58
+#| msgid "Stop running"
+msgid "Stop Building"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:59
+msgid "Cancel the current build operation"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:79
-#| msgid "Install project"
+#: src/plugins/buildui/gtk/menus.ui:72
 msgid "Install the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy to Device…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
 msgstr ""
 
@@ -2335,98 +2482,114 @@ msgstr ""
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:88
 msgid "_Export"
 msgstr "Э_кспорт"
 
-#: src/plugins/buildui/gtk/menus.ui:96
-#| msgid "Empty Project"
+#: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:104
-#| msgid "Build"
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Stop Build"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:106
-#| msgid "Building project"
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Stop building project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:114
-#| msgid "Save build log"
-msgid "Show Build _Log"
+#: src/plugins/buildui/gtk/menus.ui:108
+#| msgid "Build Output"
+msgid "Show Bui_ld Output"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:111
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
 msgid "Running"
 msgstr "Орындалуда"
 
-#: src/plugins/buildui/gtk/menus.ui:128
-#| msgid "Delete Command"
+#: src/plugins/buildui/gtk/menus.ui:122
 msgid "Select Run Command…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:135
 msgid "Run"
 msgstr "Жөнелту"
 
-#: src/plugins/buildui/gtk/menus.ui:143
-#| msgid "Build the project"
+#: src/plugins/buildui/gtk/menus.ui:138
 msgid "Run the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:144
+msgid "Restart Program"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:147
+msgid "Restart the running program"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:153
+msgid "Stop Program"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:156
+#| msgid "Build the project"
+msgid "Stop running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:161
+#| msgid "Debugger"
+msgid "Debugging"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Юниттесттер"
 
-#: src/plugins/buildui/gtk/menus.ui:155
-#| msgid "Follow system night light"
+#: src/plugins/buildui/gtk/menus.ui:172
 msgid "Follow System Style"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:161
-#| msgid "Light"
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "Force Light"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:184
 msgid "Force Dark"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Accessibility"
 msgstr "Қол жетерлілігі"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:193
 msgid "High Contrast"
 msgstr "Жоғары контраст"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:198
 msgid "Text Direction"
 msgstr "Мәтін бағыты"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:200
 msgid "Left-to-Right"
 msgstr "Солдан оңға"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Right-to-Left"
 msgstr "Оңнан солға"
 
-#: src/plugins/buildui/gtk/menus.ui:204
-msgid "Tools"
-msgstr "Саймандар"
+#: src/plugins/buildui/gtk/menus.ui:221
+#| msgid "D-Bus Inspector"
+msgid "Show Inspector"
+msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:53
+#: src/plugins/menu-search/gtk/menus.ui:57
 msgid "Style"
 msgstr "Стиль"
 
@@ -2440,7 +2603,6 @@ msgid "Editor Font"
 msgstr "Түзетуші қарібі"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#| msgid "The source code editor"
 msgid "The font used in the source code editor"
 msgstr ""
 
@@ -2449,12 +2611,10 @@ msgid "Terminal Font"
 msgstr "Терминал қарібі"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#| msgid "The word is not in the dictionary"
 msgid "The font used in the terminal"
 msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
 msgstr ""
 
@@ -2502,14 +2662,13 @@ msgstr ""
 msgid "Switch documents using a popover"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
-#: src/plugins/shellcmd/tweaks.ui:21
-#| msgid "Command"
+#: src/plugins/buildui/tweaks.ui:12
+#: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
-msgstr ""
+msgstr "Командалар"
 
 #: src/plugins/buildui/tweaks.ui:16
-#| msgid "Command"
 msgid "Run Command"
 msgstr ""
 
@@ -2522,7 +2681,6 @@ msgid "Starting & Stopping"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:58
-#| msgid "Installing"
 msgid "Install Before Running"
 msgstr ""
 
@@ -2533,7 +2691,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
-#| msgid "Signals"
 msgid "Stop Signal"
 msgstr ""
 
@@ -2554,12 +2711,10 @@ msgid ""
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:151
-#| msgid "Run in build environment"
 msgid "Run unit tests from within the build environment."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:163
-#| msgid "GTK Application"
 msgid "As Application"
 msgstr ""
 
@@ -2568,13 +2723,8 @@ msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:176
-#| msgid "Building…"
 msgid "Build & Tooling"
 msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
-msgid "General"
-msgstr "Жалпы"
 
 #: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -2589,7 +2739,6 @@ msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:200
-#| msgid "Clear build log"
 msgid "Clear Build Logs"
 msgstr ""
 
@@ -2597,119 +2746,118 @@ msgstr ""
 msgid "Clear the build log history when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:214
-#| msgid "Workspace"
+#: src/plugins/buildui/tweaks.ui:212
+#| msgid "Save build log"
+msgid "Show Build Logs"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:213
+msgid "Show the build log when a new build begins"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:229
+#| msgid "Console"
+msgid "Log to Console"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:230
+msgid "Redirect language server error logs to stderr"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:218
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:227
+#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Стандартты"
 
-#: src/plugins/buildui/tweaks.ui:233
+#: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:239
-msgid "1"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
-#: src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
-#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
-#: src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
-#: src/plugins/buildui/tweaks.ui:257
-msgid "6"
-msgstr "6"
-
-#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
-#: src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
-#: src/plugins/buildui/tweaks.ui:269
-msgid "16"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:275
-#| msgid "2"
-msgid "32"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:281
-#| msgid "4"
-msgid "64"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:287
-msgid "128"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:293
-msgid "256"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:299
-msgid "512"
-msgstr ""
-
-#: src/plugins/buildui/tweaks.ui:313
+#: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:348
-#| msgid "Installation failed"
+#: src/plugins/buildui/tweaks.ui:389
 msgid "Installation Prefix"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:349
+#: src/plugins/buildui/tweaks.ui:390
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:367
+#: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
 msgstr "Баптау опциялары"
 
-#: src/plugins/buildui/tweaks.ui:380
+#: src/plugins/buildui/tweaks.ui:421
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:387
+#: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:403
+#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:432
+#| msgid "Search your project"
+msgid "Where your project builds"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:449
+#| msgid "Indexing Source Code"
+msgid "Inside Source Tree"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:455
+msgid "Outside Source Tree"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:476
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
-#| msgid "Building dependencies…"
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr ""
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:201
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Жобаны құрастыру"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-client.c:166
+msgid "Clang integration server has exited"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-client.c:199
+#, c-format
+msgid "Clang integration server has started as process %s"
 msgstr ""
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
@@ -2759,7 +2907,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "Жобаны баптау"
 
@@ -2807,7 +2955,7 @@ msgstr ""
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:996
+#: src/plugins/ctags/ide-ctags-service.c:1023
 msgid "Indexing Source Code"
 msgstr "Бастапқы кодты индекстеу"
 
@@ -2818,23 +2966,150 @@ msgstr ""
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:338
+#: src/plugins/code-index/ide-code-index-index.c:340
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
 msgstr "Анықтамасы"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#: src/plugins/code-index/ide-code-index-search-provider.c:150
+#| msgid "Projects"
+msgid "Project Symbols"
+msgstr ""
+
+#: src/plugins/codeshot/gtk/menus.ui:6
+#| msgctxt "shortcut window"
+#| msgid "Copy and Paste"
+msgid "Copy as Image"
+msgstr ""
+
+#: src/plugins/codeshot/gtk/menus.ui:7
+#| msgctxt "shortcut window"
+#| msgid "Cut selected text to clipboard"
+msgid "Copy selected text as an image"
+msgstr ""
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr ""
 
+#: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
+#, c-format
+#| msgid "Failed to load file: %s: %s"
+msgid "Failed to format while saving document: %s"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
+#| msgid "Selections"
+msgid "Code Actions"
+msgstr "Код әрекеттері"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
+msgid "_Apply"
+msgstr "Іске _асыру"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+msgid "Loading…"
+msgstr "Жүктеу…"
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+#| msgid "No commands available"
+msgid "No code actions available"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+msgid "Code Action Failure"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
+msgid "Symbol Not Selected"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
+msgid "A symbol to rename must be selected"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#| msgid "Build Preferences"
+msgid "Find References"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+#| msgid "Preferences"
+msgid "No references found"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to rename symbol: %s"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+#| msgid "Rename symbol"
+msgid "Rename Symbol"
+msgstr "Символ атын өзгерту"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:66
+msgid "_Rename"
+msgstr "Атын ауысты_ру"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+#| msgid "Current line"
+msgid "Current Symbol name"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:7
+#| msgid "Rename symbol"
+msgid "R_ename Symbol…"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:12
+msgid "Code Actions…"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:14
+msgid "Display a list of possible code actions from the cursor position"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:20
+#| msgid "Declaration"
+msgid "_Go to Declaration"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:21
+msgid "Jump to file and location where item is declared"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:27
+msgid "_Go to Definition"
+msgstr "Анықтамасына ө_ту"
+
+#: src/plugins/codeui/gtk/menus.ui:28
+msgid "Jump to file and location where item is defined"
+msgstr ""
+
+#: src/plugins/codeui/gtk/menus.ui:33
+msgid "_Find References"
+msgstr ""
+
 #: src/plugins/comment-code/gtk/menus.ui:7
-#| msgid "Color Components"
 msgid "Code Comments"
 msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-#| msgid "_Comment code"
 msgid "_Comment Code"
 msgstr ""
 
@@ -2843,7 +3118,6 @@ msgid "Add comments surrounding the source code selection"
 msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:16
-#| msgid "Unco_mment code"
 msgid "Unco_mment Code"
 msgstr ""
 
@@ -2867,93 +3141,88 @@ msgstr ""
 msgid "Update copyright headers when saving documents"
 msgstr ""
 
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr ""
+
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
 msgid "Select Location"
 msgstr "Орналасуды таңдаңыз"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:259
-#| msgid "Failed to load the project"
 msgid "Failed to Create Project"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:18
+#: src/plugins/create-project/gbp-create-project-widget.ui:13
 msgid "Project Name"
 msgstr "Жоба атауы"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:24
-#| msgid "A folder with that name already exists."
+#: src/plugins/create-project/gbp-create-project-widget.ui:19
 msgid "A subdirectory with this name already exists"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:31
+#: src/plugins/create-project/gbp-create-project-widget.ui:26
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:47
-#| msgid "Application ID"
+#: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:53
+#: src/plugins/create-project/gbp-create-project-widget.ui:48
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:69
+#: src/plugins/create-project/gbp-create-project-widget.ui:64
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:151
 msgid "Location"
 msgstr "Орналасуы"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:85
+#: src/plugins/create-project/gbp-create-project-widget.ui:80
 msgid "The project will be created in a new subdirectory."
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Лицензиясы"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:127
+#: src/plugins/create-project/gbp-create-project-widget.ui:122
 msgid "Template"
 msgstr "Үлгі"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:183
-#| msgid "_Create Project"
+#: src/plugins/create-project/gbp-create-project-widget.ui:181
 msgid "Create Project"
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
-#| msgid "_Create Project"
 msgid "Create _New Project…"
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
-#| msgid "_Create Project"
 msgid "Create New Project"
 msgstr ""
 
-#: src/plugins/create-project/gtk/menus.ui:7
-#: src/plugins/create-project/gtk/menus.ui:18
-#: src/plugins/create-project/gtk/menus.ui:30
-#| msgid "_Create Project"
+#: src/plugins/create-project/gtk/menus.ui:9
+#: src/plugins/create-project/gtk/menus.ui:21
+#: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
 msgstr ""
 
-#: src/plugins/create-project/gtk/menus.ui:22
-#| msgid "Create a new empty project"
+#: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr ""
 
@@ -2963,22 +3232,19 @@ msgid ""
 "indexing is complete."
 msgstr ""
 
-#: src/plugins/ctags/ide-ctags-service.c:953
+#: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
 msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:14
-#| msgid "Tags"
 msgid "CTags"
 msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:17
-#| msgid "Suggest Python completions"
 msgid "Suggest Completions"
 msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:18
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use CTags to suggest code completion proposals"
 msgstr ""
 
@@ -2990,44 +3256,88 @@ msgstr ""
 msgid "The path to the ctags executable"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:10
+#: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
 msgstr "Жөндеушімен жөнелту"
 
-#: src/plugins/debuggerui/gtk/menus.ui:13
-#| msgid "Run with Debugger"
+#: src/plugins/debuggerui/gtk/menus.ui:14
 msgid "Run the project with debugger"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#: src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Жөндеуші"
 
-#: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/gtk/menus.ui:25
+#| msgid "Breakpoint"
+msgid "Toggle Breakpoint"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:28
+#| msgid "Highlight current line"
+msgid "Toggle breakpoint at current line"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:34
+msgid "Continue"
+msgstr "Жалғастыру"
+
+#: src/plugins/debuggerui/gtk/menus.ui:37
+msgid "Continue debugging to next breakpoint"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:43
+msgid "Pause"
+msgstr "Аялдату"
+
+#: src/plugins/debuggerui/gtk/menus.ui:46
+msgid "Pause debugger until continued"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:52
+msgid "Step Over"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:55
+msgid "Execute the current line, stepping over any function calls"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:61
+msgid "Step Into"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:64
+msgid "Execute the current line, stepping into any function calls"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:70
+msgid "Step Out"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:73
+msgid "Run until the end of the function"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:83
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:25
+#: src/plugins/debuggerui/gtk/menus.ui:85
 msgid "Automatically Break at Program Start"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:30
-#| msgid "Automatically indent"
+#: src/plugins/debuggerui/gtk/menus.ui:90
 msgid "Automatically Break at Warnings"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:35
-#| msgid "Automatically indent"
+#: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
 msgstr ""
-
-#: src/plugins/debuggerui/gtk/menus.ui:49
-msgid "Run with _Debugger"
-msgstr "Жөн_деушімен жөнелту"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3065,23 +3375,23 @@ msgid "Expression"
 msgstr "Өрнек"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
-msgid "Interrupt the program"
+msgid "Pause the program (F6)"
 msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
-msgid "Continue running the program"
+msgid "Continue running the program (F5)"
 msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
-msgid "Execute the current line, stepping into any function calls"
+msgid "Execute the current line, stepping into any function calls (F8)"
 msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
-msgid "Execute the current line, stepping over any function calls"
+msgid "Execute the current line, stepping over any function calls (F7)"
 msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
-msgid "Run until the end of the function"
+msgid "Run until the end of the function (Shift+F8)"
 msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
@@ -3149,19 +3459,19 @@ msgstr "Аргументтер"
 msgid "Binary"
 msgstr "Бинарлы"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:234
 msgid "Threads"
 msgstr "Ағындар"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
 msgid "Libraries"
 msgstr "Кітапханалар"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:263
 msgid "Registers"
 msgstr "Регистрлер"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:268
 msgid "Console"
 msgstr "Консоль"
 
@@ -3174,7 +3484,6 @@ msgid "Automatically insert a breakpoint at the start of the application"
 msgstr ""
 
 #: src/plugins/debuggerui/tweaks.ui:31
-#| msgid "Stop running"
 msgid "Stop at Warnings"
 msgstr ""
 
@@ -3199,7 +3508,6 @@ msgid "The device port number"
 msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
-#| msgid "Application Output"
 msgid "The application to run"
 msgstr ""
 
@@ -3219,13 +3527,25 @@ msgstr ""
 msgid "D-Bus Inspector…"
 msgstr ""
 
+#: src/plugins/dub/gbp-dub-run-command-provider.c:74
+msgid "Dub Run"
+msgstr ""
+
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
 msgstr "Файл ұсынылмады."
 
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
-#| msgid "Use terminal interface"
-msgid "Use minimal editorui interface"
+msgid "Use minimal editor interface"
+msgstr ""
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:62
+#, c-format
+msgid "Switch to %s style"
+msgstr ""
+
+#: src/plugins/editorui/gbp-editorui-search-result.c:181
+msgid "Switch application and editor theme"
 msgstr ""
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
@@ -3236,22 +3556,22 @@ msgstr "Тастау"
 msgid "Reverts language preferences to application defaults"
 msgstr ""
 
-#. translators: "Text" means plaintext or text/plain
+#. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
-msgid "Text"
-msgstr "Мәтін"
+msgid "Plain Text"
+msgstr "Ашық мәтін"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:257
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Spaces"
 msgstr "Бос аралықтар"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Tabs"
 msgstr "Табуляция"
 
@@ -3260,6 +3580,7 @@ msgid "Go"
 msgstr "Өту"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Жолға өту"
 
@@ -3268,46 +3589,53 @@ msgid "Indentation"
 msgstr "Шегіну"
 
 #: src/plugins/editorui/gtk/menus.ui:7
-#| msgid "Insert Matching Brace"
 msgid "Indent Using Spaces"
-msgstr ""
+msgstr "Бос орындарды қолданып шегіну"
 
 #: src/plugins/editorui/gtk/menus.ui:13
-#| msgid "Spaces"
 msgid "Spaces per Tab"
-msgstr ""
+msgstr "Бір табуляция үшін бос орындар саны"
+
+#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
 
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
+#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
-msgstr ""
+msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
-#| msgid "Indentation"
 msgid "Indentation Size"
-msgstr ""
+msgstr "Шегініс өлшемі"
 
 #: src/plugins/editorui/gtk/menus.ui:44
-#| msgid "Tab width"
 msgid "Same as Tab Width"
-msgstr ""
+msgstr "Табуляция енімен бірдей"
 
 #: src/plugins/editorui/gtk/menus.ui:81
-#| msgid "Line Spacing"
 msgid "Line Ending"
-msgstr ""
+msgstr "Жолдың аяқталуы"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
-msgstr ""
+msgstr "Windows (CR/LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
-msgstr ""
+msgstr "Классикалық Mac (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -3321,36 +3649,61 @@ msgstr "Жаңа _файл"
 msgid "_Open File…"
 msgstr "Файлды а_шу…"
 
-#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Жаңа фреймде ашу"
 
 #: src/plugins/editorui/gtk/menus.ui:147
-#| msgid "Open in New Frame"
 msgid "Open in New Workspace…"
 msgstr ""
 
-#: src/plugins/editorui/gtk/menus.ui:161
+#: src/plugins/editorui/gtk/menus.ui:163
 msgid "Save _As"
 msgstr "Қала_йша сақтау"
 
-#: src/plugins/editorui/gtk/menus.ui:168
-#| msgid "Find"
+#: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find…"
 msgstr "Табу…"
 
-#: src/plugins/editorui/gtk/menus.ui:173
-#| msgid "Find and Replace"
+#: src/plugins/editorui/gtk/menus.ui:177
 msgid "Find/Replace…"
 msgstr "Табу/алмастыру…"
 
-#: src/plugins/editorui/gtk/menus.ui:180
+#: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
 msgstr "Баспаға шығару…"
 
-#: src/plugins/editorui/gtk/menus.ui:188
-#| msgid "Format Strings"
+#: src/plugins/editorui/gtk/menus.ui:194
+#| msgid "Document"
+msgid "Format Document"
+msgstr "Құжатты пішімдеу"
+
+#: src/plugins/editorui/gtk/menus.ui:200
 msgid "Format Selection"
+msgstr "Таңдалғанды пішімдеу"
+
+#: src/plugins/editorui/gtk/menus.ui:208
+#| msgctxt "shortcut window"
+#| msgid "Move to previous edit location"
+msgid "Move to Previous Diagnostic"
+msgstr ""
+
+#: src/plugins/editorui/gtk/menus.ui:209
+#| msgctxt "shortcut window"
+#| msgid "Move to previous edit location"
+msgid "Move the insertion cursor to the previous diagnostic location"
+msgstr ""
+
+#: src/plugins/editorui/gtk/menus.ui:216
+#| msgctxt "shortcut window"
+#| msgid "Move to next edit location"
+msgid "Move to Next Diagnostic"
+msgstr ""
+
+#: src/plugins/editorui/gtk/menus.ui:217
+#| msgctxt "shortcut window"
+#| msgid "Move to next edit location"
+msgid "Move the insertion cursor to the next diagnostic location"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:9
@@ -3364,7 +3717,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
-#| msgid "Indentation"
 msgid "Indentation & Formatting"
 msgstr ""
 
@@ -3401,12 +3753,10 @@ msgid "Auto Indent"
 msgstr "Автошегініс"
 
 #: src/plugins/editorui/tweaks-language.ui:112
-#| msgid "Indent source code as you type"
 msgid "Automatically indent source code as you type"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:128
-#| msgid "Size"
 msgid "Tab Size"
 msgstr "Табуляция өлшемі"
 
@@ -3419,7 +3769,6 @@ msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:164
-#| msgid "Margins"
 msgid "Margin"
 msgstr "Шет өрісі"
 
@@ -3440,7 +3789,7 @@ msgid "The desired maximum line length"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:356
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Behavior"
 msgstr "Мінез-құлығы"
 
@@ -3457,7 +3806,6 @@ msgid "Insert Matching Brace"
 msgstr "Сәйкес жақшаны кірістіру"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#| msgid "Insert matching character for { [ ( or \""
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 
@@ -3478,7 +3826,6 @@ msgid "Space before opening angles"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:283
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before colon"
 msgstr ""
 
@@ -3487,8 +3834,7 @@ msgid "Prefer a space before commas"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#| msgid "Prefer spaces over use of tabs"
-msgid "Prefer a space before simicolons"
+msgid "Prefer a space before semicolons"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:10
@@ -3508,12 +3854,10 @@ msgid "Font"
 msgstr "Қаріп"
 
 #: src/plugins/editorui/tweaks.ui:49
-#| msgid "The source code editor"
 msgid "The font used within the source code editor"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:61
-#| msgid "Auto indent new lines"
 msgid "Adjust spacing between lines"
 msgstr ""
 
@@ -3522,7 +3866,6 @@ msgid "How text should be wrapped when wider than the frame"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:93
-#| msgid "Spaces"
 msgid "At Spaces"
 msgstr ""
 
@@ -3531,32 +3874,26 @@ msgid "Anywhere"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:111
-#| msgid "Grid Pattern"
 msgid "Background Pattern"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:112
-#| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:121
-#| msgid "Grid Pattern"
 msgid "No Pattern"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:127
-#| msgid "_Join Lines"
 msgid "Grid Lines"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:137
-#| msgid "Scrollback"
 msgid "Scrollbars"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:140
-#| msgid "_Source Code Editor"
 msgid "Source Code Overview"
 msgstr ""
 
@@ -3573,27 +3910,22 @@ msgid "Always On"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:162
-#| msgid "Automatically indent"
 msgid "Automatic"
 msgstr "Автоматты түрде"
 
 #: src/plugins/editorui/tweaks.ui:172
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Жолдардың нөмірленуі"
 
 #: src/plugins/editorui/tweaks.ui:175
-#| msgid "Show line numbers"
 msgid "Show Line Numbers"
 msgstr "Жол нөмірлерін көрсету"
 
 #: src/plugins/editorui/tweaks.ui:176
-#| msgid "Display line numbers"
 msgid "Display line numbers next to each line of code"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:187
-#| msgid "Relative line numbers"
 msgid "Use Relative Line Numbers"
 msgstr ""
 
@@ -3602,271 +3934,265 @@ msgid "Show line numbers relative to the current line"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:199
-#| msgid "No Diagnostics"
 msgid "Show Diagnostics"
 msgstr "Диагностиканы көрсету"
 
 #: src/plugins/editorui/tweaks.ui:200
-#| msgid "Display relative line numbers"
 msgid "Display diagnostics next to the line number"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:213
-msgid "Syntax Highlighting"
-msgstr "Синтаксисті түспен ерекшелеу"
+#: src/plugins/editorui/tweaks.ui:211
+#| msgid "Show Line Numbers"
+msgid "Show Line Changes"
+msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:216
+#: src/plugins/editorui/tweaks.ui:212
+msgid "Highlight changed lines next to the line number"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:225
+msgid "Highlighting"
+msgstr "Түспен ерекшелеу"
+
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Highlight Current Line"
 msgstr "Ағымдағы жолды ерекшелеу"
 
-#: src/plugins/editorui/tweaks.ui:217
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Make the current line stand out with highlights"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Matching Brackets"
 msgstr "Сәйкес жақшаны түспен ерекшелеу"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Semantic Highlighting"
 msgstr "Семантикалық түспен ерекшелеу"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:258
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:271
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw a mark representing tabs"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Newlines"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:284
+#: src/plugins/editorui/tweaks.ui:296
 msgid "Draw a mark at the end of lines"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Non-breaking spaces"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:309
 msgid "Draw a mark at non-breaking space characters"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:313
-#| msgid "Leading Only"
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Leading"
 msgstr "Жол басындағы"
 
-#: src/plugins/editorui/tweaks.ui:314
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw marks for leading spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Inside Text"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:327
+#: src/plugins/editorui/tweaks.ui:339
 msgid "Draw marks inside a line of text only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:339
-#| msgid "Trailing Only"
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Trailing"
 msgstr "Жол соңындағы"
 
-#: src/plugins/editorui/tweaks.ui:340
+#: src/plugins/editorui/tweaks.ui:352
 msgid "Draw marks for trailing spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:360
+#: src/plugins/editorui/tweaks.ui:372
 msgid "Spelling"
 msgstr "Емле"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:376
 msgid "Underline potential spelling mistakes as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:377
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Selections"
 msgstr "Таңдаулар"
 
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Minimum Characters to Highlight"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:393
 msgid "The minimum selection length before highlighting matches"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Snippets"
 msgstr "Снипеттер"
 
-#: src/plugins/editorui/tweaks.ui:397
-#| msgid "Snippets"
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Expand Snippets"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:398
+#: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:413
-#| msgid "Completion"
+#: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:417
-#| msgid "Completion"
+#: src/plugins/editorui/tweaks.ui:429
 msgid "Completion Proposals"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:420
-#| msgid "Suggest Python completions"
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Suggest Code Completions"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically suggest code completions while typing"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Select First Completion Proposal"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:448
+#: src/plugins/editorui/tweaks.ui:460
 msgid "Maximum Completion Proposals"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:449
+#: src/plugins/editorui/tweaks.ui:461
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
-#| msgid "Keyboard"
-msgid "Keyboard Theme"
-msgstr "Пернетақта темасы"
-
-#: src/plugins/editorui/tweaks.ui:472
-msgid ""
-"Shortcut themes provide a keyboard experience similar to other IDEs and "
-"editors"
-msgstr ""
-
-#: src/plugins/editorui/tweaks.ui:491
+#: src/plugins/editorui/tweaks.ui:480
 msgid "Movements"
 msgstr "Жылжытулар"
 
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:484
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:507
+#: src/plugins/editorui/tweaks.ui:496
 msgid "Navigate to non-space characters"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:516
+#: src/plugins/editorui/tweaks.ui:505
 msgid "Before line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:522
+#: src/plugins/editorui/tweaks.ui:511
 msgid "After line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:528
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Instead of line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
+#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Сөндірулі"
 
-#: src/plugins/editorui/tweaks.ui:546
-#| msgid "Palette management"
+#: src/plugins/editorui/tweaks.ui:535
 msgid "Session Management"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:550
-#| msgid "Save palette"
+#: src/plugins/editorui/tweaks.ui:539
 msgid "Save & Restore"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:553
-#| msgid "Autosave"
+#: src/plugins/editorui/tweaks.ui:542
 msgid "Auto-Save"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:543
 msgid "Regularly save the document as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:565
-#| msgid "Autosave"
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save Delay"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:566
+#: src/plugins/editorui/tweaks.ui:555
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:581
+#: src/plugins/editorui/tweaks.ui:570
 msgid "Format on Save"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:582
+#: src/plugins/editorui/tweaks.ui:571
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:597
-#| msgid "Restore last position"
+#: src/plugins/editorui/tweaks.ui:586
 msgid "Restore Cursor Position"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:598
-#| msgid "Jump to the last position when reopening a file"
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Jump to the last position when re-opening a file"
 msgstr ""
+
+#: src/plugins/file-search/gbp-file-search-index.c:397
+#| msgid "Open a File or Terminal"
+msgid "Open file or folder"
+msgstr ""
+
+#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/project-tree/gbp-project-tree-addin.c:212
+msgid "Files"
+msgstr "Файлдар"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr ""
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
 msgstr "Орнату сәтсіз аяқталды"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
 msgid "Installation complete"
 msgstr "Орнату аяқталды"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:328
+#: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr ""
@@ -3889,18 +4215,25 @@ msgstr ""
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Name"
 msgstr "Атауы"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:113
+msgid "Resolving SDK Extensions"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:115
+msgid ""
+"Builder is locating the appropriate SDK extensions to build your project"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -3933,15 +4266,14 @@ msgid "Creating flatpak bundle"
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
-#| msgid "GTK Application"
 msgid "Flatpak Application"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
 msgid "Installing Necessary SDKs"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -3966,6 +4298,37 @@ msgstr ""
 msgid "Updating SDK Runtime"
 msgstr ""
 
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
+msgid "Flatpak installation for new SDKs"
+msgstr ""
+
+#: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
+msgid "The Flatpak installation to use for new SDKs and SDK extensions."
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:12
+msgid "Preferred Flatpak Installation"
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:13
+msgid ""
+"When installing SDKs and SDK extensions, Builder may prefer a specific "
+"Flatpak installation which contains the extension."
+msgstr ""
+
+#: src/plugins/flatpak/tweaks.ui:22
+msgid "GNOME Builder"
+msgstr "GNOME құрастырушысы"
+
+#: src/plugins/flatpak/tweaks.ui:28
+#| msgid "Username"
+msgid "User"
+msgstr "Пайдаланушы"
+
+#: src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "Жүйе"
+
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -3987,12 +4350,12 @@ msgstr ""
 msgid "The operation failed. The original error was \"%s\""
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been canceled"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
@@ -4009,9 +4372,19 @@ msgstr ""
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr ""
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:402
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
 #, c-format
 msgid "Cannot monitor files outside the working directory"
+msgstr ""
+
+#: src/plugins/git/gbp-git-client.c:171
+#, c-format
+msgid "Git integration has started as process %s"
+msgstr ""
+
+#: src/plugins/git/gbp-git-client.c:195
+#| msgid "Integration with Git"
+msgid "Git integration has exited"
 msgstr ""
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
@@ -4022,153 +4395,150 @@ msgstr ""
 msgid "Updating Git Submodules"
 msgstr ""
 
-#: src/plugins/git/gbp-git-submodule-stage.c:136
-msgid "Network is not available, skipping submodule update"
-msgstr ""
-
-#: src/plugins/git/gbp-git-submodule-stage.c:208
+#: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:206
+#: src/plugins/git/gbp-git-submodule-stage.c:133
+msgid "Network is not available, skipping submodule update"
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:244
+#: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:508
+#: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:536
-#| msgid "Gitg"
+#: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:240
+#: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs-cloner.c:256
+#: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "Жарамды Git сілтемесі керек"
 
 #: src/plugins/git/tweaks.ui:13
-#| msgid "Author Email"
 msgid "Authorship"
 msgstr ""
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
 msgstr "Эл. пошта"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
+#: src/plugins/golang/gbp-golang-run-command-provider.c:79
+msgid "go run"
+msgstr ""
+
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr ""
 
-#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr ""
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+#: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-panel.c:756
+#: src/plugins/grep/gbp-grep-panel.c:763
 msgid "Match"
 msgstr "Сәйкес"
 
-#: src/plugins/grep/gbp-grep-panel.c:768
+#: src/plugins/grep/gbp-grep-panel.c:775
 msgid "Path"
 msgstr "Орналасу"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:832
+#: src/plugins/grep/gbp-grep-panel.c:839
 #, c-format
 msgid "_Find in %s"
 msgstr "%s ішінен _табу"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:834
+#: src/plugins/grep/gbp-grep-panel.c:841
 #, c-format
 msgid "_Replace in %s"
 msgstr "%s ішінде алмасты_ру"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5
-msgid "Find in Files (Ctrl+Alt+Shift+F)"
-msgstr ""
-
-#: src/plugins/grep/gbp-grep-panel.ui:46
-msgid "Find and Replace"
-msgstr "Табу және алмастыру"
-
-#: src/plugins/grep/gbp-grep-panel.ui:65
-msgid "R_ecursive"
-msgstr "Р_екурсивті"
-
-#: src/plugins/grep/gbp-grep-panel.ui:72
-msgid "Match _Case"
-msgstr "_Регистрді ескеру"
-
-#: src/plugins/grep/gbp-grep-panel.ui:78
-msgid "Match _Words"
-msgstr "Тек толық сө_зді сәйкестеу"
-
-#: src/plugins/grep/gbp-grep-panel.ui:84
-msgid "Regular E_xpressions"
-msgstr "Тұрақты ө_рнектер"
-
-#: src/plugins/grep/gbp-grep-panel.ui:93
-msgid "Close the panel (Escape key)"
-msgstr "Панельді жабу (Escape пернесі)"
-
-#: src/plugins/grep/gbp-grep-panel.ui:124
-msgid "_Find in Project"
-msgstr "Жобадан _табу"
-
-#: src/plugins/grep/gbp-grep-panel.ui:144
-msgid "_Replace in Project"
-msgstr "Жобада алмасты_ру"
-
-#: src/plugins/grep/gbp-grep-popover.ui:12
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
 msgstr "Файлдардан табу"
 
-#: src/plugins/grep/gbp-grep-popover.ui:28
+#: src/plugins/grep/gbp-grep-panel.ui:6
+msgid "Find in Files (Shift+Ctrl+Alt+F)"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+#| msgid "S_ort Directories First"
+msgid "_Recurse into Directories"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-panel.ui:100
+#| msgid "Match _whole words"
+msgid "Match Whole _Words"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-panel.ui:106
+#| msgid "Regular _expressions"
+msgid "Use Regular _Expressions"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-panel.ui:115
+msgid "Close the panel (Escape key)"
+msgstr "Панельді жабу (Escape пернесі)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:137
+msgid "_Find in Project"
+msgstr "Жобадан _табу"
+
+#: src/plugins/grep/gbp-grep-panel.ui:170
+msgid "_Replace in Project"
+msgstr "Жобада алмасты_ру"
+
+#: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
 msgstr "Іздеу…"
 
-#: src/plugins/grep/gbp-grep-popover.ui:38
+#: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
 msgstr "_Табу"
 
-#: src/plugins/grep/gbp-grep-popover.ui:55
+#: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
 msgstr "Бумалардан _рекурсивті іздеу"
 
-#: src/plugins/grep/gbp-grep-popover.ui:62
+#: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
 msgstr "Іздеу кезінде реги_стрді ескеру"
 
-#: src/plugins/grep/gbp-grep-popover.ui:70
+#: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
 msgstr "Тол_ық сөздерді сәйкестендіру"
 
-#: src/plugins/grep/gbp-grep-popover.ui:77
+#: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
 msgstr "Тұрақты өрн_ектерді рұқсат ету"
 
@@ -4176,20 +4546,20 @@ msgstr "Тұрақты өрн_ектерді рұқсат ету"
 msgid "_Find in Files"
 msgstr "Файлдардан _табу"
 
-#: src/plugins/host/gbp-host-runtime-provider.c:52
+#: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
+msgstr ""
+
+#. translators: Bundled means a runtime "bundled" with Builder
+#: src/plugins/host/gbp-host-runtime-provider.c:68
+#| msgid "Run with Profiler"
+msgid "Bundled with Builder"
 msgstr ""
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
 #: src/plugins/sphinx-preview/gtk/menus.ui:7
-#| msgid "Open Preview"
 msgid "Open Preview…"
-msgstr ""
-
-#: src/plugins/intelephense/gbp-intelephense-service.c:100
-#| msgid "Indexing Source Code"
-msgid "Indexing PHP code"
 msgstr ""
 
 #: src/plugins/ls/gbp-ls-page.c:291
@@ -4214,7 +4584,6 @@ msgid "Open Containing Folder"
 msgstr "Орналасқан бумасын ашу"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
-#| msgid "Browse…"
 msgid "With File _Browser…"
 msgstr ""
 
@@ -4223,7 +4592,6 @@ msgid "Default Make Target"
 msgstr ""
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#| msgid "CMake"
 msgid "Make Run"
 msgstr ""
 
@@ -4235,104 +4603,128 @@ msgstr "Бос Makefile жобасы"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Қарапайым Makefile көмегімен жаңа бос жобаны жасау"
 
-#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+#: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:13
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
+#: src/plugins/menu-search/gbp-menu-search-provider.c:192
+msgid "Actions"
+msgstr "Әрекеттер"
+
+#: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Глобалды іздеу"
 
-#: src/plugins/menu-search/gtk/menus.ui:14
-#| msgid "Focus to the global search entry"
+#: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Панельдер"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
+#: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:27
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
 msgstr ""
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:29
+#: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:35
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
+#: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
 msgstr ""
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:41
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
+#: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:42
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
+#: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:55
-#| msgid "S_witch to Folder"
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:60
-#| msgid "S_witch to Folder"
+#: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:61
+#: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:72
-#| msgid "No Diagnostics"
+#: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:73
-#| msgid "Show errors and warnings provided by Vala"
+#: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
 msgstr ""
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/menu-search/gtk/menus.ui:88
+msgid "Jump to a specific line or column"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:101
+#| msgid "Close Frame"
+msgid "Close Page"
+msgstr "Бетті жабу"
+
+#: src/plugins/menu-search/gtk/menus.ui:102
+#| msgid "Reload the current page"
+msgid "Close the current page"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+#| msgid "Move to next match (Ctrl+G)"
+msgid "Move to next search result"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Move to and select the next available search result"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:122
+#| msgid "Move to previous match (Ctrl+Shift+G)"
+msgid "Move to previous search result"
+msgstr ""
+
+#: src/plugins/menu-search/gtk/menus.ui:123
+#| msgid "Move to the previous error"
+msgid "Move to and select the previous search result"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:584
+#: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
 msgstr ""
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:274
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "Жобаны орнату"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
+msgid "Cache development environment"
+msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
@@ -4344,12 +4736,10 @@ msgid "No Provided Tool"
 msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
 msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
 msgstr ""
 
@@ -4432,54 +4822,91 @@ msgstr ""
 msgid "Delete Tool"
 msgstr "Құралды өшіру"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
 msgid "GNOME Application"
 msgstr "GNOME қолданбасы"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
-#| msgid "GTK Application"
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
 msgid "GTK 4 Application"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
 msgid "Shared Library"
 msgstr "Бөлісетін библиотека"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
-#| msgid "Create a new project with a shared library"
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "A Meson-based project for a shared library"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
 msgid "Command Line Tool"
 msgstr "Командалық жол құралы"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
-#| msgid "A Meson-based project is loaded but Ninja could not be found."
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "An Meson-based project for a command-line program"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
-#| msgid "Empty Project"
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
 msgid "Empty Meson Project"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
-#| msgid "Return to project selection"
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "An empty Meson project skeleton"
 msgstr ""
+
+#: src/plugins/messages/gbp-messages-panel.c:102
+#: src/plugins/messages/gbp-messages-panel.ui:169
+#| msgid "Debugger"
+msgid "Debug"
+msgstr "Жөндеу"
+
+#: src/plugins/messages/gbp-messages-panel.c:104
+msgid "Info"
+msgstr "Ақпараты"
+
+#: src/plugins/messages/gbp-messages-panel.c:106
+#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
+#| msgid "Messages"
+msgid "Message"
+msgstr "Хабарлама"
+
+#: src/plugins/messages/gbp-messages-panel.c:108
+#: src/plugins/messages/gbp-messages-panel.ui:157
+msgid "Warning"
+msgstr "Ескерту"
+
+#: src/plugins/messages/gbp-messages-panel.c:110
+#: src/plugins/messages/gbp-messages-panel.ui:151
+msgid "Critical"
+msgstr "Критикалық"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Хабарламалар"
+
+#: src/plugins/messages/gbp-messages-panel.ui:25
+msgid "Time"
+msgstr "Уақыт"
+
+#: src/plugins/messages/gbp-messages-panel.ui:57
+#: src/plugins/messages/gbp-messages-panel.ui:149
+#| msgid "Never"
+msgid "Severity"
+msgstr "Қатаңдығы"
+
+#: src/plugins/messages/gbp-messages-panel.ui:88
+#| msgid "Selection"
+msgid "Section"
+msgstr "Санат"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -4490,7 +4917,6 @@ msgid "Boxes"
 msgstr "Бокстар"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-#| msgid "A simple GNOME 3 application to access remote or virtual systems"
 msgid "A GNOME application to access remote or virtual systems"
 msgstr ""
 
@@ -4503,7 +4929,6 @@ msgid "Calendar"
 msgstr "Күнтізбе"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
-#| msgid "Calendar application for GNOME"
 msgid "A calendar application for GNOME"
 msgstr ""
 
@@ -4512,7 +4937,6 @@ msgid "Clocks"
 msgstr "Сағаттар"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
-#| msgid "A simple clock application for GNOME"
 msgid "A clock application for GNOME"
 msgstr ""
 
@@ -4529,7 +4953,6 @@ msgid "Maps"
 msgstr "Карталар"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
-#| msgid "A simple GNOME 3 maps application"
 msgid "A GNOME maps application"
 msgstr ""
 
@@ -4571,38 +4994,37 @@ msgid "Sound Recorder"
 msgstr "Дыбыс жазу құралы"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
-#| msgid "A simple and modern sound recorder"
 msgid "A modern sound recorder for GNOME"
 msgstr ""
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Құрастыру сәтті аяқталды"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "\"%s\" жобасының құрастырылуы аяқталды"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Құрастыру сәтсіз аяқталды"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "\"%s\" жобасының құрастырылуы сәтсіз аяқталды"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Құрастыру сәтті аяқталды"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Құрастыру бапталды"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr ""
 
@@ -4615,7 +5037,6 @@ msgid "_External Program…"
 msgstr ""
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
-#| msgid "Build System"
 msgid "Follow System"
 msgstr ""
 
@@ -4628,7 +5049,6 @@ msgid "Dark"
 msgstr "Қараңғы"
 
 #: src/plugins/platformui/tweaks.ui:22
-#| msgid "Documentation"
 msgid "Document Navigation"
 msgstr ""
 
@@ -4637,17 +5057,16 @@ msgid "Tab Bar"
 msgstr ""
 
 #: src/plugins/platformui/tweaks.ui:37
-#| msgid "Split Down"
 msgid "Drop Down"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:672
 msgid "Containers/Toolbox"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:678
 msgid "Containers/Podman"
 msgstr ""
 
@@ -4662,7 +5081,6 @@ msgid "A file with that name already exists."
 msgstr "Олай аталатын файл бар болып тұр."
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:354
-#: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "Файл аты"
@@ -4671,46 +5089,52 @@ msgstr "Файл аты"
 msgid "Folder Name"
 msgstr "Бума атауы"
 
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+#| msgid "File Name"
+msgid "New File Name"
+msgstr ""
+
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
 msgstr "Жа_сау"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:208
-msgid "Files"
-msgstr "Файлдар"
-
-#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#: src/plugins/project-tree/gbp-project-tree-addin.c:697
 #, c-format
 msgid "Copying 1 file"
 msgstr "1 файлды көшіру"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying %s of %s files"
 msgstr ""
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+#: src/plugins/project-tree/gbp-project-tree-addin.c:736
 msgid "Failed to copy files"
 msgstr "Файлдарды көшіру сәтсіз аяқталды"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+#: src/plugins/project-tree/gbp-project-tree-addin.c:746
 msgid "Files copied"
 msgstr "Файлдар көшірілді"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:750
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s файлы көшірілді"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Copying files…"
 msgstr "Файлдарды көшіру…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+#: src/plugins/project-tree/gbp-project-tree-addin.c:942
 msgid "Files will be copied in a moment"
 msgstr "Файлдар бір сәтте көшіріледі"
+
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
+#: src/plugins/todo/gbp-todo-panel.ui:99
+msgid "Filter"
+msgstr "Сүзгі"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -4721,11 +5145,6 @@ msgstr "Жоба ағашы"
 #, c-format
 msgid "Rename %s"
 msgstr "%s атын ауыстыру"
-
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "Атын ауысты_ру"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
@@ -4752,37 +5171,34 @@ msgid "Open _Containing Folder"
 msgstr "_Орналасқан бумасын ашу"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
-#| msgid "New _Terminal"
 msgid "With _Terminal…"
 msgstr ""
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "Қоқыс шелегіне та_стау"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "_Көрсету опциялары"
 
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "Елемейтін файлдарды көр_сету"
 
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "Алдымен бумаларды сұр_ыптау"
 
-#: src/plugins/project-tree/gtk/menus.ui:93
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Жоба ағашында көрсету"
 
-#: src/plugins/project-tree/gtk/menus.ui:102
-#| msgid "Reveal in Project Tree"
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr ""
 
 #: src/plugins/project-tree/tweaks.ui:14
-#| msgid "Destination file must be within the project tree."
 msgid "Display icons next to files within the project tree"
 msgstr ""
 
@@ -4795,12 +5211,10 @@ msgid "Sort directories before files in the same directory"
 msgstr ""
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
-#| msgid "Version Control"
 msgid "No version control"
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:14
-#| msgid "Restoring previous session"
 msgid "Restore Previous Session"
 msgstr ""
 
@@ -4809,7 +5223,6 @@ msgid "Open previously opened files when loading a project"
 msgstr "Жобаны жүктеу кезінде алдында ашылған файлдарды ашу"
 
 #: src/plugins/projectui/tweaks.ui:28
-#| msgid "Project Location"
 msgid "Project Creation"
 msgstr ""
 
@@ -4822,7 +5235,6 @@ msgid "The default license when creating new projects"
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:93
-#| msgid "No license"
 msgid "No License"
 msgstr ""
 
@@ -4831,7 +5243,6 @@ msgid "Overview"
 msgstr "Шолу"
 
 #: src/plugins/projectui/tweaks.ui:115
-#| msgid "Project sidebar"
 msgid "Project Identifier"
 msgstr ""
 
@@ -4850,7 +5261,6 @@ msgid "Source Directory"
 msgstr "Қайнар көз бумасы"
 
 #: src/plugins/projectui/tweaks.ui:160
-#| msgid "Configure Options"
 msgid "Current Configuration"
 msgstr ""
 
@@ -4861,7 +5271,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
-#| msgid "Funded By"
 msgid "Provided By"
 msgstr ""
 
@@ -4881,7 +5290,6 @@ msgid "My Computer (%s) %s"
 msgstr "Менің компьютерім (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
-#| msgid "Removing Files…"
 msgid "Removed Files"
 msgstr ""
 
@@ -4904,40 +5312,7 @@ msgstr "Жуырдағы жобалар"
 msgid "_Reformat Tabs"
 msgstr ""
 
-#: src/plugins/rust-analyzer/tweaks.ui:13
-#| msgid "Installing Rust Analyzer..."
-msgid "Rust Analyzer"
-msgstr ""
-
-#: src/plugins/rust-analyzer/tweaks.ui:16
-msgid "Cargo"
-msgstr ""
-
-#: src/plugins/rust-analyzer/tweaks.ui:19
-#| msgid "Command"
-msgid "Cargo Command"
-msgstr ""
-
-#: src/plugins/rust-analyzer/tweaks.ui:20
-#| msgid "the default cargo command"
-msgid "The default cargo command to run with rust-analyzer"
-msgstr ""
-
-#: src/plugins/rust-analyzer/tweaks.ui:45
-#| msgid "Features:"
-msgid "Features"
-msgstr "Мүмкіндіктері"
-
-#: src/plugins/rust-analyzer/tweaks.ui:48
-msgid "Proc Macros"
-msgstr ""
-
-#: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-msgstr ""
-
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
-#| msgid "_Update"
 msgid "Update"
 msgstr "Жаңарту"
 
@@ -4946,7 +5321,6 @@ msgid "Manage SDKs…"
 msgstr ""
 
 #: src/plugins/sdkui/tweaks.ui:12
-#| msgid "Downloading "
 msgid "Downloads"
 msgstr "Жүктемелер"
 
@@ -4961,36 +5335,36 @@ msgid ""
 msgstr ""
 
 #: src/plugins/sdkui/tweaks.ui:29
-#| msgid "Update Available"
+msgid "Sources"
+msgstr "Қайнар көздер"
+
+#: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
-#| msgid "Untitled Terminal"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
 msgid "Untitled Command"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:179
 msgid "Set Shortcut"
 msgstr "Жарлықты орнату"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
-#| msgid "Select Project Directory"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
 msgid "Select Working Directory"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
-#| msgid "Delete Command"
 msgid "Create Command"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
 msgid "Cre_ate"
 msgstr "Ж_асау"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
-#| msgid "Command"
 msgid "Edit Command"
 msgstr ""
 
@@ -5019,14 +5393,13 @@ msgid "Environment"
 msgstr "Қоршам"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
-#| msgid "Source Directory"
 msgid "Working Directory"
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
@@ -5037,45 +5410,37 @@ msgstr ""
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-#| msgid "Location"
-msgid "Locality"
-msgstr ""
-
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
-#| msgid "Delete Command"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
 msgid "_Delete Command"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-#| msgid "Success"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Subprocess"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
 msgid "Runs the command as a subprocess of Builder."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
 msgid "Runs the command on the host system."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
-#| msgid "GTK Application"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "As Target Application"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -5100,17 +5465,14 @@ msgid "Keyboard Accelerator"
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
-#| msgid "Source Directory"
 msgid "Current Working Directory"
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-#| msgid "Arguments"
 msgid "Command Arguments"
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-#| msgid "Environment"
 msgid "Command Environment"
 msgstr ""
 
@@ -5120,12 +5482,11 @@ msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
-msgstr ""
+msgstr "Қоршамды қолдану"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
-#| msgid "Command"
 msgid "Run Commands"
-msgstr ""
+msgstr "Командаларды орындау"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
@@ -5138,6 +5499,51 @@ msgid ""
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
 
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:56
+msgid "No keyboard shortcut found"
+msgstr "Пернетақта жарлықтары табылмады"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:57
+msgid "Try a different search"
+msgstr "Басқа сөздерді іздеп көріңіз"
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
+#| msgid "Reset"
+msgid "_Reset All"
+msgstr ""
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:81
+msgid "Reset all actions to original keyboard shortcut"
+msgstr ""
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
+#| msgid "_Empty File"
+msgid "_Edit File"
+msgstr ""
+
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
+msgid "Open keybindings.json in editor"
+msgstr ""
+
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+#| msgid "Set Shortcut"
+msgid "Reset shortcut"
+msgstr ""
+
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
+msgid "View and Customize Shortcuts…"
+msgstr ""
+
+#: src/plugins/shortcutui/tweaks.ui:15
+msgid "Keyboard Theme"
+msgstr "Пернетақта темасы"
+
+#: src/plugins/shortcutui/tweaks.ui:16
+msgid ""
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
+msgstr ""
+
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
 msgstr "Enchant 2"
@@ -5147,34 +5553,38 @@ msgid "Add to Dictionary"
 msgstr "Сөздікке қосу"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
-#| msgid "_Ignore"
 msgid "Ignore"
 msgstr "Елемеу"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:259
-#| msgid "Language"
 msgid "Languages"
 msgstr "Тілдер"
+
+#: src/plugins/swift/gbp-swift-run-command-provider.c:77
+msgid "swift run"
+msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
 msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#| msgid "_Select Symbol…"
 msgid "Filter Symbols…"
 msgstr ""
 
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+#| msgid "Symbols"
+msgid "Symbols in File"
+msgstr ""
+
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
-#| msgid "Open Pages"
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
 msgid "In Page"
 msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:8
-#| msgid "_Select Symbol…"
 msgid "Select Symbol…"
 msgstr ""
 
@@ -5183,120 +5593,114 @@ msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr ""
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
-#| msgid "Create a split page below the current page"
 msgid "Navigate to a symbol within the current page"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
-msgid "Open Sysprof Capture…"
+#: src/plugins/sysprof/gbp-sysprof-tool.c:77
+#, c-format
+#| msgid "Sysprof Capture (*.syscap)"
+msgid "System Capture from %s.syscap"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
-msgid "Sysprof Capture (*.syscap)"
-msgstr "Sysprof Capture (*.syscap)"
+#: src/plugins/sysprof/gbp-sysprof-tool.c:312
+#| msgid "Application"
+msgid "Profiling Application…"
+msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
-msgid "All Files"
-msgstr "Барлық файлдар"
+#: src/plugins/sysprof/gbp-sysprof-tool.c:313
+msgid "Symbol decoding will begin after application exits"
+msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
 msgid "Open _Sysprof Capture…"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:20
 msgid "Run with Profiler"
 msgstr "Профильдеушімен жөнелту"
 
-#: src/plugins/sysprof/gtk/menus.ui:22
-#| msgid "Run with Profiler"
+#: src/plugins/sysprof/gtk/menus.ui:23
 msgid "Run the project with profiler"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
+#: src/plugins/sysprof/gtk/menus.ui:31 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Профильдеуші"
 
-#: src/plugins/sysprof/gtk/menus.ui:32
-#| msgid "Check _Spelling"
+#: src/plugins/sysprof/gtk/menus.ui:33
 msgid "Thread Sampling"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:34
+#: src/plugins/sysprof/gtk/menus.ui:35
 msgid "CPU Performance"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:39
+#: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Memory Allocations"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:44
+#: src/plugins/sysprof/gtk/menus.ui:45
 msgid "Sample JavaScript Stacks"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:50
+#: src/plugins/sysprof/gtk/menus.ui:51
 msgid "Graphics"
 msgstr "Графика"
 
-#: src/plugins/sysprof/gtk/menus.ui:52
-#| msgid "_Display Options"
+#: src/plugins/sysprof/gtk/menus.ui:53
 msgid "Display Timings"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:58
+#: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Counters"
 msgstr "Санағыштар"
 
-#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:61 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "CPU қолданылуы"
 
-#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
-#| msgid "Messages"
+#: src/plugins/sysprof/gtk/menus.ui:66 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
 msgstr "Жады қолданылуы"
 
-#: src/plugins/sysprof/gtk/menus.ui:70
+#: src/plugins/sysprof/gtk/menus.ui:71
 msgid "Storage I/O"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:75
-#| msgid "Network"
+#: src/plugins/sysprof/gtk/menus.ui:76
 msgid "Network I/O"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:81
+#: src/plugins/sysprof/gtk/menus.ui:82
 msgid "Energy"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:83
-#| msgid "Completion"
+#: src/plugins/sysprof/gtk/menus.ui:84
 msgid "Consumption"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:88
+#: src/plugins/sysprof/gtk/menus.ui:89
 msgid "Battery Charge"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:95
-#| msgid "Application ID"
+#: src/plugins/sysprof/gtk/menus.ui:96
 msgid "Allow Application Integration"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:100
+#: src/plugins/sysprof/gtk/menus.ui:101
 msgid "Allow CPU Throttling"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:112
+#: src/plugins/sysprof/gtk/menus.ui:113
 msgid "Run with _Profiler"
 msgstr "_Профильдеушімен жөнелту"
 
-#: src/plugins/sysprof/gtk/menus.ui:130
+#: src/plugins/sysprof/gtk/menus.ui:131
 msgid "Record Again…"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:16
-#| msgid "Arguments"
 msgid "Instruments"
 msgstr "Құралдар"
 
@@ -5357,7 +5761,6 @@ msgid "Record statistics about battery charge and discharge rates"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:127
-#| msgid "Network"
 msgid "Network Usage"
 msgstr ""
 
@@ -5378,7 +5781,6 @@ msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:169
-#| msgid "Indentation"
 msgid "Integration"
 msgstr "Интеграция"
 
@@ -5391,7 +5793,6 @@ msgid "Collect information from GJS-based applications"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:184
-#| msgid "Application ID"
 msgid "Application Tracing"
 msgstr ""
 
@@ -5401,74 +5802,49 @@ msgid ""
 "events"
 msgstr ""
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
-msgid "An absolute file-system path to the sysroot."
-msgstr ""
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
-msgid "Package Config Path"
-msgstr ""
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
-msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-msgstr ""
-
-#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
-#, c-format
-msgid "%s (Sysroot SDK)"
-msgstr "%s (Sysroot SDK)"
-
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr ""
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-#| msgid "Application exited\r\n"
-msgid "Application exited"
-msgstr ""
-
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Қолданба шығысы"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
-#| msgid "Process quit unexpectedly"
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
 msgid "Process completed"
 msgstr ""
 
-#: src/plugins/terminal/gtk/menus.ui:6
+#: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
 msgstr "Жаңа _терминал"
 
-#: src/plugins/terminal/gtk/menus.ui:11
+#: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
 msgstr ""
 
-#: src/plugins/terminal/gtk/menus.ui:14
+#: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
 msgstr "Жаңа құ_растыру терминалы"
 
-#: src/plugins/terminal/gtk/menus.ui:19
+#: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
 msgstr ""
 
-#: src/plugins/terminal/gtk/menus.ui:22
+#: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
 msgstr ""
 
-#: src/plugins/terminal/gtk/menus.ui:27
+#: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
 msgstr ""
 
-#: src/plugins/terminal/gtk/menus.ui:41
+#: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
 msgstr "Бөлу"
 
 #: src/plugins/terminal/tweaks.ui:14
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "The font used within terminals"
 msgstr ""
 
@@ -5481,7 +5857,6 @@ msgid "Allows the use of bold escape sequences"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:41
-#| msgid "Show hyperlinks"
 msgid "Allow Hyperlinks"
 msgstr ""
 
@@ -5490,12 +5865,10 @@ msgid "Allows the use of hyperlink escape sequences"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:55
-#| msgid "Spelling"
 msgid "Scrolling"
 msgstr "Айналдыру"
 
 #: src/plugins/terminal/tweaks.ui:58
-#| msgid "Run Output"
 msgid "Scroll On Output"
 msgstr ""
 
@@ -5556,12 +5929,10 @@ msgid "Unit tests completed in %lf seconds"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
-#| msgid "Unit Test Output"
 msgid "Unit tests completed"
 msgstr ""
 
 #: src/plugins/testui/gtk/menus.ui:8
-#| msgid "Unit Tests"
 msgid "Run all Unit Tests"
 msgstr ""
 
@@ -5578,16 +5949,15 @@ msgstr ""
 msgid "Loading TODOs…"
 msgstr ""
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
 msgstr ""
 
-#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
-msgid "Builder is updating your projects configured dependencies."
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
+msgid "Builder is updating your project’s configured dependencies."
 msgstr ""
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
-#| msgid "Building dependencies…"
 msgid "Update Dependencies…"
 msgstr ""
 
@@ -5614,7 +5984,6 @@ msgid "_Update"
 msgstr "_Жаңарту"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#| msgid "Installing project…"
 msgid "Install Updates…"
 msgstr ""
 
@@ -5622,54 +5991,51 @@ msgstr ""
 msgid "Install pending updates for Builder"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
-#| msgid "Run with Debugger"
+#: src/plugins/valgrind/gtk/menus.ui:11
 msgid "Run with Leak Detector"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:13
-#| msgid "Run with Valgrind"
+#: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
+#: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:24
+#: src/plugins/valgrind/gtk/menus.ui:25
 msgid "Track Origin of Leaks"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:30
-#| msgid "S_ort Lines"
+#: src/plugins/valgrind/gtk/menus.ui:31
 msgid "Report Leaks"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:32
+#: src/plugins/valgrind/gtk/menus.ui:33
 msgid "Summary"
 msgstr "Қорытынды"
 
-#: src/plugins/valgrind/gtk/menus.ui:38
+#: src/plugins/valgrind/gtk/menus.ui:39
 msgid "Full"
 msgstr "Толық"
 
-#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
+#: src/plugins/valgrind/gtk/menus.ui:52 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
+#: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
+#: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
 msgstr ""
 
-#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
+#: src/plugins/valgrind/gtk/menus.ui:64 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
 msgstr "Мүмкін"
 
-#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
+#: src/plugins/valgrind/gtk/menus.ui:69 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
 msgstr ""
 
@@ -5690,20 +6056,27 @@ msgid "Include reachable leaks in report summary"
 msgstr ""
 
 #: src/plugins/valgrind/tweaks.ui:71
-#| msgid "Margins"
 msgid "Track Origins"
 msgstr ""
 
 #: src/plugins/valgrind/tweaks.ui:72
-#| msgid "Show modified lines"
 msgid "Show origin of undefined values"
 msgstr ""
 
-#: src/plugins/valgrind/tweaks.ui:87
+#: src/plugins/valgrind/tweaks.ui:83
+#| msgid "Number of CPU"
+msgid "Number of Callers"
+msgstr ""
+
+#: src/plugins/valgrind/tweaks.ui:84
+msgid "Set the limit to the number of entries in stack traces"
+msgstr ""
+
+#: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
 msgstr ""
 
-#: src/plugins/valgrind/tweaks.ui:88
+#: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
 msgstr ""
 
@@ -5711,52 +6084,49 @@ msgstr ""
 msgid "Begin cloning project from URI"
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:15
 msgid "Repository URL"
 msgstr "Репозиторий сілтемесі"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
 msgid "Choose an alternate branch"
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
 msgid "Branches"
 msgstr "Бұтақтар"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
 msgid "The repository will be cloned into a new subdirectory."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
 msgid "Author Details"
 msgstr "Автор ақпараты"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
-#| msgid "Status:"
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
 msgid "Status"
 msgstr "Қалып-күйі"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
-#| msgid "Branch"
 msgid "_Branches"
 msgstr "_Бұтақтар"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
-#| msgid "Tags"
 msgid "_Tags"
 msgstr "_Тегтер"
 
@@ -5768,40 +6138,42 @@ msgstr ""
 msgid "_Push to origin"
 msgstr ""
 
-#: src/plugins/vim/tweaks.ui:18
+#: src/plugins/vim/tweaks.ui:14
 msgid "Vim"
 msgstr "Vim"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
-#| msgid "New _Documentation Page"
 msgid "New _Browser Page"
 msgstr ""
 
-#: src/plugins/web-browser/gtk/menus.ui:18
-#: src/plugins/web-browser/gtk/menus.ui:24
-#| msgid "Reload tests"
+#: src/plugins/web-browser/gtk/menus.ui:9
+msgid "Open a web browser in a new page"
+msgstr ""
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+#: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload Page"
 msgstr "Парақты қайта жүктеу"
 
-#: src/plugins/web-browser/gtk/menus.ui:19
-#| msgid "Save the current page"
+#: src/plugins/web-browser/gtk/menus.ui:20
 msgid "Reload the current page"
 msgstr "Ағымдағы парақты қайта жүктеу"
 
-#: src/plugins/web-browser/gtk/menus.ui:25
-#| msgid "Save the current page"
+#: src/plugins/web-browser/gtk/menus.ui:26
 msgid "Reload the current page ignoring cache"
 msgstr "Кэшті елемей, ағымдағы бетті қайта жүктеу"
 
-#: src/plugins/web-browser/gtk/menus.ui:30
-#| msgid "Project Location"
+#: src/plugins/web-browser/gtk/menus.ui:31
 msgid "Focus Location"
 msgstr ""
 
-#: src/plugins/web-browser/gtk/menus.ui:31
-#| msgid "Save the current page"
+#: src/plugins/web-browser/gtk/menus.ui:32
 msgid "Focus the current page's location"
 msgstr ""
+
+#: src/plugins/xml-pack/ide-xml-formatter.c:133
+msgid "Failed to parse XML document"
+msgstr "XML құжатын талдау қатемен аяқталды"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
@@ -5811,6 +6183,83 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файлды талдау үшін ол жергілікті сақталған болуы тиіс."
+
+#~ msgid "Restore Previous Files"
+#~ msgstr "Алдыңғы файлдарды қалпына келтіру"
+
+#~ msgid "Save _As…"
+#~ msgstr "Қал_айша сақтау…"
+
+#~ msgid "_Save…"
+#~ msgstr "_Сақтау…"
+
+#~ msgid "Draft Changes Restored"
+#~ msgstr "Жобалық өзгерістер қалпына келтірілді"
+
+#~ msgid "C_ut"
+#~ msgstr "Қ_иып алу"
+
+#~ msgid "Redo"
+#~ msgstr "Қайтару"
+
+#~ msgid "Regex"
+#~ msgstr "Тұрақты өрнек"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Регистрді ескеру"
+
+#~ msgid "Match whole word"
+#~ msgstr "Тек толық сөзді сәйкестеу"
+
+#~ msgid "R_ebuild"
+#~ msgstr "Қайта құраст_ыру"
+
+#~ msgid "_Run"
+#~ msgstr "О_рындау"
+
+#~ msgid "R_un With…"
+#~ msgstr "Көмегімен жөн_елту…"
+
+#~ msgid "Tools"
+#~ msgstr "Саймандар"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "Run with _Debugger"
+#~ msgstr "Жөн_деушімен жөнелту"
+
+#~ msgid "Text"
+#~ msgstr "Мәтін"
+
+#~ msgid "Syntax Highlighting"
+#~ msgstr "Синтаксисті түспен ерекшелеу"
+
+#~ msgid "Find and Replace"
+#~ msgstr "Табу және алмастыру"
+
+#~ msgid "R_ecursive"
+#~ msgstr "Р_екурсивті"
+
+#~ msgid "Match _Case"
+#~ msgstr "_Регистрді ескеру"
+
+#~ msgid "Match _Words"
+#~ msgstr "Тек толық сө_зді сәйкестеу"
+
+#~ msgid "Regular E_xpressions"
+#~ msgstr "Тұрақты ө_рнектер"
+
+#~| msgid "Features:"
+#~ msgid "Features"
+#~ msgstr "Мүмкіндіктері"
+
+#~ msgid "All Files"
+#~ msgstr "Барлық файлдар"
+
+#, c-format
+#~ msgid "%s (Sysroot SDK)"
+#~ msgstr "%s (Sysroot SDK)"
 
 #~ msgid "Whether or not Home moves to first non-space character."
 #~ msgstr "Home батырмасы бірінші бос аралық емес таңбаға өту керек пе."
@@ -5898,10 +6347,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #, c-format
 #~ msgid "%s: This file format is not supported\n"
 #~ msgstr "%s: Бұл файл пішіміне қолдау жоқ\n"
-
-#, c-format
-#~ msgid "failed to parse\n"
-#~ msgstr "талдау сәтсіз аяқталды\n"
 
 #~ msgid "Generated"
 #~ msgstr "Генерацияланған"
@@ -5994,10 +6439,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Rename"
 #~ msgstr "Атын ауыстыру"
 
-#, c-format
-#~ msgid "Failed to save file: %s"
-#~ msgstr "Файлды сақтау сәтсіз аяқталды: %s"
-
 #~ msgid "Save a Copy"
 #~ msgstr "Көшірмесін сақтау"
 
@@ -6019,9 +6460,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Move to the next error"
 #~ msgstr "Келесі қатеге жылжу"
 
-#~ msgid "Move to the previous error"
-#~ msgstr "Алдыңғы қатеге жылжу"
-
 #~ msgid "_Reload"
 #~ msgstr "Қа_йта жүктеу"
 
@@ -6040,9 +6478,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Switch between Search and Search-and-Replace"
 #~ msgstr "Іздеу және іздеу мен алмастыру арасында ауысу"
-
-#~ msgid "Regular _expressions"
-#~ msgstr "Тұрақты өрн_ектер"
 
 #~ msgid "_Match whole word only"
 #~ msgstr "Тек толық сөз сә_йкестіктері"
@@ -6077,9 +6512,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Your previous session will be ready in a moment."
 #~ msgstr "Алдыңғы сеансыңыз бір сәтте дайын болады."
 
-#~ msgid "Search your project"
-#~ msgstr "Жобаны іздеу"
-
 #~ msgid "Workbench shortcuts"
 #~ msgstr "Жұмыс ортасының жарлықтары"
 
@@ -6101,9 +6533,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgctxt "title"
 #~ msgid "Clone Repository"
 #~ msgstr "Репозиторийді клондау"
-
-#~ msgid "GNOME Builder"
-#~ msgstr "GNOME құрастырушысы"
 
 #~ msgid "Learn more about GNOME Builder"
 #~ msgstr "GNOME құрастырушысы туралы көбірек біліңіз"
@@ -6151,9 +6580,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Extensions"
 #~ msgstr "Кеңейтулер"
 
-#~ msgid "System"
-#~ msgstr "Жүйе"
-
 #~ msgid "Color Scheme"
 #~ msgstr "Түстер схемасы"
 
@@ -6169,9 +6595,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Highlight"
 #~ msgstr "Түспен ерекшелеу"
 
-#~ msgid "Current line"
-#~ msgstr "Ағымдағы жол"
-
 #~ msgid "Matching brackets"
 #~ msgstr "Сәйкес жақшалар"
 
@@ -6180,9 +6603,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Enable or disable autosave feature"
 #~ msgstr "Автосақтау мүмкіндігін іске қосу/сөндіру"
-
-#~ msgid "Highlighting"
-#~ msgstr "Түспен ерекшелеу"
 
 #~ msgid "Search languages…"
 #~ msgstr "Тілдерді іздеу…"
@@ -6201,9 +6621,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Spacing"
 #~ msgstr "Аралық"
-
-#~ msgid "Number of CPU"
-#~ msgstr "Процессорлар саны"
 
 #~ msgid "A place for all your projects"
 #~ msgstr "Жобаларыңыз үшін орын"
@@ -6318,20 +6735,8 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgstr "Келесі сәйкестікті табу"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Find the previous match"
-#~ msgstr "Алдыңғы сәйкестікті табу"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Clear highlight"
 #~ msgstr "Түспен ерекшелеуді тастау"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Copy and Paste"
-#~ msgstr "Көшіріп алу және кірістіру"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Cut selected text to clipboard"
-#~ msgstr "Таңдалған мәтінді алмасу буферіне қиып алу"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Undo previous command"
@@ -6404,14 +6809,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgctxt "shortcut window"
 #~ msgid "Move to previous error in file"
 #~ msgstr "Файлдағы алдыңғы қатеге жылжу"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous edit location"
-#~ msgstr "Алдыңғы түзету орнына жылжыту"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next edit location"
-#~ msgstr "Келесі түзету орнына жылжыту"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Jump to definition of symbol"
@@ -6502,9 +6899,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Replace “%s” with “%s”"
 #~ msgstr "\"%s\" мәнін \"%s\" мәнімен алмастыру"
 
-#~ msgid "Rename symbol"
-#~ msgstr "Таңба атын ауыстыру"
-
 #, c-format
 #~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 #~ msgstr "<b>%s</b> — <small>Жол %u, Баған %u</small>"
@@ -6538,9 +6932,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Build Details"
 #~ msgstr "Құрастыру ақпараты"
-
-#~ msgid "Build Preferences"
-#~ msgstr "Құрастыру баптаулары"
 
 #~ msgid "Palette name"
 #~ msgstr "Палитра аты"
@@ -6614,9 +7005,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Percent"
 #~ msgstr "Пайыз"
 
-#~ msgid "Filters:"
-#~ msgstr "Сүзгілер:"
-
 #~ msgid "Palettes options"
 #~ msgstr "Палитралар опциялары"
 
@@ -6646,9 +7034,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Workspace Shortcuts"
 #~ msgstr "Жұмыс ортасының жарлықтары"
-
-#~ msgid "Command Bar"
-#~ msgstr "Командалар панелі"
 
 #~ msgid "Comment the code"
 #~ msgstr "Кодты түсіндірме қылу"
@@ -6698,10 +7083,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "_Select Documentation…"
 #~ msgstr "Құжаттаманы _таңдау…"
-
-#, c-format
-#~ msgid "Connected to “%s”"
-#~ msgstr "\"%s\" дегенге байланысқан"
 
 #~ msgid "Session"
 #~ msgstr "Сессия"
@@ -6781,9 +7162,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Move Page Right"
 #~ msgstr "Парақты оңға жылжыту"
 
-#~ msgid "Close Frame"
-#~ msgstr "Фреймді жабу"
-
 #~ msgid "Emacs"
 #~ msgstr "Emacs"
 
@@ -6797,9 +7175,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #, c-format
 #~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 #~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-
-#~ msgid "_View Source"
-#~ msgstr "Бастапқы кодын қа_рау"
 
 #~ msgid "Glade shortcuts"
 #~ msgstr "Glade жарлықтары"
@@ -6981,9 +7356,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
 #~ "жөніндегі хабарламаға немесе қолдау көрсету сұранымыңызға қосып жіберіңіз."
 
-#~ msgid "Symbols"
-#~ msgstr "Таңбалар"
-
 #~ msgid "Symbol"
 #~ msgstr "Таңба"
 
@@ -7057,9 +7429,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Emulates the Vim text editor"
 #~ msgstr "Vim мәтін өңдегішін эмуляциялайды"
-
-#~ msgid "Building project…"
-#~ msgstr "Жобаны құрастыру…"
 
 #~ msgid "Night Mode"
 #~ msgstr "Түнгі режимі"
@@ -7265,9 +7634,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "COMMAND"
 #~ msgstr "КОМАНДА"
 
-#~ msgid "No commands available"
-#~ msgstr "Қолжетерлік командалар жоқ"
-
 #~ msgid "Please provide a command"
 #~ msgstr "Команданы көрсетіңіз"
 
@@ -7392,9 +7758,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "_New"
 #~ msgstr "Ж_аңа"
 
-#~ msgid "_Empty File"
-#~ msgstr "Бо_с файл"
-
 #~ msgid "_Collapse All Nodes"
 #~ msgstr "Барлық тораптарды ж_инау"
 
@@ -7440,9 +7803,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Use code fragments to increase typing efficiency"
 #~ msgstr "Теру жылдамдығын арттыру үшін код бөліктерін қолдану"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Файлды жүктеу сәтсіз аяқталды: %s: %s"
 
 #~ msgid "Unknown failure"
 #~ msgstr "Белгісіз қате"
@@ -7545,11 +7905,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Show Project Sidebar"
 #~ msgstr "Жобаның бүйір панелін көрсету"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr ""
-#~ "Іске қосылған болса, түзеткіш жұмыс орнында бүйір панель көрсетілетін "
-#~ "болады."
 
 #~ msgid "Find the next match"
 #~ msgstr "Келесі сәйкестікті табу"
@@ -7680,9 +8035,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Missing project name"
 #~ msgstr "Жоба атауы көрсетілмеген"
 
-#~ msgid "Username"
-#~ msgstr "Пайдаланушы"
-
 #~ msgid "Failed to locate configure.ac"
 #~ msgstr "configure.ac табылмады"
 
@@ -7697,9 +8049,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "Bundled Extensions"
 #~ msgstr "Құрамындағы кеңейтулер"
-
-#~ msgid "Co_ntinue"
-#~ msgstr "Жалғ_астыру"
 
 #~ msgid "_New Document"
 #~ msgstr "Жаңа құ_жат"
