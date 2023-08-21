@@ -13,5 +13,8 @@
     <key type="b" name="gjs-aid"><default>false</default></key>
     <key type="b" name="allow-throttle"><default>true</default></key>
     <key type="b" name="allow-tracefd"><default>true</default></key>
+    <key type="b" name="scheduler-details"><default>false</default></key>
+    <key type="b" name="system-bus"><default>false</default></key>
+    <key type="b" name="session-bus"><default>false</default></key>
   </schema>
 </schemalist>

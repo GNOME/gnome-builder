@@ -37,6 +37,11 @@
             <attribute name="role">check</attribute>
           </item>
           <item>
+            <attribute name="label" translatable="yes">Process Scheduling</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.scheduler-details</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
             <attribute name="label" translatable="yes">Memory Allocations</attribute>
             <attribute name="action">context.settings.project:org.gnome.builder.sysprof.memprof-aid</attribute>
             <attribute name="role">check</attribute>
@@ -44,6 +49,19 @@
           <item>
             <attribute name="label" translatable="yes">Sample JavaScript Stacks</attribute>
             <attribute name="action">context.settings.project:org.gnome.builder.sysprof.gjs-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-dbus-section">
+          <attribute name="label" translatable="yes">D-Bus</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Session Bus</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.session-bus</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">System Bus</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.system-bus</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>

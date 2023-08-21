@@ -178,6 +178,15 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   if (ide_settings_get_boolean (settings, "allow-tracefd"))
     ide_run_context_append_argv (run_context, "--tracefd");
 
+  if (ide_settings_get_boolean (settings, "session-bus"))
+    ide_run_context_append_argv (run_context, "--session-bus");
+
+  if (ide_settings_get_boolean (settings, "system-bus"))
+    ide_run_context_append_argv (run_context, "--system-bus");
+
+  if (ide_settings_get_boolean (settings, "scheduler-details"))
+    ide_run_context_append_argv (run_context, "--scheduler");
+
   for (guint i = 0; env[i]; i++)
     ide_run_context_append_formatted (run_context, "--env=%s", env[i]);
 
