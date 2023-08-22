@@ -185,9 +185,14 @@ ide_file_search_preview_settings_changed_cb (IdeFileSearchPreview *self,
                                               GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
                                               GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
 
+#if 0
+  /* We always want highlight-current-line active for search to
+   * make results more prominent. See #2089.
+   */
   if (!key || ide_str_equal0 (key, "highlight-current-line"))
     gtk_source_view_set_highlight_current_line (self->view,
                                                 g_settings_get_boolean (settings, "highlight-current-line"));
+#endif
 
   if (!key || ide_str_equal0 (key, "highlight-matching-brackets"))
     gtk_source_buffer_set_highlight_matching_brackets (self->buffer,
