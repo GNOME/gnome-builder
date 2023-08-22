@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-08 19:03+0000\n"
-"PO-Revision-Date: 2023-08-09 18:14+0200\n"
+"POT-Creation-Date: 2023-08-21 22:57+0000\n"
+"PO-Revision-Date: 2023-08-22 05:08+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -503,7 +503,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
-msgstr "ნაგულისხმები ლიცენზია"
+msgstr "ნაგულისხმევი ლიცენზია"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
@@ -556,7 +556,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
-msgstr "ნაგულისხმებად გაშვებული ბრძანება"
+msgstr "ნაგულისხმევად გაშვებული ბრძანება"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
 msgid "The id of the default run command"
@@ -675,7 +675,7 @@ msgstr "შეუნახავი ფაილი %u"
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr ""
+msgstr "%s არასწორ ASCII-ის შეიცავდა"
 
 #: src/libide/code/ide-language-defaults.c:234
 #, c-format
@@ -688,7 +688,7 @@ msgstr ""
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
-msgstr "ნაგულისხმები მნიშვნელობების ინიციალიზაციის შეცდომა."
+msgstr "ნაგულისხმევი მნიშვნელობების ინიციალიზაციის შეცდომა."
 
 #. translators: %s is replaced with the error message
 #: src/libide/code/ide-unsaved-files.c:253
@@ -894,7 +894,7 @@ msgstr "ფაილის შენახვა"
 #: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:124
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
 msgid "Save"
 msgstr "შენახვა"
 
@@ -1267,7 +1267,7 @@ msgstr "_რეპოზიტორიის კლონირება…"
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
 msgid "Close"
 msgstr "დახურვა"
 
@@ -2000,7 +2000,7 @@ msgstr "უსახელო ტერმინალი"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
-msgstr ""
+msgstr "გაშვების გარემოების მოძებნა"
 
 #: src/libide/terminal/ide-terminal-search.ui:34
 msgid "Move to previous match"
@@ -2017,7 +2017,7 @@ msgstr "სიტყვების გადატანა"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr ""
+msgstr "პროცესი გაჩერდა სიგნალით: %d"
 
 #: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
@@ -2128,7 +2128,7 @@ msgstr "გარემოს ცვლადის დასაყენებ�
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
-msgstr ""
+msgstr "გასაღებები, არ შეიძლება, რიცხვით იწყებოდეს"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
@@ -2281,15 +2281,15 @@ msgstr "გასაშვები"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr ""
+msgstr "სამიზნეების აგება ჩავარდა: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr ""
+msgstr "აირჩიეთ აგების სამიზნე"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid "Available Build Targets"
-msgstr ""
+msgstr "ხელმისაწვდომი აგების სამიზნეები"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
@@ -2299,7 +2299,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
-msgstr ""
+msgstr "ავტომატური აღმოჩენა"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
@@ -2378,11 +2378,11 @@ msgstr "პროექტის კონფიგურაციის თა�
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
-msgstr ""
+msgstr "აირჩიეთ აგების სამიზნე…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
-msgstr ""
+msgstr "ნაგულისხმევი აგების სამიზნის შეცვლა"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
 #: src/plugins/buildui/gtk/menus.ui:106
@@ -5503,11 +5503,11 @@ msgstr ""
 msgid "System Capture from %s.syscap"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:312
+#: src/plugins/sysprof/gbp-sysprof-tool.c:321
 msgid "Profiling Application…"
 msgstr "პროფილირების აპლიკაცია…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:313
+#: src/plugins/sysprof/gbp-sysprof-tool.c:322
 msgid "Symbol decoding will begin after application exits"
 msgstr ""
 
@@ -5537,66 +5537,82 @@ msgid "CPU Performance"
 msgstr "CPU-ის წარმადობა"
 
 #: src/plugins/sysprof/gtk/menus.ui:40
+msgid "Process Scheduling"
+msgstr "პროცესის მგეგმავი"
+
+#: src/plugins/sysprof/gtk/menus.ui:45
 msgid "Memory Allocations"
 msgstr "მეხსიერების გამოყოფები"
 
-#: src/plugins/sysprof/gtk/menus.ui:45
+#: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Sample JavaScript Stacks"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:51
+#: src/plugins/sysprof/gtk/menus.ui:56
+msgid "D-Bus"
+msgstr "D-Bus"
+
+#: src/plugins/sysprof/gtk/menus.ui:58 src/plugins/sysprof/tweaks.ui:111
+msgid "Session Bus"
+msgstr "სესიების მატარებელი"
+
+#: src/plugins/sysprof/gtk/menus.ui:63 src/plugins/sysprof/tweaks.ui:123
+msgid "System Bus"
+msgstr "სისტემური მატარებელი"
+
+#: src/plugins/sysprof/gtk/menus.ui:69
 msgid "Graphics"
 msgstr "გრაფიკა"
 
-#: src/plugins/sysprof/gtk/menus.ui:53
+#: src/plugins/sysprof/gtk/menus.ui:71
 msgid "Display Timings"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:59
+#: src/plugins/sysprof/gtk/menus.ui:77
 msgid "Counters"
 msgstr "მთვლელები"
 
-#: src/plugins/sysprof/gtk/menus.ui:61 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "CPU -ის გამოყენება"
 
-#: src/plugins/sysprof/gtk/menus.ui:66 src/plugins/sysprof/tweaks.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
 msgstr "მეხსიერების გამოყენება"
 
-#: src/plugins/sysprof/gtk/menus.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:89
 msgid "Storage I/O"
 msgstr "საცავის I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:76
+#: src/plugins/sysprof/gtk/menus.ui:94
 msgid "Network I/O"
 msgstr "ქსელის I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:82
+#: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Energy"
 msgstr "ენერგია"
 
-#: src/plugins/sysprof/gtk/menus.ui:84
+#: src/plugins/sysprof/gtk/menus.ui:102
 msgid "Consumption"
 msgstr "მოხმარება"
 
-#: src/plugins/sysprof/gtk/menus.ui:89
+#: src/plugins/sysprof/gtk/menus.ui:107
 msgid "Battery Charge"
 msgstr "ელემენტის მუხტი"
 
-#: src/plugins/sysprof/gtk/menus.ui:96
+#: src/plugins/sysprof/gtk/menus.ui:114
 msgid "Allow Application Integration"
 msgstr "აპლიკაციის ინტეგრაციის დაშვება"
 
-#: src/plugins/sysprof/gtk/menus.ui:101
+#: src/plugins/sysprof/gtk/menus.ui:119
 msgid "Allow CPU Throttling"
 msgstr "CPU-ის შეზღუდვის დაშვება"
 
-#: src/plugins/sysprof/gtk/menus.ui:113
+#: src/plugins/sysprof/gtk/menus.ui:131
 msgid "Run with _Profiler"
 msgstr "პროფაილერით _გაშვება"
 
-#: src/plugins/sysprof/gtk/menus.ui:131
+#: src/plugins/sysprof/gtk/menus.ui:149
 msgid "Record Again…"
 msgstr ""
 
@@ -5617,86 +5633,102 @@ msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
+msgid "Scheduler Details"
+msgstr "მგეგმავის დეტალები"
+
+#: src/plugins/sysprof/tweaks.ui:44
+msgid "Track when processes are scheduled per CPU"
+msgstr ""
+
+#: src/plugins/sysprof/tweaks.ui:55
 msgid "CPU Governor"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:44
+#: src/plugins/sysprof/tweaks.ui:56
 msgid "Force performance mode while profiling"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:53
+#: src/plugins/sysprof/tweaks.ui:65
 msgid "Don't Change Governor"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:59
+#: src/plugins/sysprof/tweaks.ui:71
 msgid "Force Performance Mode"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:72
+#: src/plugins/sysprof/tweaks.ui:84
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:83
+#: src/plugins/sysprof/tweaks.ui:95
 msgid "Memory Profiling"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:84
+#: src/plugins/sysprof/tweaks.ui:96
 msgid "Record stacktraces of memory allocations and releases"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:99
-msgid "Energy Usage"
-msgstr "ენერგიის გამოყენება"
-
-#: src/plugins/sysprof/tweaks.ui:100
-msgid "Record statistics about energy usage using RAPL"
+#: src/plugins/sysprof/tweaks.ui:112
+msgid "Record D-Bus messages on the session bus"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:111
-msgid "Battery Usage"
-msgstr "ელემენტის მუხტი"
-
-#: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
-msgid "Record statistics about battery charge and discharge rates"
-msgstr ""
-
-#: src/plugins/sysprof/tweaks.ui:127
-msgid "Network Usage"
-msgstr "ქსელის გამოყენება"
-
-#: src/plugins/sysprof/tweaks.ui:128
-msgid "Record statistics about network usage"
+#: src/plugins/sysprof/tweaks.ui:124
+msgid "Record D-Bus messages on the system bus"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:139
+msgid "Energy Usage"
+msgstr "ენერგიის გამოყენება"
+
+#: src/plugins/sysprof/tweaks.ui:140
+msgid "Record statistics about energy usage using RAPL"
+msgstr ""
+
+#: src/plugins/sysprof/tweaks.ui:151
+msgid "Battery Usage"
+msgstr "ელემენტის მუხტი"
+
+#: src/plugins/sysprof/tweaks.ui:152 src/plugins/sysprof/tweaks.ui:180
+msgid "Record statistics about battery charge and discharge rates"
+msgstr ""
+
+#: src/plugins/sysprof/tweaks.ui:167
+msgid "Network Usage"
+msgstr "ქსელის გამოყენება"
+
+#: src/plugins/sysprof/tweaks.ui:168
+msgid "Record statistics about network usage"
+msgstr ""
+
+#: src/plugins/sysprof/tweaks.ui:179
 msgid "Disk Usage"
 msgstr "დისკის გამოყენება"
 
-#: src/plugins/sysprof/tweaks.ui:155
+#: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:156
+#: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:169
+#: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
 msgstr "ინტეგრაცია"
 
-#: src/plugins/sysprof/tweaks.ui:172
+#: src/plugins/sysprof/tweaks.ui:212
 msgid "JavaScript"
 msgstr "JavaScript"
 
-#: src/plugins/sysprof/tweaks.ui:173
+#: src/plugins/sysprof/tweaks.ui:213
 msgid "Collect information from GJS-based applications"
 msgstr ""
 
-#: src/plugins/sysprof/tweaks.ui:184
+#: src/plugins/sysprof/tweaks.ui:224
 msgid "Application Tracing"
 msgstr "აპლიკაციის კვლევა"
 
-#: src/plugins/sysprof/tweaks.ui:185
+#: src/plugins/sysprof/tweaks.ui:225
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
