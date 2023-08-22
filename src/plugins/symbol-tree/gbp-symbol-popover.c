@@ -434,6 +434,7 @@ GListModel *
 gbp_symbol_popover_get_model (GbpSymbolPopover *self)
 {
   GtkSelectionModel *selection;
+  GListModel *model;
 
   g_return_val_if_fail (GBP_IS_SYMBOL_POPOVER (self), NULL);
 
@@ -442,5 +443,15 @@ gbp_symbol_popover_get_model (GbpSymbolPopover *self)
       !GTK_IS_SINGLE_SELECTION (selection))
     return NULL;
 
-  return gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection));
+  model = gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection));
+
+  if (GTK_IS_FILTER_LIST_MODEL (model))
+    {
+      GListModel *filtered;
+
+      if ((filtered = gtk_filter_list_model_get_model (GTK_FILTER_LIST_MODEL (model))))
+        return filtered;
+    }
+
+  return model;
 }
