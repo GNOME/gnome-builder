@@ -59,7 +59,9 @@ gbp_symbol_search_provider_foreach_workspace_cb (IdeWorkspace *workspace,
                                                  gpointer      user_data)
 {
   g_autoptr(GtkMapListModel) map = NULL;
+  GtkFilterListModel *filtered;
   IdeWorkspaceAddin *addin;
+  GtkStringFilter *filter;
   GListStore *store = user_data;
   GListModel *model;
   IdeBuffer *buffer;
@@ -75,7 +77,15 @@ gbp_symbol_search_provider_foreach_workspace_cb (IdeWorkspace *workspace,
   if ((buffer = gbp_symbol_workspace_addin_get_buffer (GBP_SYMBOL_WORKSPACE_ADDIN (addin))))
     file = g_object_ref (ide_buffer_get_file (buffer));
 
-  map = gtk_map_list_model_new (g_object_ref (model),
+  filter = gtk_string_filter_new (gtk_property_expression_new (IDE_TYPE_SYMBOL_NODE,
+                                                               gtk_property_expression_new (GTK_TYPE_TREE_LIST_ROW, NULL, "item"),
+                                                               "display-name"));
+  gtk_string_filter_set_search (filter, g_object_get_data (G_OBJECT (store), "SEARCH"));
+  gtk_string_filter_set_ignore_case (filter, TRUE);
+  gtk_string_filter_set_match_mode (filter, GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
+  filtered = gtk_filter_list_model_new (g_object_ref (model), GTK_FILTER (filter));
+
+  map = gtk_map_list_model_new (G_LIST_MODEL (filtered),
                                 gbp_symbol_search_provider_map_func,
                                 file,
                                 file ? g_object_unref : NULL);
@@ -107,6 +117,11 @@ gbp_symbol_search_provider_search_async (IdeSearchProvider   *provider,
   context = ide_object_get_context (IDE_OBJECT (provider));
   workbench = ide_workbench_from_context (context);
   store = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  g_object_set_data_full (G_OBJECT (store),
+                          "SEARCH",
+                          g_strdup (query),
+                          g_free);
 
   ide_workbench_foreach_workspace (workbench,
                                    gbp_symbol_search_provider_foreach_workspace_cb,
