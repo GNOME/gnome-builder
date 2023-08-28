@@ -140,6 +140,12 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   capture_file = gbp_sysprof_tool_get_capture_file (self);
   ide_run_context_append_formatted (run_context, "--capture=%s", capture_file);
 
+  if (cwd != NULL)
+    {
+      ide_run_context_append_argv (run_context, "--directory");
+      ide_run_context_append_argv (run_context, cwd);
+    }
+
   ide_run_context_append_argv (run_context, "--decode");
 
   if (ide_settings_get_boolean (settings, "cpu-aid"))
