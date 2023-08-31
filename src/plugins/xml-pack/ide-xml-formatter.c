@@ -81,7 +81,9 @@ apply_contents_to_buffer (DexFuture *completed,
 {
   IdeBuffer *buffer = user_data;
   g_autoptr(GBytes) bytes = NULL;
-  GtkTextIter begin, end;
+  GtkTextMark *insert;
+  GtkTextIter begin, end, iter;
+  guint line, line_offset;
 
   IDE_ENTRY;
 
@@ -93,6 +95,11 @@ apply_contents_to_buffer (DexFuture *completed,
 
   g_assert (bytes != NULL);
 
+  insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
+  line = gtk_text_iter_get_line (&iter);
+  line_offset = gtk_text_iter_get_line_offset (&iter);
+
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
   gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
@@ -100,6 +107,9 @@ apply_contents_to_buffer (DexFuture *completed,
                           &begin,
                           g_bytes_get_data (bytes, NULL),
                           -1);
+  gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                           &iter, line, line_offset);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &iter, &iter);
   gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 
   IDE_RETURN (dex_future_new_for_boolean (TRUE));
