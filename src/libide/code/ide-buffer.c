@@ -162,6 +162,7 @@ enum {
   PROP_FAILED,
   PROP_FILE,
   PROP_FILE_SETTINGS,
+  PROP_FORMATTER,
   PROP_HAS_DIAGNOSTICS,
   PROP_HAS_ENCODING_ERROR,
   PROP_HAS_SYMBOL_RESOLVERS,
@@ -636,6 +637,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_get_file_settings (self));
       break;
 
+    case PROP_FORMATTER:
+      g_value_set_object (value, ide_buffer_get_formatter (self));
+      break;
+
     case PROP_HAS_DIAGNOSTICS:
       g_value_set_boolean (value, ide_buffer_has_diagnostics (self));
       break;
@@ -881,6 +886,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          "File Settings",
                          "The file settings for the buffer",
                          IDE_TYPE_FILE_SETTINGS,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FORMATTER] =
+    g_param_spec_object ("formatter", NULL, NULL,
+                         IDE_TYPE_FORMATTER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -1184,6 +1194,8 @@ ide_buffer_formatter_notify_extension (IdeBuffer           *self,
 
   if ((formatter = ide_extension_adapter_get_extension (adapter)))
     ide_formatter_load (formatter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMATTER]);
 }
 
 static void
