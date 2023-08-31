@@ -139,6 +139,21 @@ can_pass_through_finish_arg (const char *arg)
 }
 
 static gboolean
+maybe_profiling (const char * const *argv)
+{
+  if (argv == NULL)
+    return FALSE;
+
+  for (guint i = 0; argv[i]; i++)
+    {
+      if (strstr (argv[i], "sysprof-agent"))
+        return TRUE;
+    }
+
+   return FALSE;
+}
+
+static gboolean
 gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
                                            const char * const  *argv,
                                            const char * const  *env,
@@ -252,8 +267,13 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--talk-name=org.freedesktop.portal.*");
 
   /* Layering violation, but always give access to profiler */
-  ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
-  ide_run_context_append_argv (run_context, "--system-talk-name=org.freedesktop.PolicyKit1");
+  if (maybe_profiling (argv))
+    {
+      ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
+      ide_run_context_append_argv (run_context, "--system-talk-name=org.freedesktop.PolicyKit1");
+      ide_run_context_append_argv (run_context, "--filesystem=~/.local/share/flatpak:ro");
+      ide_run_context_append_argv (run_context, "--filesystem=host");
+    }
 
   /* Make A11y bus available to the application */
   {
