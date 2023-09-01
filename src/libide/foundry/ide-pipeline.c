@@ -1,6 +1,6 @@
 /* ide-pipeline.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,18 +90,18 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
  *
  * If your plugin has discovered that something has changed that invalidates a
  * given phase, use ide_pipeline_invalidate_phase() to ensure that the
- * phase is re-buildd the next time a requested phase of higher precidence
+ * phase is re-build the next time a requested phase of higher precedence
  * is requested.
  *
  * It can be useful to perform operations before or after a given stage (but
- * still be buildd as part of that stage) so the %IDE_PIPELINE_PHASE_BEFORE and
+ * still be built as part of that stage) so the %IDE_PIPELINE_PHASE_BEFORE and
  * %IDE_PIPELINE_PHASE_AFTER flags may be xor'd with the requested phase.  If more
  * precise ordering is required, you may use the priority parameter to order
  * the operation with regards to other stages in that phase.
  *
  * Transient stages may be added to the pipeline and they will be removed after
  * the ide_pipeline_build_async() operation has completed successfully
- * or has failed. You can mark a stage as trandient with
+ * or has failed. You can mark a stage as transient with
  * ide_pipeline_stage_set_transient(). This may be useful to perform operations
  * such as an "export tarball" stage which should only run once as determined
  * by the user requesting a "make dist" style operation.
@@ -146,7 +146,7 @@ struct _IdePipeline
   IdeExtensionSetAdapter *addins;
 
   /*
-   * Deployment stategies help discover how to make a deployment to
+   * Deployment strategies help discover how to make a deployment to
    * a device which might require sending data to another system such
    * as a phone or tablet.
    */
@@ -2192,7 +2192,7 @@ ide_pipeline_task_notify_completed (IdePipeline *self,
  * %IDE_PIPELINE_PHASE_BEFORE flags as those must always be processed
  * with the underlying phase they are attached to.
  *
- * Upon completion, @callback will be buildd and should call
+ * Upon completion, @callback will be build and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
  */
@@ -2273,7 +2273,7 @@ short_circuit:
  * This function completes the asynchronous request to build
  * up to a particular phase and targets of the build pipeline.
  *
- * Returns: %TRUE if the build stages were buildd successfully
+ * Returns: %TRUE if the build stages were built successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_targets_async().
  */
@@ -2314,7 +2314,7 @@ ide_pipeline_build_targets_finish (IdePipeline   *self,
  * %IDE_PIPELINE_PHASE_BEFORE flags as those must always be processed
  * with the underlying phase they are attached to.
  *
- * Upon completion, @callback will be buildd and should call
+ * Upon completion, @callback will be built and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
  */
@@ -2337,7 +2337,7 @@ ide_pipeline_build_async (IdePipeline         *self,
  * This function completes the asynchronous request to build
  * up to a particular phase of the build pipeline.
  *
- * Returns: %TRUE if the build stages were buildd successfully
+ * Returns: %TRUE if the build stages were built successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_async().
  */
@@ -2376,7 +2376,7 @@ ide_pipeline_do_flush (gpointer data)
    */
   if (self->busy)
     {
-      IDE_TRACE_MSG ("pipeline already busy, defering flush");
+      IDE_TRACE_MSG ("pipeline already busy, deferring flush");
       IDE_RETURN (G_SOURCE_REMOVE);
     }
 
@@ -2944,7 +2944,7 @@ ide_pipeline_detach (IdePipeline *self,
  * Invalidates the phases matching @phases flags.
  *
  * If the requested phases include the phases invalidated here, the next
- * execution of the pipeline will build thse phases.
+ * execution of the pipeline will build these phases.
  *
  * This should be used by plugins to ensure a particular phase is re-buildd
  * upon discovering its state is no longer valid. Such an example might be
@@ -2969,7 +2969,7 @@ ide_pipeline_invalidate_phase (IdePipeline      *self,
 /**
  * ide_pipeline_get_stage_by_id:
  * @self: An #IdePipeline
- * @stage_id: the identfier of the stage
+ * @stage_id: the identifier of the stage
  *
  * Gets the stage matching the identifier @stage_id as returned from
  * ide_pipeline_attach().
