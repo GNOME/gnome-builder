@@ -1,3 +1,20 @@
+# GNOME Builder 45.rc
+
+ * Improvements to various Meson-based project templates
+ * Ensure more error messages are translated
+ * Support for more recent Sysprof features such as
+   scheduler details and D-Bus message recording
+ * Improve pattern matching for symbol-tree popover and
+   global search integration
+ * Make sure to run sysprof-agent with --cwd=
+ * Flatpak runtime will only poke sandbox holes when we think
+   we are performing a profile with sysprof-agent.
+ * Fix cursor placement after formatting with XML indent.
+ * Move `flatpak build-init` as a fallback pipeline stage
+   during `BEFORE|AUTOGEN` phase.
+ * Fix mimetype for C++ code
+ * Translation updates
+
 # GNOME Builder 45.beta
 
  * Fix build system discovery with Flatpak
