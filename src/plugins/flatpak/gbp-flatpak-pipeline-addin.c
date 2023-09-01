@@ -1,6 +1,6 @@
 /* gbp-flatpak-pipeline-addin.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,11 +49,6 @@ struct _GbpFlatpakPipelineAddin
 };
 
 G_DEFINE_QUARK (gb-flatpak-pipeline-error-quark, gb_flatpak_pipeline_error)
-
-enum {
-  PREPARE_MKDIRS,
-  PREPARE_BUILD_INIT,
-};
 
 enum {
   COMMIT_BUILD_FINISH,
@@ -186,7 +181,7 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
   ide_pipeline_stage_mkdirs_add_path (IDE_PIPELINE_STAGE_MKDIRS (mkdirs), repo_dir, TRUE, 0750, FALSE);
   ide_pipeline_stage_mkdirs_add_path (IDE_PIPELINE_STAGE_MKDIRS (mkdirs), staging_dir, TRUE, 0750, TRUE);
 
-  stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, PREPARE_MKDIRS, mkdirs);
+  stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, mkdirs);
 
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
@@ -407,9 +402,14 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
                          (GClosureNotify)g_free,
                          0);
 
+  /* Connect at autogen level because both downloads/dependencies
+   * will end up deleting build-init anyway from --force-clean. So
+   * when those do not need to run, do this as a last chance to ensure
+   * that we have something useful before building the apps.
+   */
   stage_id = ide_pipeline_attach (pipeline,
-                                  IDE_PIPELINE_PHASE_PREPARE,
-                                  PREPARE_BUILD_INIT,
+                                  IDE_PIPELINE_PHASE_AUTOGEN | IDE_PIPELINE_PHASE_BEFORE,
+                                  0,
                                   stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
