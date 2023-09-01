@@ -1,6 +1,6 @@
 /* gbp-flatpak-download-stage.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,9 +69,9 @@ gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
   if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
       ide_pipeline_stage_log (stage,
-                           IDE_BUILD_LOG_STDERR,
-                           _("Network is not available, skipping downloads"),
-                           -1);
+                              IDE_BUILD_LOG_STDERR,
+                              _("Network is not available, skipping downloads"),
+                              -1);
       ide_pipeline_stage_set_completed (stage, TRUE);
       return;
     }
