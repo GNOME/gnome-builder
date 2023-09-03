@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-21 22:57+0000\n"
-"PO-Revision-Date: 2023-08-22 05:08+0200\n"
+"POT-Creation-Date: 2023-08-22 03:10+0000\n"
+"PO-Revision-Date: 2023-09-03 10:23+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -262,12 +262,12 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
-msgstr ""
+msgstr "ხაზის ნომრის გასწვრივ დიაგნოსტიკის ჩვენება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი ხაზის ნომრების მარცხნივ დიაგნოსტიკას გაჩვენებთ."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
@@ -275,7 +275,7 @@ msgstr "მიმდინარე ხაზის გამოკვეთა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი კურსორის შემცველ ხაზს გამოკვეთს."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -283,7 +283,7 @@ msgstr "შესაბამისი ბრჭყალების გამ�
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი შესაბამის ბრჭყალებს გამოკვეთს."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -291,7 +291,7 @@ msgstr "ხაზის ნომრების ჩვენება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი ხაზის ნომრებს აჩვენებს."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
@@ -299,7 +299,7 @@ msgstr "შესაბამისი ხაზის ნომრების 
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი შედარებით ხაზის ნომრებს აჩვენებს."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/plugins/editorui/tweaks.ui:483
@@ -319,7 +319,7 @@ msgstr "ჭკვიანი  Home End"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Home/End ღილაკების ქცევის შეცვლა."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
@@ -361,7 +361,7 @@ msgstr "ავტომატური შენახვა ჩართულ�
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
-msgstr ""
+msgstr "ავტომატური შენახვის ჩართვა/გამორთვა."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Autosave Frequency"
@@ -628,7 +628,7 @@ msgstr "მართლწერის შემოწმება"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
 msgid "Automatically check spelling within documents"
-msgstr ""
+msgstr "დოკუმენტებში მართლწერის ავტომატური შემოწმება"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -664,7 +664,7 @@ msgstr "D-Bus-ის ინსპექტორი"
 
 #: src/libide/code/ide-buffer.c:3810
 msgid "The current language lacks a symbol resolver."
-msgstr ""
+msgstr "მიმდინარე ენას სიმბოლოს ამომხსნელი აკლია."
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:397
@@ -680,7 +680,7 @@ msgstr "%s არასწორ ASCII-ის შეიცავდა"
 #: src/libide/code/ide-language-defaults.c:234
 #, c-format
 msgid "Failed to parse integer from “%s”"
-msgstr ""
+msgstr "\"%s\"-დან მთელი რიცხვის დამუშავება ჩავარდა"
 
 #: src/libide/code/ide-language-defaults.c:309
 msgid "language defaults missing version in [global] group."
@@ -719,7 +719,7 @@ msgstr "_გაუქმება"
 
 #: src/libide/debugger/ide-debug-manager.c:977
 msgid "A suitable debugger could not be found."
-msgstr ""
+msgstr "შესაბამისი გამმართველი ვერ ვიპოვე."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
 #: src/libide/gui/ide-workbench.c:1527
@@ -728,7 +728,7 @@ msgstr "ფაილის გახსნა…"
 
 #: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
-msgstr ""
+msgstr "ფაილის სამუშაო სივრცეში გახსნა"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
 #: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:129
@@ -837,7 +837,7 @@ msgstr "ფაილი სხვა პროგრამის მიერ �
 
 #: src/libide/editor/ide-editor-info-bar.c:99
 msgid "File Contains Encoding Errors"
-msgstr ""
+msgstr "ფაილი დაშიფვრის შეცდომებს შეიცავს"
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
@@ -1054,23 +1054,23 @@ msgstr "ჩემი კომპიუტერი (%s) - %s"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
-msgstr ""
+msgstr "აგების ფაიფლაინი ავარიულ მდგომარეობაშია"
 
 #: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
-msgstr ""
+msgstr "აგების კონფიგურაცია შეცდომებს შეიცავს"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "ფაიფლაინი გაეშვა აგების ხის გასასუფთავებლად"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "ფაიფლაინი გაეშვა"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "ფაიფლაინი დასრულდა"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1082,7 +1082,7 @@ msgstr "აგება (%s)"
 #: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
-msgstr ""
+msgstr "დაყენებისშემდგომი (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3113
 #: src/libide/foundry/ide-pipeline.c:3152
@@ -1883,7 +1883,7 @@ msgstr "სიმბოლოების ზომის ინვერსი�
 
 #: src/libide/sourceview/gtk/menus.ui:98
 msgid "Invert case of the text selection"
-msgstr ""
+msgstr "მონიშნული ტექსტის რეგისტრის ინვერსია"
 
 #: src/libide/sourceview/gtk/menus.ui:104
 msgid "_Title Case"
@@ -2517,7 +2517,7 @@ msgstr "ძალით ღია"
 
 #: src/plugins/buildui/gtk/menus.ui:184
 msgid "Force Dark"
-msgstr ""
+msgstr "ნაძალადევი ბნელი"
 
 #: src/plugins/buildui/gtk/menus.ui:191
 msgid "Accessibility"
@@ -2571,7 +2571,7 @@ msgstr "ტერმინალის ფონტი"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr ""
+msgstr "ბადის ნიმუშის ჩვენება"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
@@ -2603,7 +2603,7 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "ტაბულაციით ნავიგაცია"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
@@ -2908,7 +2908,7 @@ msgstr ""
 #: src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:1023
 msgid "Indexing Source Code"
-msgstr ""
+msgstr "საწყისი კოდის ინდექსი"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
@@ -2959,11 +2959,11 @@ msgstr "იტვირთება…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
 msgid "No code actions available"
-msgstr ""
+msgstr "კოდის ქმედებები ხელმისაწვდომი არაა"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
 msgid "Code Action Failure"
-msgstr ""
+msgstr "კოდის ქმედების შეცდომა"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
 msgid "Symbol Not Selected"
@@ -2971,7 +2971,7 @@ msgstr "სიმბოლო არჩეული არაა"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
 msgid "A symbol to rename must be selected"
-msgstr ""
+msgstr "სახელის გადასარქმევი სიმბოლო არჩეული არაა"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
@@ -3160,7 +3160,7 @@ msgstr "ახალი პროექტის შექმნა…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
-msgstr ""
+msgstr "შაბლონიდან ახალი პროექტის შექმნა"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -3330,7 +3330,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
-msgstr ""
+msgstr "დაშლა"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -3435,15 +3435,15 @@ msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
-msgstr ""
+msgstr "მოწყობილობის მისამართი"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:49
 msgid "The device port number"
-msgstr ""
+msgstr "მოწყობილობის პორტის ნომერი"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
 msgid "The application to run"
-msgstr ""
+msgstr "გასაშვები აპლიკაცია"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
@@ -3459,7 +3459,7 @@ msgstr ""
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
-msgstr ""
+msgstr "D-Bus-ის ინსპექტორი…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
@@ -3524,11 +3524,11 @@ msgstr "სწორება"
 
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
-msgstr ""
+msgstr "გამოტოვებებით შეწევა"
 
 #: src/plugins/editorui/gtk/menus.ui:13
 msgid "Spaces per Tab"
-msgstr ""
+msgstr "გამოტოვებების რაოდენობა ტაბულაციაში"
 
 #: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
@@ -3569,7 +3569,7 @@ msgstr "Windows (CR/LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
-msgstr ""
+msgstr "Mac OS Classic (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -3589,7 +3589,7 @@ msgstr "ახალი ჩარჩოში გახსნა"
 
 #: src/plugins/editorui/gtk/menus.ui:147
 msgid "Open in New Workspace…"
-msgstr ""
+msgstr "ახალ სამუშაო მაგიდაზე გახსნა…"
 
 #: src/plugins/editorui/gtk/menus.ui:163
 msgid "Save _As"
@@ -3633,7 +3633,7 @@ msgstr "ჩასმის კურსორის შემდეგი დი
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
-msgstr ""
+msgstr "პროგრამირების ენები"
 
 #: src/plugins/editorui/tweaks-language.ui:34
 msgid ""
@@ -3647,7 +3647,7 @@ msgstr "სწორება & ფორმატირება"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr ""
+msgstr "ტაბულაციის სიმბოლო"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
@@ -3659,7 +3659,7 @@ msgstr "ჩანართი"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
-msgstr ""
+msgstr "მომყოლი ახალ ხაზზე გადაყვანის ჩასმა"
 
 #: src/plugins/editorui/tweaks-language.ui:74
 msgid "Ensure files end with a newline"
@@ -3898,7 +3898,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:252
 msgid "Semantic Highlighting"
-msgstr ""
+msgstr "სემანტიკური გამოკვეთა"
 
 #: src/plugins/editorui/tweaks.ui:253
 msgid ""
@@ -3916,7 +3916,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:295
 msgid "Newlines"
-msgstr ""
+msgstr "ახალი ხაზები"
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Draw a mark at the end of lines"
@@ -3924,7 +3924,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:308
 msgid "Non-breaking spaces"
-msgstr ""
+msgstr "გადაუტანადი გამოტოვებები"
 
 #: src/plugins/editorui/tweaks.ui:309
 msgid "Draw a mark at non-breaking space characters"
@@ -3932,7 +3932,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:325
 msgid "Leading"
-msgstr ""
+msgstr "თავში მიწერილი"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Draw marks for leading spaces only"
@@ -3940,7 +3940,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:338
 msgid "Inside Text"
-msgstr ""
+msgstr "ტექსტში"
 
 #: src/plugins/editorui/tweaks.ui:339
 msgid "Draw marks inside a line of text only"
@@ -3948,7 +3948,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:351
 msgid "Trailing"
-msgstr ""
+msgstr "ბოლოში"
 
 #: src/plugins/editorui/tweaks.ui:352
 msgid "Draw marks for trailing spaces only"
@@ -4100,7 +4100,7 @@ msgstr "ფაილები"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
-msgstr ""
+msgstr "მსგავსი ფაილები (Ctrl+Shift+O)"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
 msgid "Installation failed"
@@ -4126,7 +4126,7 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
 msgid "Install or Update SDK?"
-msgstr ""
+msgstr "დავაყენო ან განვაახლო SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
 msgid ""
@@ -4149,7 +4149,7 @@ msgstr "არქიტექტურა"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:113
 msgid "Resolving SDK Extensions"
-msgstr ""
+msgstr "SDK-ის გაფართოებების ამოხსნა"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
 msgid ""
@@ -4186,15 +4186,15 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
 msgid "Creating flatpak bundle"
-msgstr ""
+msgstr "Flatpak-ის პაკეტის შექმნა"
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
 msgid "Flatpak Application"
-msgstr ""
+msgstr "Flatpak-ის აპლიკაცია"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
 msgid "Installing Necessary SDKs"
-msgstr ""
+msgstr "საჭირო SDK-ების დაყენება"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
 msgid ""
@@ -4205,11 +4205,11 @@ msgstr ""
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
 msgid "Failed to update SDKs: %s"
-msgstr ""
+msgstr "SDK-ების განახლება ჩავარდა: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
 msgid "Updating Necessary SDKs"
-msgstr ""
+msgstr "საჭირო SDK-ების განახლება"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
 msgid ""
@@ -4219,11 +4219,11 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
-msgstr ""
+msgstr "SDK-ის გაშვების გარემოს განახლება"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
 msgid "Flatpak installation for new SDKs"
-msgstr ""
+msgstr "Flatpak -ის დაყენება ახალი SDK-ებისთვის"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
@@ -4361,7 +4361,7 @@ msgstr ""
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
-msgstr ""
+msgstr "ავტორობა"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
 msgid "Email"
@@ -4534,7 +4534,7 @@ msgstr "გლობალური ძებნა"
 
 #: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
-msgstr ""
+msgstr "გლობალური ძებნის ჩვენება"
 
 #: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
@@ -4542,7 +4542,7 @@ msgstr "პანელები"
 
 #: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
-msgstr ""
+msgstr "მარცხენა პანელის გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
@@ -4551,7 +4551,7 @@ msgstr "მარცხენა პანელის გადართვა 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
-msgstr ""
+msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
@@ -4560,11 +4560,11 @@ msgstr ""
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
-msgstr ""
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
-msgstr ""
+msgstr "ქვედა პანელის გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
@@ -4572,7 +4572,7 @@ msgstr "ქვედა პანელის გადართვა ხედ
 
 #: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
-msgstr ""
+msgstr "მუქ რეჟიმზე გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
@@ -4580,7 +4580,7 @@ msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
-msgstr ""
+msgstr "ღია რეჟიმზე გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
@@ -4965,7 +4965,7 @@ msgstr "ჩანართების ზოლი"
 
 #: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
-msgstr ""
+msgstr "ჩამოსაშლელი სია"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:672
@@ -5614,7 +5614,7 @@ msgstr "პროფაილერით _გაშვება"
 
 #: src/plugins/sysprof/gtk/menus.ui:149
 msgid "Record Again…"
-msgstr ""
+msgstr "თავიდან ჩაწერა…"
 
 #: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
@@ -5662,7 +5662,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:95
 msgid "Memory Profiling"
-msgstr ""
+msgstr "მეხსიერების პროფილირება"
 
 #: src/plugins/sysprof/tweaks.ui:96
 msgid "Record stacktraces of memory allocations and releases"
@@ -5782,7 +5782,7 @@ msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
-msgstr ""
+msgstr "სქელი ფონტის დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
@@ -5790,7 +5790,7 @@ msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
-msgstr ""
+msgstr "ჰიპერბმულების დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
