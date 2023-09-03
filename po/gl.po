@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-21 22:57+0000\n"
-"PO-Revision-Date: 2023-08-23 09:20+0200\n"
+"POT-Creation-Date: 2023-08-23 07:22+0000\n"
+"PO-Revision-Date: 2023-09-03 20:58+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -363,11 +363,11 @@ msgstr "Modifica o comportamento das teclas Inicio/Fin."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
-msgstr "Mostrar liñas de grella"
+msgstr "Mostrar liñas de grade"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr "Se está activo, o editor mostrará as liñas de grella no documento."
+msgstr "Se está activo, o editor mostrará as liñas de grade no documento."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
@@ -2659,11 +2659,11 @@ msgstr "O tipo de letra usado no terminal"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr "Mostrar o patrón da grella"
+msgstr "Mostrar o patrón de grade"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
-msgstr "Mostrar un patrón de grella debaixo do código fonte"
+msgstr "Mostrar un patrón de grade debaixo do código fonte"
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
@@ -3933,7 +3933,7 @@ msgstr "En calquera lugar"
 
 #: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
-msgstr "Patrón da grella"
+msgstr "Patrón de grade"
 
 #: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
@@ -3945,7 +3945,7 @@ msgstr "Sen patrón"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
-msgstr "Liñas da grella"
+msgstr "Liñas de grade"
 
 #: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
@@ -5647,12 +5647,12 @@ msgstr "Símbolo sen nome"
 msgid "Filter Symbols…"
 msgstr "Filtrar símbolos…"
 
-#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Símbolos no ficheiro"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
 msgstr "Na páxina"
 
