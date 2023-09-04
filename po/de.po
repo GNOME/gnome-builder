@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-01 03:24+0000\n"
-"PO-Revision-Date: 2023-09-02 00:46+0200\n"
+"POT-Creation-Date: 2023-09-02 22:13+0000\n"
+"PO-Revision-Date: 2023-09-04 17:40+0200\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -5891,7 +5891,6 @@ msgstr "Scheduler-Details"
 
 # https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2091 - pk
 #: src/plugins/sysprof/tweaks.ui:44
-#, fuzzy
 msgid "Track when processes are scheduled per CPU"
 msgstr "Nachverfolgen, wann Prozesse pro CPU eingeplant werden"
 
