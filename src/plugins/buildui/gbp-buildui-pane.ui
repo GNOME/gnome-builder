@@ -102,6 +102,11 @@
                   <property name="column">0</property>
                   <property name="column-span">2</property>
                 </layout>
+                <child>
+                  <object class="GtkEventControllerKey">
+                    <signal name="modifiers" handler="key_modifiers_cb" swapped="true"/>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

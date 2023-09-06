@@ -45,6 +45,8 @@ struct _GbpBuilduiPane
   GtkLabel            *build_status_label;
   GtkLabel            *time_completed_label;
   GtkListBox          *stages_list_box;
+
+  guint                shift_pressed : 1;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiPane, gbp_buildui_pane, IDE_TYPE_PANE)
@@ -233,11 +235,27 @@ gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
   stage = gbp_buildui_stage_row_get_stage (row);
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
+  if (self->shift_pressed)
+    ide_pipeline_stage_set_completed (stage, FALSE);
+
   phase = _ide_pipeline_stage_get_phase (stage);
 
   ide_pipeline_build_async (self->pipeline,
                             phase & IDE_PIPELINE_PHASE_MASK,
                             NULL, NULL, NULL);
+}
+
+static gboolean
+key_modifiers_cb (GbpBuilduiPane        *self,
+                  GdkModifierType        state,
+                  GtkEventControllerKey *key)
+{
+  g_assert (GBP_IS_BUILDUI_PANE (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
+
+  self->shift_pressed = !!(state & GDK_SHIFT_MASK);
+
+  return FALSE;
 }
 
 static void
@@ -324,6 +342,7 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, build_status_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, time_completed_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, stages_list_box);
+  gtk_widget_class_bind_template_callback (widget_class, key_modifiers_cb);
 
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
 }
