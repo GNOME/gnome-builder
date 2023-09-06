@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "ide-pipeline.h"
+#include "ide-pipeline-private.h"
 #include "ide-pipeline-addin.h"
 
 G_DEFINE_INTERFACE (IdePipelineAddin, ide_pipeline_addin, IDE_TYPE_OBJECT)
@@ -109,7 +109,7 @@ ide_pipeline_addin_unload (IdePipelineAddin *self,
  */
 void
 ide_pipeline_addin_track (IdePipelineAddin *self,
-                                guint                  stage_id)
+                          guint             stage_id)
 {
   GArray *ar;
 
@@ -126,4 +126,21 @@ ide_pipeline_addin_track (IdePipelineAddin *self,
     }
 
   g_array_append_val (ar, stage_id);
+}
+
+const guint *
+_ide_pipeline_addin_get_stages (IdePipelineAddin *self,
+                                guint            *n_stages)
+{
+  GArray *ar;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE_ADDIN (self), NULL);
+  g_return_val_if_fail (n_stages != NULL, NULL);
+
+  *n_stages = 0;
+
+  if (!(ar = g_object_get_data (G_OBJECT (self), "IDE_PIPELINE_ADDIN_STAGES")))
+    return NULL;
+
+  return (const guint *)(gpointer)ar->data;
 }
