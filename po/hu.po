@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-07-22 00:30+0000\n"
-"PO-Revision-Date: 2023-07-28 00:30+0200\n"
+"POT-Creation-Date: 2023-08-21 22:57+0000\n"
+"PO-Revision-Date: 2023-09-06 13:56+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -955,7 +955,7 @@ msgstr "Fájl mentése"
 #: src/libide/editor/ide-editor-page.c:1134
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:124
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
 msgid "Save"
 msgstr "Mentés"
 
@@ -1334,7 +1334,7 @@ msgstr "Tároló _klónozása…"
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:139
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
 msgid "Close"
 msgstr "Bezárás"
 
@@ -1759,11 +1759,25 @@ msgid_plural "Installing %u packages"
 msgstr[0] "%u csomag telepítése"
 msgstr[1] "%u csomag telepítése"
 
+#: src/libide/lsp/ide-lsp-client.c:169
+#| msgid "The operation has been canceled"
+msgid "The operation has been cancelled"
+msgstr "A művelet meg lett szakítva"
+
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1698
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "A nyelvi kiszolgáló előkészítése sikertelen: %s"
+
+#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+msgid "No connection to language server"
+msgstr "Nincs kapcsolat a nyelvi kiszolgálóhoz"
+
+#: src/libide/lsp/ide-lsp-code-action-provider.c:302
+#| msgid "No code actions available"
+msgid "No LSP client connection is available"
+msgstr "Nincs elérhető LSP-klienskapcsolat"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:517
@@ -3976,12 +3990,10 @@ msgid "Display diagnostics next to the line number"
 msgstr "Diagnosztika megjelenítése a sor száma mellett"
 
 #: src/plugins/editorui/tweaks.ui:211
-#| msgid "Show Line Numbers"
 msgid "Show Line Changes"
 msgstr "Sorok változtatásainak megjelenítése"
 
 #: src/plugins/editorui/tweaks.ui:212
-#| msgid "Display diagnostics next to the line number"
 msgid "Highlight changed lines next to the line number"
 msgstr "Megváltoztatott sorok kiemelése a sor száma mellett"
 
@@ -5654,15 +5666,14 @@ msgstr "Ugrás egy szimbólumhoz a jelenlegi lapon"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
-#| msgid "Sysprof Capture (*.syscap)"
 msgid "System Capture from %s.syscap"
 msgstr "Rendszer rögzítése %s.syscap fájlból"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:312
+#: src/plugins/sysprof/gbp-sysprof-tool.c:321
 msgid "Profiling Application…"
 msgstr "Alkalmazás profilozása…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:313
+#: src/plugins/sysprof/gbp-sysprof-tool.c:322
 msgid "Symbol decoding will begin after application exits"
 msgstr "A szimbólumdekódolás az alkalmazás kilépése után kezdődik"
 
@@ -5692,66 +5703,84 @@ msgid "CPU Performance"
 msgstr "CPU-teljesítmény"
 
 #: src/plugins/sysprof/gtk/menus.ui:40
+#| msgid "Process completed"
+msgid "Process Scheduling"
+msgstr "Folyamat ütemezése"
+
+#: src/plugins/sysprof/gtk/menus.ui:45
 msgid "Memory Allocations"
 msgstr "Memóriafoglalások"
 
-#: src/plugins/sysprof/gtk/menus.ui:45
+#: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Sample JavaScript Stacks"
 msgstr "JavaScript vermek mintavételezése"
 
-#: src/plugins/sysprof/gtk/menus.ui:51
+#: src/plugins/sysprof/gtk/menus.ui:56
+msgid "D-Bus"
+msgstr "D-Bus"
+
+#: src/plugins/sysprof/gtk/menus.ui:58 src/plugins/sysprof/tweaks.ui:111
+msgid "Session Bus"
+msgstr "Munkamenetbusz"
+
+#: src/plugins/sysprof/gtk/menus.ui:63 src/plugins/sysprof/tweaks.ui:123
+#| msgid "System"
+msgid "System Bus"
+msgstr "Rendszerbusz"
+
+#: src/plugins/sysprof/gtk/menus.ui:69
 msgid "Graphics"
 msgstr "Grafika"
 
-#: src/plugins/sysprof/gtk/menus.ui:53
+#: src/plugins/sysprof/gtk/menus.ui:71
 msgid "Display Timings"
 msgstr "Időzítések megjelenítése"
 
-#: src/plugins/sysprof/gtk/menus.ui:59
+#: src/plugins/sysprof/gtk/menus.ui:77
 msgid "Counters"
 msgstr "Számlálók"
 
-#: src/plugins/sysprof/gtk/menus.ui:61 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "CPU-használat"
 
-#: src/plugins/sysprof/gtk/menus.ui:66 src/plugins/sysprof/tweaks.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
 msgstr "Memóriahasználat"
 
-#: src/plugins/sysprof/gtk/menus.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:89
 msgid "Storage I/O"
 msgstr "Tárhely I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:76
+#: src/plugins/sysprof/gtk/menus.ui:94
 msgid "Network I/O"
 msgstr "Hálózati I/O"
 
-#: src/plugins/sysprof/gtk/menus.ui:82
+#: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Energy"
 msgstr "Energia"
 
-#: src/plugins/sysprof/gtk/menus.ui:84
+#: src/plugins/sysprof/gtk/menus.ui:102
 msgid "Consumption"
 msgstr "Fogyasztás"
 
-#: src/plugins/sysprof/gtk/menus.ui:89
+#: src/plugins/sysprof/gtk/menus.ui:107
 msgid "Battery Charge"
 msgstr "Akkumulátortöltöttség"
 
-#: src/plugins/sysprof/gtk/menus.ui:96
+#: src/plugins/sysprof/gtk/menus.ui:114
 msgid "Allow Application Integration"
 msgstr "Alkalmazásintegráció engedélyezése"
 
-#: src/plugins/sysprof/gtk/menus.ui:101
+#: src/plugins/sysprof/gtk/menus.ui:119
 msgid "Allow CPU Throttling"
 msgstr "CPU visszafogásának engedélyezése"
 
-#: src/plugins/sysprof/gtk/menus.ui:113
+#: src/plugins/sysprof/gtk/menus.ui:131
 msgid "Run with _Profiler"
 msgstr "Futtatás _profilozóval"
 
-#: src/plugins/sysprof/gtk/menus.ui:131
+#: src/plugins/sysprof/gtk/menus.ui:149
 msgid "Record Again…"
 msgstr "Felvétel ismét…"
 
@@ -5772,87 +5801,104 @@ msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr "Hívásvermek rendszeres rögzítése és hívási gráf összeállítása"
 
 #: src/plugins/sysprof/tweaks.ui:43
+#| msgid "Author Details"
+msgid "Scheduler Details"
+msgstr "Ütemező részletei"
+
+#: src/plugins/sysprof/tweaks.ui:44
+msgid "Track when processes are scheduled per CPU"
+msgstr "Annak követése, hogy a folyamatok CPU-nként mikor vannak ütemezve"
+
+#: src/plugins/sysprof/tweaks.ui:55
 msgid "CPU Governor"
 msgstr "CPU-vezérlő"
 
-#: src/plugins/sysprof/tweaks.ui:44
+#: src/plugins/sysprof/tweaks.ui:56
 msgid "Force performance mode while profiling"
 msgstr "A teljesítmény-központú mód kényszerítése profilozás során"
 
-#: src/plugins/sysprof/tweaks.ui:53
+#: src/plugins/sysprof/tweaks.ui:65
 msgid "Don't Change Governor"
 msgstr "Ne módosítsa a vezérlőt"
 
-#: src/plugins/sysprof/tweaks.ui:59
+#: src/plugins/sysprof/tweaks.ui:71
 msgid "Force Performance Mode"
 msgstr "Teljesítmény-központú mód kényszerítése"
 
-#: src/plugins/sysprof/tweaks.ui:72
+#: src/plugins/sysprof/tweaks.ui:84
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
 "Egyszerű memóriastatisztikák a folyamatról, mint az összes használt memória"
 
-#: src/plugins/sysprof/tweaks.ui:83
+#: src/plugins/sysprof/tweaks.ui:95
 msgid "Memory Profiling"
 msgstr "Memóriaprofilozás"
 
-#: src/plugins/sysprof/tweaks.ui:84
+#: src/plugins/sysprof/tweaks.ui:96
 msgid "Record stacktraces of memory allocations and releases"
 msgstr "Memóriafoglalások és -felszabadítások veremkiíratásainak rögzítése"
 
-#: src/plugins/sysprof/tweaks.ui:99
+#: src/plugins/sysprof/tweaks.ui:112
+msgid "Record D-Bus messages on the session bus"
+msgstr "D-Bus üzenetek rögzítése a munkamenetbuszon"
+
+#: src/plugins/sysprof/tweaks.ui:124
+msgid "Record D-Bus messages on the system bus"
+msgstr "D-Bus üzenetek rögzítése a rendszerbuszon"
+
+#: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
 msgstr "Energiahasználat"
 
-#: src/plugins/sysprof/tweaks.ui:100
+#: src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about energy usage using RAPL"
 msgstr "Energiahasználat statisztikáinak rögzítése a RAPL segítségével"
 
-#: src/plugins/sysprof/tweaks.ui:111
+#: src/plugins/sysprof/tweaks.ui:151
 msgid "Battery Usage"
 msgstr "Akkumulátorhasználat"
 
-#: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
+#: src/plugins/sysprof/tweaks.ui:152 src/plugins/sysprof/tweaks.ui:180
 msgid "Record statistics about battery charge and discharge rates"
 msgstr "Statisztikák rögzítése az akkumulátortöltés és -kisülés sebességéről"
 
-#: src/plugins/sysprof/tweaks.ui:127
+#: src/plugins/sysprof/tweaks.ui:167
 msgid "Network Usage"
 msgstr "Hálózathasználat"
 
-#: src/plugins/sysprof/tweaks.ui:128
+#: src/plugins/sysprof/tweaks.ui:168
 msgid "Record statistics about network usage"
 msgstr "Statisztikák rögzítése a hálózathasználatról"
 
-#: src/plugins/sysprof/tweaks.ui:139
+#: src/plugins/sysprof/tweaks.ui:179
 msgid "Disk Usage"
 msgstr "Lemezhasználat"
 
-#: src/plugins/sysprof/tweaks.ui:155
+#: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
 msgstr "GNOME Shell teljesítménye"
 
-#: src/plugins/sysprof/tweaks.ui:156
+#: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr "Teljesítménybeli és időzítési információk gyűjtése a GNOME Shellből"
 
-#: src/plugins/sysprof/tweaks.ui:169
+#: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
 msgstr "Integráció"
 
-#: src/plugins/sysprof/tweaks.ui:172
+#: src/plugins/sysprof/tweaks.ui:212
 msgid "JavaScript"
 msgstr "JavaScript"
 
-#: src/plugins/sysprof/tweaks.ui:173
+#: src/plugins/sysprof/tweaks.ui:213
 msgid "Collect information from GJS-based applications"
 msgstr "Információk gyűjtése a GJS-alapú alkalmazásokból"
 
-#: src/plugins/sysprof/tweaks.ui:184
+#: src/plugins/sysprof/tweaks.ui:224
 msgid "Application Tracing"
 msgstr "Alkalmazás nyomkövetése"
 
-#: src/plugins/sysprof/tweaks.ui:185
+#: src/plugins/sysprof/tweaks.ui:225
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
