@@ -22,7 +22,10 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-foundry.h>
 #include <libide-gtk.h>
+
+#include "ide-pipeline-private.h"
 
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-download-stage.h"
@@ -196,17 +199,39 @@ reap_staging_dir_cb (GObject      *object,
   IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(IdePipelineStage) stage = user_data;
   g_autoptr(GError) error = NULL;
+  IdePipelineAddin *addin;
+  IdePipeline *pipeline;
+  const guint *stage_ids;
+  guint n_stages;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
+
+  pipeline = g_object_get_data (G_OBJECT (reaper), "IDE_PIPELINE");
+
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     ide_object_warning (stage,
                         "Failed to reap staging directory: %s",
                         error->message);
+
+  /* Since we reaped the directory tree, make sure that the
+   * dependencies stage is re-run.
+   */
+  addin = ide_pipeline_addin_find_by_module_name (pipeline, "flatpak");
+  stage_ids = _ide_pipeline_addin_get_stages (addin, &n_stages);
+  for (guint i = 0; i < n_stages; i++)
+    {
+      IdePipelineStage *item = ide_pipeline_get_stage_by_id (pipeline, stage_ids[i]);
+
+      if (g_object_get_data (G_OBJECT (item), "FLATPAK_DEPENDENCIES_STAGE"))
+        ide_pipeline_stage_set_completed (item, FALSE);
+    }
 
   ide_pipeline_stage_unpause (stage);
 
@@ -262,6 +287,10 @@ check_for_build_init_files (IdePipelineStage *stage,
 
       reaper = ide_directory_reaper_new ();
       ide_directory_reaper_add_directory (reaper, staging, 0);
+      g_object_set_data_full (G_OBJECT (reaper),
+                              "IDE_PIPELINE",
+                              g_object_ref (pipeline),
+                              g_object_unref);
       ide_directory_reaper_execute_async (reaper,
                                           cancellable,
                                           reap_staging_dir_cb,
@@ -512,6 +541,10 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
                         "name", _("Building dependencies"),
                         "launcher", launcher,
                         NULL);
+
+  g_object_set_data (G_OBJECT (stage),
+                     "FLATPAK_DEPENDENCIES_STAGE",
+                     GINT_TO_POINTER (1));
 
   stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_DEPENDENCIES, 0, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
