@@ -46,9 +46,15 @@ enum {
   N_PROPS
 };
 
+enum {
+  CREATE_RUN_CONTEXT,
+  N_SIGNALS
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE_TYPE_PIPELINE_STAGE)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_pipeline_stage_command_wait_check_cb (GObject      *object,
@@ -113,7 +119,10 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
+  g_signal_emit (self, signals[CREATE_RUN_CONTEXT], 0, priv->build_command, &run_context);
+
+  if (run_context == NULL)
+    run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
 
   if (priv->stdout_path == NULL)
     _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
@@ -190,7 +199,10 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
+  g_signal_emit (self, signals[CREATE_RUN_CONTEXT], 0, priv->clean_command, &run_context);
+
+  if (run_context == NULL)
+    run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
 
   _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
 
@@ -385,6 +397,28 @@ ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdePipelineStageCommand::create-run-context:
+   * @self: a #IdePipelineStageCommand
+   * @command: an #IdeRunCommand
+   *
+   * Sets up the #IdeRunContext which will be used to hoist in the
+   * #IdeRunCommand. If no run context is provided, then the build pipeline
+   * will be used.
+   *
+   * Returns: (transfer full): an #IdeRunContext
+   */
+  signals [CREATE_RUN_CONTEXT] =
+    g_signal_new_class_handler ("create-run-context",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                g_signal_accumulator_first_wins, NULL,
+                                NULL,
+                                IDE_TYPE_RUN_CONTEXT,
+                                1,
+                                IDE_TYPE_RUN_COMMAND);
 }
 
 static void
