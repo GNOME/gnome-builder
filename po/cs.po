@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-01 03:24+0000\n"
-"PO-Revision-Date: 2023-09-02 09:55+0200\n"
-"Last-Translator: Vojtěch Perník <translations@pervoj.cz>\n"
+"POT-Creation-Date: 2023-09-07 01:24+0000\n"
+"PO-Revision-Date: 2023-09-07 15:48+0200\n"
+"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
@@ -2300,7 +2300,7 @@ msgstr "Chyby"
 msgid "Warnings"
 msgstr "Varovnání"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:348
+#: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
@@ -4274,31 +4274,37 @@ msgstr "Builder vyhledává rozšíření SDK potřebná pro sestavení vašeho 
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Vytvoření prostředí flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:378
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#, c-format
+#| msgid "Exporting staging directory"
+msgid "Removing stale flatpak staging directory: %s"
+msgstr "Odstraňuje se zastaralá výsledná složka flatpak: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Preparing build directory"
 msgstr "Příprava složky pro sestavení"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
 msgid "Downloading dependencies"
 msgstr "Stažení závislostí"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
 msgid "Building dependencies"
 msgstr "Sestavení závislostí"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
 msgid "Finalizing flatpak build"
 msgstr "Dokončení sestavení flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Exporting staging directory"
 msgstr "Export výsledné složky"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
 msgid "Creating flatpak bundle"
 msgstr "Vytvoření balíčku flatpak"
 
@@ -5433,8 +5439,8 @@ msgstr "Pracovní složka"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "Příkaz bude spuštěn z tohoto umístění. K definici relativní cesty použijte "
 "<tt>$BUILDDIR</tt> (složka sestavení), <tt>$SRCDIR</tt> (složka se "
