@@ -472,6 +472,19 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
   return TRUE;
 }
 
+static IdeRunContext *
+create_run_context_cb (IdePipelineStageCommand *stage,
+                       IdeRunCommand           *run_command,
+                       gpointer                 user_data)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (stage));
+  IdeRunContext *run_context = ide_run_context_new ();
+
+  ide_run_command_prepare_to_run (run_command, run_context, context);
+
+  return run_context;
+}
+
 static gboolean
 register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
                              IdePipeline              *pipeline,
@@ -479,7 +492,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
                              GError                  **error)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autofree char *arch = NULL;
   g_autofree char *manifest_path = NULL;
   g_autofree char *staging_dir = NULL;
@@ -508,43 +521,46 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   src_dir = ide_pipeline_get_srcdir (pipeline);
 
-  launcher = create_subprocess_launcher ();
-
-  ide_subprocess_launcher_set_cwd (launcher, src_dir);
-  ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  run_command = ide_run_command_new ();
+  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
+  ide_run_command_set_cwd (run_command, src_dir);
 
   if (ide_is_flatpak ())
     {
       g_autofree char *user_dir = NULL;
 
       user_dir = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-      ide_subprocess_launcher_setenv (launcher, "FLATPAK_USER_DIR", user_dir, TRUE);
-      ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
+      ide_run_command_setenv (run_command, "FLATPAK_USER_DIR", user_dir);
+      ide_run_command_setenv (run_command, "XDG_RUNTIME_DIR", g_get_user_runtime_dir ());
     }
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
-  ide_subprocess_launcher_push_argv (launcher, arch);
-  ide_subprocess_launcher_push_argv (launcher, "--ccache");
-  ide_subprocess_launcher_push_argv (launcher, "--force-clean");
-  ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
-  ide_subprocess_launcher_push_argv (launcher, "--disable-download");
+  ide_run_command_append_argv (run_command, "flatpak-builder");
+  ide_run_command_append_argv (run_command,  arch);
+  ide_run_command_append_argv (run_command,  "--ccache");
+  ide_run_command_append_argv (run_command,  "--force-clean");
+  ide_run_command_append_argv (run_command,  "--disable-updates");
+  ide_run_command_append_argv (run_command,  "--disable-download");
 
   if (self->state_dir != NULL)
     {
-      ide_subprocess_launcher_push_argv (launcher, "--state-dir");
-      ide_subprocess_launcher_push_argv (launcher, self->state_dir);
+      ide_run_command_append_argv (run_command, "--state-dir");
+      ide_run_command_append_argv (run_command, self->state_dir);
     }
 
   stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
-  ide_subprocess_launcher_push_argv (launcher, stop_at_option);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
-  ide_subprocess_launcher_push_argv (launcher, manifest_path);
+  ide_run_command_append_argv (run_command, stop_at_option);
+  ide_run_command_append_argv (run_command, staging_dir);
+  ide_run_command_append_argv (run_command, manifest_path);
 
-  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
                         "name", _("Building dependencies"),
-                        "launcher", launcher,
+                        "build-command", run_command,
                         NULL);
+
+  g_signal_connect (stage,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    NULL);
 
   g_object_set_data (G_OBJECT (stage),
                      "FLATPAK_DEPENDENCIES_STAGE",
