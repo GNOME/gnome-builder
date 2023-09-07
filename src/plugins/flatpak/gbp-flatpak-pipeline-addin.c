@@ -38,6 +38,11 @@
    (((v)->major == (a)) && ((v)->minor > (b))) ||                      \
    (((v)->major == (a)) && ((v)->minor == (b)) && ((v)->micro >= (c))))
 
+enum {
+  FLAGS_NONE = 0,
+  FLAGS_RUN_ON_HOST = 1,
+};
+
 struct _GbpFlatpakPipelineAddin
 {
   IdeObject parent_instance;
@@ -143,21 +148,18 @@ always_run_query_handler (IdePipelineStage *stage,
   ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
-static IdeSubprocessLauncher *
-create_subprocess_launcher (void)
+static IdeRunCommand *
+create_run_command (void)
 {
-  IdeSubprocessLauncher *launcher;
+  IdeRunCommand *run_command;
   const char *config_dir;
 
   config_dir = gbp_flatpak_get_config_dir ();
+  run_command = ide_run_command_new ();
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_setenv (launcher, "FLATPAK_CONFIG_DIR", config_dir, TRUE);
+  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", config_dir);
 
-  return launcher;
+  return run_command;
 }
 
 static gboolean
@@ -317,13 +319,30 @@ reap_staging_dir (IdePipelineStage   *stage,
   ide_directory_reaper_add_directory (reaper, dir, 0);
 }
 
+static IdeRunContext *
+create_run_context_cb (IdePipelineStageCommand *stage,
+                       IdeRunCommand           *run_command,
+                       gpointer                 user_data)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (stage));
+  IdeRunContext *run_context = ide_run_context_new ();
+  guint flags = GPOINTER_TO_UINT (user_data);
+
+  if (flags & FLAGS_RUN_ON_HOST)
+    ide_run_context_push_host (run_context);
+
+  ide_run_command_prepare_to_run (run_command, run_context, context);
+
+  return run_context;
+}
+
 static gboolean
 register_build_init_stage (GbpFlatpakPipelineAddin  *self,
                            IdePipeline              *pipeline,
                            IdeContext               *context,
                            GError                  **error)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autofree char *staging_dir = NULL;
   g_autofree char *sdk = NULL;
@@ -340,7 +359,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  launcher = create_subprocess_launcher ();
+  run_command = create_run_command ();
 
   config = ide_pipeline_get_config (pipeline);
   runtime = ide_pipeline_get_runtime (pipeline);
@@ -386,15 +405,15 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   if (sdk == NULL)
     sdk = g_strdup (platform);
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-init");
-  ide_subprocess_launcher_push_argv (launcher, "--type=app");
-  ide_subprocess_launcher_push_argv (launcher, arch);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
-  ide_subprocess_launcher_push_argv (launcher, app_id);
-  ide_subprocess_launcher_push_argv (launcher, sdk);
-  ide_subprocess_launcher_push_argv (launcher, platform);
-  ide_subprocess_launcher_push_argv (launcher, branch);
+  ide_run_command_append_argv (run_command, "flatpak");
+  ide_run_command_append_argv (run_command, "build-init");
+  ide_run_command_append_argv (run_command, "--type=app");
+  ide_run_command_append_argv (run_command, arch);
+  ide_run_command_append_argv (run_command, staging_dir);
+  ide_run_command_append_argv (run_command, app_id);
+  ide_run_command_append_argv (run_command, sdk);
+  ide_run_command_append_argv (run_command, platform);
+  ide_run_command_append_argv (run_command, branch);
 
   if (sdk_extensions != NULL)
     {
@@ -403,14 +422,19 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
           g_auto(GStrv) split = g_strsplit (sdk_extensions[i], "/", 2);
           g_autofree char *arg = g_strdup_printf ("--sdk-extension=%s", split[0]);
 
-          ide_subprocess_launcher_push_argv (launcher, arg);
+          ide_run_command_append_argv (run_command, arg);
         }
     }
 
-  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
                         "name", _("Preparing build directory"),
-                        "launcher", launcher,
+                        "build-command", run_command,
                         NULL);
+
+  g_signal_connect (stage,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    GUINT_TO_POINTER (FLAGS_RUN_ON_HOST));
 
   /*
    * We want to avoid calling build-init if it has already been called.
@@ -472,19 +496,6 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
   return TRUE;
 }
 
-static IdeRunContext *
-create_run_context_cb (IdePipelineStageCommand *stage,
-                       IdeRunCommand           *run_command,
-                       gpointer                 user_data)
-{
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (stage));
-  IdeRunContext *run_context = ide_run_context_new ();
-
-  ide_run_command_prepare_to_run (run_command, run_context, context);
-
-  return run_context;
-}
-
 static gboolean
 register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
                              IdePipeline              *pipeline,
@@ -521,8 +532,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   src_dir = ide_pipeline_get_srcdir (pipeline);
 
-  run_command = ide_run_command_new ();
-  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
+  run_command = create_run_command ();
   ide_run_command_set_cwd (run_command, src_dir);
 
   if (ide_is_flatpak ())
@@ -578,7 +588,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
                              IdeContext               *context,
                              GError                  **error)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autofree char *staging_dir = NULL;
   const char * const *finish_args;
@@ -598,24 +608,29 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
 
-  launcher = create_subprocess_launcher ();
+  run_command = create_run_command ();
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-finish");
+  ide_run_command_append_argv (run_command, "flatpak");
+  ide_run_command_append_argv (run_command, "build-finish");
 
   if (command != NULL)
     {
-      ide_subprocess_launcher_push_argv (launcher, "--command");
-      ide_subprocess_launcher_push_argv (launcher, command);
+      ide_run_command_append_argv (run_command, "--command");
+      ide_run_command_append_argv (run_command, command);
     }
 
-  ide_subprocess_launcher_push_args (launcher, finish_args);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
+  ide_run_command_append_args (run_command, finish_args);
+  ide_run_command_append_argv (run_command, staging_dir);
 
-  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
                         "name", _("Finalizing flatpak build"),
-                        "launcher", launcher,
+                        "build-command", run_command,
                         NULL);
+
+  g_signal_connect (stage,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    GUINT_TO_POINTER (FLAGS_RUN_ON_HOST));
 
   stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
@@ -629,7 +644,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
                              IdeContext               *context,
                              GError                  **error)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autofree char *arch = NULL;
   g_autofree char *repo_dir = NULL;
@@ -649,23 +664,28 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   repo_dir = gbp_flatpak_get_repo_dir (context);
   arch = get_arch_option (pipeline);
 
-  launcher = create_subprocess_launcher ();
+  run_command = create_run_command ();
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-export");
-  ide_subprocess_launcher_push_argv (launcher, arch);
-  ide_subprocess_launcher_push_argv (launcher, repo_dir);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
+  ide_run_command_append_argv (run_command, "flatpak");
+  ide_run_command_append_argv (run_command, "build-export");
+  ide_run_command_append_argv (run_command, arch);
+  ide_run_command_append_argv (run_command, repo_dir);
+  ide_run_command_append_argv (run_command, staging_dir);
 
-  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
                         "name", _("Exporting staging directory"),
-                        "launcher", launcher,
+                        "build-command", run_command,
                         NULL);
 
   g_signal_connect (stage,
                     "query",
                     G_CALLBACK (always_run_query_handler),
                     NULL);
+
+  g_signal_connect (stage,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    GUINT_TO_POINTER (FLAGS_RUN_ON_HOST));
 
   stage_id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_COMMIT, COMMIT_BUILD_EXPORT, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
@@ -700,7 +720,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
                              GError                  **error)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autofree char *staging_dir = NULL;
   g_autofree char *repo_dir = NULL;
   g_autofree char *dest_path = NULL;
@@ -727,30 +747,35 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
 
   arch = get_arch_option (pipeline);
 
-  launcher = create_subprocess_launcher ();
+  run_command = create_run_command ();
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-bundle");
-  ide_subprocess_launcher_push_argv (launcher, arch);
-  ide_subprocess_launcher_push_argv (launcher, repo_dir);
-  ide_subprocess_launcher_push_argv (launcher, dest_path);
-  ide_subprocess_launcher_push_argv (launcher, app_id);
+  ide_run_command_append_argv (run_command, "flatpak");
+  ide_run_command_append_argv (run_command, "build-bundle");
+  ide_run_command_append_argv (run_command, arch);
+  ide_run_command_append_argv (run_command, repo_dir);
+  ide_run_command_append_argv (run_command, dest_path);
+  ide_run_command_append_argv (run_command, app_id);
   /* TODO:
    *
    * We probably need to provide UI/config opt to tweak the branch name
    * if (ide_config_get_is_release (config))
    */
-  ide_subprocess_launcher_push_argv (launcher, "master");
+  ide_run_command_append_argv (run_command, "master");
 
-  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
                         "name", _("Creating flatpak bundle"),
-                        "launcher", launcher,
+                        "build-command", run_command,
                         NULL);
 
   g_signal_connect (stage,
                     "query",
                     G_CALLBACK (always_run_query_handler),
                     NULL);
+
+  g_signal_connect (stage,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    GUINT_TO_POINTER (FLAGS_RUN_ON_HOST));
 
   g_signal_connect_data (stage,
                          "notify::completed",
