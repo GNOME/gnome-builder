@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-21 22:57+0000\n"
-"PO-Revision-Date: 2023-08-28 10:00+0100\n"
+"POT-Creation-Date: 2023-09-07 01:24+0000\n"
+"PO-Revision-Date: 2023-09-07 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -660,7 +660,7 @@ msgstr "Editorearen laneko area berria"
 msgid "D-Bus Inspector"
 msgstr "D-Bus ikuskatzailea"
 
-#: src/libide/code/ide-buffer.c:3810
+#: src/libide/code/ide-buffer.c:3822
 msgid "The current language lacks a symbol resolver."
 msgstr "Uneko lengoaiak ez du ikur-ebazlerik."
 
@@ -2230,7 +2230,7 @@ msgstr "Erroreak"
 msgid "Warnings"
 msgstr "Abisuak"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:348
+#: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
@@ -4160,31 +4160,36 @@ msgstr "Builder proiektua eraikitzeko SDK hedapen egokiak bilatzen ari da."
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Flatpak laneko area sortzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#, c-format
+msgid "Removing stale flatpak staging directory: %s"
+msgstr "Kentzen flatpak zaharraren konfigurazio-direktorioa: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Preparing build directory"
 msgstr "Eraikuntza-direktorioa prestatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
 msgid "Downloading dependencies"
 msgstr "Mendekotasunak deskargatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
 msgid "Building dependencies"
 msgstr "Mendekotasunak eraikitzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
 msgid "Finalizing flatpak build"
 msgstr "Flatpak eraikuntza amaitzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Exporting staging directory"
 msgstr "Konfigurazio-direktorioa esportatzen"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
 msgid "Creating flatpak bundle"
 msgstr "Flatpak bilduma sortzen"
 
@@ -5476,12 +5481,12 @@ msgstr "Izenik gabeko ikurra"
 msgid "Filter Symbols…"
 msgstr "Iragazi ikurrak…"
 
-#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Ikurrak fitxategian"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
 msgstr "Orrian"
 
@@ -5504,11 +5509,11 @@ msgstr "Joan uneko orriko ikur batera"
 msgid "System Capture from %s.syscap"
 msgstr "Sistemaren kaptura hemen: %s.syscap"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:321
+#: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
 msgstr "Profilatze-aplikazioa…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:322
+#: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
 msgstr "Ikurren deskodetzea aplikaziotik irten ondoren abiaraziko da"
 
@@ -6103,7 +6108,7 @@ msgstr "Fokuratu kokalekua"
 msgid "Focus the current page's location"
 msgstr "Fokuratu uneko orriaren kokalekua"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:133
+#: src/plugins/xml-pack/ide-xml-formatter.c:143
 msgid "Failed to parse XML document"
 msgstr "Huts egin du XML dokumentuaren analisiak"
 
