@@ -73,6 +73,7 @@ gbp_flatpak_download_stage_query (IdePipelineStage *stage,
                               _("Network is not available, skipping downloads"),
                               -1);
       ide_pipeline_stage_set_completed (stage, TRUE);
+      self->invalid = FALSE;
       return;
     }
 
