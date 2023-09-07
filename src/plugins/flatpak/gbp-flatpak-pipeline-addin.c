@@ -283,6 +283,10 @@ check_for_build_init_files (IdePipelineStage *stage,
       g_autoptr(IdeDirectoryReaper) reaper = NULL;
       g_autoptr(GFile) staging = g_file_new_for_path (staging_dir);
 
+      ide_object_message (pipeline,
+                          _("Removing stale flatpak staging directory: %s"),
+                          staging_dir);
+
       ide_pipeline_stage_pause (stage);
 
       reaper = ide_directory_reaper_new ();
