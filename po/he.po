@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-07 01:24+0000\n"
-"PO-Revision-Date: 2023-09-05 16:25+0300\n"
+"POT-Creation-Date: 2023-09-07 16:22+0000\n"
+"PO-Revision-Date: 2023-09-07 19:25+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
-"X-Generator: Poedit 3.3.2\n"
+"2 : 3)\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -4271,8 +4271,7 @@ msgid "Creating flatpak workspace"
 msgstr "נוצרת סביבת flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
-#, fuzzy, c-format
-#| msgid "Exporting staging directory"
+#, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "מסיר את תיקיית ההכנות היציבה של flatpak: ‏%s"
 
@@ -4284,19 +4283,19 @@ msgstr "תיקיית build בהכנה"
 msgid "Downloading dependencies"
 msgstr "מוריד תלויות"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:556
 msgid "Building dependencies"
 msgstr "בונה תלויות"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:616
 msgid "Finalizing flatpak build"
 msgstr "מסיים בניית flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:661
 msgid "Exporting staging directory"
 msgstr "תיקיית ההכנות מיוצאת"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:746
 msgid "Creating flatpak bundle"
 msgstr "יצירת חבילת flatpak"
 
@@ -5432,8 +5431,8 @@ msgstr "תיקיית עבודה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "הפקודה תרוץ ממיקום זה. יש להשתמש ב־<tt>$BUILDDIR</tt>‎, <tt>$SRCDIR</tt>‎ ‏או "
 "<tt>$HOME</tt>‎ על מנת להגדיר נתיב יחסי."
