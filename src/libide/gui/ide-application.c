@@ -236,6 +236,11 @@ ide_application_startup (GApplication *app)
 
   /* Load language defaults into gsettings */
   ide_language_defaults_init_async (NULL, NULL, NULL);
+
+  /* Queue loading of the Network Monitor early to help ensure we
+   * get reliable data quickly.
+   */
+  (void) ide_application_has_network (self);
 }
 
 static void
