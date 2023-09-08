@@ -30,7 +30,7 @@
 
 struct _IdeTweaksPanel
 {
-  AdwBin               parent_instance;
+  AdwNavigationPage    parent_instance;
 
   AdwPreferencesPage  *prefs_page;
   AdwPreferencesGroup *current_group;
@@ -50,7 +50,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_NAVIGATION_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 
