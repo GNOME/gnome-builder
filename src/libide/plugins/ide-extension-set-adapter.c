@@ -740,6 +740,7 @@ sort_by_priority (gconstpointer a,
   const SortedInfo *sb = b;
 
   /* Greater values are higher priority */
+  /* FIXME: ^ Clearly this is not the case??? */
 
   if (sa->priority < sb->priority)
     return -1;
