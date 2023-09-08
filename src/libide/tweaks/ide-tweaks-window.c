@@ -43,8 +43,7 @@ struct _IdeTweaksWindow
   IdeActionMuxer   *muxer;
 
   AdwLeaflet       *leaflet;
-  GtkBox           *panel_box;
-  GtkStack         *panel_stack;
+  AdwBin           *panel_bin;
   GtkStack         *panel_list_stack;
   GtkBox           *panel_list_box;
   AdwWindowTitle   *sidebar_title;
@@ -66,20 +65,6 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksWindow, ide_tweaks_window, ADW_TYPE_WINDOW)
 
 static GParamSpec *properties [N_PROPS];
-
-static IdeTweaksPage *
-ide_tweaks_window_get_current_page (IdeTweaksWindow *self)
-{
-  GtkWidget *visible_child;
-
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-
-  if ((visible_child = gtk_stack_get_visible_child (self->panel_stack)) &&
-      IDE_IS_TWEAKS_PANEL (visible_child))
-    return ide_tweaks_panel_get_page (IDE_TWEAKS_PANEL (visible_child));
-
-  return NULL;
-}
 
 static IdeTweaksPanelList *
 ide_tweaks_window_get_current_list (IdeTweaksWindow *self)
@@ -150,7 +135,7 @@ ide_tweaks_window_update_actions (IdeTweaksWindow *self)
   visible_child = adw_leaflet_get_visible_child (self->leaflet);
   list = ide_tweaks_window_get_current_list (self);
 
-  if (visible_child == GTK_WIDGET (self->panel_box) && self->folded)
+  if (visible_child == GTK_WIDGET (self->panel_bin) && self->folded)
     {
       can_navigate_back = TRUE;
     }
@@ -184,23 +169,12 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
   name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
   has_subpages = ide_tweaks_page_get_has_subpage (page);
 
-  /* Re-use a panel if it is already in the stack. This can happen if
-   * we haven't yet reached a notify::transition-running that caused the
-   * old page to be discarded.
-   *
-   * However, if there are subpages, we will instead jump right to the
-   * subpage instead of this item as a page.
-   */
+  /* If there are subpages, we will jump right to the subpage instead of this item as a page. */
   if (!has_subpages)
     {
-      if (!(panel = gtk_stack_get_child_by_name (self->panel_stack, name)))
-        {
-          panel = ide_tweaks_panel_new (page);
-          ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (panel), self->folded);
-          gtk_stack_add_named (self->panel_stack, panel, name);
-        }
-
-      gtk_stack_set_visible_child (self->panel_stack, panel);
+      panel = ide_tweaks_panel_new (page);
+      ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (panel), self->folded);
+      adw_bin_set_child (self->panel_bin, panel);
 
       adw_leaflet_navigate (self->leaflet, ADW_NAVIGATION_DIRECTION_FORWARD);
     }
@@ -246,8 +220,7 @@ ide_tweaks_window_clear (IdeTweaksWindow *self)
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
     gtk_stack_remove (self->panel_list_stack, child);
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_stack))))
-    gtk_stack_remove (self->panel_stack, child);
+  adw_bin_set_child (self->panel_bin, NULL);
 
   ide_tweaks_window_update_actions (self);
 }
@@ -341,43 +314,6 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 }
 
 static void
-panel_stack_notify_transition_running_cb (IdeTweaksWindow *self,
-                                          GParamSpec      *pspec,
-                                          GtkStack        *stack)
-{
-  GtkSelectionModel *model;
-  IdeTweaksPage *current_page;
-  guint n_items;
-
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-  g_assert (GTK_IS_STACK (stack));
-
-  if (gtk_stack_get_transition_running (stack))
-    return;
-
-  if (!(current_page = ide_tweaks_window_get_current_page (self)))
-    return;
-
-  model = gtk_stack_get_pages (stack);
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
-
-  for (guint i = n_items; i > 0; i--)
-    {
-      g_autoptr(GtkStackPage) page = g_list_model_get_item (G_LIST_MODEL (model), i - 1);
-      IdeTweaksPanel *panel;
-      IdeTweaksPage *item;
-
-      panel = IDE_TWEAKS_PANEL (gtk_stack_page_get_child (page));
-      item = ide_tweaks_panel_get_page (panel);
-
-      if (item != NULL &&
-          item != current_page &&
-          !ide_tweaks_item_is_ancestor (IDE_TWEAKS_ITEM (current_page), IDE_TWEAKS_ITEM (item)))
-        gtk_stack_remove (stack, GTK_WIDGET (panel));
-    }
-}
-
-static void
 panel_list_stack_notify_transition_running_cb (IdeTweaksWindow *self,
                                                GParamSpec      *pspec,
                                                GtkStack        *stack)
@@ -442,17 +378,17 @@ ide_tweaks_window_set_folded (IdeTweaksWindow *self,
   if (self->folded != folded)
     {
       GtkSelectionMode selection_mode;
+      GtkWidget *child;
 
       self->folded = folded;
 
       selection_mode = folded ? GTK_SELECTION_NONE : GTK_SELECTION_SINGLE;
 
-      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_stack));
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
+      child = adw_bin_get_child (self->panel_bin);
+      if (child != NULL)
         ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (child), folded);
 
-      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack));
+      for (child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack));
            child != NULL;
            child = gtk_widget_get_next_sibling (child))
         ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (child), selection_mode);
@@ -567,16 +503,14 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, leaflet);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_bin);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_title);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_visible_child_cb);
-  gtk_widget_class_bind_template_callback (widget_class, panel_stack_notify_transition_running_cb);
 
   gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
 
@@ -733,7 +667,7 @@ ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
   visible_child = adw_leaflet_get_visible_child (self->leaflet);
   list = ide_tweaks_window_get_current_list (self);
 
-  if (visible_child == GTK_WIDGET (self->panel_box) && self->folded)
+  if (visible_child == GTK_WIDGET (self->panel_bin) && self->folded)
     {
       adw_leaflet_navigate (self->leaflet, ADW_NAVIGATION_DIRECTION_BACK);
     }

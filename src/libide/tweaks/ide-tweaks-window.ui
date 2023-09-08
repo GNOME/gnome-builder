@@ -105,22 +105,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="panel_box">
-            <property name="orientation">vertical</property>
+          <object class="AdwBin" id="panel_bin">
             <property name="hexpand">true</property>
-            <property name="vexpand">true</property>
-            <child>
-              <object class="GtkStack" id="panel_stack">
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
-                <property name="transition-type">crossfade</property>
-                <property name="width-request">360</property>
-                <signal name="notify::transition-running" handler="panel_stack_notify_transition_running_cb" swapped="true" object="IdeTweaksWindow"/>
-                <style>
-                  <class name="background"/>
-                </style>
-              </object>
-            </child>
+            <property name="width-request">360</property>
           </object>
         </child>
       </object>
