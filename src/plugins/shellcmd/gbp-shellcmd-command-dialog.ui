@@ -5,9 +5,8 @@
     <property name="default-height">650</property>
     <property name="title" translatable="yes">Edit Command</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView">
+        <child type="top">
           <object class="AdwHeaderBar">
             <property name="show-start-title-buttons">false</property>
             <property name="show-end-title-buttons">false</property>
@@ -32,7 +31,6 @@
         </child>
         <child>
           <object class="AdwPreferencesPage">
-            <property name="vexpand">true</property>
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
