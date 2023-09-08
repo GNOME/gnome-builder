@@ -3,42 +3,27 @@
   <template class="IdeTweaksWindow" parent="AdwWindow">
     <property name="default-width">1080</property>
     <property name="default-height">720</property>
-    <property name="folded" bind-source="leaflet" bind-property="folded" bind-flags="sync-create"/>
+    <property name="width-request">360</property>
+    <property name="height-request">200</property>
+    <property name="folded" bind-source="split_view" bind-property="collapsed" bind-flags="sync-create"/>
+    <child>
+      <object class="AdwBreakpoint">
+        <condition>max-width: 560sp</condition>
+        <setter object="split_view" property="collapsed">True</setter>
+      </object>
+    </child>
     <style>
       <class name="IdeTweaksWindow"/>
     </style>
     <child>
-      <object class="AdwLeaflet" id="leaflet">
-        <property name="can-navigate-back">true</property>
-        <property name="can-unfold">true</property>
-        <property name="fold-threshold-policy">minimum</property>
-        <property name="homogeneous">true</property>
-        <property name="mode-transition-duration">250</property>
-        <property name="transition-type">over</property>
-        <child>
-          <object class="AdwNavigationView" id="sidebar_nav_view">
-            <property name="width-request">200</property>
+      <object class="AdwNavigationSplitView" id="split_view">
+        <property name="sidebar">
+          <object class="AdwNavigationPage">
+            <child>
+              <object class="AdwNavigationView" id="sidebar_nav_view"/>
+            </child>
           </object>
-        </child>
-        <child>
-          <object class="AdwLeafletPage">
-            <property name="navigatable">false</property>
-            <property name="child">
-              <object class="GtkSeparator" id="sidebar_separator">
-                <property name="orientation">vertical</property>
-                <style>
-                  <class name="sidebar"/>
-                </style>
-              </object>
-            </property>
-          </object>
-        </child>
-        <child>
-          <object class="AdwBin" id="panel_bin">
-            <property name="hexpand">true</property>
-            <property name="width-request">360</property>
-          </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>
