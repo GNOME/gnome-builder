@@ -31,9 +31,6 @@ popover.global-search contents {
   padding: 0;
   margin: 0;
 }
-popover.global-search contents .navigation-sidebar {
-  border-right: 1px solid @borders;
-}
 popover.global-search listview.results {
   padding: 6px 0;
   background: none;
@@ -44,6 +41,12 @@ popover.global-search listview.results row {
   padding: 2px 8px;
   border-radius: 6px;
   margin: 0 6px 4px;
+}
+.global-search textview {
+  background: none;
+}
+.global-search .sidebar-pane {
+  background: alpha(currentColor, .05);
 }
 
 notificationstack button {
