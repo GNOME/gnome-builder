@@ -107,6 +107,7 @@
         <child>
           <object class="GtkLinkButton">
             <property name="halign">start</property>
+            <property name="can-shrink">True</property>
             <binding name="label">
               <lookup name="website" type="IdePlugin">
                 <lookup name="plugin">IdePluginView</lookup>
