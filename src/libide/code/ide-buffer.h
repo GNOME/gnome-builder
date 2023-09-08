@@ -152,6 +152,8 @@ IdeSymbol              *ide_buffer_get_symbol_at_location_finish (IdeBuffer     
                                                                   GError                 **error);
 IDE_AVAILABLE_IN_ALL
 GPtrArray              *ide_buffer_get_symbol_resolvers          (IdeBuffer               *self);
+IDE_AVAILABLE_IN_45
+GListModel             *ide_buffer_list_symbol_resolvers         (IdeBuffer               *self);
 IDE_AVAILABLE_IN_ALL
 gchar                  *ide_buffer_get_word_at_iter              (IdeBuffer               *self,
                                                                   const GtkTextIter       *iter);

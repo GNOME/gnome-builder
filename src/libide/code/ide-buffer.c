@@ -172,6 +172,7 @@ enum {
   PROP_NEWLINE_TYPE,
   PROP_READ_ONLY,
   PROP_STATE,
+  PROP_SYMBOL_RESOLVERS,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   N_PROPS
@@ -677,6 +678,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_enum (value, ide_buffer_get_state (self));
       break;
 
+    case PROP_SYMBOL_RESOLVERS:
+      g_value_take_object (value, ide_buffer_list_symbol_resolvers (self));
+      break;
+
     case PROP_STYLE_SCHEME_NAME:
       g_value_set_string (value, ide_buffer_get_style_scheme_name (self));
       break;
@@ -1018,6 +1023,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                        IDE_BUFFER_STATE_READY,
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_SYMBOL_RESOLVERS] =
+    g_param_spec_object ("symbol-resolvers", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   /**
    * IdeBuffer:style-scheme-name:
    *
@@ -1235,6 +1245,7 @@ ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
   ide_symbol_resolver_load (resolver);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SYMBOL_RESOLVERS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVERS]);
 
   IDE_EXIT;
 }
@@ -1261,6 +1272,7 @@ ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
   ide_symbol_resolver_unload (resolver);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SYMBOL_RESOLVERS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVERS]);
 
   IDE_EXIT;
 }
@@ -3968,6 +3980,51 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
                                                    ar);
 
   return IDE_PTR_ARRAY_STEAL_FULL (&ar);
+}
+
+static void
+ide_buffer_list_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
+                                     PeasPluginInfo         *plugin_info,
+                                     GObject                *extension,
+                                     gpointer                user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
+  GListStore *store = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_LIST_STORE (store));
+
+  g_list_store_append (store, resolver);
+}
+
+/**
+ * ide_buffer_list_symbol_resolvers:
+ * @self: a #IdeBuffer
+ *
+ * Gets the symbol resolvers for the buffer.
+ *
+ * Returns: (transfer full): a #GListModel of #IdeSymbolResolver
+ *
+ * Since: 45
+ */
+GListModel *
+ide_buffer_list_symbol_resolvers (IdeBuffer *self)
+{
+  g_autoptr(GListStore) store = NULL;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  store = g_list_store_new (IDE_TYPE_SYMBOL_RESOLVER);
+
+  if (self->symbol_resolvers != NULL)
+    ide_extension_set_adapter_foreach_by_priority (self->symbol_resolvers,
+                                                   ide_buffer_list_symbol_resolvers_cb,
+                                                   store);
+
+  return G_LIST_MODEL (g_steal_pointer (&store));
 }
 
 /**
