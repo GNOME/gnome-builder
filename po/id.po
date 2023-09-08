@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-21 22:57+0000\n"
-"PO-Revision-Date: 2023-08-30 13:45+0700\n"
+"POT-Creation-Date: 2023-09-07 01:24+0000\n"
+"PO-Revision-Date: 2023-09-08 11:19+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -711,7 +711,7 @@ msgstr "Area Kerja Penyunting Baru"
 msgid "D-Bus Inspector"
 msgstr "Pemeriksa D-Bus"
 
-#: src/libide/code/ide-buffer.c:3810
+#: src/libide/code/ide-buffer.c:3822
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -2292,7 +2292,7 @@ msgstr "Galat"
 msgid "Warnings"
 msgstr "Peringatan"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:348
+#: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
@@ -4271,31 +4271,36 @@ msgstr "Builder menemukan ekstensi SDK yang sesuai untuk membangun proyek Anda"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Membuat ruang kerja flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#, c-format
+msgid "Removing stale flatpak staging directory: %s"
+msgstr "Menghapus direktori staging flatpak yang basi: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Preparing build directory"
 msgstr "Menyiapkan direktori bangun"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
 msgid "Downloading dependencies"
 msgstr "Mengunduh dependensi"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
 msgid "Building dependencies"
 msgstr "Membangun dependensi"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
 msgid "Finalizing flatpak build"
 msgstr "Menyelesaikan bangun flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Exporting staging directory"
 msgstr "Mengekspor direktori staging"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
 msgid "Creating flatpak bundle"
 msgstr "Membuat bundel flatpak"
 
@@ -5617,12 +5622,12 @@ msgstr "Simbol tanpa nama"
 msgid "Filter Symbols…"
 msgstr "Simbol Filter…"
 
-#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Simbol dalam Berkas"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
 msgstr "Dalam Halaman"
 
@@ -5645,11 +5650,11 @@ msgstr "Navigasi ke simbol di dalam halaman saat ini"
 msgid "System Capture from %s.syscap"
 msgstr "System Capture from %s.syscap"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:321
+#: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
 msgstr "Membuat Profil Aplikasi…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:322
+#: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
 msgstr "Decoding simbol akan dimulai setelah aplikasi keluar"
 
@@ -6254,7 +6259,7 @@ msgstr "Lokasi Fokus"
 msgid "Focus the current page's location"
 msgstr "Memfokuskan lokasi halaman saat ini"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:133
+#: src/plugins/xml-pack/ide-xml-formatter.c:143
 msgid "Failed to parse XML document"
 msgstr "Gagal mengurai dokumen XML"
 
