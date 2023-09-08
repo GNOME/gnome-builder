@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include <libide-vcs.h>
 
@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_VCSUI_CLONE_PAGE (gbp_vcsui_clone_page_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GBP, VCSUI_CLONE_PAGE, GtkWidget)
+G_DECLARE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GBP, VCSUI_CLONE_PAGE, AdwNavigationPage)
 
 void gbp_vcsui_clone_page_set_uri (GbpVcsuiClonePage *self,
                                    const char        *uri);

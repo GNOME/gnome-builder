@@ -1,134 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpCreateProjectWidget" parent="GtkWidget">
-    <child>
-      <object class="AdwPreferencesPage" id="main">
-        <style>
-          <class name="undershoot-top"/>
-        </style>
+  <template class="GbpCreateProjectWidget" parent="AdwNavigationPage">
+    <property name="tag">create-project</property>
+    <property name="title" translatable="yes">Create New Project</property>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
+        </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdwPreferencesPage" id="main">
             <child>
-              <object class="AdwEntryRow" id="name_row">
-                <property name="title" translatable="yes">Project Name</property>
-                <property name="text" bind-source="input" bind-property="name" bind-flags="sync-create|bidirectional" />
-                <child type="suffix">
-                  <object class="GtkImage" id="directory_clash">
-                    <property name="visible">false</property>
-                    <property name="icon-name">dialog-error-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">A subdirectory with this name already exists</property>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="name_row">
+                    <property name="title" translatable="yes">Project Name</property>
+                    <property name="text" bind-source="input" bind-property="name" bind-flags="sync-create|bidirectional" />
+                    <child type="suffix">
+                      <object class="GtkImage" id="directory_clash">
+                        <property name="visible">false</property>
+                        <property name="icon-name">dialog-error-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">A subdirectory with this name already exists</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">A unique name that is used for the project folder and other resources. The name should be in lower case without spaces and should not start with a number.</property>
-                <property name="margin-top">12</property>
-                <property name="wrap">true</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="caption" />
-                  <class name="dim-label" />
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="AdwEntryRow" id="app_id_row">
-                <property name="title" translatable="yes">Application ID…</property>
-                <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional" />
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">A reverse domain-name identifier used to identify the application, such as "org.gnome.Builder". It may not contain dashes.</property>
-                <property name="margin-top">12</property>
-                <property name="wrap">true</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="caption" />
-                  <class name="dim-label" />
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="AdwEntryRow" id="location_row">
-                <property name="title" translatable="yes">Location</property>
-                <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
-                <child type="suffix">
-                  <object class="GtkButton">
-                    <property name="action-name">create-project.select-folder</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">folder-symbolic</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">A unique name that is used for the project folder and other resources. The name should be in lower case without spaces and should not start with a number.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
                     <style>
-                      <class name="flat" />
+                      <class name="caption" />
+                      <class name="dim-label" />
                     </style>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">The project will be created in a new subdirectory.</property>
-                <property name="margin-top">12</property>
-                <property name="wrap">true</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="caption" />
-                  <class name="dim-label" />
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="AdwComboRow" id="language_row">
-                <property name="title" translatable="yes">Language</property>
-                <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create" />
-                <signal name="notify::selected-item" handler="language_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
-              </object>
-            </child>
-            <child>
-              <object class="AdwComboRow" id="license_row">
-                <property name="title" translatable="yes">License</property>
-                <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create" />
-                <signal name="notify::selected-item" handler="license_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
-              </object>
-            </child>
-            <child>
-              <object class="AdwActionRow">
-                <property name="title" translatable="yes">Version Control</property>
-                <property name="activatable-widget">version_control_switch</property>
-                <child type="suffix">
-                  <object class="GtkSwitch" id="version_control_switch">
-                    <property name="valign">center</property>
-                    <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create" />
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="app_id_row">
+                    <property name="title" translatable="yes">Application ID…</property>
+                    <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional" />
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">A reverse domain-name identifier used to identify the application, such as "org.gnome.Builder". It may not contain dashes.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption" />
+                      <class name="dim-label" />
+                    </style>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="AdwComboRow" id="template_row">
-                <property name="title" translatable="yes">Template</property>
-                <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create" />
-                <property name="expression">
-                  <lookup name="name" type="IdeProjectTemplate" />
-                </property>
-                <signal name="notify::selected-item" handler="template_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
-                <property name="list-factory">
-                  <object class="GtkBuilderListItemFactory">
-                    <property name="bytes">
-                      <![CDATA[
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="location_row">
+                    <property name="title" translatable="yes">Location</property>
+                    <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="action-name">create-project.select-folder</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <style>
+                          <class name="flat" />
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">The project will be created in a new subdirectory.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption" />
+                      <class name="dim-label" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="language_row">
+                    <property name="title" translatable="yes">Language</property>
+                    <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create" />
+                    <signal name="notify::selected-item" handler="language_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="license_row">
+                    <property name="title" translatable="yes">License</property>
+                    <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create" />
+                    <signal name="notify::selected-item" handler="license_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Version Control</property>
+                    <property name="activatable-widget">version_control_switch</property>
+                    <child type="suffix">
+                      <object class="GtkSwitch" id="version_control_switch">
+                        <property name="valign">center</property>
+                        <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create" />
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="template_row">
+                    <property name="title" translatable="yes">Template</property>
+                    <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create" />
+                    <property name="expression">
+                      <lookup name="name" type="IdeProjectTemplate" />
+                    </property>
+                    <signal name="notify::selected-item" handler="template_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
+                    <property name="list-factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes">
+                          <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
@@ -166,30 +170,32 @@
   </template>
 </interface>
 ]]>
+                        </property>
+                      </object>
                     </property>
                   </object>
-                </property>
+                </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkButton">
-                <property name="action-name">create-project.expand</property>
-                <property name="label" translatable="yes">Create Project</property>
-                <property name="margin-top">12</property>
-                <property name="halign">end</property>
-                <style>
-                  <class name="suggested-action" />
-                </style>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">create-project.expand</property>
+                    <property name="label" translatable="yes">Create Project</property>
+                    <property name="margin-top">12</property>
+                    <property name="halign">end</property>
+                    <style>
+                      <class name="suggested-action" />
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
   <object class="IdeTemplateInput" id="input">
     <signal name="notify" handler="input_notify_cb" swapped="true" object="GbpCreateProjectWidget" />

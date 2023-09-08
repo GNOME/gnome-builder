@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TWEAKS_PANEL_LIST (ide_tweaks_panel_list_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, IDE, TWEAKS_PANEL_LIST, AdwBin)
+G_DECLARE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, IDE, TWEAKS_PANEL_LIST, AdwNavigationPage)
 
 GtkWidget        *ide_tweaks_panel_list_new                (IdeTweaksItem      *item);
 IdeTweaksItem    *ide_tweaks_panel_list_get_item           (IdeTweaksPanelList *self);

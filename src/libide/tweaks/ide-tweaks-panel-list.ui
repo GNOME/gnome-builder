@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeTweaksPanelList" parent="AdwBin">
+  <template class="IdeTweaksPanelList" parent="AdwNavigationPage">
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkSearchEntry" id="search_entry">
-            <signal name="changed" handler="on_search_changed_cb" swapped="true" object="IdeTweaksPanelList"/>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">6</property>
-            <property name="visible">false</property>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
+        </child>
+        <child type="top">
+          <object class="AdwBin" id="search_bin">
+            <property name="visible">False</property>
+            <style>
+              <class name="toolbar"/>
+            </style>
+            <child>
+              <object class="GtkSearchEntry">
+                <signal name="changed" handler="on_search_changed_cb" swapped="true" object="IdeTweaksPanelList"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
-            <property name="vexpand">true</property>
             <child>
               <object class="GtkListBox" id="list_box">
                 <signal name="row-activated" handler="ide_tweaks_panel_list_row_activated_cb" swapped="true" object="IdeTweaksPanelList"/>

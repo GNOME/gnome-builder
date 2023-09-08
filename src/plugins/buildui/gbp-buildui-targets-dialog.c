@@ -269,12 +269,4 @@ gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
 #ifdef DEVELOPMENT_BUILD
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
-
-  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->page));
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      if (GTK_IS_SCROLLED_WINDOW (child))
-        gtk_widget_add_css_class (child, "undershoot-top");
-    }
 }

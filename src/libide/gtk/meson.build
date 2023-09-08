@@ -99,6 +99,7 @@ libide_gtk_generated_headers += [libide_gtk_resources[1]]
 libide_gtk_deps = [
   libgio_dep,
   libgtk_dep,
+  libadwaita_dep,
 
   libide_core_dep,
   libide_io_dep,

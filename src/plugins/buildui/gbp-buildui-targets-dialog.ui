@@ -5,9 +5,8 @@
     <property name="default-width">700</property>
     <property name="default-height">550</property>
     <child type="content">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView">
+        <child type="top">
           <object class="AdwHeaderBar">
           </object>
         </child>

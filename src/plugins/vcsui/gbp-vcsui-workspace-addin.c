@@ -60,7 +60,7 @@ greeter_open_project_cb (GbpVcsuiWorkspaceAddin *self,
       (vcs_uri = ide_project_info_get_vcs_uri (project_info)))
     {
       gbp_vcsui_clone_page_set_uri (self->clone, vcs_uri);
-      ide_greeter_workspace_set_page_name (greeter, "clone");
+      ide_greeter_workspace_push_page_by_tag (greeter, "clone");
       IDE_RETURN (TRUE);
     }
 
@@ -87,9 +87,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
       self->clone = g_object_new (GBP_TYPE_VCSUI_CLONE_PAGE,
                                   NULL);
       ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
-                                      GTK_WIDGET (self->clone),
-                                      "clone",
-                                      _("Clone Repository"));
+                                      ADW_NAVIGATION_PAGE (self->clone));
       ide_greeter_workspace_add_button (IDE_GREETER_WORKSPACE (workspace),
                                         g_object_new (GTK_TYPE_BUTTON,
                                                       "label", _("_Clone Repository…"),
@@ -168,7 +166,7 @@ gbp_vcsui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   if (IDE_IS_GREETER_WORKSPACE (workspace))
     {
       ide_greeter_workspace_remove_page (IDE_GREETER_WORKSPACE (workspace),
-                                         GTK_WIDGET (self->clone));
+                                         ADW_NAVIGATION_PAGE (self->clone));
       self->clone = NULL;
     }
   else if (IDE_IS_PRIMARY_WORKSPACE (workspace))

@@ -20,13 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_CREATE_PROJECT_WIDGET (gbp_create_project_widget_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GBP, CREATE_PROJECT_WIDGET, GtkWidget)
+G_DECLARE_FINAL_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GBP, CREATE_PROJECT_WIDGET, AdwNavigationPage)
 
 void     gbp_create_project_widget_create_async  (GbpCreateProjectWidget  *self,
                                                   GCancellable            *cancellable,

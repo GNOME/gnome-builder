@@ -36,7 +36,7 @@
 
 struct _GbpVcsuiClonePage
 {
-  GtkWidget           parent_instance;
+  AdwNavigationPage   parent_instance;
 
   AdwEntryRow        *author_email_row;
   AdwEntryRow        *author_name_row;
@@ -54,7 +54,7 @@ struct _GbpVcsuiClonePage
   IdeVcsCloneRequest *request;
 };
 
-G_DEFINE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, ADW_TYPE_NAVIGATION_PAGE)
 
 static void
 location_row_changed_cb (GbpVcsuiClonePage *self,

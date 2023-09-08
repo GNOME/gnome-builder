@@ -1,43 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeTweaksPanel" parent="AdwBin">
+  <template class="IdeTweaksPanel" parent="AdwNavigationPage">
+    <binding name="title">
+      <lookup name="title" type="IdeTweaksPage">
+        <lookup name="page">IdeTweaksPanel</lookup>
+      </lookup>
+    </binding>
     <child>
-      <object class="GtkBox">
-        <property name="hexpand">true</property>
-        <property name="vexpand">true</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="AdwBin">
-            <property name="hexpand">true</property>
-            <child>
-              <object class="AdwHeaderBar" id="titlebar">
-                <property name="show-end-title-buttons">true</property>
-                <property name="show-start-title-buttons" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="sync-create"/>
-                <child type="start">
-                  <object class="GtkButton">
-                    <property name="visible" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="sync-create"/>
-                    <property name="icon-name">go-previous-symbolic</property>
-                    <property name="action-name">navigation.back</property>
-                  </object>
-                </child>
-                <property name="title-widget">
-                  <object class="AdwWindowTitle">
-                    <binding name="title">
-                      <lookup name="title" type="IdeTweaksPage">
-                        <lookup name="page">IdeTweaksPanel</lookup>
-                      </lookup>
-                    </binding>
-                  </object>
-                </property>
-              </object>
-            </child>
-          </object>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
         </child>
         <child>
-          <object class="AdwPreferencesPage" id="prefs_page">
-            <property name="hexpand">true</property>
-            <property name="vexpand">true</property>
-          </object>
+          <object class="AdwPreferencesPage" id="prefs_page"/>
         </child>
       </object>
     </child>

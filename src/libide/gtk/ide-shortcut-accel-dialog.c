@@ -30,7 +30,7 @@
 
 struct _IdeShortcutAccelDialog
 {
-  GtkDialog             parent_instance;
+  AdwWindow             parent_instance;
 
   GtkStack             *stack;
   GtkLabel             *display_label;
@@ -54,9 +54,15 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeShortcutAccelDialog, ide_shortcut_accel_dialog, GTK_TYPE_DIALOG)
+enum {
+  SHORTCUT_SET,
+  N_SIGNALS
+};
 
 static GParamSpec *properties[N_PROPS];
+static guint signals[N_SIGNALS];
+
+G_DEFINE_FINAL_TYPE (IdeShortcutAccelDialog, ide_shortcut_accel_dialog, ADW_TYPE_WINDOW)
 
 static gboolean
 ide_shortcut_accel_dialog_is_editing (IdeShortcutAccelDialog *self)
@@ -74,12 +80,12 @@ ide_shortcut_accel_dialog_apply_state (IdeShortcutAccelDialog *self)
   if (self->editing)
     {
       gtk_stack_set_visible_child_name (self->stack, "selection");
-      gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT, FALSE);
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "shortcut.set", FALSE);
     }
   else
     {
       gtk_stack_set_visible_child_name (self->stack, "display");
-      gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT, TRUE);
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "shortcut.set", TRUE);
     }
 }
 
@@ -139,7 +145,7 @@ ide_shortcut_accel_dialog_key_pressed (GtkWidget             *widget,
           real_mask == 0 &&
           keyval_lower == GDK_KEY_Escape)
         {
-          gtk_dialog_response (GTK_DIALOG (self), GTK_RESPONSE_CANCEL);
+          gtk_window_close (GTK_WINDOW (self));
           return GDK_EVENT_STOP;
         }
 
@@ -147,7 +153,7 @@ ide_shortcut_accel_dialog_key_pressed (GtkWidget             *widget,
       if (real_mask == 0 && keyval_lower == GDK_KEY_BackSpace)
         {
           ide_shortcut_accel_dialog_set_accelerator (self, NULL);
-          gtk_dialog_response (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT);
+          gtk_widget_activate_action (GTK_WIDGET (self), "shortcut.set", NULL);
           return GDK_EVENT_STOP;
         }
 
@@ -219,14 +225,22 @@ ide_shortcut_accel_dialog_key_released (GtkWidget             *widget,
 }
 
 static void
+shortcut_set_cb (IdeShortcutAccelDialog *self)
+{
+  g_signal_emit (self, signals [SHORTCUT_SET], 0,
+                 ide_shortcut_accel_dialog_get_accelerator (self));
+
+  gtk_window_close (GTK_WINDOW (self));
+}
+
+static void
 ide_shortcut_accel_dialog_constructed (GObject *object)
 {
   IdeShortcutAccelDialog *self = (IdeShortcutAccelDialog *)object;
 
   G_OBJECT_CLASS (ide_shortcut_accel_dialog_parent_class)->constructed (object);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT, FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "shortcut.set", FALSE);
 }
 
 static void
@@ -310,6 +324,16 @@ ide_shortcut_accel_dialog_class_init (IdeShortcutAccelDialogClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  signals[SHORTCUT_SET] =
+    g_signal_new ("shortcut-set",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gtk/ide-shortcut-accel-dialog.ui");
@@ -320,6 +344,10 @@ ide_shortcut_accel_dialog_class_init (IdeShortcutAccelDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeShortcutAccelDialog, display_shortcut);
   gtk_widget_class_bind_template_callback (widget_class, ide_shortcut_accel_dialog_key_pressed);
   gtk_widget_class_bind_template_callback (widget_class, ide_shortcut_accel_dialog_key_released);
+
+  gtk_widget_class_install_action (widget_class, "shortcut.set", NULL, (GtkWidgetActionActivateFunc) shortcut_set_cb);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 }
 
 static void

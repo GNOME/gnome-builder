@@ -16,6 +16,7 @@
             <property name="margin-bottom">6</property>
             <property name="selectable">true</property>
             <property name="wrap">true</property>
+            <property name="wrap-mode">word-char</property>
             <binding name="label">
               <lookup name="copyright" type="IdePlugin">
                 <lookup name="plugin">IdePluginView</lookup>
@@ -48,6 +49,7 @@
             <property name="hexpand">true</property>
             <property name="selectable">true</property>
             <property name="wrap">true</property>
+            <property name="wrap-mode">word-char</property>
             <binding name="label">
               <lookup name="authors" type="IdePlugin">
                 <lookup name="plugin">IdePluginView</lookup>
@@ -79,6 +81,7 @@
             <property name="hexpand">true</property>
             <property name="selectable">true</property>
             <property name="wrap">true</property>
+            <property name="wrap-mode">word-char</property>
             <binding name="label">
               <lookup name="version" type="IdePlugin">
                 <lookup name="plugin">IdePluginView</lookup>
@@ -107,6 +110,7 @@
         <child>
           <object class="GtkLinkButton">
             <property name="halign">start</property>
+            <property name="can-shrink">True</property>
             <binding name="label">
               <lookup name="website" type="IdePlugin">
                 <lookup name="plugin">IdePluginView</lookup>

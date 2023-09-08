@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpShortcutuiDialog" parent="GtkWindow">
+  <template class="GbpShortcutuiDialog" parent="AdwWindow">
     <style>
       <class name="shortcutui"/>
     </style>
-    <child type="titlebar">
-      <object class="AdwHeaderBar">
-      </object>
-    </child>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="vexpand">true</property>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
+        </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="vexpand">true</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">primary</property>
@@ -65,7 +61,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="bottom">
           <object class="GtkActionBar">
             <child type="center">
               <object class="GtkBox">

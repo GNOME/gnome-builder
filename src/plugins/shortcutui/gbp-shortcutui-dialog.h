@@ -30,6 +30,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_SHORTCUTUI_DIALOG (gbp_shortcutui_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GBP, SHORTCUTUI_DIALOG, GtkWindow)
+G_DECLARE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GBP, SHORTCUTUI_DIALOG, AdwWindow)
 
 G_END_DECLS

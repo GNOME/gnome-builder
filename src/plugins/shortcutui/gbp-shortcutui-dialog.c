@@ -36,7 +36,7 @@
 
 struct _GbpShortcutuiDialog
 {
-  GtkWindow            parent_instance;
+  AdwWindow            parent_instance;
 
   IdeContext          *context;
 
@@ -53,7 +53,7 @@ struct _GbpShortcutuiDialog
   guint                update_source;
 };
 
-G_DEFINE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, ADW_TYPE_WINDOW)
 
 enum {
   PROP_0,
@@ -118,12 +118,12 @@ gbp_shortcutui_dialog_queue_update (GbpShortcutuiDialog *self)
 }
 
 static void
-shortcut_dialog_response_cb (GbpShortcutuiDialog    *self,
-                             int                     response_id,
-                             IdeShortcutAccelDialog *dialog)
+shortcut_dialog_shortcut_set_cb (GbpShortcutuiDialog    *self,
+                                 const char             *accel,
+                                 IdeShortcutAccelDialog *dialog)
 {
   GbpShortcutuiShortcut *shortcut;
-  const char *accel;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -132,21 +132,13 @@ shortcut_dialog_response_cb (GbpShortcutuiDialog    *self,
   g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
 
   shortcut = g_object_get_data (G_OBJECT (dialog), "GBP_SHORTCUTUI_SHORTCUT");
-  accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
 
   g_assert (GBP_IS_SHORTCUTUI_SHORTCUT (shortcut));
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      g_autoptr(GError) error = NULL;
-
-      if (!gbp_shortcutui_shortcut_override (shortcut, accel, &error))
-        ide_object_warning (self->context,
-                            "Failed to override keyboard shortcut: %s",
-                            error->message);
-    }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  if (!gbp_shortcutui_shortcut_override (shortcut, accel, &error))
+    ide_object_warning (self->context,
+                        "Failed to override keyboard shortcut: %s",
+                        error->message);
 
   IDE_EXIT;
 }
@@ -177,11 +169,10 @@ gbp_shortcutui_dialog_row_activated_cb (GbpShortcutuiDialog *self,
                          "modal", TRUE,
                          "shortcut-title", name,
                          "title", _("Set Shortcut"),
-                         "use-header-bar", 1,
                          NULL);
   g_signal_connect_object (dialog,
-                           "response",
-                           G_CALLBACK (shortcut_dialog_response_cb),
+                           "shortcut-set",
+                           G_CALLBACK (shortcut_dialog_shortcut_set_cb),
                            self,
                            G_CONNECT_SWAPPED);
   g_object_set_data_full (G_OBJECT (dialog),

@@ -88,8 +88,9 @@ typedef struct
   /* Queued source to save window size/etc */
   guint queued_window_save;
 
-  /* Vertical box for children */
-  GtkBox *box;
+  /* Contains children */
+  AdwToolbarView *toolbar_view;
+  GtkBox *content_box;
 
   /* Weak pointer to the current page. */
   gpointer current_page_ptr;
@@ -116,6 +117,7 @@ enum {
   PROP_CONTEXT,
   PROP_ID,
   PROP_SEARCH_POPOVER,
+  PROP_TOOLBAR_STYLE,
   N_PROPS
 };
 
@@ -658,6 +660,10 @@ ide_workspace_get_property (GObject    *object,
       g_value_set_object (value, priv->search_popover);
       break;
 
+    case PROP_TOOLBAR_STYLE:
+      g_value_set_enum (value, ide_workspace_get_toolbar_style (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -675,6 +681,10 @@ ide_workspace_set_property (GObject      *object,
     {
     case PROP_ID:
       ide_workspace_set_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_TOOLBAR_STYLE:
+      ide_workspace_set_toolbar_style (self, g_value_get_enum (value));
       break;
 
     default:
@@ -741,6 +751,12 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                          IDE_TYPE_SEARCH_POPOVER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_TOOLBAR_STYLE] =
+    g_param_spec_enum ("toolbar-style", NULL, NULL,
+                       ADW_TYPE_TOOLBAR_STYLE,
+                       ADW_TOOLBAR_RAISED,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   ide_action_mixin_init (&klass->action_mixin, object_class);
@@ -767,16 +783,20 @@ ide_workspace_init (IdeWorkspace *self)
   gtk_widget_add_css_class (GTK_WIDGET (self), "workspace");
 
   /* Setup container for children widgetry */
-  priv->box = g_object_new (GTK_TYPE_BOX,
-                            "orientation", GTK_ORIENTATION_VERTICAL,
-                            NULL);
+  priv->toolbar_view = ADW_TOOLBAR_VIEW (adw_toolbar_view_new ());
+  adw_toolbar_view_set_top_bar_style (priv->toolbar_view, ADW_TOOLBAR_RAISED);
+  adw_toolbar_view_set_bottom_bar_style (priv->toolbar_view, ADW_TOOLBAR_RAISED);
+
+  priv->content_box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  adw_toolbar_view_set_content (priv->toolbar_view, GTK_WIDGET (priv->content_box));
+
   adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
-                                      GTK_WIDGET (priv->box));
+                                      GTK_WIDGET (priv->toolbar_view));
 
   if (IDE_WORKSPACE_GET_CLASS (self)->has_statusbar)
     {
       priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
-      gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+      adw_toolbar_view_add_bottom_bar (priv->toolbar_view, GTK_WIDGET (priv->statusbar));
     }
 
   /* Track focus change to propagate to addins */
@@ -1107,14 +1127,11 @@ ide_workspace_add_child (GtkBuildable *buildable,
     {
       if (g_strcmp0 (type, "titlebar") == 0)
         {
-          gtk_box_prepend (priv->box, GTK_WIDGET (object));
+          adw_toolbar_view_add_top_bar (priv->toolbar_view, GTK_WIDGET (object));
         }
       else
         {
-          gtk_box_append (priv->box, GTK_WIDGET (object));
-
-          if (priv->statusbar != NULL)
-            gtk_box_reorder_child_after (priv->box, GTK_WIDGET (priv->statusbar), GTK_WIDGET (object));
+          gtk_box_append (priv->content_box, GTK_WIDGET (object));
         }
     }
 }
@@ -1136,7 +1153,7 @@ ide_workspace_get_internal_child (GtkBuildable *buildable,
       if (priv->statusbar == NULL)
         {
           priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
-          gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+          adw_toolbar_view_add_bottom_bar (priv->toolbar_view, GTK_WIDGET (priv->statusbar));
         }
 
       return G_OBJECT (priv->statusbar);
@@ -1751,6 +1768,28 @@ ide_workspace_get_id (IdeWorkspace *self)
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
   return priv->id;
+}
+
+void
+ide_workspace_set_toolbar_style (IdeWorkspace    *self,
+                                 AdwToolbarStyle  style)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  adw_toolbar_view_set_top_bar_style (priv->toolbar_view, style);
+  adw_toolbar_view_set_bottom_bar_style (priv->toolbar_view, style);
+}
+
+AdwToolbarStyle
+ide_workspace_get_toolbar_style (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), ADW_TOOLBAR_FLAT);
+
+  return adw_toolbar_view_get_top_bar_style (priv->toolbar_view);
 }
 
 void
