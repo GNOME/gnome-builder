@@ -2,55 +2,43 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="IdeGreeterWorkspace" parent="IdeWorkspace">
-    <property name="toolbar-style">flat</property>
-    <child type="titlebar">
-      <object class="IdeHeaderBar" id="header_bar">
-        <property name="menu-id">ide-greeter-workspace-menu</property>
-        <child internal-child="headerbar">
-          <object class="AdwHeaderBar">
-          </object>
-        </child>
-        <child type="title">
-          <object class="AdwWindowTitle" id="title"/>
-        </child>
-        <child type="left">
-          <object class="GtkButton" id="back_button">
-            <property name="action-name">greeter.page</property>
-            <property name="action-target">'overview'</property>
-            <property name="has-tooltip">true</property>
-            <property name="tooltip-text" translatable="yes">Go back</property>
-            <property name="margin-end">6</property>
-            <property name="icon-name">go-previous-symbolic</property>
-          </object>
-        </child>
-        <child type="left">
-          <object class="GtkBox" id="left_box">
-            <property name="spacing">6</property>
-            <property name="hexpand">false</property>
-            <property name="homogeneous">true</property>
-          </object>
-        </child>
-        <child type="right">
-          <object class="GtkToggleButton" id="select_button">
-            <property name="action-name">win.selection-mode</property>
-            <property name="icon-name">selection-mode-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Toggle selection mode</property>
-          </object>
-        </child>
-      </object>
-    </child>>
     <child>
-      <object class="GtkStack" id="pages">
-        <property name="transition-type">crossfade</property>
-        <property name="hhomogeneous">false</property>
-        <property name="vhomogeneous">false</property>
-        <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
+      <object class="AdwNavigationView" id="navigation_view">
+        <signal name="notify::visible-page" handler="navigation_view_notify_visible_page_cb" object="IdeGreeterWorkspace" swapped="true"/>
         <child>
-          <object class="GtkStackPage">
-            <property name="name">overview</property>
+          <object class="AdwNavigationPage" id="page">
+            <property name="tag">overview</property>
             <property name="title" translatable="yes" context="title">Open a Project</property>
             <property name="child">
               <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="IdeHeaderBar" id="header_bar">
+                    <property name="menu-id">ide-greeter-workspace-menu</property>
+                    <child internal-child="headerbar">
+                      <object class="AdwHeaderBar">
+                      </object>
+                    </child>
+                    <child type="title">
+                      <object class="AdwWindowTitle">
+                        <property name="title" bind-source="page" bind-property="title" bind-flags="sync-create"/>
+                      </object>
+                    </child>
+                    <child type="left">
+                      <object class="GtkBox" id="left_box">
+                        <property name="spacing">6</property>
+                        <property name="hexpand">false</property>
+                        <property name="homogeneous">true</property>
+                      </object>
+                    </child>
+                    <child type="right">
+                      <object class="GtkToggleButton" id="select_button">
+                        <property name="action-name">win.selection-mode</property>
+                        <property name="icon-name">selection-mode-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Toggle selection mode</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scroller">
                     <property name="hscrollbar-policy">never</property>

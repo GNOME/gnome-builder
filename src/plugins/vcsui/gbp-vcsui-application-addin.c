@@ -60,7 +60,7 @@ gbp_vcsui_application_addin_handle_command_line (IdeApplicationAddin     *addin,
     {
       IdeGreeterWorkspace *workspace;
       IdeWorkbench *workbench;
-      GtkWidget *page;
+      AdwNavigationPage *page;
 
       workbench = ide_workbench_new ();
       ide_application_add_workbench (app, workbench);
@@ -68,8 +68,8 @@ gbp_vcsui_application_addin_handle_command_line (IdeApplicationAddin     *addin,
       workspace = ide_greeter_workspace_new (app);
       ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
 
-      ide_greeter_workspace_set_page_name (workspace, "clone");
-      page = ide_greeter_workspace_get_page_named (workspace, "clone");
+      ide_greeter_workspace_push_page_by_tag (workspace, "clone");
+      page = ide_greeter_workspace_find_page (workspace, "clone");
 
       if (GBP_IS_VCSUI_CLONE_PAGE (page))
         gbp_vcsui_clone_page_set_uri (GBP_VCSUI_CLONE_PAGE (page), clone_uri);
