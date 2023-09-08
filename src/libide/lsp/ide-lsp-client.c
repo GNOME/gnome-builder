@@ -1053,10 +1053,9 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                             priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
                             "%s", message);
         }
-      else if (g_str_equal (method, "$/logTrace") ||
-               g_str_equal (method, "window/logMessage"))
+      else if (g_str_equal (method, "$/logTrace"))
         {
-          const gchar *message = NULL;
+          const char *message = NULL;
 
           JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
 
@@ -1064,6 +1063,45 @@ ide_lsp_client_real_notification (IdeLspClient *self,
             g_log (priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
                    IDE_LOG_LEVEL_TRACE,
                    "%s", message);
+        }
+      else if (g_str_equal (method, "window/logMessage"))
+        {
+          const char *message = NULL;
+          GLogLevelFlags level = IDE_LOG_LEVEL_TRACE;
+          gint64 type;
+
+          if (JSONRPC_MESSAGE_PARSE (params, "type", JSONRPC_MESSAGE_GET_INT64 (&type)))
+            {
+              switch (type)
+                {
+                case 1:
+                  level = G_LOG_LEVEL_ERROR;
+                  break;
+
+                case 2:
+                  level = G_LOG_LEVEL_WARNING;
+                  break;
+
+                case 3:
+                  level = G_LOG_LEVEL_MESSAGE;
+                  break;
+
+                case 4:
+                  level = G_LOG_LEVEL_INFO;
+                  break;
+
+                default:
+                  break;
+                }
+            }
+
+          JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+
+          if (!ide_str_empty0 (message))
+            ide_object_log (self,
+                            level,
+                            priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
+                            "%s", message);
         }
     }
 
