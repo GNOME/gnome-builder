@@ -5,7 +5,6 @@
     <property name="toolbar-style">flat</property>
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
-        <property name="flat">true</property>
         <property name="menu-id">ide-greeter-workspace-menu</property>
         <child internal-child="headerbar">
           <object class="AdwHeaderBar">
@@ -39,7 +38,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </child>>
     <child>
       <object class="GtkStack" id="pages">
         <property name="transition-type">crossfade</property>
@@ -153,4 +152,5 @@
       </object>
     </child>
   </template>
-</interface>
+</interface
+>
