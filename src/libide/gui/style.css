@@ -52,18 +52,6 @@ notificationstack button {
   background: none;
 }
 
-scrolledwindow.undershoot-top > undershoot.top,
-preferencespage.undershoot-top > scrolledwindow > undershoot.top {
-  box-shadow: inset 0 1px alpha(@shade_color, .75);
-  background: linear-gradient(to bottom, alpha(@shade_color, .75), transparent 4px);
-}
-
-scrolledwindow.undershoot-bottom > undershoot.bottom,
-preferencespage.undershoot-bottom > scrolledwindow > undershoot.bottom {
-  box-shadow: inset 0 -1px alpha(@shade_color, .75);
-  background: linear-gradient(to top, alpha(@shade_color, .75), transparent 4px);
-}
-
 button.pill.small {
   font-size: .83333em;
   border-radius: 99px;
