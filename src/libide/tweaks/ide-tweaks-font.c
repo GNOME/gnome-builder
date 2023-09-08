@@ -108,6 +108,7 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
   button = g_object_new (GTK_TYPE_BUTTON,
                          "css-classes", IDE_STRV_INIT ("flat"),
                          "valign", GTK_ALIGN_CENTER,
+                         "can-shrink", TRUE,
                          NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", self->title,
