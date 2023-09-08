@@ -36,7 +36,7 @@
 
 struct _GbpShortcutuiDialog
 {
-  GtkWindow            parent_instance;
+  AdwWindow            parent_instance;
 
   IdeContext          *context;
 
@@ -53,7 +53,7 @@ struct _GbpShortcutuiDialog
   guint                update_source;
 };
 
-G_DEFINE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, GTK_TYPE_WINDOW)
+G_DEFINE_FINAL_TYPE (GbpShortcutuiDialog, gbp_shortcutui_dialog, ADW_TYPE_WINDOW)
 
 enum {
   PROP_0,
