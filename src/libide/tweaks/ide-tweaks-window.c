@@ -47,8 +47,6 @@ struct _IdeTweaksWindow
   GtkStack         *panel_list_stack;
   GtkBox           *panel_list_box;
   AdwWindowTitle   *sidebar_title;
-  GtkSearchBar     *sidebar_search_bar;
-  GtkSearchEntry   *sidebar_search_entry;
 
   guint             can_navigate_back : 1;
   guint             folded : 1;
@@ -181,8 +179,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
   else
     {
       GtkWidget *sublist;
-
-      gtk_search_bar_set_search_mode (self->sidebar_search_bar, FALSE);
 
       sublist = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (page));
       g_signal_connect_object (sublist,
@@ -506,8 +502,6 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_bin);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_title);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_visible_child_cb);
