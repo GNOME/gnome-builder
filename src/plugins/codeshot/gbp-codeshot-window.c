@@ -33,7 +33,6 @@ struct _GbpCodeshotWindow
   GtkTextMark    *end_mark;
 
   GtkSourceView  *view;
-  AdwWindowTitle *title;
 };
 
 enum {
@@ -89,7 +88,7 @@ gbp_codeshot_window_constructed (GObject *object)
 
   /* Update title */
   title = g_file_get_basename (ide_buffer_get_file (self->buffer));
-  adw_window_title_set_title (self->title, title);
+  gtk_window_set_title (GTK_WINDOW (self), title);
 
   /* Get the text from original buffer */
   buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view)));
@@ -236,7 +235,6 @@ gbp_codeshot_window_class_init (GbpCodeshotWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/codeshot/gbp-codeshot-window.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpCodeshotWindow, view);
-  gtk_widget_class_bind_template_child (widget_class, GbpCodeshotWindow, title);
 }
 
 static void
