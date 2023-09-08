@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="IdeShortcutAccelDialog" parent="GtkDialog">
+  <template class="IdeShortcutAccelDialog" parent="AdwWindow">
     <property name="resizable">false</property>
     <property name="modal">true</property>
     <property name="width-request">400</property>
@@ -13,27 +13,31 @@
         <signal name="key-released" handler="ide_shortcut_accel_dialog_key_released" swapped="true" object="IdeShortcutAccelDialog"/>
       </object>
     </child>
-    <child type="titlebar">
-      <object class="GtkHeaderBar">
-        <property name="show-title-buttons">false</property>
-        <child type="start">
-          <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="yes">_Cancel</property>
-            <property name="use-underline">true</property>
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+            <child type="start">
+              <object class="GtkButton" id="cancel_button">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">true</property>
+                <property name="action-name">window.close</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="accept_button">
+                <property name="label" translatable="yes">_Set</property>
+                <property name="use-underline">true</property>
+                <property name="action-name">shortcut.set</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
-        <child type="end">
-          <object class="GtkButton" id="accept_button">
-            <property name="label" translatable="yes">_Set</property>
-            <property name="use-underline">true</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child internal-child="content_area">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="vexpand">true</property>
         <child>
           <object class="GtkStack" id="stack">
             <property name="hhomogeneous">true</property>
@@ -104,10 +108,6 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="cancel">cancel_button</action-widget>
-      <action-widget response="accept">accept_button</action-widget>
-    </action-widgets>
   </template>
   <object class="GtkSizeGroup">
     <widgets>

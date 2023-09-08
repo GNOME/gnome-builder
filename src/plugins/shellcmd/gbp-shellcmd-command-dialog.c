@@ -311,29 +311,6 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
 }
 
 static void
-on_shortcut_dialog_response (GbpShellcmdCommandDialog *self,
-                             int                       response_id,
-                             IdeShortcutAccelDialog   *dialog)
-{
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
-  g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
-
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      const char *accel;
-
-      accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
-      set_accel (self, accel);
-    }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  IDE_EXIT;
-}
-
-static void
 on_shortcut_activated_cb (GbpShellcmdCommandDialog *self,
                           AdwActionRow             *shortcut_row)
 {
@@ -355,11 +332,10 @@ on_shortcut_activated_cb (GbpShellcmdCommandDialog *self,
                          "modal", TRUE,
                          "shortcut-title", name,
                          "title", _("Set Shortcut"),
-                         "use-header-bar", 1,
                          NULL);
   g_signal_connect_object (dialog,
-                           "response",
-                           G_CALLBACK (on_shortcut_dialog_response),
+                           "shortcut-set",
+                           G_CALLBACK (set_accel),
                            self,
                            G_CONNECT_SWAPPED);
   gtk_window_present (GTK_WINDOW (dialog));
