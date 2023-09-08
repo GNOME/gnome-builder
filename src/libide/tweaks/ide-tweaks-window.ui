@@ -16,42 +16,8 @@
         <property name="mode-transition-duration">250</property>
         <property name="transition-type">over</property>
         <child>
-          <object class="GtkBox" id="panel_list_box">
-            <property name="orientation">vertical</property>
-            <property name="hexpand">false</property>
-            <child>
-              <object class="AdwHeaderBar" id="sidebar_header">
-                <property name="show-start-title-buttons">true</property>
-                <property name="show-end-title-buttons" bind-source="leaflet" bind-property="folded" bind-flags="sync-create"/>
-                <property name="title-widget">
-                  <object class="AdwWindowTitle" id="sidebar_title"/>
-                </property>
-                <child>
-                  <object class="GtkButton" id="sidebar_previous_button">
-                    <property name="visible" bind-source="IdeTweaksWindow" bind-property="can-navigate-back" bind-flags="sync-create"/>
-                    <property name="action-name">navigation.back</property>
-                    <property name="icon-name">go-previous-symbolic</property>
-                    <accessibility>
-                      <property name="label" translatable="yes">All Preferences</property>
-                    </accessibility>
-                    <style>
-                      <class name="image-button"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStack" id="panel_list_stack">
-                <property name="hhomogeneous">true</property>
-                <property name="transition-type">slide-left-right</property>
-                <property name="vexpand">true</property>
-                <property name="vhomogeneous">false</property>
-                <property name="width-request">200</property>
-                <signal name="notify::visible-child" handler="panel_list_stack_notify_visible_child_cb" swapped="true" object="IdeTweaksWindow"/>
-                <signal name="notify::transition-running" handler="panel_list_stack_notify_transition_running_cb" swapped="true" object="IdeTweaksWindow"/>
-              </object>
-            </child>
+          <object class="AdwNavigationView" id="sidebar_nav_view">
+            <property name="width-request">200</property>
           </object>
         </child>
         <child>
@@ -76,11 +42,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="header_sizegroup">
-    <property name="mode">vertical</property>
-    <widgets>
-      <!--widget name="sidebar_search_button"/-->
-      <widget name="sidebar_previous_button"/>
-    </widgets>
-  </object>
 </interface>

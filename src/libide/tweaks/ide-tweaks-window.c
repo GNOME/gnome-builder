@@ -36,20 +36,18 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkStackPage, g_object_unref)
 
 struct _IdeTweaksWindow
 {
-  AdwWindow         parent_instance;
+  AdwWindow          parent_instance;
 
-  IdeTweaks        *tweaks;
-  PeasExtensionSet *addins;
-  IdeActionMuxer   *muxer;
+  IdeTweaks         *tweaks;
+  PeasExtensionSet  *addins;
+  IdeActionMuxer    *muxer;
 
-  AdwLeaflet       *leaflet;
-  AdwBin           *panel_bin;
-  GtkStack         *panel_list_stack;
-  GtkBox           *panel_list_box;
-  AdwWindowTitle   *sidebar_title;
+  AdwLeaflet        *leaflet;
+  AdwBin            *panel_bin;
+  AdwNavigationView *sidebar_nav_view;
 
-  guint             can_navigate_back : 1;
-  guint             folded : 1;
+  guint              can_navigate_back : 1;
+  guint              folded : 1;
 };
 
 enum {
@@ -69,20 +67,7 @@ ide_tweaks_window_get_current_list (IdeTweaksWindow *self)
 {
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
 
-  return IDE_TWEAKS_PANEL_LIST (gtk_stack_get_visible_child (self->panel_list_stack));
-}
-
-static IdeTweaksItem *
-ide_tweaks_window_get_current_list_item (IdeTweaksWindow *self)
-{
-  IdeTweaksPanelList *list;
-
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-
-  if ((list = ide_tweaks_window_get_current_list (self)))
-    return ide_tweaks_panel_list_get_item (list);
-
-  return NULL;
+  return IDE_TWEAKS_PANEL_LIST (adw_navigation_view_get_visible_page (self->sidebar_nav_view));
 }
 
 static void
@@ -91,9 +76,7 @@ ide_tweaks_window_update_title (IdeTweaksWindow *self)
   g_autofree char *window_title = NULL;
   g_autofree char *project_title = NULL;
   IdeTweaksPanelList *list;
-  IdeTweaksItem *item;
   IdeContext *context;
-  const char *title;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
@@ -103,15 +86,6 @@ ide_tweaks_window_update_title (IdeTweaksWindow *self)
 
   if ((context = ide_tweaks_get_context (self->tweaks)))
     project_title = ide_context_dup_title (context);
-
-  if ((item = ide_tweaks_panel_list_get_item (list)) && IDE_IS_TWEAKS_PAGE (item))
-    title = ide_tweaks_page_get_title (IDE_TWEAKS_PAGE (item));
-  else if (project_title != NULL)
-    title = project_title;
-  else
-    title = _("Preferences");
-
-  adw_window_title_set_title (self->sidebar_title, title);
 
   if (project_title != NULL)
     window_title = g_strdup_printf (_("Builder — %s — Preferences"), project_title);
@@ -124,24 +98,15 @@ ide_tweaks_window_update_title (IdeTweaksWindow *self)
 static void
 ide_tweaks_window_update_actions (IdeTweaksWindow *self)
 {
-  IdeTweaksPanelList *list;
   GtkWidget *visible_child;
   gboolean can_navigate_back = FALSE;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
 
   visible_child = adw_leaflet_get_visible_child (self->leaflet);
-  list = ide_tweaks_window_get_current_list (self);
 
   if (visible_child == GTK_WIDGET (self->panel_bin) && self->folded)
-    {
-      can_navigate_back = TRUE;
-    }
-  else if (list != NULL)
-    {
-      IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
-      can_navigate_back = !IDE_IS_TWEAKS (item);
-    }
+    can_navigate_back = TRUE;
 
   if (can_navigate_back != self->can_navigate_back)
     {
@@ -156,7 +121,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                                      IdeTweaksPage      *page,
                                      IdeTweaksPanelList *list)
 {
-  const char *name;
   GtkWidget *panel;
   gboolean has_subpages;
 
@@ -164,7 +128,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
   g_assert (IDE_IS_TWEAKS_PAGE (page));
   g_assert (IDE_IS_TWEAKS_PANEL_LIST (list));
 
-  name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
   has_subpages = ide_tweaks_page_get_has_subpage (page);
 
   /* If there are subpages, we will jump right to the subpage instead of this item as a page. */
@@ -181,15 +144,13 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
       GtkWidget *sublist;
 
       sublist = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (page));
+      g_object_bind_property (page, "title", sublist, "title", G_BINDING_SYNC_CREATE);
       g_signal_connect_object (sublist,
                                "page-activated",
                                G_CALLBACK (ide_tweaks_window_page_activated_cb),
                                self,
                                G_CONNECT_SWAPPED);
-      gtk_stack_add_named (self->panel_list_stack,
-                           sublist,
-                           ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page)));
-      gtk_stack_set_visible_child (self->panel_list_stack, sublist);
+      adw_navigation_view_push (self->sidebar_nav_view, ADW_NAVIGATION_PAGE (sublist));
       ide_tweaks_panel_list_set_search_mode (IDE_TWEAKS_PANEL_LIST (sublist),
                                              ide_tweaks_page_get_show_search (page));
 
@@ -206,16 +167,12 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
 static void
 ide_tweaks_window_clear (IdeTweaksWindow *self)
 {
-  GtkWidget *child;
-
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
 
   g_clear_object (&self->addins);
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
-    gtk_stack_remove (self->panel_list_stack, child);
-
+  adw_navigation_view_replace (self->sidebar_nav_view, NULL, 0);
   adw_bin_set_child (self->panel_bin, NULL);
 
   ide_tweaks_window_update_actions (self);
@@ -261,19 +218,27 @@ static void
 ide_tweaks_window_add_initial_list (IdeTweaksWindow *self)
 {
   GtkWidget *list;
+  IdeContext *context;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
 
   /* Now create our list for toplevel pages */
   list = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (self->tweaks));
+
+  if ((context = ide_tweaks_get_context (self->tweaks)))
+    {
+      g_autofree char *project_title = ide_context_dup_title (context);
+      adw_navigation_page_set_title (ADW_NAVIGATION_PAGE (list), project_title);
+    }
+  else
+    adw_navigation_page_set_title (ADW_NAVIGATION_PAGE (list), _("Preferences"));
+
   g_signal_connect_object (list,
                            "page-activated",
                            G_CALLBACK (ide_tweaks_window_page_activated_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  gtk_stack_add_named (self->panel_list_stack,
-                       list,
-                       ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
+  adw_navigation_view_push (self->sidebar_nav_view, ADW_NAVIGATION_PAGE (list));
 
   /* Setup initial selection state */
   if (self->folded)
@@ -310,52 +275,6 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 }
 
 static void
-panel_list_stack_notify_transition_running_cb (IdeTweaksWindow *self,
-                                               GParamSpec      *pspec,
-                                               GtkStack        *stack)
-{
-  IdeTweaksItem *current_list_item;
-  GListModel *model;
-  guint n_items;
-
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-  g_assert (GTK_IS_STACK (stack));
-
-  if (gtk_stack_get_transition_running (stack))
-    return;
-
-  if (!(current_list_item = ide_tweaks_window_get_current_list_item (self)))
-    return;
-
-  model = G_LIST_MODEL (gtk_stack_get_pages (stack));
-  n_items = g_list_model_get_n_items (model);
-
-  for (guint i = n_items; i > 0; i--)
-    {
-      g_autoptr(GtkStackPage) page = g_list_model_get_item (G_LIST_MODEL (model), i - 1);
-      IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (gtk_stack_page_get_child (page));
-      IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
-
-      if (item != NULL &&
-          item != current_list_item &&
-          !ide_tweaks_item_is_ancestor (current_list_item, item))
-        gtk_stack_remove (stack, GTK_WIDGET (list));
-    }
-}
-
-static void
-panel_list_stack_notify_visible_child_cb (IdeTweaksWindow *self,
-                                          GParamSpec      *pspec,
-                                          GtkStack        *stack)
-{
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-  g_assert (GTK_IS_STACK (stack));
-
-  ide_tweaks_window_update_title (self);
-  ide_tweaks_window_update_actions (self);
-}
-
-static void
 ide_tweaks_window_navigate_back_action (GtkWidget  *widget,
                                         const char *action_name,
                                         GVariant   *param)
@@ -375,6 +294,7 @@ ide_tweaks_window_set_folded (IdeTweaksWindow *self,
     {
       GtkSelectionMode selection_mode;
       GtkWidget *child;
+      AdwNavigationPage *page;
 
       self->folded = folded;
 
@@ -384,10 +304,10 @@ ide_tweaks_window_set_folded (IdeTweaksWindow *self,
       if (child != NULL)
         ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (child), folded);
 
-      for (child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack));
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-        ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (child), selection_mode);
+      for (page = adw_navigation_view_get_visible_page (self->sidebar_nav_view);
+           page != NULL;
+           page = adw_navigation_view_get_previous_page (self->sidebar_nav_view, page))
+        ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (page), selection_mode);
 
       ide_tweaks_window_update_actions (self);
 
@@ -499,12 +419,8 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, leaflet);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_nav_view);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_bin);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_title);
-  gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
-  gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_visible_child_cb);
 
   gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
 
@@ -624,32 +540,6 @@ ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
   ide_tweaks_panel_list_select_item (list, item);
 }
 
-static IdeTweaksPanelList *
-ide_tweaks_window_find_list_for_item (IdeTweaksWindow *self,
-                                      IdeTweaksItem   *item)
-{
-  GListModel *model;
-  guint n_items;
-
-  g_assert (IDE_IS_TWEAKS_WINDOW (self));
-  g_assert (IDE_IS_TWEAKS_ITEM (item));
-
-  model = G_LIST_MODEL (gtk_stack_get_pages (GTK_STACK (self->panel_list_stack)));
-  n_items = g_list_model_get_n_items (model);
-
-  for (guint i = 0; i < n_items; i++)
-    {
-      g_autoptr(GtkStackPage) page = g_list_model_get_item (model, i);
-      IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (gtk_stack_page_get_child (page));
-      IdeTweaksItem *list_item = ide_tweaks_panel_list_get_item (list);
-
-      if (item == list_item)
-        return list;
-    }
-
-  return NULL;
-}
-
 void
 ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
 {
@@ -662,22 +552,9 @@ ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
   list = ide_tweaks_window_get_current_list (self);
 
   if (visible_child == GTK_WIDGET (self->panel_bin) && self->folded)
-    {
-      adw_leaflet_navigate (self->leaflet, ADW_NAVIGATION_DIRECTION_BACK);
-    }
+    adw_leaflet_navigate (self->leaflet, ADW_NAVIGATION_DIRECTION_BACK);
   else if (list != NULL)
-    {
-      IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
-
-      while ((item = ide_tweaks_item_get_parent (item)))
-        {
-          if ((list = ide_tweaks_window_find_list_for_item (self, item)))
-            {
-              gtk_stack_set_visible_child (self->panel_list_stack, GTK_WIDGET (list));
-              break;
-            }
-        }
-    }
+    adw_navigation_view_pop (self->sidebar_nav_view);
 
   ide_tweaks_window_update_actions (self);
 }
@@ -697,15 +574,10 @@ ide_tweaks_window_navigate_initial (IdeTweaksWindow *self)
 
   if (self->tweaks != NULL)
     {
-      GtkWidget *child;
-
       while (ide_tweaks_window_get_can_navigate_back (self))
         ide_tweaks_window_navigate_back (self);
 
-      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
-        gtk_stack_remove (self->panel_list_stack, child);
-
-      ide_tweaks_window_add_initial_list (self);
+      while (adw_navigation_view_pop (self->sidebar_nav_view)) {}
 
       ide_tweaks_window_update_title (self);
       ide_tweaks_window_update_actions (self);

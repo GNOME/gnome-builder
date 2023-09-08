@@ -40,13 +40,13 @@ typedef struct
 
 struct _IdeTweaksPanelList
 {
-  AdwBin              parent_instance;
+  AdwNavigationPage   parent_instance;
 
   IdeTweaksItem      *item;
   IdeTweaksItem      *selected;
 
   GtkListBox         *list_box;
-  GtkSearchEntry     *search_entry;
+  AdwBin             *search_bin;
 
   char               *last_search;
   GListModel         *model;
@@ -70,7 +70,7 @@ enum {
 
 static void ide_tweaks_panel_list_reset_search (IdeTweaksPanelList *self);
 
-G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_NAVIGATION_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -444,7 +444,7 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
   gtk_widget_class_set_css_name (widget_class, "IdeTweaksPanelList");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, search_bin);
   gtk_widget_class_bind_template_callback (widget_class, ide_tweaks_panel_list_row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed_cb);
 
@@ -549,7 +549,7 @@ ide_tweaks_panel_list_get_search_mode (IdeTweaksPanelList *self)
 {
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self), FALSE);
 
-  return gtk_widget_get_visible (GTK_WIDGET (self->search_entry));
+  return gtk_widget_get_visible (GTK_WIDGET (self->search_bin));
 }
 
 void
@@ -562,7 +562,7 @@ ide_tweaks_panel_list_set_search_mode (IdeTweaksPanelList *self,
 
   if (ide_tweaks_panel_list_get_search_mode (self) != search_mode)
     {
-      gtk_widget_set_visible (GTK_WIDGET (self->search_entry), search_mode);
+      gtk_widget_set_visible (GTK_WIDGET (self->search_bin), search_mode);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_MODE]);
     }
 }
