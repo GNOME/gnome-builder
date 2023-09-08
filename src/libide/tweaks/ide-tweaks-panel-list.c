@@ -240,7 +240,12 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       NULL);
   if (separator != NULL)
-    gtk_box_append (box, GTK_WIDGET (separator));
+    {
+      /* We can't automatically style separators when they are in a box, so add margins manually */
+      gtk_widget_set_margin_start (GTK_WIDGET (separator), 6);
+      gtk_widget_set_margin_end (GTK_WIDGET (separator), 6);
+      gtk_box_append (box, GTK_WIDGET (separator));
+    }
   gtk_box_append (box, GTK_WIDGET (label));
 
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), GTK_WIDGET (box));
