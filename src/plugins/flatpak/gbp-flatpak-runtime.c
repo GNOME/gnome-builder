@@ -92,7 +92,15 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                program,
                                NULL);
 
-      if (g_file_test (path, G_FILE_TEST_IS_EXECUTABLE))
+      /* Check that the file exists instead of things like IS_EXECUTABLE.  The
+       * reason we MUST check for either EXISTS or _IS_SYMLINK separately is
+       * that EXISTS will check that the destination file exists too. That may
+       * not be possible until the mount namespaces are correctly setup.
+       *
+       * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2050#note_1841120
+       */
+      if (g_file_test (path, G_FILE_TEST_IS_SYMLINK) ||
+          g_file_test (path, G_FILE_TEST_EXISTS))
         {
           ret = TRUE;
           break;
