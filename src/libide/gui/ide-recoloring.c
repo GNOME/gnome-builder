@@ -29,6 +29,7 @@
 #define SHARED_CSS \
   "@define-color card_fg_color @window_fg_color;\n" \
   "@define-color headerbar_border_color @window_fg_color;\n" \
+  "@define-color sidebar_backdrop_color mix(@sidebar_bg_color, @window_bg_color, .5);\n" \
   "@define-color popover_fg_color @window_fg_color;\n" \
   "@define-color dialog_fg_color @window_fg_color;\n" \
   "@define-color dark_fill_bg_color @headerbar_bg_color;\n" \
@@ -254,6 +255,20 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
     define_color_mixed (str, "headerbar_fg_color", &text_bg, alt, .05);
   else
     define_color_mixed (str, "headerbar_fg_color", &text_bg, alt, .025);
+
+  if (has_bg && has_fg)
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &text_fg, .085);
+   else if (is_dark)
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .07);
+   else
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .1);
+
+  if (has_bg && has_fg)
+    define_color (str, "sidebar_fg_color", &text_fg);
+  else if (is_dark)
+    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .05);
+  else
+    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .025);
 
   define_color_mixed (str, "popover_bg_color", &text_bg, &white, is_dark ? .07 : .25);
 
