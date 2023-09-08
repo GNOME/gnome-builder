@@ -2,6 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="IdeGreeterWorkspace" parent="IdeWorkspace">
+    <property name="toolbar-style">flat</property>
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
         <property name="flat">true</property>
@@ -50,14 +51,9 @@
             <property name="name">overview</property>
             <property name="title" translatable="yes" context="title">Open a Project</property>
             <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
+              <object class="AdwToolbarView">
                 <child>
                   <object class="GtkScrolledWindow" id="scroller">
-                    <style>
-                      <class name="undershoot-top"/>
-                    </style>
-                    <property name="vexpand">true</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
                       <object class="GtkViewport">
@@ -104,7 +100,7 @@
                     </child>
                   </object>
                 </child>
-                <child>
+                <child type="bottom">
                   <object class="GtkActionBar" id="projects_action_bar">
                     <child type="center">
                       <object class="IdeGreeterButtonsSection" id="buttons_section">
@@ -113,7 +109,7 @@
                     </child>
                   </object>
                 </child>
-                <child>
+                <child type="bottom">
                   <object class="GtkActionBar" id="action_bar">
                     <property name="visible">false</property>
                     <child type="center">

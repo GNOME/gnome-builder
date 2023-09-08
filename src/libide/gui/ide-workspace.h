@@ -160,5 +160,10 @@ IDE_AVAILABLE_IN_ALL
 void            ide_workspace_inhibit_logout                (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
 void            ide_workspace_uninhibit_logout              (IdeWorkspace          *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_set_toolbar_style            (IdeWorkspace           *self,
+                                                            AdwToolbarStyle         style);
+IDE_AVAILABLE_IN_ALL
+AdwToolbarStyle ide_workspace_get_toolbar_style             (IdeWorkspace          *self);
 
 G_END_DECLS
