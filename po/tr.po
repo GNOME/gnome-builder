@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-22 11:30+0000\n"
-"PO-Revision-Date: 2023-08-22 18:44+0300\n"
+"POT-Creation-Date: 2023-09-07 01:24+0000\n"
+"PO-Revision-Date: 2023-09-07 23:38+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -712,7 +712,7 @@ msgstr "Yeni Düzenleyici Çalışma Alanı"
 msgid "D-Bus Inspector"
 msgstr "D-Bus İnceleyici"
 
-#: src/libide/code/ide-buffer.c:3810
+#: src/libide/code/ide-buffer.c:3822
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -2291,7 +2291,7 @@ msgstr "Hatalar"
 msgid "Warnings"
 msgstr "Uyarılar"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:348
+#: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
@@ -4261,31 +4261,36 @@ msgstr "Builder, projenizi inşa etmek için uygun SDK uzantılarını buluyor"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Flatpak çalışma alanı oluşturuluyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#, c-format
+msgid "Removing stale flatpak staging directory: %s"
+msgstr "Eski flatpak evreleme dizini kaldırılıyor: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Preparing build directory"
 msgstr "İnşa dizini hazırlanıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
 msgid "Downloading dependencies"
 msgstr "Bağımlılıklar indiriliyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
 msgid "Building dependencies"
 msgstr "Bağımlılıklar inşa ediliyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
 msgid "Finalizing flatpak build"
 msgstr "Flatpak inşası sonuçlandırılıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Exporting staging directory"
 msgstr "Evreleme dizini dışa aktarılıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
 msgid "Creating flatpak bundle"
 msgstr "Flatpak paketi oluşturuluyor"
 
@@ -5605,12 +5610,12 @@ msgstr "Adsız Simge"
 msgid "Filter Symbols…"
 msgstr "Simgeleri Süz…"
 
-#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
+#: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Dosyadaki Simgeler"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
-#: src/plugins/symbol-tree/gbp-symbol-search-result.c:262
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
 msgstr "Sayfada"
 
@@ -5633,11 +5638,11 @@ msgstr "Geçerli sayfadaki simgeye git"
 msgid "System Capture from %s.syscap"
 msgstr "Sistem yakalama %s.syscap"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:321
+#: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
 msgstr "Uygulama Profilleniyor…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:322
+#: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
 msgstr "Uygulama çıktıktan sonra simge çözümü başlayacak"
 
@@ -6239,7 +6244,7 @@ msgstr "Konuma Odaklan"
 msgid "Focus the current page's location"
 msgstr "Geçerli sayfanın konumuna odaklan"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:133
+#: src/plugins/xml-pack/ide-xml-formatter.c:143
 msgid "Failed to parse XML document"
 msgstr "XML belgesini ayrıştırılamadı"
 
