@@ -72,16 +72,20 @@ gbp_codeui_hover_provider_populate (GtkSourceHoverProvider  *provider,
     {
       GtkBox *box;
       GtkLabel *label;
+      g_autofree gchar *markup = NULL;
 
       IDE_PTR_ARRAY_SET_FREE_FUNC (line_diags, g_object_unref);
 
       box = g_object_new (GTK_TYPE_BOX,
                           "orientation", GTK_ORIENTATION_VERTICAL,
                           NULL);
+
+      markup = g_strdup_printf ("<b>%s</b>:", _("Diagnostics"));
+
       label = g_object_new (GTK_TYPE_LABEL,
-                            "label", _("Diagnostics"),
+                            "label", markup,
+                            "use-markup", TRUE,
                             "xalign", .0f,
-                            "margin-bottom", 3,
                             NULL);
       gtk_box_append (box, GTK_WIDGET (label));
 
@@ -97,6 +101,7 @@ gbp_codeui_hover_provider_populate (GtkSourceHoverProvider  *provider,
           gtk_box_append (box, child);
         }
 
+      gtk_widget_add_css_class (GTK_WIDGET (box), "hover-display-row");
       gtk_source_hover_display_append (display, GTK_WIDGET (box));
 
       return TRUE;

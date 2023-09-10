@@ -11,9 +11,16 @@ textview.GtkSourceMap:dir(rtl) {
   border-right: 1px solid @borders;
 }
 
-GtkSourceHoverDisplay {
-  padding: 6px;
+.hover-display-row:not(:last-child) {
+  border-bottom: 1px solid @borders;
 }
+
+.hover-display-row {
+  padding: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 GtkSourceAssistant.hover-assistant {
   background: @popover_bg_color;
   color: @popover_fg_color;
