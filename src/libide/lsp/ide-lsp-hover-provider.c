@@ -299,6 +299,7 @@ ide_lsp_hover_provider_hover_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GtkSourceHoverDisplay *display;
+  GtkWidget *marked_view;
   IdeLspHoverProvider *self;
 
   IDE_ENTRY;
@@ -338,7 +339,9 @@ ide_lsp_hover_provider_hover_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  gtk_source_hover_display_append (display, ide_marked_view_new (marked));
+  marked_view = ide_marked_view_new (marked);
+  gtk_widget_add_css_class (marked_view, "hover-display-row");
+  gtk_source_hover_display_append (display, marked_view);
 
   ide_task_return_boolean (task, TRUE);
 
