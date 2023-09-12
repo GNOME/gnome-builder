@@ -147,8 +147,11 @@ handle_reply_cb (JsonrpcClient *client,
 
   if (!jsonrpc_client_reply_finish (client, result, &error))
     {
+      /* We want to bail if a reply fails and just cause the process
+       * to be respawned by gnome-builder UI process.
+       */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("Reply failed: %s", error->message);
+        g_error ("Reply failed: %s", error->message);
     }
 }
 
