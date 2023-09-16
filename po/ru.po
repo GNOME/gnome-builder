@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-08-28 14:49+0000\n"
-"PO-Revision-Date: 2023-08-28 18:06+0300\n"
-"Last-Translator: Дронова Юлия <juliette.tux@gmail.com>\n"
+"POT-Creation-Date: 2023-09-07 01:24+0000\n"
+"PO-Revision-Date: 2023-09-07 13:19+0300\n"
+"Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
-"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -48,17 +48,17 @@ msgid ""
 msgstr ""
 "Builder — это активно развиваемая интегрированная среда разработки для "
 "GNOME. Приложение сочетает в себе встроенную поддержку основных технологий "
-"GNOME, таких, как GTK+, Glib и GNOME API, и с возможностями, которые оценит"
-" любой "
-"разработчик, например, подсветка синтаксиса и фрагменты исходного текста."
+"GNOME, таких, как GTK+, Glib и GNOME API, и с возможностями, которые оценит "
+"любой разработчик, например, подсветка синтаксиса и фрагменты исходного "
+"текста."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"Выпуски Builder предсказуемо и надёжно выходят с каждым новым выпуском "
-"GNOME каждые 6 месяцев"
+"Выпуски Builder предсказуемо и надёжно выходят с каждым новым выпуском GNOME "
+"каждые 6 месяцев"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid "Features:"
@@ -90,8 +90,8 @@ msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 msgstr ""
-"Интеграция с Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
-"PHPize и Waf"
+"Интеграция с Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize и "
+"Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -176,9 +176,8 @@ msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
-"Число рабочих процессов, используемых в сборках. «-1» — разумное значение по"
-" умолчанию. "
-"«0» — число ЦП."
+"Число рабочих процессов, используемых в сборках. «-1» — разумное значение по "
+"умолчанию. «0» — число ЦП."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -187,8 +186,8 @@ msgstr "Очистить журналы сборки"
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr ""
-"Если параметр включён, при повторной сборке панель журнала сборки будет"
-" очищаться"
+"Если параметр включён, при повторной сборке панель журнала сборки будет "
+"очищаться"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Show Log When Building"
@@ -207,9 +206,8 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"Включить автоматические передачи файлов во время сборки при ограниченном"
-" трафике, "
-"например, закачки SDK и зависимостей"
+"Включить автоматические передачи файлов во время сборки при ограниченном "
+"трафике, например, закачки SDK и зависимостей"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -228,9 +226,8 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"Если параметр включён, то для поддерживаемых языков будет предоставляться"
-" дополнительная подсветка "
-"на основе информации, полученной из исходного кода"
+"Если параметр включён, то для поддерживаемых языков будет предоставляться "
+"дополнительная подсветка на основе информации, полученной из исходного кода"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -257,8 +254,8 @@ msgstr "Точка останова отладчика на Criticals"
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
-"Отладчик должен автоматически устанавливать точку останова на функциях"
-" g_critical()"
+"Отладчик должен автоматически устанавливать точку останова на функциях "
+"g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at Warnings and Criticals"
@@ -269,8 +266,8 @@ msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
 msgstr ""
-"Отладчик должен автоматически устанавливать точку останова на функциях"
-" g_warning() и g_critical"
+"Отладчик должен автоматически устанавливать точку останова на функциях "
+"g_warning() и g_critical"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -289,8 +286,8 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
-"Если параметр включён, то рядом с исходным кодом редактор будет показывать"
-" дополнения и изменения в строках"
+"Если параметр включён, то рядом с исходным кодом редактор будет показывать "
+"дополнения и изменения в строках"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
@@ -300,8 +297,8 @@ msgstr "Выводить диагностику рядом с номером с�
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
-"Если параметр включён, то слева от номера строки редактор будет показывать"
-" диагностику"
+"Если параметр включён, то слева от номера строки редактор будет показывать "
+"диагностику"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
@@ -310,8 +307,8 @@ msgstr "Подсветка текущей строки"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr ""
-"Если параметр включён, редактор будет подсвечивать ту строку, на которой"
-" располагается курсор"
+"Если параметр включён, редактор будет подсвечивать ту строку, на которой "
+"располагается курсор"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -394,8 +391,8 @@ msgstr "Перенос текста"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
-"Как именно должны переноситься длинные строки для лучшего визуального"
-" восприятия"
+"Как именно должны переноситься длинные строки для лучшего визуального "
+"восприятия"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
@@ -449,8 +446,8 @@ msgstr "Мин. число символов для подбора соответ
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
-"Укажите минимальное число набранных символов для запуска процесса "
-"подбора соответствий"
+"Укажите минимальное число набранных символов для запуска процесса подбора "
+"соответствий"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
@@ -461,8 +458,8 @@ msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
-"Разрешить разворачивание фрагментов кода по нажатию клавиши Tab "
-"после события активации этого фрагмента"
+"Разрешить разворачивание фрагментов кода по нажатию клавиши Tab после "
+"события активации этого фрагмента"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
@@ -513,8 +510,8 @@ msgid ""
 "Use the light or dark variant of the GTK theme and/or GtkSourceView style "
 "scheme."
 msgstr ""
-"Использовать тёмный или светлый вариант темы GTK и/или схему стиля"
-" GtkSourceView"
+"Использовать тёмный или светлый вариант темы GTK и/или схему стиля "
+"GtkSourceView"
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
@@ -567,8 +564,8 @@ msgstr "Наследовать stderr языкового сервера"
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr ""
-"Если параметр включён, stderr языковых серверов будет перенаправляться в"
-" консоль"
+"Если параметр включён, stderr языковых серверов будет перенаправляться в "
+"консоль"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -577,8 +574,8 @@ msgstr "Предварительный просмотр результатов �
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
 msgstr ""
-"Должны ли предварительные просмотры результатов поиска отображаться"
-" автоматически"
+"Должны ли предварительные просмотры результатов поиска отображаться "
+"автоматически"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -597,8 +594,8 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
-"Конфигурация, которая была выбрана, и которая будет восстановлена в следующий"
-" раз при загрузке проекта."
+"Конфигурация, которая была выбрана, и которая будет восстановлена в "
+"следующий раз при загрузке проекта."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
@@ -609,8 +606,8 @@ msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
-"Перед запуском проекта запускать этап установки. Применяйте, только "
-"если действительно понимаете, что делаете."
+"Перед запуском проекта запускать этап установки. Применяйте, только если "
+"действительно понимаете, что делаете."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -630,10 +627,9 @@ msgid ""
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
 msgstr ""
-"Позволяет посылать сигналы, отличные от sigkill, для остановки работы"
-" целевого "
-"приложения. Может пригодиться при необходимости безопасно выключить процесс"
-" на сервере."
+"Позволяет посылать сигналы, отличные от sigkill, для остановки работы "
+"целевого приложения. Может пригодиться при необходимости безопасно выключить "
+"процесс на сервере."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -652,8 +648,8 @@ msgstr "Подробное журналирование"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
-"Необходимо ли запускать целевое приложение с параметром"
-" «G_MESSAGES_DEBUG=all» "
+"Необходимо ли запускать целевое приложение с параметром "
+"«G_MESSAGES_DEBUG=all» "
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -673,8 +669,8 @@ msgstr "Показывать игнорируемые файлы"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Если параметр включён, в дереве проекта будут показываться файлы,"
-" игнорируемые системами контроля версий"
+"Если параметр включён, в дереве проекта будут показываться файлы, "
+"игнорируемые системами контроля версий"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/tweaks.ui:37
@@ -685,9 +681,8 @@ msgstr "При сортировке сначала показывать ката
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
-"Если параметр включён, то в дереве проекта будут сначала показываться"
-" каталоги, "
-"а потом обычные файлы"
+"Если параметр включён, то в дереве проекта будут сначала показываться "
+"каталоги, а потом обычные файлы"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:375
@@ -731,7 +726,7 @@ msgstr "Создать рабочую область редактора"
 msgid "D-Bus Inspector"
 msgstr "Инспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3810
+#: src/libide/code/ide-buffer.c:3822
 msgid "The current language lacks a symbol resolver."
 msgstr "В текущем языке отсутствует распознаватель символов."
 
@@ -913,8 +908,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
-"Кодировка, используемая для загрузки файла, обнаружила ошибки. "
-"В строке состояния можно выбрать другую кодировку и перезагрузить файл."
+"Кодировка, используемая для загрузки файла, обнаружила ошибки. В строке "
+"состояния можно выбрать другую кодировку и перезагрузить файл."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1080,9 +1075,8 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"Не удалось обнаружить конфигурацию сборки “%s”. Она может быть"
-" недействительной "
-"или иметь ошибки формата."
+"Не удалось обнаружить конфигурацию сборки “%s”. Она может быть "
+"недействительной или иметь ошибки формата."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1068
@@ -1481,9 +1475,7 @@ msgstr "Нулевой путь до файла"
 
 #: src/libide/gtk/ide-file-manager.c:108 src/libide/gtk/ide-file-manager.c:119
 msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
-"Ошибка преобразования имени файла в кодировке UTF-8 "
-"в широкие символы"
+msgstr "Ошибка преобразования имени файла в кодировке UTF-8 в широкие символы"
 
 #: src/libide/gtk/ide-file-manager.c:127
 msgid "ILCreateFromPath() failed"
@@ -1668,8 +1660,7 @@ msgstr "Открыть файл или терминал"
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
 msgstr ""
-"Используйте переключатель страниц наверху, либо используйте "
-"что-то одно из:"
+"Используйте переключатель страниц наверху, либо используйте что-то одно из:"
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
@@ -2079,8 +2070,8 @@ msgstr "Завершён"
 #: src/libide/terminal/ide-terminal-page.c:144
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
-"Слишком быстрый сбой программы запуска подпроцесса, повторного создания не"
-" будет"
+"Слишком быстрый сбой программы запуска подпроцесса, повторного создания не "
+"будет"
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
@@ -2319,7 +2310,7 @@ msgstr "Ошибки"
 msgid "Warnings"
 msgstr "Предупреждения"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:348
+#: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Build Pipeline"
@@ -2384,8 +2375,8 @@ msgstr "Доступные цели сборки"
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
-"Некоторые цели могут быть недоступны, пока не будет создана конфигурация"
-" проекта"
+"Некоторые цели могут быть недоступны, пока не будет создана конфигурация "
+"проекта"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -2757,8 +2748,8 @@ msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
-"Запускается с переменной окружения <tt>G_MESSAGES_DEBUG=all</tt> для поиска и"
-" устранения неполадок"
+"Запускается с переменной окружения <tt>G_MESSAGES_DEBUG=all</tt> для поиска "
+"и устранения неполадок"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
@@ -2771,8 +2762,8 @@ msgstr "Как приложение"
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
-"Запускать модуль с доступом к монитору и с другим функционалом среды"
-" выполнения"
+"Запускать модуль с доступом к монитору и с другим функционалом среды "
+"выполнения"
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
@@ -2844,8 +2835,8 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
-"Во время установочного этапа конвейера сборки в этот каталог будет установлен"
-" проект"
+"Во время установочного этапа конвейера сборки в этот каталог будет "
+"установлен проект"
 
 #: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
@@ -2856,8 +2847,8 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
-"Эти параметры используются системой сборки для создания конфигурации "
-"проекта во время этапа конфигурации конвейера сборки"
+"Эти параметры используются системой сборки для создания конфигурации проекта "
+"во время этапа конфигурации конвейера сборки"
 
 #: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
@@ -2885,8 +2876,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
-"SDK, используемый для сборки приложения, автоматически определяется "
-"на базе среды выполнения"
+"SDK, используемый для сборки приложения, автоматически определяется на базе "
+"среды выполнения"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
@@ -3020,8 +3011,8 @@ msgstr "Идёт индексирование исходного кода"
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
 msgstr ""
-"Возможности поиска, диагностики и автодополнений могут быть "
-"ограничены до завершения операции"
+"Возможности поиска, диагностики и автодополнений могут быть ограничены до "
+"завершения операции"
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3218,9 +3209,9 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"Уникальное имя, используемое для папки проекта и других ресурсов. "
-"Имя должно состоять из строчных символов, не должно содержать пробелов "
-"и не должно начинаться с цифры."
+"Уникальное имя, используемое для папки проекта и других ресурсов. Имя должно "
+"состоять из строчных символов, не должно содержать пробелов и не должно "
+"начинаться с цифры."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:42
 msgid "Application ID…"
@@ -3231,8 +3222,8 @@ msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"Идентификатор обратной зоны DNS, используемой в приложении, "
-"например \"org.gnome.Builder\". Не должен содержать тире."
+"Идентификатор обратной зоны DNS, используемой в приложении, например \"org."
+"gnome.Builder\". Не должен содержать тире."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:64
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3757,8 +3748,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
-"Параметры, указанные в файлах .editorconfig и modelines, имеют приоритет над"
-" параметрами ниже"
+"Параметры, указанные в файлах .editorconfig и modelines, имеют приоритет над "
+"параметрами ниже"
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -3811,8 +3802,8 @@ msgstr "Число символов в отступе при использов�
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
-"Число символов в отступе, или «-1» для использования номинального размера"
-" табуляции"
+"Число символов в отступе, или «-1» для использования номинального размера "
+"табуляции"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -3846,8 +3837,8 @@ msgstr "Переопределять поведение фигурных ско�
 #: src/plugins/editorui/tweaks-language.ui:207
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr ""
-"Переопределять поведение закрывающих круглых, фигурных и квадратных скобок и"
-" кавычек"
+"Переопределять поведение закрывающих круглых, фигурных и квадратных скобок и "
+"кавычек"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
@@ -3913,8 +3904,7 @@ msgstr "Корректировать расстояния между строк�
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
 msgstr ""
-"Как именно должен выполняться перенос строк, выходящих за пределы "
-"панели"
+"Как именно должен выполняться перенос строк, выходящих за пределы панели"
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
@@ -4021,8 +4011,8 @@ msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
-"Использовать местоположение курсора для подсветки парных круглых, фигурных и"
-" квадратных скобок и прочего"
+"Использовать местоположение курсора для подсветки парных круглых, фигурных и "
+"квадратных скобок и прочего"
 
 #: src/plugins/editorui/tweaks.ui:252
 msgid "Semantic Highlighting"
@@ -4033,8 +4023,8 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
-"Использовать сведения о символах для подсветки пространств имён, функций "
-"и переменных в исходном коде"
+"Использовать сведения о символах для подсветки пространств имён, функций и "
+"переменных в исходном коде"
 
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
@@ -4115,8 +4105,8 @@ msgstr "Разворачивать фрагменты кода"
 #: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
-"Использовать клавишу Tab для разворачивания настроенных фрагментов "
-"кода в редакторе"
+"Использовать клавишу Tab для разворачивания настроенных фрагментов кода в "
+"редакторе"
 
 #: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
@@ -4224,8 +4214,7 @@ msgstr "Восстановить местоположение курсора"
 #: src/plugins/editorui/tweaks.ui:587
 msgid "Jump to the last position when re-opening a file"
 msgstr ""
-"При повторном открытии файла перейти к последнему "
-"местоположению курсора"
+"При повторном открытии файла перейти к последнему местоположению курсора"
 
 #: src/plugins/file-search/gbp-file-search-index.c:397
 msgid "Open file or folder"
@@ -4271,8 +4260,8 @@ msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
-"Для сборки проекта Builder должен установить следующие пакеты средств"
-" разработки программного обеспечения."
+"Для сборки проекта Builder должен установить следующие пакеты средств "
+"разработки программного обеспечения."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
@@ -4300,31 +4289,36 @@ msgstr "Builder определяет местоположение расшире
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
 msgid "Creating flatpak workspace"
 msgstr "Создаётся рабочая область flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#, c-format
+msgid "Removing stale flatpak staging directory: %s"
+msgstr "Удаление промежуточного каталога устаревшего flatpak: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
 msgid "Preparing build directory"
 msgstr "Подготовка каталога сборки"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
 msgid "Downloading dependencies"
 msgstr "Идёт загрузка зависимостей…"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
 msgid "Building dependencies"
 msgstr "Идёт построение зависимостей"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
 msgid "Finalizing flatpak build"
 msgstr "Идёт завершение сборки flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Exporting staging directory"
 msgstr "Идёт экспорт промежуточного каталога"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
 msgid "Creating flatpak bundle"
 msgstr "Идёт создание пакета flatpak"
 
@@ -4341,9 +4335,8 @@ msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Builder устанавливает пакеты средств разработки программного обеспечения,"
-" необходимые "
-"для сборки приложения"
+"Builder устанавливает пакеты средств разработки программного обеспечения, "
+"необходимые для сборки приложения"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
@@ -4359,9 +4352,8 @@ msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Builder обновляет пакеты средств разработки программного обеспечения,"
-" необходимые "
-"для сборки приложения"
+"Builder обновляет пакеты средств разработки программного обеспечения, "
+"необходимые для сборки приложения"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
@@ -4384,9 +4376,8 @@ msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
-"Builder во время установки пакетов SDK и расширений SDK может выбрать"
-" конкретную "
-"установку Flatpak, которая содержит расширение"
+"Builder во время установки пакетов SDK и расширений SDK может выбрать "
+"конкретную установку Flatpak, которая содержит расширение"
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -5310,8 +5301,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
-"Идентификатор используется при отсылке на параметры проекта, на каталоги"
-" сборок и на кэшированные данные"
+"Идентификатор используется при отсылке на параметры проекта, на каталоги "
+"сборок и на кэшированные данные"
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5330,8 +5321,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
-"Эта конфигурация используется для настройки конвейеров сборки, системы сборки "
-"и запуска проекта"
+"Эта конфигурация используется для настройки конвейеров сборки, системы "
+"сборки и запуска проекта"
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5465,8 +5456,8 @@ msgid ""
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "Команда будет запускаться из данного местоположения. Для указания "
-"относительного пути используйте <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> или <tt"
-">$HOME</tt>."
+"относительного пути используйте <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> или "
+"<tt>$HOME</tt>."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5567,12 +5558,10 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
-"Используйте команды для запуска сценариев сборочного инструментария,"
-" приложений или "
-"сценариев командного интерпретатора и привязывайте их к сочетаниям клавиш."
-" Таким образом "
-"команды можно запускать в разных окружениях, таких, как конвейеры сборки,"
-" среда выполнения или ОС хоста"
+"Используйте команды для запуска сценариев сборочного инструментария, "
+"приложений или сценариев командного интерпретатора и привязывайте их к "
+"сочетаниям клавиш. Таким образом команды можно запускать в разных "
+"окружениях, таких, как конвейеры сборки, среда выполнения или ОС хоста"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:56
 msgid "No keyboard shortcut found"
@@ -5674,11 +5663,11 @@ msgstr "Переместиться к символу в границах тек�
 msgid "System Capture from %s.syscap"
 msgstr "Системный захват из %s.syscap"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:321
+#: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
 msgstr "Профилирование приложения…"
 
-#: src/plugins/sysprof/gbp-sysprof-tool.c:322
+#: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
 msgstr "Расшифровка символов начнётся после завершения работы приложения"
 
@@ -5802,7 +5791,8 @@ msgstr "Образцы стеков вызовов"
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
-"Записать трассировки стеков с регулярными интервалами и построить граф вызовов"
+"Записать трассировки стеков с регулярными интервалами и построить граф "
+"вызовов"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
@@ -5886,8 +5876,8 @@ msgstr "Производительность командного интерпр
 #: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
-"Собирать сведения о производительности и временных характеристиках "
-"из командного интерпретатора GNOME"
+"Собирать сведения о производительности и временных характеристиках из "
+"командного интерпретатора GNOME"
 
 #: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
@@ -5910,8 +5900,8 @@ msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
-"Предоставить переменную окружения TRACE_FD для доставки "
-"сведений о настраиваемых событиях приложений"
+"Предоставить переменную окружения TRACE_FD для доставки сведений о "
+"настраиваемых событиях приложений"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
@@ -6285,7 +6275,7 @@ msgstr "Установить фокус на местоположение"
 msgid "Focus the current page's location"
 msgstr "Установить фокус на местоположение текущей страницы"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:133
+#: src/plugins/xml-pack/ide-xml-formatter.c:143
 msgid "Failed to parse XML document"
 msgstr "Сбой анализа документа XML"
 
