@@ -1067,21 +1067,18 @@ ide_lsp_client_real_notification (IdeLspClient *self,
       else if (g_str_equal (method, "window/logMessage"))
         {
           const char *message = NULL;
-          GLogLevelFlags level = IDE_LOG_LEVEL_TRACE;
+          GLogLevelFlags level = G_LOG_LEVEL_MESSAGE;
           gint64 type;
 
           if (JSONRPC_MESSAGE_PARSE (params, "type", JSONRPC_MESSAGE_GET_INT64 (&type)))
             {
+              /* Ignore error/etc because we don't want g_error() fatal errors
+               * to be logged. This is just from the LSP.
+               */
               switch (type)
                 {
                 case 1:
-                  level = G_LOG_LEVEL_ERROR;
-                  break;
-
                 case 2:
-                  level = G_LOG_LEVEL_WARNING;
-                  break;
-
                 case 3:
                   level = G_LOG_LEVEL_MESSAGE;
                   break;
