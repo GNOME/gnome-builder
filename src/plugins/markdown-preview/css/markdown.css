@@ -1,5 +1,4 @@
 :root {
-  --octicon-link-color: #1b1f23;
   --text-color: #24292e;
   --hyperlink-color: #0366d6;
   --codeblock-color: rgba(0, 0, 0, 0.08);
@@ -10,7 +9,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --octicon-link-color: #c3c3c3;
     --text-color: #dfdfdf;
     --hyperlink-color: lightblue;
     --codeblock-color: rgba(255, 255, 255, 0.08);
@@ -22,10 +20,19 @@
 
 body {
   color: var(--text-color);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  overflow-wrap: break-word;
 }
 
 a {
   color: var(--hyperlink-color);
+  transition: all 0.125s ease;
+}
+
+a:hover {
+  opacity: 0.75;
 }
 
 blockquote {
@@ -60,6 +67,11 @@ table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 table, th, td {
