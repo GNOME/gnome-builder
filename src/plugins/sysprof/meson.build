@@ -1,14 +1,5 @@
 if get_option('plugin_sysprof')
 
-sysprof_req_version = '3.46.0'
-sysprof_req = '>= @0@'.format(sysprof_req_version)
-
-libsysprof_dep = dependency('sysprof-6', version: sysprof_req)
-
-plugins_deps += [
-  libsysprof_dep,
-]
-
 ipc_sysprof_src = gnome.gdbus_codegen('ipc-sysprof',
            sources: 'org.gnome.Sysprof.Agent.xml',
   interface_prefix: 'org.gnome.Sysprof.',
