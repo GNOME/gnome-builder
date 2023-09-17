@@ -110,7 +110,7 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   context = ide_object_get_context (IDE_OBJECT (self));
   settings = ide_context_ref_settings (context, "org.gnome.builder.sysprof");
 
-  /* Run sysprof-agent/gnome-builder-sysprof */
+  /* Run sysprof-agent */
   ide_run_context_append_argv (run_context, "sysprof-agent");
 
   /* Pass along FDs after stderr to next process */

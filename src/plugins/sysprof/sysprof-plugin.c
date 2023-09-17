@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <libpeas.h>
-#include <sysprof.h>
 
 #include <libide-gui.h>
 
@@ -34,8 +33,6 @@
 _IDE_EXTERN void
 _gbp_sysprof_register_types (PeasObjectModule *module)
 {
-  sysprof_clock_init ();
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_TOOL,
                                               GBP_TYPE_SYSPROF_TOOL);

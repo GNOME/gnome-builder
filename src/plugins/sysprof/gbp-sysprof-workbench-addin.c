@@ -24,8 +24,6 @@
 
 #include <glib/gi18n.h>
 
-#include <sysprof.h>
-
 #include <libide-gui.h>
 #include <libide-threading.h>
 
