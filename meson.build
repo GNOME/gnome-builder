@@ -366,7 +366,7 @@ endforeach
 # to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
 # already have to link against that for the plugin.
 #
-libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.46.0', static: true, required: false)
+libsysprof_capture = dependency('sysprof-capture-4', version: '>= 45.0', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif
