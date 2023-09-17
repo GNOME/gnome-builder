@@ -1,3 +1,16 @@
+# GNOME Builder 45.0
+
+ * Style fixes to match GNOME 45 Adwaita styling
+ * Various style scheme color improvements
+ * Improved hover styling
+ * Build fixes around Sysprof 45 usage
+ * Autocompletion fixes for CTags
+ * Fixes for pipeline failures expecting "flatpak build-init" to run
+ * Port Flatpak plugin to IdePipelineStateCommand
+ * Prime initial state of GNetworkMonitor to reduce eroneous values
+ * Improve LSP "window/logMessage" conformance
+ * Fixes for typescript-language-server support
+
 # GNOME Builder 45.rc
 
  * Improvements to various Meson-based project templates
