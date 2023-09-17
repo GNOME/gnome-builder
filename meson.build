@@ -361,11 +361,8 @@ foreach func: check_functions
   config_h.set(func[0], cc.has_function(func[1]))
 endforeach
 
-#
 # If we have sysprof-capture-4, we can export tracing information
-# to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
-# already have to link against that for the plugin.
-#
+# to the SYSPROF_TRACE_FD.
 libsysprof_capture = dependency('sysprof-capture-4', version: '>= 45.0', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
