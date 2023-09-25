@@ -14,7 +14,7 @@
         <property name="child">
           <object class="GtkPicture" id="wallpaper">
             <property name="content-fit">fill</property>
-            <property name="height-request">50</property>
+            <property name="height-request">90</property>
           </object>
         </property>
       </object>
