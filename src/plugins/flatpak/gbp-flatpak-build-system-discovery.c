@@ -219,20 +219,24 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
               buildsystem = "directory";
 
               /* Check for a cargo project */
-              sdk_extensions = json_object_get_member (root_object, "sdk-extensions");
-              sdk_extensions_array = json_node_get_array (sdk_extensions);
-              len = json_array_get_length (sdk_extensions_array);
-              for (guint j = 0; j < len; j++)
+              if ((sdk_extensions = json_object_get_member (root_object, "sdk-extensions")) &&
+                  JSON_NODE_HOLDS_ARRAY (sdk_extensions) &&
+                  (sdk_extensions_array = json_node_get_array (sdk_extensions)))
                 {
-                  const char *extension = json_array_get_string_element (sdk_extensions_array, j);
+                  guint ar_len = json_array_get_length (sdk_extensions_array);
 
-                  if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
-                      ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
+                  for (guint j = 0; j < ar_len; j++)
                     {
-                      g_autoptr(GFile) Cargo_toml = g_file_get_child (project_dir, "Cargo.toml");
+                      const char *extension = json_array_get_string_element (sdk_extensions_array, j);
 
-                      if (g_file_query_exists (Cargo_toml, NULL))
-                        buildsystem = "cargo";
+                      if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
+                          ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
+                        {
+                          g_autoptr(GFile) Cargo_toml = g_file_get_child (project_dir, "Cargo.toml");
+
+                          if (g_file_query_exists (Cargo_toml, NULL))
+                            buildsystem = "cargo";
+                        }
                     }
                 }
             }
