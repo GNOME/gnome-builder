@@ -126,6 +126,18 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
     }
 }
 
+static int
+sort_by_path (gconstpointer a,
+              gconstpointer b)
+{
+  GFile *file_a = *(GFile * const *)a;
+  GFile *file_b = *(GFile * const *)b;
+  g_autofree char *collate_a = g_utf8_collate_key_for_filename (g_file_peek_path (file_a), -1);
+  g_autofree char *collate_b = g_utf8_collate_key_for_filename (g_file_peek_path (file_b), -1);
+
+  return g_strcmp0 (collate_a, collate_b);
+}
+
 static gchar *
 gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery,
                                              GFile                    *project_file,
@@ -147,6 +159,16 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
   gbp_flatpak_build_system_discovery_find_manifests (project_file, manifests, 0, cancellable);
 
   IDE_TRACE_MSG ("We found %u potential manifests", manifests->len);
+
+  g_ptr_array_sort (manifests, sort_by_path);
+
+#ifdef IDE_ENABLE_TRACE
+  for (guint i = 0; i < manifests->len; i++)
+    IDE_TRACE_MSG ("  Manifest[%u]: %s\n",
+                   i,
+                   g_file_peek_path (g_ptr_array_index (manifests, i)));
+#endif
+
 
   if (g_file_query_file_type (project_file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
     project_dir = g_object_ref (project_file);
