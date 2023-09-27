@@ -1593,17 +1593,30 @@ ide_source_view_get_visual_position_range (IdeSourceView *self,
 
   if (range != NULL)
     {
-      int selection_line = gtk_text_iter_get_line (&selection);
+      int selection_line;
+      int insert_offset = gtk_text_iter_get_offset (&insert);
+      int selection_offset = gtk_text_iter_get_offset (&selection);
+
+      /* Since insert or selection iterator is be located one symbol away from selection
+       * we have to adjust it before calculating multiline range
+       */
+      if (insert_offset > selection_offset)
+        {
+          gtk_text_iter_backward_char (&insert);
+        }
+      else if (insert_offset < selection_offset)
+        {
+          gtk_text_iter_backward_char (&selection);
+        }
+      selection_line = gtk_text_iter_get_line (&selection);
+      insert_line = gtk_text_iter_get_line (&insert);
 
       if (insert_line != selection_line)
         {
-          *range = ABS (selection_line - insert_line);
+          *range = ABS (selection_line - insert_line) + 1;
         }
       else
         {
-          int insert_offset = gtk_text_iter_get_offset (&insert);
-          int selection_offset = gtk_text_iter_get_offset (&selection);
-
           *range = ABS (selection_offset - insert_offset);
         }
     }
