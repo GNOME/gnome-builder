@@ -33,7 +33,7 @@
 #include "gbp-symbol-util.h"
 
 #define NEAREST_SCOPE_DELAY_MSEC 500
-#define SETTLING_DELAY_MSEC      333
+#define SETTLING_DELAY_MSEC      50
 #define SYMBOL_TREE_DELAY_MSEC   1000
 
 struct _GbpSymbolWorkspaceAddin
