@@ -33,6 +33,7 @@
 #include "gbp-symbol-util.h"
 
 #define NEAREST_SCOPE_DELAY_MSEC 500
+#define SETTLING_DELAY_MSEC      333
 #define SYMBOL_TREE_DELAY_MSEC   1000
 
 struct _GbpSymbolWorkspaceAddin
@@ -49,6 +50,7 @@ struct _GbpSymbolWorkspaceAddin
 
   GSignalGroup     *buffer_signals;
   guint             nearest_scope_timeout_source;
+  guint             nearest_scope_settling_source;
   guint             symbol_tree_timeout_source;
 };
 
@@ -269,17 +271,36 @@ gbp_symbol_workspace_addin_nearest_scope_timeout (gpointer data)
   IDE_RETURN (G_SOURCE_REMOVE);
 }
 
-static void
-gbp_symbol_workspace_addin_buffer_cursor_moved_cb (GbpSymbolWorkspaceAddin *self,
-                                                   IdeBuffer               *buffer)
+static gboolean
+gbp_symbol_workspace_addin_buffer_cursor_moved_cb (gpointer data)
 {
+  GbpSymbolWorkspaceAddin *self = data;
+
+  IDE_ENTRY;
+
   g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->nearest_scope_settling_source = 0;
 
   if (self->nearest_scope_timeout_source == 0)
     self->nearest_scope_timeout_source = g_timeout_add (NEAREST_SCOPE_DELAY_MSEC,
                                                         gbp_symbol_workspace_addin_nearest_scope_timeout,
                                                         self);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+gbp_symbol_workspace_addin_buffer_cursor_moved_settling_cb (GbpSymbolWorkspaceAddin *self,
+                                                            IdeBuffer               *buffer)
+{
+  g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  g_clear_handle_id (&self->nearest_scope_settling_source, g_source_remove);
+  self->nearest_scope_settling_source = g_timeout_add (SETTLING_DELAY_MSEC,
+                                                       gbp_symbol_workspace_addin_buffer_cursor_moved_cb,
+                                                       self);
 }
 
 static gboolean
@@ -429,6 +450,7 @@ gbp_symbol_workspace_addin_finalize (GObject *object)
   GbpSymbolWorkspaceAddin *self = (GbpSymbolWorkspaceAddin *)object;
 
   g_clear_object (&self->buffer_signals);
+  g_clear_handle_id (&self->nearest_scope_settling_source, g_source_remove);
 
   G_OBJECT_CLASS (gbp_symbol_workspace_addin_parent_class)->finalize (object);
 }
@@ -452,7 +474,7 @@ gbp_symbol_workspace_addin_init (GbpSymbolWorkspaceAddin *self)
                            G_CONNECT_SWAPPED);
   g_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
-                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_cursor_moved_cb),
+                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_cursor_moved_settling_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   g_signal_group_connect_object (self->buffer_signals,
