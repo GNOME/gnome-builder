@@ -48,7 +48,7 @@
                     <property name="activatable">true</property>
                     <property name="title" translatable="yes">Keyboard Shortcut</property>
                     <property name="subtitle" translatable="yes">An optional shortcut to run the command</property>
-                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                    <property name="icon-name">builder-keyboard-shortcuts-symbolic</property>
                     <child type="suffix">
                       <object class="GtkLabel" id="shortcut_label">
                         <property name="valign">center</property>
