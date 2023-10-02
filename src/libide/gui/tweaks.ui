@@ -13,7 +13,7 @@
         <property name="hidden-when">project</property>
         <child>
           <object class="IdeTweaksPage" id="appearance_page">
-            <property name="icon-name">preferences-desktop-appearance-symbolic</property>
+            <property name="icon-name">builder-appearance-symbolic</property>
             <property name="title" translatable="yes">Appearance</property>
           </object>
         </child>

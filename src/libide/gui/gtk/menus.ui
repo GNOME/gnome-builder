@@ -38,7 +38,7 @@
         <attribute name="description" translatable="yes">Find keyboard shortcuts</attribute>
         <attribute name="action">workspace.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
-        <attribute name="verb-icon">preferences-desktop-keyboard-shortcuts-symbolic</attribute>
+        <attribute name="verb-icon">builder-keyboard-shortcuts-symbolic</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-help</attribute>

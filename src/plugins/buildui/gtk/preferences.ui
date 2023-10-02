@@ -23,7 +23,7 @@
   <menu id="app-visual">
     <item>
       <attribute name="label" translatable="yes">Appearance</attribute>
-      <attribute name="icon">preferences-desktop-appearance-symbolic</attribute>
+      <attribute name="icon">builder-appearance-symbolic</attribute>
       <link name="page" id="app-visual-appearance"/>
     </item>
   </menu>

@@ -4,7 +4,7 @@
       <object class="IdeTweaksSection">
         <child internal-child="languages_page">
           <object class="IdeTweaksPage">
-            <property name="icon-name">preferences-desktop-appearance-symbolic</property>
+            <property name="icon-name">builder-appearance-symbolic</property>
             <property name="title">Appearance</property>
             <child internal-child="language_subpage_factory">
               <object class="IdeTweaksFactory">
