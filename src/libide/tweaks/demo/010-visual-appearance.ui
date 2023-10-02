@@ -5,7 +5,7 @@
       <object class="IdeTweaksSection">
         <child>
           <object class="IdeTweaksPage" id="appearance_page">
-            <property name="icon-name">preferences-desktop-appearance-symbolic</property>
+            <property name="icon-name">builder-appearance-symbolic</property>
             <property name="title" translatable="yes">Appearance</property>
             <child>
               <object class="IdeTweaksGroup" id="appearance_page_style_group">
