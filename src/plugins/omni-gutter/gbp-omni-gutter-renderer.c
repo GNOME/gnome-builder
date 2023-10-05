@@ -687,8 +687,14 @@ populate_diagnostics_cb (guint                 line,
     guint   end_line;
   } *state = user_data;
 
-  g_assert (line >= state->begin_line);
-  g_assert (line <= state->end_line);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (state != NULL);
+  g_assert (state->begin_line <= state->end_line);
+
+  if (line < state->begin_line ||
+      line > state->end_line ||
+      line - state->begin_line >= state->lines->len)
+    return;
 
   info = &g_array_index (state->lines, LineInfo, line - state->begin_line);
   info->is_warning |= severity == IDE_DIAGNOSTIC_WARNING
@@ -711,8 +717,14 @@ populate_changes_cb (guint               line,
   } *state = user_data;
   guint pos;
 
-  g_assert (line >= state->begin_line);
-  g_assert (line <= state->end_line);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (state != NULL);
+  g_assert (state->begin_line <= state->end_line);
+
+  if (line < state->begin_line ||
+      line > state->end_line ||
+      line - state->begin_line >= state->lines->len)
+    return;
 
   pos = line - state->begin_line;
 
