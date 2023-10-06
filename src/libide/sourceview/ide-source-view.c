@@ -375,10 +375,7 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
    * See GNOME/gnome-builder#1870.
    */
   if (self->waiting_for_paste)
-    {
-      self->waiting_for_paste = FALSE;
-      return;
-    }
+    return;
 
   /* Ignore anything odd that we won't be able to process or is outside
    * of a key-press event (such as buffer changes from plugins).
@@ -534,6 +531,23 @@ ide_source_view_buffer_after_redo_cb (IdeSourceView *self,
 }
 
 static void
+ide_source_view_buffer_paste_done_cb (IdeSourceView *self,
+                                      GdkClipboard  *clipboard,
+                                      IdeBuffer     *buffer)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GDK_IS_CLIPBOARD (clipboard));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->waiting_for_paste = FALSE;
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
@@ -583,6 +597,13 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Track when a paste operation has completed */
+  g_signal_connect_object (buffer,
+                           "paste-done",
+                           G_CALLBACK (ide_source_view_buffer_paste_done_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
   /* Track when we're within an undo/redo operation */
   g_signal_connect_object (buffer,
                            "undo",
@@ -618,6 +639,9 @@ ide_source_view_disconnect_buffer (IdeSourceView *self)
   if (self->buffer == NULL)
     return;
 
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_paste_done_cb),
+                                        self);
   g_signal_handlers_disconnect_by_func (self->buffer,
                                         G_CALLBACK (ide_source_view_buffer_before_undo_cb),
                                         self);
