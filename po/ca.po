@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-10-02 21:38+0000\n"
-"PO-Revision-Date: 2023-09-08 11:45+0200\n"
+"PO-Revision-Date: 2023-10-08 11:45+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -276,8 +276,8 @@ msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
 msgstr ""
-"El depurador hauria d'inserir automàticament el punt d'interrupció a "
-"g_warning() i funció g_crítica."
+"El depurador hauria d'inserir automàticament el punt d'interrupció a les funcions "
+"g_warning() i g_critical."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -1075,7 +1075,7 @@ msgstr "Configuració activa"
 #: src/libide/foundry/ide-config-manager.c:626
 #, c-format
 msgid "Configuration %s changed"
-msgstr "Configuració %s ha camviat"
+msgstr "Configuració %s ha canviat"
 
 #. translators: %s will be replaced with the build configuration identifier
 #: src/libide/foundry/ide-config-manager.c:872
@@ -1084,7 +1084,7 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"No s'ha pogut localitzar la configuració de compilació \"%s\". Pot ser que "
+"No s'ha pogut localitzar la configuració de compilació «%s». Pot ser que "
 "no sigui vàlid o que tingui un format incorrecte."
 
 #. translators: %s is set to the identifier of the build configuration
@@ -1258,7 +1258,7 @@ msgstr "Prova unitària"
 #: src/libide/foundry/ide-run-manager.c:184
 #, c-format
 msgid "User requested run tool “%s”"
-msgstr "L'usuari ha sol·licitat l'eina d'execució  \"%s\""
+msgstr "L'usuari ha sol·licitat l'execució de l'eina «%s»"
 
 #: src/libide/foundry/ide-run-manager.c:545
 msgid "Cannot run target, another target is running"
@@ -1296,7 +1296,7 @@ msgstr "L'usuari ha sol·licitat reiniciar l'aplicació"
 #: src/libide/foundry/ide-run-manager.c:1354
 #, c-format
 msgid "User requested application to run with tool “%s”"
-msgstr "L'usuari ha sol·licitat que l'aplicació s'executi amb l'eina  “%s”"
+msgstr "L'usuari ha sol·licitat que l'aplicació s'executi amb l'eina «%s»"
 
 #: src/libide/foundry/ide-run-manager.c:1374
 msgid "User requested application to stop"
@@ -1313,12 +1313,12 @@ msgstr "Sistema amfitrió"
 #: src/libide/foundry/ide-runtime-provider.c:147
 #, c-format
 msgid "Discovered runtime “%s”"
-msgstr "Temps d'execució descobert  \"%s\""
+msgstr "Descobert entorn d'execució «%s»"
 
 #: src/libide/foundry/ide-runtime-provider.c:170
 #, c-format
 msgid "Removing runtime “%s”"
-msgstr "S'està eliminant el temps d'execució  \"%s\""
+msgstr "S'està eliminant el temps d'execució «%s»"
 
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
@@ -1794,13 +1794,13 @@ msgstr "No hi ha cap connexió de client LSP disponible"
 #: src/libide/lsp/ide-lsp-service.c:517
 #, c-format
 msgid "Language server “%s” exited"
-msgstr "S'ha sortit del servidor d'idioma  \"%s\""
+msgstr "S'ha sortit del servidor d'idioma «%s»"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
 #: src/libide/lsp/ide-lsp-service.c:556
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr "El servidor d'idioma \"%s\" s'ha generat com a procés  %s"
+msgstr "El servidor d'idioma «%s» s'ha generat com a procés %s"
 
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:114
@@ -3160,7 +3160,7 @@ msgstr "_Comenta codi"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr "Afegeix comentaris al envoltant de la selecció del codi font"
+msgstr "Afegeix comentaris al voltant de la selecció del codi font"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
@@ -5894,7 +5894,7 @@ msgstr "Rendiment del GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
-msgstr "Recoll la informació de rendiment i temps del GNOME Shell"
+msgstr "Recull la informació de rendiment i temps del GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
