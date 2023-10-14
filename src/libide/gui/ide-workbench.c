@@ -1508,6 +1508,7 @@ ide_workbench_action_open_response_cb (IdeWorkbench         *self,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
+  g_object_unref (chooser);
 }
 
 static void

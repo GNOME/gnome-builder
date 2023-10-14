@@ -79,6 +79,7 @@ gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel *self,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
 
   IDE_EXIT;
 }

@@ -447,6 +447,7 @@ select_folder_response_cb (GtkFileChooserNative *native,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
 }
 
 static void
