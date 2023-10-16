@@ -91,6 +91,7 @@ select_folder_response_cb (GbpVcsuiClonePage    *self,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
 }
 
 static void
