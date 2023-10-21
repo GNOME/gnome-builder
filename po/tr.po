@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-11 01:42+0000\n"
-"PO-Revision-Date: 2023-10-14 10:33+0300\n"
+"POT-Creation-Date: 2023-10-14 12:27+0000\n"
+"PO-Revision-Date: 2023-10-17 18:28+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -874,7 +874,7 @@ msgstr "Dosya açılamadı: %s"
 #: src/libide/editor/ide-editor-info-bar.c:85
 #: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
-msgstr "Değişikliklerden _Vazgeç ve Yeniden Yükle"
+msgstr "Değişiklikleri _Gözden Çıkar ve Yeniden Yükle"
 
 #: src/libide/editor/ide-editor-info-bar.c:88
 msgid "File Has Changed on Disk"
@@ -922,7 +922,7 @@ msgstr "Kaydedilmemiş belge geri yüklendi."
 
 #: src/libide/editor/ide-editor-info-bar.ui:81
 msgid "_Discard…"
-msgstr "_Vazgeç…"
+msgstr "_Gözden Çıkar…"
 
 #. translators: %s is the error message
 #: src/libide/editor/ide-editor-page.c:514
@@ -1746,12 +1746,12 @@ msgid "The operation has been cancelled"
 msgstr "İşlem iptal edildi"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1736
+#: src/libide/lsp/ide-lsp-client.c:1733
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirilemedi: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2168 src/libide/lsp/ide-lsp-client.c:2278
+#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
 msgid "No connection to language server"
 msgstr "Dil sunucusuna bağlantı yok"
 
@@ -1981,14 +1981,14 @@ msgid "Code Navigation"
 msgstr "Kod Gezinme"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1624
+#: src/libide/sourceview/ide-source-view.c:1661
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Satır %u, Sütun %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1626
+#: src/libide/sourceview/ide-source-view.c:1663
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -4625,7 +4625,7 @@ msgstr "Basit bir Makefile kullanarak yeni boş proje oluştur"
 msgid "Maven Run"
 msgstr "Maven Çalıştır"
 
-#: src/plugins/menu-search/gbp-menu-search-provider.c:192
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Eylemler"
 
@@ -5602,13 +5602,13 @@ msgstr "Dosyadaki Simgeler"
 msgid "In Page"
 msgstr "Sayfada"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:97
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:363
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Simge Seç…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:366
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Simge Seç (Ctrl+Shift+K)"
 
