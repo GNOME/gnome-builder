@@ -75,8 +75,10 @@ static void
 gbp_symbol_workspace_addin_set_symbol (GbpSymbolWorkspaceAddin *self,
                                        IdeSymbol               *symbol)
 {
+  g_autofree char *truncated = NULL;
   const char *label = NULL;
   const char *icon_name = NULL;
+  const char *nl;
 
   IDE_ENTRY;
 
@@ -99,6 +101,9 @@ gbp_symbol_workspace_addin_set_symbol (GbpSymbolWorkspaceAddin *self,
       gtk_widget_hide (GTK_WIDGET (self->menu_image));
       IDE_EXIT;
     }
+
+  if ((nl = strchr (label, '\n')))
+    label = truncated = g_strndup (label, nl - label);
 
   gtk_label_set_label (self->menu_label, label);
   gtk_image_set_from_icon_name (self->menu_image, icon_name);
