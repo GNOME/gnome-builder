@@ -110,15 +110,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdwSwitchRow">
                     <property name="title" translatable="yes">Version Control</property>
-                    <property name="activatable-widget">version_control_switch</property>
-                    <child type="suffix">
-                      <object class="GtkSwitch" id="version_control_switch">
-                        <property name="valign">center</property>
-                        <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create" />
-                      </object>
-                    </child>
+                    <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create" />
                   </object>
                 </child>
                 <child>

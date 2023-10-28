@@ -116,15 +116,9 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow" id="shell_row">
+                  <object class="AdwSwitchRow" id="shell_row">
                     <property name="title" translatable="yes">Use Subshell</property>
                     <property name="subtitle" translatable="yes">Run the program from a subshell such as &lt;tt&gt;sh -c ''&lt;/tt&gt;</property>
-                    <property name="activatable-widget">use_shell</property>
-                    <child type="suffix">
-                      <object class="GtkSwitch" id="use_shell">
-                        <property name="valign">center</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
