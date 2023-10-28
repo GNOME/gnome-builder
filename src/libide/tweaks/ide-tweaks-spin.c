@@ -56,8 +56,7 @@ ide_tweaks_spin_create_for_item (IdeTweaksWidget *instance,
   IdeTweaksSpin *self = (IdeTweaksSpin *)widget;
   IdeTweaksBinding *binding;
   GtkAdjustment *adjustment = NULL;
-  GtkSpinButton *button;
-  AdwActionRow *row;
+  AdwSpinRow *row;
 
   g_assert (IDE_IS_TWEAKS_SPIN (self));
 
@@ -65,17 +64,12 @@ ide_tweaks_spin_create_for_item (IdeTweaksWidget *instance,
       (adjustment = ide_tweaks_binding_create_adjustment (binding)))
     ide_tweaks_binding_bind (binding, adjustment, "value");
 
-  button = g_object_new (GTK_TYPE_SPIN_BUTTON,
-                         "adjustment", adjustment,
-                         "digits", self->digits,
-                         "valign", GTK_ALIGN_CENTER,
-                         NULL);
-  row = g_object_new (ADW_TYPE_ACTION_ROW,
+  row = g_object_new (ADW_TYPE_SPIN_ROW,
                       "title", self->title,
                       "subtitle", self->subtitle,
-                      "activatable-widget", button,
+                      "adjustment", adjustment,
+                      "digits", self->digits,
                       NULL);
-  adw_action_row_add_suffix (row, GTK_WIDGET (button));
 
   return GTK_WIDGET (row);
 }
