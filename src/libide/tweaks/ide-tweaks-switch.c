@@ -50,24 +50,18 @@ ide_tweaks_switch_create_for_item (IdeTweaksWidget *instance,
 {
   IdeTweaksSwitch *self = (IdeTweaksSwitch *)widget;
   IdeTweaksBinding *binding;
-  AdwActionRow *row;
-  GtkSwitch *switch_;
+  AdwSwitchRow *row;
 
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
 
   if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (self))))
     return NULL;
 
-  switch_ = g_object_new (GTK_TYPE_SWITCH,
-                          "valign", GTK_ALIGN_CENTER,
-                          NULL);
-  row = g_object_new (ADW_TYPE_ACTION_ROW,
+  row = g_object_new (ADW_TYPE_SWITCH_ROW,
                       "title", self->title,
                       "subtitle", self->subtitle,
-                      "activatable-widget", switch_,
                       NULL);
-  adw_action_row_add_suffix (row, GTK_WIDGET (switch_));
-  ide_tweaks_binding_bind (binding, switch_, "active");
+  ide_tweaks_binding_bind (binding, row, "active");
 
   return GTK_WIDGET (row);
 }
