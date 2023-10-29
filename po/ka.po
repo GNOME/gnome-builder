@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-09-11 01:42+0000\n"
-"PO-Revision-Date: 2023-10-18 08:08+0200\n"
+"PO-Revision-Date: 2023-10-29 09:38+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -60,7 +60,7 @@ msgstr "ჩაშენებული გამოკვეთის მხა�
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "გვერდიგვერდ კოდის რედაქტორები"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Multi-monitor support"
@@ -102,7 +102,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr ""
+msgstr "არასავალდებულო Vim, Emacs, და SublimeText სტილის რედაქტორი"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "An integrated software profiler for native applications"
@@ -118,7 +118,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr ""
+msgstr "მხარდაჭერა jghbuild და flatpak გაშვების გარემოსთან ერთად აგებისთვის"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Support for viewing TODOs found within your code base"
@@ -138,7 +138,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
 msgid "Integration with Git to clone your projects"
-msgstr ""
+msgstr "ინტეგრაცია Git-თან თქვენი პროექტების დასაკლონად"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "The source code editor"
@@ -146,7 +146,7 @@ msgstr "საწყისი კოდის რედაქტორი"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "Fast global fuzzy search"
-msgstr ""
+msgstr "სწრაფი გლობალური ბუნდოვანი ძებნა"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
 msgid "Debug with the GNU debugger"
@@ -373,7 +373,7 @@ msgstr "ავტომატური შენახვის სიხში�
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
-msgstr ""
+msgstr "წამების რაოდენობა ცვლილების შემდეგ, სანამ ავტოშენახვა მოხდება."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
@@ -404,7 +404,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
-msgstr ""
+msgstr "მინიმალური სიმბოლოები მონიშნულთან დამთხვევისთვის."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
@@ -538,7 +538,7 @@ msgstr "დამატება ჩართულია"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
-msgstr ""
+msgstr "უნდა იყოს დამატება ჩართული, თუ არა"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
@@ -566,7 +566,7 @@ msgstr "ნაგულისხმევად გაშვებული ბ�
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
 msgid "The id of the default run command"
-msgstr ""
+msgstr "ნაგულისხმევად გასაშვები ბრძანების id"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
@@ -585,7 +585,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr ""
+msgstr "ერთეულის ტესტის გაშვებისას გამოყენებული გარემო"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
@@ -991,12 +991,12 @@ msgstr "ენა"
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
-msgstr ""
+msgstr "აგების ფაიფლაინის ინიციალიზაცია ჩავარდა: %s"
 
 #: src/libide/foundry/ide-build-manager.c:623
 #, c-format
 msgid "Failed to get device information: %s"
-msgstr ""
+msgstr "მოწყობილობის ინფორმაციის მიღება ჩავარდა: %s"
 
 #: src/libide/foundry/ide-config-manager.c:538
 msgid "Active Configuration"
@@ -1181,7 +1181,7 @@ msgstr "ერთეულის ტესტი"
 #: src/libide/foundry/ide-run-manager.c:184
 #, c-format
 msgid "User requested run tool “%s”"
-msgstr ""
+msgstr "მომხმარებელმა მოითხოვა ხელსაწყოს \"%s\" გაშვება"
 
 #: src/libide/foundry/ide-run-manager.c:545
 msgid "Cannot run target, another target is running"
@@ -2227,7 +2227,7 @@ msgstr "გაფრთხილებები"
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:271
 msgid "Build Pipeline"
-msgstr ""
+msgstr "აგების ფაიფლაინი"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:4
 msgid "Build Issues"
@@ -2333,11 +2333,11 @@ msgstr "პროექტის აგების შეჩერება (Sh
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr ""
+msgstr "პროექტის აგება (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
-msgstr ""
+msgstr "აგების დიაგნოსტიკის ჩვენება (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
@@ -2345,7 +2345,7 @@ msgstr "პროექტის მორგება…"
 
 #: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
-msgstr ""
+msgstr "პროექტის პარამეტრების შეცვლა"
 
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
@@ -2412,7 +2412,7 @@ msgstr "პროექტის აგების შეჩერება"
 
 #: src/plugins/buildui/gtk/menus.ui:59
 msgid "Cancel the current build operation"
-msgstr ""
+msgstr "მიმდინარე აგების ოეპრაციის გაუქმება"
 
 #: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
@@ -2428,7 +2428,7 @@ msgstr "მოწყობილობაზე გაშლა…"
 
 #: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
-msgstr ""
+msgstr "პროექტის გაშლა მიმდინარე მოწყობილობაზე"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -2448,7 +2448,7 @@ msgstr "აგების გაჩერება"
 
 #: src/plugins/buildui/gtk/menus.ui:100
 msgid "Stop building project"
-msgstr ""
+msgstr "პროექტის აგების გაჩერება"
 
 #: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
@@ -2456,7 +2456,7 @@ msgstr "აგების გამონატანის ჩვენებ�
 
 #: src/plugins/buildui/gtk/menus.ui:111
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "აგების ჟურნალის შემცველი პანელის ჩვენება"
 
 #: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
 msgid "Running"
@@ -2630,7 +2630,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:58
 msgid "Install Before Running"
-msgstr ""
+msgstr "გაშვებამდე დაყენება"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
@@ -2724,7 +2724,7 @@ msgstr "სტანდარტული"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
-msgstr ""
+msgstr "1 თითეულ CPU-ზე"
 
 #: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
@@ -2761,7 +2761,7 @@ msgstr "რაიონი"
 
 #: src/plugins/buildui/tweaks.ui:432
 msgid "Where your project builds"
-msgstr ""
+msgstr "სად აიგება თქვენი პროექტი"
 
 #: src/plugins/buildui/tweaks.ui:449
 msgid "Inside Source Tree"
@@ -2894,7 +2894,7 @@ msgstr ""
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
-msgstr ""
+msgstr "პროექტის ჩატვირთვა ჩავარდა: %s"
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
@@ -3076,7 +3076,7 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
-msgstr ""
+msgstr "პროექტის შექმნის სახელმძღვანელოს ჩვენება"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
@@ -3097,7 +3097,7 @@ msgstr "პროექტის სახელი"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:23
 msgid "A subdirectory with this name already exists"
-msgstr ""
+msgstr "ქვესაქაღალდე ამ სახელით უკვე არსებობს"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:30
 msgid ""
@@ -3126,7 +3126,7 @@ msgstr "მდებარეობა"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:84
 msgid "The project will be created in a new subdirectory."
-msgstr ""
+msgstr "პროექტი ახალ ქვესაქაღალდეში შეიქმნება."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:107
 #: src/plugins/projectui/tweaks.ui:47
@@ -3163,7 +3163,7 @@ msgstr ""
 
 #: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
-msgstr ""
+msgstr "საწყისი კოდის დაინდექსება (შეჩერებულია)"
 
 #: src/plugins/ctags/tweaks.ui:14
 msgid "CTags"
@@ -3469,7 +3469,7 @@ msgstr "მინიმალური რედაქტორის ინტ�
 #: src/plugins/editorui/gbp-editorui-search-result.c:62
 #, c-format
 msgid "Switch to %s style"
-msgstr ""
+msgstr "%s სტილზე გადართვა"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
 msgid "Switch application and editor theme"
