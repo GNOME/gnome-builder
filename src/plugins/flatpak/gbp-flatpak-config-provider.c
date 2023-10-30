@@ -293,6 +293,28 @@ manifest_needs_reload (GbpFlatpakConfigProvider *self,
   IDE_EXIT;
 }
 
+static int
+sort_by_path (gconstpointer a,
+              gconstpointer b)
+{
+  GbpFlatpakManifest *manifest_a = *(GbpFlatpakManifest **)a;
+  GbpFlatpakManifest *manifest_b = *(GbpFlatpakManifest **)b;
+  GFile *file_a = gbp_flatpak_manifest_get_file (manifest_a);
+  GFile *file_b = gbp_flatpak_manifest_get_file (manifest_b);
+  const char *path_a = g_file_peek_path (file_a);
+  const char *path_b = g_file_peek_path (file_b);
+  gboolean is_devel_a = strstr (path_a, ".Devel.") != NULL;
+  gboolean is_devel_b = strstr (path_b, ".Devel.") != NULL;
+
+  if (is_devel_a && !is_devel_b)
+    return -1;
+
+  if (!is_devel_a && is_devel_b)
+    return 1;
+
+  return g_utf8_collate (path_a, path_b);
+}
+
 static void
 gbp_flatpak_config_provider_load_worker (IdeTask      *task,
                                          gpointer      source_object,
@@ -346,6 +368,8 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
       g_ptr_array_add (manifests, g_steal_pointer (&manifest));
     }
+
+  g_ptr_array_sort (manifests, sort_by_path);
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&manifests),
