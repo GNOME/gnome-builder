@@ -44,7 +44,7 @@ struct _GbpShellcmdCommandDialog
   GtkLabel              *shortcut_label;
   GtkButton             *save;
   GtkButton             *delete_button;
-  GtkSwitch             *use_shell;
+  AdwSwitchRow          *use_shell;
 
   char                  *accel;
 
@@ -295,7 +295,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->argv), argvstr);
   gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
   gtk_editable_set_text (GTK_EDITABLE (self->name), name);
-  gtk_switch_set_active (self->use_shell, use_shell);
+  adw_switch_row_set_active (self->use_shell, use_shell);
   set_accel (self, accel);
 
   /* locality value equates to position in list model for simplicity */
@@ -411,7 +411,7 @@ command_save_action (GtkWidget  *widget,
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
   gbp_shellcmd_run_command_set_accelerator (self->command, self->accel);
   gbp_shellcmd_run_command_set_use_shell (self->command,
-                                          gtk_switch_get_active (self->use_shell));
+                                          adw_switch_row_get_active (self->use_shell));
 
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_environ (IDE_RUN_COMMAND (self->command),
