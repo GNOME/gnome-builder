@@ -116,7 +116,7 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwSwitchRow" id="shell_row">
+                  <object class="AdwSwitchRow" id="use_shell">
                     <property name="title" translatable="yes">Use Subshell</property>
                     <property name="subtitle" translatable="yes">Run the program from a subshell such as &lt;tt&gt;sh -c ''&lt;/tt&gt;</property>
                   </object>
@@ -275,3 +275,4 @@
     </child>
   </object>
 </interface>
+
