@@ -29,6 +29,6 @@ _IDE_EXTERN void
 _gb_clang_format_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUFFER_ADDIN,
+                                              IDE_TYPE_FORMATTER,
                                               GB_TYPE_CLANG_FORMAT_BUFFER_ADDIN);
 }
