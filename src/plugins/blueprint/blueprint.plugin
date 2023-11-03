@@ -9,6 +9,7 @@ X-Code-Action-Languages=blueprint
 X-Completion-Provider-Languages=blueprint
 X-Diagnostic-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=blueprint
+X-Formatter-Languages=blueprint
 X-Hover-Provider-Languages=blueprint
 X-LSP-Command=blueprint-compiler lsp
 X-LSP-Languages=blueprint
