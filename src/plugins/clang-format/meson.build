@@ -1,6 +1,6 @@
 plugins_sources += files([
   'clang-format-plugin.c',
-  'gb-clang-format-buffer-addin.c',
+  'gbp-clang-formatter.c',
 ])
 
 plugin_clang_format_resources = gnome.compile_resources(

@@ -1,4 +1,4 @@
-/* gb-clang-format-buffer-addin.c
+/* gbb-clang-formatter.c
  *
  * Copyright 2023 Tomi Lähteenmäki <lihis@lihis.net>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "clang-format-buffer"
+#define G_LOG_DOMAIN "clang-formatter"
 
 #include "config.h"
 
@@ -27,9 +27,9 @@
 #include <libide-lsp.h>
 #include <sys/wait.h>
 
-#include "gb-clang-format-buffer-addin.h"
+#include "gbp-clang-formatter.h"
 
-struct _GbClangFormatBufferAddin
+struct _GbpClangFormatter
 {
   GObject parent_instance;
 };
@@ -225,7 +225,7 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
                               GAsyncReadyCallback   callback,
                               gpointer              user_data)
 {
-  GbClangFormatBufferAddin *self = (GbClangFormatBufferAddin *)formatter;
+  GbpClangFormatter *self = (GbpClangFormatter *)formatter;
   g_autoptr(IdeTask) task = NULL;
   GtkSourceLanguage *language;
   g_autofree gchar *config_dir = NULL;
@@ -238,7 +238,7 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
 
   IDE_ENTRY;
 
-  g_assert (GB_IS_CLANG_FORMAT_BUFFER_ADDIN (self));
+  g_assert (GBP_IS_CLANG_FORMATTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -296,7 +296,7 @@ gb_clang_format_format_finish(IdeFormatter         *formatter,
 {
   IDE_ENTRY;
 
-  g_assert (GB_IS_CLANG_FORMAT_BUFFER_ADDIN (formatter));
+  g_assert (GBP_IS_CLANG_FORMATTER (formatter));
   g_assert (IDE_IS_TASK (result));
 
   IDE_RETURN (ide_task_propagate_boolean (IDE_TASK (result), error));
@@ -309,15 +309,15 @@ ide_formatter_iface_init (IdeFormatterInterface *iface)
   iface->format_finish = gb_clang_format_format_finish;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbClangFormatBufferAddin, gb_clang_format_buffer_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpClangFormatter, gbp_clang_formatter, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_FORMATTER, ide_formatter_iface_init))
 
 static void
-gb_clang_format_buffer_addin_class_init (GbClangFormatBufferAddinClass *klass)
+gbp_clang_formatter_class_init (GbpClangFormatterClass *klass)
 {
 }
 
 static void
-gb_clang_format_buffer_addin_init (GbClangFormatBufferAddin *self)
+gbp_clang_formatter_init (GbpClangFormatter *self)
 {
 }
