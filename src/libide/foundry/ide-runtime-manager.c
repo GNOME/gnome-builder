@@ -105,7 +105,6 @@ ide_runtime_manager_extension_added (IdeExtensionSetAdapter *set,
                                      gpointer                user_data)
 {
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;
-  g_autoptr(DexFuture) future = NULL;
   IdeRuntimeManager *self = user_data;
 
   IDE_ENTRY;
@@ -116,11 +115,10 @@ ide_runtime_manager_extension_added (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
   g_assert (IDE_IS_RUNTIME_MANAGER (self));
 
-  future = ide_runtime_provider_load (provider);
-  future = dex_future_finally (future,
-                               ide_runtime_manager_provider_load_cb,
-                               g_object_ref (provider),
-                               g_object_unref);
+  dex_future_disown (dex_future_finally (ide_runtime_provider_load (provider),
+                                         ide_runtime_manager_provider_load_cb,
+                                         g_object_ref (provider),
+                                         g_object_unref));
 
   IDE_EXIT;
 }
@@ -157,7 +155,6 @@ ide_runtime_manager_extension_removed (IdeExtensionSetAdapter *set,
                                        gpointer                user_data)
 {
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)exten;
-  g_autoptr(DexFuture) future = NULL;
 
   IDE_ENTRY;
 
@@ -166,11 +163,10 @@ ide_runtime_manager_extension_removed (IdeExtensionSetAdapter *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
 
-  future = ide_runtime_provider_unload (provider);
-  future = dex_future_finally (future,
-                               ide_runtime_manager_provider_unload_cb,
-                               g_object_ref (provider),
-                               g_object_unref);
+  dex_future_disown (dex_future_finally (ide_runtime_provider_unload (provider),
+                                         ide_runtime_manager_provider_unload_cb,
+                                         g_object_ref (provider),
+                                         g_object_unref));
 
   IDE_EXIT;
 }
