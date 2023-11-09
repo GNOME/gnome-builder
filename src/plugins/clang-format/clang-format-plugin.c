@@ -23,12 +23,12 @@
 #include <libide-editor.h>
 #include <libpeas.h>
 
-#include "gb-clang-format-buffer-addin.h"
+#include "gbp-clang-formatter.h"
 
 _IDE_EXTERN void
-_gb_clang_format_register_types (PeasObjectModule *module)
+_gbp_clang_format_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUFFER_ADDIN,
-                                              GB_TYPE_CLANG_FORMAT_BUFFER_ADDIN);
+                                              IDE_TYPE_FORMATTER,
+                                              GBP_TYPE_CLANG_FORMATTER);
 }

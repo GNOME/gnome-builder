@@ -1,4 +1,4 @@
-/* gb-clang-format-buffer-addin.h
+/* gbp-clang-formatter.h
  *
  * Copyright 2021 Tomi Lähteenmäki <lihis@lihis.net>
  *
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_CLANG_FORMAT_BUFFER_ADDIN (gb_clang_format_buffer_addin_get_type())
+#define GBP_TYPE_CLANG_FORMATTER (gbp_clang_formatter_get_type())
 
-G_DECLARE_FINAL_TYPE (GbClangFormatBufferAddin, gb_clang_format_buffer_addin, GB, CLANG_FORMAT_BUFFER_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpClangFormatter, gbp_clang_formatter, GBP, CLANG_FORMATTER, GObject)
 
 G_END_DECLS
