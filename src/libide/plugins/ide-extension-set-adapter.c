@@ -170,6 +170,9 @@ remove_extension (IdeExtensionSetAdapter *self,
 
   hold = g_object_ref (exten);
 
+  IDE_TRACE_MSG ("Unloading extension %s",
+                 G_OBJECT_TYPE_NAME (hold));
+
   g_hash_table_remove (self->extensions, plugin_info);
 
   if (g_ptr_array_find (self->extensions_array, exten, &position))
