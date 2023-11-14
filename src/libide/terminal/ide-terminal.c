@@ -569,7 +569,7 @@ ide_terminal_init (IdeTerminal *self)
                                        VTE_REGEX_FLAGS_DEFAULT | BUILDER_PCRE2_MULTILINE | BUILDER_PCRE2_UCP,
                                        NULL);
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
-      vte_terminal_match_set_cursor_name (VTE_TERMINAL (self), tag, "hand2");
+      vte_terminal_match_set_cursor_name (VTE_TERMINAL (self), tag, "hand");
     }
 
   priv->settings = g_settings_new ("org.gnome.builder.terminal");
