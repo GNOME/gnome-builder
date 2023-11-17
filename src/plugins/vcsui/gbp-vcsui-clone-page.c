@@ -433,7 +433,6 @@ static void
 gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
 {
   g_autofree char *projects_dir = ide_path_collapse (ide_get_projects_dir ());
-  static GdkRGBA transparent = {0, 0, 0, 0};
   g_autoptr(VtePty) pty = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -441,7 +440,7 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
   gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
   gtk_editable_set_text (GTK_EDITABLE (self->author_name_row), g_get_real_name ());
 
-  vte_terminal_set_colors (self->terminal, NULL, &transparent, NULL, 0);
+  vte_terminal_set_clear_background (self->terminal, FALSE);
 
   pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
   vte_terminal_set_pty (self->terminal, pty);
