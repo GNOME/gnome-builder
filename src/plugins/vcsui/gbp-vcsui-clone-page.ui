@@ -229,6 +229,28 @@
                         <property name="child">
                           <object class="AdwPreferencesGroup">
                             <property name="title" translatable="yes">Status</property>
+                            <property name="header-suffix">
+                              <object class="GtkBox">
+                                <property name="spacing">16</property>
+                                <child>
+                                  <object class="GtkLabel" id="failure_message">
+                                    <property name="wrap">true</property>
+                                    <property name="hexpand">true</property>
+                                    <property name="xalign">0</property>
+                                    <property name="valign">center</property>
+                                    <style>
+                                      <class name="error"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="IdeProgressIcon" id="progress">
+                                    <property name="visible">false</property>
+                                    <property name="valign">center</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <style>
@@ -260,36 +282,14 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="GtkBox">
-                    <property name="margin-top">12</property>
-                    <property name="spacing">16</property>
-                    <child>
-                      <object class="GtkLabel" id="failure_message">
-                        <property name="wrap">true</property>
-                        <property name="hexpand">true</property>
-                        <property name="xalign">0</property>
-                        <property name="valign">center</property>
-                        <style>
-                          <class name="error"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeProgressIcon" id="progress">
-                        <property name="visible">false</property>
-                        <property name="valign">center</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="action-name">clone-page.clone</property>
-                        <property name="label" translatable="yes">Clone Repository</property>
-                        <property name="valign">center</property>
-                        <style>
-                          <class name="suggested-action"/>
-                        </style>
-                      </object>
-                    </child>
+                  <object class="GtkButton">
+                    <property name="action-name">clone-page.clone</property>
+                    <property name="label" translatable="yes">Clone Repository</property>
+                    <property name="halign">center</property>
+                    <style>
+                      <class name="suggested-action"/>
+                      <class name="pill"/>
+                    </style>
                   </object>
                 </child>
               </object>
