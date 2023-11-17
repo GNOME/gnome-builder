@@ -1,0 +1,26 @@
+vte-terminal
+{
+  padding-top: 7px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+vte-terminal:drop(active) .drop-highlight
+{
+  box-shadow: 0 0 1px 1px @accent_bg_color;
+  border-radius: 0 0 11px 11px;
+}
+window.maximized vte-terminal:drop(active) .drop-highlight
+{
+  border-radius: 0;
+}
+
+vte-terminal revealer.size label
+{
+  background: @theme_bg_color;
+  padding: 3px 12px;
+  border-top-left-radius: 9px;
+  border-top: 1px solid alpha(@borders,.5);
+  border-left: 1px solid alpha(@borders,.5);
+}

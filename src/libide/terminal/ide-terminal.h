@@ -1,6 +1,7 @@
-/* ide-terminal.h
+/*
+ * ide-terminal.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +21,11 @@
 
 #pragma once
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
-
 #include <vte/vte.h>
+
 #include <libide-core.h>
+
+#include "ide-terminal-palette.h"
 
 G_BEGIN_DECLS
 
@@ -39,11 +39,11 @@ struct _IdeTerminalClass
   VteTerminalClass parent_class;
 };
 
-IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_terminal_new        (void);
-IDE_AVAILABLE_IN_ALL
-void       ide_terminal_get_colors (IdeTerminal *self,
-                                    GdkRGBA     *bg,
-                                    GdkRGBA     *fg);
+IDE_AVAILABLE_IN_46
+IdeTerminalPalette *ide_terminal_get_palette (IdeTerminal         *self);
+IDE_AVAILABLE_IN_46
+void                ide_terminal_set_palette (IdeTerminal         *self,
+                                              IdeTerminalPalette  *palette);
 
 G_END_DECLS
+

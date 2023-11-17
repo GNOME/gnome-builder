@@ -27,6 +27,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #include <vte/vte.h>
 
 #include <libide-foundry.h>
@@ -56,6 +57,51 @@ static GParamSpec *properties [N_PROPS];
 
 static void ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                                 VteTerminal     *terminal);
+
+static void
+ide_terminal_page_notify_style_scheme_cb (IdeTerminalPage *self,
+                                          GParamSpec      *pspec,
+                                          IdeApplication  *application)
+{
+  g_autoptr(IdeTerminalPalette) palette = NULL;
+  const char *scheme;
+  const char *palette_id = "gnome";
+
+  g_assert (IDE_IS_TERMINAL_PAGE (self));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  if (!(scheme = ide_application_get_style_scheme (application)))
+    return;
+
+  if (g_str_has_prefix (scheme, "solarized"))
+    palette_id = "solarized";
+  else if (g_str_has_prefix (scheme, "arctic"))
+    palette_id = "nord";
+
+  palette = ide_terminal_palette_new_from_name (palette_id);
+
+  ide_terminal_set_palette (self->terminal, palette);
+}
+
+static void
+ide_terminal_page_constructed (GObject *object)
+{
+  IdeTerminalPage *self = (IdeTerminalPage *)object;
+
+  G_OBJECT_CLASS (ide_terminal_page_parent_class)->constructed (object);
+
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (ide_terminal_page_notify_style_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::dark",
+                           G_CALLBACK (ide_terminal_page_notify_style_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_terminal_page_notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
+}
 
 static gboolean
 terminal_has_notification_signal (void)
@@ -499,6 +545,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (klass);
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
+  object_class->constructed = ide_terminal_page_constructed;
   object_class->dispose = ide_terminal_page_dispose;
   object_class->get_property = ide_terminal_page_get_property;
   object_class->set_property = ide_terminal_page_set_property;

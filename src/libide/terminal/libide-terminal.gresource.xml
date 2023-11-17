@@ -2,8 +2,10 @@
 <gresources>
   <gresource prefix="/org/gnome/libide-terminal">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>style.css</file>
   </gresource>
   <gresource prefix="/org/gnome/libide-terminal/ui">
+    <file preprocess="xml-stripblanks">ide-terminal.ui</file>
     <file preprocess="xml-stripblanks">ide-terminal-page.ui</file>
     <file preprocess="xml-stripblanks">ide-terminal-popover.ui</file>
     <file preprocess="xml-stripblanks">ide-terminal-popover-row.ui</file>

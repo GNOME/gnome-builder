@@ -12,6 +12,7 @@ cc.has_header('pcre2.h', required: true)
 
 libide_terminal_public_headers = [
   'ide-terminal-page.h',
+  'ide-terminal-palette.h',
   'ide-terminal-popover.h',
   'ide-terminal-launcher.h',
   'ide-terminal-search.h',
@@ -37,6 +38,7 @@ libide_terminal_private_headers = [
 
 libide_terminal_public_sources = [
   'ide-terminal-page.c',
+  'ide-terminal-palette.c',
   'ide-terminal-popover.c',
   'ide-terminal-launcher.c',
   'ide-terminal-search.c',
