@@ -166,6 +166,8 @@ ide_greeter_workspace_apply_filter_all (IdeGreeterWorkspace *self)
                                 ide_greeter_workspace_filter_sections,
                                 self);
 
+  gtk_widget_set_visible (GTK_WIDGET (self->sections),
+                          ide_greeter_workspace_has_match (self));
   gtk_widget_set_visible (GTK_WIDGET (self->empty_state),
                           !ide_greeter_workspace_has_match (self));
 }
