@@ -488,7 +488,6 @@ ide_greeter_workspace_delete_selected_rows (GSimpleAction *action,
         ide_greeter_section_delete_selected (IDE_GREETER_SECTION (child));
     }
 
-  ide_greeter_workspace_apply_filter_all (self);
   ide_greeter_workspace_set_selection_mode (self, FALSE);
 }
 
@@ -505,7 +504,6 @@ purge_selected_rows_response (IdeGreeterWorkspace *self)
         ide_greeter_section_purge_selected (IDE_GREETER_SECTION (child));
     }
 
-  ide_greeter_workspace_apply_filter_all (self);
   ide_greeter_workspace_set_selection_mode (self, FALSE);
 }
 
@@ -1115,6 +1113,9 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
 
       gtk_widget_set_visible (GTK_WIDGET (self->action_bar), selection_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->projects_action_bar), !selection_mode);
+
+      ide_greeter_workspace_apply_filter_all (self);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTION_MODE]);
     }
 }
