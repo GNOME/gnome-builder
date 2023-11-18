@@ -89,11 +89,14 @@ src/libide/projects/xml-reader.c
 src/libide/sourceview/gtk/menus.ui
 src/libide/sourceview/ide-source-view.c
 src/libide/terminal/gtk/menus.ui
+src/libide/terminal/ide-terminal.c
 src/libide/terminal/ide-terminal-page-actions.c
 src/libide/terminal/ide-terminal-page.c
 src/libide/terminal/ide-terminal-page.ui
+src/libide/terminal/ide-terminal-palettes.h
 src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.ui
+src/libide/terminal/ide-terminal.ui
 src/libide/threading/ide-subprocess.c
 src/libide/tree/ide-tree-empty.c
 src/libide/tree/ide-tree-node.c
