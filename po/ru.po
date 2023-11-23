@@ -6,13 +6,16 @@
 # Stas Solovey <whats_up@tut.by>, 2017.
 # Дронова Юлия <juliette.tux@gmail.com>, 2023.
 # SPDX-FileCopyrightText: 2023 SPDX-FileCopyrightText :
-# SPDX-FileCopyrightText: 2023 Дронова Юлия <juliette.tux@gmail.com>
+# SPDX-FileCopyrightText: 2023 SPDX-FileCopyrightText :
+# SPDX-FileCopyrightText: 2023 SPDX-FileCopyrightText :
+# SPDX-FileCopyrightText: 2023 SPDX-FileCopyrightText :
+# SPDX-FileCopyrightText: 2023 SPDX-FileCopyrightText :
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-16 09:47+0000\n"
-"PO-Revision-Date: 2023-09-19 12:31+0300\n"
+"POT-Creation-Date: 2023-09-19 09:33+0000\n"
+"PO-Revision-Date: 2023-10-16 17:09+0300\n"
 "Last-Translator: Дронова Юлия <juliette.tux@gmail.com>\n"
 "Language-Team: RU\n"
 "Language: ru\n"
@@ -21,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
 "=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.08.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -52,7 +55,7 @@ msgstr ""
 "GNOME. Приложение сочетает в себе встроенную поддержку основных технологий "
 "GNOME, таких, как GTK+, Glib и GNOME API, и с возможностями, которые оценит "
 "любой разработчик, например, подсветка синтаксиса и фрагменты исходного "
-"текста."
+"кода."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
 msgid ""
@@ -134,7 +137,8 @@ msgstr "Поддержка сборок с использованием jhbuild 
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Support for viewing TODOs found within your code base"
-msgstr "Поддержка для просмотра файлов TODO, найденных в кодовой базе"
+msgstr ""
+"Поддержка просмотра меток TODO: HACK: и т.п. в комментариях исходного кода"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "Fast fuzzy text search across files and symbols"
@@ -154,7 +158,7 @@ msgstr "Интеграция с Git для клонирования проект
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "The source code editor"
-msgstr "Редактор исходных текстов"
+msgstr "Редактор исходного кода"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "Fast global fuzzy search"
@@ -171,7 +175,7 @@ msgstr "Мини-карта для более полного просмотра 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 #: src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
-msgstr "Параллельные сборки"
+msgstr "Параллельная сборка"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
@@ -183,7 +187,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
-msgstr "Очистить журналы сборки"
+msgstr "Очищать журналы сборки"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
@@ -201,14 +205,14 @@ msgstr "Если параметр включён, при запуске сбор
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
-msgstr "Разрешить использование сети при ограниченном трафике"
+msgstr "Разрешить использование сети при тарифицируемом трафике"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"Включить автоматические передачи файлов во время сборки при ограниченном "
+"Включить автоматические передачи файлов во время сборки при тарифицируемом "
 "трафике, например, закачки SDK и зависимостей"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
@@ -250,7 +254,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
 msgid "Debugger Breakpoint at Criticals"
-msgstr "Точка останова отладчика на Criticals"
+msgstr "Точка останова отладчика на критических ошибках"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
@@ -261,7 +265,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at Warnings and Criticals"
-msgstr "Точка останова отладчика на предупреждениях и Criticals"
+msgstr "Точка останова отладчика на предупреждениях и критических ошибках"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
@@ -281,7 +285,7 @@ msgstr "При повторном открытии файла перейти к 
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
-msgstr "Показать изменённые строки"
+msgstr "Показывать изменённые строки"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
@@ -304,7 +308,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
-msgstr "Подсветка текущей строки"
+msgstr "Подсвечивать текущую строку"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
@@ -314,7 +318,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
-msgstr "Подсветка парных скобок"
+msgstr "Подсвечивать парные скобки"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
@@ -383,7 +387,9 @@ msgstr "Отображение пробелов"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
-msgstr "Различные типы отображения пробелов в редакторе"
+msgstr ""
+"Различные типы пробелов, отображаемые в редакторе с помощью "
+"спец. символов"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:77
@@ -1231,7 +1237,7 @@ msgstr "Идёт удаление каталогов сборки…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr "Невозможно выполнить перенос сборки при ограниченном трафике"
+msgstr "Невозможно выполнить перенос сборки при тарифицируемом трафике"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
@@ -1805,7 +1811,7 @@ msgstr "Языковые серверы"
 
 #: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
-msgstr "Устройства и симуляторы"
+msgstr "Устройства/эмуляторы"
 
 #: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
@@ -1838,7 +1844,7 @@ msgstr "Web"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
-msgstr "Включение использования языков"
+msgstr "Поддержка языков"
 
 #: src/libide/plugins/ide-plugin.c:350
 msgid "Desktop Integration"
@@ -1968,7 +1974,7 @@ msgstr "Преобразовать выделенный текст в регис
 
 #: src/libide/sourceview/gtk/menus.ui:114
 msgid "Select _Line"
-msgstr "Выбрать _строку"
+msgstr "Выделить _строку"
 
 #: src/libide/sourceview/gtk/menus.ui:119
 msgid "_Delete Line"
@@ -2088,7 +2094,8 @@ msgstr "Перейти к следующему совпадению"
 
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
-msgstr "Перенос без разбивки слов"
+msgstr ""
+"При поиске переходить от последнего найденного совпадения снова к первому"
 
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
@@ -2336,11 +2343,11 @@ msgstr "Ошибки (%u)"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
 msgid "Shared"
-msgstr "Общий ресурс"
+msgstr "Разделяемая"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 msgid "Static"
-msgstr "Статически"
+msgstr "Статическая"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
@@ -2374,7 +2381,7 @@ msgstr "Автоматическое обнаружение"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr "Данный выбор позволяет Builder выбирать лучших кандидатов"
+msgstr "Данный выбор позволяет Builder выбирать лучшего кандидата"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
@@ -2382,7 +2389,7 @@ msgstr "Контейнер, используемый для сборки и за
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
-msgstr "Создать дубликат"
+msgstr "Создать копию"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
 msgid "Duplicate into new configuration"
@@ -2764,7 +2771,7 @@ msgstr "История"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
-msgstr "Очистить артефакты с истёкшим сроком действия"
+msgstr "Очищать просроченные артефакты"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
@@ -2773,7 +2780,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
-msgstr "Очистить журналы сборки"
+msgstr "Очищать журналы сборки"
 
 #: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
@@ -2797,7 +2804,7 @@ msgstr "Перенаправлять журналы ошибок языково�
 
 #: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
-msgstr "Рабоч. процессы"
+msgstr "Рабочие процессы"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
@@ -2897,7 +2904,7 @@ msgstr "Сервер интеграции Clang начал работу как �
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
-msgstr "анонимно"
+msgstr "анонимный"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
@@ -3065,16 +3072,16 @@ msgstr "Необходимо выбрать символ для переимен
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
-msgstr "Найти документацию"
+msgstr "Найти ссылки"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
 msgid "No references found"
-msgstr "Документация не найдена"
+msgstr "Ссылки не найдены"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
-"Инструментарий языка программирования может не поддерживать поиск отсылок"
+"Инструментарий языка программирования может не поддерживать поиск ссылок"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
@@ -3117,7 +3124,7 @@ msgstr "_Перейти к объявлению"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
-msgstr "Быстрый переход к файлу и местоположению объявления элемента"
+msgstr "Перейти к файлу и местоположению объявления элемента"
 
 #: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
@@ -3125,11 +3132,11 @@ msgstr "_Перейти к определению"
 
 #: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
-msgstr "Быстрый переход к файлу и местоположению определения элемента"
+msgstr "Перейти к файлу и местоположению определения элемента"
 
 #: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
-msgstr "_Найти отсылки"
+msgstr "_Найти ссылки"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -3141,7 +3148,7 @@ msgstr "_Закомментировать код"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr "Закомментировать выбранный блок исходного кода"
+msgstr "Закомментировать выбранный исходный код"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
@@ -3149,7 +3156,7 @@ msgstr "Раск_омментировать код"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr "Удалить комментирование выбранного блока исходного кода"
+msgstr "Удалить комментирование выбранного исходного кода"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3330,23 +3337,23 @@ msgstr "Приостановить отладчик до продолжения"
 
 #: src/plugins/debuggerui/gtk/menus.ui:52
 msgid "Step Over"
-msgstr "Без захода в код"
+msgstr "Шаг с обходом"
 
 #: src/plugins/debuggerui/gtk/menus.ui:55
 msgid "Execute the current line, stepping over any function calls"
-msgstr "Выполнить код в текущей строке с обходом кода вызова функций"
+msgstr "Выполнить код в текущей строке с обходом кода вызываемых функций"
 
 #: src/plugins/debuggerui/gtk/menus.ui:61
 msgid "Step Into"
-msgstr "С заходом в код"
+msgstr "Шаг с заходом"
 
 #: src/plugins/debuggerui/gtk/menus.ui:64
 msgid "Execute the current line, stepping into any function calls"
-msgstr "Выполнить код в текущей строке с заходом в код вызовов функций"
+msgstr "Выполнить код в текущей строке с заходом в код вызываемых функций"
 
 #: src/plugins/debuggerui/gtk/menus.ui:70
 msgid "Step Out"
-msgstr "Выйти из кода"
+msgstr "Выйти из функции"
 
 #: src/plugins/debuggerui/gtk/menus.ui:73
 msgid "Run until the end of the function"
@@ -3368,7 +3375,7 @@ msgstr "Автоматически выполнять останов на пре
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
-msgstr "Автоматически выполнять останов на Criticals"
+msgstr "Автоматически выполнять останов на критических ошибках"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3415,11 +3422,11 @@ msgstr "Продолжить выполнение программы (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
 msgid "Execute the current line, stepping into any function calls (F8)"
-msgstr "Выполнить код в текущей строке с заходом в код вызова функций (F8)"
+msgstr "Выполнить код в текущей строке с заходом в код вызываемых функций (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
 msgid "Execute the current line, stepping over any function calls (F7)"
-msgstr "Выполнить код в текущей строке, не заходя в код вызова функций (F7)"
+msgstr "Выполнить код в текущей строке с обходом кода вызываемых функций (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
 msgid "Run until the end of the function (Shift+F8)"
@@ -3427,7 +3434,7 @@ msgstr "Выполнить до конца функции (Shift+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
-msgstr "Декомпозиция"
+msgstr "Дизассемблирование"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
@@ -3451,7 +3458,7 @@ msgstr "Диапазон адресов"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:312
 msgid "Locals"
-msgstr "Locals"
+msgstr "Локальные переменные"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:367
 msgid "Parameters"
@@ -3512,7 +3519,7 @@ msgstr "Остановить после запуска программы"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "Автоматически вставлять точку останова в начало приложения"
+msgstr "Автоматически приостанавливать выполнение в начале приложения"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
@@ -3520,15 +3527,19 @@ msgstr "Останавливать на предупреждениях"
 
 #: src/plugins/debuggerui/tweaks.ui:32
 msgid "Automatically insert a breakpoint on warning logs"
-msgstr "Автоматически вставлять точку останова на журналах предупреждений"
+msgstr ""
+"Автоматически приостанавливать выполнение при появлении предупреждений в"
+" журнале"
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
-msgstr "Останавливаться на Criticals"
+msgstr "Останавливаться на критических ошибках"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr "Автоматически вставлять точку останова на критических журналах"
+msgstr ""
+"Автоматически приостанавливать выполнение при появлении критических ошибок в"
+" журнале"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
@@ -3621,7 +3632,7 @@ msgstr "Отступ"
 
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
-msgstr "Отступы создаются с помощью пробелов"
+msgstr "Создавать отступы с помощью пробелов"
 
 #: src/plugins/editorui/gtk/menus.ui:13
 msgid "Spaces per Tab"
@@ -3860,7 +3871,7 @@ msgstr "Предпочитать пробел перед двоеточием"
 
 #: src/plugins/editorui/tweaks-language.ui:290
 msgid "Prefer a space before commas"
-msgstr "Предпочитать пробел перед разделительными запятыми"
+msgstr "Предпочитать пробел перед запятыми"
 
 #: src/plugins/editorui/tweaks-language.ui:297
 msgid "Prefer a space before semicolons"
@@ -3888,7 +3899,7 @@ msgstr "Шрифт, используемый в редакторе исходн�
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr "Корректировать расстояния между строками"
+msgstr "Настроить расстояние между строками"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
@@ -4128,7 +4139,7 @@ msgstr "Макс. число вариантов автодополнений"
 #: src/plugins/editorui/tweaks.ui:461
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
-"Максимальное число рядов в меню автодополнений, показываемых одновременно"
+"Максимальное число строк в меню автодополнений, показываемых одновременно"
 
 #: src/plugins/editorui/tweaks.ui:480
 msgid "Movements"
@@ -4193,7 +4204,7 @@ msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
-"Повторно форматировать исходный текст при сохранении на диск. Требуется "
+"Повторно форматировать исходный код при сохранении на диск. Требуется "
 "зарегистрированный модуль форматирования для исходного языка."
 
 #: src/plugins/editorui/tweaks.ui:586
@@ -4462,7 +4473,7 @@ msgstr "Отправлено"
 #: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
-msgstr "Отправляется отсылка “%s”"
+msgstr "Отправляется ссылка “%s”"
 
 #: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
@@ -4751,7 +4762,7 @@ msgstr "Перейти к предыдущему результату поиск
 
 #: src/plugins/menu-search/gtk/menus.ui:123
 msgid "Move to and select the previous search result"
-msgstr "Перейти к предыдущему доступному результату поиска и выбрать его"
+msgstr "Перейти к предыдущему результату поиска и выбрать его"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -4928,7 +4939,7 @@ msgstr "Предупреждение"
 #: src/plugins/messages/gbp-messages-panel.c:110
 #: src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
-msgstr "Критический"
+msgstr "Критическая"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -4965,11 +4976,11 @@ msgstr "IDE для написания ПО на базе GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Calendar"
-msgstr "Ежедневник"
+msgstr "Календарь"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr "Ежедневник для GNOME"
+msgstr "Календарь для GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
@@ -4989,7 +5000,7 @@ msgstr "Gitg — это графический клиент Git"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
 msgid "Maps"
-msgstr "Географические карты"
+msgstr "Карты"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
 msgid "A GNOME maps application"
@@ -5029,7 +5040,7 @@ msgstr "Клиент IRC для GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:123
 msgid "Sound Recorder"
-msgstr "Звукозапись"
+msgstr "Диктофон"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
 msgid "A modern sound recorder for GNOME"
@@ -5076,7 +5087,7 @@ msgstr "_Внешняя программа…"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
-msgstr "Использовать системные параметры"
+msgstr "Как в системе"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
@@ -5259,7 +5270,7 @@ msgstr "Восстановить предыдущий сеанс"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
-msgstr "Пои загрузке проекта открывать ранее открытые файлы"
+msgstr "При загрузке проекта открывать ранее открытые файлы"
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
@@ -5290,7 +5301,7 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
-"Идентификатор используется при отсылке на параметры проекта, на каталоги "
+"Идентификатор используется при ссылках на параметры проекта, на каталоги "
 "сборок и на кэшированные данные"
 
 #: src/plugins/projectui/tweaks.ui:132
@@ -5369,13 +5380,13 @@ msgstr "Загрузки"
 
 #: src/plugins/sdkui/tweaks.ui:15
 msgid "Download on Metered Connections"
-msgstr "Загрузки при лимитированном трафике"
+msgstr "Загрузки при тарифицируемом трафике"
 
 #: src/plugins/sdkui/tweaks.ui:16
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "Разрешить скачивать SDK и зависимости при лимитированном трафике"
+msgstr "Разрешить загружать SDK и зависимости при тарифицируемом трафике"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Sources"
@@ -5527,7 +5538,7 @@ msgstr "Окружение команд"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
-msgstr "Местоположение команды"
+msgstr "Среда выполнения команды"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
@@ -5554,7 +5565,7 @@ msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
-msgstr "Комбинаций клавиш не найдено"
+msgstr "Комбинации клавиш не найдены"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:53
 msgid "Try a different search"
@@ -5646,7 +5657,7 @@ msgstr "Переместиться к символу в границах тек�
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
 msgid "System Capture from %s.syscap"
-msgstr "Системный захват из %s.syscap"
+msgstr "Захват системы из %s.syscap"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
@@ -5719,11 +5730,11 @@ msgstr "Счётчики"
 
 #: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr "Потребление ЦП"
+msgstr "Использование ЦП"
 
 #: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
-msgstr "Потребление памяти"
+msgstr "Использование памяти"
 
 #: src/plugins/sysprof/gtk/menus.ui:89
 msgid "Storage I/O"
@@ -5856,13 +5867,13 @@ msgstr "Потребление места на диске"
 
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
-msgstr "Производительность командного интерпретатора GNOME"
+msgstr "Производительность GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
-"Собирать сведения о производительности и временных характеристиках из "
-"командного интерпретатора GNOME"
+"Собирать сведения о производительности и временных характеристиках из GNOME"
+" Shell"
 
 #: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
@@ -6032,11 +6043,11 @@ msgstr "Запросить выполнение всех модульных те
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
-msgstr "Файлы TODO/FIXME"
+msgstr "TODO/FIXME"
 
 #: src/plugins/todo/gbp-todo-panel.ui:14
 msgid "Loading TODOs…"
-msgstr "Идёт загрузка файлов TODO…"
+msgstr "Загрузка TODO…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
@@ -6048,11 +6059,11 @@ msgstr "Builder обновляет зависимости из конфигур�
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
-msgstr "Обновление зависимостей…"
+msgstr "Обновить зависимости…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr "Скачать обновления для зависимостей проекта"
+msgstr "Загрузить обновления для зависимостей проекта"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6066,7 +6077,7 @@ msgstr "Доступно обновление"
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
-msgstr "Доступно обновление Builder. Builder может скачать и установить его."
+msgstr "Доступно обновление Builder. Builder может загрузить и установить его."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
