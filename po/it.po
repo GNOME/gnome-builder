@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-10-16 17:15+0000\n"
-"PO-Revision-Date: 2023-10-17 17:42+0200\n"
+"POT-Creation-Date: 2023-11-10 13:42+0000\n"
+"PO-Revision-Date: 2023-11-26 15:20+0100\n"
 "Last-Translator: Davide Ferracin <davide.ferracin@protonmail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1305,16 +1305,16 @@ msgstr "L'utente ha richiesto la terminazione dell'applicazione"
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:264
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Sistema host"
 
-#: src/libide/foundry/ide-runtime-provider.c:147
+#: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
 msgid "Discovered runtime “%s”"
 msgstr "Trovato il runtime «%s»"
 
-#: src/libide/foundry/ide-runtime-provider.c:170
+#: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
 msgstr "Rimozione del runtime «%s»"
@@ -1531,7 +1531,7 @@ msgstr "%u di %u"
 #: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
-msgstr "Cerca"
+msgstr "Ricerca"
 
 #: src/libide/gui/ide-search-popover.ui:61
 msgid "Search for anything"
@@ -1663,7 +1663,7 @@ msgstr "Rimuovi variabile d'ambiente"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
-msgstr "Aprire un file o un terminale"
+msgstr "Aprire un file o il terminale"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
@@ -2216,17 +2216,17 @@ msgstr ""
 "Le chiavi possono contenere solo caratteri alfanumerici o trattini bassi."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 msgid "Add _Variable"
 msgstr "Aggiungi _variabile"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:208
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 msgid "Add Variable"
 msgstr "Aggiungi variabile"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:209
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "_Aggiungi"
 
@@ -2312,7 +2312,7 @@ msgstr "Avvisi"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:271
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
 msgstr "Pipeline di compilazione"
 
@@ -2778,7 +2778,7 @@ msgstr "Cronologia"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
-msgstr "Pulisci artefatti scaduti"
+msgstr "Elimina artefatti scaduti"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
@@ -2859,7 +2859,7 @@ msgid "Build Environment"
 msgstr "Ambiente di compilazione"
 
 #: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:132
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Località"
 
@@ -2883,13 +2883,13 @@ msgstr ""
 "Il SDK usato per compilare la propria applicazione è individuato "
 "automaticamente dal runtime."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Ottieni dipendenze"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
@@ -3255,11 +3255,11 @@ msgstr "Il progetto verrà creato all'interno di una nuova sotto-directory."
 msgid "License"
 msgstr "Licenza"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:126
+#: src/plugins/create-project/gbp-create-project-widget.ui:120
 msgid "Template"
 msgstr "Modello"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:185
+#: src/plugins/create-project/gbp-create-project-widget.ui:179
 msgid "Create Project"
 msgstr "Crea progetto"
 
@@ -3779,7 +3779,7 @@ msgstr "Indentazione e formattazione"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr "Carattere tabulazione"
+msgstr "Carattere della tabulazione"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
@@ -3791,7 +3791,7 @@ msgstr "Tabulazione"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
-msgstr "Aggiunge un a capo finale"
+msgstr "Aggiungi riga vuota alla fine"
 
 #: src/plugins/editorui/tweaks-language.ui:74
 msgid "Ensure files end with a newline"
@@ -3799,12 +3799,12 @@ msgstr "Fa in modo che i file finiscano con un a capo"
 
 #: src/plugins/editorui/tweaks-language.ui:90
 msgid "Trim Trailing Space"
-msgstr "Elimina spazi bianchi terminali"
+msgstr "Elimina gli spazi bianchi terminali"
 
 #: src/plugins/editorui/tweaks-language.ui:91
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
 msgstr ""
-"Al salvataggio, gli spazi bianchi terminali nelle righe modificate verranno "
+"Al salvataggio, gli spazi bianchi al termine delle righe modificate verranno "
 "rimossi"
 
 #: src/plugins/editorui/tweaks-language.ui:111
@@ -3817,7 +3817,7 @@ msgstr "Indenta il codice automaticamente mentre si scrive"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
-msgstr "Ampiezza tabulazione"
+msgstr "Ampiezza della tabulazione"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
@@ -4265,7 +4265,7 @@ msgstr "Installazione completata"
 msgid "The client has been closed"
 msgstr "Il client è stato chiuso"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Eliminazione del manifesto flatpak non riuscita: %s"
@@ -4571,13 +4571,16 @@ msgstr "_Trova in %s"
 msgid "_Replace in %s"
 msgstr "_Sostituisci in %s"
 
+# [DF] Questo comando (l'ho provato) apre il riquadro per cercare
+# un testo all'interno dei file nell'albero visualizzato in Builder.
+# Non effettua una ricerca aprendo l'app File.
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
-msgstr "Trova in File"
+msgstr "Trova nei file"
 
 #: src/plugins/grep/gbp-grep-panel.ui:6
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
-msgstr "Trova in File (Maiusc+Ctrl+Alt+F)"
+msgstr "Trova nei file (Maiusc+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
 msgid "_Recurse into Directories"
@@ -5497,7 +5500,7 @@ msgstr "Usa una sotto-shell"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Esegui il programma in una sotto-shell, come <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:133
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5505,31 +5508,31 @@ msgstr ""
 "Builder può eseguire i comandi da varie posizioni, inclusi il sistema host e "
 "i contenitori di compilazione."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:229
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
 msgstr "_Elimina comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:257
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 msgid "Subprocess"
 msgstr "Sottoprocesso"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Esegue il comando come sottoprocesso di Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
 msgstr "Esegue il comando sul sistema host."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
 msgstr "Esegue il comando all'interno della pipeline di compilazione."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:278
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
 msgstr "Come l'applicazione obiettivo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
 msgstr "Esegue il comando come se fosse l'applicazione obiettivo."
 
@@ -5673,13 +5676,13 @@ msgstr "Simboli nel file"
 msgid "In Page"
 msgstr "Nella pagina"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:97
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:363
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Seleziona simbolo…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:366
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Seleziona simbolo (Ctrl+Maiusc+K)"
 
@@ -6158,37 +6161,41 @@ msgstr "Completo"
 msgid "Leak Kinds"
 msgstr "Tipi di perdite"
 
+# [DF] Contesto: tipi di perdite
 #: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
-msgstr "Definiti"
+msgstr "Certe"
 
+# [DF] Contesto: tipi di perdite
 #: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
-msgstr "Indiretti"
+msgstr "Indirette"
 
+# [DF] Contesto: tipi di perdite
 #: src/plugins/valgrind/gtk/menus.ui:64 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
 msgstr "Probabili"
 
+# [DF] Contesto: tipi di perdite
 #: src/plugins/valgrind/gtk/menus.ui:69 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
 msgstr "Raggiungibili"
 
 #: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
-msgstr "Include perdite definite nel sommario"
+msgstr "Include nella sintesi del rapporto le perdite certe"
 
 #: src/plugins/valgrind/tweaks.ui:32
 msgid "Include possible leaks in report summary"
-msgstr "Include perdite possibili nel sommario"
+msgstr "Include nella sintesi del rapporto le perdite possibili"
 
 #: src/plugins/valgrind/tweaks.ui:44
 msgid "Include indirect leaks in report summary"
-msgstr "Include perdite indirette nel sommario"
+msgstr "Include nella sintesi del rapporto le perdite indirette"
 
 #: src/plugins/valgrind/tweaks.ui:56
 msgid "Include reachable leaks in report summary"
-msgstr "Include perdite raggiungibili nel sommario"
+msgstr "Include nella sintesi del rapporto le perdite raggiungibili"
 
 #: src/plugins/valgrind/tweaks.ui:71
 msgid "Track Origins"
@@ -6196,7 +6203,7 @@ msgstr "Rintraccia origini"
 
 #: src/plugins/valgrind/tweaks.ui:72
 msgid "Show origin of undefined values"
-msgstr "Mostra l'origine di valori non definiti"
+msgstr "Mostra l'origine dei valori non definiti"
 
 #: src/plugins/valgrind/tweaks.ui:83
 msgid "Number of Callers"
