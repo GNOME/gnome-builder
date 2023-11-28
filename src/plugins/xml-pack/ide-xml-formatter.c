@@ -27,6 +27,7 @@
 
 #include <libxml/tree.h>
 #include <libxml/parser.h>
+#include <libxml/xmlsave.h>
 
 #include "ide-xml-formatter.h"
 

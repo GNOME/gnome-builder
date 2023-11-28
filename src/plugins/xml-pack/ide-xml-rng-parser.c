@@ -23,6 +23,7 @@
  * Whole refactoring to match the GNOME Builder needs.
  */
 
+#include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/uri.h>
 
