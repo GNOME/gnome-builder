@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-10-02 21:38+0000\n"
-"PO-Revision-Date: 2023-10-08 11:45+0200\n"
+"POT-Creation-Date: 2023-11-10 13:42+0000\n"
+"PO-Revision-Date: 2023-11-29 16:48+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -266,18 +266,16 @@ msgstr ""
 "g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-#, fuzzy
-#| msgid "Debugger Breakpoint at Criticals"
 msgid "Debugger Breakpoint at Warnings and Criticals"
-msgstr "Punt d'interrupció del depurador a Criticals"
+msgstr "Punt d'interrupció del depurador als crítics i als avisos"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
 msgstr ""
-"El depurador hauria d'inserir automàticament el punt d'interrupció a les funcions "
-"g_warning() i g_critical."
+"El depurador hauria d'inserir automàticament el punt d'interrupció a les "
+"funcions g_warning() i g_critical."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -781,7 +779,7 @@ msgstr "Sense títol"
 #: src/libide/greeter/ide-greeter-workspace.c:666
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1531
+#: src/libide/gui/ide-workbench.c:1532
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -789,7 +787,7 @@ msgstr "Sense títol"
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:104
+#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -798,7 +796,7 @@ msgid "A suitable debugger could not be found."
 msgstr "No s'ha pogut trobar un depurador adequat."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1528
 msgid "Open File…"
 msgstr "Obre un fitxer…"
 
@@ -919,6 +917,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
+"La codificació usada per a carregar el fitxer ha detectat errors. Es pot "
+"seleccionar una codificació alternativa a la barra d'estat i reintentar-ho."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -960,26 +960,26 @@ msgstr "La impressió ha fallat: %s"
 msgid "Failed to format selection: %s"
 msgstr "Ha fallat en formar la selecció %s"
 
-#: src/libide/editor/ide-editor-page.c:1131
+#: src/libide/editor/ide-editor-page.c:1132
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:100
+#: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Desa el fitxer"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
 msgid "Save"
 msgstr "Desa"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Cancel"
 msgstr "Cancel·la"
 
@@ -1084,8 +1084,8 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"No s'ha pogut localitzar la configuració de compilació «%s». Pot ser que "
-"no sigui vàlid o que tingui un format incorrecte."
+"No s'ha pogut localitzar la configuració de compilació «%s». Pot ser que no "
+"sigui vàlid o que tingui un format incorrecte."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1068
@@ -1306,16 +1306,16 @@ msgstr "L'usuari ha sol·licitat que l'aplicació s'aturi"
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:264
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Sistema amfitrió"
 
-#: src/libide/foundry/ide-runtime-provider.c:147
+#: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
 msgid "Discovered runtime “%s”"
 msgstr "Descobert entorn d'execució «%s»"
 
-#: src/libide/foundry/ide-runtime-provider.c:170
+#: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
 msgstr "S'està eliminant el temps d'execució «%s»"
@@ -1384,7 +1384,7 @@ msgid "Failed to load the project"
 msgstr "Ha fallat carregar el projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.c:334
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/plugins/create-project/gbp-create-project-widget.c:262
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Tanca"
@@ -1412,7 +1412,7 @@ msgid "Select Project File"
 msgstr "Selecciona el fitxer del projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1530
+#: src/libide/gui/ide-workbench.c:1531
 msgid "_Open"
 msgstr "_Obre"
 
@@ -1467,9 +1467,9 @@ msgstr "Obre"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:474
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Select"
 msgstr "Selecciona"
 
@@ -2012,14 +2012,14 @@ msgid "Code Navigation"
 msgstr "Navegació del codi"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1637
+#: src/libide/sourceview/ide-source-view.c:1661
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Ln %u, Col %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1639
+#: src/libide/sourceview/ide-source-view.c:1663
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2218,17 +2218,17 @@ msgid "Keys may only contain alpha-numerics or underline."
 msgstr "Les claus només poden contenir alfanumèrics o subratllats."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 msgid "Add _Variable"
 msgstr "Afegeix _variable"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:208
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 msgid "Add Variable"
 msgstr "Afegeix una variable"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:209
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "_Afegeix"
 
@@ -2242,7 +2242,7 @@ msgid "Remove"
 msgstr "Suprimeix"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:103
+#: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Save"
 msgstr "_Desa"
 
@@ -2314,7 +2314,7 @@ msgstr "Avisos"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:271
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
 msgstr "Canonada de construcció"
 
@@ -2863,7 +2863,7 @@ msgid "Build Environment"
 msgstr "Entorn de construcció"
 
 #: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:132
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Localització"
 
@@ -2887,13 +2887,13 @@ msgstr ""
 "El SDK utilitzat per a construir l'aplicació es determina automàticament a "
 "partir del temps d'execució."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Obtenir dependències"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
@@ -3123,7 +3123,7 @@ msgstr "_Canvia el nom d'un símbol…"
 
 #: src/plugins/codeui/gtk/menus.ui:12
 msgid "Code Actions…"
-msgstr "Accions del codi ..."
+msgstr "Accions del codi…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
@@ -3196,12 +3196,12 @@ msgstr "Prototips de funció de reformateig"
 msgid "Display the project creation guide"
 msgstr "Mostra la guia de creació de projectes"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
+#: src/plugins/create-project/gbp-create-project-widget.c:220
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
 msgid "Select Location"
 msgstr "Selecciona una ubicació"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:260
 msgid "Failed to Create Project"
 msgstr "Ha fallat crear el projecte"
 
@@ -3256,11 +3256,11 @@ msgstr "El projecte es crearà en un subdirectori nou."
 msgid "License"
 msgstr "Llicència"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:126
+#: src/plugins/create-project/gbp-create-project-widget.ui:120
 msgid "Template"
 msgstr "Plantilla"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:185
+#: src/plugins/create-project/gbp-create-project-widget.ui:179
 msgid "Create Project"
 msgstr "Crea un projecte"
 
@@ -3388,7 +3388,7 @@ msgstr "Interrupció automàtica a l'inici del programa"
 
 #: src/plugins/debuggerui/gtk/menus.ui:90
 msgid "Automatically Break at Warnings"
-msgstr "Interromp automàticament a advertències"
+msgstr "Interromp automàticament als avisos"
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
@@ -3613,6 +3613,8 @@ msgstr "Reinicia"
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
 msgstr ""
+"Restitueix les preferències del llenguatge a les predeterminades per "
+"l'aplicació"
 
 #. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
@@ -3798,6 +3800,7 @@ msgstr "Retalla l'espai en blanc final"
 #: src/plugins/editorui/tweaks-language.ui:91
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
 msgstr ""
+"Al desar s'eliminaran els espais en blanc del final de les línies modificades"
 
 #: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
@@ -3816,10 +3819,8 @@ msgid "The number of characters to indent for Tab"
 msgstr "El nombre de caràcters a sagnar per al tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:146
-#, fuzzy
-#| msgid "The number of characters to indent for Tab"
 msgid "The number of characters to indent, or -1 to use tab size"
-msgstr "El nombre de caràcters a sagnar per al tabulador"
+msgstr "El nombre de caràcters a sagnar, o -1 per usar un tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -3859,10 +3860,10 @@ msgid "Insert Matching Brace"
 msgstr "Insereix claudàtors concordants"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#, fuzzy
-#| msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "Sobreescriu les claus de tancament, parèntesis i cometes"
+msgstr ""
+"Insereix el caràcter corresponent per les claus de tancament, parèntesis i "
+"cometes"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -4118,7 +4119,7 @@ msgstr "Ampliar fragments"
 
 #: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "Usa el tabulador per sagnar els fragments configurats a l'editor"
 
 #: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
@@ -4141,10 +4142,9 @@ msgid "Select First Completion Proposal"
 msgstr "Selecciona la primera proposta de compleció"
 
 #: src/plugins/editorui/tweaks.ui:445
-#, fuzzy
-#| msgid "Automatically select the first auto-completion entry."
 msgid "Automatically select the first completion proposal when displayed"
-msgstr "Selecciona automàticament la primera entrada de compleció automàtica."
+msgstr ""
+"Selecciona automàticament la primera proposta de compleció quan es mostri"
 
 #: src/plugins/editorui/tweaks.ui:460
 msgid "Maximum Completion Proposals"
@@ -4256,7 +4256,7 @@ msgstr "S'ha completat la instal·lació"
 msgid "The client has been closed"
 msgstr "S'ha tancat el client"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Ha fallat suprimir el manifest de flatpak: %s"
@@ -4310,10 +4310,9 @@ msgid "Creating flatpak workspace"
 msgstr "Creació d'espais de treball flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
-#, fuzzy, c-format
-#| msgid "Exporting staging directory"
+#, c-format
 msgid "Removing stale flatpak staging directory: %s"
-msgstr "Exportació del directori"
+msgstr "S'està esborrant el directori obsolet de treball del flatpak: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
 msgid "Preparing build directory"
@@ -4393,6 +4392,9 @@ msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
+"Quan s'instal·lin SDK i extensions d'SDK, el Constructor pot donar "
+"preferència a una instal·lació específica de Flatpak que contingui "
+"l'extensió."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -5424,16 +5426,16 @@ msgstr "Ordre sense títol"
 msgid "Set Shortcut"
 msgstr "Estableix la drecera"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:471
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
 msgid "Select Working Directory"
 msgstr "Selecciona el directori de treball"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:537
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Crea una ordre"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:539
 msgid "Cre_ate"
 msgstr "_Crea"
 
@@ -5471,8 +5473,8 @@ msgstr "Directori de treball"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "L'ordre s'executarà des d'aquesta ubicació. Utilitzeu <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt> o <tt>$HOME</tt> per a definir un camí relatiu."
@@ -5485,7 +5487,7 @@ msgstr "Utilitza subintèrpret"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Executa el programa des d'un subintèrpret com ara <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:133
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5493,31 +5495,31 @@ msgstr ""
 "El Constructor pot executar la vostra ordre des de diverses ubicacions, "
 "inclòs el sistema amfitrió o contenidors construïts."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:229
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
 msgstr "_Suprimeix l'ordre"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:257
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 msgid "Subprocess"
 msgstr "Subprocés"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Executa l'ordre com un subprocés del Constructor."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
 msgstr "Executa l'ordre al sistema amfitrió."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
 msgstr "Executa l'ordre dins de la canonada de construcció."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:278
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
 msgstr "Com a aplicació objectiu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
 msgstr "Executa l'ordre com si fos l'aplicació de destinació."
 
@@ -5614,7 +5616,7 @@ msgstr "Restableix la drecera"
 
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
-msgstr "Visualitza i personalitza les dreceres de teclat..."
+msgstr "Visualitza i personalitza les dreceres de teclat…"
 
 #: src/plugins/shortcutui/tweaks.ui:15
 msgid "Keyboard Theme"
@@ -5661,13 +5663,13 @@ msgstr "Símbols al fitxer"
 msgid "In Page"
 msgstr "A la pàgina"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:97
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:363
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Selecciona un símbol…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:366
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Selecciona símbol (Ctrl + Maj + K)"
 
@@ -6025,7 +6027,7 @@ msgstr ""
 "El nombre màxim de línies emmagatzemades a l'historial en limitar el "
 "desplaçament enrere"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:147
+#: src/plugins/testui/gbp-testui-output-panel.c:148
 msgid "Unit Test Output"
 msgstr "Sortida de la prova unitària"
 
@@ -6210,7 +6212,7 @@ msgstr "Cerca fuites de memòria en sortir"
 msgid "Begin cloning project from URI"
 msgstr "Comença el projecte de clonat a partir de l'URI"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
 msgid "A failure occurred while cloning the repository."
 msgstr "Es va produir un error durant la clonació del repositori."
 
@@ -6312,4 +6314,3 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
-
