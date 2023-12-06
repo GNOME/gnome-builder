@@ -635,28 +635,28 @@ ide_run_context_expansion_handler (IdeRunContext       *self,
 
   if (env != NULL)
     {
-      g_autoptr(GArray) newenv = g_array_new (TRUE, TRUE, sizeof (char *));
+      g_autoptr(GPtrArray) newenv = g_ptr_array_new_null_terminated (0, g_free, TRUE);
 
       for (guint i = 0; env[i]; i++)
         {
           char *expanded = wordexp_with_environ (env[i], environ);
-          g_array_append_val (newenv, expanded);
+          g_ptr_array_add (newenv, expanded);
         }
 
-      ide_run_context_add_environ (self, (const char * const *)(gpointer)newenv->data);
+      ide_run_context_add_environ (self, (const char * const *)(gpointer)newenv->pdata);
     }
 
   if (argv != NULL)
     {
-      g_autoptr(GArray) newargv = g_array_new (TRUE, TRUE, sizeof (char *));
+      g_autoptr(GPtrArray) newargv = g_ptr_array_new_null_terminated (0, g_free, TRUE);
 
       for (guint i = 0; argv[i]; i++)
         {
           char *expanded = wordexp_with_environ (argv[i], environ);
-          g_array_append_val (newargv, expanded);
+          g_ptr_array_add (newargv, expanded);
         }
 
-      ide_run_context_append_args (self, (const char * const *)(gpointer)newargv->data);
+      ide_run_context_append_args (self, (const char * const *)(gpointer)newargv->pdata);
     }
 
   IDE_RETURN (TRUE);
