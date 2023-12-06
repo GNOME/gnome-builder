@@ -1657,7 +1657,7 @@ ide_pipeline_get_property (GObject    *object,
       break;
 
     case PROP_MESSAGE:
-      g_value_set_string (value, ide_pipeline_get_message (self));
+      g_value_take_string (value, ide_pipeline_get_message (self));
       break;
 
     case PROP_PHASE:
