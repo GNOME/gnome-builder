@@ -1427,6 +1427,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_0, GDK_CONTROL_MASK, "zoom.one", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_j, GDK_CONTROL_MASK, "selection.join", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_j, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "selection.sort", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "buffer.select-line", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK, "buffer.delete-line", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK|GDK_ALT_MASK, "buffer.duplicate-line", NULL);
