@@ -1,3 +1,26 @@
+# GNOME Builder 46.alpha
+
+ * Fix various shortcuts in editor
+ * Fix various icon usage from icon themes
+ * Improve various preferences to follow GNOME HIG
+ * Add formatting support for Blueprint
+ * Build fixes for libxml 2.12
+ * Fix build locality for autotools srcdir vs builddir
+ * Add delay before updating symbol-tree scope
+ * Improve selection range detection for status bar
+ * Clang formatting now uses the improved IdeFormatter interface
+ * Various project template fixes
+ * Fix memory leak of native dialogs
+ * Various SDK extension improvements for Flatpak
+ * Fix spellcheck when language changes
+ * Improve copy/paste issues where additional formatting was added
+ * Presort Flatpak manifests by path for predictable loading
+ * Fix path translation with readlink
+ * Terminal styling improvements
+ * Greeter styling improvements
+ * Various libdex usage fixes
+ * Fix leaks of various pipeline messages and variables
+
 # GNOME Builder 45.0
 
  * Style fixes to match GNOME 45 Adwaita styling
