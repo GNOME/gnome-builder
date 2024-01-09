@@ -9,7 +9,7 @@ meson_test_parse_languages (void)
     const char *input;
     const char **expected;
   } cases[] = {
-      { .input = "'testproject', 'rust'", .expected = (const char *[]){ "rust", NULL } },
+      { .input = "'testproject', 'rust',", .expected = (const char *[]){ "rust", NULL } },
       { .input = "'testproject', 'rust', 'c'", .expected = (const char *[]){ "rust", "c", NULL } },
       { .input = "'testproject', 'rust', version: '3.0'", .expected = (const char *[]){ "rust", NULL } },
       { .input = "testproject, rust, version: 3.0, default_options: ['warning_level=2']", .expected = (const char *[]){ "rust", NULL } },
