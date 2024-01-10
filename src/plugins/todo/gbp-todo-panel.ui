@@ -96,10 +96,9 @@
                 </child>
                 <child>
                   <object class="GtkSearchEntry" id="search">
-                    <property name="margin-top">6</property>
-                    <property name="margin-bottom">6</property>
-                    <property name="margin-start">6</property>
-                    <property name="margin-end">6</property>
+                    <style>
+                      <class name="statusbar"/>
+                    </style>
                     <property name="placeholder-text" translatable="yes">Filter…</property>
                     <signal name="notify::text" handler="gbp_todo_panel_notify_text_cb" swapped="true"/>
                   </object>

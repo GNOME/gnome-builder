@@ -1,3 +1,10 @@
+window.workspace headerbar {
+  box-shadow: none;
+}
+window.workspace:not(:backdrop) tabbar {
+  background: @headerbar_bg_color;
+}
+
 stylevariantpreview widget.wallpaper {
   border-radius: 6px;
 }
@@ -76,7 +83,20 @@ button.pill.small {
   -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
 }
 
+/* Statusbar style to match sidebar entries */
+panelstatusbar {
+  min-height: 28px;
+}
+
 /* Sidebar style */
+entry.statusbar {
+  min-height: 28px;
+  font-size: 0.9em;
+  border-top: 1px solid @sidebar_shade_color;
+  border-radius: 0;
+}
+window:not(.maximized) paneldockchild.start panelframe:last-child entry.statusbar { border-radius: 0 0 0 11px; }
+window:not(.maximized) paneldockchild.end panelframe:last-child entry.statusbar { border-radius: 0 0 11px 0; }
 paneldockchild.start,
 paneldockchild.end {
   background: @sidebar_bg_color;
@@ -89,7 +109,7 @@ paneldockchild.end:backdrop {
 }
 paneldockchild.start .frameheader,
 paneldockchild.end .frameheader {
-  border: none;
+  border-top: 1px solid transparent;
 }
 paneldockchild.start panelresizer > widget > separator,
 paneldockchild.end panelresizer > widget > separator {
