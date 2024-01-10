@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2023-11-10 13:42+0000\n"
-"PO-Revision-Date: 2020-09-21 22:20+0300\n"
+"PO-Revision-Date: 2024-01-10 22:13+0200\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
@@ -16,14 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.4\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
-#: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
-#: src/plugins/shortcutui/tweaks.ui:25
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:3
+#: src/libide/editor/ide-editor-workspace.ui:21 src/libide/gui/ide-application-actions.c:163 src/main.c:218
+#: src/plugins/newcomers/gbp-newcomers-section.ui:39 src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Κατασκευαστής"
 
@@ -31,30 +28,24 @@ msgstr "Κατασκευαστής"
 msgid "An IDE for GNOME"
 msgstr "Ένα IDE για το GNOME"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:168
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9 src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, και άλλοι."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
 msgid ""
-"Builder is an actively developed Integrated Development Environment for "
-"GNOME. It combines integrated support for essential GNOME technologies such "
-"as GTK+, GLib, and GNOME APIs with features that any developer will "
-"appreciate, like syntax highlighting and snippets."
+"Builder is an actively developed Integrated Development Environment for GNOME. It combines integrated "
+"support for essential GNOME technologies such as GTK+, GLib, and GNOME APIs with features that any "
+"developer will appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Το Builder είναι ένα Περιβάλλον Ανάπτυξης για το GNOME. Συνδυάζει "
-"ολοκληρωμένη υποστήριξη για βασικές τεχνολογίες GNOME όπως GTK +, GLib και "
-"GNOME API με δυνατότητες που θα εκτιμήσει κάθε προγραμματιστής, όπως "
-"επισήμανση σύνταξης και snippets."
+"Το Builder είναι ένα Περιβάλλον Ανάπτυξης για το GNOME. Συνδυάζει ολοκληρωμένη υποστήριξη για βασικές "
+"τεχνολογίες GNOME όπως GTK +, GLib και GNOME API με δυνατότητες που θα εκτιμήσει κάθε προγραμματιστής, "
+"όπως επισήμανση σύνταξης και snippets."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
-msgid ""
-"You can rely on predictable releases of Builder with each new release of "
-"GNOME every six months."
+msgid "You can rely on predictable releases of Builder with each new release of GNOME every six months."
 msgstr ""
-"Μπορείτε να βασιστείτε σε προβλέψιμες εκδόσεις του Builder με κάθε νέα "
-"έκδοση του GNOME κάθε έξι μήνες."
+"Μπορείτε να βασιστείτε σε προβλέψιμες εκδόσεις του Builder με κάθε νέα έκδοση του GNOME κάθε έξι μήνες."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid "Features:"
@@ -82,24 +73,16 @@ msgid "Integration with Git"
 msgstr "Ενσωμάτωση με Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
-msgid ""
-"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
-"PHPize, and Waf"
-msgstr ""
-"Ενσωμάτωση με Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize "
-"και Waf"
+msgid "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, and Waf"
+msgstr "Ενσωμάτωση με Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize και Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
-"Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στο "
-"Clang"
+msgstr "Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στο Clang"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr ""
-"Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στη "
-"Python"
+msgstr "Αυτόματη συμπλήρωση, σημασιολογική επισήμανση και διαγνωστικά βασισμένα στη Python"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Vala based auto-completion and diagnostics"
@@ -171,18 +154,15 @@ msgstr "Αποσφαλμάτωση με τον αποσφαλματωτή GNU"
 msgid "Use the minimap to see more of the file"
 msgstr "Χρησιμοποιήστε τον μίνι χάρτη για να δείτε περισσότερα από το αρχείο"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:246
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6 src/plugins/buildui/tweaks.ui:246
 msgid "Build Parallelism"
 msgstr "Δημιουργία παραλληλισμού"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
-msgid ""
-"Number of workers to use when performing builds. -1 for sensible default. 0 "
-"for number of CPU."
+msgid "Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU."
 msgstr ""
-"Ο αριθμός των εργατών που θα χρησιμοποιηθούν για τη δόμηση. -1 για την "
-"προεπιλεγμένη τιμή. 0 για τον αριθμό των CPU."
+"Ο αριθμός των εργατών που θα χρησιμοποιηθούν για τη δόμηση. -1 για την προεπιλεγμένη τιμή. 0 για τον "
+"αριθμό των CPU."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 #| msgid "Clear build log"
@@ -203,17 +183,17 @@ msgstr "Εμφάνιση καταγραφής κατά την κατασκευή
 msgid "If enabled, the build log will be raised when a build starts"
 msgstr "Αν είναι ενεργοποιημένο, το αρχείο καταγραφής κατασκευής θα εμφανίζεται όταν ξεκινάει μια κατασκευή"
 
-
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
 msgstr "Να επιτρέπεται το δίκτυο κατά τη μέτρηση"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
-"Enable automated transfers upon building such as SDK downloads and "
-"dependencies when connection is metered."
-msgstr "Ενεργοποίηση αυτόματων μεταφορών κατά την κατασκευή, όπως λήψεις SDK και "
-"εξαρτήσεων όταν η σύνδεση είναι μετριέται."
+"Enable automated transfers upon building such as SDK downloads and dependencies when connection is "
+"metered."
+msgstr ""
+"Ενεργοποίηση αυτόματων μεταφορών κατά την κατασκευή, όπως λήψεις SDK και εξαρτήσεων όταν η σύνδεση είναι "
+"μετριέται."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -229,11 +209,11 @@ msgstr "Ενεργοποίηση σημασιολογικής επισήμανσ
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid ""
-"If enabled, additional highlighting will be provided in supported languages "
-"based on information extracted from the source code."
+"If enabled, additional highlighting will be provided in supported languages based on information "
+"extracted from the source code."
 msgstr ""
-"Εάν είναι ενεργοποιημένη, θα παρέχεται πρόσθετη επισήμανση στις υποστηριζόμενες γλώσσες "
-"με βάση πληροφορίες που εξάγονται από τον πηγαίο κώδικα."
+"Εάν είναι ενεργοποιημένη, θα παρέχεται πρόσθετη επισήμανση στις υποστηριζόμενες γλώσσες με βάση "
+"πληροφορίες που εξάγονται από τον πηγαίο κώδικα."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -256,8 +236,7 @@ msgid "Debugger Breakpoint at Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-msgid ""
-"Debugger should automatically insert breakpoint at g_critical() function."
+msgid "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
@@ -265,9 +244,7 @@ msgid "Debugger Breakpoint at Warnings and Criticals"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-msgid ""
-"Debugger should automatically insert breakpoint at g_warning() and "
-"g_critical function."
+msgid "Debugger should automatically insert breakpoint at g_warning() and g_critical function."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
@@ -275,34 +252,24 @@ msgid "Restore last position"
 msgstr "Επαναφορά τελευταίας θέσης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
-#, fuzzy
 msgid "Jump to the last position when reopening a file"
-msgstr "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
+msgstr "Μετάβαση στην τελευταία θέση όταν ξανανοίξετε το αρχείο"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
 msgstr "Εμφάνιση τροποποιημένων γραμμών"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
-msgid ""
-"If enabled, the editor will show line additions and changes next to the "
-"source code."
-msgstr ""
+msgid "If enabled, the editor will show line additions and changes next to the source code."
+msgstr "Εάν είναι ενεργοποιημένο, ο επεξεργαστής θα εμφανίζει προσθήκες και αλλαγές γραμμών δίπλα στον πηγαίο κώδικα."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
-#, fuzzy
-#| msgid "Show if a line was added or modified next to line number"
 msgid "Show diagnostics next to line number"
-msgstr ""
-"Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια "
-"γραμμή"
+msgstr "Εμφάνιση διαγνωστικών μετά την αρίθμηση γραμμής"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
-#, fuzzy
-#| msgid "If enabled, the editor will show line numbers."
-msgid ""
-"If enabled, the editor will show diagnostics to the left to the line numbers."
-msgstr "Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει την αρίθμηση γραμμών."
+msgid "If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr "Εάν είναι ενεργοποιημένο, ο επεξεργαστής θα εμφανίζει διαγνωστικά στα αριστερά των αρίθμηση γραμμών."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
@@ -310,9 +277,7 @@ msgstr "Επισήμανση τρέχουσας γραμμής"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
-"Αν είναι ενεργό, ο επεξεργαστής θα επισημάνει τη γραμμή όπου βρίσκεται ο "
-"δρομέας."
+msgstr "Αν είναι ενεργοποιημένο, ο επεξεργαστής θα επισημάνει τη γραμμή όπου βρίσκεται ο δρομέας."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -320,8 +285,7 @@ msgstr "Επισήμανση αντίστοιχων παρενθέσεων"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
-"Αν είναι ενεργό, ο επεξεργαστής θα επισημάνει τις παρενθέσεις που ταιριάζουν."
+msgstr "Αν είναι ενεργοποιημένο, ο επεξεργαστής θα επισημάνει τις αντίστοιχες παρενθέσεις."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -329,43 +293,34 @@ msgstr "Εμφάνιση αρίθμησης των γραμμών"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr "Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει την αρίθμηση γραμμών."
+msgstr "Αν είναι ενεργοποιημένο, ο επεξεργαστής θα εμφανίσει την αρίθμηση γραμμών."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
-#, fuzzy
 #| msgid "Show line numbers"
 msgid "Show relative line numbers"
-msgstr "Εμφάνιση αρίθμησης των γραμμών"
+msgstr "Εμφάνιση σχετικής αρίθμησης γραμμών"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
-#, fuzzy
 #| msgid "If enabled, the editor will show line numbers."
 msgid "If enabled, the editor will show relative line numbers."
-msgstr "Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει την αρίθμηση γραμμών."
+msgstr "Αν είναι ενεργοποιημένο, ο επεξεργαστής θα εμφανίσει την σχετική αρίθμηση γραμμών."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54 src/plugins/editorui/tweaks.ui:483
 msgid "Smart Backspace"
 msgstr "Έξυπνο Backspace"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
-msgid ""
-"Backspace will remove additional spaces to keep you aligned to the "
-"indentation size."
-msgstr ""
-"Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με "
-"το μέγεθος εσοχής."
+msgid "Backspace will remove additional spaces to keep you aligned to the indentation size."
+msgstr "Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με το μέγεθος εσοχής."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
-#, fuzzy
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65 src/plugins/editorui/tweaks.ui:495
 #| msgid "Smart Home End"
 msgid "Smart Home/End"
 msgstr "Έξυπνα πλήκτρα Home/End"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Τροποποιεί τη συμπεριφορά των πλήκτρων Home/End."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
@@ -373,24 +328,19 @@ msgstr "Εμφάνιση γραμμών πλέγματος"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
-"Αν είναι ενεργό, ο επεξεργαστής θα εμφανίσει τις γραμμές πλέγματος στο "
-"έγγραφο."
+msgstr "Αν είναι ενεργοποιημένο, ο επεξεργαστής θα εμφανίσει τις γραμμές πλέγματος στο έγγραφο."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
-#, fuzzy
 #| msgid "Show Overview Map"
 msgid "Overview Map Policy"
 msgstr "Εμφάνιση χάρτη επισκόπησης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:87
-#, fuzzy
 #| msgid "If the overview map should be shown."
 msgid "When the overview map should be displayed."
-msgstr "Αν θα εμφανίζεται ο χάρτης επισκόπησης."
+msgstr "Πότε πρέπει να εμφανίζεται ο χάρτης επισκόπησης."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91 src/plugins/editorui/tweaks.ui:266
 msgid "Draw Spaces"
 msgstr "Σχεδίαση διαστημάτων"
 
@@ -398,104 +348,77 @@ msgstr "Σχεδίαση διαστημάτων"
 msgid "The various types of space to draw in the editor."
 msgstr "Οι διάφοροι τύποι διαστημάτων που θα σχεδιαστούν στον επεξεργαστή."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
-#: src/plugins/editorui/tweaks.ui:77
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101 src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Αναδίπλωση κειμένου"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
-msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
+msgid "The way to wrap a long line of text for better visibility."
+msgstr "Ο τρόπος αναδίπλωσης μιας μεγάλης γραμμής κειμένου για καλύτερη ορατότητα."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
-msgstr "Η αυτόματη αποθήκευση ενεργοποιήθηκε"
+msgstr "Ενεργοποίηση αυτόματης αποθήκευσης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
-msgstr ""
+msgstr "Ενεργοποίηση ή απενεργοποίηση της λειτουργίας αυτόματης αποθήκευσης."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Autosave Frequency"
 msgstr "Συχνότητα αυτόματης αποθήκευσης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:113
-msgid "The number of seconds after modification before auto saving."
-msgstr ""
+msgid "The number of seconds after modification before autosaving."
+msgstr "Ο αριθμός των δευτερολέπτων μετά την τροποποίηση πριν την αυτόματη αποθήκευση."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#, fuzzy
-#| msgid "Completion"
 msgid "Completion Row Count"
-msgstr "Συμπλήρωση"
+msgstr "Αριθμός σειρών ολοκλήρωσης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-#, fuzzy
 msgid "The number of completion rows to display to the user."
-msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
+msgstr "Ο αριθμός των σειρών ολοκλήρωσης που θα εμφανίζονται στον χρήστη."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#: src/plugins/editorui/tweaks.ui:60
-#, fuzzy
-#| msgid "Line Width"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124 src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
-msgstr "Πλάτος γραμμής"
+msgstr "Ύψος γραμμής"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
-#, fuzzy
 msgid "The line height to use for the selected font."
-msgstr "Χρήση τροποποιημένων πληροφοριών συγγραφέα:"
+msgstr "Το ύψος γραμμής που θα χρησιμοποιηθεί για την επιλεγμένη γραμματοσειρά."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#, fuzzy
-#| msgid "Auto Completion"
 msgid "Interactive Completion"
-msgstr "Αυτόματη συμπλήρωση"
+msgstr "Διαδραστική Ολοκλήρωση"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:130
-#, fuzzy
-#| msgid ""
-#| "If enabled, Builder will automatically hide the overview map when mouse "
-#| "focus leaves the editor, or a timeout occurs."
-msgid ""
-"If enabled, Builder will automatically display completion proposals as you "
-"type."
-msgstr ""
-"Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
-"όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το χρονικό "
-"όριο."
+msgid "If enabled, Builder will automatically display completion proposals as you type."
+msgstr "Εάν είναι ενεργοποιημένο, το Builder θα εμφανίζει αυτόματα προτάσεις ολοκλήρωσης καθώς πληκτρολογείτε."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-#, fuzzy
-#| msgid "The parameters for the action."
 msgid "Minimum characters for matching selection."
-msgstr "Οι παράμετροι για την ενέργεια."
+msgstr "Ελάχιστος αριθμός χαρακτήρων για την αντιστοίχιση της επιλογής."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
-msgstr ""
+msgstr "Καθορίστε τον ελάχιστο αριθμό χαρακτήρων για την αντιστοίχιση της επιλογής."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
-#, fuzzy
-#| msgid "Enable Pylint"
 msgid "Enable Snippets"
-msgstr "Ενεργοποίηση Pylint"
+msgstr "Ενεργοποίηση Snippets"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:141
-msgid ""
-"Allow expanding snippets from the editor by pressing tab after the snippet "
-"trigger."
-msgstr ""
+msgid "Allow expanding snippets from the editor by pressing tab after the snippet trigger."
+msgstr "Επιτρέψτε την επέκταση των snippets από τον επεξεργαστή πατώντας το tab μετά την ενεργοποίηση του snippets."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
-#, fuzzy
-#| msgid "Suggest Word Completion"
 msgid "Select First Completion"
-msgstr "Υποδείξεις συμπλήρωσης λέξεων"
+msgstr "Επιλογή Πρώτης Ολοκλήρωσης"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
-msgstr ""
+msgstr "Επιλέξτε αυτόματα την πρώτη καταχώρηση αυτόματης ολοκλήρωσης."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 #, fuzzy
@@ -538,9 +461,7 @@ msgid "Style Variant"
 msgstr "Στυλ"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
-msgid ""
-"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
-"scheme."
+msgid "Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme."
 msgstr ""
 
 #. Translators: This is the default directory name for user’s
@@ -603,8 +524,7 @@ msgid "Inherit Language Server stderr"
 msgstr "Γίνεται εγκατάσταση διακομιστή γλώσσας"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
-msgid ""
-"If enabled, stderr of language servers will be redirected to the console."
+msgid "If enabled, stderr of language servers will be redirected to the console."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
@@ -632,12 +552,8 @@ msgid "Selected configuration for building"
 msgstr "Οι ρυθμίσεις για την δόμηση."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:8
-msgid ""
-"The configuration that has been selected and will be restored the next time "
-"the project loads."
-msgstr ""
-"Η διαμόρφωση που έχει επιλεγεί και θα αποκατασταθεί την επόμενη φορά που θα "
-"φορτωθεί το έργο."
+msgid "The configuration that has been selected and will be restored the next time the project loads."
+msgstr "Η διαμόρφωση που έχει επιλεγεί και θα αποκατασταθεί την επόμενη φορά που θα φορτωθεί το έργο."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 #, fuzzy
@@ -647,8 +563,8 @@ msgstr "Εγκατάσταση έργου"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
-"Run the pipelines install phase before running the project. Only use this if "
-"you know what you're doing with your project."
+"Run the pipelines install phase before running the project. Only use this if you know what you're doing "
+"with your project."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
@@ -670,9 +586,8 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
-"This allows sending something other than sigkill to stop the target "
-"application. That might be useful when you want to gracefully shutdown a "
-"server process."
+"This allows sending something other than sigkill to stop the target application. That might be useful "
+"when you want to gracefully shutdown a server process."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
@@ -684,18 +599,16 @@ msgstr "Απόσπασμα"
 msgid "What environment to use when running unit tests"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50 src/plugins/buildui/gtk/menus.ui:215
+#: src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
-msgid ""
-"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgid "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:13
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5 src/plugins/project-tree/tweaks.ui:13
 msgid "Show Icons"
 msgstr "Εμφάνιση εικονιδίων"
 
@@ -703,34 +616,27 @@ msgstr "Εμφάνιση εικονιδίων"
 msgid "This setting is deprecated and no longer in use."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:25
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10 src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
 msgstr "Εμφάνιση αγνοημένων αρχείων"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-msgid ""
-"If enabled, the project tree will display files that are ignored by the VCS."
+msgid "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Αν είναι ενεργό, το δέντρο του έργου θα προβάλει αρχεία που παραβλέπονται "
-"από το σύστημα ελέγχου εκδόσεων (VCS)."
+"Αν είναι ενεργό, το δέντρο του έργου θα προβάλει αρχεία που παραβλέπονται από το σύστημα ελέγχου εκδόσεων "
+"(VCS)."
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:37
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15 src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
 msgstr "Ταξινόμηση καταλόγων πρώτα"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 #, fuzzy
 #| msgid "If enabled, the project tree will display icons next to each item."
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
-msgstr ""
-"Αν είναι ενεργό, το δέντρο του έργου θα προβάλει εικονίδια δίπλα σε κάθε "
-"αντικείμενο."
+msgid "If enabled, the project tree will sort directories before regular files."
+msgstr "Αν είναι ενεργό, το δέντρο του έργου θα προβάλει εικονίδια δίπλα σε κάθε αντικείμενο."
 
-#: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
+#: data/gsettings/org.gnome.builder.spelling.gschema.xml:5 src/plugins/editorui/tweaks.ui:375
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 #, fuzzy
 #| msgid "Check _Spelling"
@@ -741,8 +647,7 @@ msgstr "_Ορθογραφικός έλεγχος"
 #, fuzzy
 #| msgid "Automatically hide map when editor loses focus"
 msgid "Automatically check spelling within documents"
-msgstr ""
-"Αποκρύπτει αυτόματα τον χάρτη όταν ο επεξεργαστής χάνει την εστίαση του"
+msgstr "Αποκρύπτει αυτόματα τον χάρτη όταν ο επεξεργαστής χάνει την εστίαση του"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -761,8 +666,7 @@ msgstr "Άνοιγμα έργου"
 msgid "Start New Project"
 msgstr "Έναρξη νέου έργου"
 
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: data/org.gnome.Builder.desktop.in.in:28 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
 msgid "Clone Repository"
 msgstr "Κλωνοποίηση αποθετηρίου"
@@ -774,8 +678,7 @@ msgstr "Κλωνοποίηση αποθετηρίου"
 msgid "New Editor Workspace"
 msgstr "font editor monospace γραμματοσειρά επεξεργαστής"
 
-#: data/org.gnome.Builder.desktop.in.in:36
-#: src/plugins/dspy/gbp-dspy-workspace.ui:11
+#: data/org.gnome.Builder.desktop.in.in:36 src/plugins/dspy/gbp-dspy-workspace.ui:11
 msgid "D-Bus Inspector"
 msgstr ""
 
@@ -803,8 +706,7 @@ msgstr "Αποτυχία ανάλυσης ακέραιου από το \"%s\""
 
 #: src/libide/code/ide-language-defaults.c:309
 msgid "language defaults missing version in [global] group."
-msgstr ""
-"οι προεπιλογές της γλώσσας δεν περιέχουν την έκδοση στην ομάδα [global]."
+msgstr "οι προεπιλογές της γλώσσας δεν περιέχουν την έκδοση στην ομάδα [global]."
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
@@ -821,20 +723,14 @@ msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
 msgid "Untitled"
 msgstr "Χωρίς τίτλο"
 
-#: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:528
-#: src/libide/greeter/ide-greeter-workspace.c:666
-#: src/libide/gtk/ide-install-button.ui:31
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1532
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
+#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:528
+#: src/libide/greeter/ide-greeter-workspace.c:666 src/libide/gtk/ide-install-button.ui:31
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24 src/libide/gui/ide-workbench.c:1532
+#: src/plugins/buildui/gbp-buildui-log-pane.c:325 src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7 src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:105
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15 src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "Ακύ_ρωση"
 
@@ -844,8 +740,7 @@ msgstr "Ακύ_ρωση"
 msgid "A suitable debugger could not be found."
 msgstr "Αδυναμία εύρεσης παρόχου."
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1528
 msgid "Open File…"
 msgstr "Άνοιγμα αρχείου…"
 
@@ -855,26 +750,23 @@ msgstr "Άνοιγμα αρχείου…"
 msgid "Open a file in the workspace"
 msgstr "Άνοι_γμα στο τερματικό"
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
-#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:204
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31 src/libide/gui/gtk/menus.ui:29
+#: src/libide/tweaks/ide-tweaks-window.c:204
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
-#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
-#: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37 src/libide/gui/gtk/menus.ui:37
+#: src/libide/plugins/ide-plugin.c:346 src/plugins/editorui/tweaks.ui:476
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65 src/plugins/shortcutui/tweaks.ui:8
+#: src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
-#: src/libide/gui/gtk/menus.ui:45
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43 src/libide/gui/gtk/menus.ui:45
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
-#: src/libide/gui/gtk/menus.ui:52
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49 src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
 msgstr "Περί του Κατασκευαστή"
 
@@ -886,18 +778,13 @@ msgstr "Έ_ξοδος"
 msgid "Document"
 msgstr "Έγγραφο"
 
-#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
-#: src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10
-#: src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
-#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
-#: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
-#: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
-#: src/plugins/editorui/gtk/menus.ui:153
-#: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:24
-#: src/plugins/menu-search/gtk/menus.ui:56
-#: src/plugins/menu-search/gtk/menus.ui:97
-#: src/plugins/web-browser/gtk/menus.ui:16
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71 src/libide/editor/gtk/menus.ui:80
+#: src/libide/greeter/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71 src/libide/gui/gtk/menus.ui:75
+#: src/libide/gui/gtk/menus.ui:79 src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:24 src/plugins/menu-search/gtk/menus.ui:56
+#: src/plugins/menu-search/gtk/menus.ui:97 src/plugins/web-browser/gtk/menus.ui:16
 #, fuzzy
 #| msgid "Application ID"
 msgid "Application"
@@ -910,19 +797,14 @@ msgstr "ID Εφαρμογής"
 msgid "Pages"
 msgstr "Άνοιγμα σελίδων"
 
-#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
-#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
-#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84 src/libide/editor/gtk/menus.ui:88
+#: src/libide/gui/tweaks.ui:26 src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
 #: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
-#: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
-#: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:111
-#: src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/libide/sourceview/gtk/menus.ui:144 src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:156 src/libide/sourceview/gtk/menus.ui:162
+#: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:111 src/plugins/symbol-tree/gtk/menus.ui:5
 #, fuzzy
 #| msgid "Editor"
 msgid "Text Editor"
@@ -934,8 +816,8 @@ msgstr "Επεξεργαστής"
 msgid "Search & Replace"
 msgstr "Αποτελέσματα αναζήτησης"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72
-#: src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
+#: src/plugins/editorui/gtk/menus.ui:154
 #, fuzzy
 #| msgid "Document"
 msgid "Documents"
@@ -959,8 +841,7 @@ msgstr "Εκτύπωση"
 msgid "Failed to open file: %s"
 msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
 
-#: src/libide/editor/ide-editor-info-bar.c:85
-#: src/libide/editor/ide-editor-info-bar.c:96
+#: src/libide/editor/ide-editor-info-bar.c:85 src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
 msgstr ""
 
@@ -981,8 +862,8 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
-"The encoding used to load the file detected errors. You may select an "
-"alternate encoding from the statusbar and reload."
+"The encoding used to load the file detected errors. You may select an alternate encoding from the "
+"statusbar and reload."
 msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
@@ -997,7 +878,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.ui:37
 msgid "_Retry"
-msgstr ""
+msgstr "_Επαναπροσπάθεια"
 
 #: src/libide/editor/ide-editor-info-bar.ui:44
 msgid "Open As _Administrator"
@@ -1032,31 +913,25 @@ msgstr "Αποτυχία εκτύπωσης: %s"
 msgid "Failed to format selection: %s"
 msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
 
-#: src/libide/editor/ide-editor-page.c:1132
-#: src/plugins/buildui/gbp-buildui-log-pane.c:321
+#: src/libide/editor/ide-editor-page.c:1132 src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Αποθήκευση αρχείου"
 
-#: src/libide/editor/ide-editor-page.c:1135
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
+#: src/libide/editor/ide-editor-page.c:1135 src/libide/gtk/ide-file-chooser-entry.c:109
+#: src/libide/terminal/ide-terminal-page-actions.c:281 src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/sysprof/gtk/menus.ui:142
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/libide/editor/ide-editor-page.c:1135
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
+#: src/libide/editor/ide-editor-page.c:1135 src/libide/gtk/ide-file-chooser-entry.c:156
+#: src/libide/terminal/ide-terminal-page-actions.c:280 src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476 src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Cancel"
 msgstr "Aκύρωση"
 
-#: src/libide/editor/ide-editor-search-bar.ui:32
-#: src/plugins/grep/gbp-grep-panel.ui:162
+#: src/libide/editor/ide-editor-search-bar.ui:32 src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
@@ -1078,8 +953,7 @@ msgstr "Εύρεση της επόμενης αντιστοιχίας"
 msgid "Search & Replace (Ctrl+H)"
 msgstr ""
 
-#: src/libide/editor/ide-editor-search-bar.ui:105
-#: src/libide/terminal/ide-terminal-search.ui:77
+#: src/libide/editor/ide-editor-search-bar.ui:105 src/libide/terminal/ide-terminal-search.ui:77
 #, fuzzy
 #| msgid "Close Project"
 msgid "Close search"
@@ -1097,23 +971,20 @@ msgstr "Αντικατάσταση"
 msgid "Replace _All"
 msgstr "Αντικατάσταση όλων"
 
-#: src/libide/editor/ide-editor-search-bar.ui:148
-#: src/libide/terminal/ide-terminal-search.ui:95
+#: src/libide/editor/ide-editor-search-bar.ui:148 src/libide/terminal/ide-terminal-search.ui:95
 #, fuzzy
 #| msgid "Regular expressions"
 msgid "Use Re_gular Expressions"
 msgstr "Κανονικές εκφράσεις"
 
-#: src/libide/editor/ide-editor-search-bar.ui:152
-#: src/libide/terminal/ide-terminal-search.ui:99
+#: src/libide/editor/ide-editor-search-bar.ui:152 src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
 #, fuzzy
 #| msgid "Case sensitive"
 msgid "_Case Sensitive"
 msgstr "Διάκριση πεζών/κεφαλαίων"
 
-#: src/libide/editor/ide-editor-search-bar.ui:156
-#: src/libide/terminal/ide-terminal-search.ui:103
+#: src/libide/editor/ide-editor-search-bar.ui:156 src/libide/terminal/ide-terminal-search.ui:103
 #, fuzzy
 #| msgid "Match whole word"
 msgid "Match Whole Words"
@@ -1147,8 +1018,7 @@ msgstr ""
 msgid "Line Ending:"
 msgstr "Διαστήματα γραμμών"
 
-#: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/libide/editor/ide-editor-utils.c:270 src/plugins/create-project/gbp-create-project-widget.ui:100
 msgid "Language"
 msgstr "Γλώσσα"
 
@@ -1179,9 +1049,7 @@ msgstr "Προεπιλεγμένη ρύθμιση"
 #. translators: %s will be replaced with the build configuration identifier
 #: src/libide/foundry/ide-config-manager.c:872
 #, c-format
-msgid ""
-"Failed to locate build configuration “%s”. It may be invalid or incorrectly "
-"formatted."
+msgid "Failed to locate build configuration “%s”. It may be invalid or incorrectly formatted."
 msgstr ""
 
 #. translators: %s is set to the identifier of the build configuration
@@ -1208,14 +1076,11 @@ msgstr "Συσκευές"
 
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr ""
-"Δεν είναι δυνατή η ανάπτυξη στη συσκευή, η κατασκευή του αγωγού δεν έχει "
-"προετοιμαστεί"
+msgstr "Δεν είναι δυνατή η ανάπτυξη στη συσκευή, η κατασκευή του αγωγού δεν έχει προετοιμαστεί"
 
-#: src/libide/foundry/ide-fallback-build-system.c:143
-#: src/libide/greeter/ide-greeter-row.c:252
+#: src/libide/foundry/ide-fallback-build-system.c:143 src/libide/greeter/ide-greeter-row.c:252
 msgid "Fallback"
-msgstr ""
+msgstr "Υποχώρηση"
 
 #. translators: %s is replaced with the host name
 #: src/libide/foundry/ide-local-device.c:140
@@ -1267,8 +1132,7 @@ msgstr "Δόμηση — %s"
 msgid "Post-install (%s)"
 msgstr "Εγκαταστάθηκε το %s"
 
-#: src/libide/foundry/ide-pipeline.c:3113
-#: src/libide/foundry/ide-pipeline.c:3152
+#: src/libide/foundry/ide-pipeline.c:3113 src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 
@@ -1276,14 +1140,12 @@ msgstr ""
 msgid "Cleaning…"
 msgstr "Εκκαθάριση…"
 
-#: src/libide/foundry/ide-pipeline.c:3353
-#: src/libide/foundry/ide-pipeline.c:3410
+#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Απέτυχε"
 
-#: src/libide/foundry/ide-pipeline.c:3355
-#: src/libide/foundry/ide-pipeline.c:3418
+#: src/libide/foundry/ide-pipeline.c:3355 src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Έτοιμο"
 
@@ -1305,8 +1167,7 @@ msgstr ""
 msgid "Configuring…"
 msgstr "Ρυθμίζεται…"
 
-#: src/libide/foundry/ide-pipeline.c:3386
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/libide/foundry/ide-pipeline.c:3386 src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Δόμηση…"
@@ -1324,8 +1185,7 @@ msgstr "Γίνεται ρύθμιση"
 msgid "Exporting…"
 msgstr "Εξάγεται…"
 
-#: src/libide/foundry/ide-pipeline.c:3402
-#: src/libide/foundry/ide-pipeline.c:3406
+#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Επιτυχία"
@@ -1351,8 +1211,7 @@ msgstr "Αποτυχία δημιουργίας του καταλόγου δόμ
 msgid "Cannot build transfer while on metered connection"
 msgstr ""
 
-#: src/libide/foundry/ide-run-command.c:177
-#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
+#: src/libide/foundry/ide-run-command.c:177 src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
 #, fuzzy
 #| msgid "Untitled Terminal"
@@ -1382,8 +1241,7 @@ msgstr ""
 msgid "Application exited with error: %s"
 msgstr "Εισαγωγή λειτουργίας υπηρεσίας GApplication"
 
-#: src/libide/foundry/ide-run-manager.c:808
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/libide/foundry/ide-run-manager.c:808 src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 #, fuzzy
 #| msgid "Enter GApplication Service mode"
 msgid "Application exited"
@@ -1417,10 +1275,8 @@ msgstr ""
 msgid "User requested application to stop"
 msgstr ""
 
-#: src/libide/foundry/ide-runtime.c:406
-#: src/plugins/host/gbp-host-runtime-provider.c:54
-#: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/libide/foundry/ide-runtime.c:406 src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69 src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 #, fuzzy
 #| msgid "Host operating system"
@@ -1456,21 +1312,19 @@ msgid "Default (Host operating system)"
 msgstr "Λειτουργικό σύστημα"
 
 #: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
+#: src/libide/projects/ide-projects-global.c:103 src/plugins/create-project/gtk/menus.ui:6
+#: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
 msgstr "Έργα"
 
-#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
-#: src/libide/greeter/gtk/menus.ui:86
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66 src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
 msgid "_Clone Repository…"
 msgstr "_Κλωνοποίηση αποθετηρίου…"
 
-#: src/libide/greeter/gtk/menus.ui:22
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
+#: src/libide/greeter/gtk/menus.ui:22 src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436 src/plugins/dspy/gtk/menus.ui:21
+#: src/plugins/sysprof/gtk/menus.ui:157
 msgid "Close"
 msgstr "Κλείσιμο"
 
@@ -1498,8 +1352,8 @@ msgstr "Επιλογή _φακέλου…"
 msgid "Directory"
 msgstr "Κατάλογος"
 
-#: src/libide/greeter/ide-greeter-workspace.c:220
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/greeter/ide-greeter-workspace.c:220 src/libide/gui/ide-workbench.c:348
+#: src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Δόμηση — %s"
@@ -1508,8 +1362,7 @@ msgstr "Δόμηση — %s"
 msgid "Failed to load the project"
 msgstr "Αποτυχία φόρτωσης του έργου"
 
-#: src/libide/greeter/ide-greeter-workspace.c:334
-#: src/plugins/create-project/gbp-create-project-widget.c:262
+#: src/libide/greeter/ide-greeter-workspace.c:334 src/plugins/create-project/gbp-create-project-widget.c:262
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "Κλεί_σιμο"
@@ -1530,8 +1383,7 @@ msgstr ""
 msgid "_Delete Project Sources"
 msgstr "Διαγραφή πηγών έργου"
 
-#: src/libide/greeter/ide-greeter-workspace.c:623
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:623 src/libide/greeter/ide-greeter-workspace.c:662
 msgid "Select Project Folder"
 msgstr "Επιλογή φακέλου έργου"
 
@@ -1539,8 +1391,7 @@ msgstr "Επιλογή φακέλου έργου"
 msgid "Select Project File"
 msgstr "Επιλογή αρχείου έργου"
 
-#: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1531
+#: src/libide/greeter/ide-greeter-workspace.c:667 src/libide/gui/ide-workbench.c:1531
 msgid "_Open"
 msgstr "Άν_οιγμα"
 
@@ -1593,16 +1444,13 @@ msgstr "Αποτυχία εύρεσης ιδιότητας %s στο %s"
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
 
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
+#: src/libide/gtk/ide-file-chooser-entry.c:101 src/libide/gtk/ide-file-chooser-entry.c:157
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
+#: src/libide/gtk/ide-file-chooser-entry.c:105 src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475 src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Select"
 msgstr "Επιλογή"
 
@@ -1662,9 +1510,8 @@ msgstr "Ε_γκατάσταση"
 msgid "%u of %u"
 msgstr "%u από %u"
 
-#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16 src/libide/plugins/ide-plugin.c:347
+#: src/plugins/grep/gbp-grep-panel.ui:64 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Αναζήτηση"
 
@@ -1720,8 +1567,8 @@ msgstr ""
 msgid "Close Project"
 msgstr "Κλείσιμο έργου"
 
-#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59 src/plugins/buildui/tweaks.ui:182
+#: src/plugins/buildui/tweaks.ui:386
 msgid "General"
 msgstr "Γενικά"
 
@@ -1757,9 +1604,8 @@ msgstr "Έ_γγραφα με μη-αποθηκευμένες αλλαγές:"
 msgid "Web Browsing"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
-#: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32 src/libide/terminal/gtk/menus.ui:12
+#: src/libide/terminal/gtk/menus.ui:34 src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Τερματικό"
@@ -1864,8 +1710,7 @@ msgstr ""
 msgid "Toggle Left Panel (F9)"
 msgstr "Εναλλαγή αριστερού πίνακα"
 
-#: src/libide/gui/ide-primary-workspace.ui:51
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/libide/gui/ide-primary-workspace.ui:51 src/plugins/menu-search/gtk/menus.ui:37
 #, fuzzy
 #| msgid "Show Right Panel"
 msgid "Toggle Right Panel"
@@ -1906,14 +1751,10 @@ msgstr "Διακοπή εκτέλεσης"
 msgid "Run project"
 msgstr "Δόμηση του έργου"
 
-#: src/libide/gui/ide-shortcut-window.c:259
-#: src/libide/gui/ide-shortcut-window.c:285
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
+#: src/libide/gui/ide-shortcut-window.c:259 src/libide/gui/ide-shortcut-window.c:285
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "Άλλο"
 
@@ -1936,8 +1777,7 @@ msgid "There are unsaved documents"
 msgstr "Μη αποθηκευμένο έγγραφο %u"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
-#: src/plugins/buildui/gtk/preferences.ui:25
-#: src/plugins/buildui/gtk/preferences.ui:32
+#: src/plugins/buildui/gtk/preferences.ui:25 src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
@@ -1991,8 +1831,7 @@ msgstr ""
 msgid "Language server “%s” spawned as process %s"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:336
-#: src/plugins/create-project/gbp-create-project-widget.ui:114
+#: src/libide/plugins/ide-plugin.c:336 src/plugins/create-project/gbp-create-project-widget.ui:114
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Έλεγχος εκδόσεων"
@@ -2046,7 +1885,7 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
-msgstr ""
+msgstr "Ιστός"
 
 #: src/libide/plugins/ide-plugin.c:349
 #, fuzzy
@@ -2080,7 +1919,7 @@ msgstr "Συνεδρία"
 
 #: src/libide/plugins/ide-plugin-view.ui:100
 msgid "Website"
-msgstr ""
+msgstr "Ιστότοπος"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
@@ -2242,10 +2081,8 @@ msgstr "_Αντίγραφο"
 msgid "_Formatting"
 msgstr "Μορφοποίηση συμβολοσειρών"
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
-#: src/plugins/menu-search/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:153 src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163 src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 #, fuzzy
 #| msgid "Navigation"
@@ -2253,16 +2090,14 @@ msgid "Code Navigation"
 msgstr "Πλοήγηση"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1661
-#: src/plugins/editorui/gbp-editorui-position-label.c:79
+#: src/libide/sourceview/ide-source-view.c:1661 src/plugins/editorui/gbp-editorui-position-label.c:79
 #, fuzzy, c-format
 #| msgid "Line %u, Column %u"
 msgid "Ln %u, Col %u"
 msgstr "Γραμμή %u, Στήλη %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1663
-#: src/plugins/editorui/gbp-editorui-position-label.c:82
+#: src/libide/sourceview/ide-source-view.c:1663 src/plugins/editorui/gbp-editorui-position-label.c:82
 #, fuzzy, c-format
 #| msgid "Line %u, Column %u"
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2314,8 +2149,7 @@ msgstr "Αποθήκευση περιεχομένου τερματικού ως"
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-page.c:122
-#: src/libide/terminal/ide-terminal-page.c:157
+#: src/libide/terminal/ide-terminal-page.c:122 src/libide/terminal/ide-terminal-page.c:157
 #: src/libide/terminal/ide-terminal-page.c:270
 msgid "Untitled terminal"
 msgstr "Άτιτλο τερματικό"
@@ -2323,7 +2157,7 @@ msgstr "Άτιτλο τερματικό"
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:124
 msgid "Exited"
-msgstr ""
+msgstr "Τερματίστηκε"
 
 #: src/libide/terminal/ide-terminal-page.c:144
 msgid "Subprocess launcher failed too quickly, will not respawn."
@@ -2409,7 +2243,7 @@ msgstr "Κανένα"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
-msgstr ""
+msgstr "Κενή σελίδα"
 
 #: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
 msgid "Settings"
@@ -2441,20 +2275,16 @@ msgid "Bootstrapping build system"
 msgstr "Λειτουργικό σύστημα"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:116
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113 src/plugins/waf/gbp-waf-pipeline-addin.c:116
 #, fuzzy
 msgid "Configuring project"
 msgstr "Γίνεται ρύθμιση"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
-#: src/plugins/make/gbp-make-pipeline-addin.c:142
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:91
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:131
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230 src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
+#: src/plugins/make/gbp-make-pipeline-addin.c:142 src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124 src/plugins/waf/gbp-waf-pipeline-addin.c:131
 #, fuzzy
 #| msgid "Run project"
 msgid "Building project"
@@ -2510,8 +2340,7 @@ msgstr "Μεταβλητή"
 msgid "_Add"
 msgstr ""
 
-#: src/plugins/buildui/gbp-buildui-environment-row.ui:29
-#: src/plugins/project-tree/gtk/menus.ui:56
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:29 src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Αντιγραφή"
 
@@ -2519,8 +2348,7 @@ msgstr "Αντιγραφή"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:104
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324 src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Save"
 msgstr "Απ_οθήκευση"
 
@@ -2559,8 +2387,7 @@ msgstr "Κλάδος"
 msgid "Build Profile"
 msgstr "Δόμηση προφίλ"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
-#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83 src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
 msgid "Runtime"
 msgstr "Περιβάλλον εκτέλεσης"
 
@@ -2594,9 +2421,8 @@ msgstr "Σφάλματα"
 msgid "Warnings"
 msgstr "Προειδοποιήσεις"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:367
-#: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/buildui/gbp-buildui-pane.c:367 src/plugins/buildui/gbp-buildui-pane.ui:81
+#: src/plugins/buildui/tweaks.ui:150 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 #, fuzzy
 #| msgid "Build Profile"
 msgid "Build Pipeline"
@@ -2616,8 +2442,7 @@ msgstr "Κατάσταση δόμησης:"
 msgid "Time completed:"
 msgstr "Ολοκληρωμένο "
 
-#: src/plugins/buildui/gbp-buildui-pane.ui:53
-#: src/plugins/buildui/gbp-buildui-pane.ui:67
+#: src/plugins/buildui/gbp-buildui-pane.ui:53 src/plugins/buildui/gbp-buildui-pane.ui:67
 msgid "—"
 msgstr "—"
 
@@ -2673,12 +2498,10 @@ msgid "Available Build Targets"
 msgstr "Κατάσταση δόμησης"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-msgid ""
-"Some targets may not be available until the project has been configured."
+msgid "Some targets may not be available until the project has been configured."
 msgstr ""
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
-#: src/plugins/buildui/tweaks.ui:26
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26 src/plugins/buildui/tweaks.ui:26
 #, fuzzy
 #| msgid "Automatically indent"
 msgid "Automatically Discover"
@@ -2952,8 +2775,7 @@ msgid "Debugging"
 msgstr "Αποσφαλματωτής"
 
 #: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
-#: src/plugins/testui/gbp-testui-item.c:84
-#: src/plugins/testui/gbp-testui-panel.ui:4
+#: src/plugins/testui/gbp-testui-item.c:84 src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Δοκιμές μονάδας"
 
@@ -2981,46 +2803,39 @@ msgstr "Ορατότητα LAB"
 
 #: src/plugins/buildui/gtk/menus.ui:193
 msgid "High Contrast"
-msgstr ""
+msgstr "Υψηλή Αντίθεση"
 
 #: src/plugins/buildui/gtk/menus.ui:198
 #, fuzzy
 msgid "Text Direction"
 msgstr ""
 "\n"
-"TRAY -f <λήξη χρόνου> <αρχείο1> [<αρχείο2>] αναλαμπή της περιοχής συστήματος "
-"μεταξύ δύο εικονιδίων.\n"
-"TRAY -f <όνομα αρχείου>                  Ορισμός της περιοχής συστήματος σε "
-"ένα σταθερό εικονίδιο.\n"
-"TRAY -i <αριθμός>                    Αναλαμπή της περιοχής συστήματος με ένα "
-"εσωτερικό εικονίδιο.\n"
-"TRAY -t <κείμενο>                      Ορισμός συμβουλής οθόνης στη περιοχή "
-"συστήματος.\n"
-"TRAY -b <τίτλος> <κείμενο>              Ορισμός φυσαλίδας στη περιοχή "
-"συστήματος."
+"TRAY -f <λήξη χρόνου> <αρχείο1> [<αρχείο2>] αναλαμπή της περιοχής συστήματος μεταξύ δύο εικονιδίων.\n"
+"TRAY -f <όνομα αρχείου>                  Ορισμός της περιοχής συστήματος σε ένα σταθερό εικονίδιο.\n"
+"TRAY -i <αριθμός>                    Αναλαμπή της περιοχής συστήματος με ένα εσωτερικό εικονίδιο.\n"
+"TRAY -t <κείμενο>                      Ορισμός συμβουλής οθόνης στη περιοχή συστήματος.\n"
+"TRAY -b <τίτλος> <κείμενο>              Ορισμός φυσαλίδας στη περιοχή συστήματος."
 
 #: src/plugins/buildui/gtk/menus.ui:200
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Αριστερά προς δεξιά"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Δεξιά προς αριστερά"
 
 #: src/plugins/buildui/gtk/menus.ui:221
 #, fuzzy
 msgid "Show Inspector"
 msgstr "Κινούμενη εικόνα"
 
-#: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/menu-search/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/preferences.ui:36 src/plugins/menu-search/gtk/menus.ui:57
 #, fuzzy
 #| msgid "Style"
 msgid "Style"
 msgstr "Στυλ"
 
-#: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:10
+#: src/plugins/buildui/gtk/preferences.ui:40 src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
 msgstr "Διεπαφή"
 
@@ -3059,7 +2874,7 @@ msgstr "Εάν θα εμφανίζεται ένα μοτίβο πλέγματο�
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
-msgstr ""
+msgstr "Ποτέ"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
@@ -3067,7 +2882,7 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
-msgstr ""
+msgstr "Πάντα"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
@@ -3100,8 +2915,7 @@ msgstr ""
 msgid "Switch documents using a popover"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:12
-#: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
+#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
 #: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 #, fuzzy
 #| msgid "Command"
@@ -3132,8 +2946,8 @@ msgstr "Εγκαθίσταται"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
-"Installs the application before running. This is necessary for most projects "
-"unless custom run commands are used."
+"Installs the application before running. This is necessary for most projects unless custom run commands "
+"are used."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
@@ -3143,19 +2957,15 @@ msgid "Stop Signal"
 msgstr "Σήματα"
 
 #: src/plugins/buildui/tweaks.ui:75
-msgid ""
-"Send the signal to the target application when requesting the application "
-"stop."
+msgid "Send the signal to the target application when requesting the application stop."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
-msgstr ""
+msgstr "Γίνεται σύνδεση"
 
 #: src/plugins/buildui/tweaks.ui:134
-msgid ""
-"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
-"troubleshooting"
+msgid "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for troubleshooting"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:151
@@ -3257,9 +3067,7 @@ msgid "Installation Prefix"
 msgstr "Εγκατάσταση προθέματος"
 
 #: src/plugins/buildui/tweaks.ui:390
-msgid ""
-"The project will be installed to this directory during the installation "
-"phase of the build pipeline."
+msgid "The project will be installed to this directory during the installation phase of the build pipeline."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:408
@@ -3268,8 +3076,8 @@ msgstr "Επιλογές Configure"
 
 #: src/plugins/buildui/tweaks.ui:421
 msgid ""
-"These options are used by the build system to configure the project during "
-"the configure phase of the build pipeline"
+"These options are used by the build system to configure the project during the configure phase of the "
+"build pipeline"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:428
@@ -3278,8 +3086,7 @@ msgstr ""
 msgid "Build Environment"
 msgstr "Περιβάλλον"
 
-#: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
+#: src/plugins/buildui/tweaks.ui:431 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 #, fuzzy
 #| msgid "local"
 msgid "Locality"
@@ -3304,23 +3111,18 @@ msgid "Outside Source Tree"
 msgstr "Προβολή πηγής"
 
 #: src/plugins/buildui/tweaks.ui:476
-msgid ""
-"The SDK used to build your application is automatically determined from the "
-"runtime."
+msgid "The SDK used to build your application is automatically determined from the runtime."
 msgstr ""
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
-#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146 src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 #, fuzzy
 #| msgid "Build Preferences"
 msgid "Fetch dependencies"
 msgstr "Προτιμήσεις δόμησης"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
-#: src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174 src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156 src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Δόμηση του έργου"
@@ -3355,9 +3157,7 @@ msgid "Complete parameters"
 msgstr "Ολοκληρωμένες παράμετροι"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
-msgid ""
-"If parameters should be included when completing. Requires complete-"
-"parentheses."
+msgid "If parameters should be included when completing. Requires complete-parentheses."
 msgstr ""
 
 #: src/plugins/clang/tweaks.ui:14
@@ -3386,15 +3186,12 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202 src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "Ρύθμιση έργου"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
-#: src/plugins/make/gbp-make-pipeline-addin.c:155
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245 src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103 src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "Γίνεται εγκατάσταση έργου"
@@ -3439,8 +3236,7 @@ msgid "Failed to load project: %s"
 msgstr "Αποτυχία φόρτωσης του έργου"
 
 #. Now we can drop our paused state
-#: src/plugins/code-index/gbp-code-index-service.c:209
-#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/code-index/gbp-code-index-service.c:209 src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:1023
 #, fuzzy
 #| msgid "Indent source code as you type"
@@ -3451,15 +3247,12 @@ msgstr "Αυτόματη εσοχή του κώδικα κατά την πληκ
 #, fuzzy
 #| msgid "exuberant ctags tags autocompletion auto complete"
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr ""
-"exuberant ctags tags autocompletion auto complete ετικέτες συμπλήρωση "
-"αυτόματη"
+msgstr "exuberant ctags tags autocompletion auto complete ετικέτες συμπλήρωση αυτόματη"
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:340
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
+#: src/plugins/code-index/ide-code-index-index.c:340 src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 #, fuzzy
 #| msgid "Description"
 msgid "Declaration"
@@ -3504,8 +3297,7 @@ msgstr "Επιλογές"
 msgid "_Apply"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30 src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "Φόρτωση…"
 
@@ -3531,8 +3323,7 @@ msgstr "Δέντρο συμβόλων"
 msgid "A symbol to rename must be selected"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492 src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 #, fuzzy
 #| msgid "Build Preferences"
 msgid "Find References"
@@ -3559,8 +3350,7 @@ msgstr "Αποτυχία επίλυσης συμβόλου"
 msgid "Rename Symbol"
 msgstr "Μετονομασία συμβόλου"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10 src/plugins/project-tree/gbp-rename-file-popover.ui:34
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "Με_τονομασία"
@@ -3668,8 +3458,7 @@ msgstr ""
 msgid "Display the project creation guide"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:220 src/plugins/vcsui/gbp-vcsui-clone-page.c:109
 #, fuzzy
 #| msgid "Project Location"
 msgid "Select Location"
@@ -3699,9 +3488,8 @@ msgstr "Υπάρχει ήδη ένας φάκελος με το ίδιο όνο�
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:30
 msgid ""
-"A unique name that is used for the project folder and other resources. The "
-"name should be in lower case without spaces and should not start with a "
-"number."
+"A unique name that is used for the project folder and other resources. The name should be in lower case "
+"without spaces and should not start with a number."
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:46
@@ -3712,15 +3500,13 @@ msgstr "ID Εφαρμογής"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:52
 msgid ""
-"A reverse domain-name identifier used to identify the application, such as "
-"\"org.gnome.Builder\". It may not contain dashes."
+"A reverse domain-name identifier used to identify the application, such as \"org.gnome.Builder\". It may "
+"not contain dashes."
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:68
-#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95 src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78 src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
 msgid "Location"
 msgstr "Τοποθεσία"
 
@@ -3730,8 +3516,7 @@ msgstr "Τοποθεσία"
 msgid "The project will be created in a new subdirectory."
 msgstr "Ο κατάλογος του έργου."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
-#: src/plugins/projectui/tweaks.ui:47
+#: src/plugins/create-project/gbp-create-project-widget.ui:107 src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Άδεια"
 
@@ -3751,8 +3536,7 @@ msgstr "Δημιουργία έργου"
 msgid "Create _New Project…"
 msgstr "Εκκίνηση _νέου έργου…"
 
-#: src/plugins/create-project/gtk/menus.ui:9
-#: src/plugins/create-project/gtk/menus.ui:21
+#: src/plugins/create-project/gtk/menus.ui:9 src/plugins/create-project/gtk/menus.ui:21
 #: src/plugins/create-project/gtk/menus.ui:34
 #, fuzzy
 #| msgid "_Start New Project…"
@@ -3768,12 +3552,8 @@ msgstr "Δημιουργία νέων έργων από μια ποικιλία 
 #: src/plugins/ctags/ide-ctags-service.c:132
 #, fuzzy
 #| msgid "exuberant ctags tags autocompletion auto complete"
-msgid ""
-"Search, autocompletion, and symbol information may be limited until Ctags "
-"indexing is complete."
-msgstr ""
-"exuberant ctags tags autocompletion auto complete ετικέτες συμπλήρωση "
-"αυτόματη"
+msgid "Search, autocompletion, and symbol information may be limited until Ctags indexing is complete."
+msgstr "exuberant ctags tags autocompletion auto complete ετικέτες συμπλήρωση αυτόματη"
 
 #: src/plugins/ctags/ide-ctags-service.c:980
 #, fuzzy
@@ -3819,10 +3599,8 @@ msgstr "Δόμηση προφίλ"
 msgid "Run the project with debugger"
 msgstr "Δόμηση προφίλ"
 
-#: src/plugins/debuggerui/gtk/menus.ui:20
-#: src/plugins/debuggerui/gtk/menus.ui:81
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
-#: src/plugins/debuggerui/tweaks.ui:12
+#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219 src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Αποσφαλματωτής"
 
@@ -3850,7 +3628,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:43
 msgid "Pause"
-msgstr ""
+msgstr "Παύση"
 
 #: src/plugins/debuggerui/gtk/menus.ui:46
 msgid "Pause debugger until continued"
@@ -3882,11 +3660,10 @@ msgstr ""
 msgid "Run until the end of the function"
 msgstr "Το όνομα της ενέργειας"
 
-#: src/plugins/debuggerui/gtk/menus.ui:83
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
+#: src/plugins/debuggerui/gtk/menus.ui:83 src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
-msgstr ""
+msgstr "Σημεία διακοπής"
 
 #: src/plugins/debuggerui/gtk/menus.ui:85
 #, fuzzy
@@ -3977,7 +3754,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
-msgstr ""
+msgstr "Σημείο διακοπής"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 #, fuzzy
@@ -3990,7 +3767,7 @@ msgstr "Βιβλιοθήκη"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
 msgid "Address Range"
-msgstr ""
+msgstr "Εύρος διεύθυνσης"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:312
 #, fuzzy
@@ -4153,16 +3930,13 @@ msgid "Plain Text"
 msgstr "Έξοδος κειμένου"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks-language.ui:65
-#: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks-language.ui:65
+#: src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:269
 msgid "Spaces"
 msgstr "Διαστήματα"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks.ui:282
 msgid "Tabs"
 msgstr "Στηλοθέτες"
 
@@ -4170,8 +3944,7 @@ msgstr "Στηλοθέτες"
 msgid "Go"
 msgstr "Μετάβαση"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
-#: src/plugins/menu-search/gtk/menus.ui:87
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541 src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Μετάβαση στη γραμμή"
 
@@ -4210,8 +3983,7 @@ msgstr ""
 msgid "8"
 msgstr "8"
 
-#: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:145
+#: src/plugins/editorui/gtk/menus.ui:41 src/plugins/editorui/tweaks-language.ui:145
 #, fuzzy
 #| msgid "Indentation"
 msgid "Indentation Size"
@@ -4328,9 +4100,7 @@ msgid "Programming Languages"
 msgstr "Γλώσσες προγραμματισμού"
 
 #: src/plugins/editorui/tweaks-language.ui:34
-msgid ""
-"Settings provided by .editorconfig and modelines take precedence over those "
-"below."
+msgid "Settings provided by .editorconfig and modelines take precedence over those below."
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
@@ -4371,12 +4141,9 @@ msgstr "Περικοπή τελικών κενών διαστημάτων"
 
 #: src/plugins/editorui/tweaks-language.ui:91
 #, fuzzy
-#| msgid ""
-#| "Upon saving, trailing whitespace from modified lines will be trimmed."
+#| msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr ""
-"Κατά την αποθήκευση, θα περικοπούν τα τελικά κενά διαστήματα από τις "
-"επεξεργασμένες γραμμές."
+msgstr "Κατά την αποθήκευση, θα περικοπούν τα τελικά κενά διαστήματα από τις επεξεργασμένες γραμμές."
 
 #: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
@@ -4430,8 +4197,7 @@ msgstr "Θέση δεξιού περιθωρίου"
 msgid "The desired maximum line length"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks-language.ui:203 src/plugins/editorui/tweaks.ui:368
 msgid "Behavior"
 msgstr ""
 
@@ -4575,13 +4341,9 @@ msgstr "Επισκόπηση κώδικα"
 
 #: src/plugins/editorui/tweaks.ui:141
 #, fuzzy
-#| msgid ""
-#| "If enabled, Builder will display an overview map of the source file next "
-#| "to the editor."
+#| msgid "If enabled, Builder will display an overview map of the source file next to the editor."
 msgid "Display an overview of source code next to the editor"
-msgstr ""
-"Αν είναι ενεργό, ο Κατασκευαστής θα εμφανίσει έναν χάρτη επισκόπησης δίπλα "
-"από τον επεξεργαστή."
+msgstr "Αν είναι ενεργό, ο Κατασκευαστής θα εμφανίσει έναν χάρτη επισκόπησης δίπλα από τον επεξεργαστή."
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
@@ -4635,9 +4397,7 @@ msgstr "Διαγνωστικά"
 #, fuzzy
 #| msgid "Show if a line was added or modified next to line number"
 msgid "Display diagnostics next to the line number"
-msgstr ""
-"Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια "
-"γραμμή"
+msgstr "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια γραμμή"
 
 #: src/plugins/editorui/tweaks.ui:211
 msgid "Show Line Changes"
@@ -4647,9 +4407,7 @@ msgstr "Εμφάνιση αλλαγών γραμμής"
 #, fuzzy
 #| msgid "Show if a line was added or modified next to line number"
 msgid "Highlight changed lines next to the line number"
-msgstr ""
-"Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια "
-"γραμμή"
+msgstr "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια γραμμή"
 
 #: src/plugins/editorui/tweaks.ui:225
 msgid "Highlighting"
@@ -4670,9 +4428,7 @@ msgid "Highlight Matching Brackets"
 msgstr "Επισήμανση αγκυλών που ταιριάζουν"
 
 #: src/plugins/editorui/tweaks.ui:241
-msgid ""
-"Use cursor position to highlight matching brackets, braces, parenthesis, and "
-"more"
+msgid "Use cursor position to highlight matching brackets, braces, parenthesis, and more"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:252
@@ -4680,9 +4436,7 @@ msgid "Semantic Highlighting"
 msgstr "Σημασιολογική επισήμανση"
 
 #: src/plugins/editorui/tweaks.ui:253
-msgid ""
-"Use symbol information to highlight namespaces, functions, and variables "
-"within source code"
+msgid "Use symbol information to highlight namespaces, functions, and variables within source code"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:270
@@ -4831,11 +4585,8 @@ msgid "Movements"
 msgstr "Κίνηση"
 
 #: src/plugins/editorui/tweaks.ui:484
-msgid ""
-"Backspace will remove extra space to keep you aligned with your indentation"
-msgstr ""
-"Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με "
-"το πλάτος εσοχής"
+msgid "Backspace will remove extra space to keep you aligned with your indentation"
+msgstr "Το Backspace θα αφαιρέσει τα επιπλέον κενά για να διατηρηθεί η στοίχιση με το πλάτος εσοχής"
 
 #: src/plugins/editorui/tweaks.ui:496
 #, fuzzy
@@ -4897,9 +4648,7 @@ msgid "Format on Save"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:571
-msgid ""
-"Reformat sources when saving to disk. Requires a registered formatter for "
-"the source language."
+msgid "Reformat sources when saving to disk. Requires a registered formatter for the source language."
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:586
@@ -4938,8 +4687,7 @@ msgstr "Εγκαθίσταται "
 msgid "Installation complete"
 msgstr "Γίνεται εγκατάσταση έργου"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:398
+#: src/plugins/flatpak/gbp-flatpak-client.c:454 src/plugins/git/gbp-git-client.c:398
 #, fuzzy
 #| msgid "If the document has been modified."
 msgid "The client has been closed"
@@ -4962,16 +4710,12 @@ msgid "Install or Update SDK?"
 msgstr "Πρόθεμα εγκατάστασης"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
-msgid ""
-"Builder needs to install the following software development kits to build "
-"your project."
+msgid "Builder needs to install the following software development kits to build your project."
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
-#: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58 src/plugins/git/tweaks.ui:16
+#: src/plugins/ls/gbp-ls-page.ui:17 src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38 src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
 msgid "Name"
 msgstr "Όνομα"
 
@@ -4985,8 +4729,7 @@ msgid "Resolving SDK Extensions"
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:115
-msgid ""
-"Builder is locating the appropriate SDK extensions to build your project"
+msgid "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:839
@@ -5044,9 +4787,7 @@ msgid "Installing Necessary SDKs"
 msgstr "Εγκατάσταση %s %s"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
-msgid ""
-"Builder is installing Software Development Kits necessary for building your "
-"application."
+msgid "Builder is installing Software Development Kits necessary for building your application."
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
@@ -5060,9 +4801,7 @@ msgid "Updating Necessary SDKs"
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
-msgid ""
-"Builder is updating Software Development Kits necessary for building your "
-"application."
+msgid "Builder is updating Software Development Kits necessary for building your application."
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
@@ -5085,8 +4824,8 @@ msgstr ""
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
-"When installing SDKs and SDK extensions, Builder may prefer a specific "
-"Flatpak installation which contains the extension."
+"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation which "
+"contains the extension."
 msgstr ""
 
 #: src/plugins/flatpak/tweaks.ui:22
@@ -5118,8 +4857,7 @@ msgstr ""
 msgid "No contents have been set to diff"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
-#: src/plugins/git/daemon/ipc-git-util.h:33
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264 src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
 msgstr ""
@@ -5131,9 +4869,7 @@ msgstr ""
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
-msgid ""
-"Builder failed to provide appropriate credentials when cloning the "
-"repository."
+msgid "Builder failed to provide appropriate credentials when cloning the repository."
 msgstr ""
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:619
@@ -5233,8 +4969,7 @@ msgstr "Ηλεκτρονική διεύθυνση"
 msgid "go run"
 msgstr ""
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96 src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 #, fuzzy
 #| msgid "Options to use when bootstrapping the project"
 msgid "Bootstrapping project"
@@ -5363,8 +5098,7 @@ msgstr "Λειτουργικό σύστημα"
 msgid "Bundled with Builder"
 msgstr "Δόμηση προφίλ"
 
-#: src/plugins/html-preview/gtk/menus.ui:7
-#: src/plugins/markdown-preview/gtk/menus.ui:7
+#: src/plugins/html-preview/gtk/menus.ui:7 src/plugins/markdown-preview/gtk/menus.ui:7
 #: src/plugins/sphinx-preview/gtk/menus.ui:7
 #, fuzzy
 #| msgid "Open Preview"
@@ -5605,8 +5339,7 @@ msgstr ""
 "    # a window\n"
 "\n"
 "    def __init__(self, app):\n"
-"        Gtk.Window.__init__(self, title=\"Switch Example\", "
-"application=app)\n"
+"        Gtk.Window.__init__(self, title=\"Switch Example\", application=app)\n"
 "        self.set_default_size(300, 100)\n"
 "        self.set_border_width(10)\n"
 "\n"
@@ -5788,8 +5521,7 @@ msgstr "Κενό έργο"
 msgid "An empty Meson project skeleton"
 msgstr "Επιστροφή στην επιλογή έργου"
 
-#: src/plugins/messages/gbp-messages-panel.c:102
-#: src/plugins/messages/gbp-messages-panel.ui:169
+#: src/plugins/messages/gbp-messages-panel.c:102 src/plugins/messages/gbp-messages-panel.ui:169
 #, fuzzy
 #| msgid "Debugger"
 msgid "Debug"
@@ -5801,23 +5533,20 @@ msgstr "Αποσφαλματωτής"
 msgid "Info"
 msgstr "Πληροφορίες αρχείου"
 
-#: src/plugins/messages/gbp-messages-panel.c:106
-#: src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.c:106 src/plugins/messages/gbp-messages-panel.ui:116
 #: src/plugins/messages/gbp-messages-panel.ui:163
 #, fuzzy
 #| msgid "Messages"
 msgid "Message"
 msgstr "Μηνύματα"
 
-#: src/plugins/messages/gbp-messages-panel.c:108
-#: src/plugins/messages/gbp-messages-panel.ui:157
+#: src/plugins/messages/gbp-messages-panel.c:108 src/plugins/messages/gbp-messages-panel.ui:157
 #, fuzzy
 #| msgid "Warnings"
 msgid "Warning"
 msgstr "Προειδοποιήσεις"
 
-#: src/plugins/messages/gbp-messages-panel.c:110
-#: src/plugins/messages/gbp-messages-panel.ui:151
+#: src/plugins/messages/gbp-messages-panel.c:110 src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
 msgstr ""
 
@@ -5829,8 +5558,7 @@ msgstr "Μηνύματα"
 msgid "Time"
 msgstr ""
 
-#: src/plugins/messages/gbp-messages-panel.ui:57
-#: src/plugins/messages/gbp-messages-panel.ui:149
+#: src/plugins/messages/gbp-messages-panel.ui:57 src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
 msgstr ""
 
@@ -6083,15 +5811,13 @@ msgstr "Αντιγράφονται αρχεία…"
 msgid "Files will be copied in a moment"
 msgstr ""
 
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:99
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:113 src/plugins/todo/gbp-todo-panel.ui:99
 #, fuzzy
 #| msgid "Filters:"
 msgid "Filter"
 msgstr "Φίλτρα:"
 
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
-#: src/plugins/project-tree/tweaks.ui:10
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48 src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
 msgstr "Δέντρο έργου"
 
@@ -6239,8 +5965,8 @@ msgstr "Το μοναδικό αναγνωριστικό του αντικειμ
 
 #: src/plugins/projectui/tweaks.ui:123
 msgid ""
-"This identifier is used when referencing your project's settings, build "
-"directories, and cached information."
+"This identifier is used when referencing your project's settings, build directories, and cached "
+"information."
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:132
@@ -6259,8 +5985,7 @@ msgstr "Προεπιλεγμένη ρύθμιση"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
-"The configuration is used to setup build pipelines, configure your build "
-"system, and run your project."
+"The configuration is used to setup build pipelines, configure your build system, and run your project."
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
@@ -6291,8 +6016,7 @@ msgid "Removed Files"
 msgstr "Γίνεται αφαίρεση αρχείων…"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
-#: src/plugins/recent/gbp-recent-section.c:289
-#: src/plugins/recent/gbp-recent-section.c:296
+#: src/plugins/recent/gbp-recent-section.c:289 src/plugins/recent/gbp-recent-section.c:296
 #, c-format
 msgid "Removing %s\n"
 msgstr "Αφαίρεση %s\n"
@@ -6330,9 +6054,7 @@ msgid "Download on Metered Connections"
 msgstr "Λήψη εξαρτήσεων"
 
 #: src/plugins/sdkui/tweaks.ui:16
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
+msgid "Allow the download of SDKs and dependencies when on metered internet connections"
 msgstr ""
 
 #: src/plugins/sdkui/tweaks.ui:29
@@ -6353,8 +6075,7 @@ msgstr "Δεν υπάρχουν διαθέσιμες εντολές"
 msgid "Untitled Command"
 msgstr "Άτιτλο τερματικό"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334 src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
 #, fuzzy
 #| msgid "Change Shortcut"
 msgid "Set Shortcut"
@@ -6415,8 +6136,8 @@ msgstr "Οποιοσδήποτε κατάλογος"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt>, or <tt>$HOME</tt> "
+"to define a relative path."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
@@ -6429,8 +6150,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
-"Builder can run your command from a number of localities including the host "
-"system or build containers."
+"Builder can run your command from a number of localities including the host system or build containers."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
@@ -6537,9 +6257,9 @@ msgstr ""
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
-"Use commands to run build tooling, applications, or shell scripts and map "
-"them to a keyboard shortcut. They can run from various environments such as "
-"the build pipeline, runtime environment, or host operating system."
+"Use commands to run build tooling, applications, or shell scripts and map them to a keyboard shortcut. "
+"They can run from various environments such as the build pipeline, runtime environment, or host operating "
+"system."
 msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
@@ -6590,9 +6310,7 @@ msgid "Keyboard Theme"
 msgstr "Κίνηση πληκτρολογίου"
 
 #: src/plugins/shortcutui/tweaks.ui:16
-msgid ""
-"Shortcut themes provide a keyboard experience similar to other IDEs and "
-"editors"
+msgid "Shortcut themes provide a keyboard experience similar to other IDEs and editors"
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
@@ -6639,8 +6357,7 @@ msgid "In Page"
 msgstr "Άνοιγμα σελίδων"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
-#: src/plugins/symbol-tree/gtk/menus.ui:8
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368 src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Επιλογή συμβόλου…"
 
@@ -6920,9 +6637,7 @@ msgid "Application Tracing"
 msgstr "ID Εφαρμογής"
 
 #: src/plugins/sysprof/tweaks.ui:225
-msgid ""
-"Provide TRACE_FD environment variable for applications to deliver custom "
-"events"
+msgid "Provide TRACE_FD environment variable for applications to deliver custom events"
 msgstr ""
 
 #. translators: %s is replaced with the current local time of day
@@ -7028,8 +6743,7 @@ msgid "Limit Scrollback"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:88
-msgid ""
-"Limit the number of lines that are stored in memory for terminal scrollback"
+msgid "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:99
@@ -7084,8 +6798,7 @@ msgstr "Δοκιμές μονάδας"
 msgid "Request that all unit tests are run"
 msgstr ""
 
-#: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:142
+#: src/plugins/todo/gbp-todo-panel.ui:4 src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr ""
 
@@ -7130,9 +6843,7 @@ msgid "Update Available"
 msgstr "Δεν υπάρχουν διαθέσιμες εντολές"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
-msgid ""
-"An update to Builder is available. Builder can download and install it for "
-"you."
+msgid "An update to Builder is available. Builder can download and install it for you."
 msgstr ""
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
@@ -7262,8 +6973,7 @@ msgstr "Εκτέλεση έργου"
 #, fuzzy
 #| msgid "A failure occurred while initializing version control"
 msgid "A failure occurred while cloning the repository."
-msgstr ""
-"Προέκυψε ένα σφάλμα κατά την αρχικοποίηση του συστήματος ελέγχου εκδόσεων"
+msgstr "Προέκυψε ένα σφάλμα κατά την αρχικοποίηση του συστήματος ελέγχου εκδόσεων"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
@@ -7280,9 +6990,7 @@ msgstr "Κλάδοι"
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
 #, fuzzy
 #| msgid "Enter the URL of your project's source code repository."
-msgid ""
-"Enter the URL of the source code repository for the project you would like "
-"to clone."
+msgid "Enter the URL of the source code repository for the project you would like to clone."
 msgstr "Πληκτρολογήστε τη διεύθυνση αποθετηρίου του έργου σας."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
@@ -7339,8 +7047,7 @@ msgstr ""
 msgid "Open a web browser in a new page"
 msgstr ""
 
-#: src/plugins/web-browser/gtk/menus.ui:19
-#: src/plugins/web-browser/gtk/menus.ui:25
+#: src/plugins/web-browser/gtk/menus.ui:19 src/plugins/web-browser/gtk/menus.ui:25
 #, fuzzy
 #| msgid "_Reload"
 msgid "Reload Page"
@@ -7376,8 +7083,7 @@ msgstr "Αποθήκευση της τρέχουσας σελίδας"
 msgid "Failed to parse XML document"
 msgstr "Αποτυχία αποθήκευσης αρχείου: %s"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
-#: src/plugins/xml-pack/ide-xml-tree-builder.c:522
+#: src/plugins/xml-pack/ide-xml-parser.c:604 src/plugins/xml-pack/ide-xml-tree-builder.c:522
 #, fuzzy
 #| msgid "Failed to create service of type \"%s\"."
 msgid "Failed to create the XML tree."
@@ -7392,8 +7098,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid "Whether or not Home moves to first non-space character."
-#~ msgstr ""
-#~ "Αν το πλήκτρο Home μετακινεί τον δρομέα στον πρώτο μη κενό χαρακτήρα."
+#~ msgstr "Αν το πλήκτρο Home μετακινεί τον δρομέα στον πρώτο μη κενό χαρακτήρα."
 
 #~ msgid "Show overview map"
 #~ msgstr "Εμφάνιση του χάρτη επισκόπησης"
@@ -7402,12 +7107,11 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αυτόματη απόκρυψη του χάρτη επισκόπησης"
 
 #~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
+#~ "If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a "
+#~ "timeout occurs."
 #~ msgstr ""
-#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
-#~ "όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το "
-#~ "χρονικό όριο."
+#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης όταν η εστίαση του ποντικιού "
+#~ "αφήσει τον επεξεργαστή, ή όταν λήξει το χρονικό όριο."
 
 #~ msgid "Overscroll"
 #~ msgstr "Υπερκύλιση"
@@ -7418,21 +7122,17 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~| msgid ""
-#~| "If enabled, Builder will automatically hide the overview map when mouse "
-#~| "focus leaves the editor, or a timeout occurs."
-#~ msgid ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
+#~| "If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a "
+#~| "timeout occurs."
+#~ msgid "If enabled, Builder will automatically wrap text so all of the line text is visible."
 #~ msgstr ""
-#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
-#~ "όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το "
-#~ "χρονικό όριο."
+#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης όταν η εστίαση του ποντικιού "
+#~ "αφήσει τον επεξεργαστή, ή όταν λήξει το χρονικό όριο."
 
 #, fuzzy
 #~| msgid "Minimal number of lines to keep above and below the cursor."
 #~ msgid "The number of pixels to include above and below lines in the editor."
-#~ msgstr ""
-#~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα."
+#~ msgstr "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα."
 
 #~ msgid "Window position"
 #~ msgstr "Θέση παραθύρου"
@@ -7490,9 +7190,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Κατασκευαστής"
 
 #~ msgid "Dark color scheme for Builder using the Tango color palette"
-#~ msgstr ""
-#~ "Σκοτεινό θέμα χρώματος για τον Κατασκεθαστή χρησιμοποιώντας την παλέτα "
-#~ "χρώματος Tango"
+#~ msgstr "Σκοτεινό θέμα χρώματος για τον Κατασκεθαστή χρησιμοποιώντας την παλέτα χρώματος Tango"
 
 #~ msgid "The default color scheme for Builder"
 #~ msgstr "Το προεπιλεγμένο χρώμα θέματος του Κατασκευαστή"
@@ -7668,11 +7366,10 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Α_νανέωση"
 
 #~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
+#~ "Builder has discovered that this file has been modified externally. Would you like to reload the file?"
 #~ msgstr ""
-#~ "Ο Κατασκευαστής εντόπισε πως αυτό το αρχείο τροποποιήθηκε από άλλη "
-#~ "εφαρμογή. Θέλετε να ανανεώσετε το αρχείο;"
+#~ "Ο Κατασκευαστής εντόπισε πως αυτό το αρχείο τροποποιήθηκε από άλλη εφαρμογή. Θέλετε να ανανεώσετε το "
+#~ "αρχείο;"
 
 #~ msgid "Match whole word only"
 #~ msgstr "Ταίριασμα μόνο ολόκληρης λέξης"
@@ -7682,8 +7379,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Εναλλαγή μεταξύ αναζήτησης και εύρεση και αντικατάσταση"
 
 #~ msgid "Show or hide search options such as case sensitivity"
-#~ msgstr ""
-#~ "Εμφάνιση ή απόκρυψη επιλογών αναζήτησης όπως ευαισθησία πεζών-κεφαλαίων"
+#~ msgstr "Εμφάνιση ή απόκρυψη επιλογών αναζήτησης όπως ευαισθησία πεζών-κεφαλαίων"
 
 #~ msgid "Highlight Mode"
 #~ msgstr "Λειτουργία επισήμανσης"
@@ -7880,8 +7576,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~| msgid "Minimum number of lines to keep above and below the cursor"
 #~ msgid "Number of pixels above and below editor lines"
-#~ msgstr ""
-#~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
+#~ msgstr "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
 
 #, fuzzy
 #~| msgctxt "Keywords"
@@ -7919,8 +7614,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Επαναφορά θέσης δρομέα"
 
 #~ msgid "Restore cursor position when a file is reopened"
-#~ msgstr ""
-#~ "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
+#~ msgstr "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
 
 #~ msgid "Enable text wrapping"
 #~ msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
@@ -7929,8 +7623,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αναδίπλωση κειμένου που είναι πολύ ευρύ για προβολή"
 
 #~ msgid "Minimum number of lines to keep above and below the cursor"
-#~ msgstr ""
-#~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
+#~ msgstr "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
 
 #~ msgid "Allow the editor to scroll past the end of the buffer"
 #~ msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
@@ -7945,18 +7638,14 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αλλαγές γραμμής"
 
 #~ msgid "Show if a line was added or modified next to line number"
-#~ msgstr ""
-#~ "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε "
-#~ "μια γραμμή"
+#~ msgstr "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε μια γραμμή"
 
 #, fuzzy
 #~ msgid "Line diagnostics"
 #~ msgstr "Επισήμανση διαγνωστικών"
 
 #~ msgid "Show an icon next to line numbers indicating type of diagnostic"
-#~ msgstr ""
-#~ "Εμφάνιση ενός εικονιδίου δίπλα στους αριθμούς γραμμής που υποδεικνύουν "
-#~ "τον τύπο του διαγνωστικού"
+#~ msgstr "Εμφάνιση ενός εικονιδίου δίπλα στους αριθμούς γραμμής που υποδεικνύουν τον τύπο του διαγνωστικού"
 
 #~ msgid "Highlight"
 #~ msgstr "Επισήμανση"
@@ -7990,12 +7679,10 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Code Insight"
 #~ msgstr "Επιλογές κώδικα"
 
-#~ msgid ""
-#~ "Use code insight to highlight additional information discovered in source "
-#~ "file"
+#~ msgid "Use code insight to highlight additional information discovered in source file"
 #~ msgstr ""
-#~ "Χρησιμοποιεί τις επιλογές κώδικα για να επισημαίνει επιπρόσθετες "
-#~ "πληροφορίες που βρέθηκαν στο πηγαίο αρχείο"
+#~ "Χρησιμοποιεί τις επιλογές κώδικα για να επισημαίνει επιπρόσθετες πληροφορίες που βρέθηκαν στο πηγαίο "
+#~ "αρχείο"
 
 #~ msgid "Search languages…"
 #~ msgstr "Αναζήτηση γλωσσών…"
@@ -8453,8 +8140,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Εμφάνιση σφλαμάτων και προειδοποιήσεων από το Clang"
 
 #~ msgid "clang diagnostics warnings errors"
-#~ msgstr ""
-#~ "clang diagnostics warnings errors διαγνωστικά προειδοποιήσεις σφάλματα"
+#~ msgstr "clang diagnostics warnings errors διαγνωστικά προειδοποιήσεις σφάλματα"
 
 #, fuzzy
 #~| msgid "Suggest completions using Ctags"
@@ -8621,15 +8307,12 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~| msgid ""
-#~| "If enabled, Builder will automatically hide the overview map when mouse "
-#~| "focus leaves the editor, or a timeout occurs."
-#~ msgid ""
-#~ "When saving a file Builder will automatically update copyright "
-#~ "information for you"
+#~| "If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a "
+#~| "timeout occurs."
+#~ msgid "When saving a file Builder will automatically update copyright information for you"
 #~ msgstr ""
-#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
-#~ "όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το "
-#~ "χρονικό όριο."
+#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης όταν η εστίαση του ποντικιού "
+#~ "αφήσει τον επεξεργαστή, ή όταν λήξει το χρονικό όριο."
 
 #~ msgid "Directory already exists with that name"
 #~ msgstr "Ένας κατάλογος με αυτό το όνομα υπάρχει ήδη"
@@ -8759,8 +8442,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Επιλογή αρχείου παλέτας"
 
 #, fuzzy
-#~ msgid ""
-#~ "If you close without saving, all your changes will be permanently lost."
+#~ msgid "If you close without saving, all your changes will be permanently lost."
 #~ msgstr "Αν δεν αποθηκεύσετε, όλες οι αλλαγές σας θα χαθούν μόνιμα."
 
 #, c-format
@@ -8785,9 +8467,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~| msgid "Enable the use of pylint, which may execute code in your project"
 #~ msgid "Enable the use of ESLint, which may execute code in your project"
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #, fuzzy
 #~| msgid "pylint python lint code execute execution"
@@ -8796,11 +8476,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid ""
-#~ "Enable the use of eslint to find additional diagnostics in JavaScript "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Enable the use of eslint to find additional diagnostics in JavaScript files. This may result in the "
+#~ "execution of code in your project."
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #~ msgid "MANIFEST"
 #~ msgstr "ΜΑΝΙΦΕΣΤΟ"
@@ -8896,9 +8574,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "Open _Preview"
 #~ msgstr ""
-#~ "Πριν εκτυπώσετε το έγγραφο σας, μπορείτε επίσης να προεπισκοπήσετε πώς θα "
-#~ "φαίνεται το εκτυπωμένο έγγραφο με την χρήση του <gui>Προεπισκόπηση "
-#~ "εκτύπωσης</gui>. Για προεπισκόπηση του εγγράφου:"
+#~ "Πριν εκτυπώσετε το έγγραφο σας, μπορείτε επίσης να προεπισκοπήσετε πώς θα φαίνεται το εκτυπωμένο "
+#~ "έγγραφο με την χρήση του <gui>Προεπισκόπηση εκτύπωσης</gui>. Για προεπισκόπηση του εγγράφου:"
 
 #~ msgid "Cut"
 #~ msgstr "Αποκοπή"
@@ -8916,9 +8593,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Pylint"
 
 #~ msgid "Enable the use of pylint, which may execute code in your project"
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #~ msgid "pylint python lint code execute execution"
 #~ msgstr "pylint python lint code execute execution κώδικας εκτέλεση δόμηση"
@@ -8931,11 +8606,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid ""
-#~ "Enable the use of pylint to find additional diagnostics in Python "
-#~ "programs. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Enable the use of pylint to find additional diagnostics in Python programs. This may result in the "
+#~ "execution of code in your project."
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #~ msgid "Quit"
 #~ msgstr "Έξοδος"
@@ -9139,10 +8812,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "Change _to"
 #~ msgstr ""
-#~ "Η οθόνη με την <link xref=\"shell-introduction\">πάνω γραμμή</link> είναι "
-#~ "η κύρια οθόνη. Για να αλλάξετε ποια οθόνη αντιμετωπίζεται ως \"κύρια\", "
-#~ "κάντε κλικ στην πάνω γραμμή και σύρετέ την στην οθόνη που θέλετε να "
-#~ "ορίσετε ως την \"κύρια\" οθόνη."
+#~ "Η οθόνη με την <link xref=\"shell-introduction\">πάνω γραμμή</link> είναι η κύρια οθόνη. Για να "
+#~ "αλλάξετε ποια οθόνη αντιμετωπίζεται ως \"κύρια\", κάντε κλικ στην πάνω γραμμή και σύρετέ την στην "
+#~ "οθόνη που θέλετε να ορίσετε ως την \"κύρια\" οθόνη."
 
 #~ msgid "Cha_nge"
 #~ msgstr "Αλλ_αγή"
@@ -9169,18 +8841,14 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid ""
-#~ "Enable the use of stylelint to find additional diagnostics in stylesheet "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Enable the use of stylelint to find additional diagnostics in stylesheet files. This may result in the "
+#~ "execution of code in your project."
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #, fuzzy
 #~| msgid "Enable the use of pylint, which may execute code in your project"
 #~ msgid "Enable the use of Stylelint, which may execute code in your project"
-#~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ msgstr "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο έργο σας"
 
 #, fuzzy
 #~| msgid "pylint python lint code execute execution"
@@ -9197,14 +8865,14 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy, c-format
 #~| msgid ""
-#~| "The support log file has been written to '%s'. Please provide this file "
-#~| "as an attachment on your bug report or support request."
+#~| "The support log file has been written to '%s'. Please provide this file as an attachment on your bug "
+#~| "report or support request."
 #~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file "
-#~ "as an attachment on your bug report or support request."
+#~ "The support log file has been written to “%s”. Please provide this file as an attachment on your bug "
+#~ "report or support request."
 #~ msgstr ""
-#~ "Η καταγραφή υποστήριξης εγγράφηκε στο '%s'. Παρακαλούμε επισυνάψτε το "
-#~ "στην αναφορά σφάλματος ή στο αίτημα υποστήριξη σας."
+#~ "Η καταγραφή υποστήριξης εγγράφηκε στο '%s'. Παρακαλούμε επισυνάψτε το στην αναφορά σφάλματος ή στο "
+#~ "αίτημα υποστήριξη σας."
 
 #, fuzzy
 #~| msgctxt "shortcut window"
@@ -9358,9 +9026,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Ιστορικό"
 
 #~ msgid "vala diagnostics warnings errors"
-#~ msgstr ""
-#~ "vala diagnostics warnings errors διαγνωστικά σφάλματα προειδοποιήσεις "
-#~ "σφάλμα"
+#~ msgstr "vala diagnostics warnings errors διαγνωστικά σφάλματα προειδοποιήσεις σφάλμα"
 
 #~ msgid "Suggest Snippet Completion"
 #~ msgstr "Υποδείξεις συμπλήρωσης αποσπασμάτων"
@@ -9377,17 +9043,11 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Enable auto-completion of words in document"
 #~ msgstr "Ενεργοποίηση αυτόματης συμπλήρωσης για τις λέξεις του εγγράφου"
 
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Αν είναι ενεργό, λέξεις στο τρέχον έγγραφο θα είναι διαθέσιμες για "
-#~ "αυτόματη συμπλήρωση."
+#~ msgid "If enabled, words within the current document will be available for auto-completion."
+#~ msgstr "Αν είναι ενεργό, λέξεις στο τρέχον έγγραφο θα είναι διαθέσιμες για αυτόματη συμπλήρωση."
 
 #~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr ""
-#~ "Αν είναι ενεργό, το δέντρο του έργου θα προβάλει εικονίδια δίπλα σε κάθε "
-#~ "αντικείμενο."
+#~ msgstr "Αν είναι ενεργό, το δέντρο του έργου θα προβάλει εικονίδια δίπλα σε κάθε αντικείμενο."
 
 #~ msgid "org.gnome.Builder"
 #~ msgstr "org.gnome.Builder"
@@ -9454,10 +9114,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Tabs and Indentation"
 #~ msgstr "Εσοχή"
 
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Γιατί δε <a href=\"action://app.new-project\">δημιουργείτε ένα έργο</a>;"
+#~ msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+#~ msgstr "Γιατί δε <a href=\"action://app.new-project\">δημιουργείτε ένα έργο</a>;"
 
 #~ msgid "Click an item to select"
 #~ msgstr "Κάντε κλικ σε ένα αντικείμενο για να το επιλέξετε"
@@ -9514,18 +9172,13 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Suggest words found in open files"
 #~ msgstr "Υποδείξεις λέξεων που βρίσκονται στα ανοιχτά αρχεία"
 
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Προτείνει συμπληρώσεις για λέξεις που βρίσκονται σε οποιοδήποτε ανοιχτό "
-#~ "έγγραφο"
+#~ msgid "Suggests completions as you type based on words found in any open document"
+#~ msgstr "Προτείνει συμπληρώσεις για λέξεις που βρίσκονται σε οποιοδήποτε ανοιχτό έγγραφο"
 
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
+#~ msgid "Create and manages a Ctags database for completing class names, functions, and more"
 #~ msgstr ""
-#~ "Δημιουργεί και διαχειρίζεται μια βάση δεδομένων Ctags για τη συμπλήρωση "
-#~ "ονομάτων κλάσεων, συναρτήσεων και περισσότερα."
+#~ "Δημιουργεί και διαχειρίζεται μια βάση δεδομένων Ctags για τη συμπλήρωση ονομάτων κλάσεων, συναρτήσεων "
+#~ "και περισσότερα."
 
 #~ msgid "Suggest completions using Clang (Experimental)"
 #~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Clang (πειραματικό)"
@@ -9534,9 +9187,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αποσπάσματα κώδικα"
 
 #~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr ""
-#~ "Χρησιμοποιεί αποσπάσματα κώδικα για αύξηση της αποδοτικότητάς στην "
-#~ "πληκτρολόγηση"
+#~ msgstr "Χρησιμοποιεί αποσπάσματα κώδικα για αύξηση της αποδοτικότητάς στην πληκτρολόγηση"
 
 #~ msgid "Failed to load file: %s: %s"
 #~ msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
@@ -9573,9 +9224,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~| msgid "Non-ASCII hostname '%s' forbidden in this URI"
 #~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr ""
-#~ "Το μη έγκυρο ASCII όνομα κεντρικού υπολογιστή '%s' απαγορεύτηκε σε αυτό "
-#~ "το URI"
+#~ msgstr "Το μη έγκυρο ASCII όνομα κεντρικού υπολογιστή '%s' απαγορεύτηκε σε αυτό το URI"
 
 #, fuzzy
 #~| msgid "Could not parse port '%s' in URI"
@@ -9691,9 +9340,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~| msgid "The version control to use or \"none\" to disable"
 #~ msgid "The version control to use or “none” to disable"
-#~ msgstr ""
-#~ "Το σύστημα έλεγχου εκδόσεων που θα χρησιμοποιηθεί ή \"none\" για "
-#~ "απενεργοποίηση"
+#~ msgstr "Το σύστημα έλεγχου εκδόσεων που θα χρησιμοποιηθεί ή \"none\" για απενεργοποίηση"
 
 #~ msgid "git"
 #~ msgstr "git"
@@ -9881,8 +9528,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αλλαγή ρυθμίσεων επεξεργαστή και γλώσσας"
 
 #~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr ""
-#~ "Ανοίξτε ένα αρχείο πληκτρολογώντας στο πλαίσιο αναζήτησης στο πάνω μέρος"
+#~ msgstr "Ανοίξτε ένα αρχείο πληκτρολογώντας στο πλαίσιο αναζήτησης στο πάνω μέρος"
 
 #~ msgid "Search highlight mode…"
 #~ msgstr "Αναζήτηση σε λειτουργία επισήμανσης…"
@@ -9957,8 +9603,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αποτυχία εντοπισμού του configure.ac"
 
 #~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr ""
-#~ "Ο κατάλογος πρέπει να είναι σε ένα τοπικά προσαρτημένο σύστημα αρχείων."
+#~ msgstr "Ο κατάλογος πρέπει να είναι σε ένα τοπικά προσαρτημένο σύστημα αρχείων."
 
 #~ msgid "Failed to locate device"
 #~ msgstr "Αποτυχία εντοπισμού συσκευής"
@@ -10070,8 +9715,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "CONFIG_ID"
 
 #~ msgid "Path to project file, defaults to current directory"
-#~ msgstr ""
-#~ "Διαδρομή στο αρχείο του έργου, η προεπιλογή είναι ο τρέχων κατάλογος"
+#~ msgstr "Διαδρομή στο αρχείο του έργου, η προεπιλογή είναι ο τρέχων κατάλογος"
 
 #~ msgid "Enable color picker"
 #~ msgstr "Ενεργοποίηση επιλογέα χρωμάτων"
@@ -10090,12 +9734,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ "Usage:\n"
 #~ "  ide contribute PROJECT_NAME\n"
 #~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
+#~ "  This command will bootstrap your system to begin contributing to the project\n"
+#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring that\n"
+#~ "  you have the required dependencies to build, and bootstraps the first build\n"
 #~ "  of the project.\n"
 #~ "\n"
 #~ "Examples:\n"
@@ -10106,12 +9747,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ "Χρήση:\n"
 #~ "  ide contribute ΟΝΟΜΑ_ΕΡΓΟΥ\n"
 #~ "\n"
-#~ "  Η εντολή αυτή προετοιμάζει το σύστημα σας για να ξεκινήσετε να "
-#~ "συνεισφέρετε σε ένα έργο\n"
-#~ "  με βάση το ΟΝΟΜΑ_ΕΡΓΟΥ.  Η διαδικασία αυτή περιλαμβάνει τη λήψη του "
-#~ "πηγαίου κώδικα,\n"
-#~ "  εξασφαλίζοντας ότι έχετε όλες τις απαιτούμενες εξαρτήσεις για την πρώτη "
-#~ "δόμηση,\n"
+#~ "  Η εντολή αυτή προετοιμάζει το σύστημα σας για να ξεκινήσετε να συνεισφέρετε σε ένα έργο\n"
+#~ "  με βάση το ΟΝΟΜΑ_ΕΡΓΟΥ.  Η διαδικασία αυτή περιλαμβάνει τη λήψη του πηγαίου κώδικα,\n"
+#~ "  εξασφαλίζοντας ότι έχετε όλες τις απαιτούμενες εξαρτήσεις για την πρώτη δόμηση,\n"
 #~ "   του έργου.\n"
 #~ "\n"
 #~ "Παραδείγματα:\n"
@@ -10306,9 +9944,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Έληξε το χρονικο όριο κατά την αναμονή εγκατάστασης των συσκευων.\n"
 
 #~ msgid "Waiting up to 60 seconds for devices to settle. Ctrl+C to exit.\n"
-#~ msgstr ""
-#~ "Αναμονή πάνω από 60 δευτερόλεπτα για την ρύθμιση των συσκευών. Πατήστε "
-#~ "Ctrl+C για έξοδο.\n"
+#~ msgstr "Αναμονή πάνω από 60 δευτερόλεπτα για την ρύθμιση των συσκευών. Πατήστε Ctrl+C για έξοδο.\n"
 
 #~ msgid "The target device we are building for."
 #~ msgstr "Η συσκευή για την οποία γίνεται η δόμηση."
@@ -10381,11 +10017,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Display Document Changes"
 #~ msgstr "Εμφάνιση αλλαγών εγγράφου"
 
-#~ msgid ""
-#~ "Display whether a line has been added or modified next to the line number."
-#~ msgstr ""
-#~ "Εμφανίζει αν μια γραμμή έχει προστεθεί ή τροποποιηθεί δίπλα στον αριθμό "
-#~ "γραμμής."
+#~ msgid "Display whether a line has been added or modified next to the line number."
+#~ msgstr "Εμφανίζει αν μια γραμμή έχει προστεθεί ή τροποποιηθεί δίπλα στον αριθμό γραμμής."
 
 #~ msgid "Display Line Numbers"
 #~ msgstr "Προβολή αριθμών γραμμής"
@@ -10423,26 +10056,20 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Semantic Language Highlighting"
 #~ msgstr "Σημασιολογική επισήμανση γλώσσας"
 
-#~ msgid ""
-#~ "Highlight additional syntax based upon information found in the document."
-#~ msgstr ""
-#~ "Επισημαίνει τη σύνταξη βασιζόμενο στις πληροφορίες που βρέθηκαν στο "
-#~ "έγγραφο."
+#~ msgid "Highlight additional syntax based upon information found in the document."
+#~ msgstr "Επισημαίνει τη σύνταξη βασιζόμενο στις πληροφορίες που βρέθηκαν στο έγγραφο."
 
 #~ msgid "Suggest completion of words found within all open documents."
-#~ msgstr ""
-#~ "Υποδεικνύει συμπληρώσεις λέξεων σε όλα τα ανοιχτά έγγραφα που βρέθηκαν."
+#~ msgstr "Υποδεικνύει συμπληρώσεις λέξεων σε όλα τα ανοιχτά έγγραφα που βρέθηκαν."
 
 #~ msgid "Use Ctags for completions in supported languages."
-#~ msgstr ""
-#~ "Χρησιμοποιήστε Ctags για αυτόματη συμπλήρωση στις υποστηριζόμενες γλώσσες."
+#~ msgstr "Χρησιμοποιήστε Ctags για αυτόματη συμπλήρωση στις υποστηριζόμενες γλώσσες."
 
 #~ msgid "Suggest Completions using Clang (Experimental)"
 #~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Clang (πειραματικό)"
 
 #~ msgid "Use Clang for completions in the C and C++ languages."
-#~ msgstr ""
-#~ "Χρησιμοποιήστε Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
+#~ msgstr "Χρησιμοποιήστε Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++."
 
 #~ msgid "Suggest Completions using Jedi"
 #~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Jedi"
@@ -10475,8 +10102,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αποτυχία δημιουργίας περιεχομένου JavaScript."
 
 #~ msgid "Failed to set IdeContext in JavaScript runtime."
-#~ msgstr ""
-#~ "Αποτυχία ορισμού του IdeContext στο περιβάλλον εκτέλεσης JavaScript."
+#~ msgstr "Αποτυχία ορισμού του IdeContext στο περιβάλλον εκτέλεσης JavaScript."
 
 #~ msgid "The script \"%s\" is not a JavaScript file."
 #~ msgstr "Το σενάριο \"%s\" δεν είναι ένα αρχείο JavaScript."
@@ -10527,8 +10153,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "(Πατήστε στα αντικείμενα για να τα επιλέξετε)"
 
 #~ msgid "restore insert cursor mark"
-#~ msgstr ""
-#~ "restore insert cursor mark επαναφορά εισαγωγή δρομέας σήμανση επισήμανση"
+#~ msgstr "restore insert cursor mark επαναφορά εισαγωγή δρομέας σήμανση επισήμανση"
 
 #~ msgid "diff renderer gutter changes git vcs"
 #~ msgstr "diff renderer gutter changes git vcs αλλαγές"
@@ -10551,44 +10176,33 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "minimap mini map overview over view"
 #~ msgstr "minimap mini map overview over view χάρτης επισκόπηση προβολή"
 
-#~ msgid ""
-#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing "
-#~ "leading"
+#~ msgid "draw spaces space tab newline nbsp non-breaking whitespace trailing leading"
 #~ msgstr ""
-#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing "
-#~ "leading σχεδίαση εσοχή διαστήματα γραμμή"
+#~ "draw spaces space tab newline nbsp non-breaking whitespace trailing leading σχεδίαση εσοχή διαστήματα "
+#~ "γραμμή"
 
 #~ msgid "git author name surname attribution source code"
-#~ msgstr ""
-#~ "git author name surname attribution source code πηγαίος κώδικας επώνυμο "
-#~ "όνομα προγραμματιστής"
+#~ msgstr "git author name surname attribution source code πηγαίος κώδικας επώνυμο όνομα προγραμματιστής"
 
 #~ msgid "git author email mail address attribute source code"
 #~ msgstr ""
-#~ "git author email mail address attribute source code πηγαίος κώδικας "
-#~ "επώνυμο όνομα προγραμματιστής διεύθυνση"
+#~ "git author email mail address attribute source code πηγαίος κώδικας επώνυμο όνομα προγραμματιστής "
+#~ "διεύθυνση"
 
 #~ msgid "word words auto completion suggest found document"
-#~ msgstr ""
-#~ "word words auto completion suggest found document λέξη λέξεις αυτόματη "
-#~ "συμπλήρωση έγγραφο"
+#~ msgstr "word words auto completion suggest found document λέξη λέξεις αυτόματη συμπλήρωση έγγραφο"
 
 #~ msgid "experimental clang autocompletion auto complete"
-#~ msgstr ""
-#~ "experimental clang autocompletion auto complete πειραματικό συμπλήρωση"
+#~ msgstr "experimental clang autocompletion auto complete πειραματικό συμπλήρωση"
 
 #~ msgid "jedi python autocompletion auto complete"
 #~ msgstr "jedi python autocompletion auto complete συμπλήρωση αυτόματη"
 
 #~ msgid "snippets autocompletion auto complete"
-#~ msgstr ""
-#~ "snippets autocompletion auto complete αποσπάσματα κώδικας συμπλήρωση "
-#~ "αυτόματη"
+#~ msgstr "snippets autocompletion auto complete αποσπάσματα κώδικας συμπλήρωση αυτόματη"
 
 #~ msgid "semantic highlighting color goto declaration definition"
-#~ msgstr ""
-#~ "semantic highlighting color goto declaration definition μετάβαση χρώμα "
-#~ "επισήμανση "
+#~ msgstr "semantic highlighting color goto declaration definition μετάβαση χρώμα επισήμανση "
 
 #~ msgid "default builder keybindings"
 #~ msgstr "default builder keybindings συντομεύσεις συνδυασμοί πλήκτρων"
@@ -10609,9 +10223,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "show grid lines εμφάνιση πλέγμα γραμμές"
 
 #~ msgid "source style scheme source tango solarized builder syntax"
-#~ msgstr ""
-#~ "source style scheme source tango solarized builder syntax κώδικας σύνταξη "
-#~ "εμφάνιση θέμα"
+#~ msgstr "source style scheme source tango solarized builder syntax κώδικας σύνταξη εμφάνιση θέμα"
 
 #~ msgid "%s more"
 #~ msgid_plural "%s more"
@@ -10622,8 +10234,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Άνοιγμα εγγράφου"
 
 #~ msgid "Project build system does not support building"
-#~ msgstr ""
-#~ "Το σύστημα δόμησης του έργου δεν υποστηρίζει την λειτουργία δόμησης."
+#~ msgstr "Το σύστημα δόμησης του έργου δεν υποστηρίζει την λειτουργία δόμησης."
 
 #~ msgid "HTML Preview"
 #~ msgstr "Προεπισκόπηση HTML"
@@ -10741,9 +10352,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Άλλαξε στον τόμο"
 
 #~ msgid "If the file has changed on disk and the buffer is not in sync."
-#~ msgstr ""
-#~ "Αν το αρχείο άλλαξε στον δίσκο και η ενδιάμεση μνήμη δεν είναι "
-#~ "συγχρονισμένη."
+#~ msgstr "Αν το αρχείο άλλαξε στον δίσκο και η ενδιάμεση μνήμη δεν είναι συγχρονισμένη."
 
 #~ msgid "Context"
 #~ msgstr "Περιεχόμενο"
@@ -10752,8 +10361,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Το IdeContext για την ενδιάμεση μνήμη."
 
 #~ msgid "If diagnostic warnings and errors should be highlighted."
-#~ msgstr ""
-#~ "Αν θα επισημαίνονται τα σφάλματα και οι προειδοποιήσεις των διαγνωστικών."
+#~ msgstr "Αν θα επισημαίνονται τα σφάλματα και οι προειδοποιήσεις των διαγνωστικών."
 
 #~ msgid "If the underlying file is read only."
 #~ msgstr "Αν το αρχείο είναι μόνο για ανάγνωση."
@@ -10772,9 +10380,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid "If the documents should auto save after a configured timeout."
-#~ msgstr ""
-#~ "Αν το έγγραφο θα αποθηκεύεται αυτόματα μετά από ένα καθορισμένο χρονικό "
-#~ "σημείο."
+#~ msgstr "Αν το έγγραφο θα αποθηκεύεται αυτόματα μετά από ένα καθορισμένο χρονικό σημείο."
 
 #~ msgid "Focused Buffer"
 #~ msgstr "Εστιασμένη ενδιάμεση μνήμη"
@@ -10804,9 +10410,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "The project for the context."
 #~ msgstr ""
-#~ "Επιλέξτε τον επιθυμητό αρχείο για αφαίρεση στην <gui>προβολή έργου</gui>, "
-#~ "κλικ στο δεξί πλήκτρο ποντικιού για την εμφάνιση του <gui>μενού "
-#~ "περιεχομένου έργου</gui> και επιλέξτε <gui>αφαίρεση</gui>."
+#~ "Επιλέξτε τον επιθυμητό αρχείο για αφαίρεση στην <gui>προβολή έργου</gui>, κλικ στο δεξί πλήκτρο "
+#~ "ποντικιού για την εμφάνιση του <gui>μενού περιεχομένου έργου</gui> και επιλέξτε <gui>αφαίρεση</gui>."
 
 #~ msgid "The project file for the context."
 #~ msgstr "Το αρχείο έργου για το περιεχόμενο."
@@ -10914,14 +10519,12 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ "\t}\n"
 #~ "\n"
 #~ "\tbool fill () {\n"
-#~ "\t\tdouble fraction = progress_bar.get_fraction (); //get current "
-#~ "progress\n"
+#~ "\t\tdouble fraction = progress_bar.get_fraction (); //get current progress\n"
 #~ "\t\tfraction += 0.1; //increase by 10% each time this function is called\n"
 #~ "\n"
 #~ "\t\tprogress_bar.set_fraction (fraction);\n"
 #~ "\n"
-#~ "\t\t/* This function is only called by GLib.Timeout.add while it returns "
-#~ "true; */\n"
+#~ "\t\t/* This function is only called by GLib.Timeout.add while it returns true; */\n"
 #~ "\t\tif (fraction &lt; 1.0)\n"
 #~ "\t\t\treturn true;\n"
 #~ "\t\treturn false;\n"
@@ -10949,11 +10552,10 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "The project description."
 #~ msgstr ""
-#~ "Το <app>Anjuta</app> προσπαθεί να βρει αυτόματα την χρησιμοποιούμενη "
-#~ "οπισθοφυλακή του έργου από το έργο σας. Αλλά εάν είναι δυνατές πολλές "
-#~ "οπισθοφυλακές, θα πάρετε ένα διάλογο που ζητά την επιλογή ενός προσθέτου "
-#~ "οπισθοφυλακής έργου. Διαβάστε την περιγραφή οπισθοφυλακής του έργου για "
-#~ "να βρείτε την κατάλληλη επιλογή."
+#~ "Το <app>Anjuta</app> προσπαθεί να βρει αυτόματα την χρησιμοποιούμενη οπισθοφυλακή του έργου από το "
+#~ "έργο σας. Αλλά εάν είναι δυνατές πολλές οπισθοφυλακές, θα πάρετε ένα διάλογο που ζητά την επιλογή ενός "
+#~ "προσθέτου οπισθοφυλακής έργου. Διαβάστε την περιγραφή οπισθοφυλακής του έργου για να βρείτε την "
+#~ "κατάλληλη επιλογή."
 
 #, fuzzy
 #~ msgid "The project name."
@@ -11019,9 +10621,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid "Relative Path"
-#~ msgstr ""
-#~ "Εισάγετε όνομα αρχείου, είτε σχετική ή πλήρη διαδρομή για να φορτωθεί η "
-#~ "εικόνα"
+#~ msgstr "Εισάγετε όνομα αρχείου, είτε σχετική ή πλήρη διαδρομή για να φορτωθεί η εικόνα"
 
 #, fuzzy
 #~ msgid "Schema ID"
@@ -11042,17 +10642,14 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "Mark End"
 #~ msgstr ""
-#~ "<menuchoice><guimenu>Επιλογές</guimenu><guimenuitem>Μορφή = Ρέουσα</"
-#~ "guimenuitem></menuchoice> -- Η <quote>ρέουσα</quote> μορφή (RFC 3676) "
-#~ "χωρίζει το κείμενο του μηνύματος σε παραγράφους, που πληκτρολογείτε "
-#~ "συνεχώς χρησιμοποιώντας το πλήκτρο <keysym>Εισαγωγή</keysym> μόνο για να "
-#~ "σημειώσετε το τέλος μιας παραγράφου και <quote>σταθερές </quote> γραμμές "
-#~ "που σημειώνετε μεμονωμένα χρησιμοποιώντας το πλήκτρο <keysym>εισαγωγή</"
-#~ "keysym>. Αυτό επιτρέπει σε άλλα προγράμματα αλληλογραφίας που "
-#~ "αναγνωρίζουν τη μορφή να εμφανίσουν το κείμενο κατάλληλα ως προς το "
-#~ "πλάτος της οθόνης του αποδέκτη και να παραθέσουν το κείμενο σωστά όταν "
-#~ "απαντάτε. Το κείμενο εμφανίζεται επίσης κατανοητά από ένα πρόγραμμα που "
-#~ "δεν αναγνωρίζει ρέουσα μορφή."
+#~ "<menuchoice><guimenu>Επιλογές</guimenu><guimenuitem>Μορφή = Ρέουσα</guimenuitem></menuchoice> -- Η "
+#~ "<quote>ρέουσα</quote> μορφή (RFC 3676) χωρίζει το κείμενο του μηνύματος σε παραγράφους, που "
+#~ "πληκτρολογείτε συνεχώς χρησιμοποιώντας το πλήκτρο <keysym>Εισαγωγή</keysym> μόνο για να σημειώσετε το "
+#~ "τέλος μιας παραγράφου και <quote>σταθερές </quote> γραμμές που σημειώνετε μεμονωμένα χρησιμοποιώντας "
+#~ "το πλήκτρο <keysym>εισαγωγή</keysym>. Αυτό επιτρέπει σε άλλα προγράμματα αλληλογραφίας που "
+#~ "αναγνωρίζουν τη μορφή να εμφανίσουν το κείμενο κατάλληλα ως προς το πλάτος της οθόνης του αποδέκτη και "
+#~ "να παραθέσουν το κείμενο σωστά όταν απαντάτε. Το κείμενο εμφανίζεται επίσης κατανοητά από ένα "
+#~ "πρόγραμμα που δεν αναγνωρίζει ρέουσα μορφή."
 
 #, fuzzy
 #~ msgid "The ending text mark."
@@ -11084,9 +10681,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #, fuzzy
 #~ msgid "The text for the chunk."
-#~ msgstr ""
-#~ "Η τιμή του τμήματος κειμένου του PNG %s δεν μπορεί να μετατραπεί σε "
-#~ "κωδικοποίηση ISO-8859-1."
+#~ msgstr "Η τιμή του τμήματος κειμένου του PNG %s δεν μπορεί να μετατραπεί σε κωδικοποίηση ISO-8859-1."
 
 #, fuzzy
 #~ msgid "If the text property has been manually set."
@@ -11607,8 +11202,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αναδόμηση έργου"
 
 #~ msgid "Suggest completion of words found within the current document."
-#~ msgstr ""
-#~ "Προτείνει συμπληρώσεις για λέξεις που βρίσκονται στο τρέχον έγγραφο."
+#~ msgstr "Προτείνει συμπληρώσεις για λέξεις που βρίσκονται στο τρέχον έγγραφο."
 
 #~ msgid "Display line numbers in the document."
 #~ msgstr "Εμφανίζει τους αριθμούς γραμμής του εγγράφου."
@@ -11713,8 +11307,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Στοίβα"
 
 #~ msgid "source style scheme source tango solarized builder"
-#~ msgstr ""
-#~ "source style scheme source tango solarized builder πηγή στυλ κατασκευαστής"
+#~ msgstr "source style scheme source tango solarized builder πηγή στυλ κατασκευαστής"
 
 #~ msgid "git author name surname"
 #~ msgstr "git author name surname συντάκτης όνομα επώνυμο"
@@ -11921,18 +11514,12 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Πρόοδος"
 
 #, fuzzy
-#~ msgid ""
-#~ "If you don't save, changes from the last minute will be permanently lost."
-#~ msgstr ""
-#~ "Αν δεν αποθηκεύσετε, οι αλλαγές που έγιναν στο έγγραφο το τελευταίο λεπτό "
-#~ "θα χαθούν οριστικά."
+#~ msgid "If you don't save, changes from the last minute will be permanently lost."
+#~ msgstr "Αν δεν αποθηκεύσετε, οι αλλαγές που έγιναν στο έγγραφο το τελευταίο λεπτό θα χαθούν οριστικά."
 
 #, fuzzy
-#~ msgid ""
-#~ "If you don't save, changes from the last hour will be permanently lost."
-#~ msgstr ""
-#~ "Αν δεν αποθηκεύσετε, οι αλλαγές που έγιναν στο έγγραφο την τελευταία ώρα "
-#~ "θα χαθούν οριστικά."
+#~ msgid "If you don't save, changes from the last hour will be permanently lost."
+#~ msgstr "Αν δεν αποθηκεύσετε, οι αλλαγές που έγιναν στο έγγραφο την τελευταία ώρα θα χαθούν οριστικά."
 
 #, fuzzy
 #~ msgid "Changes to document “%s” will be permanently lost."
@@ -12141,16 +11728,13 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #, fuzzy
 #~ msgid "Funded By:"
 #~ msgstr ""
-#~ "Η βοήθεια αρχικής εγκατάστασης του GNOME, η οποία σας βοηθά να ορίσετε "
-#~ "ρυθμίσεις την πρώτη φορά που θα εκτελέσετε το GNOME, είχε μια αλλαγή "
-#~ "εμφάνισης για την 3.12. Με βάση την έρευνα χρηστικότητας που "
-#~ "χρηματοδοτήθηκε από το <link href=\"https://01.org/\">Intel Open Source "
-#~ "Technology Center</link>, έχει ενημερωθεί κάθε βήμα της αρχικής "
-#~ "διαδικασίας εγκατάστασης, ώστε να καταστεί ευκολότερη και φιλικότερη στη "
-#~ "χρήση. Οι βελτιώσεις περιλαμβάνουν ξεχωριστά βήματα για την επιλογή μιας "
-#~ "γλώσσας και της περιοχής, μεγαλύτερο χάρτη για την επιλογή μιας ζώνης "
-#~ "ώρας, τη δυνατότητα να επιλέξετε ένα άβαταρ για το λογαριασμό χρήστη σας, "
-#~ "και βελτιωμένα γραφικά παντού."
+#~ "Η βοήθεια αρχικής εγκατάστασης του GNOME, η οποία σας βοηθά να ορίσετε ρυθμίσεις την πρώτη φορά που θα "
+#~ "εκτελέσετε το GNOME, είχε μια αλλαγή εμφάνισης για την 3.12. Με βάση την έρευνα χρηστικότητας που "
+#~ "χρηματοδοτήθηκε από το <link href=\"https://01.org/\">Intel Open Source Technology Center</link>, έχει "
+#~ "ενημερωθεί κάθε βήμα της αρχικής διαδικασίας εγκατάστασης, ώστε να καταστεί ευκολότερη και φιλικότερη "
+#~ "στη χρήση. Οι βελτιώσεις περιλαμβάνουν ξεχωριστά βήματα για την επιλογή μιας γλώσσας και της περιοχής, "
+#~ "μεγαλύτερο χάρτη για την επιλογή μιας ζώνης ώρας, τη δυνατότητα να επιλέξετε ένα άβαταρ για το "
+#~ "λογαριασμό χρήστη σας, και βελτιωμένα γραφικά παντού."
 
 #, fuzzy
 #~ msgid "Special Thanks To:"
