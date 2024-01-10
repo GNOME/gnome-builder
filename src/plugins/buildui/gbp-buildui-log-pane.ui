@@ -8,8 +8,12 @@
           <object class="GtkScrolledWindow">
             <child>
               <object class="IdeTerminal" id="terminal">
+                <property name="allow-hyperlink">true</property>
                 <property name="audible-bell">false</property>
+                <property name="enable-fallback-scrolling">false</property>
                 <property name="hexpand">true</property>
+                <property name="pointer-autohide">true</property>
+                <property name="scroll-unit-is-pixels">true</property>
                 <property name="vexpand">true</property>
               </object>
             </child>

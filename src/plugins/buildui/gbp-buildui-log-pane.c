@@ -335,6 +335,31 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
 }
 
 static void
+gbp_buildui_log_pane_notify_style_scheme_cb (GbpBuilduiLogPane *self,
+                                             GParamSpec        *pspec,
+                                             IdeApplication    *application)
+{
+  g_autoptr(IdeTerminalPalette) palette = NULL;
+  const char *scheme;
+  const char *palette_id = "gnome";
+
+  g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
+  g_assert (IDE_IS_APPLICATION (application));
+
+  if (!(scheme = ide_application_get_style_scheme (application)))
+    return;
+
+  if (g_str_has_prefix (scheme, "solarized"))
+    palette_id = "solarized";
+  else if (g_str_has_prefix (scheme, "arctic"))
+    palette_id = "nord";
+
+  palette = ide_terminal_palette_new_from_name (palette_id);
+
+  ide_terminal_set_palette (self->terminal, palette);
+}
+
+static void
 gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
 {
   g_autoptr(GSimpleActionGroup) actions = NULL;
@@ -344,6 +369,20 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
+
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (gbp_buildui_log_pane_notify_style_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::dark",
+                           G_CALLBACK (gbp_buildui_log_pane_notify_style_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gbp_buildui_log_pane_notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
 
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-build-info-symbolic");
 
