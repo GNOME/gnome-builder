@@ -190,13 +190,15 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   const GdkRGBA *alt;
   GdkRGBA text_bg;
   GdkRGBA text_fg;
+  GdkRGBA numbers_bg;
+  GdkRGBA numbers_fg;
   GdkRGBA right_margin;
   const char *name;
   GString *str;
   GdkRGBA color;
   gboolean is_dark;
-  gboolean has_fg;
-  gboolean has_bg;
+  gboolean has_fg, has_bg;
+  gboolean has_numbers_fg, has_numbers_bg;
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
@@ -220,8 +222,16 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   has_bg = get_background (style_scheme, "text", &text_bg);
   has_fg = get_foreground (style_scheme, "text", &text_fg);
+  has_numbers_bg = get_background (style_scheme, "line-numbers", &numbers_bg);
+  has_numbers_fg = get_foreground (style_scheme, "line-numbers", &numbers_fg);
   get_background (style_scheme, "right-margin", &right_margin);
   right_margin.alpha = 1;
+
+  if (has_numbers_bg && gdk_rgba_equal (&numbers_bg, &text_bg))
+    has_numbers_bg = FALSE;
+
+  if (has_numbers_fg && gdk_rgba_equal (&numbers_fg, &text_fg))
+    has_numbers_fg = FALSE;
 
   if (get_metadata_color (style_scheme, "window_bg_color", &color))
     define_color (str, "window_bg_color", &color);
@@ -257,7 +267,9 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   else
     define_color_mixed (str, "headerbar_fg_color", &text_bg, alt, .025);
 
-  if (has_bg && has_fg)
+  if (has_numbers_bg)
+    define_color_mixed (str, "sidebar_bg_color", &numbers_bg, &text_bg, .25);
+  else if (has_bg && has_fg)
     define_color_mixed (str, "sidebar_bg_color", &text_bg, &text_fg, .085);
    else if (is_dark)
     define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .07);
