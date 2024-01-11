@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-frame.h"
 #include "ide-grid.h"
 #include "ide-gui-global.h"
@@ -72,14 +74,28 @@ ide_primary_workspace_get_statusbar (IdeWorkspace *workspace)
   return IDE_PRIMARY_WORKSPACE (workspace)->statusbar;
 }
 
+static gboolean
+config_to_title (GBinding     *binding,
+                 const GValue *value,
+                 GValue       *to_value,
+                 gpointer      data)
+{
+  IdeConfig *config = g_value_get_object (value);
+
+  if (config)
+    g_value_set_string (to_value, ide_config_get_display_name (config));
+  else
+    g_value_set_static_string (to_value, _("Invalid configuration"));
+
+  return TRUE;
+}
+
 static void
 ide_primary_workspace_context_set (IdeWorkspace *workspace,
                                    IdeContext   *context)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
   IdeConfigManager *config_manager;
-  IdeProjectInfo *project_info;
-  IdeWorkbench *workbench;
   GMenuModel *config_menu;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -88,15 +104,13 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 
   IDE_WORKSPACE_CLASS (ide_primary_workspace_parent_class)->context_set (workspace, context);
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  project_info = ide_workbench_get_project_info (workbench);
-
-  if (project_info)
-    g_object_bind_property (project_info, "name",
-                            self->project_title, "label",
-                            G_BINDING_SYNC_CREATE);
-
   config_manager = ide_config_manager_from_context (context);
+
+  g_object_bind_property_full (config_manager, "current",
+                               self->project_title, "label",
+                               G_BINDING_SYNC_CREATE,
+                               config_to_title, NULL, NULL, NULL);
+
   config_menu = ide_config_manager_get_menu (config_manager);
   ide_joined_menu_prepend_menu (self->build_menu, G_MENU_MODEL (config_menu));
 }
