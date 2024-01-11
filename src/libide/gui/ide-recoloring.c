@@ -191,7 +191,6 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   GdkRGBA text_bg;
   GdkRGBA text_fg;
   GdkRGBA right_margin;
-  const char *id;
   const char *name;
   GString *str;
   GdkRGBA color;
@@ -201,10 +200,14 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
-  /* Don't restyle Adwaita as we already have it */
-  id = gtk_source_style_scheme_get_name (style_scheme);
-  if (g_str_has_prefix (id, "Adwaita"))
-    return NULL;
+#if 0
+  {
+    /* Don't restyle Adwaita as we already have it */
+    const char *id = gtk_source_style_scheme_get_name (style_scheme);
+    if (g_str_has_prefix (id, "Adwaita"))
+      return NULL;
+  }
+#endif
 
   name = gtk_source_style_scheme_get_name (style_scheme);
   is_dark = ide_source_style_scheme_is_dark (style_scheme);
