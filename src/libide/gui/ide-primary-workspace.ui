@@ -22,13 +22,6 @@
               <object class="IdeHeaderBar" id="header_bar">
                 <property name="menu-id">ide-primary-workspace-menu</property>
                 <child type="left">
-                  <object class="PanelToggleButton">
-                    <property name="dock">dock</property>
-                    <property name="area">start</property>
-                    <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
-                  </object>
-                </child>
-                <child type="left">
                   <object class="GtkMenuButton" id="add_button">
                     <property name="icon-name">list-add-symbolic</property>
                     <property name="always-show-arrow">true</property>
@@ -39,10 +32,18 @@
                     </binding>
                   </object>
                 </child>
+                <child type="left">
+                  <object class="PanelToggleButton">
+                    <property name="dock">dock</property>
+                    <property name="area">start</property>
+                    <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
+                  </object>
+                </child>
                 <child type="title">
                   <object class="AdwClamp">
+                    <property name="hexpand">true</property>
                     <property name="orientation">horizontal</property>
-                    <property name="maximum-size">400</property>
+                    <property name="maximum-size">800</property>
                     <child>
                       <object class="IdeOmniBar" id="omni_bar">
                         <property name="icon-name">builder-build-symbolic</property>
@@ -79,6 +80,11 @@
                     <property name="icon-name">edit-find-symbolic</property>
                     <property name="margin-start">6</property>
                     <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
+                    <binding name="visible">
+                      <closure function="invert_boolean" type="gboolean">
+                        <lookup name="reveal-start">dock</lookup>
+                      </closure>
+                    </binding>
                   </object>
                 </child>
               </object>
@@ -117,8 +123,10 @@
                   </object>
                 </child>
                 <child type="end">
-                  <object class="GtkMenuButton" id="sidebar_menu_button">
-                    <property name="icon-name">open-menu-symbolic</property>
+                  <object class="GtkButton">
+                    <property name="action-name">context.workbench.global-search</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
                   </object>
                 </child>
                 <child type="title">

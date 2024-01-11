@@ -57,7 +57,6 @@ struct _IdePrimaryWorkspace
   GtkLabel           *project_title;
   GtkMenuButton      *add_button;
   GtkMenuButton      *sidebar_add_button;
-  GtkMenuButton      *sidebar_menu_button;
   GtkOverlay         *overlay;
   IdeOmniBar         *omni_bar;
   IdeJoinedMenu      *build_menu;
@@ -355,7 +354,6 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, statusbar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, sidebar_add_button);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, sidebar_menu_button);
   gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
   gtk_widget_class_bind_template_callback (widget_class, invert_boolean);
 
@@ -379,9 +377,6 @@ ide_primary_workspace_init (IdePrimaryWorkspace *self)
   ide_workspace_set_id (IDE_WORKSPACE (self), "primary");
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-primary-workspace-menu");
-  gtk_menu_button_set_menu_model (self->sidebar_menu_button, G_MENU_MODEL (menu));
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
   gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
