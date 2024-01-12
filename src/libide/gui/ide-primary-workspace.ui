@@ -1,66 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdePrimaryWorkspace" parent="IdeWorkspace">
-    <child type="titlebar">
-      <object class="IdeHeaderBar" id="header_bar">
-        <property name="menu-id">ide-primary-workspace-menu</property>
-        <child type="left">
-          <object class="GtkMenuButton" id="add_button">
-            <property name="icon-name">list-add-symbolic</property>
-            <property name="always-show-arrow">true</property>
-          </object>
-        </child>
-        <child type="left">
-          <object class="PanelToggleButton">
-            <property name="dock">dock</property>
-            <property name="area">start</property>
-            <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
-          </object>
-        </child>
-        <child type="title">
-          <object class="AdwClamp">
-            <property name="orientation">horizontal</property>
-            <property name="maximum-size">400</property>
-            <child>
-              <object class="IdeOmniBar" id="omni_bar">
-                <property name="icon-name">builder-build-symbolic</property>
-                <property name="action-name">context.build-manager.build</property>
-                <property name="menu-model">build_menu</property>
-                <child type="placeholder">
-                  <object class="GtkLabel" id="project_title">
-                    <property name="ellipsize">end</property>
-                    <property name="xalign">0.0</property>
-                    <property name="width-chars">5</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="right-of-center">
-          <object class="IdeRunButton" id="run_button">
-          </object>
-        </child>
-        <child type="right">
-          <object class="IdeNotificationsButton" id="notifications_button"/>
-        </child>
-        <child type="right">
-          <object class="PanelToggleButton">
-            <property name="dock">dock</property>
-            <property name="area">end</property>
-            <property name="tooltip-text" translatable="yes">Toggle Right Panel</property>
-          </object>
-        </child>
-        <child type="right">
-          <object class="GtkButton" id="search_button">
-            <property name="action-name">context.workbench.global-search</property>
-            <property name="icon-name">edit-find-symbolic</property>
-            <property name="margin-start">6</property>
-            <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
-          </object>
-        </child>
-      </object>
-    </child>
     <child>
       <object class="PanelDock" id="dock">
         <property name="start-width">300</property>
@@ -68,42 +8,167 @@
         <property name="reveal-start">true</property>
         <property name="vexpand">true</property>
         <signal name="adopt-widget" handler="_ide_workspace_adopt_widget" swapped="true"/>
-        <child type="center">
-          <object class="GtkOverlay" id="overlay">
-            <child>
-              <object class="IdeGrid" id="grid">
+        <child internal-child="center">
+          <object class="PanelDockChild">
+            <property name="child">
+              <object class="GtkOverlay" id="overlay">
+                <child>
+                  <object class="IdeGrid" id="grid">
+                  </object>
+                </child>
               </object>
-            </child>
+            </property>
+            <property name="top-edge">
+              <object class="IdeHeaderBar" id="header_bar">
+                <property name="menu-id">ide-primary-workspace-menu</property>
+                <binding name="show-end-title-buttons">
+                  <closure function="invert_boolean" type="gboolean">
+                    <lookup name="reveal-end">dock</lookup>
+                  </closure>
+                </binding>
+                <child type="left">
+                  <object class="GtkMenuButton" id="add_button">
+                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="always-show-arrow">true</property>
+                    <binding name="visible">
+                      <closure function="invert_boolean" type="gboolean">
+                        <lookup name="reveal-start">dock</lookup>
+                      </closure>
+                    </binding>
+                  </object>
+                </child>
+                <child type="left">
+                  <object class="PanelToggleButton">
+                    <property name="dock">dock</property>
+                    <property name="area">start</property>
+                    <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
+                  </object>
+                </child>
+                <child type="title">
+                  <object class="AdwClamp">
+                    <property name="hexpand">true</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="maximum-size">800</property>
+                    <child>
+                      <object class="IdeOmniBar" id="omni_bar">
+                        <property name="icon-name">builder-build-symbolic</property>
+                        <property name="action-name">context.build-manager.build</property>
+                        <property name="menu-model">build_menu</property>
+                        <child type="placeholder">
+                          <object class="GtkLabel" id="project_title">
+                            <property name="ellipsize">end</property>
+                            <property name="xalign">0.0</property>
+                            <property name="width-chars">5</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="right-of-center">
+                  <object class="IdeRunButton" id="run_button">
+                  </object>
+                </child>
+                <child type="right">
+                  <object class="IdeNotificationsButton" id="notifications_button"/>
+                </child>
+                <child type="right">
+                  <object class="PanelToggleButton">
+                    <property name="dock">dock</property>
+                    <property name="area">end</property>
+                    <property name="tooltip-text" translatable="yes">Toggle Right Panel</property>
+                  </object>
+                </child>
+                <child type="right">
+                  <object class="GtkButton" id="search_button">
+                    <property name="action-name">context.workbench.global-search</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="margin-start">6</property>
+                    <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
+                    <binding name="visible">
+                      <closure function="invert_boolean" type="gboolean">
+                        <lookup name="reveal-start">dock</lookup>
+                      </closure>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child internal-child="bottom">
+          <object class="PanelDockChild">
+            <property name="child">
+              <object class="PanelPaned" id="bottom_area">
+                <property name="orientation">horizontal</property>
+              </object>
+            </property>
+            <property name="bottom-edge">
+              <object class="PanelStatusbar" id="statusbar">
+                <child type="suffix">
+                  <object class="PanelToggleButton">
+                    <property name="dock">dock</property>
+                    <property name="area">bottom</property>
+                    <property name="tooltip-text" translatable="yes">Toggle Bottom Panel (Ctrl+F9)</property>
+                  </object>
+                </child>
+              </object>
+            </property>
           </object>
         </child>
         <child type="start">
-          <object class="PanelPaned" id="start_area">
-            <property name="orientation">vertical</property>
-          </object>
-        </child>
-        <child type="end">
-          <object class="PanelPaned" id="end_area">
-            <property name="orientation">vertical</property>
+          <object class="AdwToolbarView">
+            <child type="top">
+              <object class="AdwHeaderBar">
+                <property name="show-end-title-buttons">false</property>
+                <child type="start">
+                  <object class="GtkMenuButton" id="sidebar_add_button">
+                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="always-show-arrow">true</property>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkButton">
+                    <property name="action-name">context.workbench.global-search</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
+                  </object>
+                </child>
+                <child type="title">
+                  <object class="AdwWindowTitle">
+                    <binding name="title">
+                      <lookup name="title" type="IdeContext">
+                        <lookup name="context">IdePrimaryWorkspace</lookup>
+                      </lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child>
-              <object class="PanelFrame">
+              <object class="PanelPaned" id="start_area">
+                <property name="orientation">vertical</property>
               </object>
             </child>
           </object>
         </child>
-        <child type="bottom">
-          <object class="PanelPaned" id="bottom_area">
-            <property name="orientation">horizontal</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child internal-child="statusbar">
-      <object class="PanelStatusbar">
-        <child type="suffix">
-          <object class="PanelToggleButton">
-            <property name="dock">dock</property>
-            <property name="area">bottom</property>
-            <property name="tooltip-text" translatable="yes">Toggle Bottom Panel (Ctrl+F9)</property>
+        <child type="end">
+          <object class="AdwToolbarView">
+            <child type="top">
+              <object class="AdwHeaderBar">
+                <property name="show-end-title-buttons">true</property>
+                <property name="show-title">false</property>
+              </object>
+            </child>
+            <child>
+              <object class="PanelPaned" id="end_area">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="PanelFrame">
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>

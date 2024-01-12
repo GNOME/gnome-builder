@@ -69,9 +69,6 @@ typedef struct
    */
   IdeExtensionSetAdapter *addins;
 
-  /* A statusbar, if any, that was added to the workspace */
-  PanelStatusbar *statusbar;
-
   /* The global search for the workspace, if any */
   IdeSearchPopover *search_popover;
 
@@ -793,12 +790,6 @@ ide_workspace_init (IdeWorkspace *self)
   adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
                                       GTK_WIDGET (priv->toolbar_view));
 
-  if (IDE_WORKSPACE_GET_CLASS (self)->has_statusbar)
-    {
-      priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
-      adw_toolbar_view_add_bottom_bar (priv->toolbar_view, GTK_WIDGET (priv->statusbar));
-    }
-
   /* Track focus change to propagate to addins */
   g_signal_connect (self,
                     "notify::focus-widget",
@@ -1136,55 +1127,10 @@ ide_workspace_add_child (GtkBuildable *buildable,
     }
 }
 
-static GObject *
-ide_workspace_get_internal_child (GtkBuildable *buildable,
-                                  GtkBuilder   *builder,
-                                  const char   *id)
-{
-  IdeWorkspace *self = (IdeWorkspace *)buildable;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (GTK_IS_BUILDER (builder));
-  g_assert (id != NULL);
-
-  if (g_strcmp0 (id, "statusbar") == 0)
-    {
-      if (priv->statusbar == NULL)
-        {
-          priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
-          adw_toolbar_view_add_bottom_bar (priv->toolbar_view, GTK_WIDGET (priv->statusbar));
-        }
-
-      return G_OBJECT (priv->statusbar);
-    }
-
-  return NULL;
-}
-
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_workspace_add_child;
-  iface->get_internal_child = ide_workspace_get_internal_child;
-}
-
-/**
- * ide_workspace_get_statusbar:
- * @self: a #IdeWorkspace
- *
- * Gets the statusbar if any.
- *
- * Returns: (transfer none) (nullable): a #PanelStatusbar or %NULL
- */
-PanelStatusbar *
-ide_workspace_get_statusbar (IdeWorkspace *self)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
-
-  return priv->statusbar;
 }
 
 static void
@@ -1838,4 +1784,21 @@ _ide_workspace_adopt_widget (IdeWorkspace *workspace,
     IDE_RETURN (GDK_EVENT_PROPAGATE);
 
   IDE_RETURN (GDK_EVENT_STOP);
+}
+
+/**
+ * ide_workspace_get_statusbar:
+ * @self: a #IdeWorkspace
+ *
+ * Returns: (transfer none) (nullable): a #PanelStatusbar or %NULL
+ */
+PanelStatusbar *
+ide_workspace_get_statusbar (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  if (!IDE_WORKSPACE_GET_CLASS (self)->get_statusbar)
+    return NULL;
+
+  return IDE_WORKSPACE_GET_CLASS (self)->get_statusbar (self);
 }

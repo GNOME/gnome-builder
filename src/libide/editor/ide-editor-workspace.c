@@ -43,6 +43,7 @@ struct _IdeEditorWorkspace
   IdeHeaderBar       *header_bar;
   AdwWindowTitle     *project_title;
   GtkMenuButton      *add_button;
+  PanelStatusbar     *statusbar;
   IdeWorkspaceDock    dock;
 };
 
@@ -90,13 +91,22 @@ ide_editor_workspace_context_set (IdeWorkspace *workspace,
   project_info = ide_workbench_get_project_info (workbench);
 
   if (project_info)
-    g_object_bind_property (project_info, "name",
-                            self->project_title, "title",
-                            G_BINDING_SYNC_CREATE);
-  g_object_bind_property_full (context, "workdir",
-                               self->project_title, "subtitle",
-                               G_BINDING_SYNC_CREATE,
-                               file_to_short_path, NULL, NULL, NULL);
+    {
+      g_object_bind_property (project_info, "name",
+                              self->project_title, "title",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property_full (context, "workdir",
+                                   self->project_title, "subtitle",
+                                   G_BINDING_SYNC_CREATE,
+                                   file_to_short_path, NULL, NULL, NULL);
+    }
+  else
+    {
+      g_object_bind_property_full (context, "workdir",
+                                   self->project_title, "title",
+                                   G_BINDING_SYNC_CREATE,
+                                   file_to_short_path, NULL, NULL, NULL);
+    }
 }
 
 static void
@@ -247,7 +257,7 @@ ide_editor_workspace_save_session (IdeWorkspace *workspace,
 
 static void
 ide_editor_workspace_restore_session (IdeWorkspace *workspace,
-                                   IdeSession   *session)
+                                      IdeSession   *session)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
 
@@ -255,6 +265,19 @@ ide_editor_workspace_restore_session (IdeWorkspace *workspace,
   g_assert (IDE_IS_SESSION (session));
 
   _ide_workspace_restore_session_simple (workspace, session, &self->dock);
+}
+
+static PanelStatusbar *
+ide_editor_workspace_get_statusbar (IdeWorkspace *workspace)
+{
+  return IDE_EDITOR_WORKSPACE (workspace)->statusbar;
+}
+
+static gboolean
+invert_boolean (gpointer object,
+                gboolean value)
+{
+  return !value;
 }
 
 static void
@@ -294,6 +317,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
   workspace_class->save_session = ide_editor_workspace_save_session;
   workspace_class->restore_session = ide_editor_workspace_restore_session;
+  workspace_class->get_statusbar = ide_editor_workspace_get_statusbar;
 
   ide_workspace_class_set_kind (workspace_class, "editor");
 
@@ -301,7 +325,9 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, project_title);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, statusbar);
   gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
+  gtk_widget_class_bind_template_callback (widget_class, invert_boolean);
 
   _ide_workspace_class_bind_template_dock (widget_class, G_STRUCT_OFFSET (IdeEditorWorkspace, dock));
 

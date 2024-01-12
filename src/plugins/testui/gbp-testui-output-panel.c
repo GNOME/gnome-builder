@@ -145,6 +145,8 @@ gbp_testui_output_panel_init (GbpTestuiOutputPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET(self));
 
+  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
+
   panel_widget_set_title (PANEL_WIDGET (self), _("Unit Test Output"));
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-unit-tests-symbolic");
 }

@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-frame.h"
 #include "ide-grid.h"
 #include "ide-gui-global.h"
@@ -54,13 +56,38 @@ struct _IdePrimaryWorkspace
   IdeRunButton       *run_button;
   GtkLabel           *project_title;
   GtkMenuButton      *add_button;
+  GtkMenuButton      *sidebar_add_button;
   GtkOverlay         *overlay;
   IdeOmniBar         *omni_bar;
   IdeJoinedMenu      *build_menu;
+  PanelStatusbar     *statusbar;
+
   IdeWorkspaceDock    dock;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
+
+static PanelStatusbar *
+ide_primary_workspace_get_statusbar (IdeWorkspace *workspace)
+{
+  return IDE_PRIMARY_WORKSPACE (workspace)->statusbar;
+}
+
+static gboolean
+config_to_title (GBinding     *binding,
+                 const GValue *value,
+                 GValue       *to_value,
+                 gpointer      data)
+{
+  IdeConfig *config = g_value_get_object (value);
+
+  if (config)
+    g_value_set_string (to_value, ide_config_get_display_name (config));
+  else
+    g_value_set_static_string (to_value, _("Invalid configuration"));
+
+  return TRUE;
+}
 
 static void
 ide_primary_workspace_context_set (IdeWorkspace *workspace,
@@ -68,8 +95,6 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
   IdeConfigManager *config_manager;
-  IdeProjectInfo *project_info;
-  IdeWorkbench *workbench;
   GMenuModel *config_menu;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -78,15 +103,13 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
 
   IDE_WORKSPACE_CLASS (ide_primary_workspace_parent_class)->context_set (workspace, context);
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  project_info = ide_workbench_get_project_info (workbench);
-
-  if (project_info)
-    g_object_bind_property (project_info, "name",
-                            self->project_title, "label",
-                            G_BINDING_SYNC_CREATE);
-
   config_manager = ide_config_manager_from_context (context);
+
+  g_object_bind_property_full (config_manager, "current",
+                               self->project_title, "label",
+                               G_BINDING_SYNC_CREATE,
+                               config_to_title, NULL, NULL, NULL);
+
   config_menu = ide_config_manager_get_menu (config_manager);
   ide_joined_menu_prepend_menu (self->build_menu, G_MENU_MODEL (config_menu));
 }
@@ -271,6 +294,13 @@ ide_primary_workspace_restore_session (IdeWorkspace *workspace,
   _ide_workspace_restore_session_simple (workspace, session, &self->dock);
 }
 
+static gboolean
+invert_boolean (gpointer object,
+                gboolean value)
+{
+  return !value;
+}
+
 static void
 ide_primary_workspace_dispose (GObject *object)
 {
@@ -310,6 +340,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
   workspace_class->save_session = ide_primary_workspace_save_session;
   workspace_class->restore_session = ide_primary_workspace_restore_session;
+  workspace_class->get_statusbar = ide_primary_workspace_get_statusbar;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
@@ -321,7 +352,10 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, statusbar);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, sidebar_add_button);
   gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
+  gtk_widget_class_bind_template_callback (widget_class, invert_boolean);
 
   _ide_workspace_class_bind_template_dock (widget_class, G_STRUCT_OFFSET (IdePrimaryWorkspace, dock));
 
@@ -338,7 +372,6 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 static void
 ide_primary_workspace_init (IdePrimaryWorkspace *self)
 {
-  GMenu *build_menu;
   GMenu *menu;
 
   ide_workspace_set_id (IDE_WORKSPACE (self), "primary");
@@ -347,9 +380,10 @@ ide_primary_workspace_init (IdePrimaryWorkspace *self)
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
   gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
+  gtk_menu_button_set_menu_model (self->sidebar_add_button, G_MENU_MODEL (menu));
 
-  build_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "build-menu");
-  ide_joined_menu_append_menu (self->build_menu, G_MENU_MODEL (build_menu));
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "build-menu");
+  ide_joined_menu_append_menu (self->build_menu, G_MENU_MODEL (menu));
 }
 
 /**
