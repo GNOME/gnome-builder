@@ -21,6 +21,11 @@
             <property name="top-edge">
               <object class="IdeHeaderBar" id="header_bar">
                 <property name="menu-id">ide-primary-workspace-menu</property>
+                <binding name="show-end-title-buttons">
+                  <closure function="invert_boolean" type="gboolean">
+                    <lookup name="reveal-end">dock</lookup>
+                  </closure>
+                </binding>
                 <child type="left">
                   <object class="GtkMenuButton" id="add_button">
                     <property name="icon-name">list-add-symbolic</property>
@@ -151,7 +156,7 @@
           <object class="AdwToolbarView">
             <child type="top">
               <object class="AdwHeaderBar">
-                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">true</property>
                 <property name="show-title">false</property>
               </object>
             </child>
