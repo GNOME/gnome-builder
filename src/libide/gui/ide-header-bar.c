@@ -41,6 +41,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_MENU_ID,
+  PROP_SHOW_END_TITLE_BUTTONS,
   N_PROPS
 };
 
@@ -72,11 +73,16 @@ ide_header_bar_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   IdeHeaderBar *self = IDE_HEADER_BAR (object);
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_MENU_ID:
       g_value_set_string (value, ide_header_bar_get_menu_id (self));
+      break;
+
+    case PROP_SHOW_END_TITLE_BUTTONS:
+      g_value_set_boolean (value, adw_header_bar_get_show_end_title_buttons (priv->header_bar));
       break;
 
     default:
@@ -91,11 +97,16 @@ ide_header_bar_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   IdeHeaderBar *self = IDE_HEADER_BAR (object);
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_MENU_ID:
       ide_header_bar_set_menu_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_SHOW_END_TITLE_BUTTONS:
+      adw_header_bar_set_show_end_title_buttons (priv->header_bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -119,6 +130,12 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
                          "The id of the menu to display with the window",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SHOW_END_TITLE_BUTTONS] =
+    g_param_spec_boolean ("show-end-title-buttons", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
