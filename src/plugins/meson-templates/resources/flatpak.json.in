@@ -1,5 +1,5 @@
 {
-    "app-id" : "{{appid}}",
+    "id" : "{{appid}}",
 {{if !is_cli}}
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "@gnome_sdk_version@",
