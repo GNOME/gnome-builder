@@ -71,6 +71,7 @@ src/libide/gui/ide-environment-editor-row.ui
 src/libide/gui/ide-frame.ui
 src/libide/gui/ide-header-bar.ui
 src/libide/gui/ide-marked-view.c
+src/libide/gui/ide-primary-workspace.c
 src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-shortcut-window.c
