@@ -57,14 +57,10 @@ struct _IdeGreeterWorkspace
   /* Template Widgets */
   IdeHeaderBar             *header_bar;
   GtkBox                   *sections;
-  GtkBox                   *left_box;
-  GtkStack                 *pages;
+  AdwNavigationView        *navigation_view;
   GtkSearchEntry           *search_entry;
-  GtkButton                *back_button;
-  GtkButton                *select_button;
   GtkActionBar             *action_bar;
   GtkActionBar             *projects_action_bar;
-  AdwWindowTitle           *title;
   IdeGreeterButtonsSection *buttons_section;
   AdwStatusPage            *empty_state;
 
@@ -170,6 +166,8 @@ ide_greeter_workspace_apply_filter_all (IdeGreeterWorkspace *self)
                                 ide_greeter_workspace_filter_sections,
                                 self);
 
+  gtk_widget_set_visible (GTK_WIDGET (self->sections),
+                          ide_greeter_workspace_has_match (self));
   gtk_widget_set_visible (GTK_WIDGET (self->empty_state),
                           !ide_greeter_workspace_has_match (self));
 }
@@ -208,36 +206,23 @@ ide_greeter_workspace_search_entry_changed (IdeGreeterWorkspace *self,
 }
 
 static void
-stack_notify_visible_child_cb (IdeGreeterWorkspace *self,
-                               GParamSpec          *pspec,
-                               GtkStack            *stack)
+navigation_view_notify_visible_page_cb (IdeGreeterWorkspace *self)
 {
   g_autofree gchar *title = NULL;
   g_autofree gchar *full_title = NULL;
-  GtkStackPage *page;
-  GtkWidget *visible_child;
-  gboolean overview;
+  AdwNavigationPage *page;
 
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
-  g_assert (GTK_IS_STACK (stack));
 
-  visible_child = gtk_stack_get_visible_child (stack);
-  page = gtk_stack_get_page (stack, visible_child);
+  page = adw_navigation_view_get_visible_page (self->navigation_view);
 
   if (page != NULL)
     {
-      if ((title = g_strdup (gtk_stack_page_get_title (page))))
+      if ((title = g_strdup (adw_navigation_page_get_title (page))))
         full_title = g_strdup_printf (_("Builder — %s"), title);
     }
 
-  adw_window_title_set_title (self->title, title);
   gtk_window_set_title (GTK_WINDOW (self), full_title);
-
-  overview = ide_str_equal0 ("overview", gtk_stack_get_visible_child_name (stack));
-
-  gtk_widget_set_visible (GTK_WIDGET (self->left_box), overview);
-  gtk_widget_set_visible (GTK_WIDGET (self->back_button), !overview);
-  gtk_widget_set_visible (GTK_WIDGET (self->select_button), overview);
 }
 
 static void
@@ -309,7 +294,7 @@ ide_greeter_workspace_constructed (GObject *object)
                               self);
 
   /* Ensure that no plugin changed our page */
-  ide_greeter_workspace_set_page_name (self, "overview");
+  adw_navigation_view_pop_to_tag (self->navigation_view, "overview");
 
   gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
 }
@@ -473,19 +458,6 @@ not_ready:
 }
 
 static void
-ide_greeter_workspace_click_pressed_cb (IdeGreeterWorkspace *self,
-                                        guint                n_press,
-                                        double               x,
-                                        double               y,
-                                        GtkGestureClick     *gesture)
-{
-  g_assert (IDE_IS_GREETER_WORKSPACE (self));
-  g_assert (GTK_IS_GESTURE_CLICK (gesture));
-
-  ide_greeter_workspace_set_page_name (self, "overview");
-}
-
-static void
 ide_greeter_workspace_project_activated_cb (IdeGreeterWorkspace *self,
                                             IdeProjectInfo      *project_info,
                                             IdeGreeterSection   *section)
@@ -516,7 +488,6 @@ ide_greeter_workspace_delete_selected_rows (GSimpleAction *action,
         ide_greeter_section_delete_selected (IDE_GREETER_SECTION (child));
     }
 
-  ide_greeter_workspace_apply_filter_all (self);
   ide_greeter_workspace_set_selection_mode (self, FALSE);
 }
 
@@ -533,7 +504,6 @@ purge_selected_rows_response (IdeGreeterWorkspace *self)
         ide_greeter_section_purge_selected (IDE_GREETER_SECTION (child));
     }
 
-  ide_greeter_workspace_apply_filter_all (self);
   ide_greeter_workspace_set_selection_mode (self, FALSE);
 }
 
@@ -581,8 +551,7 @@ ide_greeter_workspace_page_action (GtkWidget  *widget,
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
-  ide_greeter_workspace_set_page_name (self,
-                                       g_variant_get_string (param, NULL));
+  ide_greeter_workspace_push_page_by_tag (self, g_variant_get_string (param, NULL));
 
   IDE_EXIT;
 }
@@ -921,18 +890,14 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-greeter/ide-greeter-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, action_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, back_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, buttons_section);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, empty_state);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, pages);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, navigation_view);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, projects_action_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, select_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
-  gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
+  gtk_widget_class_bind_template_callback (widget_class, navigation_view_notify_visible_page_cb);
 
   gtk_widget_class_install_action (widget_class, "greeter.open", NULL, ide_greeter_workspace_open_action);
   gtk_widget_class_install_action (widget_class, "greeter.page", "s", ide_greeter_workspace_page_action);
@@ -957,7 +922,6 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
   };
 
   g_autoptr(GPropertyAction) selection_action = NULL;
-  GtkGesture *gesture;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -966,10 +930,6 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.reset", FALSE);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 8);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect_object (self->search_entry,
                            "activate",
@@ -988,13 +948,7 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
                     G_CALLBACK (gtk_editable_set_text),
                     (gpointer) "");
 
-  g_signal_connect_object (gesture,
-                           "pressed",
-                           G_CALLBACK (ide_greeter_workspace_click_pressed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  stack_notify_visible_child_cb (self, NULL, self->pages);
+  navigation_view_notify_visible_page_cb (self);
 }
 
 IdeGreeterWorkspace *
@@ -1159,98 +1113,81 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
 
       gtk_widget_set_visible (GTK_WIDGET (self->action_bar), selection_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->projects_action_bar), !selection_mode);
+
+      ide_greeter_workspace_apply_filter_all (self);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SELECTION_MODE]);
     }
 }
 
 /**
- * ide_greeter_workspace_get_page:
+ * ide_greeter_workspace_get_visible_page:
  *
  * Returns: (transfer none) (nullable): the current page, or %NULL if not
  *   page has been added yet.
  */
-GtkWidget *
-ide_greeter_workspace_get_page (IdeGreeterWorkspace *self)
+AdwNavigationPage *
+ide_greeter_workspace_get_visible_page (IdeGreeterWorkspace *self)
 {
   g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
 
-  return gtk_stack_get_visible_child (self->pages);
+  return adw_navigation_view_get_visible_page (self->navigation_view);
 }
 
 void
-ide_greeter_workspace_set_page (IdeGreeterWorkspace *self,
-                                GtkWidget           *page)
+ide_greeter_workspace_push_page (IdeGreeterWorkspace *self,
+                                 AdwNavigationPage   *page)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
-  g_return_if_fail (!page || GTK_IS_WIDGET (page));
+  g_return_if_fail (ADW_IS_NAVIGATION_PAGE (page));
 
-  if (page != NULL)
-    gtk_stack_set_visible_child (self->pages, page);
-  else
-    gtk_stack_set_visible_child_name (self->pages, "overview");
-}
-
-const char *
-ide_greeter_workspace_get_page_name (IdeGreeterWorkspace *self)
-{
-  g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
-
-  return gtk_stack_get_visible_child_name (self->pages);
+  adw_navigation_view_push (self->navigation_view, page);
 }
 
 void
-ide_greeter_workspace_set_page_name (IdeGreeterWorkspace *self,
-                                     const char          *name)
+ide_greeter_workspace_push_page_by_tag (IdeGreeterWorkspace *self,
+                                        const char          *tag)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+  g_return_if_fail (tag != NULL);
 
-  if (name == NULL)
-    name = "overview";
-
-  gtk_stack_set_visible_child_name (self->pages, name);
-  gtk_widget_set_visible (GTK_WIDGET (self->back_button),
-                          !ide_str_equal0 (name, "overview"));
+  adw_navigation_view_push_by_tag (self->navigation_view, tag);
 }
 
 void
 ide_greeter_workspace_add_page (IdeGreeterWorkspace *self,
-                                GtkWidget           *page,
-                                const char          *name,
-                                const char          *title)
+                                AdwNavigationPage   *page)
 {
-  GtkStackPage *child;
-
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
-  g_return_if_fail (GTK_IS_WIDGET (page));
+  g_return_if_fail (ADW_IS_NAVIGATION_PAGE (page));
 
-  child = gtk_stack_add_named (self->pages, page, name);
-  gtk_stack_page_set_title (child, title);
+  adw_navigation_view_add (self->navigation_view, page);
 }
 
 void
 ide_greeter_workspace_remove_page (IdeGreeterWorkspace *self,
-                                   GtkWidget           *page)
+                                   AdwNavigationPage   *page)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
-  g_return_if_fail (GTK_IS_WIDGET (page));
+  g_return_if_fail (ADW_IS_NAVIGATION_PAGE (page));
 
-  gtk_stack_remove (self->pages, page);
+  adw_navigation_view_remove (self->navigation_view, page);
 }
 
 /**
- * ide_greeter_workspace_get_page_named:
+ * ide_greeter_workspace_find_page:
  * @self: a #IdeGreeterWorkspace
  *
- * Gets a page that was added, by it's name.
+ * Finds a page that was added, by its tag.
  *
- * Returns: (transfer none) (nullable): a #GtkWidget or %NULL
+ * Returns: (transfer none) (nullable): a #AdwNavigationPage or %NULL
  */
-GtkWidget *
-ide_greeter_workspace_get_page_named (IdeGreeterWorkspace *self,
-                                      const char          *page_name)
+AdwNavigationPage *
+ide_greeter_workspace_find_page (IdeGreeterWorkspace *self,
+                                 const char          *tag)
 {
   g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
-  g_return_val_if_fail (page_name != NULL, NULL);
+  g_return_val_if_fail (tag != NULL, NULL);
 
-  return gtk_stack_get_child_by_name (self->pages, page_name);
+  return adw_navigation_view_find_page (self->navigation_view, tag);
 }

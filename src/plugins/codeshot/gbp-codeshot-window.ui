@@ -6,17 +6,10 @@
       <class name="devel"/>
     </style>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="AdwHeaderBar">
-            <property name="show-start-title-buttons">false</property>
-            <property name="show-end-title-buttons">true</property>
-            <child type="title">
-              <object class="AdwWindowTitle" id="title">
-              </object>
-            </child>
-          </object>
+      <object class="AdwToolbarView">
+        <property name="top-bar-style">raised</property>
+        <child type="top">
+          <object class="AdwHeaderBar"/>
         </child>
         <child>
           <object class="GtkSourceView" id="view">

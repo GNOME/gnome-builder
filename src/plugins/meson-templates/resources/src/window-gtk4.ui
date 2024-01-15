@@ -8,49 +8,51 @@
     <property name="default-width">600</property>
     <property name="default-height">300</property>
 {{if is_adwaita}}
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkHeaderBar" id="header_bar">
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar" id="header_bar">
             <child type="end">
               <object class="GtkMenuButton">
+                <property name="primary">True</property>
                 <property name="icon-name">open-menu-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Menu</property>
                 <property name="menu-model">primary_menu</property>
               </object>
             </child>
           </object>
         </child>
-        <child>
+        <property name="content">
           <object class="GtkLabel" id="label">
             <property name="label">Hello, World!</property>
-            <property name="vexpand">true</property>
             <style>
               <class name="title-1"/>
             </style>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
 {{else}}
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <child type="end">
           <object class="GtkMenuButton">
+            <property name="primary">True</property>
             <property name="icon-name">open-menu-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Menu</property>
             <property name="menu-model">primary_menu</property>
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkLabel" id="label">
         <property name="label">Hello, World!</property>
         <style>
           <class name="title-1"/>
         </style>
       </object>
-    </child>
+    </property>
 {{end}}
   </template>
   <menu id="primary_menu">

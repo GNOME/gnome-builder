@@ -910,15 +910,16 @@ _ide_g_file_readlink (GFile *file)
 
   do
     {
-      g_autofree gchar *target = NULL;
+      g_autofree char *target = NULL;
 
       if (is_symlink (iter, &target))
         {
+          g_autofree char *relative = g_file_get_relative_path (iter, file);
+
           if (!g_path_is_absolute (target))
             {
               g_autoptr(GFile) parent = g_file_get_parent (iter);
               g_autoptr(GFile) base = g_file_get_child (parent, target);
-              g_autofree gchar *relative = g_file_get_relative_path (iter, file);
 
               if (relative == NULL)
                 return g_steal_pointer (&base);
@@ -926,7 +927,7 @@ _ide_g_file_readlink (GFile *file)
                 return g_file_get_child (base, relative);
             }
 
-          return g_file_new_for_path (target);
+          return g_file_new_build_filename (target, relative, NULL);
         }
     }
   while (iter_parents (&iter));

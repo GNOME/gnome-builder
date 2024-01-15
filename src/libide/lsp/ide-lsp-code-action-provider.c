@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <jsonrpc-glib.h>
 
 #include <libide-code.h>
@@ -297,7 +299,7 @@ ide_lsp_code_action_provider_query_async (IdeCodeActionProvider *code_action_pro
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_CONNECTED,
-                                 "No LSP client connection is available");
+                                 _("No LSP client connection is available"));
       IDE_EXIT;
     }
 

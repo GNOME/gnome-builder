@@ -65,6 +65,7 @@ subdir('dspy')
 subdir('dub')
 subdir('editorui')
 subdir('editorconfig')
+subdir('elixir-ls')
 subdir('eslint')
 subdir('flatpak')
 subdir('file-search')
@@ -135,6 +136,7 @@ subdir('stylelint')
 subdir('swift')
 subdir('swiftlint')
 subdir('swift-format')
+subdir('swift-mesonlsp')
 subdir('symbol-tree')
 subdir('sysprof')
 subdir('terminal')
@@ -237,6 +239,7 @@ status += [
   'bash-language-server .......... (Bash) : @0@'.format(get_option('plugin_bash_language_server')),
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
+  'elixir-ls ................... (Elixir) : @0@'.format(get_option('plugin_elixir_ls')),
   'glsl-language-server .......... (GLSL) : @0@'.format(get_option('plugin_glsl_language_server')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
   'gopls ........................... (Go) : @0@'.format(get_option('plugin_gopls')),

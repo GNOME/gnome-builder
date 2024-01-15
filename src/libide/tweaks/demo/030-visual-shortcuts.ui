@@ -5,7 +5,7 @@
       <object class="IdeTweaksSection">
         <child>
           <object class="IdeTweaksPage" id="shortcuts_page">
-            <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+            <property name="icon-name">builder-keyboard-shortcuts-symbolic</property>
             <property name="title" translatable="yes">Keyboard Shortcuts</property>
           </object>
         </child>

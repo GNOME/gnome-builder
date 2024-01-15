@@ -186,7 +186,7 @@ gbp_newcomers_project_init (GbpNewcomersProject *self)
   self->project_info = ide_project_info_new ();
 }
 
-const gchar *
+const char *
 gbp_newcomers_project_get_name (GbpNewcomersProject *self)
 {
   g_return_val_if_fail (GBP_IS_NEWCOMERS_PROJECT (self), NULL);
@@ -194,10 +194,18 @@ gbp_newcomers_project_get_name (GbpNewcomersProject *self)
   return ide_project_info_get_name (self->project_info);
 }
 
-const gchar *
+const char *
 gbp_newcomers_project_get_uri (GbpNewcomersProject *self)
 {
   g_return_val_if_fail (GBP_IS_NEWCOMERS_PROJECT (self), NULL);
 
   return ide_project_info_get_vcs_uri (self->project_info);
+}
+
+const char * const *
+gbp_newcomers_project_get_languages (GbpNewcomersProject *self)
+{
+  g_return_val_if_fail (GBP_IS_NEWCOMERS_PROJECT (self), NULL);
+
+  return ide_project_info_get_languages (self->project_info);
 }

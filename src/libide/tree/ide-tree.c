@@ -753,6 +753,7 @@ ide_tree_list_item_setup_cb (IdeTree                  *self,
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
   expander = g_object_new (IDE_TYPE_TREE_EXPANDER,
                            "suffix", image,
+                           "has-tooltip", TRUE,
                            NULL);
   gtk_list_item_set_child (item, GTK_WIDGET (expander));
 
@@ -950,19 +951,20 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
 
   ide_tree_expander_set_list_row (expander, row);
 
-#define BIND_PROPERTY(name) \
+#define BIND_PROPERTY(name, to) \
   G_STMT_START { \
-    GBinding *binding = g_object_bind_property (node, name, expander, name, G_BINDING_SYNC_CREATE); \
-    g_object_set_data_full (G_OBJECT (expander), "BINDING_" name, g_object_ref (binding), g_object_unref); \
+    GBinding *binding = g_object_bind_property (node, name, expander, to, G_BINDING_SYNC_CREATE); \
+    g_object_set_data_full (G_OBJECT (expander), "BINDING_" name to, g_object_ref (binding), g_object_unref); \
   } G_STMT_END
 
-  BIND_PROPERTY ("expanded-icon");
-  BIND_PROPERTY ("icon");
-  BIND_PROPERTY ("title");
-  BIND_PROPERTY ("use-markup");
+  BIND_PROPERTY ("expanded-icon", "expanded-icon");
+  BIND_PROPERTY ("icon", "icon");
+  BIND_PROPERTY ("title", "title");
+  BIND_PROPERTY ("title", "tooltip-text");
+  BIND_PROPERTY ("use-markup", "use-markup");
 
   g_object_set_data_full (G_OBJECT (expander),
-                          "BINDING_flags",
+                          "BINDING_flagsflags",
                           g_object_ref (g_object_bind_property_full (node, "flags",
                                                                      suffix, "gicon",
                                                                      G_BINDING_SYNC_CREATE,
@@ -1010,7 +1012,7 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
                                         G_CALLBACK (ide_tree_row_notify_expanded_cb),
                                         self);
 
-#define UNBIND_PROPERTY(name) \
+#define UNBIND_PROPERTY(name, to) \
   G_STMT_START { \
     GBinding *binding = g_object_steal_data (G_OBJECT (expander), "BINDING_" name); \
     if (binding != NULL) \
@@ -1020,11 +1022,12 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
       } \
   } G_STMT_END
 
-  UNBIND_PROPERTY ("expanded-icon");
-  UNBIND_PROPERTY ("icon");
-  UNBIND_PROPERTY ("title");
-  UNBIND_PROPERTY ("use-markup");
-  UNBIND_PROPERTY ("flags");
+  UNBIND_PROPERTY ("expanded-icon", "expanded-icon");
+  UNBIND_PROPERTY ("icon", "icon");
+  UNBIND_PROPERTY ("title", "title");
+  UNBIND_PROPERTY ("title", "tooltip-text");
+  UNBIND_PROPERTY ("use-markup", "use-markup");
+  UNBIND_PROPERTY ("flags", "flags");
 
 #undef UNBIND_PROPERTY
 
@@ -1426,28 +1429,9 @@ ide_tree_set_selected_node (IdeTree     *self,
   gtk_widget_activate_action (GTK_WIDGET (priv->list_view), "list.scroll-to-item", "u", position);
 }
 
-static void
-ide_tree_rebuild_node_cb (IdeExtensionSetAdapter *set,
-                          PeasPluginInfo         *plugin_info,
-                          GObject          *exten,
-                          gpointer                user_data)
-{
-  IdeTreeAddin *addin = (IdeTreeAddin *)exten;
-  IdeTreeNode *node = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TREE_ADDIN (addin));
-  g_assert (IDE_IS_TREE_NODE (node));
-
-  ide_tree_addin_build_node (addin, node);
-}
-
 void
 ide_tree_invalidate_all (IdeTree *self)
 {
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   IdeTreeNode *root;
 
   IDE_ENTRY;
@@ -1458,22 +1442,10 @@ ide_tree_invalidate_all (IdeTree *self)
   if (!(root = ide_tree_get_root (self)))
     IDE_EXIT;
 
-  for (IdeTreeNode *child = ide_tree_node_get_first_child (root);
-       child != NULL;
-       child = ide_tree_node_get_next_sibling (child))
-    {
-      gboolean expanded = ide_tree_is_node_expanded (self, child);
-
-      if (expanded)
-        ide_tree_collapse_node (self, child);
-
-      ide_extension_set_adapter_foreach (priv->addins,
-                                         ide_tree_rebuild_node_cb,
-                                         child);
-
-      if (expanded)
-        ide_tree_expand_node (self, child);
-    }
+  g_object_ref (root);
+  ide_tree_set_root (self, NULL);
+  ide_tree_set_root (self, root);
+  g_object_unref (root);
 
   IDE_EXIT;
 }

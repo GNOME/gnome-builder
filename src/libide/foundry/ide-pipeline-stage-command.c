@@ -33,6 +33,7 @@ typedef struct
 {
   IdeRunCommand *build_command;
   IdeRunCommand *clean_command;
+  char *stdout_path;
   guint ignore_exit_status : 1;
 } IdePipelineStageCommandPrivate;
 
@@ -41,12 +42,19 @@ enum {
   PROP_BUILD_COMMAND,
   PROP_CLEAN_COMMAND,
   PROP_IGNORE_EXIT_STATUS,
+  PROP_STDOUT_PATH,
   N_PROPS
+};
+
+enum {
+  CREATE_RUN_CONTEXT,
+  N_SIGNALS
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE_TYPE_PIPELINE_STAGE)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_pipeline_stage_command_wait_check_cb (GObject      *object,
@@ -111,12 +119,19 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
+  g_signal_emit (self, signals[CREATE_RUN_CONTEXT], 0, priv->build_command, &run_context);
 
-  _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
+  if (run_context == NULL)
+    run_context = ide_pipeline_create_run_context (pipeline, priv->build_command);
+
+  if (priv->stdout_path == NULL)
+    _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
 
   if (!(launcher = ide_run_context_end (run_context, &error)))
     IDE_GOTO (handle_error);
+
+  if (priv->stdout_path != NULL)
+    ide_subprocess_launcher_set_stdout_file_path (launcher, priv->stdout_path);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (handle_error);
@@ -184,7 +199,10 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
       IDE_EXIT;
     }
 
-  run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
+  g_signal_emit (self, signals[CREATE_RUN_CONTEXT], 0, priv->clean_command, &run_context);
+
+  if (run_context == NULL)
+    run_context = ide_pipeline_create_run_context (pipeline, priv->clean_command);
 
   _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
 
@@ -267,6 +285,7 @@ ide_pipeline_stage_command_finalize (GObject *object)
 
   g_clear_object (&priv->build_command);
   g_clear_object (&priv->clean_command);
+  g_clear_pointer (&priv->stdout_path, g_free);
 
   G_OBJECT_CLASS (ide_pipeline_stage_command_parent_class)->finalize (object);
 }
@@ -294,6 +313,10 @@ ide_pipeline_stage_command_get_property (GObject    *object,
       g_value_set_boolean (value, priv->ignore_exit_status);
       break;
 
+    case PROP_STDOUT_PATH:
+      g_value_set_string (value, priv->stdout_path);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -319,7 +342,11 @@ ide_pipeline_stage_command_set_property (GObject      *object,
       break;
 
     case PROP_IGNORE_EXIT_STATUS:
-      priv->ignore_exit_status = g_value_get_boolean (value);
+      ide_pipeline_stage_command_set_ignore_exit_status (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_STDOUT_PATH:
+      ide_pipeline_stage_command_set_stdout_path (self, g_value_get_string (value));
       break;
 
     default:
@@ -362,9 +389,36 @@ ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
   properties [PROP_IGNORE_EXIT_STATUS] =
     g_param_spec_boolean ("ignore-exit-status", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_STDOUT_PATH] =
+    g_param_spec_string ("stdout-path", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdePipelineStageCommand::create-run-context:
+   * @self: a #IdePipelineStageCommand
+   * @command: an #IdeRunCommand
+   *
+   * Sets up the #IdeRunContext which will be used to hoist in the
+   * #IdeRunCommand. If no run context is provided, then the build pipeline
+   * will be used.
+   *
+   * Returns: (transfer full): an #IdeRunContext
+   */
+  signals [CREATE_RUN_CONTEXT] =
+    g_signal_new_class_handler ("create-run-context",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                g_signal_accumulator_first_wins, NULL,
+                                NULL,
+                                IDE_TYPE_RUN_CONTEXT,
+                                1,
+                                IDE_TYPE_RUN_COMMAND);
 }
 
 static void
@@ -409,4 +463,33 @@ ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
 
   if (g_set_object (&priv->clean_command, clean_command))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_COMMAND]);
+}
+
+void
+ide_pipeline_stage_command_set_stdout_path (IdePipelineStageCommand *self,
+                                            const char              *stdout_path)
+{
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  if (g_set_str (&priv->stdout_path, stdout_path))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STDOUT_PATH]);
+}
+
+void
+ide_pipeline_stage_command_set_ignore_exit_status (IdePipelineStageCommand *self,
+                                                   gboolean                 ignore_exit_status)
+{
+  IdePipelineStageCommandPrivate *priv = ide_pipeline_stage_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  ignore_exit_status = !!ignore_exit_status;
+
+  if (priv->ignore_exit_status != ignore_exit_status)
+    {
+      priv->ignore_exit_status = ignore_exit_status;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IGNORE_EXIT_STATUS]);
+    }
 }

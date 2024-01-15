@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/testgjs">
+    <file>testgjs.plugin</file>
+    <file>testgjs.js</file>
+  </gresource>
+</gresources>

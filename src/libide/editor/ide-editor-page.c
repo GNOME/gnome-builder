@@ -1093,6 +1093,7 @@ ide_editor_page_save_response (GtkFileChooserNative *native,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
   g_object_unref (task);
 
   IDE_EXIT;

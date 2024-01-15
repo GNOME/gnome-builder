@@ -38,8 +38,6 @@ G_DECLARE_FINAL_TYPE (IdeTweaksWindow, ide_tweaks_window, IDE, TWEAKS_WINDOW, Ad
 IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_tweaks_window_new                   (void);
 IDE_AVAILABLE_IN_ALL
-gboolean   ide_tweaks_window_get_can_navigate_back (IdeTweaksWindow *self);
-IDE_AVAILABLE_IN_ALL
 IdeTweaks *ide_tweaks_window_get_tweaks            (IdeTweaksWindow *self);
 IDE_AVAILABLE_IN_ALL
 void       ide_tweaks_window_set_tweaks            (IdeTweaksWindow *self,
@@ -47,8 +45,6 @@ void       ide_tweaks_window_set_tweaks            (IdeTweaksWindow *self,
 IDE_AVAILABLE_IN_ALL
 void       ide_tweaks_window_navigate_to           (IdeTweaksWindow *self,
                                                     IdeTweaksItem   *item);
-IDE_AVAILABLE_IN_ALL
-void       ide_tweaks_window_navigate_back         (IdeTweaksWindow *self);
 IDE_AVAILABLE_IN_ALL
 void       ide_tweaks_window_navigate_initial      (IdeTweaksWindow *self);
 

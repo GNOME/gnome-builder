@@ -534,6 +534,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       const char *platform = gbp_flatpak_manifest_get_platform (GBP_FLATPAK_MANIFEST (config));
       const char *branch = gbp_flatpak_manifest_get_branch (GBP_FLATPAK_MANIFEST (config));
       const char * const *extensions = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (config));
+      const char *base = gbp_flatpak_manifest_get_base (GBP_FLATPAK_MANIFEST (config));
+      const char *base_version = gbp_flatpak_manifest_get_base_version (GBP_FLATPAK_MANIFEST (config));
 
       if (sdk == NULL)
         sdk = platform;
@@ -547,6 +549,13 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       g_ptr_array_add (state->to_install, g_strdup (full_sdk));
       if (g_strcmp0 (full_sdk, full_platform) != 0)
         g_ptr_array_add (state->to_install, g_strdup (full_platform));
+
+      if (base != NULL && base_version != NULL)
+        g_ptr_array_add (state->to_install,
+                         g_strdup_printf ("runtime/%s/%s/%s",
+                                          base,
+                                          arch,
+                                          base_version));
 
       if (extensions != NULL)
         {

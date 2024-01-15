@@ -38,7 +38,7 @@ struct _GbpSymbolPopover
   GtkSearchEntry  *search_entry;
   GtkListView     *list_view;
 
-  char           **search_needle;
+  IdePatternSpec  *search_needle;
 };
 
 enum {
@@ -133,10 +133,10 @@ gbp_symbol_popover_search_changed_cb (GbpSymbolPopover *self,
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
   text = gtk_editable_get_text (GTK_EDITABLE (search_entry));
-  g_clear_pointer (&self->search_needle, g_strfreev);
+  g_clear_pointer (&self->search_needle, ide_pattern_spec_unref);
 
   if (text && *text)
-    self->search_needle = g_str_tokenize_and_fold (text, NULL, NULL);
+    self->search_needle = ide_pattern_spec_new (text);
 
   if (self->filter != NULL)
     gtk_filter_changed (self->filter, GTK_FILTER_CHANGE_DIFFERENT);
@@ -209,7 +209,7 @@ gbp_symbol_popover_dispose (GObject *object)
 
   g_clear_object (&self->filter);
   g_clear_object (&self->symbol_tree);
-  g_clear_pointer (&self->search_needle, g_strfreev);
+  g_clear_pointer (&self->search_needle, ide_pattern_spec_unref);
 
   G_OBJECT_CLASS (gbp_symbol_popover_parent_class)->dispose (object);
 }
@@ -321,24 +321,22 @@ get_child_model (gpointer item,
 }
 
 static gboolean
-filter_node (IdeSymbolNode      *node,
-             const char * const *search_needle)
+filter_node (IdeSymbolNode  *node,
+             IdePatternSpec *search_needle)
 {
-  /* Show only if the name matches every needle */
-  for (guint i = 0; search_needle[i]; i++)
-    {
-      const char *name = ide_symbol_node_get_name (node);
+  const char *name = ide_symbol_node_get_name (node);
+  if (name && ide_pattern_spec_match (search_needle, name))
+    return TRUE;
 
-      if (!name)
-        return FALSE;
+  {
+    g_autofree char *display_name = NULL;
 
-      if (g_str_match_string (search_needle[i], name, TRUE))
-        continue;
+    g_object_get (node, "display-name", &display_name, NULL);
+    if (display_name && ide_pattern_spec_match (search_needle, display_name))
+      return TRUE;
+  }
 
-      return FALSE;
-    }
-
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
@@ -356,7 +354,7 @@ filter_by_name (gpointer item,
   g_assert (GBP_IS_SYMBOL_POPOVER (self));
 
   /* Show all items if search is empty */
-  if (!self->search_needle || !self->search_needle[0] || !*self->search_needle[0])
+  if (!self->search_needle)
     return TRUE;
 
   /* Show a row if itself or any parent matches */
@@ -365,7 +363,7 @@ filter_by_name (gpointer item,
       node = gtk_tree_list_row_get_item (parent);
       g_assert (IDE_IS_SYMBOL_NODE (node));
 
-      if (filter_node (node, (const char * const *)self->search_needle))
+      if (filter_node (node, self->search_needle))
         return TRUE;
     }
 
@@ -380,7 +378,7 @@ filter_by_name (gpointer item,
           node = g_list_model_get_item (children, i);
           g_assert (IDE_IS_SYMBOL_NODE (node));
 
-          ret = filter_node (node, (const char * const *)self->search_needle);
+          ret = filter_node (node, self->search_needle);
           g_object_unref (node);
           if (ret)
             return TRUE;
@@ -436,6 +434,7 @@ GListModel *
 gbp_symbol_popover_get_model (GbpSymbolPopover *self)
 {
   GtkSelectionModel *selection;
+  GListModel *model;
 
   g_return_val_if_fail (GBP_IS_SYMBOL_POPOVER (self), NULL);
 
@@ -444,5 +443,15 @@ gbp_symbol_popover_get_model (GbpSymbolPopover *self)
       !GTK_IS_SINGLE_SELECTION (selection))
     return NULL;
 
-  return gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection));
+  model = gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection));
+
+  if (GTK_IS_FILTER_LIST_MODEL (model))
+    {
+      GListModel *filtered;
+
+      if ((filtered = gtk_filter_list_model_get_model (GTK_FILTER_LIST_MODEL (model))))
+        return filtered;
+    }
+
+  return model;
 }

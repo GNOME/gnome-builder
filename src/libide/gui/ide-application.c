@@ -236,6 +236,11 @@ ide_application_startup (GApplication *app)
 
   /* Load language defaults into gsettings */
   ide_language_defaults_init_async (NULL, NULL, NULL);
+
+  /* Queue loading of the Network Monitor early to help ensure we
+   * get reliable data quickly.
+   */
+  (void) ide_application_has_network (self);
 }
 
 static void
@@ -746,6 +751,8 @@ ide_application_network_changed_cb (IdeApplication  *self,
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (G_IS_NETWORK_MONITOR (monitor));
 
+  g_debug ("Network available has changed to %d", available);
+
   self->has_network = !!available;
 }
 
@@ -778,6 +785,18 @@ ide_application_has_network (IdeApplication *self)
                                G_CONNECT_SWAPPED);
 
       self->has_network = g_network_monitor_get_network_available (self->network_monitor);
+
+      /*
+       * FIXME: Ignore the network portal initially for now.
+       *
+       * See https://gitlab.gnome.org/GNOME/glib/merge_requests/227 for more
+       * information about when this is fixed. However, even with that in
+       * place we still have issues with our initial state.
+       *
+       * See Also: https://gitlab.gnome.org/GNOME/glib/-/issues/1718
+       */
+      if (!self->has_network && ide_is_flatpak ())
+        self->has_network = TRUE;
     }
 
   return self->has_network;

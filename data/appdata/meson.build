@@ -13,11 +13,11 @@ appdata_file = i18n.merge_file(
   install_dir: join_paths(get_option('datadir'), 'metainfo'),
 )
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
-  validate_args = ['validate-relax', appdata_file]
+appstreamcli = find_program('appstreamcli', required: false)
+if appstreamcli.found()
+  validate_args = ['validate', appdata_file]
 if not get_option('network_tests')
-  validate_args += '--nonet'
+  validate_args += '--no-net'
 endif
-  test('Validate appstream file', appstream_util, args: validate_args)
+  test('Validate appstream file', appstreamcli, args: validate_args)
 endif

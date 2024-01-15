@@ -35,7 +35,7 @@
         </child>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
-            <property name="placeholder-text" translatable="yes">Filter Symbols…</property>
+            <property name="placeholder-text" translatable="yes">Filter…</property>
             <signal name="activate" handler="gbp_symbol_popover_search_activate_cb" swapped="true" object="GbpSymbolPopover"/>
             <signal name="search-changed" handler="gbp_symbol_popover_search_changed_cb" swapped="true" object="GbpSymbolPopover"/>
             <property name="margin-top">6</property>

@@ -13,7 +13,7 @@
 {{name_}}_deps = [
   dependency('gtk4'),
 {{if is_adwaita}}
-  dependency('libadwaita-1', version: '>= 1.2'),
+  dependency('libadwaita-1', version: '>= 1.4'),
 {{end}}
 ]
 

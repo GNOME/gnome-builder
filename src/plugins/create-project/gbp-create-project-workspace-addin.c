@@ -58,9 +58,7 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->widget = g_object_new (GBP_TYPE_CREATE_PROJECT_WIDGET, NULL);
   ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
-                                  GTK_WIDGET (self->widget),
-                                  "create-project",
-                                  _("Create New Project"));
+                                  ADW_NAVIGATION_PAGE (self->widget));
 
   IDE_EXIT;
 }
@@ -77,7 +75,7 @@ gbp_create_project_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_GREETER_WORKSPACE (workspace));
 
   ide_greeter_workspace_remove_page (IDE_GREETER_WORKSPACE (workspace),
-                                     GTK_WIDGET (self->widget));
+                                     ADW_NAVIGATION_PAGE (self->widget));
   self->widget = NULL;
 
   IDE_EXIT;

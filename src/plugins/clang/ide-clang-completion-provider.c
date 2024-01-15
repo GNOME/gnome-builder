@@ -406,12 +406,24 @@ ide_clang_completion_provider_populate_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static gboolean
+can_first_symbol_char (gunichar ch)
+{
+  if (ch == 0)
+    return TRUE;
+
+  if (g_unichar_isdigit (ch))
+    return FALSE;
+
+  return ch == '_' || g_unichar_isalpha (ch);
+}
+
 static void
-ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *provider,
-                                              GtkSourceCompletionContext   *context,
-                                              GCancellable           *cancellable,
-                                              GAsyncReadyCallback     callback,
-                                              gpointer                user_data)
+ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                              GtkSourceCompletionContext  *context,
+                                              GCancellable                *cancellable,
+                                              GAsyncReadyCallback          callback,
+                                              gpointer                     user_data)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
@@ -436,6 +448,18 @@ ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *prov
 
   if (self->proposals == NULL)
     self->proposals = ide_clang_proposals_new (self->client);
+
+  /* If the first character is not a symbol character, then just
+   * avoid any sort of completion work now.
+   */
+  if (self->word && !can_first_symbol_char (g_utf8_get_char (self->word)))
+    {
+      ide_clang_proposals_clear (self->proposals);
+      ide_task_return_pointer (task,
+                               g_object_ref (self->proposals),
+                               g_object_unref);
+      IDE_EXIT;
+    }
 
   /* Deliver results immediately until our updated results come in. Often what
    * the user wants will be in the previous list too, and that can drop the

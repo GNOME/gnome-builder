@@ -54,8 +54,7 @@ struct _IdeWorkspaceClass
 
   const gchar *kind;
 
-  guint has_statusbar : 1;
-  guint _unused_flags : 31;
+  guint _unused_flags : 32;
 
   void          (*context_set)           (IdeWorkspace         *self,
                                           IdeContext           *context);
@@ -97,6 +96,7 @@ struct _IdeWorkspaceClass
                                           IdeSession           *session);
   void          (*restore_session)       (IdeWorkspace         *self,
                                           IdeSession           *session);
+  PanelStatusbar *(*get_statusbar)       (IdeWorkspace         *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -160,5 +160,10 @@ IDE_AVAILABLE_IN_ALL
 void            ide_workspace_inhibit_logout                (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
 void            ide_workspace_uninhibit_logout              (IdeWorkspace          *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_set_toolbar_style            (IdeWorkspace           *self,
+                                                            AdwToolbarStyle         style);
+IDE_AVAILABLE_IN_ALL
+AdwToolbarStyle ide_workspace_get_toolbar_style             (IdeWorkspace          *self);
 
 G_END_DECLS

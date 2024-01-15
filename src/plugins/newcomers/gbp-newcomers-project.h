@@ -28,8 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpNewcomersProject, gbp_newcomers_project, GBP, NEWCOMERS_PROJECT, IdeGreeterRow)
 
-const gchar *gbp_newcomers_project_get_name (GbpNewcomersProject *self);
-const gchar *gbp_newcomers_project_get_uri  (GbpNewcomersProject *self);
-GIcon       *gbp_newcomers_project_get_icon (GbpNewcomersProject *self);
+const char         *gbp_newcomers_project_get_name      (GbpNewcomersProject *self);
+const char         *gbp_newcomers_project_get_uri       (GbpNewcomersProject *self);
+GIcon              *gbp_newcomers_project_get_icon      (GbpNewcomersProject *self);
+const char * const *gbp_newcomers_project_get_languages (GbpNewcomersProject *self);
 
 G_END_DECLS

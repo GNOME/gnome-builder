@@ -1,0 +1,8 @@
+[Plugin]
+Authors=Christian Hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2023 Christian Hergert
+Description=Test GJS plugin
+Loader=gjs
+Module=testgjs
+Name=TestGJS

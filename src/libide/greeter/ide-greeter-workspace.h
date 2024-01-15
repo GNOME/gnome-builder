@@ -62,25 +62,21 @@ void                 ide_greeter_workspace_open_project       (IdeGreeterWorkspa
                                                                IdeProjectInfo      *project_info);
 IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_add_page           (IdeGreeterWorkspace *self,
-                                                               GtkWidget           *widget,
-                                                               const char          *name,
-                                                               const char          *title);
+                                                               AdwNavigationPage   *page);
 IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_remove_page        (IdeGreeterWorkspace *self,
-                                                               GtkWidget           *widget);
+                                                               AdwNavigationPage   *page);
 IDE_AVAILABLE_IN_ALL
-GtkWidget           *ide_greeter_workspace_get_page           (IdeGreeterWorkspace *self);
+AdwNavigationPage   *ide_greeter_workspace_get_visible_page   (IdeGreeterWorkspace *self);
 IDE_AVAILABLE_IN_ALL
-void                 ide_greeter_workspace_set_page           (IdeGreeterWorkspace *self,
-                                                               GtkWidget           *page);
+void                 ide_greeter_workspace_push_page          (IdeGreeterWorkspace *self,
+                                                               AdwNavigationPage   *page);
 IDE_AVAILABLE_IN_ALL
-GtkWidget           *ide_greeter_workspace_get_page_named     (IdeGreeterWorkspace *self,
-                                                               const char          *page_name);
+AdwNavigationPage   *ide_greeter_workspace_find_page          (IdeGreeterWorkspace *self,
+                                                               const char          *tag);
 IDE_AVAILABLE_IN_ALL
-const char          *ide_greeter_workspace_get_page_name      (IdeGreeterWorkspace *self);
-IDE_AVAILABLE_IN_ALL
-void                 ide_greeter_workspace_set_page_name      (IdeGreeterWorkspace *self,
-                                                               const char          *name);
+void                 ide_greeter_workspace_push_page_by_tag   (IdeGreeterWorkspace *self,
+                                                               const char          *tag);
 
 
 G_END_DECLS

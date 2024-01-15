@@ -1,6 +1,6 @@
 /* gbp-flatpak-download-stage.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,15 +29,15 @@
 
 struct _GbpFlatpakDownloadStage
 {
-  IdePipelineStageLauncher parent_instance;
+  IdePipelineStageCommand parent_instance;
 
-  gchar *state_dir;
+  char *state_dir;
 
   guint invalid : 1;
   guint force_update : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_PIPELINE_STAGE_COMMAND)
 
 enum {
   PROP_0,
@@ -48,8 +48,8 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
-                                  IdePipeline *pipeline,
+gbp_flatpak_download_stage_query (IdePipelineStage *stage,
+                                  IdePipeline      *pipeline,
                                   GPtrArray        *targets,
                                   GCancellable     *cancellable)
 {
@@ -69,10 +69,11 @@ gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
   if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
       ide_pipeline_stage_log (stage,
-                           IDE_BUILD_LOG_STDERR,
-                           _("Network is not available, skipping downloads"),
-                           -1);
+                              IDE_BUILD_LOG_STDERR,
+                              _("Network is not available, skipping downloads"),
+                              -1);
       ide_pipeline_stage_set_completed (stage, TRUE);
+      self->invalid = FALSE;
       return;
     }
 
@@ -87,9 +88,9 @@ gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
 
   if (self->invalid)
     {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-      g_autofree gchar *arch = NULL;
-      g_autofree gchar *arch_param = NULL;
+      g_autoptr(IdeRunCommand) run_command = NULL;
+      g_autofree char *arch = NULL;
+      g_autofree char *arch_param = NULL;
       IdeRuntime *runtime;
 
       primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
@@ -97,53 +98,64 @@ gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
       staging_dir = gbp_flatpak_get_staging_dir (pipeline);
       src_dir = ide_pipeline_get_srcdir (pipeline);
 
-      launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                              G_SUBPROCESS_FLAGS_STDERR_PIPE);
+      run_command = ide_run_command_new ();
 
-      ide_subprocess_launcher_set_cwd (launcher, src_dir);
-      ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
+      ide_run_command_set_cwd (run_command, src_dir);
 
       if (ide_is_flatpak ())
         {
           g_autofree gchar *user_dir = NULL;
 
           user_dir = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
-          ide_subprocess_launcher_setenv (launcher, "FLATPAK_USER_DIR", user_dir, TRUE);
-          ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
+          ide_run_command_setenv (run_command, "FLATPAK_USER_DIR", user_dir);
+          ide_run_command_setenv (run_command, "XDG_RUNTIME_DIR", g_get_user_runtime_dir ());
         }
 
       runtime = ide_pipeline_get_runtime (pipeline);
       arch = ide_runtime_get_arch (runtime);
       arch_param = g_strdup_printf ("--arch=%s", arch);
 
-      ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
-      ide_subprocess_launcher_push_argv (launcher, arch_param);
-      ide_subprocess_launcher_push_argv (launcher, "--ccache");
-      ide_subprocess_launcher_push_argv (launcher, "--force-clean");
+      ide_run_command_append_argv (run_command, "flatpak-builder");
+      ide_run_command_append_argv (run_command, arch_param);
+      ide_run_command_append_argv (run_command, "--ccache");
+      ide_run_command_append_argv (run_command, "--force-clean");
 
       if (!ide_str_empty0 (self->state_dir))
         {
-          ide_subprocess_launcher_push_argv (launcher, "--state-dir");
-          ide_subprocess_launcher_push_argv (launcher, self->state_dir);
+          ide_run_command_append_argv (run_command, "--state-dir");
+          ide_run_command_append_argv (run_command, self->state_dir);
         }
 
-      ide_subprocess_launcher_push_argv (launcher, "--download-only");
+      ide_run_command_append_argv (run_command, "--download-only");
 
       if (!self->force_update)
-        ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
+        ide_run_command_append_argv (run_command, "--disable-updates");
 
       stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
-      ide_subprocess_launcher_push_argv (launcher, stop_at_option);
+      ide_run_command_append_argv (run_command, stop_at_option);
 
-      ide_subprocess_launcher_push_argv (launcher, staging_dir);
-      ide_subprocess_launcher_push_argv (launcher, manifest_path);
+      ide_run_command_append_argv (run_command, staging_dir);
+      ide_run_command_append_argv (run_command, manifest_path);
 
-      ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (self), launcher);
+      ide_pipeline_stage_command_set_build_command (IDE_PIPELINE_STAGE_COMMAND (self), run_command);
       ide_pipeline_stage_set_completed (stage, FALSE);
 
       self->invalid = FALSE;
       self->force_update = FALSE;
     }
+}
+
+static IdeRunContext *
+create_run_context_cb (IdePipelineStageCommand *stage,
+                       IdeRunCommand           *command,
+                       gpointer                 user_data)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (stage));
+  IdeRunContext *run_context = ide_run_context_new ();
+
+  ide_run_command_prepare_to_run (command, run_context, context);
+
+  return run_context;
 }
 
 static void
@@ -210,7 +222,12 @@ gbp_flatpak_download_stage_init (GbpFlatpakDownloadStage *self)
   self->invalid = TRUE;
 
   /* Allow downloads to fail in case we can still make progress */
-  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (self), TRUE);
+  ide_pipeline_stage_command_set_ignore_exit_status (IDE_PIPELINE_STAGE_COMMAND (self), TRUE);
+
+  g_signal_connect (self,
+                    "create-run-context",
+                    G_CALLBACK (create_run_context_cb),
+                    NULL);
 }
 
 void

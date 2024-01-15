@@ -27,7 +27,6 @@
 
 #include "ide-action-group.h"
 #include "ide-action-muxer.h"
-#include "ide-binding-group.h"
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-global.h"
@@ -42,7 +41,6 @@
 #include "ide-property-action-group.h"
 #include "ide-settings.h"
 #include "ide-settings-flag-action.h"
-#include "ide-signal-group.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
 #include "ide-version.h"

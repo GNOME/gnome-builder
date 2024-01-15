@@ -32,7 +32,7 @@
 typedef struct
 {
   IdeLspClient   *client;
-  IdeSignalGroup *client_signals;
+  GSignalGroup   *client_signals;
 } IdeLspDiagnosticProviderPrivate;
 
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
@@ -209,9 +209,9 @@ ide_lsp_diagnostic_provider_init (IdeLspDiagnosticProvider *self)
 {
   IdeLspDiagnosticProviderPrivate *priv = ide_lsp_diagnostic_provider_get_instance_private (self);
 
-  priv->client_signals = ide_signal_group_new (IDE_TYPE_LSP_CLIENT);
+  priv->client_signals = g_signal_group_new (IDE_TYPE_LSP_CLIENT);
 
-  ide_signal_group_connect_object (priv->client_signals,
+  g_signal_group_connect_object (priv->client_signals,
                                    "published-diagnostics",
                                    G_CALLBACK (ide_diagnostic_provider_emit_invalidated),
                                    self,
@@ -246,7 +246,7 @@ ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
 
   if (g_set_object (&priv->client, client))
     {
-      ide_signal_group_set_target (priv->client_signals, client);
+      g_signal_group_set_target (priv->client_signals, client);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLIENT]);
     }
 }

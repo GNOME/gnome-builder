@@ -33,7 +33,7 @@ struct _GbpBuilduiOmniBarSection
 {
   AdwBin          parent_instance;
 
-  IdeSignalGroup *build_manager_signals;
+  GSignalGroup   *build_manager_signals;
 
   GtkLabel       *config_ready_label;
   GtkLabel       *popover_branch_label;
@@ -241,7 +241,7 @@ gbp_buildui_omni_bar_section_build_finished (GbpBuilduiOmniBarSection *self,
 static void
 gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
                                                  IdeBuildManager          *build_manager,
-                                                 IdeSignalGroup           *signals)
+                                                 GSignalGroup             *signals)
 {
   IdeContext *context;
   IdeVcs *vcs;
@@ -249,7 +249,7 @@ gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   gbp_buildui_omni_bar_section_notify_can_build (self, NULL, build_manager);
   gbp_buildui_omni_bar_section_notify_pipeline (self, NULL, build_manager);
@@ -279,7 +279,7 @@ gbp_buildui_omni_bar_section_dispose (GObject *object)
 
   if (self->build_manager_signals)
     {
-      ide_signal_group_set_target (self->build_manager_signals, NULL);
+      g_signal_group_set_target (self->build_manager_signals, NULL);
       g_clear_object (&self->build_manager_signals);
     }
 
@@ -314,53 +314,53 @@ gbp_buildui_omni_bar_section_init (GbpBuilduiOmniBarSection *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->build_manager_signals = ide_signal_group_new (IDE_TYPE_BUILD_MANAGER);
+  self->build_manager_signals = g_signal_group_new (IDE_TYPE_BUILD_MANAGER);
   g_signal_connect_object (self->build_manager_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_omni_bar_section_bind_build_manager),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::can-build",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_can_build),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::message",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::pipeline",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_pipeline),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::error-count",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_error_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::warning-count",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_warning_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "notify::last-build-time",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_last_build_time),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "build-started",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_started),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "build-failed",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_failed),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->build_manager_signals,
+  g_signal_group_connect_object (self->build_manager_signals,
                                    "build-finished",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_finished),
                                    self,
@@ -377,5 +377,5 @@ gbp_buildui_omni_bar_section_set_context (GbpBuilduiOmniBarSection *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
   build_manager = ide_build_manager_from_context (context);
-  ide_signal_group_set_target (self->build_manager_signals, build_manager);
+  g_signal_group_set_target (self->build_manager_signals, build_manager);
 }

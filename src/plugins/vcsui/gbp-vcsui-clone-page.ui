@@ -1,96 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="Adw" version="1.0"/>
-  <template class="GbpVcsuiClonePage" parent="GtkWidget">
-    <child>
-      <object class="AdwPreferencesPage" id="main">
-        <style>
-          <class name="undershoot-top"/>
-        </style>
+  <template class="GbpVcsuiClonePage" parent="AdwNavigationPage">
+    <property name="tag">clone</property>
+    <property name="title" translatable="yes">Clone Repository</property>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
+        </child>
         <child>
-          <object class="AdwPreferencesGroup">
-            <property name="margin-top">36</property>
+          <object class="AdwPreferencesPage" id="main">
             <child>
-              <object class="AdwEntryRow" id="uri_row">
-                <property name="title" translatable="yes">Repository URL</property>
-                <property name="text" bind-source="request" bind-property="uri" bind-flags="sync-create|bidirectional"/>
-                <child type="suffix">
-                  <object class="GtkLabel" id="branch_label">
-                    <property name="ellipsize">end</property>
-                    <property name="selectable">true</property>
-                    <property name="max-width-chars">10</property>
-                    <property name="visible">false</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child type="suffix">
-                  <object class="GtkMenuButton" id="branch_button">
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                    <property name="icon-name">builder-vcs-branch-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Choose an alternate branch</property>
-                    <property name="valign">center</property>
-                    <property name="popover">
-                      <object class="GtkPopover">
+              <object class="AdwPreferencesGroup">
+                <property name="margin-top">36</property>
+                <child>
+                  <object class="AdwEntryRow" id="uri_row">
+                    <property name="title" translatable="yes">Repository URL</property>
+                    <property name="text" bind-source="request" bind-property="uri" bind-flags="sync-create|bidirectional"/>
+                    <child type="suffix">
+                      <object class="GtkLabel" id="branch_label">
+                        <property name="ellipsize">end</property>
+                        <property name="selectable">true</property>
+                        <property name="max-width-chars">10</property>
+                        <property name="visible">false</property>
                         <style>
-                          <class name="menu"/>
+                          <class name="dim-label"/>
                         </style>
-                        <signal name="show" handler="branch_popover_show_cb" swapped="true" object="GbpVcsuiClonePage"/>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
+                      </object>
+                    </child>
+                    <child type="suffix">
+                      <object class="GtkMenuButton" id="branch_button">
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                        <property name="icon-name">builder-vcs-branch-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Choose an alternate branch</property>
+                        <property name="valign">center</property>
+                        <property name="popover">
+                          <object class="GtkPopover">
+                            <style>
+                              <class name="menu"/>
+                            </style>
+                            <signal name="show" handler="branch_popover_show_cb" swapped="true" object="GbpVcsuiClonePage"/>
                             <child>
                               <object class="GtkBox">
-                                <property name="margin-start">18</property>
-                                <property name="margin-end">18</property>
-                                <property name="margin-top">12</property>
-                                <property name="margin-bottom">6</property>
+                                <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Branches</property>
-                                    <property name="hexpand">true</property>
-                                    <property name="xalign">0</property>
-                                    <style>
-                                      <class name="heading"/>
-                                      <class name="dim-label"/>
-                                    </style>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinner">
-                                    <property name="spinning" bind-source="request" bind-property="branch-model-busy"/>
-                                    <property name="visible" bind-source="request" bind-property="branch-model-busy"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkScrolledWindow">
-                                <property name="propagate-natural-height">true</property>
-                                <property name="propagate-natural-width">true</property>
-                                <property name="min-content-width">300</property>
-                                <property name="max-content-width">300</property>
-                                <property name="max-content-height">500</property>
-                                <style>
-                                  <class name="undershoot-top"/>
-                                </style>
-                                <child>
-                                  <object class="GtkListView">
-                                    <signal name="activate" handler="branch_activated_cb" swapped="true" object="GbpVcsuiClonePage"/>
-                                    <property name="model">
-                                      <object class="GtkSingleSelection">
-                                        <property name="model" bind-source="request" bind-property="branch-model" bind-flags="sync-create"/>
+                                  <object class="GtkBox">
+                                    <property name="margin-start">18</property>
+                                    <property name="margin-end">18</property>
+                                    <property name="margin-top">12</property>
+                                    <property name="margin-bottom">6</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Branches</property>
+                                        <property name="hexpand">true</property>
+                                        <property name="xalign">0</property>
+                                        <style>
+                                          <class name="heading"/>
+                                          <class name="dim-label"/>
+                                        </style>
                                       </object>
-                                    </property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="single-click-activate">true</property>
-                                    <property name="factory">
-                                      <object class="GtkBuilderListItemFactory">
-                                        <property name="bytes">
-                                          <![CDATA[
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinner">
+                                        <property name="spinning" bind-source="request" bind-property="branch-model-busy"/>
+                                        <property name="visible" bind-source="request" bind-property="branch-model-busy"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkScrolledWindow">
+                                    <property name="propagate-natural-height">true</property>
+                                    <property name="propagate-natural-width">true</property>
+                                    <property name="min-content-width">300</property>
+                                    <property name="max-content-width">300</property>
+                                    <property name="max-content-height">500</property>
+                                    <style>
+                                      <class name="undershoot-top"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkListView">
+                                        <signal name="activate" handler="branch_activated_cb" swapped="true" object="GbpVcsuiClonePage"/>
+                                        <property name="model">
+                                          <object class="GtkSingleSelection">
+                                            <property name="model" bind-source="request" bind-property="branch-model" bind-flags="sync-create"/>
+                                          </object>
+                                        </property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="single-click-activate">true</property>
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes">
+                                              <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
@@ -114,192 +118,194 @@
   </template>
 </interface>
 ]]>
+                                            </property>
+                                          </object>
                                         </property>
                                       </object>
-                                    </property>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
+                        <property name="sensitive" bind-source="request" bind-property="can-select-branch" bind-flags="sync-create"/>
                       </object>
-                    </property>
-                    <property name="sensitive" bind-source="request" bind-property="can-select-branch" bind-flags="sync-create"/>
+                    </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="xalign">0</property>
-                <property name="margin-top">12</property>
-                <property name="wrap">true</property>
-                <property name="label" translatable="yes">Enter the URL of the source code repository for the project you would like to clone.</property>
-                <style>
-                  <class name="caption"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="AdwEntryRow" id="location_row">
-                <property name="title" translatable="yes">Location</property>
-                <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpVcsuiClonePage"/>
-                <child type="suffix">
-                  <object class="GtkButton">
-                    <property name="action-name">clone-page.select-folder</property>
-                    <property name="valign">center</property>
-                    <property name="icon-name">folder-symbolic</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">0</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="label" translatable="yes">Enter the URL of the source code repository for the project you would like to clone.</property>
                     <style>
-                      <class name="flat"/>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
                     </style>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">The repository will be cloned into a new subdirectory.</property>
-                <property name="margin-top">12</property>
-                <property name="wrap">true</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="caption"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="GtkStack" id="stack">
-                <property name="hhomogeneous">true</property>
-                <property name="vhomogeneous">true</property>
-                <property name="transition-type">crossfade</property>
-                <property name="transition-duration">300</property>
-                <property name="vexpand">false</property>
+              <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="GtkStackPage">
-                    <property name="name">details</property>
-                    <property name="child">
-                      <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Author Details</property>
-                        <child>
-                          <object class="AdwEntryRow" id="author_name_row">
-                            <property name="title" translatable="yes">Name</property>
-                            <property name="text" bind-source="request" bind-property="author-name" bind-flags="sync-create|bidirectional"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwEntryRow" id="author_email_row">
-                            <property name="title" translatable="yes">Email</property>
-                            <property name="text" bind-source="request" bind-property="author-email" bind-flags="sync-create|bidirectional"/>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="xalign">0</property>
-                            <property name="margin-top">12</property>
-                            <property name="wrap">true</property>
-                            <property name="label" translatable="yes">You may specify authorship information to override defaults.</property>
-                            <style>
-                              <class name="caption"/>
-                              <class name="dim-label"/>
-                            </style>
-                          </object>
-                        </child>
+                  <object class="AdwEntryRow" id="location_row">
+                    <property name="title" translatable="yes">Location</property>
+                    <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpVcsuiClonePage"/>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="action-name">clone-page.select-folder</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkStackPage">
-                    <property name="name">progress</property>
-                    <property name="child">
-                      <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Status</property>
-                        <child>
-                          <object class="GtkScrolledWindow">
-                            <style>
-                              <class name="card"/>
-                            </style>
-                            <property name="has-frame">false</property>
-                            <property name="min-content-height">100</property>
-                            <property name="max-content-height">300</property>
-                            <property name="hscrollbar-policy">never</property>
-                            <property name="vexpand">true</property>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">The repository will be cloned into a new subdirectory.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkStack" id="stack">
+                    <property name="hhomogeneous">true</property>
+                    <property name="vhomogeneous">true</property>
+                    <property name="transition-type">crossfade</property>
+                    <property name="transition-duration">300</property>
+                    <property name="vexpand">false</property>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">details</property>
+                        <property name="child">
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Author Details</property>
                             <child>
-                              <object class="IdeTerminal" id="terminal">
-                                <property name="margin-top">9</property>
-                                <property name="margin-bottom">9</property>
-                                <property name="margin-start">9</property>
-                                <property name="margin-end">9</property>
+                              <object class="AdwEntryRow" id="author_name_row">
+                                <property name="title" translatable="yes">Name</property>
+                                <property name="text" bind-source="request" bind-property="author-name" bind-flags="sync-create|bidirectional"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwEntryRow" id="author_email_row">
+                                <property name="title" translatable="yes">Email</property>
+                                <property name="text" bind-source="request" bind-property="author-email" bind-flags="sync-create|bidirectional"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="xalign">0</property>
+                                <property name="margin-top">12</property>
+                                <property name="wrap">true</property>
+                                <property name="label" translatable="yes">You may specify authorship information to override defaults.</property>
+                                <style>
+                                  <class name="caption"/>
+                                  <class name="dim-label"/>
+                                </style>
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
-                    </property>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">progress</property>
+                        <property name="child">
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Status</property>
+                            <property name="header-suffix">
+                              <object class="GtkBox">
+                                <property name="spacing">16</property>
+                                <child>
+                                  <object class="GtkLabel" id="failure_message">
+                                    <property name="wrap">true</property>
+                                    <property name="hexpand">true</property>
+                                    <property name="xalign">0</property>
+                                    <property name="valign">center</property>
+                                    <style>
+                                      <class name="error"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="IdeProgressIcon" id="progress">
+                                    <property name="visible">false</property>
+                                    <property name="valign">center</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <style>
+                                  <class name="card"/>
+                                </style>
+                                <property name="has-frame">false</property>
+                                <property name="min-content-height">100</property>
+                                <property name="max-content-height">300</property>
+                                <property name="hscrollbar-policy">never</property>
+                                <property name="vexpand">true</property>
+                                <child>
+                                  <object class="IdeTerminal" id="terminal">
+                                    <style>
+                                      <class name="greeter"/>
+                                    </style>
+                                    <property name="input-enabled">false</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkBox">
-                <property name="margin-top">12</property>
-                <property name="spacing">16</property>
-                <child>
-                  <object class="GtkLabel" id="failure_message">
-                    <property name="wrap">true</property>
-                    <property name="hexpand">true</property>
-                    <property name="xalign">0</property>
-                    <property name="valign">center</property>
-                    <style>
-                      <class name="error"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeProgressIcon" id="progress">
-                    <property name="visible">false</property>
-                    <property name="valign">center</property>
-                  </object>
-                </child>
+              <object class="AdwPreferencesGroup">
                 <child>
                   <object class="GtkButton">
                     <property name="action-name">clone-page.clone</property>
                     <property name="label" translatable="yes">Clone Repository</property>
-                    <property name="valign">center</property>
+                    <property name="halign">center</property>
                     <style>
                       <class name="suggested-action"/>
+                      <class name="pill"/>
                     </style>
                   </object>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkBox">
-                <property name="margin-top">12</property>
+              <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="GtkLabel" id="error_label">
-                    <property name="wrap">true</property>
-                    <property name="hexpand">true</property>
-                    <property name="xalign">0</property>
+                  <object class="GtkBox">
+                    <property name="margin-top">12</property>
+                    <child>
+                      <object class="GtkLabel" id="error_label">
+                        <property name="wrap">true</property>
+                        <property name="hexpand">true</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -307,7 +313,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
   <object class="IdeVcsCloneRequest" id="request">
     <!--

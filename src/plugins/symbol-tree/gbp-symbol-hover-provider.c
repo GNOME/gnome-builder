@@ -111,22 +111,19 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                       NULL);
 
   name = ide_symbol_get_name (symbol);
-  if (!name || !*name)
-    name = _("Unnamed Symbol");
-
-  tt = g_strdup_printf ("<tt>%s</tt>", name);
-
-  gtk_box_append (box,
-                  g_object_new (GTK_TYPE_LABEL,
-                                "ellipsize", PANGO_ELLIPSIZE_END,
-                                "visible", TRUE,
-                                "xalign", 0.0f,
-                                "margin-bottom", 3,
-                                "selectable", TRUE,
-                                "use-markup", TRUE,
-                                "label", tt,
-                                NULL));
-
+  if (!(!name || !*name))
+    {
+        tt = g_strdup_printf ("<tt>%s</tt>", name);
+        gtk_box_append (box,
+                        g_object_new (GTK_TYPE_LABEL,
+                                      "ellipsize", PANGO_ELLIPSIZE_END,
+                                      "visible", TRUE,
+                                      "xalign", 0.0f,
+                                      "selectable", TRUE,
+                                      "use-markup", TRUE,
+                                      "label", tt,
+                                      NULL));
+    }
 
   for (guint i = 0; i < G_N_ELEMENTS (loc); i++)
     {
@@ -140,13 +137,13 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
           int line_offset = ide_location_get_line_offset (loc[i].loc);
 
           if (line >= 0 && line_offset >= 0)
-            markup = g_strdup_printf ("%s: <a href='#'>%s:%d:%d</a>",
+            markup = g_strdup_printf ("<b>%s</b>: <a href='#'>%s:%d:%d</a>",
                                       loc[i].kind, base, line+1, line_offset+1);
           else if (line >= 0)
-            markup = g_strdup_printf ("%s: <a href='#'>%s:%d</a>",
+            markup = g_strdup_printf ("<b>%s</b>: <a href='#'>%s:%d</a>",
                                       loc[i].kind, base, line+1);
           else
-            markup = g_strdup_printf ("%s: <a href='#'>%s</a>",
+            markup = g_strdup_printf ("<b>%s</b>: <a href='#'>%s</a>",
                                       loc[i].kind, base);
 
           label = g_object_new (GTK_TYPE_LABEL,
@@ -166,6 +163,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
 
     }
 
+  gtk_widget_add_css_class (GTK_WIDGET (box), "hover-display-row");
   gtk_source_hover_display_append (display, GTK_WIDGET (box));
 
   ide_task_return_boolean (task, TRUE);

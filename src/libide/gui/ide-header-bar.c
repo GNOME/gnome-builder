@@ -36,14 +36,12 @@ typedef struct
   GtkBox *left_of_center;
   GtkBox *right;
   GtkBox *right_of_center;
-
-  guint flat : 1;
 } IdeHeaderBarPrivate;
 
 enum {
   PROP_0,
-  PROP_FLAT,
   PROP_MENU_ID,
+  PROP_SHOW_END_TITLE_BUTTONS,
   N_PROPS
 };
 
@@ -75,15 +73,16 @@ ide_header_bar_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   IdeHeaderBar *self = IDE_HEADER_BAR (object);
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   switch (prop_id)
     {
-    case PROP_FLAT:
-      g_value_set_boolean (value, ide_header_bar_get_flat (self));
-      break;
-
     case PROP_MENU_ID:
       g_value_set_string (value, ide_header_bar_get_menu_id (self));
+      break;
+
+    case PROP_SHOW_END_TITLE_BUTTONS:
+      g_value_set_boolean (value, adw_header_bar_get_show_end_title_buttons (priv->header_bar));
       break;
 
     default:
@@ -98,15 +97,16 @@ ide_header_bar_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   IdeHeaderBar *self = IDE_HEADER_BAR (object);
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   switch (prop_id)
     {
-    case PROP_FLAT:
-      ide_header_bar_set_flat (self, g_value_get_boolean (value));
-      break;
-
     case PROP_MENU_ID:
       ide_header_bar_set_menu_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_SHOW_END_TITLE_BUTTONS:
+      adw_header_bar_set_show_end_title_buttons (priv->header_bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -124,17 +124,18 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
   object_class->get_property = ide_header_bar_get_property;
   object_class->set_property = ide_header_bar_set_property;
 
-  properties [PROP_FLAT] =
-    g_param_spec_boolean ("flat", NULL, NULL,
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_MENU_ID] =
     g_param_spec_string ("menu-id",
                          "Menu ID",
                          "The id of the menu to display with the window",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SHOW_END_TITLE_BUTTONS] =
+    g_param_spec_boolean ("show-end-title-buttons", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -413,37 +414,4 @@ ide_header_bar_remove (IdeHeaderBar *self,
 
   g_warning ("Failed to locate widget of type %s within headerbar",
              G_OBJECT_TYPE_NAME (widget));
-}
-
-gboolean
-ide_header_bar_get_flat (IdeHeaderBar *self)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_HEADER_BAR (self), FALSE);
-
-  return priv->flat;
-}
-
-void
-ide_header_bar_set_flat (IdeHeaderBar *self,
-                         gboolean      flat)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-
-  flat = !!flat;
-
-  if (priv->flat != flat)
-    {
-      priv->flat = flat;
-
-      if (flat)
-        gtk_widget_add_css_class (GTK_WIDGET (priv->header_bar), "flat");
-      else
-        gtk_widget_remove_css_class (GTK_WIDGET (priv->header_bar), "flat");
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FLAT]);
-    }
 }

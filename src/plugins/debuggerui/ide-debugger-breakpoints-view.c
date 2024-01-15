@@ -31,7 +31,7 @@ struct _IdeDebuggerBreakpointsView
   AdwBin                 parent_instance;
 
   /* Owned references */
-  IdeSignalGroup        *debugger_signals;
+  GSignalGroup          *debugger_signals;
 
   /* Template references */
   GtkCellRendererText   *address_cell;
@@ -69,11 +69,11 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_debugger_breakpoints_view_bind (IdeDebuggerBreakpointsView *self,
                                     IdeDebugger                *debugger,
-                                    IdeSignalGroup             *debugger_signals)
+                                    GSignalGroup               *debugger_signals)
 {
   g_assert (IDE_IS_DEBUGGER_BREAKPOINTS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (G_IS_SIGNAL_GROUP (debugger_signals));
 
   gtk_list_store_clear (self->list_store);
 }
@@ -471,34 +471,34 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
   g_signal_connect_swapped (self->debugger_signals,
                             "bind",
                             G_CALLBACK (ide_debugger_breakpoints_view_bind),
                             self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_breakpoints_view_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_breakpoints_view_stopped),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-added",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_added),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-removed",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_removed),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-modified",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_modified),
                                     self);
@@ -567,7 +567,7 @@ ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_BREAKPOINTS_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return ide_signal_group_get_target (self->debugger_signals);
+    return _g_signal_group_get_target (self->debugger_signals);
   else
     return NULL;
 }
@@ -588,7 +588,7 @@ ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,
 
   if (self->debugger_signals != NULL)
     {
-      ide_signal_group_set_target (self->debugger_signals, debugger);
+      g_signal_group_set_target (self->debugger_signals, debugger);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
     }
 }

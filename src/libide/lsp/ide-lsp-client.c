@@ -55,8 +55,8 @@ typedef struct
 
 typedef struct
 {
-  IdeSignalGroup *buffer_manager_signals;
-  IdeSignalGroup *project_signals;
+  GSignalGroup   *buffer_manager_signals;
+  GSignalGroup   *project_signals;
   JsonrpcClient  *rpc_client;
   GIOStream      *io_stream;
   GHashTable     *diagnostics_by_file;
@@ -166,7 +166,7 @@ pending_message_fail (PendingMessage *message)
   ide_task_return_new_error (message->task,
                              G_IO_ERROR,
                              G_IO_ERROR_CANCELLED,
-                             "The operation has been cancelled");
+                             _("The operation has been cancelled"));
 
   g_clear_object (&message->task);
   g_clear_object (&message->cancellable);
@@ -644,14 +644,14 @@ ide_lsp_client_buffer_unloaded (IdeLspClient     *self,
 static void
 ide_lsp_client_buffer_manager_bind (IdeLspClient     *self,
                                     IdeBufferManager *buffer_manager,
-                                    IdeSignalGroup   *signal_group)
+                                    GSignalGroup     *signal_group)
 {
   guint n_items;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
+  g_assert (G_IS_SIGNAL_GROUP (signal_group));
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (buffer_manager));
 
@@ -666,10 +666,10 @@ ide_lsp_client_buffer_manager_bind (IdeLspClient     *self,
 
 static void
 ide_lsp_client_buffer_manager_unbind (IdeLspClient   *self,
-                                      IdeSignalGroup *signal_group)
+                                      GSignalGroup   *signal_group)
 {
   g_assert (IDE_IS_LSP_CLIENT (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (signal_group));
+  g_assert (G_IS_SIGNAL_GROUP (signal_group));
 
   /* TODO: We need to track everything we've notified so that we
    *       can notify the peer to release its resources.
@@ -1053,10 +1053,9 @@ ide_lsp_client_real_notification (IdeLspClient *self,
                             priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
                             "%s", message);
         }
-      else if (g_str_equal (method, "$/logTrace") ||
-               g_str_equal (method, "window/logMessage"))
+      else if (g_str_equal (method, "$/logTrace"))
         {
-          const gchar *message = NULL;
+          const char *message = NULL;
 
           JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
 
@@ -1064,6 +1063,42 @@ ide_lsp_client_real_notification (IdeLspClient *self,
             g_log (priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
                    IDE_LOG_LEVEL_TRACE,
                    "%s", message);
+        }
+      else if (g_str_equal (method, "window/logMessage"))
+        {
+          const char *message = NULL;
+          GLogLevelFlags level = G_LOG_LEVEL_MESSAGE;
+          gint64 type;
+
+          if (JSONRPC_MESSAGE_PARSE (params, "type", JSONRPC_MESSAGE_GET_INT64 (&type)))
+            {
+              /* Ignore error/etc because we don't want g_error() fatal errors
+               * to be logged. This is just from the LSP.
+               */
+              switch (type)
+                {
+                case 1:
+                case 2:
+                case 3:
+                  level = G_LOG_LEVEL_MESSAGE;
+                  break;
+
+                case 4:
+                  level = G_LOG_LEVEL_INFO;
+                  break;
+
+                default:
+                  break;
+                }
+            }
+
+          JSONRPC_MESSAGE_PARSE (params, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+
+          if (!ide_str_empty0 (message))
+            ide_object_log (self,
+                            level,
+                            priv->name ? priv->name : G_OBJECT_TYPE_NAME (self),
+                            "%s", message);
         }
     }
 
@@ -1537,19 +1572,19 @@ ide_lsp_client_init (IdeLspClient *self)
                                                      g_object_unref,
                                                      (GDestroyNotify)g_object_unref);
 
-  priv->buffer_manager_signals = ide_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
+  priv->buffer_manager_signals = g_signal_group_new (IDE_TYPE_BUFFER_MANAGER);
 
-  ide_signal_group_connect_object (priv->buffer_manager_signals,
+  g_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-loaded",
                                    G_CALLBACK (ide_lsp_client_buffer_loaded),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (priv->buffer_manager_signals,
+  g_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-saved",
                                    G_CALLBACK (ide_lsp_client_buffer_saved),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (priv->buffer_manager_signals,
+  g_signal_group_connect_object (priv->buffer_manager_signals,
                                    "buffer-unloaded",
                                    G_CALLBACK (ide_lsp_client_buffer_unloaded),
                                    self,
@@ -1566,14 +1601,14 @@ ide_lsp_client_init (IdeLspClient *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  priv->project_signals = ide_signal_group_new (IDE_TYPE_PROJECT);
+  priv->project_signals = g_signal_group_new (IDE_TYPE_PROJECT);
 
-  ide_signal_group_connect_object (priv->project_signals,
+  g_signal_group_connect_object (priv->project_signals,
                                    "file-trashed",
                                    G_CALLBACK (ide_lsp_client_project_file_trashed),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (priv->project_signals,
+  g_signal_group_connect_object (priv->project_signals,
                                    "file-renamed",
                                    G_CALLBACK (ide_lsp_client_project_file_renamed),
                                    self,
@@ -1632,10 +1667,10 @@ ide_lsp_client_initialized_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   buffer_manager = ide_buffer_manager_from_context (context);
-  ide_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
+  g_signal_group_set_target (priv->buffer_manager_signals, buffer_manager);
 
   project = ide_project_from_context (context);
-  ide_signal_group_set_target (priv->project_signals, project);
+  g_signal_group_set_target (priv->project_signals, project);
 
   priv->initialized = TRUE;
 
@@ -1788,8 +1823,26 @@ ide_lsp_client_start (IdeLspClient *self)
    */
 
   params = JSONRPC_MESSAGE_NEW (
+#if 0
+    /* Some LSPs will monitor the PID of the editor and exit when they
+     * detect the editor has exited. Since we are likely in a different
+     * PID namespace than the LSP, there is a PID mismatch and it will
+     * probably get PID 2 (from Flatpak) and not be of any use.
+     *
+     * Just ignore it as the easiest solution.
+     *
+     * If this causes problems elsewhere, we might need to try to setup
+     * a quirk handler for some LSPs.
+     *
+     * https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2050
+     */
     "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
+#endif
     "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
+    "clientInfo", "{",
+      "name", JSONRPC_MESSAGE_PUT_STRING (PACKAGE_NAME),
+      "version", JSONRPC_MESSAGE_PUT_STRING (PACKAGE_VERSION),
+    "}",
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "workspaceFolders", "[",
       "{",
@@ -2109,7 +2162,7 @@ ide_lsp_client_call_async (IdeLspClient        *self,
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_CONNECTED,
-                                 "No connection to language server");
+                                 _("No connection to language server"));
       IDE_EXIT;
     }
 
@@ -2219,7 +2272,7 @@ ide_lsp_client_send_notification_async (IdeLspClient        *self,
     ide_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_CONNECTED,
-                               "No connection to language server");
+                               _("No connection to language server"));
   else
     jsonrpc_client_send_notification_async (priv->rpc_client,
                                             method,

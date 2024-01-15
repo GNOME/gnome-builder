@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '45.alpha',
+          version: '46.beta',
     meson_version: '>= 0.60',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=gnu++2a',
@@ -154,6 +154,7 @@ global_c_args = [
   '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major, glib_minor),
   '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
   '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
+  '-DGDK_DISABLE_DEPRECATION_WARNINGS',
   '-DADW_VERSION_MIN_REQUIRED=ADW_VERSION_@0@_@1@'.format(adw_major, adw_minor),
   '-DADW_VERSION_MAX_ALLOWED=ADW_VERSION_@0@_@1@'.format(adw_major, adw_minor),
   '-DGTK_SOURCE_VERSION_MIN_REQUIRED=GTK_SOURCE_VERSION_@0@_@1@'.format(gtksourceview_major, gtksourceview_minor),
@@ -305,7 +306,7 @@ libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
 libgtk_dep = dependency('gtk4', version: gtk_req)
 libgir_dep = dependency('gobject-introspection-1.0', version: gobject_introspection_req)
 libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
-libpanel_dep = dependency('libpanel-1', version: '>= 1.1.2')
+libpanel_dep = dependency('libpanel-1', version: '>= 1.5.0')
 libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.43.0')
@@ -360,12 +361,9 @@ foreach func: check_functions
   config_h.set(func[0], cc.has_function(func[1]))
 endforeach
 
-#
 # If we have sysprof-capture-4, we can export tracing information
-# to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
-# already have to link against that for the plugin.
-#
-libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.46.0', static: true, required: false)
+# to the SYSPROF_TRACE_FD.
+libsysprof_capture = dependency('sysprof-capture-4', version: '>= 45.0', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif

@@ -1,10 +1,10 @@
 {
-    "app-id" : "org.gnome.Builder.Devel",
+    "id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm15"
+        "org.freedesktop.Sdk.Extension.llvm16"
     ],
     "command" : "gnome-builder",
     "tags" : [
@@ -58,8 +58,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm15/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm15/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm16/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm16/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -254,7 +254,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libgit2/libgit2.git",
-                    "tag" : "v1.5.0"
+                    "tag" : "v1.6.4"
                 }
             ]
         },
@@ -303,10 +303,27 @@
             ]
         },
         {
+            "name" : "gjs",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dinstalled_tests=false",
+                "-Dskip_dbus_tests=true",
+                "-Dskip_gtk_tests=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gjs.git",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
             "name" : "libpeas",
             "buildsystem" : "meson",
             "config-opts" : [
-            	"-Dlua51=false"
+                "-Dlua51=false",
+                "-Dpython3=false"
             ],
             "sources" : [
                 {
@@ -349,15 +366,48 @@
             ]
         },
         {
+            "name" : "libdex",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "--buildtype=debugoptimized",
+                "-Ddocs=false",
+                "-Dintrospection=enabled",
+                "-Dexamples=false",
+                "-Dtests=false",
+                "-Dsysprof=true"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdex.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name" : "libpanel",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "-Ddocs=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "sysprof",
             "config-opts" : [
                 "--buildtype=debugoptimized",
-                "-Dagent=true",
                 "-Dexamples=false",
                 "-Dgtk=true",
                 "-Dsysprofd=host",
-                "-Dtests=false",
-                "-Dtools=false"
+                "-Dtests=true",
+                "-Dtools=true"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -395,7 +445,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/ostreedev/ostree.git",
-                    "tag" : "v2022.2"
+                    "tag" : "v2023.6"
                 }
             ]
         },
@@ -436,24 +486,6 @@
                     "type" : "git",
                     "url" : "https://github.com/zvelo/libstemmer",
                     "branch" : "master"
-                }
-            ]
-        },
-        {
-            "name" : "appstream",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Dgir=false",
-                "-Dapidocs=false",
-                "-Dinstall-docs=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/ximion/appstream.git",
-                    "commit" : "565ff2f3bcf4497c7ffbd298c95c24ad0b7c3d1e"
                 }
             ]
         },
@@ -612,21 +644,6 @@
             ]
         },
         {
-            "name" : "libpanel",
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "config-opts" : [
-            	"-Ddocs=disabled"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
             "sources" : [
@@ -677,25 +694,6 @@
             ]
         },
         {
-            "name" : "libdex",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Ddocs=false",
-                "-Dintrospection=enabled",
-                "-Dexamples=false",
-                "-Dtests=false",
-                "-Dsysprof=true"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/libdex.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
@@ -710,6 +708,18 @@
                 "-Dnetwork_tests=false",
                 "-Dplugin_deviced=true"
             ],
+            "run-tests": true,
+            "build-options" : {
+                "test-args": [
+                    "--device=dri",
+                    "--share=ipc",
+                    "--socket=fallback-x11",
+                    "--socket=wayland",
+                    "--socket=session-bus",
+                    "--socket=system-bus",
+                    "--env=G_SLICE=always-malloc"
+                ]
+            },
             "cleanup" : [
                 "/share/gnome-builder/gir-1.0"
             ],
@@ -722,11 +732,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm15/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm15/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm15/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm15/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm15/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm16/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm16/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm16/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm16/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm16/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }

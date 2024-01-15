@@ -22,32 +22,38 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+
 #include "ide-truncate-model.h"
 
 #define DEFAULT_MAX_ITEMS 4
 
 struct _IdeTruncateModel
 {
-  GObject     parent_instance;
-  GListModel *child_model;
-  guint       max_items;
-  guint       prev_n_items;
-  guint       expanded : 1;
+  GObject            parent_instance;
+  GListModel        *child_model;
+  GtkSliceListModel *slice;
+  guint              max_items;
+  guint              expanded : 1;
 };
 
 static gpointer
 ide_truncate_model_get_item (GListModel *model,
                              guint       position)
 {
-  return g_list_model_get_item (IDE_TRUNCATE_MODEL (model)->child_model, position);
+  IdeTruncateModel *self = IDE_TRUNCATE_MODEL (model);
+
+  return self->expanded ? g_list_model_get_item (self->child_model, position)
+                        : g_list_model_get_item (G_LIST_MODEL (self->slice), position);
 }
 
 static guint
 ide_truncate_model_get_n_items (GListModel *model)
 {
   IdeTruncateModel *self = (IdeTruncateModel *)model;
-  guint n_items = g_list_model_get_n_items (IDE_TRUNCATE_MODEL (model)->child_model);
-  return self->expanded ? n_items : MIN (n_items, self->max_items);
+
+  return self->expanded ? g_list_model_get_n_items (G_LIST_MODEL (self->child_model))
+                        : g_list_model_get_n_items (G_LIST_MODEL (self->slice));
 }
 
 static GType
@@ -65,7 +71,7 @@ list_model_iface_init (GListModelInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTruncateModel, ide_truncate_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,
@@ -105,30 +111,10 @@ ide_truncate_model_items_changed_cb (IdeTruncateModel *self,
                                      guint             added,
                                      GListModel       *model)
 {
-  guint n_items;
-
   g_assert (IDE_IS_TRUNCATE_MODEL (self));
   g_assert (G_IS_LIST_MODEL (model));
 
-  n_items = g_list_model_get_n_items (model);
-
-  if (self->expanded)
-    {
-      g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
-    }
-  else
-    {
-      if (position < (self->max_items - 1))
-        {
-          guint truncate_removed = MIN (self->prev_n_items, self->max_items);
-          guint truncate_added = MIN (n_items, self->max_items);
-
-          if (truncate_removed || truncate_added)
-            g_list_model_items_changed (G_LIST_MODEL (self), 0, truncate_removed, truncate_added);
-        }
-    }
-
-  self->prev_n_items = n_items;
+  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
 }
@@ -139,6 +125,7 @@ ide_truncate_model_finalize (GObject *object)
   IdeTruncateModel *self = (IdeTruncateModel *)object;
 
   g_clear_object (&self->child_model);
+  g_clear_object (&self->slice);
 
   G_OBJECT_CLASS (ide_truncate_model_parent_class)->finalize (object);
 }
@@ -186,12 +173,7 @@ ide_truncate_model_set_property (GObject      *object,
     {
     case PROP_CHILD_MODEL:
       self->child_model = g_value_dup_object (value);
-      self->prev_n_items = g_list_model_get_n_items (self->child_model);
-      g_signal_connect_object (self->child_model,
-                               "items-changed",
-                               G_CALLBACK (ide_truncate_model_items_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
+      gtk_slice_list_model_set_model (self->slice, self->child_model);
       break;
 
     case PROP_MAX_ITEMS:
@@ -256,6 +238,13 @@ static void
 ide_truncate_model_init (IdeTruncateModel *self)
 {
   self->max_items = DEFAULT_MAX_ITEMS;
+  self->slice = gtk_slice_list_model_new (NULL, 0, DEFAULT_MAX_ITEMS);
+
+  g_signal_connect_object (self->slice,
+                           "items-changed",
+                           G_CALLBACK (ide_truncate_model_items_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 gboolean
@@ -276,20 +265,10 @@ ide_truncate_model_set_expanded (IdeTruncateModel *self,
 
   if (expanded != self->expanded)
     {
-      guint n_items = g_list_model_get_n_items (self->child_model);
-      guint old_n_items = self->expanded ? n_items : MIN (n_items, self->max_items);
-      guint new_n_items = expanded ? n_items : MIN (n_items, self->max_items);
-
       self->expanded = expanded;
 
-      if (new_n_items > old_n_items)
-        g_list_model_items_changed (G_LIST_MODEL (self),
-                                    old_n_items,
-                                    0,
-                                    new_n_items - old_n_items);
-      else
-        g_list_model_items_changed (G_LIST_MODEL (self),
-                                    0, old_n_items, new_n_items);
+      gtk_slice_list_model_set_size (self->slice,
+                                     self->expanded ? G_MAXUINT : self->max_items);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
@@ -310,24 +289,12 @@ ide_truncate_model_set_max_items (IdeTruncateModel *self,
 {
   g_return_if_fail (IDE_IS_TRUNCATE_MODEL (self));
 
-  if (max_items == 0)
-    max_items = DEFAULT_MAX_ITEMS;
-
   if (max_items != self->max_items)
     {
-      guint old_max_items = self->max_items;
-
       self->max_items = max_items;
 
       if (!self->expanded)
-        {
-          guint n_items = g_list_model_get_n_items (self->child_model);
-          guint old_n_items = MIN (old_max_items, n_items);
-          guint new_n_items = MIN (max_items, n_items);
-
-          if (old_n_items != new_n_items)
-            g_list_model_items_changed (G_LIST_MODEL (self), 0, old_n_items, new_n_items);
-        }
+        gtk_slice_list_model_set_size (self->slice, max_items);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MAX_ITEMS]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_EXPAND]);
@@ -355,5 +322,5 @@ ide_truncate_model_get_can_expand (IdeTruncateModel *self)
   g_return_val_if_fail (IDE_IS_TRUNCATE_MODEL (self), FALSE);
 
   return !self->expanded &&
-         g_list_model_get_n_items (self->child_model) > self->max_items;
+         g_list_model_get_n_items (self->child_model) != g_list_model_get_n_items (G_LIST_MODEL (self->slice));
 }

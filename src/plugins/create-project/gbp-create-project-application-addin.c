@@ -82,7 +82,7 @@ gbp_create_project_application_addin_handle_command_line (IdeApplicationAddin   
       workspace = ide_greeter_workspace_new (app);
       ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
 
-      ide_greeter_workspace_set_page_name (workspace, "create-project");
+      ide_greeter_workspace_push_page_by_tag (workspace, "create-project");
       ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
     }
 }
@@ -104,7 +104,7 @@ create_project_cb (GSimpleAction *action,
   workspace = ide_greeter_workspace_new (IDE_APPLICATION_DEFAULT);
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
 
-  ide_greeter_workspace_set_page_name (workspace, "create-project");
+  ide_greeter_workspace_push_page_by_tag (workspace, "create-project");
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
 }
 

@@ -26,6 +26,7 @@
 
 #include <libide-editor.h>
 #include <libide-gui.h>
+#include <libide-sourceview.h>
 
 #include "gbp-symbol-search-result.h"
 
@@ -156,6 +157,32 @@ gbp_symbol_search_result_set_node (GbpSymbolSearchResult *self,
   ide_search_result_set_use_markup (IDE_SEARCH_RESULT (self), ide_symbol_node_get_use_markup (node));
 }
 
+static gboolean
+gbp_symbol_search_result_matches (IdeSearchResult *result,
+                                  const char      *query)
+{
+  GbpSymbolSearchResult *self = (GbpSymbolSearchResult *)result;
+  g_autofree char *display_name = NULL;
+  const char *name;
+  guint prio;
+
+  g_assert (GBP_IS_SYMBOL_SEARCH_RESULT (self));
+  g_assert (IDE_IS_SYMBOL_NODE (self->node));
+
+  if (query == NULL)
+    return TRUE;
+
+  name = ide_symbol_node_get_name (self->node);
+  if (name && gtk_source_completion_fuzzy_match (name, query, &prio))
+    return TRUE;
+
+  g_object_get (self->node, "display-name", &display_name, NULL);
+  if (display_name && gtk_source_completion_fuzzy_match (display_name, query, &prio))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 gbp_symbol_search_result_dispose (GObject *object)
 {
@@ -224,6 +251,7 @@ gbp_symbol_search_result_class_init (GbpSymbolSearchResultClass *klass)
   object_class->set_property = gbp_symbol_search_result_set_property;
 
   search_result_class->activate = gbp_symbol_search_result_activate;
+  search_result_class->matches = gbp_symbol_search_result_matches;
   search_result_class->load_preview = gbp_symbol_search_result_load_preview;
 
   properties [PROP_FILE] =

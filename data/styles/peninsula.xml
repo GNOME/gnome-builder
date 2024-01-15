@@ -22,7 +22,7 @@
   <metadata>
     <property name="variant">light</property>
     <property name="dark-variant">peninsula-dark</property>
-    <property name="headerbar_bg_color">#f6f2f4</property>
+    <property name="headerbar_bg_color">#ffffff</property>
     <property name="headerbar_fg_color">#4c4c4c</property>
   </metadata>
 

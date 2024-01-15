@@ -42,9 +42,9 @@ struct _GbpEditoruiWorkspaceAddin
   IdePropertyActionGroup   *buffer_actions;
   IdePropertyActionGroup   *view_actions;
 
-  IdeBindingGroup          *buffer_bindings;
-  IdeSignalGroup           *buffer_signals;
-  IdeSignalGroup           *view_signals;
+  GBindingGroup            *buffer_bindings;
+  GSignalGroup             *buffer_signals;
+  GSignalGroup             *view_signals;
 
   GtkMenuButton            *indentation;
   GtkLabel                 *indentation_label;
@@ -157,7 +157,7 @@ notify_overwrite_cb (GbpEditoruiWorkspaceAddin *self)
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
 
-  if ((view = ide_signal_group_get_target (self->view_signals)))
+  if ((view = _g_signal_group_get_target (self->view_signals)))
     {
       gboolean overwrite = gtk_text_view_get_overwrite (GTK_TEXT_VIEW (view));
 
@@ -175,7 +175,7 @@ notify_indentation_cb (GbpEditoruiWorkspaceAddin *self)
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
 
-  if ((view = ide_signal_group_get_target (self->view_signals)))
+  if ((view = _g_signal_group_get_target (self->view_signals)))
     {
       g_autofree char *label = NULL;
       gboolean insert_spaces_instead_of_tabs;
@@ -211,7 +211,7 @@ update_position (GbpEditoruiWorkspaceAddin *self)
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
 
-  if ((view = ide_signal_group_get_target (self->view_signals)))
+  if ((view = _g_signal_group_get_target (self->view_signals)))
     {
       guint line, column, range;
 
@@ -450,45 +450,45 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->line_ends_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->syntax_label = g_object_new (GTK_TYPE_LABEL, NULL);
 
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-  ide_signal_group_connect_object (self->buffer_signals,
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
                                    G_CALLBACK (cursor_moved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->buffer_bindings = ide_binding_group_new ();
-  ide_binding_group_bind (self->buffer_bindings, "charset",
+  self->buffer_bindings = g_binding_group_new ();
+  g_binding_group_bind (self->buffer_bindings, "charset",
                           self->encoding_label, "label",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind_full (self->buffer_bindings, "newline-type",
+  g_binding_group_bind_full (self->buffer_bindings, "newline-type",
                                self->line_ends_label, "label",
                                G_BINDING_SYNC_CREATE,
                                newline_type_to_label,
                                NULL, NULL, NULL);
-  ide_binding_group_bind_full (self->buffer_bindings, "language",
+  g_binding_group_bind_full (self->buffer_bindings, "language",
                                self->syntax_label, "label",
                                G_BINDING_SYNC_CREATE,
                                language_to_label,
                                NULL, NULL, NULL);
 
-  self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
-  ide_signal_group_connect_object (self->view_signals,
+  self->view_signals = g_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  g_signal_group_connect_object (self->view_signals,
                                    "notify::indent-width",
                                    G_CALLBACK (notify_indentation_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->view_signals,
+  g_signal_group_connect_object (self->view_signals,
                                    "notify::tab-width",
                                    G_CALLBACK (notify_indentation_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->view_signals,
+  g_signal_group_connect_object (self->view_signals,
                                    "notify::insert-spaces-instead-of-tabs",
                                    G_CALLBACK (notify_indentation_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->view_signals,
+  g_signal_group_connect_object (self->view_signals,
                                    "notify::overwrite",
                                    G_CALLBACK (notify_overwrite_cb),
                                    self,
@@ -649,9 +649,9 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   ide_property_action_group_set_item (self->buffer_actions, buffer);
   ide_property_action_group_set_item (self->view_actions, view);
 
-  ide_binding_group_set_source (self->buffer_bindings, buffer);
-  ide_signal_group_set_target (self->buffer_signals, buffer);
-  ide_signal_group_set_target (self->view_signals, view);
+  g_binding_group_set_source (self->buffer_bindings, buffer);
+  g_signal_group_set_target (self->buffer_signals, buffer);
+  g_signal_group_set_target (self->view_signals, view);
 
   notify_overwrite_cb (self);
   notify_indentation_cb (self);

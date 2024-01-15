@@ -1,5 +1,5 @@
-pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-moduledir = join_paths(pkgdatadir, '{{name_}}')
+pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
+moduledir = pkgdatadir / '{{name_}}'
 
 python = import('python')
 
@@ -12,7 +12,7 @@ configure_file(
     configuration: conf,
           install: true,
       install_dir: get_option('bindir'),
-     install_mode: 'r-xr--r--'
+     install_mode: 'r-xr-xr-x'
 )
 
 {{name_}}_sources = [

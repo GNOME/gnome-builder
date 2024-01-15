@@ -493,6 +493,7 @@ ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
+  IdeConfig *config;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
@@ -506,13 +507,14 @@ ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_vcs_from_context (context);
   workdir = ide_vcs_get_workdir (vcs);
+  config = ide_pipeline_get_config (pipeline);
 
   if (!g_file_is_native (workdir))
     return NULL;
 
   makefile = g_file_get_child (workdir, "Makefile");
 
-  if (g_file_query_exists (makefile, NULL))
+  if (g_file_query_exists (makefile, NULL) || ide_config_get_locality (config) == IDE_BUILD_LOCALITY_IN_TREE)
     return g_file_get_path (workdir);
 
   return NULL;

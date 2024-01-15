@@ -62,9 +62,17 @@ ide_tree_empty_get_item (GListModel *model,
 {
   IdeTreeEmpty *self = IDE_TREE_EMPTY (model);
 
-  return self->empty ?
-         g_object_ref (self->child) :
-         g_list_model_get_item (self->model, position);
+  g_assert (!self->empty || position == 0);
+  g_assert (!self->empty || self->n_items == 0);
+  g_assert (self->empty || self->n_items > 0);
+
+  if (self->empty)
+    return g_object_ref (self->child);
+
+  if (position >= self->n_items)
+    return NULL;
+
+  return g_list_model_get_item (self->model, position);
 }
 
 static void
@@ -90,25 +98,67 @@ ide_tree_empty_items_changed_cb (IdeTreeEmpty *self,
 {
   g_assert (IDE_IS_TREE_EMPTY (self));
   g_assert (G_IS_LIST_MODEL (model));
+  g_assert (self->empty || self->n_items > 0);
+  g_assert (!self->empty || self->n_items == 0);
+  g_assert (!self->empty || position == 0);
 
   if (removed == 0 && added == 0)
     return;
 
+  /* We can enter here in a number of states:
+   *
+   * 1) "empty" meaning we have a single empty element
+   *    and are adding items to the list. We need to remove
+   *    our synthetic first element.
+   *
+   *    The underlying model absolutely must be emitting from
+   *    a position of 0 since it would be otherwise empty.
+   *
+   * 2) "!empty" meaning we have items in our model and all
+   *    of them are to be removed with no additions, meaning
+   *    we need to synthesize a new empty item.
+   *
+   * 3) "!empty" meaning we have items in our model, but not
+   *    enough items are being removed to cause us to need to
+   *    add back a synthetic empty item.
+   */
+
   if (self->empty)
     {
+      g_assert (position == 0);
+      g_assert (removed == 0);
+      g_assert (added > 0);
+
       self->empty = FALSE;
-      g_list_model_items_changed (G_LIST_MODEL (self), 0, 1, 0);
+      self->n_items = added;
+
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, 1, added);
     }
-
-  self->n_items -= removed;
-  self->n_items += added;
-
-  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
-
-  if (self->n_items == 0)
+  else
     {
-      self->empty = TRUE;
-      g_list_model_items_changed (G_LIST_MODEL (self), 0, 0, 1);
+      g_assert (self->n_items > 0);
+
+      if (removed == self->n_items && added == 0)
+        {
+          self->empty = TRUE;
+          self->n_items = 0;
+
+          g_assert (position == 0);
+
+          g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, 1);
+        }
+      else
+        {
+          g_assert (removed <= self->n_items);
+
+          self->n_items -= removed;
+          self->n_items += added;
+
+          g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+        }
+
+      g_assert (self->empty || self->n_items > 0);
+      g_assert (!self->empty || self->n_items == 0);
     }
 }
 

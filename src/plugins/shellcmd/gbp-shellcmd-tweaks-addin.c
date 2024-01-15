@@ -113,6 +113,8 @@ create_creation_row_cb (GbpShellcmdTweaksAddin *self,
   gtk_list_box_append (list, GTK_WIDGET (row));
   caption = g_object_new (GTK_TYPE_LABEL,
                           "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
+                          "wrap", TRUE,
+                          "wrap-mode", PANGO_WRAP_WORD_CHAR,
                           "label", context ? _("These commands are specific to this project.")
                                            : _("These commands are shared across all projects."),
                           "xalign", .0f,

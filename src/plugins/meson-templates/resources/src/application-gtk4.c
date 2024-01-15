@@ -14,7 +14,7 @@ struct _{{PreFix}}Application
 {{end}}
 };
 
-G_DEFINE_TYPE ({{PreFix}}Application, {{prefix_}}_application, {{if is_adwaita}}ADW_TYPE_APPLICATION{{else}}GTK_TYPE_APPLICATION{{end}})
+G_DEFINE_FINAL_TYPE ({{PreFix}}Application, {{prefix_}}_application, {{if is_adwaita}}ADW_TYPE_APPLICATION{{else}}GTK_TYPE_APPLICATION{{end}})
 
 {{PreFix}}Application *
 {{prefix_}}_application_new (const char        *application_id,

@@ -92,6 +92,8 @@ struct _IdeBuffer
   GtkSourceFile          *source_file;
   GFile                  *readlink_file;
 
+  GSignalGroup           *file_settings_signals;
+
   IdeTask                *in_flight_symbol_at_location;
   int                     in_flight_symbol_at_location_pos;
 
@@ -160,6 +162,7 @@ enum {
   PROP_FAILED,
   PROP_FILE,
   PROP_FILE_SETTINGS,
+  PROP_FORMATTER,
   PROP_HAS_DIAGNOSTICS,
   PROP_HAS_ENCODING_ERROR,
   PROP_HAS_SYMBOL_RESOLVERS,
@@ -169,6 +172,7 @@ enum {
   PROP_NEWLINE_TYPE,
   PROP_READ_ONLY,
   PROP_STATE,
+  PROP_SYMBOL_RESOLVERS,
   PROP_STYLE_SCHEME_NAME,
   PROP_TITLE,
   N_PROPS
@@ -503,6 +507,21 @@ ide_buffer_notify_language (IdeBuffer  *self,
 }
 
 static void
+on_settings_changed_newline_type_cb (IdeBuffer       *self,
+                                     GParamSpec      *pspec,
+                                     IdeFileSettings *file_settings)
+{
+  GtkSourceNewlineType newline_type;
+
+  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+
+  newline_type = ide_file_settings_get_newline_type (file_settings);
+
+  ide_buffer_set_newline_type (self, newline_type);
+}
+
+static void
 ide_buffer_constructed (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
@@ -547,6 +566,8 @@ ide_buffer_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->change_monitor);
   ide_clear_and_destroy_object (&self->file_settings);
 
+  g_signal_group_set_target (self->file_settings_signals, NULL);
+
   g_clear_pointer (&self->commit_funcs, g_array_unref);
 
   g_clear_object (&self->diagnostics);
@@ -567,6 +588,7 @@ ide_buffer_finalize (GObject *object)
 {
   IdeBuffer *self = (IdeBuffer *)object;
 
+  g_clear_object (&self->file_settings_signals);
   g_clear_object (&self->source_file);
   g_clear_object (&self->readlink_file);
   g_clear_pointer (&self->failure, g_error_free);
@@ -616,6 +638,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_get_file_settings (self));
       break;
 
+    case PROP_FORMATTER:
+      g_value_set_object (value, ide_buffer_get_formatter (self));
+      break;
+
     case PROP_HAS_DIAGNOSTICS:
       g_value_set_boolean (value, ide_buffer_has_diagnostics (self));
       break;
@@ -650,6 +676,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_STATE:
       g_value_set_enum (value, ide_buffer_get_state (self));
+      break;
+
+    case PROP_SYMBOL_RESOLVERS:
+      g_value_take_object (value, ide_buffer_list_symbol_resolvers (self));
       break;
 
     case PROP_STYLE_SCHEME_NAME:
@@ -863,6 +893,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          IDE_TYPE_FILE_SETTINGS,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_FORMATTER] =
+    g_param_spec_object ("formatter", NULL, NULL,
+                         IDE_TYPE_FORMATTER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   /**
    * IdeBuffer:has-diagnostics:
    *
@@ -956,7 +991,7 @@ ide_buffer_class_init (IdeBufferClass *klass)
                        "Newline Type",
                        "The style of newlines to append at the end of each line",
                        GTK_SOURCE_TYPE_NEWLINE_TYPE,
-                       GTK_SOURCE_NEWLINE_TYPE_LF,
+                       GTK_SOURCE_NEWLINE_TYPE_DEFAULT,
                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -987,6 +1022,11 @@ ide_buffer_class_init (IdeBufferClass *klass)
                        IDE_TYPE_BUFFER_STATE,
                        IDE_BUFFER_STATE_READY,
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SYMBOL_RESOLVERS] =
+    g_param_spec_object ("symbol-resolvers", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeBuffer:style-scheme-name:
@@ -1109,7 +1149,15 @@ ide_buffer_init (IdeBuffer *self)
   self->can_restore_cursor = TRUE;
   self->highlight_diagnostics = TRUE;
   self->enable_addins = TRUE;
-  self->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
+  self->newline_type = GTK_SOURCE_NEWLINE_TYPE_DEFAULT;
+
+  self->file_settings_signals = g_signal_group_new (IDE_TYPE_FILE_SETTINGS);
+
+  g_signal_group_connect_object (self->file_settings_signals,
+                                 "notify::newline-type",
+                                 G_CALLBACK (on_settings_changed_newline_type_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
 
   self->commit_funcs = g_array_new (FALSE, FALSE, sizeof (CommitHooks));
   g_array_set_clear_func (self->commit_funcs, clear_commit_func);
@@ -1156,6 +1204,8 @@ ide_buffer_formatter_notify_extension (IdeBuffer           *self,
 
   if ((formatter = ide_extension_adapter_get_extension (adapter)))
     ide_formatter_load (formatter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMATTER]);
 }
 
 static void
@@ -1195,6 +1245,7 @@ ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
   ide_symbol_resolver_load (resolver);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SYMBOL_RESOLVERS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVERS]);
 
   IDE_EXIT;
 }
@@ -1221,6 +1272,7 @@ ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
   ide_symbol_resolver_unload (resolver);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SYMBOL_RESOLVERS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVERS]);
 
   IDE_EXIT;
 }
@@ -2026,6 +2078,9 @@ ide_buffer_set_file_settings (IdeBuffer       *self,
 
   ide_clear_and_destroy_object (&self->file_settings);
   self->file_settings = g_object_ref (file_settings);
+
+  g_signal_group_set_target (self->file_settings_signals, file_settings);
+  on_settings_changed_newline_type_cb (self, NULL, self->file_settings);
 
   if (!ide_buffer_get_loading (self))
     ide_buffer_update_implicit_newline (self);
@@ -3927,6 +3982,51 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
   return IDE_PTR_ARRAY_STEAL_FULL (&ar);
 }
 
+static void
+ide_buffer_list_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
+                                     PeasPluginInfo         *plugin_info,
+                                     GObject                *extension,
+                                     gpointer                user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
+  GListStore *store = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_LIST_STORE (store));
+
+  g_list_store_append (store, resolver);
+}
+
+/**
+ * ide_buffer_list_symbol_resolvers:
+ * @self: a #IdeBuffer
+ *
+ * Gets the symbol resolvers for the buffer.
+ *
+ * Returns: (transfer full): a #GListModel of #IdeSymbolResolver
+ *
+ * Since: 45
+ */
+GListModel *
+ide_buffer_list_symbol_resolvers (IdeBuffer *self)
+{
+  g_autoptr(GListStore) store = NULL;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  store = g_list_store_new (IDE_TYPE_SYMBOL_RESOLVER);
+
+  if (self->symbol_resolvers != NULL)
+    ide_extension_set_adapter_foreach_by_priority (self->symbol_resolvers,
+                                                   ide_buffer_list_symbol_resolvers_cb,
+                                                   store);
+
+  return G_LIST_MODEL (g_steal_pointer (&store));
+}
+
 /**
  * ide_buffer_get_line_text:
  * @self: a #IdeBuffer
@@ -4390,7 +4490,7 @@ ide_buffer_set_charset (IdeBuffer  *self,
 GtkSourceNewlineType
 ide_buffer_get_newline_type (IdeBuffer *self)
 {
-  g_return_val_if_fail (IDE_IS_BUFFER (self), GTK_SOURCE_NEWLINE_TYPE_LF);
+  g_return_val_if_fail (IDE_IS_BUFFER (self), GTK_SOURCE_NEWLINE_TYPE_DEFAULT);
 
   return self->newline_type;
 }
@@ -4402,7 +4502,8 @@ ide_buffer_set_newline_type (IdeBuffer            *self,
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (newline_type == GTK_SOURCE_NEWLINE_TYPE_LF ||
                     newline_type == GTK_SOURCE_NEWLINE_TYPE_CR ||
-                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR_LF);
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR_LF ||
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_DEFAULT);
 
   if (newline_type == self->newline_type)
     return;

@@ -40,8 +40,6 @@ struct _GbpMenuSearchProvider
   GPtrArray *items;
 };
 
-static GIcon *default_gicon;
-
 static void
 populate_shortcut_info_cb (const IdeShortcutInfo *info,
                            gpointer               user_data)
@@ -195,7 +193,7 @@ gbp_menu_search_provider_dup_title (IdeSearchProvider *provider)
 static GIcon *
 gbp_menu_search_provider_dup_icon (IdeSearchProvider *provider)
 {
-  return g_themed_icon_new ("preferences-desktop-keyboard-shortcuts-symbolic");
+  return g_themed_icon_new ("builder-keyboard-shortcuts-symbolic");
 }
 
 static IdeSearchCategory
@@ -233,8 +231,6 @@ gbp_menu_search_provider_class_init (GbpMenuSearchProviderClass *klass)
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   i_object_class->destroy = gbp_menu_search_provider_destroy;
-
-  default_gicon = g_themed_icon_new ("preferences-desktop-keyboard-shortcuts-symbolic");
 }
 
 static void

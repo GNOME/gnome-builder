@@ -63,10 +63,5 @@ const char *ide_header_bar_get_menu_id (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_header_bar_set_menu_id (IdeHeaderBar *self,
                                         const char   *menu_id);
-IDE_AVAILABLE_IN_ALL
-gboolean    ide_header_bar_get_flat (IdeHeaderBar *self);
-IDE_AVAILABLE_IN_ALL
-void        ide_header_bar_set_flat    (IdeHeaderBar *self,
-                                        gboolean      flat);
 
 G_END_DECLS

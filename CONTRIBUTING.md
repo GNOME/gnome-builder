@@ -30,7 +30,7 @@ and we'd be happy to review your patch and help you get it merged.
 ## Asking for Help
 
 You can often find Builder contributors on our IRC channel at
-[irc://irc.gimp.net/#gnome-builder](irc://irc.gimp.net/#gnome-builder) or the
+[irc://irc.libera.chat/#gnome-builder](irc://irc.libera.chat/#gnome-builder) or the
 Matrix channel at [#gnome-builder:gnome.org](https://matrix.to/#/!owVIjvsVrBaEdelYem:matrix.org).
 If you have any questions, we'd be happy to help you.
 

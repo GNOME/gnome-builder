@@ -44,7 +44,7 @@ struct _GbpShellcmdCommandDialog
   GtkLabel              *shortcut_label;
   GtkButton             *save;
   GtkButton             *delete_button;
-  GtkSwitch             *use_shell;
+  AdwSwitchRow          *use_shell;
 
   char                  *accel;
 
@@ -295,7 +295,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->argv), argvstr);
   gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
   gtk_editable_set_text (GTK_EDITABLE (self->name), name);
-  gtk_switch_set_active (self->use_shell, use_shell);
+  adw_switch_row_set_active (self->use_shell, use_shell);
   set_accel (self, accel);
 
   /* locality value equates to position in list model for simplicity */
@@ -306,29 +306,6 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
       for (guint i = 0; env[i]; i++)
         gtk_string_list_append (self->envvars, env[i]);
     }
-
-  IDE_EXIT;
-}
-
-static void
-on_shortcut_dialog_response (GbpShellcmdCommandDialog *self,
-                             int                       response_id,
-                             IdeShortcutAccelDialog   *dialog)
-{
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
-  g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
-
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      const char *accel;
-
-      accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
-      set_accel (self, accel);
-    }
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
 
   IDE_EXIT;
 }
@@ -355,11 +332,10 @@ on_shortcut_activated_cb (GbpShellcmdCommandDialog *self,
                          "modal", TRUE,
                          "shortcut-title", name,
                          "title", _("Set Shortcut"),
-                         "use-header-bar", 1,
                          NULL);
   g_signal_connect_object (dialog,
-                           "response",
-                           G_CALLBACK (on_shortcut_dialog_response),
+                           "shortcut-set",
+                           G_CALLBACK (set_accel),
                            self,
                            G_CONNECT_SWAPPED);
   gtk_window_present (GTK_WINDOW (dialog));
@@ -435,7 +411,7 @@ command_save_action (GtkWidget  *widget,
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
   gbp_shellcmd_run_command_set_accelerator (self->command, self->accel);
   gbp_shellcmd_run_command_set_use_shell (self->command,
-                                          gtk_switch_get_active (self->use_shell));
+                                          adw_switch_row_get_active (self->use_shell));
 
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_environ (IDE_RUN_COMMAND (self->command),
@@ -471,6 +447,7 @@ select_folder_response_cb (GtkFileChooserNative *native,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
 }
 
 static void

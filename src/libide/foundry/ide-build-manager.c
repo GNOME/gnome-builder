@@ -78,7 +78,7 @@ struct _IdeBuildManager
 
   IdePipeline      *pipeline;
   GDateTime        *last_build_time;
-  IdeSignalGroup   *pipeline_signals;
+  GSignalGroup     *pipeline_signals;
 
   IdeExtensionSetAdapter
                    *build_target_providers;
@@ -718,7 +718,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  "device", device,
                                  NULL);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (self->pipeline));
-  ide_signal_group_set_target (self->pipeline_signals, self->pipeline);
+  g_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
   /*
    * Create a task to manage our async pipeline initialization state.
@@ -1236,33 +1236,33 @@ ide_build_manager_init (IdeBuildManager *self)
   self->cancellable = g_cancellable_new ();
   self->needs_rediagnose = TRUE;
 
-  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = g_signal_group_new (IDE_TYPE_PIPELINE);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (ide_build_manager_handle_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "notify::busy",
                                    G_CALLBACK (ide_build_manager_notify_busy),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "notify::message",
                                    G_CALLBACK (ide_build_manager_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (ide_build_manager_pipeline_started),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
+  g_signal_group_connect_object (self->pipeline_signals,
                                    "finished",
                                    G_CALLBACK (ide_build_manager_pipeline_finished),
                                    self,

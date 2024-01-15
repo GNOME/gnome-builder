@@ -53,20 +53,16 @@ platformui_create_style_selector (IdeTweaks       *tweaks,
                                   IdeTweaksWidget *instance)
 {
   GtkBox *box;
-  GtkBox *options;
 
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
   g_assert (IDE_IS_TWEAKS (tweaks));
 
   box = g_object_new (GTK_TYPE_BOX,
                       "css-name", "list",
+                      "homogeneous", TRUE,
                       NULL);
   gtk_widget_add_css_class (GTK_WIDGET (box), "boxed-list");
   gtk_widget_add_css_class (GTK_WIDGET (box), "style-variant");
-
-  options = g_object_new (GTK_TYPE_BOX,
-                          "halign", GTK_ALIGN_CENTER,
-                          NULL);
 
   for (guint i = 0; i < G_N_ELEMENTS (variants); i++)
     {
@@ -99,10 +95,8 @@ platformui_create_style_selector (IdeTweaks       *tweaks,
                             NULL);
       gtk_box_append (vbox, GTK_WIDGET (button));
       gtk_box_append (vbox, GTK_WIDGET (label));
-      gtk_box_append (options, GTK_WIDGET (vbox));
+      gtk_box_append (box, GTK_WIDGET (vbox));
     }
-
-  gtk_box_append (box, GTK_WIDGET (options));
 
   return GTK_WIDGET (box);
 }

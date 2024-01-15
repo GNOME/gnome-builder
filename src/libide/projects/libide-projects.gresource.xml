@@ -15,5 +15,7 @@
     <file>licenses/lgpl_3_short</file>
     <file>licenses/mit_x11_full</file>
     <file>licenses/mit_x11_short</file>
+    <file>licenses/mpl_2_full</file>
+    <file>licenses/mpl_2_short</file>
   </gresource>
 </gresources>

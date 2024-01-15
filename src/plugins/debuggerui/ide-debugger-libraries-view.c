@@ -39,7 +39,7 @@ struct _IdeDebuggerLibrariesView
   GtkTreeViewColumn   *target_column;
 
   /* Onwed refnerences */
-  IdeSignalGroup *debugger_signals;
+  GSignalGroup   *debugger_signals;
 };
 
 enum {
@@ -55,7 +55,7 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_debugger_libraries_view_bind (IdeDebuggerLibrariesView *self,
                                   IdeDebugger              *debugger,
-                                  IdeSignalGroup           *signals)
+                                  GSignalGroup             *signals)
 {
   g_assert (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
@@ -66,10 +66,10 @@ ide_debugger_libraries_view_bind (IdeDebuggerLibrariesView *self,
 
 static void
 ide_debugger_libraries_view_unbind (IdeDebuggerLibrariesView *self,
-                                    IdeSignalGroup           *signals)
+                                    GSignalGroup             *signals)
 {
   g_assert (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
 }
@@ -298,7 +298,7 @@ ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
                 "attributes", tt_attrs,
                 NULL);
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
   g_signal_connect_swapped (self->debugger_signals,
                             "bind",
@@ -310,22 +310,22 @@ ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
                             G_CALLBACK (ide_debugger_libraries_view_unbind),
                             self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_libraries_view_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_libraries_view_stopped),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "library-loaded",
                                     G_CALLBACK (ide_debugger_libraries_view_library_loaded),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "library-unloaded",
                                     G_CALLBACK (ide_debugger_libraries_view_library_unloaded),
                                     self);
@@ -359,7 +359,7 @@ ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return ide_signal_group_get_target (self->debugger_signals);
+    return _g_signal_group_get_target (self->debugger_signals);
   return NULL;
 }
 
@@ -370,6 +370,6 @@ ide_debugger_libraries_view_set_debugger (IdeDebuggerLibrariesView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  ide_signal_group_set_target (self->debugger_signals, debugger);
+  g_signal_group_set_target (self->debugger_signals, debugger);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 }

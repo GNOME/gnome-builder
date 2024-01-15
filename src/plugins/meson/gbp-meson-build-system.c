@@ -896,8 +896,9 @@ split_language (gchar *raw_language_string)
   g_string_replace (str, "'", "", -1);
   g_string_replace (str, " ", "", -1);
   g_string_replace (str, "\n", "", -1);
+  if (str->len && str->str[str->len-1] == ',')
+    g_string_truncate (str, str->len-1);
   copy = g_string_free (str, FALSE);
-
   return g_strsplit (copy, ",", -1);
 }
 

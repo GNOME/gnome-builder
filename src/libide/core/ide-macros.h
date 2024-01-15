@@ -365,6 +365,21 @@ ide_steal_fd (int *fd)
   return ret;
 }
 
+static inline gboolean
+_g_signal_group_get_target_cb (gpointer data)
+{
+  return G_SOURCE_REMOVE;
+}
+
+static inline gpointer
+_g_signal_group_get_target (GSignalGroup *sg)
+{
+  gpointer ret = g_signal_group_dup_target (sg);
+  if (ret != NULL)
+    g_idle_add_full (G_PRIORITY_HIGH_IDLE, _g_signal_group_get_target_cb, ret, g_object_unref);
+  return ret;
+}
+
 #define IDE_DEFINE_BOOLEAN_PROPERTY(name, value, flags, PROP)               \
   properties[PROP_##PROP] =                                                 \
     g_param_spec_boolean(name, NULL, NULL, value,                           \

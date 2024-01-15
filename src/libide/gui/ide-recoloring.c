@@ -28,22 +28,16 @@
 
 #define SHARED_CSS \
   "@define-color card_fg_color @window_fg_color;\n" \
-  "@define-color headerbar_fg_color @window_fg_color;\n" \
   "@define-color headerbar_border_color @window_fg_color;\n" \
+  "@define-color sidebar_backdrop_color mix(@sidebar_bg_color, @window_bg_color, .5);\n" \
   "@define-color popover_fg_color @window_fg_color;\n" \
   "@define-color dialog_fg_color @window_fg_color;\n" \
   "@define-color dark_fill_bg_color @headerbar_bg_color;\n" \
-  "@define-color view_bg_color @card_bg_color;\n" \
   "@define-color view_fg_color @window_fg_color;\n"
 #define LIGHT_CSS_SUFFIX \
-  "@define-color popover_bg_color mix(@window_bg_color, white, .1);\n" \
-  "@define-color dialog_bg_color @window_bg_color;\n" \
-  "@define-color card_bg_color alpha(white, .6);\n"
+  "@define-color card_bg_color alpha(white, .8);\n"
 #define DARK_CSS_SUFFIX \
-  "@define-color popover_bg_color mix(@window_bg_color, white, 0.07);\n" \
-  "@define-color dialog_bg_color mix(@window_bg_color, white, 0.07);\n" \
-  "@define-color card_bg_color alpha(white, .08);\n" \
-  "@define-color view_bg_color darker(@window_bg_color);\n"
+  "@define-color card_bg_color alpha(white, .08);\n"
 
 enum {
   FOREGROUND,
@@ -196,21 +190,26 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   const GdkRGBA *alt;
   GdkRGBA text_bg;
   GdkRGBA text_fg;
+  GdkRGBA numbers_bg;
+  GdkRGBA numbers_fg;
   GdkRGBA right_margin;
-  const char *id;
   const char *name;
   GString *str;
   GdkRGBA color;
   gboolean is_dark;
-  gboolean has_fg;
-  gboolean has_bg;
+  gboolean has_fg, has_bg;
+  gboolean has_numbers_fg, has_numbers_bg;
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
-  /* Don't restyle Adwaita as we already have it */
-  id = gtk_source_style_scheme_get_name (style_scheme);
-  if (g_str_has_prefix (id, "Adwaita"))
-    return NULL;
+#if 0
+  {
+    /* Don't restyle Adwaita as we already have it */
+    const char *id = gtk_source_style_scheme_get_name (style_scheme);
+    if (g_str_has_prefix (id, "Adwaita"))
+      return NULL;
+  }
+#endif
 
   name = gtk_source_style_scheme_get_name (style_scheme);
   is_dark = ide_source_style_scheme_is_dark (style_scheme);
@@ -223,15 +222,25 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   has_bg = get_background (style_scheme, "text", &text_bg);
   has_fg = get_foreground (style_scheme, "text", &text_fg);
+  has_numbers_bg = get_background (style_scheme, "line-numbers", &numbers_bg);
+  has_numbers_fg = get_foreground (style_scheme, "line-numbers", &numbers_fg);
   get_background (style_scheme, "right-margin", &right_margin);
   right_margin.alpha = 1;
 
+  if (has_numbers_bg && gdk_rgba_equal (&numbers_bg, &text_bg))
+    has_numbers_bg = FALSE;
+
+  if (has_numbers_fg && gdk_rgba_equal (&numbers_fg, &text_fg))
+    has_numbers_fg = FALSE;
+
   if (get_metadata_color (style_scheme, "window_bg_color", &color))
     define_color (str, "window_bg_color", &color);
-  else if (has_bg && has_fg)
+  else if (has_bg && has_fg && is_dark)
     define_color (str, "window_bg_color", &text_bg);
+  else if (has_bg && has_fg)
+    define_color_mixed (str, "window_bg_color", &text_bg, &text_fg, .03);
   else if (is_dark)
-    define_color_mixed (str, "window_bg_color", &text_bg, alt, .025);
+    define_color_mixed (str, "window_bg_color", &text_bg, &white, .025);
   else
     define_color_mixed (str, "window_bg_color", &text_bg, &white, .1);
 
@@ -246,12 +255,8 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   if (get_metadata_color (style_scheme, "headerbar_bg_color", &color))
     define_color (str, "headerbar_bg_color", &color);
-  else if (has_bg && has_fg)
-    define_color_mixed (str, "headerbar_bg_color", &text_bg, &text_fg, .085);
-  else if (is_dark)
-    define_color_mixed (str, "headerbar_bg_color", &text_bg, alt, .025);
   else
-    define_color_mixed (str, "headerbar_bg_color", &text_bg, &white, .1);
+    define_color (str, "headerbar_bg_color", &text_bg);
 
   if (get_metadata_color (style_scheme, "headerbar_fg_color", &color))
     define_color (str, "headerbar_fg_color", &color);
@@ -262,7 +267,34 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   else
     define_color_mixed (str, "headerbar_fg_color", &text_bg, alt, .025);
 
-  define_color_mixed (str, "view_bg_color", &text_bg, &white, is_dark ? .1 : .3);
+  if (has_numbers_bg)
+    define_color_mixed (str, "sidebar_bg_color", &numbers_bg, &text_bg, .25);
+  else if (has_bg && has_fg)
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &text_fg, .085);
+   else if (is_dark)
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .07);
+   else
+    define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .1);
+
+  if (has_bg && has_fg)
+    define_color (str, "sidebar_fg_color", &text_fg);
+  else if (is_dark)
+    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .05);
+  else
+    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .025);
+
+  define_color_mixed (str, "popover_bg_color", &text_bg, &white, is_dark ? .07 : .25);
+
+  if (is_dark)
+    define_color_mixed (str, "dialog_bg_color", &text_bg, &white, .07);
+  else
+    define_color (str, "dialog_bg_color", &text_bg);
+
+  if (is_dark)
+    define_color_mixed (str, "view_bg_color", &text_bg, &black, .1);
+  else
+    define_color_mixed (str, "view_bg_color", &text_bg, &white, .3);
+
   define_color (str, "view_fg_color", &text_fg);
 
   if (get_metadata_color (style_scheme, "accent_bg_color", &color) ||

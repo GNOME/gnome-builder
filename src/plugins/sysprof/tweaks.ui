@@ -39,6 +39,18 @@
                           </object>
                         </child>
                         <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Scheduler Details</property>
+                            <property name="subtitle" translatable="yes">Track when processes are scheduled per CPU</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.sysprof</property>
+                                <property name="schema-key">scheduler-details</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="IdeTweaksCombo">
                             <property name="title" translatable="yes">CPU Governor</property>
                             <property name="subtitle" translatable="yes">Force performance mode while profiling</property>
@@ -86,6 +98,34 @@
                               <object class="IdeTweaksSetting">
                                 <property name="schema-id">org.gnome.builder.sysprof</property>
                                 <property name="schema-key">memprof-aid</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Session Bus</property>
+                            <property name="subtitle" translatable="yes">Record D-Bus messages on the session bus</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.sysprof</property>
+                                <property name="schema-key">session-bus</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">System Bus</property>
+                            <property name="subtitle" translatable="yes">Record D-Bus messages on the system bus</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.sysprof</property>
+                                <property name="schema-key">system-bus</property>
                               </object>
                             </property>
                           </object>

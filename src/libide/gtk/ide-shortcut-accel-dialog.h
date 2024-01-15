@@ -24,7 +24,7 @@
 # error "Only <libide-gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include <libide-core.h>
 
@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SHORTCUT_ACCEL_DIALOG (ide_shortcut_accel_dialog_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeShortcutAccelDialog, ide_shortcut_accel_dialog, IDE, SHORTCUT_ACCEL_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (IdeShortcutAccelDialog, ide_shortcut_accel_dialog, IDE, SHORTCUT_ACCEL_DIALOG, AdwWindow)
 
 IDE_AVAILABLE_IN_ALL
 GtkWidget              *ide_shortcut_accel_dialog_new                (void);

@@ -1,0 +1,19 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2024 Bill Huang
+Description=Provides integration with ElixirLS
+Embedded=ide_lsp_plugin_register_types
+Module=elixir_ls
+Name=ElixirLS
+X-Category=lsps
+X-Code-Action-Languages=elixir
+X-Completion-Provider-Languages=elixir
+X-Diagnostic-Provider-Languages=elixir
+X-Formatter-Languages=elixir
+X-Highlighter-Languages=elixir
+X-Hover-Provider-Languages=elixir
+X-LSP-Command=elixir-ls
+X-LSP-Languages=elixir
+X-LSP-Settings=settings.json
+X-Rename-Provider-Languages=elixir
+X-Symbol-Resolver-Languages=elixir

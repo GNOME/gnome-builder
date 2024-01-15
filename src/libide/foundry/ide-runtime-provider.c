@@ -94,11 +94,7 @@ ide_runtime_provider_destroy (IdeObject *object)
 
   dex_clear (&priv->loaded);
 
-  if (priv->runtimes != NULL)
-    {
-      g_list_store_remove_all (G_LIST_STORE (priv->runtimes));
-      g_clear_object (&priv->runtimes);
-    }
+  g_list_store_remove_all (G_LIST_STORE (priv->runtimes));
 
   IDE_OBJECT_CLASS (ide_runtime_provider_parent_class)->destroy (object);
 
@@ -106,9 +102,23 @@ ide_runtime_provider_destroy (IdeObject *object)
 }
 
 static void
+ide_runtime_provider_finalize (GObject *object)
+{
+  IdeRuntimeProvider *self = (IdeRuntimeProvider *)object;
+  IdeRuntimeProviderPrivate *priv = ide_runtime_provider_get_instance_private (self);
+
+  g_clear_object (&priv->runtimes);
+
+  G_OBJECT_CLASS (ide_runtime_provider_parent_class)->finalize (object);
+}
+
+static void
 ide_runtime_provider_class_init (IdeRuntimeProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_runtime_provider_finalize;
 
   i_object_class->destroy = ide_runtime_provider_destroy;
 

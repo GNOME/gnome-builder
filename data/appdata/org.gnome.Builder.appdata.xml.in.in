@@ -6,7 +6,11 @@
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
   <summary>An IDE for GNOME</summary>
+  <!-- developer_name tag deprecated with Appstream 1.0 -->
   <developer_name>Christian Hergert, et al.</developer_name>
+  <developer id="gnome.org">
+    <name>Christian Hergert, et al.</name>
+  </developer>
 
   <description>
     <p>
@@ -76,6 +80,8 @@
   <url type="bugtracker">https://gitlab.gnome.org/GNOME/gnome-builder/issues</url>
   <url type="donation">https://www.gnome.org/donate/</url>
   <url type="help">https://builder.readthedocs.io</url>
+  <url type="translate">https://l10n.gnome.org/module/gnome-builder/</url>
+  <url type="vcs-browser">https://gitlab.gnome.org/GNOME/gnome-builder</url>
   <project_group>GNOME</project_group>
 
   <kudos>
@@ -90,37 +96,8 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="44.1" date="2023-03-20"/>
-    <release version="44.0" date="2023-03-17"/>
+    <release version="45.0" date="2023-09-16"/>
   </releases>
 
-  <content_rating type="oars-1.1">
-    <content_attribute id="violence-cartoon">none</content_attribute>
-    <content_attribute id="violence-fantasy">none</content_attribute>
-    <content_attribute id="violence-realistic">none</content_attribute>
-    <content_attribute id="violence-bloodshed">none</content_attribute>
-    <content_attribute id="violence-sexual">none</content_attribute>
-    <content_attribute id="violence-desecration">none</content_attribute>
-    <content_attribute id="violence-slavery">none</content_attribute>
-    <content_attribute id="violence-worship">none</content_attribute>
-    <content_attribute id="drugs-alcohol">none</content_attribute>
-    <content_attribute id="drugs-narcotics">none</content_attribute>
-    <content_attribute id="drugs-tobacco">none</content_attribute>
-    <content_attribute id="sex-nudity">none</content_attribute>
-    <content_attribute id="sex-themes">none</content_attribute>
-    <content_attribute id="sex-homosexuality">none</content_attribute>
-    <content_attribute id="sex-prostitution">none</content_attribute>
-    <content_attribute id="sex-adultery">none</content_attribute>
-    <content_attribute id="sex-appearance">none</content_attribute>
-    <content_attribute id="language-profanity">none</content_attribute>
-    <content_attribute id="language-humor">none</content_attribute>
-    <content_attribute id="language-discrimination">none</content_attribute>
-    <content_attribute id="social-chat">none</content_attribute>
-    <content_attribute id="social-info">none</content_attribute>
-    <content_attribute id="social-audio">none</content_attribute>
-    <content_attribute id="social-location">none</content_attribute>
-    <content_attribute id="social-contacts">none</content_attribute>
-    <content_attribute id="money-purchasing">none</content_attribute>
-    <content_attribute id="money-gambling">none</content_attribute>
-  </content_rating>
+  <content_rating type="oars-1.1" />
 </component>

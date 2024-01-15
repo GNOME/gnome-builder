@@ -126,6 +126,18 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
     }
 }
 
+static int
+sort_by_path (gconstpointer a,
+              gconstpointer b)
+{
+  GFile *file_a = *(GFile * const *)a;
+  GFile *file_b = *(GFile * const *)b;
+  g_autofree char *collate_a = g_utf8_collate_key_for_filename (g_file_peek_path (file_a), -1);
+  g_autofree char *collate_b = g_utf8_collate_key_for_filename (g_file_peek_path (file_b), -1);
+
+  return g_strcmp0 (collate_a, collate_b);
+}
+
 static gchar *
 gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery,
                                              GFile                    *project_file,
@@ -147,6 +159,16 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
   gbp_flatpak_build_system_discovery_find_manifests (project_file, manifests, 0, cancellable);
 
   IDE_TRACE_MSG ("We found %u potential manifests", manifests->len);
+
+  g_ptr_array_sort (manifests, sort_by_path);
+
+#ifdef IDE_ENABLE_TRACE
+  for (guint i = 0; i < manifests->len; i++)
+    IDE_TRACE_MSG ("  Manifest[%u]: %s\n",
+                   i,
+                   g_file_peek_path (g_ptr_array_index (manifests, i)));
+#endif
+
 
   if (g_file_query_file_type (project_file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
     project_dir = g_object_ref (project_file);
@@ -187,23 +209,24 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
 
       root_node = json_parser_get_root (parser);
 
-      if (NULL != (root_object = json_node_get_object (root_node)) &&
-          NULL != (app_id = json_object_get_member (root_object, "app-id")) &&
+      if ((root_object = json_node_get_object (root_node)) &&
+          ((app_id = json_object_get_member (root_object, "id")) ||
+           (app_id = json_object_get_member (root_object, "app-id"))) &&
           JSON_NODE_HOLDS_VALUE (app_id) &&
-          NULL != (app_id_str = json_node_get_string (app_id)) &&
+          (app_id_str = json_node_get_string (app_id)) &&
           g_str_has_prefix (base, app_id_str) &&
-          NULL != (modules_node = json_object_get_member (root_object, "modules")) &&
+          (modules_node = json_object_get_member (root_object, "modules")) &&
           JSON_NODE_HOLDS_ARRAY (modules_node) &&
-          NULL != (modules_array = json_node_get_array (modules_node)) &&
+          (modules_array = json_node_get_array (modules_node)) &&
           /* TODO: Discovery matching source element */
           (len = json_array_get_length (modules_array)) > 0 &&
-          NULL != (source_node = json_array_get_element (modules_array, len - 1)) &&
+          (source_node = json_array_get_element (modules_array, len - 1)) &&
           JSON_NODE_HOLDS_OBJECT (source_node) &&
-          NULL != (source_object = json_node_get_object (source_node)) &&
+          (source_object = json_node_get_object (source_node)) &&
           json_object_has_member (source_object, "buildsystem") &&
-          NULL != (buildsystem_node = json_object_get_member (source_object, "buildsystem")) &&
+          (buildsystem_node = json_object_get_member (source_object, "buildsystem")) &&
           JSON_NODE_HOLDS_VALUE (buildsystem_node) &&
-          NULL != (buildsystem = json_node_get_string (buildsystem_node)) &&
+          (buildsystem = json_node_get_string (buildsystem_node)) &&
           *buildsystem != '\0')
         {
           gchar *ret;
@@ -218,20 +241,24 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
               buildsystem = "directory";
 
               /* Check for a cargo project */
-              sdk_extensions = json_object_get_member (root_object, "sdk-extensions");
-              sdk_extensions_array = json_node_get_array (sdk_extensions);
-              len = json_array_get_length (sdk_extensions_array);
-              for (guint j = 0; j < len; j++)
+              if ((sdk_extensions = json_object_get_member (root_object, "sdk-extensions")) &&
+                  JSON_NODE_HOLDS_ARRAY (sdk_extensions) &&
+                  (sdk_extensions_array = json_node_get_array (sdk_extensions)))
                 {
-                  const char *extension = json_array_get_string_element (sdk_extensions_array, j);
+                  guint ar_len = json_array_get_length (sdk_extensions_array);
 
-                  if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
-                      ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
+                  for (guint j = 0; j < ar_len; j++)
                     {
-                      g_autoptr(GFile) Cargo_toml = g_file_get_child (project_dir, "Cargo.toml");
+                      const char *extension = json_array_get_string_element (sdk_extensions_array, j);
 
-                      if (g_file_query_exists (Cargo_toml, NULL))
-                        buildsystem = "cargo";
+                      if (ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-stable") ||
+                          ide_str_equal0 (extension, "org.freedesktop.Sdk.Extension.rust-nightly"))
+                        {
+                          g_autoptr(GFile) Cargo_toml = g_file_get_child (project_dir, "Cargo.toml");
+
+                          if (g_file_query_exists (Cargo_toml, NULL))
+                            buildsystem = "cargo";
+                        }
                     }
                 }
             }

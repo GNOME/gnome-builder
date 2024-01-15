@@ -79,6 +79,7 @@ gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel *self,
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  g_object_unref (native);
 
   IDE_EXIT;
 }
@@ -143,6 +144,8 @@ static void
 gbp_testui_output_panel_init (GbpTestuiOutputPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET(self));
+
+  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
 
   panel_widget_set_title (PANEL_WIDGET (self), _("Unit Test Output"));
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-unit-tests-symbolic");

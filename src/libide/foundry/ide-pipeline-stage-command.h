@@ -42,13 +42,19 @@ struct _IdePipelineStageCommandClass
 };
 
 IDE_AVAILABLE_IN_ALL
-IdePipelineStage *ide_pipeline_stage_command_new               (IdeRunCommand *build_command,
-                                                                IdeRunCommand *clean_command);
+IdePipelineStage *ide_pipeline_stage_command_new                    (IdeRunCommand *build_command,
+                                                                     IdeRunCommand *clean_command);
 IDE_AVAILABLE_IN_ALL
-void              ide_pipeline_stage_command_set_build_command (IdePipelineStageCommand *self,
-                                                                IdeRunCommand           *build_command);
+void              ide_pipeline_stage_command_set_build_command      (IdePipelineStageCommand *self,
+                                                                     IdeRunCommand           *build_command);
 IDE_AVAILABLE_IN_ALL
-void              ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
-                                                                IdeRunCommand           *clean_command);
+void              ide_pipeline_stage_command_set_clean_command      (IdePipelineStageCommand *self,
+                                                                     IdeRunCommand           *clean_command);
+IDE_AVAILABLE_IN_45
+void              ide_pipeline_stage_command_set_stdout_path        (IdePipelineStageCommand *self,
+                                                                     const char              *stdout_path);
+IDE_AVAILABLE_IN_45
+void              ide_pipeline_stage_command_set_ignore_exit_status (IdePipelineStageCommand *self,
+                                                                     gboolean                 ignore_exit_status);
 
 G_END_DECLS

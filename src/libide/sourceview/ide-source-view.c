@@ -375,12 +375,16 @@ ide_source_view_insert_text_cb (IdeSourceView *self,
    * See GNOME/gnome-builder#1870.
    */
   if (self->waiting_for_paste)
-    {
-      self->waiting_for_paste = FALSE;
-      return;
-    }
+    return;
 
+  /* Ignore anything odd that we won't be able to process or is outside
+   * of a key-press event (such as buffer changes from plugins).
+   */
   if (length != 1 || !self->in_key_press)
+    return;
+
+  /* Ignore if we are in an undo/redo operation */
+  if (self->undo_recurse_count > 0 || self->redo_recurse_count > 0)
     return;
 
   ide_buffer_get_selection_bounds (buffer, &insert, NULL);
@@ -462,7 +466,9 @@ ide_source_view_delete_range_cb (IdeSourceView *self,
 
   if (!self->in_key_press ||
       !self->in_backspace ||
-      !self->insert_matching_brace)
+      !self->insert_matching_brace ||
+      self->undo_recurse_count ||
+      self->redo_recurse_count)
     return;
 
   gtk_text_iter_order (begin, end);
@@ -482,6 +488,63 @@ ide_source_view_delete_range_cb (IdeSourceView *self,
   /* Remove matching }])"' */
   if (match && gtk_text_iter_get_char (end) == match)
     gtk_text_iter_forward_char (end);
+}
+
+static void
+ide_source_view_buffer_before_undo_cb (IdeSourceView *self,
+                                       IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->undo_recurse_count++;
+}
+
+static void
+ide_source_view_buffer_after_undo_cb (IdeSourceView *self,
+                                      IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->undo_recurse_count--;
+}
+
+static void
+ide_source_view_buffer_before_redo_cb (IdeSourceView *self,
+                                       IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->redo_recurse_count++;
+}
+
+static void
+ide_source_view_buffer_after_redo_cb (IdeSourceView *self,
+                                      IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->redo_recurse_count--;
+}
+
+static void
+ide_source_view_buffer_paste_done_cb (IdeSourceView *self,
+                                      GdkClipboard  *clipboard,
+                                      IdeBuffer     *buffer)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GDK_IS_CLIPBOARD (clipboard));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->waiting_for_paste = FALSE;
+
+  IDE_EXIT;
 }
 
 static void
@@ -534,6 +597,35 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Track when a paste operation has completed */
+  g_signal_connect_object (buffer,
+                           "paste-done",
+                           G_CALLBACK (ide_source_view_buffer_paste_done_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Track when we're within an undo/redo operation */
+  g_signal_connect_object (buffer,
+                           "undo",
+                           G_CALLBACK (ide_source_view_buffer_before_undo_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (buffer,
+                           "undo",
+                           G_CALLBACK (ide_source_view_buffer_after_undo_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_connect_object (buffer,
+                           "redo",
+                           G_CALLBACK (ide_source_view_buffer_before_redo_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (buffer,
+                           "redo",
+                           G_CALLBACK (ide_source_view_buffer_after_redo_cb),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+
   /* Load addins immediately */
   language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
   _ide_source_view_addins_init (self, language);
@@ -546,6 +638,22 @@ ide_source_view_disconnect_buffer (IdeSourceView *self)
 
   if (self->buffer == NULL)
     return;
+
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_paste_done_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_before_undo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_after_undo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_before_redo_cb),
+                                        self);
+  g_signal_handlers_disconnect_by_func (self->buffer,
+                                        G_CALLBACK (ide_source_view_buffer_after_redo_cb),
+                                        self);
 
   _ide_source_view_addins_shutdown (self);
 
@@ -1319,6 +1427,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_0, GDK_CONTROL_MASK, "zoom.one", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_j, GDK_CONTROL_MASK, "selection.join", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_j, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "selection.sort", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "buffer.select-line", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK, "buffer.delete-line", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK|GDK_ALT_MASK, "buffer.duplicate-line", NULL);
@@ -1509,17 +1619,30 @@ ide_source_view_get_visual_position_range (IdeSourceView *self,
 
   if (range != NULL)
     {
-      int selection_line = gtk_text_iter_get_line (&selection);
+      int selection_line;
+      int insert_offset = gtk_text_iter_get_offset (&insert);
+      int selection_offset = gtk_text_iter_get_offset (&selection);
+
+      /* Since insert or selection iterator is be located one symbol away from selection
+       * we have to adjust it before calculating multiline range
+       */
+      if (insert_offset > selection_offset)
+        {
+          gtk_text_iter_backward_char (&insert);
+        }
+      else if (insert_offset < selection_offset)
+        {
+          gtk_text_iter_backward_char (&selection);
+        }
+      selection_line = gtk_text_iter_get_line (&selection);
+      insert_line = gtk_text_iter_get_line (&insert);
 
       if (insert_line != selection_line)
         {
-          *range = ABS (selection_line - insert_line);
+          *range = ABS (selection_line - insert_line) + 1;
         }
       else
         {
-          int insert_offset = gtk_text_iter_get_offset (&insert);
-          int selection_offset = gtk_text_iter_get_offset (&selection);
-
           *range = ABS (selection_offset - insert_offset);
         }
     }

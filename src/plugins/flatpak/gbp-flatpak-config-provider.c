@@ -30,6 +30,7 @@
 #include "gbp-flatpak-manifest.h"
 
 #define DISCOVERY_MAX_DEPTH 3
+#define MAX_MANIFEST_SIZE_IN_BYTES (1024L*256L) /* 256kb */
 
 struct _GbpFlatpakConfigProvider
 {
@@ -292,6 +293,28 @@ manifest_needs_reload (GbpFlatpakConfigProvider *self,
   IDE_EXIT;
 }
 
+static int
+sort_by_path (gconstpointer a,
+              gconstpointer b)
+{
+  GbpFlatpakManifest *manifest_a = *(GbpFlatpakManifest **)a;
+  GbpFlatpakManifest *manifest_b = *(GbpFlatpakManifest **)b;
+  GFile *file_a = gbp_flatpak_manifest_get_file (manifest_a);
+  GFile *file_b = gbp_flatpak_manifest_get_file (manifest_b);
+  const char *path_a = g_file_peek_path (file_a);
+  const char *path_b = g_file_peek_path (file_b);
+  gboolean is_devel_a = strstr (path_a, ".Devel.") != NULL;
+  gboolean is_devel_b = strstr (path_b, ".Devel.") != NULL;
+
+  if (is_devel_a && !is_devel_b)
+    return -1;
+
+  if (!is_devel_a && is_devel_b)
+    return 1;
+
+  return g_utf8_collate (path_a, path_b);
+}
+
 static void
 gbp_flatpak_config_provider_load_worker (IdeTask      *task,
                                          gpointer      source_object,
@@ -315,12 +338,21 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
     {
       GFile *file = g_ptr_array_index (files, i);
       g_autoptr(GbpFlatpakManifest) manifest = NULL;
+      g_autoptr(GFileInfo) info = NULL;
       g_autoptr(GError) error = NULL;
       g_autofree gchar *name = NULL;
 
       g_assert (G_IS_FILE (file));
 
       name = g_file_get_basename (file);
+
+      if (!(info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, cancellable, NULL)) ||
+          g_file_info_get_size (info) > MAX_MANIFEST_SIZE_IN_BYTES)
+        {
+          g_debug ("Ignoring %s as potential manifest, file size too large", name);
+          continue;
+        }
+
       manifest = gbp_flatpak_manifest_new (file, name);
       ide_object_append (IDE_OBJECT (self), IDE_OBJECT (manifest));
 
@@ -336,6 +368,8 @@ gbp_flatpak_config_provider_load_worker (IdeTask      *task,
 
       g_ptr_array_add (manifests, g_steal_pointer (&manifest));
     }
+
+  g_ptr_array_sort (manifests, sort_by_path);
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&manifests),
@@ -502,7 +536,10 @@ gbp_flatpak_config_provider_load_client_cb (GObject      *object,
                            G_CONNECT_SWAPPED);
 
   ide_g_file_find_with_depth_async (workdir,
-                                    "*.json",
+                                    /* expect a.b.json at least, if not
+                                     * a.b.c.json or a.b.c.d.json or more.
+                                     */
+                                    "*.*.json",
                                     DISCOVERY_MAX_DEPTH,
                                     ide_task_get_cancellable (task),
                                     load_find_files_cb,

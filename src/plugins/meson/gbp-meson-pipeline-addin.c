@@ -212,6 +212,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdeRunCommand) clean_command = NULL;
   g_autoptr(IdeRunCommand) config_command = NULL;
   g_autoptr(IdeRunCommand) install_command = NULL;
+  g_autoptr(IdeRunCommand) devenv_command = NULL;
   IdePipelineStage *stage;
   g_autofree char *build_dot_ninja = NULL;
   g_autofree char *crossbuild_file = NULL;
@@ -302,20 +303,13 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
 
   /* Setup stage to extract "devenv" settings */
   devenv_file = ide_pipeline_build_builddir_path (pipeline, ".gnome-builder-devenv", NULL);
-  devenv_launcher = ide_subprocess_launcher_new (0);
-  ide_subprocess_launcher_set_stdout_file_path (devenv_launcher, devenv_file);
-  ide_subprocess_launcher_push_args (devenv_launcher, IDE_STRV_INIT ("meson", "devenv", "--dump"));
-  ide_subprocess_launcher_set_cwd (devenv_launcher, ide_pipeline_get_builddir (pipeline));
-  devenv_stage = ide_pipeline_stage_launcher_new (ide_object_get_context (IDE_OBJECT (pipeline)), devenv_launcher);
-  ide_pipeline_stage_launcher_set_use_pty (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), FALSE);
-  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (devenv_stage), TRUE);
-  ide_pipeline_stage_set_name (devenv_stage, _("Cache development environment"));
-  g_signal_connect (devenv_stage, "query", G_CALLBACK (devenv_query_cb), NULL);
-  id = ide_pipeline_attach (pipeline,
-                            IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
-                            0,
-                            devenv_stage);
-  ide_pipeline_addin_track (addin, id);
+  devenv_command = create_run_command (meson, "devenv", "--dump", NULL);
+  stage = attach_run_command (self, pipeline, devenv_command, NULL,
+                              _("Cache development environment"),
+                              IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER);
+  ide_pipeline_stage_command_set_stdout_path (IDE_PIPELINE_STAGE_COMMAND (stage), devenv_file);
+  ide_pipeline_stage_command_set_ignore_exit_status (IDE_PIPELINE_STAGE_COMMAND (stage), TRUE);
+  g_signal_connect (stage, "query", G_CALLBACK (devenv_query_cb), NULL);
 
   IDE_EXIT;
 }

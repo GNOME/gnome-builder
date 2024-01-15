@@ -91,7 +91,7 @@ present_greeter_with_page (GSimpleAction *action,
   if (param != NULL &&
       (name = g_variant_get_string (param, NULL)) &&
       !ide_str_empty0 (name))
-    ide_greeter_workspace_set_page_name (workspace, name);
+    ide_greeter_workspace_push_page_by_tag (workspace, name);
 
   ide_workbench_focus_workspace (ide_workspace_get_workbench (IDE_WORKSPACE (workspace)),
                                  IDE_WORKSPACE (workspace));

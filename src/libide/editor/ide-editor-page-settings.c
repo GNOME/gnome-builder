@@ -56,12 +56,12 @@ _ide_editor_page_settings_reload (IdeEditorPage *self)
   g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
   g_return_if_fail (IDE_IS_BUFFER (self->buffer));
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self->view));
-  g_return_if_fail (IDE_IS_BINDING_GROUP (self->buffer_file_settings));
+  g_return_if_fail (G_IS_BINDING_GROUP (self->buffer_file_settings));
 
   file_settings = ide_buffer_get_file_settings (self->buffer);
 
-  ide_binding_group_set_source (self->buffer_file_settings, file_settings);
-  ide_binding_group_set_source (self->view_file_settings, file_settings);
+  g_binding_group_set_source (self->buffer_file_settings, file_settings);
+  g_binding_group_set_source (self->view_file_settings, file_settings);
 
   IDE_EXIT;
 }
@@ -240,29 +240,29 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                           self->buffer, "style-scheme-name",
                           G_BINDING_SYNC_CREATE);
 
-  self->buffer_file_settings = ide_binding_group_new ();
-  ide_binding_group_bind (self->buffer_file_settings,
+  self->buffer_file_settings = g_binding_group_new ();
+  g_binding_group_bind (self->buffer_file_settings,
                           "insert-trailing-newline", self->buffer, "implicit-trailing-newline",
                           G_BINDING_SYNC_CREATE);
 
-  self->view_file_settings = ide_binding_group_new ();
-  ide_binding_group_bind (self->view_file_settings,
+  self->view_file_settings = g_binding_group_new ();
+  g_binding_group_bind (self->view_file_settings,
                           "auto-indent", self->view, "auto-indent",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind_full (self->view_file_settings,
+  g_binding_group_bind_full (self->view_file_settings,
                                "indent-style", self->view, "insert-spaces-instead-of-tabs",
                                G_BINDING_SYNC_CREATE,
                                indent_style_to_insert_spaces, NULL, NULL, NULL);
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "indent-width", self->view, "indent-width",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "right-margin-position", self->view, "right-margin-position",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "show-right-margin", self->view, "show-right-margin",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "tab-width", self->view, "tab-width",
                           G_BINDING_SYNC_CREATE);
 
@@ -287,6 +287,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                    G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings, "line-height",
                    self->view, "line-height",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "highlight-matching-brackets",
+                   self->buffer, "highlight-matching-brackets",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings, "smart-home-end",
                    self->view, "smart-home-end",
@@ -316,10 +319,10 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                    completion, "select-on-show",
                    G_SETTINGS_BIND_GET);
 
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "insert-matching-brace", self->view, "insert-matching-brace",
                           G_BINDING_SYNC_CREATE);
-  ide_binding_group_bind (self->view_file_settings,
+  g_binding_group_bind (self->view_file_settings,
                           "overwrite-braces", self->view, "overwrite-braces",
                           G_BINDING_SYNC_CREATE);
 

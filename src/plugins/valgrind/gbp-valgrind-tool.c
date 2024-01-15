@@ -50,6 +50,7 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   g_autofree char *leak_check = NULL;
   IdeContext *context;
   gboolean track_origins;
+  guint num_callers;
   int source_fd;
   int dest_fd;
 
@@ -84,6 +85,7 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   g_debug ("Using %s for valgrind log", name);
 
   track_origins = ide_settings_get_boolean (settings, "track-origins");
+  num_callers = ide_settings_get_uint (settings, "num-callers");
   leak_check = ide_settings_get_string (settings, "leak-check");
 
   leak_kinds = g_string_new (NULL);
@@ -100,6 +102,7 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   ide_run_context_append_formatted (run_context, "--log-fd=%d", dest_fd);
   ide_run_context_append_formatted (run_context, "--leak-check=%s", leak_check);
   ide_run_context_append_formatted (run_context, "--track-origins=%s", track_origins ? "yes" : "no");
+  ide_run_context_append_formatted (run_context, "--num-callers=%u", num_callers);
 
   if (leak_kinds->len > 0)
     {
@@ -202,5 +205,5 @@ gbp_valgrind_tool_class_init (GbpValgrindToolClass *klass)
 static void
 gbp_valgrind_tool_init (GbpValgrindTool *self)
 {
-  ide_run_tool_set_icon_name (IDE_RUN_TOOL (self), "system-run-symbolic");
+  ide_run_tool_set_icon_name (IDE_RUN_TOOL (self), "builder-valgrind-symbolic");
 }

@@ -53,7 +53,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "flatpak.json",                                        "{{appid}}.json" },
   { "README.md",                                           "README.md" },
   { "data/hello.desktop.in",                               "data/{{appid}}.desktop.in" },
-  { "data/hello.appdata.xml.in",                           "data/{{appid}}.appdata.xml.in" },
+  { "data/hello.metainfo.xml.in",                          "data/{{appid}}.metainfo.xml.in" },
   { "data/hello.gschema.xml",                              "data/{{appid}}.gschema.xml" },
   { "data/meson.build",                                    "data/meson.build" },
   { "data/icons/meson.build",                              "data/icons/meson.build" },
@@ -129,6 +129,7 @@ static GbpMesonTemplateExpansion library_expansions[] = {
 static GbpMesonTemplateExpansion cli_expansions[] = {
   /* Shared */
   { "meson.build", "meson.build" },
+  { "flatpak.json", "{{appid}}.json" },
   { "README.md", "README.md" },
 
   /* C */
@@ -158,6 +159,7 @@ static GbpMesonTemplateExpansion cli_expansions[] = {
 static GbpMesonTemplateExpansion empty_expansions[] = {
   /* Shared */
   { "meson.build", "meson.build" },
+  { "flatpak.json", "{{appid}}.json" },
   { "README.md", "README.md" },
   { "src/meson-empty.build", "src/meson.build" },
 
@@ -211,6 +213,8 @@ static const GbpMesonTemplateInfo templates[] = {
     N_("An Meson-based project for a command-line program"),
     IDE_STRV_INIT ("C", "C++", "Python", "Rust", "Vala"),
     cli_expansions, G_N_ELEMENTS (cli_expansions),
+    NULL, 0,
+    IDE_STRV_INIT ("is_cli=true", "exec_name={{name}}"),
   },
   {
     -600,
@@ -219,6 +223,8 @@ static const GbpMesonTemplateInfo templates[] = {
     N_("An empty Meson project skeleton"),
     IDE_STRV_INIT ("C", "C++", "C♯", "JavaScript", "Python", "Rust", "Vala"),
     empty_expansions, G_N_ELEMENTS (empty_expansions),
+    NULL, 0,
+    IDE_STRV_INIT ("is_cli=true", "exec_name={{name}}"),
   },
 };
 

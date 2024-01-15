@@ -82,7 +82,11 @@ gbp_newcomers_section_filter (IdeGreeterSection *section,
       if (GBP_IS_NEWCOMERS_PROJECT (child))
         {
           const char *name = gbp_newcomers_project_get_name (GBP_NEWCOMERS_PROJECT (child));
+          const char * const *languages = gbp_newcomers_project_get_languages (GBP_NEWCOMERS_PROJECT (child));
           gboolean match = spec == NULL || ide_pattern_spec_match (spec, name);
+
+          for (guint i = 0; !match && languages && languages[i]; i++)
+            match |= ide_pattern_spec_match (spec, languages[i]);
 
           gtk_widget_set_visible (child, match);
 

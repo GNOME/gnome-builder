@@ -5,9 +5,8 @@
     <property name="default-height">650</property>
     <property name="title" translatable="yes">Edit Command</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="AdwToolbarView">
+        <child type="top">
           <object class="AdwHeaderBar">
             <property name="show-start-title-buttons">false</property>
             <property name="show-end-title-buttons">false</property>
@@ -32,7 +31,6 @@
         </child>
         <child>
           <object class="AdwPreferencesPage">
-            <property name="vexpand">true</property>
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
@@ -50,7 +48,7 @@
                     <property name="activatable">true</property>
                     <property name="title" translatable="yes">Keyboard Shortcut</property>
                     <property name="subtitle" translatable="yes">An optional shortcut to run the command</property>
-                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                    <property name="icon-name">builder-keyboard-shortcuts-symbolic</property>
                     <child type="suffix">
                       <object class="GtkLabel" id="shortcut_label">
                         <property name="valign">center</property>
@@ -118,15 +116,9 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow" id="shell_row">
+                  <object class="AdwSwitchRow" id="use_shell">
                     <property name="title" translatable="yes">Use Subshell</property>
                     <property name="subtitle" translatable="yes">Run the program from a subshell such as &lt;tt&gt;sh -c ''&lt;/tt&gt;</property>
-                    <property name="activatable-widget">use_shell</property>
-                    <child type="suffix">
-                      <object class="GtkSwitch" id="use_shell">
-                        <property name="valign">center</property>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
@@ -283,3 +275,4 @@
     </child>
   </object>
 </interface>
+

@@ -71,8 +71,8 @@ struct _GbpOmniGutterRenderer
 
   GArray *lines;
 
-  IdeSignalGroup *view_signals;
-  IdeSignalGroup *buffer_signals;
+  GSignalGroup   *view_signals;
+  GSignalGroup   *buffer_signals;
 
   GdkPaintable *note;
   GdkPaintable *warning;
@@ -237,6 +237,16 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterRenderer,
 static GParamSpec *properties [N_PROPS];
 static GQuark selection_quark;
 static PangoAttrList *bold_attrs;
+
+static inline gboolean
+lookup_color (GtkStyleContext *context,
+              const char      *name,
+              GdkRGBA         *color)
+{
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  return gtk_style_context_lookup_color (context, name, color);
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
 
 static int
 int_to_string (guint         value,
@@ -490,24 +500,26 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (view == NULL)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
   gtk_style_context_get_color (context, &fg);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (!get_style_rgba (scheme, "text", BACKGROUND, &self->view.bg))
     {
-      if (!gtk_style_context_lookup_color (context, "view_bg_color", &self->view.bg))
+      if (!lookup_color (context, "view_bg_color", &self->view.bg))
         self->view.bg.alpha = .0;
     }
 
   if (!get_style_rgba (scheme, "text", FOREGROUND, &self->view.fg))
     {
-      if (!gtk_style_context_lookup_color (context, "view_fg_color", &self->view.fg))
+      if (!lookup_color (context, "view_fg_color", &self->view.fg))
         self->view.fg = fg;
     }
 
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
     {
-      if (!gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
+      if (!lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
         self->sel.fg = fg;
     }
   else
@@ -517,8 +529,8 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
     {
-      if (!gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
-        gtk_style_context_lookup_color (context, "accent_bg_color", &self->sel.bg);
+      if (!lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
+        lookup_color (context, "accent_bg_color", &self->sel.bg);
       /* Make selection like libadwaita would */
       self->sel.bg.alpha = .3;
     }
@@ -675,8 +687,14 @@ populate_diagnostics_cb (guint                 line,
     guint   end_line;
   } *state = user_data;
 
-  g_assert (line >= state->begin_line);
-  g_assert (line <= state->end_line);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (state != NULL);
+  g_assert (state->begin_line <= state->end_line);
+
+  if (line < state->begin_line ||
+      line > state->end_line ||
+      line - state->begin_line >= state->lines->len)
+    return;
 
   info = &g_array_index (state->lines, LineInfo, line - state->begin_line);
   info->is_warning |= severity == IDE_DIAGNOSTIC_WARNING
@@ -699,8 +717,14 @@ populate_changes_cb (guint               line,
   } *state = user_data;
   guint pos;
 
-  g_assert (line >= state->begin_line);
-  g_assert (line <= state->end_line);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (state != NULL);
+  g_assert (state->begin_line <= state->end_line);
+
+  if (line < state->begin_line ||
+      line > state->end_line ||
+      line - state->begin_line >= state->lines->len)
+    return;
 
   pos = line - state->begin_line;
 
@@ -853,7 +877,8 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
   g_assert (self->diag_size > 0);
 
   /* Now calculate the size based on enabled features */
-  size = 2;
+  size = self->show_line_diagnostics || self->show_line_numbers || self->show_line_changes ? 2 : 0;
+
   if (self->show_line_diagnostics)
     size += self->diag_size + 2;
   if (self->show_line_numbers)
@@ -1267,6 +1292,7 @@ gbp_omni_gutter_renderer_snapshot (GtkWidget   *widget,
   int width = gtk_widget_get_width (widget);
   int height = gtk_widget_get_height (widget);
 
+
   gtk_snapshot_append_color (snapshot,
                              &self->view.bg,
                              &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, 0, RIGHT_MARGIN + CHANGE_WIDTH, height));
@@ -1611,7 +1637,7 @@ gbp_omni_gutter_renderer_change_buffer (GtkSourceGutterRenderer *renderer,
   g_assert (!old_buffer || GTK_SOURCE_IS_BUFFER (old_buffer));
 
   buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
-  ide_signal_group_set_target (self->buffer_signals, buffer);
+  g_signal_group_set_target (self->buffer_signals, buffer);
 
   gbp_omni_gutter_renderer_reload (self);
 
@@ -1633,7 +1659,7 @@ gbp_omni_gutter_renderer_change_view (GtkSourceGutterRenderer *renderer,
   GTK_SOURCE_GUTTER_RENDERER_CLASS (gbp_omni_gutter_renderer_parent_class)->change_view (renderer, old_view);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  ide_signal_group_set_target (self->view_signals, view);
+  g_signal_group_set_target (self->view_signals, view);
 
   gbp_omni_gutter_renderer_reload (self);
 
@@ -1783,48 +1809,48 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
 
   self->lines = g_array_new (FALSE, FALSE, sizeof (LineInfo));
 
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::file",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::change-monitor",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "notify::diagnostics",
                                    G_CALLBACK (gtk_widget_queue_draw),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
+  g_signal_group_connect_object (self->buffer_signals,
                                    "notify::has-selection",
                                    G_CALLBACK (gtk_widget_queue_draw),
                                    self,
                                    G_CONNECT_SWAPPED);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
                                     self);
-  ide_signal_group_connect_swapped (self->buffer_signals,
+  g_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (gbp_omni_gutter_renderer_cursor_moved),
                                     self);
 
-  self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
-  ide_signal_group_connect_swapped (self->view_signals,
+  self->view_signals = g_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
                                     self);
-  ide_signal_group_connect_swapped (self->view_signals,
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-scale",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font),
                                     self);
-  ide_signal_group_connect_swapped (self->view_signals,
+  g_signal_group_connect_swapped (self->view_signals,
                                     "notify::highlight-current-line",
                                     G_CALLBACK (gtk_widget_queue_draw),
                                     self);

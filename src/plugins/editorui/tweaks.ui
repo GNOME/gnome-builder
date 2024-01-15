@@ -206,6 +206,18 @@
                             </property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_changes">
+                            <property name="title" translatable="yes">Show Line Changes</property>
+                            <property name="subtitle" translatable="yes">Highlight changed lines next to the line number</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">show-line-changes</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -462,7 +474,7 @@
                 <child>
                   <object class="IdeTweaksPage" id="editor_keyboard_page">
                     <property name="title" translatable="yes">Keyboard Shortcuts</property>
-                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                    <property name="icon-name">builder-keyboard-shortcuts-symbolic</property>
                     <child>
                       <object class="IdeTweaksGroup" id="editor_keyboard_smart_group">
                         <property name="title" translatable="yes">Movements</property>

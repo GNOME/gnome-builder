@@ -105,6 +105,10 @@ checker_notify_language_cb (GbpSpellBufferAddin *self,
   g_assert (EDITOR_IS_SPELL_CHECKER (spell_checker));
   g_assert (IDE_IS_BUFFER (self->buffer));
 
+  /* Invalidate the entire spellcheck region */
+  if (self->adapter != NULL)
+    editor_text_buffer_spell_adapter_invalidate_all (self->adapter);
+
   /* Only persist the metadata if we have a backing file */
   if (!(file = ide_buffer_get_file (self->buffer)) || !g_file_is_native (file))
     return;

@@ -30,7 +30,7 @@
 
 struct _IdeTweaksPanel
 {
-  AdwBin               parent_instance;
+  AdwNavigationPage    parent_instance;
 
   AdwPreferencesPage  *prefs_page;
   AdwPreferencesGroup *current_group;
@@ -39,18 +39,16 @@ struct _IdeTweaksPanel
   IdeTweaksPage       *page;
   IdeActionMuxer      *muxer;
 
-  guint                folded : 1;
   guint                current_list_has_non_rows : 1;
 };
 
 enum {
   PROP_0,
-  PROP_FOLDED,
   PROP_PAGE,
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_NAVIGATION_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -200,10 +198,6 @@ ide_tweaks_panel_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_FOLDED:
-      g_value_set_boolean (value, ide_tweaks_panel_get_folded (self));
-      break;
-
     case PROP_PAGE:
       g_value_set_object (value, ide_tweaks_panel_get_page (self));
       break;
@@ -223,10 +217,6 @@ ide_tweaks_panel_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FOLDED:
-      ide_tweaks_panel_set_folded (self, g_value_get_boolean (value));
-      break;
-
     case PROP_PAGE:
       self->page = g_value_dup_object (value);
       break;
@@ -246,11 +236,6 @@ ide_tweaks_panel_class_init (IdeTweaksPanelClass *klass)
   object_class->dispose = ide_tweaks_panel_dispose;
   object_class->get_property = ide_tweaks_panel_get_property;
   object_class->set_property = ide_tweaks_panel_set_property;
-
-  properties[PROP_FOLDED] =
-    g_param_spec_boolean ("folded", NULL, NULL,
-                         FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_PAGE] =
     g_param_spec_object ("page", NULL, NULL,
@@ -291,27 +276,4 @@ ide_tweaks_panel_get_page (IdeTweaksPanel *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), NULL);
 
   return self->page;
-}
-
-gboolean
-ide_tweaks_panel_get_folded (IdeTweaksPanel *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), FALSE);
-
-  return self->folded;
-}
-
-void
-ide_tweaks_panel_set_folded (IdeTweaksPanel *self,
-                             gboolean        folded)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_PANEL (self));
-
-  folded = !!folded;
-
-  if (self->folded != folded)
-    {
-      self->folded = folded;
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOLDED]);
-    }
 }

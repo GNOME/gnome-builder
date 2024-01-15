@@ -92,7 +92,15 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                program,
                                NULL);
 
-      if (g_file_test (path, G_FILE_TEST_IS_EXECUTABLE))
+      /* Check that the file exists instead of things like IS_EXECUTABLE.  The
+       * reason we MUST check for either EXISTS or _IS_SYMLINK separately is
+       * that EXISTS will check that the destination file exists too. That may
+       * not be possible until the mount namespaces are correctly setup.
+       *
+       * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/2050#note_1841120
+       */
+      if (g_file_test (path, G_FILE_TEST_IS_SYMLINK) ||
+          g_file_test (path, G_FILE_TEST_EXISTS))
         {
           ret = TRUE;
           break;
@@ -136,6 +144,21 @@ can_pass_through_finish_arg (const char *arg)
          g_str_has_prefix (arg, "--own-name") ||
          g_str_has_prefix (arg, "--talk-name") ||
          g_str_has_prefix (arg, "--add-policy");
+}
+
+static gboolean
+maybe_profiling (const char * const *argv)
+{
+  if (argv == NULL)
+    return FALSE;
+
+  for (guint i = 0; argv[i]; i++)
+    {
+      if (strstr (argv[i], "sysprof-agent"))
+        return TRUE;
+    }
+
+   return FALSE;
 }
 
 static gboolean
@@ -252,8 +275,13 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--talk-name=org.freedesktop.portal.*");
 
   /* Layering violation, but always give access to profiler */
-  ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
-  ide_run_context_append_argv (run_context, "--system-talk-name=org.freedesktop.PolicyKit1");
+  if (maybe_profiling (argv))
+    {
+      ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
+      ide_run_context_append_argv (run_context, "--system-talk-name=org.freedesktop.PolicyKit1");
+      ide_run_context_append_argv (run_context, "--filesystem=~/.local/share/flatpak:ro");
+      ide_run_context_append_argv (run_context, "--filesystem=host");
+    }
 
   /* Make A11y bus available to the application */
   {

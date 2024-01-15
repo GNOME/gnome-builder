@@ -105,7 +105,7 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_content_type, "text-x-changelog-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-chdr-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-copying-symbolic", NULL);
-  ADD_ICON (bundled_by_content_type, "text-x-cpp-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-c++src-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-csrc-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-javascript-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-python-symbolic", NULL);

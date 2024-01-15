@@ -1,8 +1,14 @@
 {
-    "app-id" : "{{appid}}",
+    "id" : "{{appid}}",
+{{if !is_cli}}
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "@gnome_sdk_version@",
     "sdk" : "org.gnome.Sdk",
+{{else}}
+    "runtime" : "org.freedesktop.Platform",
+    "runtime-version" : "@freedesktop_sdk_version@",
+    "sdk" : "org.freedesktop.Sdk",
+{{end}}
 {{if language == "rust"}}
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.rust-stable"
@@ -11,9 +17,15 @@
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.vala"
     ],
+{{else if language == "javascript"}}
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.node18",
+        "org.freedesktop.Sdk.Extension.typescript"
+    ],
 {{end}}
     "command" : "{{exec_name}}",
     "finish-args" : [
+{{if !is_cli}}
         "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
@@ -21,6 +33,7 @@
         "--device=dri",
 {{end}}
         "--socket=wayland"
+{{end}}
     ],
 {{if language == "rust"}}
     "build-options" : {
@@ -37,6 +50,10 @@
     "build-options" : {
         "append-path" : "/usr/lib/sdk/vala/bin",
         "prepend-ld-library-path" : "/usr/lib/sdk/vala/lib"
+    },
+{{else if language == "javascript"}}
+    "build-options" : {
+        "append-path" : "/usr/lib/sdk/typescript/bin:/usr/lib/sdk/node18/bin"
     },
 {{end}}
     "cleanup" : [

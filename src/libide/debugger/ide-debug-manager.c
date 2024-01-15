@@ -44,7 +44,7 @@ struct _IdeDebugManager
 
   GHashTable     *breakpoints;
   IdeDebugger    *debugger;
-  IdeSignalGroup *debugger_signals;
+  GSignalGroup   *debugger_signals;
   GQueue          pending_breakpoints;
   GPtrArray      *supported_languages;
 
@@ -537,7 +537,7 @@ ide_debug_manager_destroy (IdeObject *object)
   g_queue_clear (&self->pending_breakpoints);
 
   g_hash_table_remove_all (self->breakpoints);
-  ide_signal_group_set_target (self->debugger_signals, NULL);
+  g_signal_group_set_target (self->debugger_signals, NULL);
   ide_clear_and_destroy_object (&self->debugger);
 
   IDE_OBJECT_CLASS (ide_debug_manager_parent_class)->destroy (object);
@@ -699,29 +699,29 @@ ide_debug_manager_init (IdeDebugManager *self)
                                              g_object_unref,
                                              g_object_unref);
 
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debug_manager_debugger_stopped),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debug_manager_debugger_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-added",
                                     G_CALLBACK (ide_debug_manager_breakpoint_added),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-modified",
                                     G_CALLBACK (ide_debug_manager_breakpoint_modified),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-removed",
                                     G_CALLBACK (ide_debug_manager_breakpoint_removed),
                                     self);
@@ -986,7 +986,7 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
     ide_run_context_setenv (run_context, "G_DEBUG", "fatal-criticals");
 
   if (g_set_object (&self->debugger, debugger))
-    ide_signal_group_set_target (self->debugger_signals, self->debugger);
+    g_signal_group_set_target (self->debugger_signals, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
 

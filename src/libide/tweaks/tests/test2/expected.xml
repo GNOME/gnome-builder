@@ -1,6 +1,6 @@
 <IdeTweaks id="IdeTweaks" hidden-when="" project-id="">
   <IdeTweaksSection id="programming_section" hidden-when="" show-header="FALSE" title="">
-    <IdeTweaksPage id="languages_page" has-subpage="TRUE" hidden-when="" icon-name="preferences-desktop-appearance-symbolic" section="#programming_section" show-icon="TRUE" show-search="FALSE" title="Appearance">
+    <IdeTweaksPage id="languages_page" has-subpage="TRUE" hidden-when="" icon-name="builder-appearance-symbolic" section="#programming_section" show-icon="TRUE" show-search="FALSE" title="Appearance">
       <IdeTweaksFactory id="language_subpage_factory" hidden-when="" model="GListStore<GtkSourceLanguage>">
         <IdeTweaksPage id="language_subpage" has-subpage="FALSE" hidden-when="" icon-name="" show-icon="TRUE" show-search="FALSE" title="">
           <IdeTweaksGroup id="language_general_group" hidden-when="" title="General"/>

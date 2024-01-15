@@ -170,6 +170,7 @@ gbp_meson_template_expand_async (IdeProjectTemplate  *template,
   /* First setup some defaults for our scope */
   tmpl_scope_set_boolean (scope, "is_adwaita", FALSE);
   tmpl_scope_set_boolean (scope, "is_gtk4", FALSE);
+  tmpl_scope_set_boolean (scope, "is_cli", FALSE);
   tmpl_scope_set_boolean (scope, "enable_gnome", FALSE);
   tmpl_scope_set_boolean (scope, "enable_i18n", FALSE);
 

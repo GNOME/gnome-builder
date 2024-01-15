@@ -30,7 +30,7 @@
 struct _GbpVcsuiWorkbenchAddin
 {
   GObject         parent_instance;
-  IdeSignalGroup *vcs_signals;
+  GSignalGroup   *vcs_signals;
 };
 
 static void
@@ -69,7 +69,7 @@ gbp_vcsui_workbench_addin_vcs_changed (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (!vcs || IDE_IS_VCS (vcs));
 
-  ide_signal_group_set_target (self->vcs_signals, vcs);
+  g_signal_group_set_target (self->vcs_signals, vcs);
 }
 
 static void
@@ -82,8 +82,8 @@ gbp_vcsui_workbench_addin_load (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  self->vcs_signals = ide_signal_group_new (G_TYPE_OBJECT);
-  ide_signal_group_connect_object (self->vcs_signals,
+  self->vcs_signals = g_signal_group_new (G_TYPE_OBJECT);
+  g_signal_group_connect_object (self->vcs_signals,
                                    "notify::branch-name",
                                    G_CALLBACK (on_notify_branch_name),
                                    self,
@@ -99,7 +99,7 @@ gbp_vcsui_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_VCSUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  ide_signal_group_set_target (self->vcs_signals, NULL);
+  g_signal_group_set_target (self->vcs_signals, NULL);
   g_clear_object (&self->vcs_signals);
 }
 

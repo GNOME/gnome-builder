@@ -31,9 +31,6 @@
     <property name="variant">dark</property>
     <property name="light-variant">builder</property>
     <property name="accent_bg_color">#4186A8</property>
-    <property name="accent_fg_color">#eeeeec</property>
-    <property name="window_fg_color">#eeeeec</property>
-    <property name="headerbar_fg_color">#eeeeec</property>
   </metadata>
 
   <!-- Tango Palette -->
@@ -74,7 +71,7 @@
   <color name="transparent"                 value="#rgba(0,0,0,0)"/>
 
   <!-- Global Settings -->
-  <style name="text"                        foreground="aluminium3" background="dark1"/>
+  <style name="text"                        foreground="aluminium1" background="dark1"/>
   <style name="selection"                   background="#rgba(136,138,133,1)" foreground="white"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark2"/>
@@ -218,7 +215,7 @@
   <style name="latex:include"               use-style="def:preprocessor"/>
 
   <style name="xml:comment"                 foreground="#8b9eab"/>
-  <style name="xml:attribute-name"          foreground="#orange3" bold="false"/>
+  <style name="xml:attribute-name"          foreground="orange2" bold="false"/>
   <style name="xml:attribute-value"         foreground="#669900"/>
   <style name="xml:tag-match"               background="#rgba(114,159,207,.20)"/>
 

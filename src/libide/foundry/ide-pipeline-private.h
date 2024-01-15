@@ -21,10 +21,13 @@
 #pragma once
 
 #include "ide-pipeline.h"
+#include "ide-pipeline-addin.h"
 
 G_BEGIN_DECLS
 
-void _ide_pipeline_attach_pty_to_run_context (IdePipeline   *self,
-                                              IdeRunContext *run_context);
+void         _ide_pipeline_attach_pty_to_run_context (IdePipeline      *self,
+                                                      IdeRunContext    *run_context);
+const guint *_ide_pipeline_addin_get_stages          (IdePipelineAddin *self,
+                                                      guint            *n_stages);
 
 G_END_DECLS

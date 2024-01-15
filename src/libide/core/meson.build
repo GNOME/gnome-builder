@@ -66,7 +66,6 @@ ide_marshal = gnome.genmarshal('ide-marshal',
 libide_core_public_headers = [
   'ide-action-group.h',
   'ide-action-muxer.h',
-  'ide-binding-group.h',
   'ide-context.h',
   'ide-global.h',
   'ide-gsettings-action-group.h',
@@ -80,7 +79,6 @@ libide_core_public_headers = [
   'ide-property-action-group.h',
   'ide-settings-flag-action.h',
   'ide-settings.h',
-  'ide-signal-group.h',
   'ide-transfer-manager.h',
   'ide-transfer.h',
   'ide-version-macros.h',
@@ -103,7 +101,6 @@ install_headers(libide_core_public_headers, subdir: libide_core_header_subdir)
 
 libide_core_public_sources = [
   'ide-action-muxer.c',
-  'ide-binding-group.c',
   'ide-context.c',
   'ide-global.c',
   'ide-gsettings-action-group.c',
@@ -117,7 +114,6 @@ libide_core_public_sources = [
   'ide-property-action-group.c',
   'ide-settings-flag-action.c',
   'ide-settings.c',
-  'ide-signal-group.c',
   'ide-transfer-manager.c',
   'ide-transfer.c',
 ]

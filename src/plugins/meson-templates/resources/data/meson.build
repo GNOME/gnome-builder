@@ -4,7 +4,7 @@ desktop_file = i18n.merge_file(
          type: 'desktop',
        po_dir: '../po',
       install: true,
-  install_dir: join_paths(get_option('datadir'), 'applications')
+  install_dir: get_option('datadir') / 'applications'
 )
 
 desktop_utils = find_program('desktop-file-validate', required: false)
@@ -13,27 +13,24 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: '{{appid}}.appdata.xml.in',
-       output: '{{appid}}.appdata.xml',
+        input: '{{appid}}.metainfo.xml.in',
+       output: '{{appid}}.metainfo.xml',
        po_dir: '../po',
       install: true,
-  install_dir: join_paths(get_option('datadir'), 'appdata')
+  install_dir: get_option('datadir') / 'metainfo'
 )
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
-  test('Validate appstream file', appstream_util, args: ['validate', appstream_file])
-endif
+appstreamcli = find_program('appstreamcli', required: false, disabler: true)
+test('Validate appstream file', appstreamcli,
+     args: ['validate', '--no-net', '--explain', appstream_file])
 
 install_data('{{appid}}.gschema.xml',
-  install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
+  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 
-compile_schemas = find_program('glib-compile-schemas', required: false)
-if compile_schemas.found()
-  test('Validate schema file',
-       compile_schemas,
-       args: ['--strict', '--dry-run', meson.current_source_dir()])
-endif
+compile_schemas = find_program('glib-compile-schemas', required: false, disabler: true)
+test('Validate schema file',
+     compile_schemas,
+     args: ['--strict', '--dry-run', meson.current_source_dir()])
 
 subdir('icons')

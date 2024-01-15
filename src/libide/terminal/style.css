@@ -1,0 +1,16 @@
+vte-terminal
+{
+  padding-top: 7px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+vte-terminal revealer.size label
+{
+  background: @theme_bg_color;
+  padding: 3px 12px;
+  border-top-left-radius: 9px;
+  border-top: 1px solid alpha(@borders,.5);
+  border-left: 1px solid alpha(@borders,.5);
+}

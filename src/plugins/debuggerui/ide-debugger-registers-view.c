@@ -32,7 +32,7 @@ struct _IdeDebuggerRegistersView
   AdwBin          parent_instance;
 
   /* Owned references */
-  IdeSignalGroup      *debugger_signals;
+  GSignalGroup        *debugger_signals;
 
   /* Template references */
   GtkTreeView         *tree_view;
@@ -58,11 +58,11 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_debugger_registers_view_bind (IdeDebuggerRegistersView *self,
                                   IdeDebugger              *debugger,
-                                  IdeSignalGroup           *signals)
+                                  GSignalGroup             *signals)
 {
   g_assert (IDE_IS_DEBUGGER_REGISTERS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view),
                             !ide_debugger_get_is_running (debugger));
@@ -70,10 +70,10 @@ ide_debugger_registers_view_bind (IdeDebuggerRegistersView *self,
 
 static void
 ide_debugger_registers_view_unbind (IdeDebuggerRegistersView *self,
-                                    IdeSignalGroup           *signals)
+                                    GSignalGroup             *signals)
 {
   g_assert (IDE_IS_DEBUGGER_REGISTERS_VIEW (self));
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
 }
@@ -255,7 +255,7 @@ ide_debugger_registers_view_class_init (IdeDebuggerRegistersViewClass *klass)
 static void
 ide_debugger_registers_view_init (IdeDebuggerRegistersView *self)
 {
-  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = g_signal_group_new (IDE_TYPE_DEBUGGER);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -269,12 +269,12 @@ ide_debugger_registers_view_init (IdeDebuggerRegistersView *self)
                             G_CALLBACK (ide_debugger_registers_view_unbind),
                             self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_registers_view_running),
                                     self);
 
-  ide_signal_group_connect_swapped (self->debugger_signals,
+  g_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_registers_view_stopped),
                                     self);
@@ -312,7 +312,7 @@ ide_debugger_registers_view_get_debugger (IdeDebuggerRegistersView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_REGISTERS_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return ide_signal_group_get_target (self->debugger_signals);
+    return _g_signal_group_get_target (self->debugger_signals);
 
   return NULL;
 }
@@ -326,7 +326,7 @@ ide_debugger_registers_view_set_debugger (IdeDebuggerRegistersView *self,
 
   if (self->debugger_signals != NULL)
     {
-      ide_signal_group_set_target (self->debugger_signals, debugger);
+      g_signal_group_set_target (self->debugger_signals, debugger);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
     }
 }

@@ -70,7 +70,8 @@ attach_run_command (GbpCargoPipelineAddin *self,
                     IdePipelinePhase       phase,
                     IdeRunCommand         *build_command,
                     IdeRunCommand         *clean_command,
-                    const char            *title)
+                    const char            *title,
+                    guint                  priority)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
   guint id;
@@ -83,7 +84,7 @@ attach_run_command (GbpCargoPipelineAddin *self,
   stage = ide_pipeline_stage_command_new (build_command, clean_command);
   ide_pipeline_stage_set_name (stage, title);
 
-  id = ide_pipeline_attach (pipeline, phase, 0, stage);
+  id = ide_pipeline_attach (pipeline, phase, priority, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
 
   return g_steal_pointer (&stage);
@@ -142,7 +143,7 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (cargo != NULL);
 
   fetch_command = create_run_command (pipeline, project_dir, cargo, "fetch", NULL);
-  fetch_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_command, NULL, _("Fetch dependencies"));
+  fetch_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_BUILD, fetch_command, NULL, _("Fetch dependencies"), 100);
 
   build_command = create_run_command (pipeline, project_dir, cargo, "build", "--message-format", "human", NULL);
   clean_command = create_run_command (pipeline, project_dir, cargo, "clean", NULL);
@@ -170,7 +171,7 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   if (!ide_str_empty0 (config_opts))
     ide_run_command_append_parsed (build_command, config_opts, NULL);
 
-  build_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_BUILD, build_command, clean_command, _("Build project"));
+  build_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_BUILD, build_command, clean_command, _("Build project"), 200);
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
 
   IDE_EXIT;
