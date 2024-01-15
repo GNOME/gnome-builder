@@ -32,8 +32,6 @@
 #include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-window.h"
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkStackPage, g_object_unref)
-
 struct _IdeTweaksWindow
 {
   AdwWindow               parent_instance;
