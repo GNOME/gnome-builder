@@ -156,6 +156,8 @@ gbp_messages_panel_dispose (GObject *object)
       g_clear_object (&self->filter);
     }
 
+  gtk_widget_dispose_template (GTK_WIDGET (self), GBP_TYPE_MESSAGES_PANEL);
+
   G_OBJECT_CLASS (gbp_messages_panel_parent_class)->dispose (object);
 }
 
