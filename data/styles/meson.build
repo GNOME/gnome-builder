@@ -4,6 +4,7 @@ install_data([
   'catppuccin-latte.xml', 'catppuccin-mocha.xml',
   'horizon-light.xml', 'horizon-dark.xml',
   'peninsula.xml', 'peninsula-dark.xml',
+  'tokyo-night-light.xml', 'tokyo-night.xml',
   'vscode-light.xml', 'vscode-dark.xml',
   'fishtank.xml',
   'monokai-soda.xml',
