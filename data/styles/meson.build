@@ -6,5 +6,6 @@ install_data([
   'peninsula.xml', 'peninsula-dark.xml',
   'vscode-light.xml', 'vscode-dark.xml',
   'fishtank.xml',
+  'monokai-soda.xml',
   'spacedust.xml',
 ], install_dir: join_paths(get_option('datadir'), 'gnome-builder/styles'))
