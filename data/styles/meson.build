@@ -4,4 +4,6 @@ install_data([
   'catppuccin-latte.xml', 'catppuccin-mocha.xml',
   'peninsula.xml', 'peninsula-dark.xml',
   'vscode-light.xml', 'vscode-dark.xml',
+  'fishtank.xml',
+  'spacedust.xml',
 ], install_dir: join_paths(get_option('datadir'), 'gnome-builder/styles'))
