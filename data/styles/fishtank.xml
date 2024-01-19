@@ -27,7 +27,7 @@
   <style name="text" background="Background" foreground="Foreground"/>
   <style name="cursor" foreground="Cursor"/>
   <style name="search-match" background="Color3" foreground="Background"/>
-  <style name="line-numbers" foreground="Gutter"/>
+  <style name="line-numbers" background="Background" foreground="Gutter"/>
   <style name="current-line" background="CurrentLine"/>
   <style name="current-line-number" background="CurrentLine"/>
   <style name="right-margin" foreground="Foreground" background="Gutter"/>
