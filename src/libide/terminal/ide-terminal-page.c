@@ -614,6 +614,8 @@ ide_terminal_page_init (IdeTerminalPage *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
+
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
