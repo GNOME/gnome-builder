@@ -3,16 +3,6 @@
   <template class="GbpDspyWorkspace" parent="IdeWorkspace">
     <property name="default-width">1000</property>
     <property name="default-height">700</property>
-    <child type="titlebar">
-      <object class="IdeHeaderBar" id="header_bar">
-        <property name="menu-id">dspy-workspace-menu</property>
-        <child type="title">
-          <object class="AdwWindowTitle">
-            <property name="title" translatable="yes">D-Bus Inspector</property>
-          </object>
-        </child>
-      </object>
-    </child>
     <child type="content">
       <object class="DspyView" id="view">
         <property name="vexpand">true</property>
