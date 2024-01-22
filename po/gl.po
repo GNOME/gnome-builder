@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-08 18:55+0000\n"
-"PO-Revision-Date: 2023-09-09 04:43+0200\n"
-"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
+"POT-Creation-Date: 2024-01-13 12:40+0000\n"
+"PO-Revision-Date: 2024-01-22 18:12+0100\n"
+"Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gnome-builder\n"
@@ -28,7 +28,8 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:21
+#: src/libide/editor/ide-editor-workspace.ui:38
+#: src/libide/editor/ide-editor-workspace.ui:61
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -39,12 +40,13 @@ msgstr "Construtor"
 msgid "An IDE for GNOME"
 msgstr "Un IDE para GNOME"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
+#. developer_name tag deprecated with Appstream 1.0
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
 #: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, e outros."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -57,7 +59,7 @@ msgstr ""
 "que calquera desenvolvedor pode apreciar, como o realzado de sintaxe e os "
 "fragmentos."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -65,31 +67,31 @@ msgstr ""
 "Pode confiar nas publicacións preditivas de Builder con cada nova "
 "publicación de GNOME cada seis meses."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
 msgstr "Características:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr "Construído con realzado de sintaxe para moitos idiomas"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Editores de código un ao carón de outro"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Multi-monitor support"
 msgstr "Compatibilidade con varios monitores"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Code overview mini-map"
 msgstr "Minimapa de vista previa do código"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Integración con Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -97,76 +99,76 @@ msgstr ""
 "Integración con Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize "
 "e Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Autocompletado baseado en Clan, realzado semántico e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Autocompletado baseado en Python, realzado semántico e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Autocompletado baseado en Vala e diagnósticos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Compatibilidade de autosangrado para C, Python, Vala e XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "Vista previa en vivo para HTML, Markdown, reStructuredText e Sphinx"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Editado opcional de estilo Vim, Emacs e Sublime Text"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "Un perfilador de software integrado para aplicacións nativas"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "Un perfilador integrado para aplicacións nativas"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr ""
 "Compatibilidade para construír con ambientes de execución jhbuild e flatpak"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Compatibilidade para ver os TODO atopados no código"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Busca de texto difusa rápida nos ficheiros e símbolos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
 msgid "Quickly access your projects"
 msgstr "Acceso rápido aos seus proxectos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
 msgid "Create new projects from a variety of templates"
 msgstr "Crea un novo proxecto desde varios modelos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "Integration with Git to clone your projects"
 msgstr "Integración con Git para clonar os seus proxectos"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "The source code editor"
 msgstr "O editor de código fonte"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
 msgid "Fast global fuzzy search"
 msgstr "Busca difusa global rápida"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
 msgid "Debug with the GNU debugger"
 msgstr "Depure co GNU debugger"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
 msgid "Use the minimap to see more of the file"
 msgstr "Use o minimapa para ver máis do ficheiro"
 
@@ -715,7 +717,7 @@ msgstr "Comezar novo proxecto"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
 msgid "Clone Repository"
 msgstr "Clonar repositorio"
 
@@ -728,7 +730,7 @@ msgstr "Novo espazo de traballo do editor"
 msgid "D-Bus Inspector"
 msgstr "Inspector de D-Bus"
 
-#: src/libide/code/ide-buffer.c:3822
+#: src/libide/code/ide-buffer.c:3834
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolvedor de símbolos."
 
@@ -772,7 +774,7 @@ msgstr "Sen título"
 #: src/libide/greeter/ide-greeter-workspace.c:666
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1531
+#: src/libide/gui/ide-workbench.c:1532
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -780,7 +782,7 @@ msgstr "Sen título"
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:104
+#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -789,7 +791,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Non é posíbel atopar un depurador axeitado."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1528
 msgid "Open File…"
 msgstr "Abrir ficheiro…"
 
@@ -953,26 +955,26 @@ msgstr "Fallou a impresión: %s"
 msgid "Failed to format selection: %s"
 msgstr "Produciuse un fallo ao formatar a selección: %s"
 
-#: src/libide/editor/ide-editor-page.c:1131
+#: src/libide/editor/ide-editor-page.c:1132
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:100
+#: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Gardar ficheiro"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
 msgid "Save"
 msgstr "Gardar"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1050,6 +1052,11 @@ msgstr "Finalización de liña:"
 #: src/plugins/create-project/gbp-create-project-widget.ui:100
 msgid "Language"
 msgstr "Idioma"
+
+#: src/libide/editor/ide-editor-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:112
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Trocar panel inferior (Ctrl+F9)"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1298,16 +1305,16 @@ msgstr "O usuario solicitou deter a aplicación"
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:264
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Sistema do anfitrión"
 
-#: src/libide/foundry/ide-runtime-provider.c:147
+#: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
 msgid "Discovered runtime “%s”"
 msgstr "Runtime de «%s» descoberto"
 
-#: src/libide/foundry/ide-runtime-provider.c:170
+#: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
 msgstr "Eliminando o runtime de «%s»"
@@ -1341,7 +1348,7 @@ msgstr "_Clonar repositorio…"
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Pechar"
 
@@ -1365,18 +1372,18 @@ msgstr "Seleccionar un _cartafol…"
 msgid "Directory"
 msgstr "Cartafol"
 
-#: src/libide/greeter/ide-greeter-workspace.c:220
+#: src/libide/greeter/ide-greeter-workspace.c:222
 #: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Construtor — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:332
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "Produciuse un fallo ao cargar o proxecto"
 
-#: src/libide/greeter/ide-greeter-workspace.c:334
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/libide/greeter/ide-greeter-workspace.c:336
+#: src/plugins/create-project/gbp-create-project-widget.c:262
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Pechar"
@@ -1405,7 +1412,7 @@ msgid "Select Project File"
 msgstr "Seleccionar ficheiro do proxecto"
 
 #: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1530
+#: src/libide/gui/ide-workbench.c:1531
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1460,9 +1467,9 @@ msgstr "Abrir"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:474
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Select"
 msgstr "Seleccionar"
 
@@ -1613,7 +1620,7 @@ msgstr "Novas Terminais"
 
 #: src/libide/gui/ide-application-actions.c:175
 msgid "translator-credits"
-msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2023."
+msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2024."
 
 #: src/libide/gui/ide-application-actions.c:180
 msgid "Funded By"
@@ -1683,22 +1690,23 @@ msgstr "Abrir o menú da aplicación (F10)"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Non foi posíbel cargar o HTML. Falta a compatibilidade de WebKit."
 
-#: src/libide/gui/ide-primary-workspace.ui:17
+#: src/libide/gui/ide-primary-workspace.c:87
+msgid "Invalid configuration"
+msgstr "Configuración non válida"
+
+#: src/libide/gui/ide-primary-workspace.ui:44
 msgid "Toggle Left Panel (F9)"
 msgstr "Trocar panel esquerdo (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/libide/gui/ide-primary-workspace.ui:79
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Trocar panel dereito"
 
-#: src/libide/gui/ide-primary-workspace.ui:59
+#: src/libide/gui/ide-primary-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:134
 msgid "Search (Ctrl+Enter)"
 msgstr "Buscar (Ctrl+Intro)"
-
-#: src/libide/gui/ide-primary-workspace.ui:106
-msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Trocar panel inferior (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1737,7 +1745,7 @@ msgstr "Proxecto cargado"
 msgid "Loading project “%s”"
 msgstr "Cargando o proxecto «%s»"
 
-#: src/libide/gui/ide-workspace.c:1730
+#: src/libide/gui/ide-workspace.c:1676
 msgid "There are unsaved documents"
 msgstr "Hai documentos sen gardar"
 
@@ -1767,12 +1775,12 @@ msgid "The operation has been cancelled"
 msgstr "A operación foi cancelada"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1698
+#: src/libide/lsp/ide-lsp-client.c:1733
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Produciuse un fallo ao iniciar o servidor de linguaxe: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
 msgid "No connection to language server"
 msgstr "Non hai conexión co servidor de linguaxe"
 
@@ -1811,7 +1819,7 @@ msgid "Devices & Simulators"
 msgstr "Dispositivos e simuladores"
 
 #: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
-#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -1930,6 +1938,7 @@ msgid "_Selection"
 msgstr "_Selección"
 
 #: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2002,81 +2011,118 @@ msgid "Code Navigation"
 msgstr "Navegación de código"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1624
+#: src/libide/sourceview/ide-source-view.c:1663
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Li %u, Col %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1626
+#: src/libide/sourceview/ide-source-view.c:1665
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
 msgstr "Li %u, Col %u (Sel: %u)"
 
-#: src/libide/terminal/gtk/menus.ui:6
+#: src/libide/terminal/gtk/menus.ui:6 src/libide/terminal/ide-terminal.ui:113
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
-#: src/libide/terminal/gtk/menus.ui:16
+#: src/libide/terminal/gtk/menus.ui:16 src/libide/terminal/ide-terminal.ui:121
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/libide/terminal/gtk/menus.ui:17
+#: src/libide/terminal/gtk/menus.ui:17 src/libide/terminal/ide-terminal.ui:122
 msgid "Copy selection from terminal to clipboard"
 msgstr "Copiar a selección do terminal ao portapapeis"
 
-#: src/libide/terminal/gtk/menus.ui:22
+#: src/libide/terminal/gtk/menus.ui:22 src/libide/terminal/ide-terminal.ui:126
 msgid "_Copy Link"
 msgstr "_Copiar ligazón"
 
-#: src/libide/terminal/gtk/menus.ui:27
+#: src/libide/terminal/gtk/menus.ui:27 src/libide/terminal/ide-terminal.ui:132
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/libide/terminal/gtk/menus.ui:28
+#: src/libide/terminal/gtk/menus.ui:28 src/libide/terminal/ide-terminal.ui:133
 msgid "Paste from clipboard into the terminal"
 msgstr "Pegar desde o portapapeis no terminal"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:38 src/libide/terminal/ide-terminal.ui:141
 msgid "Selection all text from terminal including scrollback"
 msgstr ""
 "Selección de todo o texto desde a terminal incluíndo o desprazamento cara "
 "atrás"
 
-#: src/libide/terminal/gtk/menus.ui:44
+#: src/libide/terminal/gtk/menus.ui:44 src/libide/terminal/ide-terminal.ui:147
 msgid "Select _None"
 msgstr "_Deseleccionar todo"
+
+#: src/libide/terminal/ide-terminal.c:509
+#: src/libide/terminal/ide-terminal.c:542
+msgid "Copied to clipboard"
+msgstr "Copiado ao portapapeis"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:272
 msgid "Save Terminal Content As"
 msgstr "Gardar contidos do terminal como"
 
-#: src/libide/terminal/ide-terminal-page.c:117
+#: src/libide/terminal/ide-terminal-page.c:163
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Produciuse un fallo ao iniciar o subproceso. Pode precisar reconstruír o "
 "proxecto."
 
-#: src/libide/terminal/ide-terminal-page.c:122
-#: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:270
+#: src/libide/terminal/ide-terminal-page.c:168
+#: src/libide/terminal/ide-terminal-page.c:203
+#: src/libide/terminal/ide-terminal-page.c:316
 msgid "Untitled terminal"
 msgstr "Terminal sen título"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:124
+#: src/libide/terminal/ide-terminal-page.c:170
 msgid "Exited"
 msgstr "Saíu"
 
-#: src/libide/terminal/ide-terminal-page.c:144
+#: src/libide/terminal/ide-terminal-page.c:190
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "O lanzador do subproceso fallou demasiado rápido, non fará «respawn»."
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
 msgstr "Terminal sen título"
+
+#: src/libide/terminal/ide-terminal-palettes.h:48
+msgid "GNOME"
+msgstr "GNOME"
+
+#: src/libide/terminal/ide-terminal-palettes.h:123
+msgid "Solarized"
+msgstr "Solarizdo"
+
+#: src/libide/terminal/ide-terminal-palettes.h:200
+msgid "Tango"
+msgstr "Tango"
+
+#: src/libide/terminal/ide-terminal-palettes.h:275
+msgid "Dracula"
+msgstr "Drácula"
+
+#: src/libide/terminal/ide-terminal-palettes.h:350
+msgid "Nord"
+msgstr "Nord"
+
+#: src/libide/terminal/ide-terminal-palettes.h:425
+msgid "Linux"
+msgstr "Linux"
+
+#: src/libide/terminal/ide-terminal-palettes.h:500
+msgid "XTerm"
+msgstr "XTerm"
+
+#: src/libide/terminal/ide-terminal-palettes.h:575
+msgid "RXVT"
+msgstr "RXVT"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2093,6 +2139,23 @@ msgstr "Ir á seguinte coincidencia"
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Volver ao inicio"
+
+#: src/libide/terminal/ide-terminal.ui:154
+msgid "Allow Input"
+msgstr "Permitir entrada"
+
+#: src/libide/terminal/ide-terminal.ui:161
+msgid "Search…"
+msgstr "Buscar…"
+
+#: src/libide/terminal/ide-terminal.ui:168
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Restabelecer"
+
+#: src/libide/terminal/ide-terminal.ui:174
+msgid "Reset and Clear"
+msgstr "Restabelecer e limpar"
 
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
@@ -2209,17 +2272,17 @@ msgid "Keys may only contain alpha-numerics or underline."
 msgstr "As chaves só deben conter alfanuméricos e barras baixas."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 msgid "Add _Variable"
 msgstr "Engadir _variábel"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:208
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 msgid "Add Variable"
 msgstr "Engadir variábel"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:209
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "_Engadir"
 
@@ -2233,27 +2296,27 @@ msgid "Remove"
 msgstr "Eliminar"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:103
+#: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Save"
 msgstr "_Gardar"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:356
+#: src/plugins/buildui/gbp-buildui-log-pane.c:395
 msgid "Build Output"
 msgstr "Saída da construción"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:357
+#: src/plugins/buildui/gbp-buildui-log-pane.c:396
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Saída de construción (Maiús+Ctrl+L)"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
 msgstr "Limpar _todo"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:56
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:60
 msgid "Cancel build"
 msgstr "Cancelar construción"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:72
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:76
 msgid "Save build log"
 msgstr "Gardar rexistro de construción"
 
@@ -2305,7 +2368,7 @@ msgstr "Avisos"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:271
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
 msgstr "Cano de construción"
 
@@ -2852,7 +2915,7 @@ msgid "Build Environment"
 msgstr "Ambiente de construción"
 
 #: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:132
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Localidade"
 
@@ -2876,13 +2939,13 @@ msgstr ""
 "O SDK usado para construír a súa aplicación determínase automaticamente "
 "desde o «runtime»."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Obter as dependencias"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
@@ -3184,12 +3247,12 @@ msgstr "Reformatar os prototipos de función"
 msgid "Display the project creation guide"
 msgstr "Mostrar a guía da creación do proxecto"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
+#: src/plugins/create-project/gbp-create-project-widget.c:220
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
 msgid "Select Location"
 msgstr "Seleccionar localización"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:260
 msgid "Failed to Create Project"
 msgstr "Produciuse un fallo ao crear o proxecto"
 
@@ -3244,11 +3307,11 @@ msgstr "O proxecto crearase nun subcartafol novo."
 msgid "License"
 msgstr "Licenza"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:126
+#: src/plugins/create-project/gbp-create-project-widget.ui:120
 msgid "Template"
 msgstr "Modelo"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:185
+#: src/plugins/create-project/gbp-create-project-widget.ui:179
 msgid "Create Project"
 msgstr "Crear proxecto"
 
@@ -3593,10 +3656,6 @@ msgstr "Trocar ao estilo %s"
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
 msgid "Switch application and editor theme"
 msgstr "Troca o tema da aplicación e do editor"
-
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-msgid "Reset"
-msgstr "Restabelecer"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
@@ -4245,7 +4304,7 @@ msgstr "Instalación completada"
 msgid "The client has been closed"
 msgstr "O cliente foi pechado"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Produciuse un fallo ao eliminar o manifesto de flatpak: %s"
@@ -4672,7 +4731,7 @@ msgstr "Crear un novo proxecto baleiro usando un Makefile simple"
 msgid "Maven Run"
 msgstr "Execución de Maven"
 
-#: src/plugins/menu-search/gbp-menu-search-provider.c:192
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Accións"
 
@@ -5186,10 +5245,11 @@ msgstr "Copiando ficheiros…"
 msgid "Files will be copied in a moment"
 msgstr "Copiaranse os ficheiros nun momento"
 
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:99
-msgid "Filter"
-msgstr "Filtro"
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
+#: src/plugins/todo/gbp-todo-panel.ui:102
+msgid "Filter…"
+msgstr "Filtrar…"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5411,16 +5471,16 @@ msgstr "Orde sen título"
 msgid "Set Shortcut"
 msgstr "Estabelecer atallo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:471
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
 msgid "Select Working Directory"
 msgstr "Seleccionar o cartafol de traballo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:537
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Crear orde"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:539
 msgid "Cre_ate"
 msgstr "Cre_ar"
 
@@ -5472,7 +5532,7 @@ msgstr "Usar subshell"
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Executar esta orde desde unha subshell como  <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:133
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5480,31 +5540,31 @@ msgstr ""
 "Construtor pode executar a súa orde desde varias localizacións incluíndo o "
 "sistema anfitrión ou contedores de construción."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:229
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
 msgstr "_Eliminar orde"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:257
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 msgid "Subprocess"
 msgstr "Subproceso"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Executar a orde como un subproceso de Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
 msgstr "Executa a orde no sistema anfitrión."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
 msgstr "Executa a orde dentro do cano de construción."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:278
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
 msgstr "Como aplicación obxectivo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
 msgstr "Executa a orde como se fora un obxectivo da aplicación."
 
@@ -5631,14 +5691,6 @@ msgstr "Idiomas"
 msgid "swift run"
 msgstr "swift run"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
-msgid "Unnamed Symbol"
-msgstr "Símbolo sen nome"
-
-#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-msgid "Filter Symbols…"
-msgstr "Filtrar símbolos…"
-
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Símbolos no ficheiro"
@@ -5648,13 +5700,13 @@ msgstr "Símbolos no ficheiro"
 msgid "In Page"
 msgstr "Na páxina"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Seleccionar símbolo…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Seleccionar símbolo (Ctrl+Maiús+K)"
 
@@ -5675,108 +5727,103 @@ msgstr "Perfilando a aplicación…"
 msgid "Symbol decoding will begin after application exits"
 msgstr "A decodificación de símbolos comezará despois de que saia a aplicación"
 
-#: src/plugins/sysprof/gtk/menus.ui:8
-msgctxt "menu label"
-msgid "Open _Sysprof Capture…"
-msgstr "Abrir a captura de _sysprof…"
-
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
 msgstr "Executar co perfilador"
 
-#: src/plugins/sysprof/gtk/menus.ui:23
+#: src/plugins/sysprof/gtk/menus.ui:13
 msgid "Run the project with profiler"
 msgstr "Executar o proxecto co perfilador"
 
-#: src/plugins/sysprof/gtk/menus.ui:31 src/plugins/sysprof/tweaks.ui:13
+#: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Perfilador"
 
-#: src/plugins/sysprof/gtk/menus.ui:33
+#: src/plugins/sysprof/gtk/menus.ui:23
 msgid "Thread Sampling"
 msgstr "Mostraxe de fíos"
 
-#: src/plugins/sysprof/gtk/menus.ui:35
+#: src/plugins/sysprof/gtk/menus.ui:25
 msgid "CPU Performance"
 msgstr "Rendemento da CPU"
 
-#: src/plugins/sysprof/gtk/menus.ui:40
+#: src/plugins/sysprof/gtk/menus.ui:30
 msgid "Process Scheduling"
 msgstr "Programación de procesos"
 
-#: src/plugins/sysprof/gtk/menus.ui:45
+#: src/plugins/sysprof/gtk/menus.ui:35
 msgid "Memory Allocations"
 msgstr "Reservas de memoria"
 
-#: src/plugins/sysprof/gtk/menus.ui:50
+#: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Sample JavaScript Stacks"
 msgstr "Rimas JavaScript de exemplo"
 
-#: src/plugins/sysprof/gtk/menus.ui:56
+#: src/plugins/sysprof/gtk/menus.ui:46
 msgid "D-Bus"
 msgstr "D-Bus"
 
-#: src/plugins/sysprof/gtk/menus.ui:58 src/plugins/sysprof/tweaks.ui:111
+#: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
 msgstr "Bus de sesión"
 
-#: src/plugins/sysprof/gtk/menus.ui:63 src/plugins/sysprof/tweaks.ui:123
+#: src/plugins/sysprof/gtk/menus.ui:53 src/plugins/sysprof/tweaks.ui:123
 msgid "System Bus"
 msgstr "Bus do sistema"
 
-#: src/plugins/sysprof/gtk/menus.ui:69
+#: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Graphics"
 msgstr "Gráficos"
 
-#: src/plugins/sysprof/gtk/menus.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:61
 msgid "Display Timings"
 msgstr "Mostrar tempos"
 
-#: src/plugins/sysprof/gtk/menus.ui:77
+#: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
 msgstr "Contadores"
 
-#: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "Uso de CPU"
 
-#: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
+#: src/plugins/sysprof/gtk/menus.ui:74 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
 msgstr "Uso de memoria"
 
-#: src/plugins/sysprof/gtk/menus.ui:89
+#: src/plugins/sysprof/gtk/menus.ui:79
 msgid "Storage I/O"
 msgstr "E/S de almacenamento"
 
-#: src/plugins/sysprof/gtk/menus.ui:94
+#: src/plugins/sysprof/gtk/menus.ui:84
 msgid "Network I/O"
 msgstr "E/S de rede"
 
-#: src/plugins/sysprof/gtk/menus.ui:100
+#: src/plugins/sysprof/gtk/menus.ui:90
 msgid "Energy"
 msgstr "Enerxía"
 
-#: src/plugins/sysprof/gtk/menus.ui:102
+#: src/plugins/sysprof/gtk/menus.ui:92
 msgid "Consumption"
 msgstr "Consumo"
 
-#: src/plugins/sysprof/gtk/menus.ui:107
+#: src/plugins/sysprof/gtk/menus.ui:97
 msgid "Battery Charge"
 msgstr "Carga da batería"
 
-#: src/plugins/sysprof/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:104
 msgid "Allow Application Integration"
 msgstr "Permitir integración de aplicación"
 
-#: src/plugins/sysprof/gtk/menus.ui:119
+#: src/plugins/sysprof/gtk/menus.ui:109
 msgid "Allow CPU Throttling"
 msgstr "Permitir a limitación de CPU"
 
-#: src/plugins/sysprof/gtk/menus.ui:131
+#: src/plugins/sysprof/gtk/menus.ui:121
 msgid "Run with _Profiler"
 msgstr "Executar co _perfilador"
 
-#: src/plugins/sysprof/gtk/menus.ui:149
+#: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
 msgstr "Gravar de novo…"
 
@@ -6007,7 +6054,7 @@ msgstr ""
 "O número máximo de liñas almacenadas no historial cando se limita o "
 "desprazamento cara atrás"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:147
+#: src/plugins/testui/gbp-testui-output-panel.c:150
 msgid "Unit Test Output"
 msgstr "Saída das probas unitarias"
 
@@ -6192,7 +6239,7 @@ msgstr "Buscar por fugas de memoria ao saír"
 msgid "Begin cloning project from URI"
 msgstr "Comezar o clonado do proxecto desde unha URI"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
 msgid "A failure occurred while cloning the repository."
 msgstr "Produciuse un fallo ao clonar o repositorio."
 
@@ -6282,7 +6329,7 @@ msgstr "Localización do enfoque"
 msgid "Focus the current page's location"
 msgstr "Enfocar a localización da páxina actual"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:143
+#: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
 msgstr "Produciuse un fallo ao analizar o documento XML"
 
@@ -6294,6 +6341,16 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Unnamed Symbol"
+#~ msgstr "Símbolo sen nome"
+
+#~ msgid "Filter Symbols…"
+#~ msgstr "Filtrar símbolos…"
+
+#~ msgctxt "menu label"
+#~ msgid "Open _Sysprof Capture…"
+#~ msgstr "Abrir a captura de _sysprof…"
 
 #~ msgid "Go back"
 #~ msgstr "Ir atrás"
@@ -8131,9 +8188,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 
 #~ msgid "Trigger the default entry"
 #~ msgstr "Disparador para a entrada por omisión"
-
-#~ msgid "No build configuration"
-#~ msgstr "Non hai configuración de construción"
 
 #~ msgid "Select a build configuration from the sidebar to modify."
 #~ msgstr ""
