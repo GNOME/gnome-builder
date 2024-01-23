@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include <libide-gui.h>
+#include <libide-sourceview.h>
 
 #include "ide-terminal.h"
 
@@ -91,8 +92,12 @@ static void
 ide_terminal_update_colors (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  g_autoptr(IdeTerminalPalette) palette = NULL;
   const IdeTerminalPaletteFace *face;
+  GtkSourceStyleSchemeManager *style_scheme_manager;
+  GtkSourceStyleScheme *scheme;
   AdwStyleManager *style_manager;
+  const char *style_scheme;
   gboolean dark;
 
   g_assert (IDE_IS_TERMINAL (self));
@@ -100,10 +105,17 @@ ide_terminal_update_colors (IdeTerminal *self)
   style_manager = adw_style_manager_get_default ();
   dark = adw_style_manager_get_dark (style_manager);
 
-  if (priv->palette == NULL)
-    priv->palette = ide_terminal_palette_new_from_name ("gnome");
+  style_scheme = ide_application_get_style_scheme (IDE_APPLICATION_DEFAULT);
+  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, style_scheme);
 
-  face = ide_terminal_palette_get_face (priv->palette, dark);
+  if (!g_set_object (&palette, priv->palette))
+    palette = ide_terminal_palette_new_from_name (style_scheme);
+
+  if (scheme != NULL)
+    dark = ide_source_style_scheme_is_dark (scheme);
+
+  face = ide_terminal_palette_get_face (palette, dark);
 
   vte_terminal_set_colors (VTE_TERMINAL (self),
                            &face->foreground,
@@ -114,7 +126,9 @@ ide_terminal_update_colors (IdeTerminal *self)
   if (face->cursor.alpha > 0)
     vte_terminal_set_color_cursor (VTE_TERMINAL (self), &face->cursor);
   else
-    vte_terminal_set_color_cursor (VTE_TERMINAL (self), NULL);
+    vte_terminal_set_color_cursor (VTE_TERMINAL (self), &face->foreground);
+
+  vte_terminal_set_color_cursor_foreground (VTE_TERMINAL (self), &face->background);
 }
 
 static void
@@ -1140,8 +1154,6 @@ static void
 ide_terminal_constructed (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
-  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
-  static IdeTerminalPalette *default_palette;
 
   g_assert (IDE_IS_TERMINAL (self));
 
@@ -1159,11 +1171,7 @@ ide_terminal_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  if (default_palette == NULL)
-    default_palette = ide_terminal_palette_new_from_name ("gnome");
-
-  if (priv->palette == NULL)
-    ide_terminal_set_palette (self, default_palette);
+  ide_terminal_update_colors (self);
 }
 
 static void
