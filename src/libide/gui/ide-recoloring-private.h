@@ -25,8 +25,6 @@
 G_BEGIN_DECLS
 
 char                 *_ide_recoloring_generate_css         (GtkSourceStyleScheme *style_scheme);
-gboolean              _ide_source_style_scheme_is_dark     (GtkSourceStyleScheme *style_scheme);
 GtkSourceStyleScheme *_ide_source_style_scheme_get_variant (GtkSourceStyleScheme *style_scheme,
                                                             const char           *variant);
-
 G_END_DECLS
