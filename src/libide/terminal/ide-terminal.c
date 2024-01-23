@@ -98,6 +98,7 @@ ide_terminal_update_colors (IdeTerminal *self)
   GtkSourceStyleScheme *scheme;
   AdwStyleManager *style_manager;
   const char *style_scheme;
+  const char *palette_name = NULL;
   gboolean dark;
 
   g_assert (IDE_IS_TERMINAL (self));
@@ -109,11 +110,17 @@ ide_terminal_update_colors (IdeTerminal *self)
   style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
   scheme = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, style_scheme);
 
-  if (!g_set_object (&palette, priv->palette))
-    palette = ide_terminal_palette_new_from_name (style_scheme);
-
   if (scheme != NULL)
-    dark = ide_source_style_scheme_is_dark (scheme);
+    {
+      dark = ide_source_style_scheme_is_dark (scheme);
+      palette_name = gtk_source_style_scheme_get_metadata (scheme, "terminal-palette");
+    }
+
+  if (palette_name == NULL)
+    palette_name = style_scheme;
+
+  if (!g_set_object (&palette, priv->palette))
+    palette = ide_terminal_palette_new_from_name (palette_name);
 
   face = ide_terminal_palette_get_face (palette, dark);
 
@@ -1167,6 +1174,11 @@ ide_terminal_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (adw_style_manager_get_default (),
                            "notify::dark",
+                           G_CALLBACK (ide_terminal_update_colors),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
                            G_CALLBACK (ide_terminal_update_colors),
                            self,
                            G_CONNECT_SWAPPED);

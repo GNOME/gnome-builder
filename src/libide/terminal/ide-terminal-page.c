@@ -83,26 +83,6 @@ ide_terminal_page_notify_style_scheme_cb (IdeTerminalPage *self,
   ide_terminal_set_palette (self->terminal, palette);
 }
 
-static void
-ide_terminal_page_constructed (GObject *object)
-{
-  IdeTerminalPage *self = (IdeTerminalPage *)object;
-
-  G_OBJECT_CLASS (ide_terminal_page_parent_class)->constructed (object);
-
-  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
-                           "notify::style-scheme",
-                           G_CALLBACK (ide_terminal_page_notify_style_scheme_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
-                           "notify::dark",
-                           G_CALLBACK (ide_terminal_page_notify_style_scheme_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  ide_terminal_page_notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
-}
-
 static gboolean
 terminal_has_notification_signal (void)
 {
@@ -545,7 +525,6 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (klass);
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
-  object_class->constructed = ide_terminal_page_constructed;
   object_class->dispose = ide_terminal_page_dispose;
   object_class->get_property = ide_terminal_page_get_property;
   object_class->set_property = ide_terminal_page_set_property;
