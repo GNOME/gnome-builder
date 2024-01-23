@@ -107,6 +107,16 @@
   </menu>
 
   <menu id="menu-search-editor">
+    <section id="menu-search-editor-files">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Files</attribute>
+      <item>
+        <attribute name="id">org.gnome.builder.editor.reload-files</attribute>
+        <attribute name="label" translatable="yes">Reload Files</attribute>
+        <attribute name="description" translatable="yes">Reload the contents of open files</attribute>
+        <attribute name="action">context.workbench.reload-files</attribute>
+      </item>
+    </section>
     <section id="menu-search-editor-section">
       <attribute name="page" translatable="yes">Text Editor</attribute>
       <attribute name="group" translatable="yes">Search &amp; Replace</attribute>
