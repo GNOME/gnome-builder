@@ -5,6 +5,7 @@
   <metadata>
     <property name="variant">dark</property>
     <property name="light-variant">catppuccin-latte</property>
+    <property name="terminal-palette">catppuccin</property>
   </metadata>
 
   <color name="Foreground" value="#cdd6f4"/>

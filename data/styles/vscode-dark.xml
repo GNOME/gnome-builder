@@ -5,6 +5,7 @@
   <metadata>
     <property name="variant">dark</property>
     <property name="light-variant">vscode-light</property>
+    <property name="terminal-palette">vscode</property>
   </metadata>
 
   <color name="Foreground" value="#cccccc"/>

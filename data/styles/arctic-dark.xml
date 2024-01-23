@@ -24,6 +24,7 @@
   <metadata>
     <property name="variant">dark</property>
     <property name="light-variant">arctic-light</property>
+    <property name="terminal-palette">nord</property>
   </metadata>
 
   <!-- Named Colors -->

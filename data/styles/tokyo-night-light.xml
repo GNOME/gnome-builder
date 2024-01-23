@@ -5,6 +5,7 @@
   <metadata>
     <property name="variant">light</property>
     <property name="dark-variant">tokyo-night</property>
+    <property name="terminal-palette">tokyo-night</property>
   </metadata>
 
   <color name="Foreground" value="#565a6e"/>

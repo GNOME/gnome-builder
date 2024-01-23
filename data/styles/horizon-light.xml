@@ -5,6 +5,7 @@
   <metadata>
     <property name="variant">light</property>
     <property name="dark-variant">horizon-dark</property>
+    <property name="terminal-palette">horizon</property>
   </metadata>
 
   <color name="Foreground" value="#1c1e26"/>
