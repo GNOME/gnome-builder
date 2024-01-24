@@ -58,31 +58,6 @@ static GParamSpec *properties [N_PROPS];
 static void ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                                 VteTerminal     *terminal);
 
-static void
-ide_terminal_page_notify_style_scheme_cb (IdeTerminalPage *self,
-                                          GParamSpec      *pspec,
-                                          IdeApplication  *application)
-{
-  g_autoptr(IdeTerminalPalette) palette = NULL;
-  const char *scheme;
-  const char *palette_id = "gnome";
-
-  g_assert (IDE_IS_TERMINAL_PAGE (self));
-  g_assert (IDE_IS_APPLICATION (application));
-
-  if (!(scheme = ide_application_get_style_scheme (application)))
-    return;
-
-  if (g_str_has_prefix (scheme, "solarized"))
-    palette_id = "solarized";
-  else if (g_str_has_prefix (scheme, "arctic"))
-    palette_id = "nord";
-
-  palette = ide_terminal_palette_new_from_name (palette_id);
-
-  ide_terminal_set_palette (self->terminal, palette);
-}
-
 static gboolean
 terminal_has_notification_signal (void)
 {
