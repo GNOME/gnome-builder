@@ -101,6 +101,7 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_content_type, "text-rust-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-sql-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-authors-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-blueprint-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-changelog-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-chdr-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-copying-symbolic", NULL);
