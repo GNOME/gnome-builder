@@ -120,7 +120,14 @@ ide_terminal_update_colors (IdeTerminal *self)
     palette_name = style_scheme;
 
   if (!g_set_object (&palette, priv->palette))
-    palette = ide_terminal_palette_new_from_name (palette_name);
+    {
+      /* Special case solarized which doesn't have metadata
+       * upstream to work with.
+       */
+      if (g_str_has_prefix (style_scheme, "solarized"))
+        palette_name = "solarized";
+      palette = ide_terminal_palette_new_from_name (palette_name);
+    }
 
   face = ide_terminal_palette_get_face (palette, dark);
 
