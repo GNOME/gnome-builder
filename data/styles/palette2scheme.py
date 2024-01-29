@@ -63,7 +63,7 @@ def do_scheme(key_file, group, has_alt, _name):
 
     gstr.append('<?xml version="1.0" encoding="UTF-8"?>\n')
     gstr.append('<!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->\n')
-    gstr.append('<style-scheme id="%s" _name="%s" version="1.0">\n' % (_id, _name))
+    gstr.append('<style-scheme id="%s" name="%s" version="1.0">\n' % (_id, _name))
     gstr.append('\n')
     for Color in ('Foreground', 'Background', 'Cursor', 'Gutter', 'CurrentLine'):
         gstr.append('  <color name="%s" value="%s"/>\n' % (Color, html(locals()[Color])))
