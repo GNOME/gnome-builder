@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
-<style-scheme id="fishtank" _name="Fishtank" version="1.0">
+<style-scheme id="fishtank" name="Fishtank" version="1.0">
 
   <color name="Foreground" value="#ecf0fe"/>
   <color name="Background" value="#232537"/>

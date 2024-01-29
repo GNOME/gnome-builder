@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
-<style-scheme id="monokai-soda" _name="Monokai Soda" version="1.0">
+<style-scheme id="monokai-soda" name="Monokai Soda" version="1.0">
 
   <color name="Foreground" value="#c4c5b5"/>
   <color name="Background" value="#1a1a1a"/>

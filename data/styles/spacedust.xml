@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
-<style-scheme id="spacedust" _name="Spacedust" version="1.0">
+<style-scheme id="spacedust" name="Spacedust" version="1.0">
 
   <color name="Foreground" value="#ecf0c1"/>
   <color name="Background" value="#0a1e24"/>

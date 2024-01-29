@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
-<style-scheme id="tokyo-night-light" _name="Tokyo Night Light" version="1.0">
+<style-scheme id="tokyo-night-light" name="Tokyo Night Light" version="1.0">
 
   <metadata>
     <property name="variant">light</property>
