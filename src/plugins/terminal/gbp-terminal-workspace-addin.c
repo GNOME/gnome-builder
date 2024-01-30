@@ -353,7 +353,7 @@ gbp_terminal_workspace_addin_save_session_page_cb (IdePage  *page,
       g_autoptr(IdeSessionItem) item = ide_session_item_new ();
       IdeTerminal *terminal = ide_terminal_page_get_terminal (IDE_TERMINAL_PAGE (page));
       const char *title = panel_widget_get_title (PANEL_WIDGET (page));
-      g_autofree char *text = g_strchomp (vte_terminal_get_text (VTE_TERMINAL (terminal), NULL, NULL, NULL));
+      g_autofree char *text = g_strchomp (vte_terminal_get_text_format (VTE_TERMINAL (terminal), VTE_FORMAT_TEXT));
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
       const char *id = ide_workspace_get_id (workspace);
       int columns = vte_terminal_get_column_count (VTE_TERMINAL (terminal));
