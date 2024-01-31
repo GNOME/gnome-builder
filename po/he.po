@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-01-30 19:47+0000\n"
-"PO-Revision-Date: 2024-01-31 10:37+0200\n"
+"PO-Revision-Date: 2024-01-31 10:55+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
@@ -2994,7 +2994,7 @@ msgstr "שרת השילוב מול Clang יצא"
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr "שרת השילוב מול Cland הופעל בתור תהליך %s"
+msgstr "שרת השילוב מול Clang הופעל בתור תהליך %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
