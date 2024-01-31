@@ -87,6 +87,7 @@ static const char * const builtin_dingus[] = {
 };
 static VteRegex *builtin_dingus_regex[G_N_ELEMENTS(builtin_dingus)];
 static GRegex *filename_regex;
+static GSettings *settings;
 
 static void
 ide_terminal_update_colors (IdeTerminal *self)
@@ -1165,11 +1166,53 @@ ide_terminal_snapshot (GtkWidget   *widget,
 }
 
 static void
+ide_terminal_font_changed (IdeTerminal *self,
+                           const char  *key,
+                           GSettings   *settings_)
+{
+  g_autoptr(PangoFontDescription) font_desc = NULL;
+  g_autofree char *font_name = NULL;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings_));
+
+  font_name = g_settings_get_string (settings_, "font-name");
+
+  if (font_name != NULL)
+    font_desc = pango_font_description_from_string (font_name);
+
+  vte_terminal_set_font (VTE_TERMINAL (self), font_desc);
+}
+
+static void
+update_scrollback_cb (IdeTerminal *self,
+                      const char  *key,
+                      GSettings   *settings_)
+{
+  gboolean limit_scrollback;
+  guint scrollback_lines;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings_));
+
+  limit_scrollback = g_settings_get_boolean (settings_, "limit-scrollback");
+  scrollback_lines = g_settings_get_uint (settings_, "scrollback-lines");
+
+  if (limit_scrollback)
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), scrollback_lines);
+  else
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), -1);
+}
+
+static void
 ide_terminal_constructed (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
 
   g_assert (IDE_IS_TERMINAL (self));
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder.terminal");
 
   G_OBJECT_CLASS (ide_terminal_parent_class)->constructed (object);
 
@@ -1191,6 +1234,28 @@ ide_terminal_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   ide_terminal_update_colors (self);
+
+  g_settings_bind (settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "allow-hyperlink", self, "allow-hyperlink", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "scroll-on-output", self, "scroll-on-output", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "scroll-on-keystroke", self, "scroll-on-keystroke", G_SETTINGS_BIND_GET);
+  g_signal_connect_object (settings,
+                           "changed::limit-scrollback",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (settings,
+                           "changed::scrollback-lines",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (settings,
+                           "changed::font-name",
+                           G_CALLBACK (ide_terminal_font_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_terminal_font_changed (self, NULL, settings);
+  update_scrollback_cb (self, "scrollback-lines", settings);
 }
 
 static void
