@@ -137,7 +137,7 @@ ide_application_actions_about (GSimpleAction *action,
   IdeApplication *self = user_data;
   g_autofree char *support_info = NULL;
   g_autofree char *support_filename = NULL;
-  GtkDialog *dialog;
+  AdwDialog *dialog;
   GtkWindow *parent = NULL;
   GList *iter;
   GList *windows;
@@ -158,7 +158,7 @@ ide_application_actions_about (GSimpleAction *action,
   support_info = ide_get_support_log ();
   support_filename = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
 
-  dialog = g_object_new (ADW_TYPE_ABOUT_WINDOW,
+  dialog = g_object_new (ADW_TYPE_ABOUT_DIALOG,
                          "application-icon", ide_get_application_id (),
                          "application-name", _("Builder"),
                          "copyright", "© 2014–2023 Christian Hergert, et al.",
@@ -171,16 +171,15 @@ ide_application_actions_about (GSimpleAction *action,
                          "issue-url", "https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/new",
                          "license-type", GTK_LICENSE_GPL_3_0,
                          "support-url", "https://discourse.gnome.org/tags/c/applications/7/builder",
-                         "transient-for", parent,
                          "translator-credits", _("translator-credits"),
                          "version", PACKAGE_VERSION,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          NULL);
-  adw_about_window_add_acknowledgement_section (ADW_ABOUT_WINDOW (dialog),
+  adw_about_dialog_add_acknowledgement_section (ADW_ABOUT_DIALOG (dialog),
                                                 _("Funded By"),
                                                 ide_application_credits_funders);
 
-  ide_gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (parent));
 }
 
 static void
