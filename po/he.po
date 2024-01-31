@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-01-23 23:04+0000\n"
-"PO-Revision-Date: 2024-01-25 12:15+0200\n"
+"POT-Creation-Date: 2024-01-30 19:47+0000\n"
+"PO-Revision-Date: 2024-01-31 10:37+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
@@ -628,7 +628,7 @@ msgid "What environment to use when running unit tests"
 msgstr "What environment to use when running unit tests"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "רישום יומנים מורחב"
 
@@ -1231,52 +1231,52 @@ msgid "Unit Test"
 msgstr "יחידת בדיקה"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:187
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "דרישת משתמש להרצת הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:567
 msgid "Cannot run target, another target is running"
 msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:846
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "היישום יצא עם שגיאה: %s"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:849
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "היישום יצא"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1038
 #, c-format
 msgid "Running %s…"
 msgstr "מריץ %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1105
 msgid "Deploying to device…"
 msgstr "פורס להתקן…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1334
 msgid "User requested application to run"
 msgstr "דרישת משתמש להרצת היישום"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1366
 msgid "User requested application to restart"
 msgstr "דרישת משתמש להפעלה מחדש את היישום"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1396
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "דרישת משתמש להרצת היישום עם הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1416
 msgid "User requested application to stop"
 msgstr "דרישת משתמש לעצירת היישום"
 
@@ -2042,8 +2042,8 @@ msgstr "בחירת כל הטקסט במסוף לרבות מה שמעבר לגל�
 msgid "Select _None"
 msgstr "_ניקוי בחירה"
 
-#: src/libide/terminal/ide-terminal.c:530
-#: src/libide/terminal/ide-terminal.c:563
+#: src/libide/terminal/ide-terminal.c:537
+#: src/libide/terminal/ide-terminal.c:570
 msgid "Copied to clipboard"
 msgstr "הועתק ללוח הגזירים"
 
@@ -2051,22 +2051,22 @@ msgstr "הועתק ללוח הגזירים"
 msgid "Save Terminal Content As"
 msgstr "שמירת תוכן המסוף בשם"
 
-#: src/libide/terminal/ide-terminal-page.c:143
+#: src/libide/terminal/ide-terminal-page.c:118
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr "ארע כשל בהרצת תת-תהליך. יתכן ועליך לבנות מחדש את המיזם."
 
-#: src/libide/terminal/ide-terminal-page.c:148
-#: src/libide/terminal/ide-terminal-page.c:183
-#: src/libide/terminal/ide-terminal-page.c:296
+#: src/libide/terminal/ide-terminal-page.c:123
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:271
 msgid "Untitled terminal"
 msgstr "מסוף ללא כותרת"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Exited"
 msgstr "נסגר"
 
-#: src/libide/terminal/ide-terminal-page.c:170
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "הרצת תת-תהליך נכשלה מהר מדי, לא תתבצע הרצה מחודשת."
 
@@ -2691,7 +2691,37 @@ msgstr "שמאל לימין"
 msgid "Right-to-Left"
 msgstr "ימין לשמאל"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:214
+msgid "GPU"
+msgstr "מעבד גרפי (GPU)"
+
+#: src/plugins/buildui/gtk/menus.ui:216
+msgid "GTK Renderer"
+msgstr "עיבוד GTK"
+
+#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/tweaks.ui:443
+msgid "Default"
+msgstr "ברירת מחדל"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Vulkan"
+msgstr "Vulkan"
+
+# ירוק
+#: src/plugins/buildui/gtk/menus.ui:230
+msgid "GL"
+msgstr "GL"
+
+#: src/plugins/buildui/gtk/menus.ui:236
+msgid "Legacy GL"
+msgstr "‏GL מיושן"
+
+#: src/plugins/buildui/gtk/menus.ui:242
+msgid "Cairo"
+msgstr "Cairo"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Show Inspector"
 msgstr "הצגת מפקח"
 
@@ -2879,10 +2909,6 @@ msgstr "עבודות"
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "מספר עבודות לביצוע במקביל בזמן בנייה"
-
-#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
-msgid "Default"
-msgstr "ברירת מחדל"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
@@ -6927,10 +6953,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 # אדום
 #~ msgid "R"
 #~ msgstr "R"
-
-# ירוק
-#~ msgid "G"
-#~ msgstr "G"
 
 # כחול
 #~ msgid "B"
