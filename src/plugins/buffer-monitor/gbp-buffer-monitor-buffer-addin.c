@@ -77,7 +77,7 @@ gbp_buffer_monitor_buffer_addin_check_for_change (GbpBufferMonitorBufferAddin *s
   if (!self->mtime_set)
     return;
 
-  if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
+  if (info != NULL && g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
     {
       g_autoptr(GDateTime) mtime = g_file_info_get_modification_date_time (info);
 
