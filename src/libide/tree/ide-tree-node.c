@@ -48,6 +48,7 @@ struct _IdeTreeNode
   IdeTask *build_children_task;
 
   IdeTreeNodeFlags flags : 8;
+  guint vcs_ignored : 1;
   guint children_built : 1;
   guint children_possible : 1;
   guint destroy_item : 1;
@@ -65,6 +66,7 @@ enum {
   PROP_EXPANDED_ICON,
   PROP_EXPANDED_ICON_NAME,
   PROP_FLAGS,
+  PROP_VCS_IGNORED,
   PROP_HAS_ERROR,
   PROP_ICON,
   PROP_ICON_NAME,
@@ -236,6 +238,10 @@ ide_tree_node_get_property (GObject    *object,
       g_value_set_flags (value, ide_tree_node_get_flags (self));
       break;
 
+    case PROP_VCS_IGNORED:
+      g_value_set_boolean (value, ide_tree_node_get_vcs_ignored (self));
+      break;
+
     case PROP_HAS_ERROR:
       g_value_set_boolean (value, ide_tree_node_get_has_error (self));
       break;
@@ -305,6 +311,10 @@ ide_tree_node_set_property (GObject      *object,
 
     case PROP_FLAGS:
       ide_tree_node_set_flags (self, g_value_get_flags (value));
+      break;
+
+    case PROP_VCS_IGNORED:
+      ide_tree_node_set_vcs_ignored (self, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_ERROR:
@@ -387,6 +397,13 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
     g_param_spec_flags ("flags", NULL, NULL,
                         IDE_TYPE_TREE_NODE_FLAGS,
                         IDE_TREE_NODE_FLAGS_NONE,
+                        (G_PARAM_READWRITE |
+                         G_PARAM_EXPLICIT_NOTIFY |
+                         G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_VCS_IGNORED] =
+  g_param_spec_boolean ("vcs-ignored", NULL, NULL,
+                        FALSE,
                         (G_PARAM_READWRITE |
                          G_PARAM_EXPLICIT_NOTIFY |
                          G_PARAM_STATIC_STRINGS));
@@ -1033,6 +1050,27 @@ ide_tree_node_set_flags (IdeTreeNode *self,
     {
       self->flags = flags;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FLAGS]);
+    }
+}
+
+gboolean
+ide_tree_node_get_vcs_ignored (IdeTreeNode *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
+
+  return self->vcs_ignored;
+}
+
+void
+ide_tree_node_set_vcs_ignored (IdeTreeNode *self,
+                               gboolean     ignored)
+{
+  g_return_if_fail (IDE_IS_TREE_NODE (self));
+
+  if (self->vcs_ignored != ignored)
+    {
+      self->vcs_ignored = ignored;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS_IGNORED]);
     }
 }
 
