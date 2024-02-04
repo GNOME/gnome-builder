@@ -82,6 +82,8 @@ gbp_vcsui_tree_addin_build_node (IdeTreeAddin *addin,
           else
             got_flag = FALSE;
 
+          ide_tree_node_set_vcs_ignored (node, status == IDE_VCS_FILE_STATUS_IGNORED);
+
           if (got_flag && ide_project_file_is_directory (pf))
             flags |= IDE_TREE_NODE_FLAGS_DESCENDANT;
         }

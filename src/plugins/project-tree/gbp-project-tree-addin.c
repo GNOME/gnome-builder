@@ -84,7 +84,8 @@ compare_files (gconstpointer a,
 }
 
 static IdeTreeNode *
-create_file_node (IdeProjectFile *file)
+create_file_node (IdeProjectFile *file,
+                  IdeVcs         *vcs)
 {
   IdeTreeNode *child;
 
@@ -92,6 +93,8 @@ create_file_node (IdeProjectFile *file)
 
   child = ide_tree_node_new ();
   ide_tree_node_set_item (child, G_OBJECT (file));
+  if (vcs != NULL && project_file_is_ignored(file, vcs))
+    ide_tree_node_set_vcs_ignored (child, TRUE);
   ide_tree_node_set_title (child, ide_project_file_get_display_name (file));
   ide_tree_node_set_icon (child, ide_project_file_get_symbolic_icon (file));
   ide_tree_node_set_destroy_item (child, TRUE);
@@ -157,7 +160,7 @@ gbp_project_tree_addin_file_list_children_cb (GObject      *object,
 
       ide_object_append (IDE_OBJECT (project_file), IDE_OBJECT (file));
 
-      child = create_file_node (file);
+      child = create_file_node (file, vcs);
 
       if (last == NULL)
         ide_tree_node_insert_before (child, node, NULL);
@@ -208,7 +211,7 @@ gbp_project_tree_addin_build_children_async (IdeTreeAddin        *addin,
       root_file = ide_project_file_new (parent, info);
       ide_object_append (IDE_OBJECT (context), IDE_OBJECT (root_file));
 
-      files = create_file_node (root_file);
+      files = create_file_node (root_file, NULL);
       ide_tree_node_set_title (files, _("Files"));
       ide_tree_node_set_icon_name (files, "view-list-symbolic");
       ide_tree_node_set_expanded_icon_name (files, "view-list-symbolic");
@@ -509,7 +512,7 @@ gbp_project_tree_addin_add_file (GbpProjectTreeAddin *self,
 
           ide_object_append (IDE_OBJECT (parent_file), IDE_OBJECT (project_file));
 
-          node = create_file_node (project_file);
+          node = create_file_node (project_file, NULL);
 
           if (self->sort_directories_first)
             ide_tree_node_insert_sorted (parent, node, node_compare_directories_first);
