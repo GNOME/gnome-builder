@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Denis Ollier <dollierp@redhat.com>
+Copyright=Copyright © 2024 Denis Ollier
+Description=Provides linting of Python code using flake8
+Embedded=_gbp_flake8_register_types
+Module=flake8
+Name=Flake8
+X-Category=diagnostics
+X-Diagnostic-Provider-Languages-Priority=100
+X-Diagnostic-Provider-Languages=python,python3
