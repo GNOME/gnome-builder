@@ -67,9 +67,10 @@ subdir('editorui')
 subdir('editorconfig')
 subdir('elixir-ls')
 subdir('eslint')
-subdir('flatpak')
 subdir('file-search')
 subdir('find-other-file')
+subdir('flake8')
+subdir('flatpak')
 subdir('gcc')
 subdir('gdb')
 subdir('gdiagnose')
@@ -188,6 +189,7 @@ status += [
   'Editorconfig ......................... : @0@'.format(get_option('plugin_editorconfig')),
   'ESLint ............................... : @0@'.format(get_option('plugin_eslint')),
   'File Search .......................... : @0@'.format(get_option('plugin_file_search')),
+  'Flake8 ............................... : @0@'.format(get_option('plugin_flake8')),
   'Flatpak .............................. : @0@'.format(get_option('plugin_flatpak')),
   'GDB .................................. : @0@'.format(get_option('plugin_gdb')),
   'Gettext .............................. : @0@'.format(get_option('plugin_gettext')),
