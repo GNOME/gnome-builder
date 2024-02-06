@@ -151,7 +151,10 @@ handle_reply_cb (JsonrpcClient *client,
        * to be respawned by gnome-builder UI process.
        */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_error ("Reply failed: %s", error->message);
+        {
+          g_printerr ("Reply failed: %s\n", error->message);
+          exit (EXIT_FAILURE);
+        }
     }
 }
 
