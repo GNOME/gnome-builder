@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-03-15 23:54+0000\n"
+"POT-Creation-Date: 2024-02-03 13:41+0000\n"
 "PO-Revision-Date: 2023-04-10 17:38-0300\n"
 "Last-Translator: Leônidas Araújo <leorusvellt@hotmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -731,7 +731,7 @@ msgstr "Novo espaço de trabalho do editor"
 msgid "D-Bus Inspector"
 msgstr "Inspetor de D-Bus"
 
-#: src/libide/code/ide-buffer.c:3779
+#: src/libide/code/ide-buffer.c:3810
 msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
@@ -859,6 +859,7 @@ msgstr "Páginas"
 #: src/libide/sourceview/gtk/menus.ui:144
 #: src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -1995,6 +1996,7 @@ msgstr "_Formatação"
 
 #: src/libide/sourceview/gtk/menus.ui:153
 #: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2095,11 +2097,11 @@ msgstr "Quebra de linha"
 msgid "Process terminated by signal %d"
 msgstr "Processo encerrado pelo sinal %d"
 
-#: src/libide/tree/ide-tree-empty.c:207
+#: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
 msgstr "<i>Carregando</i>"
 
-#: src/libide/tree/ide-tree-empty.c:209
+#: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
 msgstr "Vazio"
 
@@ -2227,6 +2229,7 @@ msgid "_Add"
 msgstr "_Adicionar"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Copiar"
 
@@ -2864,13 +2867,11 @@ msgid "Where your project builds"
 msgstr "Onde seu projeto é compilado"
 
 #: src/plugins/buildui/tweaks.ui:449
-#, fuzzy
 msgid "Inside Source Tree"
 msgstr "Dentro do diretório raiz"
 
 # Não lembro de uma tradução para "Source tree". Mas pelo conceito, traduzi como "Diretório Raiz"
 #: src/plugins/buildui/tweaks.ui:455
-#, fuzzy
 msgid "Outside Source Tree"
 msgstr "Fora do diretório raiz"
 
@@ -2891,7 +2892,7 @@ msgstr "Obter dependências"
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:239
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Compila o projeto"
@@ -2959,7 +2960,7 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:229
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "Configurar projeto"
 
@@ -3101,7 +3102,7 @@ msgstr "Renomear símbolo"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:58
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "_Renomear"
 
@@ -3126,23 +3127,23 @@ msgstr "Ações do código…"
 msgid "Display a list of possible code actions from the cursor position"
 msgstr "Exibe uma lista de possíveis ações de código na posição do cursor"
 
-#: src/plugins/codeui/gtk/menus.ui:19
+#: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
 msgstr "_Ir para declaração"
 
-#: src/plugins/codeui/gtk/menus.ui:20
+#: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
 msgstr "Vai para o arquivo e local onde o item é declarado"
 
-#: src/plugins/codeui/gtk/menus.ui:25
+#: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Ir para a definição"
 
-#: src/plugins/codeui/gtk/menus.ui:26
+#: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
 msgstr "Vai para o arquivo e local onde o item está definido"
 
-#: src/plugins/codeui/gtk/menus.ui:31
+#: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
 msgstr "_Localizar referências"
 
@@ -4218,7 +4219,7 @@ msgid "Open file or folder"
 msgstr "Abrir arquivo ou pasta"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:211
+#: src/plugins/project-tree/gbp-project-tree-addin.c:212
 msgid "Files"
 msgstr "Arquivos"
 
@@ -4503,9 +4504,8 @@ msgid "Email"
 msgstr "E-mail"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
-#, fuzzy
 msgid "go run"
-msgstr "Executar Go"
+msgstr "Execução Go"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4544,17 +4544,14 @@ msgstr "_Substituir em %s"
 msgid "Find in Files"
 msgstr "Localizar em arquivos"
 
-# "Files" se refere ao Nautilus ou à arquivos?
 #: src/plugins/grep/gbp-grep-panel.ui:6
-#, fuzzy
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
-msgstr "Localizar em Arquivos (Shift+Ctrl+Alt+F)"
+msgstr "Localizar nos arquivos (Shift+Ctrl+Alt+F)"
 
 # Tradução aproximada do conceito de pesquisa recursiva.
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#, fuzzy
 msgid "_Recurse into Directories"
-msgstr "Passa_r por subdiretórios "
+msgstr "Passa_r por subdiretórios"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
 msgid "Match Whole _Words"
@@ -4762,7 +4759,7 @@ msgstr "Mover para o resultado de pesquisa anterior"
 msgid "Move to and select the previous search result"
 msgstr "Mover para o resultado da pesquisa anterior e seleciona-o "
 
-#: src/plugins/meson/gbp-meson-build-system.c:473
+#: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
 
@@ -4770,11 +4767,11 @@ msgstr "Meson"
 msgid "Load Meson Introspection"
 msgstr "Carregar introspecção do Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:246
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
 msgstr "Instalar projeto"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
 msgstr "Ambiente de desenvolvimento de cache"
 
@@ -5144,37 +5141,37 @@ msgstr "Novo nome do arquivo"
 msgid "_Create"
 msgstr "_Criar"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:696
+#: src/plugins/project-tree/gbp-project-tree-addin.c:697
 #, c-format
 msgid "Copying 1 file"
 msgstr "Copiando 1 arquivo"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:699
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Copiando %s de %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#: src/plugins/project-tree/gbp-project-tree-addin.c:736
 msgid "Failed to copy files"
 msgstr "Falha ao copiar arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:745
+#: src/plugins/project-tree/gbp-project-tree-addin.c:746
 msgid "Files copied"
 msgstr "Arquivos copiados"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:749
+#: src/plugins/project-tree/gbp-project-tree-addin.c:750
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "Copiado %s arquivo"
 msgstr[1] "Copiados %s arquivos"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:940
+#: src/plugins/project-tree/gbp-project-tree-addin.c:941
 msgid "Copying files…"
 msgstr "Copiando arquivos…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:942
 msgid "Files will be copied in a moment"
 msgstr "Os arquivo serão copiados em instantes"
 
@@ -5222,27 +5219,27 @@ msgstr "Abrir pasta rai_z do projeto"
 msgid "With _Terminal…"
 msgstr "Com _terminal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
 msgstr "_Mover para lixeira"
 
-#: src/plugins/project-tree/gtk/menus.ui:70
+#: src/plugins/project-tree/gtk/menus.ui:78
 msgid "_Display Options"
 msgstr "E_xibir opções"
 
-#: src/plugins/project-tree/gtk/menus.ui:74
+#: src/plugins/project-tree/gtk/menus.ui:82
 msgid "S_how Ignored Files"
 msgstr "Mostrar arquivos _ignorados"
 
-#: src/plugins/project-tree/gtk/menus.ui:79
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "_Ordenar com diretórios primeiro"
 
-#: src/plugins/project-tree/gtk/menus.ui:91
+#: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
 msgstr "Revelar em árvore de projeto"
 
-#: src/plugins/project-tree/gtk/menus.ui:100
+#: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
 msgstr "Revelar na árvore do proje_to"
 
@@ -5625,9 +5622,8 @@ msgid "Languages"
 msgstr "Idiomas"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
-#, fuzzy
 msgid "swift run"
-msgstr "Executar Swift"
+msgstr "Execução swift"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5638,7 +5634,6 @@ msgid "Filter Symbols…"
 msgstr "Filtrar símbolos…"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:141
-#, fuzzy
 msgid "Symbols in File"
 msgstr "Símbolos no arquivo"
 
