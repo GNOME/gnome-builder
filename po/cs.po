@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-01-13 12:40+0000\n"
-"PO-Revision-Date: 2024-01-22 17:22+0100\n"
+"POT-Creation-Date: 2024-02-03 13:41+0000\n"
+"PO-Revision-Date: 2024-02-07 02:32+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -636,7 +636,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Jaké se má používat prostředí při běhu jednotkových testů."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Podrobné záznamy"
 
@@ -715,7 +715,6 @@ msgid "New Editor Workspace"
 msgstr "Nová pracovní plocha editoru"
 
 #: data/org.gnome.Builder.desktop.in.in:36
-#: src/plugins/dspy/gbp-dspy-workspace.ui:11
 msgid "D-Bus Inspector"
 msgstr "Inspektor sběrnice D-Bus"
 
@@ -762,7 +761,7 @@ msgstr "Bez názvu"
 #: src/libide/greeter/ide-greeter-workspace.c:666
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1532
+#: src/libide/gui/ide-workbench.c:1564
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -779,7 +778,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Nezdařilo se najít vhodný ladicí program."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1560
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
@@ -788,7 +787,7 @@ msgid "Open a file in the workspace"
 msgstr "Otevřít soubor v pracovní ploše"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
-#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:204
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "Předvolby"
 
@@ -850,11 +849,12 @@ msgstr "Stránky"
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
+#: src/plugins/menu-search/gtk/menus.ui:121
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Textový editor"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
 msgid "Search & Replace"
 msgstr "Hledat a nahradit"
 
@@ -1239,50 +1239,50 @@ msgid "Unit Test"
 msgstr "Jednotkový test"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:187
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Uživatel požádal o spuštění nástroje „%s“"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:567
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:846
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplikace skončila s chybou: %s"
 
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:849
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Aplikace skončila"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1038
 #, c-format
 msgid "Running %s…"
 msgstr "Běží %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1105
 msgid "Deploying to device…"
 msgstr "Nasazuje se do zařízení…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1334
 msgid "User requested application to run"
 msgstr "Uživatel zažádal o spuštění aplikace"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1366
 msgid "User requested application to restart"
 msgstr "Uživatel zažádal o restart aplikace"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1396
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Uživatel požádal o spuštění aplikace pomocí nástroje „%s“"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1416
 msgid "User requested application to stop"
 msgstr "Uživatel zažádal o zastavení aplikace"
 
@@ -1396,7 +1396,7 @@ msgid "Select Project File"
 msgstr "Výběr projektového souboru"
 
 #: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1531
+#: src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "_Otevřít"
 
@@ -1601,11 +1601,11 @@ msgstr "Terminál"
 msgid "New Terminals"
 msgstr "Nový terminál"
 
-#: src/libide/gui/ide-application-actions.c:175
+#: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr "Marek Černocký <marek@manet.cz>"
 
-#: src/libide/gui/ide-application-actions.c:180
+#: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
 msgstr "Financovali"
 
@@ -2041,8 +2041,8 @@ msgstr ""
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: src/libide/terminal/ide-terminal.c:509
-#: src/libide/terminal/ide-terminal.c:542
+#: src/libide/terminal/ide-terminal.c:538
+#: src/libide/terminal/ide-terminal.c:571
 msgid "Copied to clipboard"
 msgstr "Zkopírováno do schránky"
 
@@ -2050,24 +2050,24 @@ msgstr "Zkopírováno do schránky"
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
 
-#: src/libide/terminal/ide-terminal-page.c:163
+#: src/libide/terminal/ide-terminal-page.c:118
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Selhalo spuštění podřízeného procesu. Možná budete muset svůj projekt znovu "
 "sestavit."
 
-#: src/libide/terminal/ide-terminal-page.c:168
-#: src/libide/terminal/ide-terminal-page.c:203
-#: src/libide/terminal/ide-terminal-page.c:316
+#: src/libide/terminal/ide-terminal-page.c:123
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:271
 msgid "Untitled terminal"
 msgstr "Nepojmenovaný terminál"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:170
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Exited"
 msgstr "Ukončeno"
 
-#: src/libide/terminal/ide-terminal-page.c:190
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Spouštěč podřízeného procesu selhal příliš rychle, nebude spuštěn znovu."
@@ -2080,35 +2080,62 @@ msgstr "Nepojmenovaný terminál"
 msgid "GNOME"
 msgstr "GNOME"
 
-#: src/libide/terminal/ide-terminal-palettes.h:123
-#| msgid "Polari"
+#: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-palettes.h:200
+#: src/libide/terminal/ide-terminal-palettes.h:152
 msgid "Tango"
 msgstr "Tango"
 
-#: src/libide/terminal/ide-terminal-palettes.h:275
+#: src/libide/terminal/ide-terminal-palettes.h:203
 msgid "Dracula"
 msgstr "Dracula"
 
-#: src/libide/terminal/ide-terminal-palettes.h:350
+#: src/libide/terminal/ide-terminal-palettes.h:254
 msgid "Nord"
 msgstr "Nord"
 
-#: src/libide/terminal/ide-terminal-palettes.h:425
+#: src/libide/terminal/ide-terminal-palettes.h:305
 msgid "Linux"
 msgstr "Linux"
 
-#: src/libide/terminal/ide-terminal-palettes.h:500
-#| msgid "Terminal"
+#: src/libide/terminal/ide-terminal-palettes.h:356
 msgid "XTerm"
 msgstr "XTerm"
 
-#: src/libide/terminal/ide-terminal-palettes.h:575
+#: src/libide/terminal/ide-terminal-palettes.h:407
 msgid "RXVT"
 msgstr "RXVT"
+
+#: src/libide/terminal/ide-terminal-palettes.h:458
+msgid "Fishtank"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:511
+#| msgid "Spaces"
+msgid "Spacedust"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:564
+msgid "Catppuccin"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:617
+msgid "Horizon"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:670
+msgid "Tokyo Night"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:723
+msgid "VS Code"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:776
+msgid "Monokai Soda"
+msgstr ""
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2164,12 +2191,12 @@ msgstr "Složka s projekty"
 msgid "Select Font"
 msgstr "Výběr fontu"
 
-#: src/libide/tweaks/ide-tweaks-window.c:88
+#: src/libide/tweaks/ide-tweaks-window.c:86
 #, c-format
 msgid "Builder — %s — Preferences"
 msgstr "Builder — %s — Předvolby"
 
-#: src/libide/tweaks/ide-tweaks-window.c:92
+#: src/libide/tweaks/ide-tweaks-window.c:90
 msgid "Builder — Preferences"
 msgstr "Builder — Předvolby"
 
@@ -2661,7 +2688,36 @@ msgstr "Zleva doprava"
 msgid "Right-to-Left"
 msgstr "Zprava doleva"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:214
+msgid "GPU"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:216
+msgid "GTK Renderer"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/tweaks.ui:443
+msgid "Default"
+msgstr "Výchozí"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Vulkan"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:230
+msgid "GL"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:236
+msgid "Legacy GL"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:242
+msgid "Cairo"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Show Inspector"
 msgstr "Zobrazit inspektora"
 
@@ -2853,10 +2909,6 @@ msgstr "Pracovní procesy"
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "Počet pracovních procesů použitých při sestavování"
-
-#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
-msgid "Default"
-msgstr "Výchozí"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
@@ -4254,6 +4306,7 @@ msgid "Open file or folder"
 msgstr "Otevřít soubor nebo složku"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:212
 msgid "Files"
 msgstr "Soubory"
@@ -4780,18 +4833,26 @@ msgid "Close the current page"
 msgstr "Zavřít aktuální stránku"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Reload Files"
+msgstr "Znovu načíst soubory"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Reload the contents of open files"
+msgstr "Znovu načíst obsah otevřených souborů"
+
+#: src/plugins/menu-search/gtk/menus.ui:125
 msgid "Move to next search result"
 msgstr "Přejít na následující výsledek hledání"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
 msgstr "Přejít na a vybrat další dostupný výsledek hledání"
 
-#: src/plugins/menu-search/gtk/menus.ui:122
+#: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
 msgstr "Přejít na předchozí výsledek hledání"
 
-#: src/plugins/menu-search/gtk/menus.ui:123
+#: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
 msgstr "Přejít na a vybrat předchozí výsledek hledání"
 
