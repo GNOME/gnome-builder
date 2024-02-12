@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-01-13 22:32+0000\n"
-"PO-Revision-Date: 2024-01-18 03:05+0330\n"
+"POT-Creation-Date: 2024-02-10 11:03+0000\n"
+"PO-Revision-Date: 2024-02-13 03:15+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -596,7 +596,7 @@ msgid "What environment to use when running unit tests"
 msgstr "محیطی که میخواهید در آن آزمون‌های واحد اجرا شوند"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "دخدادنگاری پرگفتار"
 
@@ -668,7 +668,7 @@ msgstr "شبیه‌سازی محزن"
 msgid "New Editor Workspace"
 msgstr "فضای کاری ویرایشگر جدید"
 
-#: data/org.gnome.Builder.desktop.in.in:36 src/plugins/dspy/gbp-dspy-workspace.ui:11
+#: data/org.gnome.Builder.desktop.in.in:36
 msgid "D-Bus Inspector"
 msgstr "بازرس D-Bus"
 
@@ -713,7 +713,7 @@ msgstr "بی‌عنوان"
 #: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:528
 #: src/libide/greeter/ide-greeter-workspace.c:666
 #: src/libide/gtk/ide-install-button.ui:31
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24 src/libide/gui/ide-workbench.c:1532
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24 src/libide/gui/ide-workbench.c:1564
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
@@ -730,7 +730,7 @@ msgid "A suitable debugger could not be found."
 msgstr "اشکال‌زدای مناسبی پیدا نشد."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1528
+#: src/libide/gui/ide-workbench.c:1560
 msgid "Open File…"
 msgstr "گشودن پرونده…"
 
@@ -739,7 +739,7 @@ msgid "Open a file in the workspace"
 msgstr "گشودن پرونده‌ای در فضای کاری"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
-#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:204
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "ترجیحات"
 
@@ -794,11 +794,12 @@ msgstr "صفحه‌ها"
 #: src/libide/sourceview/gtk/menus.ui:144 src/libide/sourceview/gtk/menus.ui:152
 #: src/libide/sourceview/gtk/menus.ui:156 src/libide/sourceview/gtk/menus.ui:162
 #: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:111 src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/plugins/menu-search/gtk/menus.ui:111 src/plugins/menu-search/gtk/menus.ui:121
+#: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "ویرایشگر متن"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
 msgid "Search & Replace"
 msgstr "جست‌وجو و جایگزینی"
 
@@ -1176,50 +1177,50 @@ msgid "Unit Test"
 msgstr "آزمون واحد"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:187
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "کاربر درخواست اجرای فرمان «%s» داده است"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:567
 msgid "Cannot run target, another target is running"
 msgstr "نمی‌توان هدف را اجرا کرد، هدف دیگری در حال اجرا شدن است"
 
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:846
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "برنامه با خطای %s خارج شد"
 
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:849
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "برنامه خارج شد"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1038
 #, c-format
 msgid "Running %s…"
 msgstr "در حال اجرای %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1105
 msgid "Deploying to device…"
 msgstr "نصب کردن بر روی افزاره…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1334
 msgid "User requested application to run"
 msgstr "کاربر درخواست اجرای برنامه داده است"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1366
 msgid "User requested application to restart"
 msgstr "کاربر درخواست راه‌اندازی دوباره برنامه داده است"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1396
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "کاربر درخواست اجرای برنامه با %s داده است"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1416
 msgid "User requested application to stop"
 msgstr "کاربر درخواست ایست برنامه داده است"
 
@@ -1330,7 +1331,7 @@ msgstr "گزینش پوشه پروژه"
 msgid "Select Project File"
 msgstr "گزینش پرونده پروژه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:667 src/libide/gui/ide-workbench.c:1531
+#: src/libide/greeter/ide-greeter-workspace.c:667 src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "گشودن"
 
@@ -1534,11 +1535,11 @@ msgstr "پایانه"
 msgid "New Terminals"
 msgstr "پایانه‌های جدید"
 
-#: src/libide/gui/ide-application-actions.c:175
+#: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr "دانیال بهزادی <dani.behzi@ubuntu.com>، اشکان عربی <ashkan.arabim@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:180
+#: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
 msgstr "تأمین مالی به دست"
 
@@ -1967,7 +1968,7 @@ msgstr "گزینش تمام متن از پایانه شامل متن‌های ل
 msgid "Select _None"
 msgstr "گزینش هیچ‌_کدام"
 
-#: src/libide/terminal/ide-terminal.c:509 src/libide/terminal/ide-terminal.c:542
+#: src/libide/terminal/ide-terminal.c:538 src/libide/terminal/ide-terminal.c:571
 msgid "Copied to clipboard"
 msgstr "در تخته‌گیره رونوشت شد"
 
@@ -1975,60 +1976,88 @@ msgstr "در تخته‌گیره رونوشت شد"
 msgid "Save Terminal Content As"
 msgstr "ذخیره محتوای پایانه به شکل"
 
-#: src/libide/terminal/ide-terminal-page.c:163
+#: src/libide/terminal/ide-terminal-page.c:118
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr "شکست در اجرای زیرفرایند. شاید مجبور باشید پروژه را دوباره بسازید."
 
-#: src/libide/terminal/ide-terminal-page.c:168
-#: src/libide/terminal/ide-terminal-page.c:203
-#: src/libide/terminal/ide-terminal-page.c:316
+#: src/libide/terminal/ide-terminal-page.c:123
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:271
 msgid "Untitled terminal"
 msgstr "پایانهٔ بی‌نام"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:170
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Exited"
 msgstr "خارج شده"
 
-#: src/libide/terminal/ide-terminal-page.c:190
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "اجراکننده زیرفرایند خیلی زود خارج شد، دوباره آغاز نخواهد شد."
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
-msgstr "پایانه بی‌نام"
+msgstr "پایانهٔ بی‌نام"
 
 #: src/libide/terminal/ide-terminal-palettes.h:48
 msgid "GNOME"
 msgstr "گنوم"
 
-#: src/libide/terminal/ide-terminal-palettes.h:123
+#: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
 msgstr "آقتاب‌زده"
 
-#: src/libide/terminal/ide-terminal-palettes.h:200
+#: src/libide/terminal/ide-terminal-palettes.h:152
 msgid "Tango"
 msgstr "تانگو"
 
-#: src/libide/terminal/ide-terminal-palettes.h:275
+#: src/libide/terminal/ide-terminal-palettes.h:203
 msgid "Dracula"
 msgstr "دراکولا"
 
-#: src/libide/terminal/ide-terminal-palettes.h:350
+#: src/libide/terminal/ide-terminal-palettes.h:254
 msgid "Nord"
 msgstr "نورد"
 
-#: src/libide/terminal/ide-terminal-palettes.h:425
+#: src/libide/terminal/ide-terminal-palettes.h:305
 msgid "Linux"
 msgstr "لینوکس"
 
-#: src/libide/terminal/ide-terminal-palettes.h:500
+#: src/libide/terminal/ide-terminal-palettes.h:356
 msgid "XTerm"
 msgstr "اکس‌ترم"
 
-#: src/libide/terminal/ide-terminal-palettes.h:575
+#: src/libide/terminal/ide-terminal-palettes.h:407
 msgid "RXVT"
 msgstr "Rxvt"
+
+#: src/libide/terminal/ide-terminal-palettes.h:458
+msgid "Fishtank"
+msgstr "آکواریوم"
+
+#: src/libide/terminal/ide-terminal-palettes.h:511
+msgid "Spacedust"
+msgstr "غبار فضایی"
+
+#: src/libide/terminal/ide-terminal-palettes.h:564
+msgid "Catppuccin"
+msgstr "قهوه‌ای"
+
+#: src/libide/terminal/ide-terminal-palettes.h:617
+msgid "Horizon"
+msgstr "افق"
+
+#: src/libide/terminal/ide-terminal-palettes.h:670
+msgid "Tokyo Night"
+msgstr "شب توکیو"
+
+#: src/libide/terminal/ide-terminal-palettes.h:723
+msgid "VS Code"
+msgstr "وی‌اس کد"
+
+#: src/libide/terminal/ide-terminal-palettes.h:776
+msgid "Monokai Soda"
+msgstr "سودای مونوکای"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2084,12 +2113,12 @@ msgstr "پوشه پروژه‌ها"
 msgid "Select Font"
 msgstr "گزینش قلم"
 
-#: src/libide/tweaks/ide-tweaks-window.c:88
+#: src/libide/tweaks/ide-tweaks-window.c:86
 #, c-format
 msgid "Builder — %s — Preferences"
 msgstr "سازنده — %s — ترجیحات"
 
-#: src/libide/tweaks/ide-tweaks-window.c:92
+#: src/libide/tweaks/ide-tweaks-window.c:90
 msgid "Builder — Preferences"
 msgstr "سازنده — ترجیحات"
 
@@ -2578,7 +2607,36 @@ msgstr "چپ به راست"
 msgid "Right-to-Left"
 msgstr "راست به چپ"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:214
+msgid "GPU"
+msgstr "شتاب‌دهندهٔ گرافیکی"
+
+#: src/plugins/buildui/gtk/menus.ui:216
+msgid "GTK Renderer"
+msgstr "پرداختگر GTK"
+
+#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/tweaks.ui:443
+msgid "Default"
+msgstr "پیش‌گزیده"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Vulkan"
+msgstr "ولکان"
+
+#: src/plugins/buildui/gtk/menus.ui:230
+msgid "GL"
+msgstr "GL"
+
+#: src/plugins/buildui/gtk/menus.ui:236
+msgid "Legacy GL"
+msgstr "GL قدیمی"
+
+#: src/plugins/buildui/gtk/menus.ui:242
+msgid "Cairo"
+msgstr "کایرو"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Show Inspector"
 msgstr "نمایش بازرس"
 
@@ -2761,10 +2819,6 @@ msgstr "کارگرها"
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
 msgstr "تعداد کارگرهای استفاده شده برای عملیات ساخت"
-
-#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
-msgid "Default"
-msgstr "پیش‌گزیده"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
@@ -4129,7 +4183,8 @@ msgid "Open file or folder"
 msgstr "گشودن پرونده یا پوشه"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:212
+#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "پرونده‌ها"
 
@@ -4644,18 +4699,26 @@ msgid "Close the current page"
 msgstr "بستن صفحهٔ کنونی"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Reload Files"
+msgstr "بازخوانی پرونده‌ها"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+msgid "Reload the contents of open files"
+msgstr "بازخوانی محتوای پرونده‌های باز"
+
+#: src/plugins/menu-search/gtk/menus.ui:125
 msgid "Move to next search result"
 msgstr "رفتن به نتیجهٔ جست‌وجوی بعدی"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
 msgstr "رفتن و گزینش نتیجهٔ جست‌وجوی موجود بعدی"
 
-#: src/plugins/menu-search/gtk/menus.ui:122
+#: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
 msgstr "رفتن به نتیجهٔ جست‌وجوی پیشین"
 
-#: src/plugins/menu-search/gtk/menus.ui:123
+#: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
 msgstr "رفتن و گزینش نتیجهٔ جست‌وجوی پیشین"
 
@@ -5041,37 +5104,37 @@ msgstr "نام پروندهٔ جدید"
 msgid "_Create"
 msgstr "_ایجاد"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:697
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying 1 file"
 msgstr "رونوشت کردن ۱ پرونده"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:700
+#: src/plugins/project-tree/gbp-project-tree-addin.c:703
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "رونوشت کردن %s از %s پرونده"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:736
+#: src/plugins/project-tree/gbp-project-tree-addin.c:739
 msgid "Failed to copy files"
 msgstr "کشست در رونوشت پرونده‌ها"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:746
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 msgid "Files copied"
 msgstr "پرونده‌ها رونوشت شدند"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:750
+#: src/plugins/project-tree/gbp-project-tree-addin.c:753
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s پرونده رونوشت شدند"
 msgstr[1] "%s پرونده رونوشت شد"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
 msgstr "رونوشت کردن پرونده‌ها…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:942
+#: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr "پرونده‌ها تا لحظه‌ای دیگر رونوشت می‌شوند"
 
