@@ -107,6 +107,7 @@ ide_io_init_ctor (void)
   ADD_ICON (bundled_by_content_type, "text-x-copying-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-c++src-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-csrc-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "text-x-go-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-javascript-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-python-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-x-python3-symbolic", "text-x-python-symbolic");
@@ -229,3 +230,4 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
 
   return g_steal_pointer (&icon);
 }
+
