@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2015, 2016.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021, 2022, 2023.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-07 01:24+0000\n"
-"PO-Revision-Date: 2023-09-07 09:27+0300\n"
+"POT-Creation-Date: 2024-02-10 11:03+0000\n"
+"PO-Revision-Date: 2024-02-13 20:12+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16,12 +16,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:21
+#: src/libide/editor/ide-editor-workspace.ui:38
+#: src/libide/editor/ide-editor-workspace.ui:61
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -32,12 +33,13 @@ msgstr "Будівник"
 msgid "An IDE for GNOME"
 msgstr "Середовище розробляння для GNOME"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
+#. developer_name tag deprecated with Appstream 1.0
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
 #: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert та інші"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -50,7 +52,7 @@ msgstr ""
 "можливостями, які подобаються усім розробникам, зокрема підсвічуванням "
 "синтаксичних конструкцій та фрагментами."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -58,33 +60,33 @@ msgstr ""
 "Випуски «Будівника» стабільно синхронізовано із випусками GNOME, які "
 "відбуваються кожні шість місяців."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
 msgstr "Можливості:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr ""
 "Вбудоване підсвічування синтаксичних конструкцій для багатьох мов "
 "програмування"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Панелі паралельного редагування коду"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Multi-monitor support"
 msgstr "Підтримка конфігурацій із багатьма моніторами"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Code overview mini-map"
 msgstr "Мінікарта для огляду коду"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Інтеграція із Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -92,81 +94,81 @@ msgstr ""
 "Інтеграція із Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize та "
 "Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Автоматичне доповнення коду на основі Clang, семантичне підсвічування та "
 "діагностика"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Автоматичне доповнення коду на основі Python, семантичне підсвічування та "
 "діагностика"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Автоматичне доповнення та діагностика коду Vala"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Підтримка автоматичних відступів у коді для C, Python, Vala та XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr ""
 "Інтерактивний перегляд результатів обробки коду HTML, Markdown, "
 "reStructuredText та Sphinx"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Можливе редагування коду у стилі Vim, Emacs та SublimeText"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "Інтегрований засіб профілювання для «рідних» програм"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "Інтегрований засіб діагностики для «рідних» програм"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Підтримка збирання пакунків-комплектів jhbuild та flatpak"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Підтримка перегляду записів TODO у коді"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Швидкий нечіткий пошук тексту у файлах та символах"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
 msgid "Quickly access your projects"
 msgstr "Швидкий доступ до ваших проєктів"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
 msgid "Create new projects from a variety of templates"
 msgstr "Створення проєктів на основі широкого діапазону шаблонів"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "Integration with Git to clone your projects"
 msgstr "Інтеграція із Git для клонування ваших проєктів"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "The source code editor"
 msgstr "Редактор коду"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
 msgid "Fast global fuzzy search"
 msgstr "Швидкий загальний нечіткий пошук"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
 msgid "Debug with the GNU debugger"
 msgstr "Діагностика за допомогою GNU debugger"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
 msgid "Use the minimap to see more of the file"
 msgstr "Використання мінікарти для повнішого перегляду вмісту файла"
 
@@ -641,7 +643,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Яке середовище слід використати для виконання перевірки модулів"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Докладний журнал"
 
@@ -713,8 +715,8 @@ msgid "Start New Project"
 msgstr "Створити проєкт"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:282
-#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
 msgid "Clone Repository"
 msgstr "Клонувати сховище"
 
@@ -723,11 +725,10 @@ msgid "New Editor Workspace"
 msgstr "Новий робочий простір редактора"
 
 #: data/org.gnome.Builder.desktop.in.in:36
-#: src/plugins/dspy/gbp-dspy-workspace.ui:11
 msgid "D-Bus Inspector"
 msgstr "Інспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3822
+#: src/libide/code/ide-buffer.c:3834
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -766,19 +767,19 @@ msgid "Untitled"
 msgstr "Без назви"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:558
-#: src/libide/greeter/ide-greeter-workspace.c:697
+#: src/libide/greeter/ide-greeter-workspace.c:528
+#: src/libide/greeter/ide-greeter-workspace.c:666
 #: src/libide/gtk/ide-install-button.ui:31
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1531
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
+#: src/libide/gui/ide-workbench.c:1564
 #: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
-#: src/plugins/testui/gbp-testui-output-panel.c:104
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
+#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -787,7 +788,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1560
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
@@ -796,13 +797,12 @@ msgid "Open a file in the workspace"
 msgstr "Відкрити файл у новому робочому просторі"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
-#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:129
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:476
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
@@ -810,7 +810,7 @@ msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
 #: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
-#: src/libide/gui/gtk/menus.ui:45 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/gui/gtk/menus.ui:45
 msgid "Help"
 msgstr "Довідка"
 
@@ -859,11 +859,12 @@ msgstr "Сторінки"
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
+#: src/plugins/menu-search/gtk/menus.ui:121
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Текстовий редактор"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
 msgid "Search & Replace"
 msgstr "Пошук і заміна"
 
@@ -952,26 +953,26 @@ msgstr "Не вдалося надрукувати: %s"
 msgid "Failed to format selection: %s"
 msgstr "Не вдалося форматувати позначене: %s"
 
-#: src/libide/editor/ide-editor-page.c:1131
+#: src/libide/editor/ide-editor-page.c:1132
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:100
+#: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Зберегти файл"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/libide/editor/ide-editor-page.c:1134
+#: src/libide/editor/ide-editor-page.c:1135
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:499
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -1046,9 +1047,14 @@ msgid "Line Ending:"
 msgstr "Кодування рядка:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:96
+#: src/plugins/create-project/gbp-create-project-widget.ui:100
 msgid "Language"
 msgstr "Мова"
+
+#: src/libide/editor/ide-editor-workspace.ui:105
+#: src/libide/gui/ide-primary-workspace.ui:112
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Перемкнути нижню панель (Ctrl+F9)"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1246,52 +1252,52 @@ msgid "Unit Test"
 msgstr "Перевірка модулів"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:187
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Користувачем надіслано запит на запуск інструмента «%s»"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:567
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:846
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Програма завершила роботу із помилкою: %s"
 
-#: src/libide/foundry/ide-run-manager.c:808
+#: src/libide/foundry/ide-run-manager.c:849
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1038
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1105
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1334
 msgid "User requested application to run"
 msgstr "Користувачем надіслано запит щодо запуску програми"
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1366
 msgid "User requested application to restart"
 msgstr "Користувачем надіслано запит щодо перезапуску програми"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1396
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 "Користувачем надіслано запит щодо запуску програми за допомогою інструмента "
 "«%s»"
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1416
 msgid "User requested application to stop"
 msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
@@ -1299,16 +1305,16 @@ msgstr "Користувачем надіслано запит щодо прип
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Основна система"
 
-#: src/libide/foundry/ide-runtime-provider.c:147
+#: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
 msgid "Discovered runtime “%s”"
 msgstr "Виявлено середовище виконання «%s»"
 
-#: src/libide/foundry/ide-runtime-provider.c:170
+#: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
 msgstr "Вилучаємо середовище виконання «%s»"
@@ -1335,14 +1341,14 @@ msgstr "Проєкти"
 
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
-#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
+#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
 msgid "_Clone Repository…"
 msgstr "_Клонувати сховище…"
 
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Закрити"
 
@@ -1366,80 +1372,76 @@ msgstr "Вибрати _теку…"
 msgid "Directory"
 msgstr "Каталог"
 
-#: src/libide/greeter/ide-greeter-workspace.c:230
+#: src/libide/greeter/ide-greeter-workspace.c:222
 #: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
 #, c-format
 msgid "Builder — %s"
 msgstr "Будівник — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:349
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "Не вдалося завантажити проєкт"
 
-#: src/libide/greeter/ide-greeter-workspace.c:351
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/libide/greeter/ide-greeter-workspace.c:336
+#: src/plugins/create-project/gbp-create-project-widget.c:262
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Закрити"
 
-#: src/libide/greeter/ide-greeter-workspace.c:555
+#: src/libide/greeter/ide-greeter-workspace.c:525
 msgid "Delete Project Sources?"
 msgstr "Вилучити код проєкту?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:556
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 "Вилучення початкового коду проєкту з вашого комп'ютера не можна буде "
 "скасувати."
 
-#: src/libide/greeter/ide-greeter-workspace.c:559
+#: src/libide/greeter/ide-greeter-workspace.c:529
 msgid "_Delete Project Sources"
 msgstr "Ви_лучити код проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace.c:654
-#: src/libide/greeter/ide-greeter-workspace.c:693
+#: src/libide/greeter/ide-greeter-workspace.c:623
+#: src/libide/greeter/ide-greeter-workspace.c:662
 msgid "Select Project Folder"
 msgstr "Виберіть теку проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace.c:659
+#: src/libide/greeter/ide-greeter-workspace.c:628
 msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace.c:698
-#: src/libide/gui/ide-workbench.c:1530
+#: src/libide/greeter/ide-greeter-workspace.c:667
+#: src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "_Відкрити"
 
-#: src/libide/greeter/ide-greeter-workspace.c:709
+#: src/libide/greeter/ide-greeter-workspace.c:678
 msgid "All Project Types"
 msgstr "усі типи проєктів"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:21
-msgid "Go back"
-msgstr "Назад"
+#: src/libide/greeter/ide-greeter-workspace.ui:11
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Відкрити проєкт"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
 msgid "Toggle selection mode"
 msgstr "Перемкнути режим позначення"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:51
-msgctxt "title"
-msgid "Open a Project"
-msgstr "Відкрити проєкт"
-
-#: src/libide/greeter/ide-greeter-workspace.ui:75
+#: src/libide/greeter/ide-greeter-workspace.ui:58
 msgid "Search all Builder projects…"
 msgstr "Шукати усі проєкти «Будівника»…"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:97
+#: src/libide/greeter/ide-greeter-workspace.ui:80
 msgid "No Projects Found"
 msgstr "Не знайдено жодного проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:130
+#: src/libide/greeter/ide-greeter-workspace.ui:113
 msgid "_Remove Projects"
 msgstr "Ви_лучити проєкти"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:141
+#: src/libide/greeter/ide-greeter-workspace.ui:124
 msgid "Remove Projects and Sources…"
 msgstr "Вилучити проєкти і початкові коди…"
 
@@ -1465,9 +1467,9 @@ msgstr "Відкрити"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:498
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
 msgid "Select"
 msgstr "Вибрати"
 
@@ -1538,37 +1540,37 @@ msgstr "Пошук"
 msgid "Search for anything"
 msgstr "Шукати будь-що"
 
-#: src/libide/gui/ide-search-popover.ui:246
+#: src/libide/gui/ide-search-popover.ui:238
 msgid "_Everything"
 msgstr "_Усе"
 
-#: src/libide/gui/ide-search-popover.ui:253
+#: src/libide/gui/ide-search-popover.ui:245
 msgid "_Actions"
 msgstr "_Дії"
 
-#: src/libide/gui/ide-search-popover.ui:260
+#: src/libide/gui/ide-search-popover.ui:252
 msgid "_Commands"
 msgstr "_Команди"
 
-#: src/libide/gui/ide-search-popover.ui:267
+#: src/libide/gui/ide-search-popover.ui:259
 msgid "_Files"
 msgstr "_Файли"
 
-#: src/libide/gui/ide-search-popover.ui:274
+#: src/libide/gui/ide-search-popover.ui:266
 msgid "_Symbols"
 msgstr "Си_мволи"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
-#: src/libide/gtk/ide-shortcut-accel-dialog.c:392
+#: src/libide/gtk/ide-shortcut-accel-dialog.c:420
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
 msgstr "Уведіть нове сполучення для зміни <b>%s</b>."
 
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:27
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:31
 msgid "_Set"
 msgstr "_Встановити"
 
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:68
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:72
 msgid "Press Escape to cancel or Backspace to disable."
 msgstr "Натисніть Escape, щоб скасувати, або Backspace, щоб вимкнути."
 
@@ -1616,11 +1618,11 @@ msgstr "Термінал"
 msgid "New Terminals"
 msgstr "Нові термінали"
 
-#: src/libide/gui/ide-application-actions.c:175
+#: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr "Daniel Korostil <ted.korostiled@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:180
+#: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
 msgstr "Фінансували"
 
@@ -1690,22 +1692,24 @@ msgstr "Відкрити меню програми (F10)"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Не вдалося завантажити HTML. Не передбачено підтримки WebKit."
 
-#: src/libide/gui/ide-primary-workspace.ui:17
+#: src/libide/gui/ide-primary-workspace.c:87
+#| msgid "No build configuration"
+msgid "Invalid configuration"
+msgstr "Некоректні налаштування"
+
+#: src/libide/gui/ide-primary-workspace.ui:44
 msgid "Toggle Left Panel (F9)"
 msgstr "Перемкнути ліву панель (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/libide/gui/ide-primary-workspace.ui:79
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Перемкнути праву панель"
 
-#: src/libide/gui/ide-primary-workspace.ui:59
+#: src/libide/gui/ide-primary-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:134
 msgid "Search (Ctrl+Enter)"
 msgstr "Шукати (Ctrl+Enter)"
-
-#: src/libide/gui/ide-primary-workspace.ui:106
-msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Перемкнути нижню панель (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1744,7 +1748,7 @@ msgstr "Проєкт завантажено"
 msgid "Loading project “%s”"
 msgstr "Завантажуємо проєкт «%s»"
 
-#: src/libide/gui/ide-workspace.c:1713
+#: src/libide/gui/ide-workspace.c:1676
 msgid "There are unsaved documents"
 msgstr "Маємо незбережені документи"
 
@@ -1776,12 +1780,12 @@ msgid "The operation has been cancelled"
 msgstr "Виконання дії було скасовано"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1698
+#: src/libide/lsp/ide-lsp-client.c:1733
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2130 src/libide/lsp/ide-lsp-client.c:2240
+#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
 msgid "No connection to language server"
 msgstr "Немає з'єднання із мовним сервером"
 
@@ -1802,7 +1806,7 @@ msgid "Language server “%s” spawned as process %s"
 msgstr "Сервер мови «%s» породжено як процес %s"
 
 #: src/libide/plugins/ide-plugin.c:336
-#: src/plugins/create-project/gbp-create-project-widget.ui:110
+#: src/plugins/create-project/gbp-create-project-widget.ui:114
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Контроль версії"
@@ -1820,7 +1824,7 @@ msgid "Devices & Simulators"
 msgstr "Пристрої та симулятори"
 
 #: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
-#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Діагностика"
 
@@ -1860,15 +1864,15 @@ msgstr "Інтеграція до стільниці"
 msgid "Additional"
 msgstr "Додатково"
 
-#: src/libide/plugins/ide-plugin-view.ui:35
+#: src/libide/plugins/ide-plugin-view.ui:36
 msgid "Authors"
 msgstr "Автори"
 
-#: src/libide/plugins/ide-plugin-view.ui:66
+#: src/libide/plugins/ide-plugin-view.ui:68
 msgid "Version"
 msgstr "Версія"
 
-#: src/libide/plugins/ide-plugin-view.ui:97
+#: src/libide/plugins/ide-plugin-view.ui:100
 msgid "Website"
 msgstr "Сайт"
 
@@ -1939,6 +1943,7 @@ msgid "_Selection"
 msgstr "Ви_бір"
 
 #: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Вибрати _все"
 
@@ -2012,73 +2017,79 @@ msgid "Code Navigation"
 msgstr "Навігація кодом"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1624
+#: src/libide/sourceview/ide-source-view.c:1663
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Рд %u, Поз %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1626
+#: src/libide/sourceview/ide-source-view.c:1665
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
 msgstr "Рд %u, Поз %u (Позн: %u)"
 
-#: src/libide/terminal/gtk/menus.ui:6
+#: src/libide/terminal/gtk/menus.ui:6 src/libide/terminal/ide-terminal.ui:113
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: src/libide/terminal/gtk/menus.ui:16
+#: src/libide/terminal/gtk/menus.ui:16 src/libide/terminal/ide-terminal.ui:121
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/libide/terminal/gtk/menus.ui:17
+#: src/libide/terminal/gtk/menus.ui:17 src/libide/terminal/ide-terminal.ui:122
 msgid "Copy selection from terminal to clipboard"
 msgstr "Копіювати позначений текст з термінала до буфера"
 
-#: src/libide/terminal/gtk/menus.ui:22
+#: src/libide/terminal/gtk/menus.ui:22 src/libide/terminal/ide-terminal.ui:126
 msgid "_Copy Link"
 msgstr "_Копіювати посилання"
 
-#: src/libide/terminal/gtk/menus.ui:27
+#: src/libide/terminal/gtk/menus.ui:27 src/libide/terminal/ide-terminal.ui:132
 msgid "_Paste"
 msgstr "В_ставити"
 
-#: src/libide/terminal/gtk/menus.ui:28
+#: src/libide/terminal/gtk/menus.ui:28 src/libide/terminal/ide-terminal.ui:133
 msgid "Paste from clipboard into the terminal"
 msgstr "Вставити з буфера обміну даними до термінала"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:38 src/libide/terminal/ide-terminal.ui:141
 msgid "Selection all text from terminal including scrollback"
 msgstr "Позначити увесь текст у терміналі, разом із буфером гортання"
 
-#: src/libide/terminal/gtk/menus.ui:44
+#: src/libide/terminal/gtk/menus.ui:44 src/libide/terminal/ide-terminal.ui:147
 msgid "Select _None"
 msgstr "За_брати вибір"
+
+#: src/libide/terminal/ide-terminal.c:538
+#: src/libide/terminal/ide-terminal.c:571
+#| msgid "Clipboard"
+msgid "Copied to clipboard"
+msgstr "Скопійовано до буфера обміну"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:272
 msgid "Save Terminal Content As"
 msgstr "Зберегти вміст терміналу як"
 
-#: src/libide/terminal/ide-terminal-page.c:117
+#: src/libide/terminal/ide-terminal-page.c:118
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Не вдалося запустити підпроцес. Можливо, вам слід повторно зібрати ваш "
 "проєкт."
 
-#: src/libide/terminal/ide-terminal-page.c:122
-#: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:270
+#: src/libide/terminal/ide-terminal-page.c:123
+#: src/libide/terminal/ide-terminal-page.c:158
+#: src/libide/terminal/ide-terminal-page.c:271
 msgid "Untitled terminal"
 msgstr "Термінал без назви"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:124
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Exited"
 msgstr "Вихід"
 
-#: src/libide/terminal/ide-terminal-page.c:144
+#: src/libide/terminal/ide-terminal-page.c:145
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не "
@@ -2087,6 +2098,70 @@ msgstr ""
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
 msgstr "Термінал без назви"
+
+#: src/libide/terminal/ide-terminal-palettes.h:48
+msgid "GNOME"
+msgstr "GNOME"
+
+#: src/libide/terminal/ide-terminal-palettes.h:99
+#| msgid "Polari"
+msgid "Solarized"
+msgstr "Засвічена"
+
+#: src/libide/terminal/ide-terminal-palettes.h:152
+msgid "Tango"
+msgstr "Tango"
+
+#: src/libide/terminal/ide-terminal-palettes.h:203
+msgid "Dracula"
+msgstr "Дракула"
+
+#: src/libide/terminal/ide-terminal-palettes.h:254
+msgid "Nord"
+msgstr "Nord"
+
+#: src/libide/terminal/ide-terminal-palettes.h:305
+msgid "Linux"
+msgstr "Linux"
+
+#: src/libide/terminal/ide-terminal-palettes.h:356
+#| msgid "Terminal"
+msgid "XTerm"
+msgstr "XTerm"
+
+#: src/libide/terminal/ide-terminal-palettes.h:407
+msgid "RXVT"
+msgstr "RXVT"
+
+#: src/libide/terminal/ide-terminal-palettes.h:458
+msgid "Fishtank"
+msgstr "Fishtank"
+
+#: src/libide/terminal/ide-terminal-palettes.h:511
+#| msgid "Spaces"
+msgid "Spacedust"
+msgstr "Spacedust"
+
+#: src/libide/terminal/ide-terminal-palettes.h:564
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/libide/terminal/ide-terminal-palettes.h:617
+msgid "Horizon"
+msgstr "Горизонт"
+
+#: src/libide/terminal/ide-terminal-palettes.h:670
+msgid "Tokyo Night"
+msgstr "Ніч у Токіо"
+
+#: src/libide/terminal/ide-terminal-palettes.h:723
+#| msgid "Code"
+msgid "VS Code"
+msgstr "VS-код"
+
+#: src/libide/terminal/ide-terminal-palettes.h:776
+msgid "Monokai Soda"
+msgstr "Monokai Soda"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2103,6 +2178,24 @@ msgstr "Перейти до наступного відповідника"
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Режим огортання"
+
+#: src/libide/terminal/ide-terminal.ui:154
+msgid "Allow Input"
+msgstr "Дозволити введення"
+
+#: src/libide/terminal/ide-terminal.ui:161
+#| msgid "Search for…"
+msgid "Search…"
+msgstr "Шукати…"
+
+#: src/libide/terminal/ide-terminal.ui:168
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Скинути"
+
+#: src/libide/terminal/ide-terminal.ui:174
+msgid "Reset and Clear"
+msgstr "Скинути та очистити"
 
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
@@ -2125,22 +2218,14 @@ msgstr "Каталог проєктів"
 msgid "Select Font"
 msgstr "Вибір шрифту"
 
-#: src/libide/tweaks/ide-tweaks-window.c:134
+#: src/libide/tweaks/ide-tweaks-window.c:86
 #, c-format
 msgid "Builder — %s — Preferences"
 msgstr "Будівник — %s – Налаштування"
 
-#: src/libide/tweaks/ide-tweaks-window.c:138
+#: src/libide/tweaks/ide-tweaks-window.c:90
 msgid "Builder — Preferences"
 msgstr "Будівник – Налаштування"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:35
-msgid "All Preferences"
-msgstr "Усі налаштування"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:61
-msgid "Primary Menu"
-msgstr "Основне меню"
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
@@ -2231,17 +2316,17 @@ msgstr ""
 "Ключі можуть містити лише літерно-цифрові символи і символи підкреслювання."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 msgid "Add _Variable"
 msgstr "Додати з_мінну"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 msgid "Add Variable"
 msgstr "Додати змінну"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "_Додати"
 
@@ -2255,27 +2340,27 @@ msgid "Remove"
 msgstr "Вилучити"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:103
+#: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Save"
 msgstr "З_берегти"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:356
+#: src/plugins/buildui/gbp-buildui-log-pane.c:395
 msgid "Build Output"
 msgstr "Вивід збірки"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:357
+#: src/plugins/buildui/gbp-buildui-log-pane.c:396
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Виведення збирання (Shift+Ctrl+L)"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
 msgstr "Спорожнити журнал збирання"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:56
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:60
 msgid "Cancel build"
 msgstr "Скасувати збирання"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:72
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:76
 msgid "Save build log"
 msgstr "Зберегти журнал збирання"
 
@@ -2327,7 +2412,7 @@ msgstr "Попередження"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
 msgstr "Конвеєр збирання"
 
@@ -2382,22 +2467,22 @@ msgstr "Не вдалося побудувати список цілей зби�
 msgid "Select Build Target"
 msgstr "Виберіть ціль збирання"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
 msgstr "Доступні цілі збирання"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
 "Деякі цілі можуть бути недоступними до того, як буде налаштовано проєкт."
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
 msgstr "Автоматичне виявлення"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
 "Вибір цього варіанта дозволить «Будівнику» автоматично скористатися "
@@ -2415,20 +2500,20 @@ msgstr "Дублювати"
 msgid "Duplicate into new configuration"
 msgstr "Дублювати до нових налаштувань"
 
-#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make Active"
 msgstr "Зробити активними"
 
-#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:219
 msgid "Make configuration active and reload build pipeline"
 msgstr "Зробити налаштування активними і перезавантажити конвеєр збирання"
 
-#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "Вилучити"
 
-#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:233
 msgid "Delete configuration"
 msgstr "Вилучити налаштування"
 
@@ -2637,7 +2722,37 @@ msgstr "Зліва праворуч"
 msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:214
+msgid "GPU"
+msgstr "ГП"
+
+#: src/plugins/buildui/gtk/menus.ui:216
+msgid "GTK Renderer"
+msgstr "Обробник GTK"
+
+#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/tweaks.ui:443
+msgid "Default"
+msgstr "Типовий"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/plugins/buildui/gtk/menus.ui:230
+#| msgid "G"
+msgid "GL"
+msgstr "GL"
+
+#: src/plugins/buildui/gtk/menus.ui:236
+msgid "Legacy GL"
+msgstr "Застаріла GL"
+
+#: src/plugins/buildui/gtk/menus.ui:242
+msgid "Cairo"
+msgstr "Cairo"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Show Inspector"
 msgstr "Показати інспектор"
 
@@ -2832,10 +2947,6 @@ msgstr "Обробники"
 msgid "Number of workers to use when performing builds"
 msgstr "Кількість обробників, які слід використовувати для виконання збирання"
 
-#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
-msgid "Default"
-msgstr "Типовий"
-
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
 msgstr "1 на процесор"
@@ -2873,7 +2984,7 @@ msgid "Build Environment"
 msgstr "Середовище збирання"
 
 #: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Локальність"
 
@@ -2897,13 +3008,13 @@ msgstr ""
 "Набір інструментів, який використано для збирання вашої програми, буде "
 "автоматично визначено з середовища виконання."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Отримати залежності"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
@@ -3204,24 +3315,28 @@ msgstr "Переформатувати прототипи функцій"
 msgid "Display the project creation guide"
 msgstr "Показати настанови зі створення проєкту"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
+#: src/plugins/create-project/gbp-create-project-widget.c:220
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
 msgid "Select Location"
 msgstr "Вибрати місце"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:260
 msgid "Failed to Create Project"
 msgstr "Не вдалося створити проєкт"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:13
+#: src/plugins/create-project/gbp-create-project-widget.ui:5
+msgid "Create New Project"
+msgstr "Створити новий проєкт"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:17
 msgid "Project Name"
 msgstr "Назва проєкту"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:19
+#: src/plugins/create-project/gbp-create-project-widget.ui:23
 msgid "A subdirectory with this name already exists"
 msgstr "Підкаталог із такою назвою вже існує."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:26
+#: src/plugins/create-project/gbp-create-project-widget.ui:30
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -3231,11 +3346,11 @@ msgstr ""
 "ресурсів. Назва має складатися з малих латинських літер і не починатися з "
 "цифри."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:42
+#: src/plugins/create-project/gbp-create-project-widget.ui:46
 msgid "Application ID…"
 msgstr "Ідентифікатор програми…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:48
+#: src/plugins/create-project/gbp-create-project-widget.ui:52
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -3244,38 +3359,34 @@ msgstr ""
 "вашої програми. Приклад: «org.gnome.Builder». Ідентифікатор не повинен "
 "містити дефісів."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:64
+#: src/plugins/create-project/gbp-create-project-widget.ui:68
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
 #: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
 msgid "Location"
 msgstr "Місце"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:80
+#: src/plugins/create-project/gbp-create-project-widget.ui:84
 msgid "The project will be created in a new subdirectory."
 msgstr "Проєкт буде створено у новому підкаталозі."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:103
+#: src/plugins/create-project/gbp-create-project-widget.ui:107
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Ліцензування"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:122
+#: src/plugins/create-project/gbp-create-project-widget.ui:120
 msgid "Template"
 msgstr "Шаблон"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:181
+#: src/plugins/create-project/gbp-create-project-widget.ui:179
 msgid "Create Project"
 msgstr "Створити проєкт"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
 msgstr "_Створити проєкт…"
-
-#: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
-msgid "Create New Project"
-msgstr "Створити новий проєкт"
 
 #: src/plugins/create-project/gtk/menus.ui:9
 #: src/plugins/create-project/gtk/menus.ui:21
@@ -3608,10 +3719,6 @@ msgstr "Перемкнутися на стиль %s"
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
 msgid "Switch application and editor theme"
 msgstr "Перемкнути тему програми і редактора"
-
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-msgid "Reset"
-msgstr "Скинути"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
@@ -4240,7 +4347,8 @@ msgid "Open file or folder"
 msgstr "Відкриття файла або теки"
 
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:212
+#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Файли"
 
@@ -4261,7 +4369,7 @@ msgstr "Встановлення завершено"
 msgid "The client has been closed"
 msgstr "Клієнт закрито"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Не вдалося вилучити маніфест flatpak: %s"
@@ -4285,8 +4393,8 @@ msgstr ""
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
 msgid "Name"
 msgstr "Назва"
 
@@ -4309,37 +4417,36 @@ msgstr ""
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
 msgid "Creating flatpak workspace"
 msgstr "Створення робочого простору flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:287
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
 #, c-format
-#| msgid "Exporting staging directory"
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Вилучаємо застарілий вміст з проміжного каталогу flatpak: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:411
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
 msgid "Preparing build directory"
 msgstr "Готуємо каталог для збирання"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:466
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
 msgid "Downloading dependencies"
 msgstr "Отримання залежностей"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:545
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
 msgid "Building dependencies"
 msgstr "Збирання залежностей"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:600
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
 msgid "Finalizing flatpak build"
 msgstr "Завершуємо збирання flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
 msgid "Exporting staging directory"
 msgstr "Експортування формувального каталогу"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:730
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
 msgid "Creating flatpak bundle"
 msgstr "Створюємо комплект flatpak"
 
@@ -4527,7 +4634,7 @@ msgstr "Потрібно вказати правильне посилання у
 msgid "Authorship"
 msgstr "Авторство"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:202
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
 msgid "Email"
 msgstr "Ел. пошта"
 
@@ -4688,7 +4795,7 @@ msgstr "Створити порожній проєкт з використанн
 msgid "Maven Run"
 msgstr "Запуск Maven"
 
-#: src/plugins/menu-search/gbp-menu-search-provider.c:192
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Дії"
 
@@ -4771,18 +4878,28 @@ msgid "Close the current page"
 msgstr "Закрити поточну сторінку"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
+#| msgid "Removed Files"
+msgid "Reload Files"
+msgstr "Перезавантажити файли"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+#| msgid "Reload the current page"
+msgid "Reload the contents of open files"
+msgstr "Перезавантажити вміст відкритих файлів"
+
+#: src/plugins/menu-search/gtk/menus.ui:125
 msgid "Move to next search result"
 msgstr "Перейти до наступного результату пошуку"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
 msgstr "Перейти і позначити наступний доступний результат пошуку"
 
-#: src/plugins/menu-search/gtk/menus.ui:122
+#: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
 msgstr "Перейти до попереднього результату пошуку"
 
-#: src/plugins/menu-search/gtk/menus.ui:123
+#: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
 msgstr "Перейти і позначити попередній результат пошуку"
 
@@ -5169,26 +5286,26 @@ msgstr "Нова назва файла"
 msgid "_Create"
 msgstr "_Створити"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:697
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying 1 file"
 msgstr "Копіювання одного файла"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:700
+#: src/plugins/project-tree/gbp-project-tree-addin.c:703
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Копіюємо %s з %s файлів"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:736
+#: src/plugins/project-tree/gbp-project-tree-addin.c:739
 msgid "Failed to copy files"
 msgstr "Не вдалося скопіювати файли"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:746
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 msgid "Files copied"
 msgstr "Файли скопійовано"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:750
+#: src/plugins/project-tree/gbp-project-tree-addin.c:753
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
@@ -5197,18 +5314,20 @@ msgstr[1] "Скопійовано %s файли"
 msgstr[2] "Скопійовано %s файлів"
 msgstr[3] "Скопійовано один файл"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
 msgstr "Копіювання файлів…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:942
+#: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
 
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:99
-msgid "Filter"
-msgstr "Фільтрувати"
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
+#: src/plugins/todo/gbp-todo-panel.ui:102
+#| msgid "Filter"
+msgid "Filter…"
+msgstr "Фільтрувати…"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5422,25 +5541,25 @@ msgstr "Джерела"
 msgid "Available SDKs"
 msgstr "Доступні набори засобів розробки"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:350
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:327
 msgid "Untitled Command"
 msgstr "Команда без назви"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:357
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:179
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
 msgid "Set Shortcut"
 msgstr "Встановити скорочення"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:495
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
 msgid "Select Working Directory"
 msgstr "Виберіть робочий каталог"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:561
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Створити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:562
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:539
 msgid "Cre_ate"
 msgstr "С_творити"
 
@@ -5448,36 +5567,36 @@ msgstr "С_творити"
 msgid "Edit Command"
 msgstr "Редагувати команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:22
 msgid "S_ave"
 msgstr "З_берегти"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:49
 msgid "Keyboard Shortcut"
 msgstr "Клавіатурне скорочення"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:50
 msgid "An optional shortcut to run the command"
 msgstr "Необов'язкове скорочення для запуску команди"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:67
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:65
 msgid "Shell Command"
 msgstr "Команда оболонки"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:70
 msgid "You may use single or double quotes for parameters."
 msgstr ""
 "Ви можете скористатися одинарними або подвійними лапками для параметрів."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:85
 msgid "Environment"
 msgstr "Середовище"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:88
 msgid "Working Directory"
 msgstr "Робочий каталог"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
@@ -5485,15 +5604,15 @@ msgstr ""
 "Команду буде запущено з цього місця. Скористайтеся <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt> або <tt>$HOME</tt> для визначення відносного шляху."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
 msgstr "Використовувати підоболонку"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:121
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr "Запустити програму у підоболонці, зокрема <tt>sh -c ''</tt>"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5501,31 +5620,31 @@ msgstr ""
 "«Будівник» може запускати вашу команду із різних середовищ, зокрема основної "
 "системи або контейнерів збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:231
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
 msgstr "Ви_лучити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 msgid "Subprocess"
 msgstr "Підпроцес"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Запустити команду як підпроцес «Будівника»"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
 msgstr "Запускає команду в основній системі."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:274
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
 msgstr "Запускає команду у конвеєрі збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
 msgstr "Як програму-ціль"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:281
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
 msgstr "Запускає команду так, наче вона є цільовою програмою."
 
@@ -5535,11 +5654,11 @@ msgstr ""
 "Командами можна скористатися для збирання і запуску проєктів або внесення "
 "змін до ваших проєктів"
 
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:118
 msgid "These commands are specific to this project."
 msgstr "Ці команди є специфічними для цього проєкту."
 
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:119
 msgid "These commands are shared across all projects."
 msgstr "Ці команди є спільними для усіх проєктів."
 
@@ -5592,27 +5711,27 @@ msgstr ""
 "різноманітних середовищ, зокрема каналу збирання, середовища запуску або "
 "основної операційної системи."
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:56
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
 msgstr "Не знайдено клавіатурного скорочення"
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:57
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:53
 msgid "Try a different search"
 msgstr "Спробувати інші критерії пошуку"
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:73
 msgid "_Reset All"
 msgstr "С_касувати всі зміни"
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:81
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
 msgid "Reset all actions to original keyboard shortcut"
 msgstr "Відновити для усіх дій початкові клавіатурні скорочення"
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:89
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:85
 msgid "_Edit File"
 msgstr "_Редагувати файл"
 
-#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:92
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:88
 msgid "Open keybindings.json in editor"
 msgstr "Відкрити keybindings.json у редакторі"
 
@@ -5656,14 +5775,6 @@ msgstr "Мови"
 msgid "swift run"
 msgstr "swift run"
 
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
-msgid "Unnamed Symbol"
-msgstr "Символ без назви"
-
-#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-msgid "Filter Symbols…"
-msgstr "Фільтрувати символи…"
-
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
 msgstr "Символи у файлі"
@@ -5673,13 +5784,13 @@ msgstr "Символи у файлі"
 msgid "In Page"
 msgstr "На сторінці"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Вибрати символ…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Вибрати символ (Ctrl+Shift+K)"
 
@@ -5700,108 +5811,103 @@ msgstr "Профілювання програми…"
 msgid "Symbol decoding will begin after application exits"
 msgstr "Декодування символів розпочнеться після виходу з програми"
 
-#: src/plugins/sysprof/gtk/menus.ui:8
-msgctxt "menu label"
-msgid "Open _Sysprof Capture…"
-msgstr "Відкрити за_хоплені дані Sysprof…"
-
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
 msgstr "Запустити з Profiler"
 
-#: src/plugins/sysprof/gtk/menus.ui:23
+#: src/plugins/sysprof/gtk/menus.ui:13
 msgid "Run the project with profiler"
 msgstr "Запустити з проєкт із засобом профілювання"
 
-#: src/plugins/sysprof/gtk/menus.ui:31 src/plugins/sysprof/tweaks.ui:13
+#: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profiler"
 
-#: src/plugins/sysprof/gtk/menus.ui:33
+#: src/plugins/sysprof/gtk/menus.ui:23
 msgid "Thread Sampling"
 msgstr "Дискретизація потоків обробки"
 
-#: src/plugins/sysprof/gtk/menus.ui:35
+#: src/plugins/sysprof/gtk/menus.ui:25
 msgid "CPU Performance"
 msgstr "Швидкодія процесора"
 
-#: src/plugins/sysprof/gtk/menus.ui:40
+#: src/plugins/sysprof/gtk/menus.ui:30
 msgid "Process Scheduling"
 msgstr "Планування процесів"
 
-#: src/plugins/sysprof/gtk/menus.ui:45
+#: src/plugins/sysprof/gtk/menus.ui:35
 msgid "Memory Allocations"
 msgstr "Розміщення у пам'яті"
 
-#: src/plugins/sysprof/gtk/menus.ui:50
+#: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Sample JavaScript Stacks"
 msgstr "Зразок стосів JavaScript"
 
-#: src/plugins/sysprof/gtk/menus.ui:56
+#: src/plugins/sysprof/gtk/menus.ui:46
 msgid "D-Bus"
 msgstr "D-Bus"
 
-#: src/plugins/sysprof/gtk/menus.ui:58 src/plugins/sysprof/tweaks.ui:111
+#: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
 msgstr "Шина сеансу"
 
-#: src/plugins/sysprof/gtk/menus.ui:63 src/plugins/sysprof/tweaks.ui:123
+#: src/plugins/sysprof/gtk/menus.ui:53 src/plugins/sysprof/tweaks.ui:123
 msgid "System Bus"
 msgstr "Системна шина"
 
-#: src/plugins/sysprof/gtk/menus.ui:69
+#: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Graphics"
 msgstr "Графіка"
 
-#: src/plugins/sysprof/gtk/menus.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:61
 msgid "Display Timings"
 msgstr "Показати часові параметри"
 
-#: src/plugins/sysprof/gtk/menus.ui:77
+#: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
 msgstr "Лічильники"
 
-#: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "Вжиток процесора"
 
-#: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
+#: src/plugins/sysprof/gtk/menus.ui:74 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
 msgstr "Використання пам'яті"
 
-#: src/plugins/sysprof/gtk/menus.ui:89
+#: src/plugins/sysprof/gtk/menus.ui:79
 msgid "Storage I/O"
 msgstr "Введення-виведення сховища даних"
 
-#: src/plugins/sysprof/gtk/menus.ui:94
+#: src/plugins/sysprof/gtk/menus.ui:84
 msgid "Network I/O"
 msgstr "Введення-виведення мережі"
 
-#: src/plugins/sysprof/gtk/menus.ui:100
+#: src/plugins/sysprof/gtk/menus.ui:90
 msgid "Energy"
 msgstr "Живлення"
 
-#: src/plugins/sysprof/gtk/menus.ui:102
+#: src/plugins/sysprof/gtk/menus.ui:92
 msgid "Consumption"
 msgstr "Споживання"
 
-#: src/plugins/sysprof/gtk/menus.ui:107
+#: src/plugins/sysprof/gtk/menus.ui:97
 msgid "Battery Charge"
 msgstr "Заряд акумулятора"
 
-#: src/plugins/sysprof/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:104
 msgid "Allow Application Integration"
 msgstr "Дозволити інтеграцію програм"
 
-#: src/plugins/sysprof/gtk/menus.ui:119
+#: src/plugins/sysprof/gtk/menus.ui:109
 msgid "Allow CPU Throttling"
 msgstr "Дозволити дроселювання процесора"
 
-#: src/plugins/sysprof/gtk/menus.ui:131
+#: src/plugins/sysprof/gtk/menus.ui:121
 msgid "Run with _Profiler"
 msgstr "Зап_устити з Profiler"
 
-#: src/plugins/sysprof/gtk/menus.ui:149
+#: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
 msgstr "Записати ще раз…"
 
@@ -6033,7 +6139,7 @@ msgstr ""
 "Максимальна кількість рядків, які зберігатимуться у журналі при обмеженні "
 "буфера гортання"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:147
+#: src/plugins/testui/gbp-testui-output-panel.c:150
 msgid "Unit Test Output"
 msgstr "Виведення перевірки модулів"
 
@@ -6217,42 +6323,42 @@ msgstr "Шукати витоки пам'яті при виході"
 msgid "Begin cloning project from URI"
 msgstr "Почати клонування проєкту за адресою"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
 msgid "A failure occurred while cloning the repository."
 msgstr "Під час клонування сховища сталася помилка"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:15
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
 msgstr "Адреса сховища"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:34
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
 msgid "Choose an alternate branch"
 msgstr "Виберіть альтернативну гілку"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:53
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
 msgid "Branches"
 msgstr "Гілки"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:138
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Введіть адресу сховища початкового коду проєкту, який ви хочете клонувати."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:167
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Сховище буде клоновано до нового підкаталогу."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:193
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
 msgid "Author Details"
 msgstr "Подробиці про автора"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:211
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
 msgid "You may specify authorship information to override defaults."
 msgstr "Ви можете вказати дані щодо авторства для перевизначення типових."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:227
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
 msgid "Status"
 msgstr "Стан"
 
@@ -6305,7 +6411,7 @@ msgstr "Фокусувати місце"
 msgid "Focus the current page's location"
 msgstr "Фокусувати місце на поточній сторінці"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:143
+#: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
 msgstr "Не вдалося обробити документ XML"
 
@@ -6317,6 +6423,25 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Go back"
+#~ msgstr "Назад"
+
+#~ msgid "All Preferences"
+#~ msgstr "Усі налаштування"
+
+#~ msgid "Primary Menu"
+#~ msgstr "Основне меню"
+
+#~ msgid "Unnamed Symbol"
+#~ msgstr "Символ без назви"
+
+#~ msgid "Filter Symbols…"
+#~ msgstr "Фільтрувати символи…"
+
+#~ msgctxt "menu label"
+#~ msgid "Open _Sysprof Capture…"
+#~ msgstr "Відкрити за_хоплені дані Sysprof…"
 
 #~ msgid "Open Sysprof Capture…"
 #~ msgstr "Відкрити захоплені дані Sysprof…"
@@ -6788,9 +6913,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "R"
 #~ msgstr "Ч"
-
-#~ msgid "G"
-#~ msgstr "З"
 
 #~ msgid "B"
 #~ msgstr "С"
@@ -7521,9 +7643,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Visual"
 #~ msgstr "Візуальний"
-
-#~ msgid "Code"
-#~ msgstr "Код"
 
 #~ msgid "External"
 #~ msgstr "Зовнішній"
@@ -8295,9 +8414,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Trigger the default entry"
 #~ msgstr "Перемкнути типовий запис"
-
-#~ msgid "No build configuration"
-#~ msgstr "Немає налаштувань збирання"
 
 #~ msgid "Select a build configuration from the sidebar to modify."
 #~ msgstr "Виберіть на бічній панелі налаштування збирання, які слід змінити."
