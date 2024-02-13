@@ -178,9 +178,8 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
                    gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer)),
                    gdk_surface_get_width (gdk_surface),
                    gdk_surface_get_height (gdk_surface));
-  cairo_translate (cr,
-                   transform_x / scale_factor,
-                   transform_y / scale_factor);
+  cairo_scale (cr, 1. / scale_factor, 1. / scale_factor);
+  cairo_translate (cr, transform_x, transform_y);
   gsk_render_node_draw (root, cr);
   cairo_surface_flush (surface);
   cairo_destroy (cr);

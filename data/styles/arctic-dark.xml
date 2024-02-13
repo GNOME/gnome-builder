@@ -17,13 +17,14 @@
   along with this library; if not, see <http://www.gnu.org/licenses/>.
 
 -->
-<style-scheme id="arctic-dark" _name="Arctic Dark" version="1.0">
+<style-scheme id="arctic-dark" name="Arctic Dark" version="1.0">
   <author>Christian Hergert</author>
   <_description>Nordic palette-based dark scheme</_description>
 
   <metadata>
     <property name="variant">dark</property>
     <property name="light-variant">arctic-light</property>
+    <property name="terminal-palette">nord</property>
   </metadata>
 
   <!-- Named Colors -->

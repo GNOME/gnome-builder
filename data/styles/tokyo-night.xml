@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
+<style-scheme id="tokyo-night" name="Tokyo Night" version="1.0">
+
+  <metadata>
+    <property name="variant">dark</property>
+    <property name="light-variant">tokyo-night-light</property>
+    <property name="terminal-palette">tokyo-night</property>
+  </metadata>
+
+  <color name="Foreground" value="#c0caf5"/>
+  <color name="Background" value="#1a1b26"/>
+  <color name="Cursor" value="#c0caf5"/>
+  <color name="Gutter" value="#434659"/>
+  <color name="CurrentLine" value="#222330"/>
+  <color name="Color0" value="#414868"/>
+  <color name="Color1" value="#f7768e"/>
+  <color name="Color2" value="#9ece6a"/>
+  <color name="Color3" value="#e0af68"/>
+  <color name="Color4" value="#7aa2f7"/>
+  <color name="Color5" value="#bb9af7"/>
+  <color name="Color6" value="#7dcfff"/>
+  <color name="Color7" value="#a9b1d6"/>
+  <color name="Color8" value="#414868"/>
+  <color name="Color9" value="#f7768e"/>
+  <color name="Color10" value="#9ece6a"/>
+  <color name="Color11" value="#e0af68"/>
+  <color name="Color12" value="#7aa2f7"/>
+  <color name="Color13" value="#bb9af7"/>
+  <color name="Color14" value="#7dcfff"/>
+  <color name="Color15" value="#c0caf5"/>
+
+  <style name="text" background="Background" foreground="Foreground"/>
+  <style name="cursor" foreground="Cursor"/>
+  <style name="search-match" background="Color3" foreground="Background"/>
+  <style name="line-numbers" background="Background" foreground="Gutter"/>
+  <style name="current-line" background="CurrentLine"/>
+  <style name="current-line-number" background="CurrentLine"/>
+  <style name="right-margin" foreground="Foreground" background="Gutter"/>
+
+  <style name="def:base-n-integer" foreground="Color5"/>
+  <style name="def:boolean" foreground="Color5"/>
+  <style name="def:character" foreground="Color5"/>
+  <style name="def:comment" foreground="#8e95b6"/>
+  <style name="def:doc-comment-element" bold="true"/>
+  <style name="def:constant" foreground="Color5"/>
+  <style name="def:decimal" foreground="Color5"/>
+  <style name="def:error" underline="error" underline-color="Color1"/>
+  <style name="def:floating-point" foreground="Color5"/>
+  <style name="def:keyword" foreground="Color2"/>
+  <style name="def:net-address" foreground="Color4" underline="low"/>
+  <style name="def:function" foreground="Color4"/>
+  <style name="def:number" foreground="Color5"/>
+  <style name="def:preprocessor" foreground="Color5"/>
+  <style name="def:special-char" foreground="Color4"/>
+  <style name="def:string" foreground="Color3"/>
+  <style name="def:strong-emphasis" bold="true"/>
+  <style name="def:identifier" foreground="Color2"/>
+  <style name="def:type" foreground="Color2"/>
+
+</style-scheme>

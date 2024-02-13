@@ -150,11 +150,19 @@ gbp_messages_panel_dispose (GObject *object)
 {
   GbpMessagesPanel *self = (GbpMessagesPanel *)object;
 
+  if (self->selection != NULL)
+    gtk_no_selection_set_model (self->selection, NULL);
+
+  if (self->filter_model)
+    gtk_filter_list_model_set_model (self->filter_model, NULL);
+
   if (self->filter != NULL)
     {
       gtk_custom_filter_set_filter_func (self->filter, NULL, NULL, NULL);
       g_clear_object (&self->filter);
     }
+
+  gtk_widget_dispose_template (GTK_WIDGET (self), GBP_TYPE_MESSAGES_PANEL);
 
   G_OBJECT_CLASS (gbp_messages_panel_parent_class)->dispose (object);
 }

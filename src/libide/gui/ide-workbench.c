@@ -1468,6 +1468,29 @@ ide_workbench_action_add_workspace (gpointer    instance,
 }
 
 static void
+ide_workbench_action_reload_all_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  if (!ide_buffer_manager_reload_all_finish (bufmgr, result, &error))
+    g_warning ("Failed to reload buffers that changed on disk: %s", error->message);
+  else
+    g_debug ("All buffers changed on disk were reloaded");
+
+  IDE_EXIT;
+}
+
+static void
 ide_workbench_action_reload_all (gpointer    instance,
                                  const char *action_name,
                                  GVariant   *param)
@@ -1476,12 +1499,21 @@ ide_workbench_action_reload_all (gpointer    instance,
   IdeBufferManager *bufmgr;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (param == NULL);
 
+  g_debug ("Reloading all files which have changed on disk");
+
   context = ide_workbench_get_context (self);
   bufmgr = ide_buffer_manager_from_context (context);
-  ide_buffer_manager_reload_all_async (bufmgr, NULL, NULL, NULL);
+  ide_buffer_manager_reload_all_async (bufmgr,
+                                       NULL,
+                                       ide_workbench_action_reload_all_cb,
+                                       g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void

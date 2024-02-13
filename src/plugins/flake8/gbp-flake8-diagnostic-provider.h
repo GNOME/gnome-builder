@@ -1,6 +1,6 @@
-/* ide-recoloring-private.h
+/* gbp-flake8-diagnostic-provider.h
  *
- * Copyright 2020 Christian Hergert <chergert@redhat.com>
+ * Copyright 2024 Denis Ollier <dollierp@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,12 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-char                 *_ide_recoloring_generate_css         (GtkSourceStyleScheme *style_scheme);
-GtkSourceStyleScheme *_ide_source_style_scheme_get_variant (GtkSourceStyleScheme *style_scheme,
-                                                            const char           *variant);
+#define GBP_TYPE_FLAKE8_DIAGNOSTIC_PROVIDER (gbp_flake8_diagnostic_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpFlake8DiagnosticProvider, gbp_flake8_diagnostic_provider, GBP, FLAKE8_DIAGNOSTIC_PROVIDER, IdeDiagnosticTool)
+
 G_END_DECLS

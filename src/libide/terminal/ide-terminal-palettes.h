@@ -68,18 +68,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("33c7de"),
           GDK_RGBA ("ffffff"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("1e1e1e"),
-          .background = GDK_RGBA ("f5c211")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("a51d2d")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("613583")
-        },
       },
       {
         .foreground = GDK_RGBA ("ffffff"),
@@ -101,18 +89,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("c061cb"),
           GDK_RGBA ("33c7de"),
           GDK_RGBA ("ffffff"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("e5a50a")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("a51d2d")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("613583")
         },
       },
     },
@@ -144,18 +120,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("839496"),
           GDK_RGBA ("fdf6e3"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("073642"),
-          .background = GDK_RGBA ("f7e0a2")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("fdf6e3"),
-          .background = GDK_RGBA ("cb4b16")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("fdf6e3"),
-          .background = GDK_RGBA ("6c71c4")
-        },
       },
       {
         .foreground = GDK_RGBA ("839496"),
@@ -178,18 +142,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("6c71c4"),
           GDK_RGBA ("93a1a1"),
           GDK_RGBA ("fdf6e3"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("fdf6e3"),
-          .background = GDK_RGBA ("335459")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("fdf6e3"),
-          .background = GDK_RGBA ("cb4b16")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("fdf6e3"),
-          .background = GDK_RGBA ("6c71c4")
         },
       },
     },
@@ -220,18 +172,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("34e2e2"),
           GDK_RGBA ("eeeeec"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("1e1e1e"),
-          .background = GDK_RGBA ("f5c211")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("eeeeec"),
-          .background = GDK_RGBA ("a51d2d")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("eeeeec"),
-          .background = GDK_RGBA ("613583")
-        },
       },
       {
         .foreground = GDK_RGBA ("d3d7cf"),
@@ -253,18 +193,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("ad7fa8"),
           GDK_RGBA ("34e2e2"),
           GDK_RGBA ("eeeeec"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("eeeeec"),
-          .background = GDK_RGBA ("e5a50a")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("eeeeec"),
-          .background = GDK_RGBA ("a51d2d")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("eeeeec"),
-          .background = GDK_RGBA ("613583")
         },
       },
     },
@@ -295,18 +223,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("006465"),
           GDK_RGBA ("595959"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("282A36"),
-          .background = GDK_RGBA ("ffb86c")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("f1f2ff"),
-          .background = GDK_RGBA ("ac202f")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("f1f2ff"),
-          .background = GDK_RGBA ("6946a3")
-        },
       },
       {
         .foreground = GDK_RGBA ("f8f8f2"),
@@ -328,18 +244,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("ff92df"),
           GDK_RGBA ("a4ffff"),
           GDK_RGBA ("ffffff"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("f8f8f2"),
-          .background = GDK_RGBA ("ffb86c")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("f1f2ff"),
-          .background = GDK_RGBA ("ac202f")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("282A36"),
-          .background = GDK_RGBA ("bd93f9")
         },
       },
     },
@@ -370,18 +274,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("8fbcbb"),
           GDK_RGBA ("eceff4"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("414858"),
-          .background = GDK_RGBA ("ebcb8b")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("f1f2ff"),
-          .background = GDK_RGBA ("bf616a")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("eceff4"),
-          .background = GDK_RGBA ("484860")
-        },
       },
       {
         .foreground = GDK_RGBA ("d8dee9"),
@@ -403,18 +295,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("b48ead"),
           GDK_RGBA ("8fbcbb"),
           GDK_RGBA ("eceff4"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("d8dee9"),
-          .background = GDK_RGBA ("af7d32")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("f1f2ff"),
-          .background = GDK_RGBA ("7d3232")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("eceff4"),
-          .background = GDK_RGBA ("484860")
         },
       },
     },
@@ -445,18 +325,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("55ffff"),
           GDK_RGBA ("ffffff"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff55")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("aa0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("aa00aa")
-        },
       },
       {
         .foreground = GDK_RGBA ("ffffff"),
@@ -478,18 +346,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("ff55ff"),
           GDK_RGBA ("55ffff"),
           GDK_RGBA ("ffffff"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff55")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("aa0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("aa00aa")
         },
       },
     },
@@ -520,18 +376,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("00ffff"),
           GDK_RGBA ("ffffff"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff00")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd00cd")
-        },
       },
       {
         .foreground = GDK_RGBA ("ffffff"),
@@ -553,18 +397,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("ff00ff"),
           GDK_RGBA ("00ffff"),
           GDK_RGBA ("ffffff"),
-        },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff00")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd00cd")
         },
       },
     },
@@ -595,18 +427,6 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("00ffff"),
           GDK_RGBA ("ffffff"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff00")
-        },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd00cd")
-        },
       },
       {
         .foreground = GDK_RGBA ("ffffff"),
@@ -629,23 +449,381 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
           GDK_RGBA ("00ffff"),
           GDK_RGBA ("ffffff"),
         },
-        .visual_bell = {
-          .foreground = GDK_RGBA ("000000"),
-          .background = GDK_RGBA ("ffff00")
+      },
+    },
+  },
+
+  {
+    .id = "fishtank",
+    .name = N_("Fishtank"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("ECF0FE"),
+        .background = GDK_RGBA ("232537"),
+        .cursor = GDK_RGBA ("ECF0FE"),
+        .indexed = {
+          GDK_RGBA ("03073C"),
+          GDK_RGBA ("C6004A"),
+          GDK_RGBA ("ACF157"),
+          GDK_RGBA ("FECD5E"),
+          GDK_RGBA ("525FB8"),
+          GDK_RGBA ("986F82"),
+          GDK_RGBA ("968763"),
+          GDK_RGBA ("ECF0FC"),
+          GDK_RGBA ("6C5B30"),
+          GDK_RGBA ("DA4B8A"),
+          GDK_RGBA ("DBFFA9"),
+          GDK_RGBA ("FEE6A9"),
+          GDK_RGBA ("B2BEFA"),
+          GDK_RGBA ("FDA5CD"),
+          GDK_RGBA ("A5BD86"),
+          GDK_RGBA ("F6FFEC"),
         },
-        .superuser = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd0000")
-        },
-        .remote = {
-          .foreground = GDK_RGBA ("ffffff"),
-          .background = GDK_RGBA ("cd00cd")
+      },
+      {
+        .foreground = GDK_RGBA ("ECF0FE"),
+        .background = GDK_RGBA ("232537"),
+        .cursor = GDK_RGBA ("ECF0FE"),
+        .indexed = {
+          GDK_RGBA ("03073C"),
+          GDK_RGBA ("C6004A"),
+          GDK_RGBA ("ACF157"),
+          GDK_RGBA ("FECD5E"),
+          GDK_RGBA ("525FB8"),
+          GDK_RGBA ("986F82"),
+          GDK_RGBA ("968763"),
+          GDK_RGBA ("ECF0FC"),
+          GDK_RGBA ("6C5B30"),
+          GDK_RGBA ("DA4B8A"),
+          GDK_RGBA ("DBFFA9"),
+          GDK_RGBA ("FEE6A9"),
+          GDK_RGBA ("B2BEFA"),
+          GDK_RGBA ("FDA5CD"),
+          GDK_RGBA ("A5BD86"),
+          GDK_RGBA ("F6FFEC"),
         },
       },
     },
   },
+
+  {
+    .id = "spacedust",
+    .name = N_("Spacedust"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("ECF0C1"),
+        .background = GDK_RGBA ("0A1E24"),
+        .cursor = GDK_RGBA ("ECF0C1"),
+        .indexed = {
+          GDK_RGBA ("6E5346"),
+          GDK_RGBA ("E35B00"),
+          GDK_RGBA ("5CAB96"),
+          GDK_RGBA ("E3CD7B"),
+          GDK_RGBA ("0F548B"),
+          GDK_RGBA ("E35B00"),
+          GDK_RGBA ("06AFC7"),
+          GDK_RGBA ("F0F1CE"),
+          GDK_RGBA ("684C31"),
+          GDK_RGBA ("FF8A3A"),
+          GDK_RGBA ("AECAB8"),
+          GDK_RGBA ("FFC878"),
+          GDK_RGBA ("67A0CE"),
+          GDK_RGBA ("FF8A3A"),
+          GDK_RGBA ("83A7B4"),
+          GDK_RGBA ("FEFFF1"),
+        },
+      },
+      {
+        .foreground = GDK_RGBA ("ECF0C1"),
+        .background = GDK_RGBA ("0A1E24"),
+        .cursor = GDK_RGBA ("ECF0C1"),
+        .indexed = {
+          GDK_RGBA ("6E5346"),
+          GDK_RGBA ("E35B00"),
+          GDK_RGBA ("5CAB96"),
+          GDK_RGBA ("E3CD7B"),
+          GDK_RGBA ("0F548B"),
+          GDK_RGBA ("E35B00"),
+          GDK_RGBA ("06AFC7"),
+          GDK_RGBA ("F0F1CE"),
+          GDK_RGBA ("684C31"),
+          GDK_RGBA ("FF8A3A"),
+          GDK_RGBA ("AECAB8"),
+          GDK_RGBA ("FFC878"),
+          GDK_RGBA ("67A0CE"),
+          GDK_RGBA ("FF8A3A"),
+          GDK_RGBA ("83A7B4"),
+          GDK_RGBA ("FEFFF1"),
+        },
+      },
+    },
+  },
+
+  {
+    .id = "catppuccin",
+    .name = N_("Catppuccin"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("4c4f69"),
+        .background = GDK_RGBA ("eff1f5"),
+        .cursor = GDK_RGBA ("4c4f69"),
+        .indexed = {
+          GDK_RGBA ("5c5f77"),
+          GDK_RGBA ("d20f39"),
+          GDK_RGBA ("40a02b"),
+          GDK_RGBA ("df8e1d"),
+          GDK_RGBA ("1e66f5"),
+          GDK_RGBA ("ea76cb"),
+          GDK_RGBA ("179299"),
+          GDK_RGBA ("acb0be"),
+          GDK_RGBA ("6c6f85"),
+          GDK_RGBA ("d20f39"),
+          GDK_RGBA ("40a02b"),
+          GDK_RGBA ("df8e1d"),
+          GDK_RGBA ("1e66f5"),
+          GDK_RGBA ("ea76cb"),
+          GDK_RGBA ("179299"),
+          GDK_RGBA ("bcc0cc"),
+        },
+      },
+      {
+        .foreground = GDK_RGBA ("cdd6f4"),
+        .background = GDK_RGBA ("1e1e2e"),
+        .cursor = GDK_RGBA ("cdd6f4"),
+        .indexed = {
+          GDK_RGBA ("45475a"),
+          GDK_RGBA ("f38ba8"),
+          GDK_RGBA ("a6e3a1"),
+          GDK_RGBA ("f9e2af"),
+          GDK_RGBA ("89b4fa"),
+          GDK_RGBA ("f5c2e7"),
+          GDK_RGBA ("94e2d5"),
+          GDK_RGBA ("bac2de"),
+          GDK_RGBA ("585b70"),
+          GDK_RGBA ("f38ba8"),
+          GDK_RGBA ("a6e3a1"),
+          GDK_RGBA ("f9e2af"),
+          GDK_RGBA ("89b4fa"),
+          GDK_RGBA ("f5c2e7"),
+          GDK_RGBA ("94e2d5"),
+          GDK_RGBA ("a6adc8"),
+        },
+      },
+    },
+  },
+
+  {
+    .id = "horizon",
+    .name = N_("Horizon"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("1c1e26"),
+        .background = GDK_RGBA ("fdf0ed"),
+        .cursor = GDK_RGBA ("1c1e26"),
+        .indexed = {
+          GDK_RGBA ("16161c"),
+          GDK_RGBA ("da103f"),
+          GDK_RGBA ("1eb980"),
+          GDK_RGBA ("f6661e"),
+          GDK_RGBA ("26bbd9"),
+          GDK_RGBA ("ee64ae"),
+          GDK_RGBA ("1d8991"),
+          GDK_RGBA ("fadad1"),
+          GDK_RGBA ("1a1c23"),
+          GDK_RGBA ("f43e5c"),
+          GDK_RGBA ("07da8c"),
+          GDK_RGBA ("f77d26"),
+          GDK_RGBA ("3fc6de"),
+          GDK_RGBA ("f075b7"),
+          GDK_RGBA ("1eaeae"),
+          GDK_RGBA ("fdf0ed"),
+        },
+      },
+      {
+        .foreground = GDK_RGBA ("fdf0ed"),
+        .background = GDK_RGBA ("1c1e26"),
+        .cursor = GDK_RGBA ("fdf0ed"),
+        .indexed = {
+          GDK_RGBA ("16161c"),
+          GDK_RGBA ("e95678"),
+          GDK_RGBA ("29d398"),
+          GDK_RGBA ("fab795"),
+          GDK_RGBA ("26bbd9"),
+          GDK_RGBA ("ee64ae"),
+          GDK_RGBA ("59e3e3"),
+          GDK_RGBA ("fadad1"),
+          GDK_RGBA ("232530"),
+          GDK_RGBA ("ec6a88"),
+          GDK_RGBA ("3fdaa4"),
+          GDK_RGBA ("fbc3a7"),
+          GDK_RGBA ("3fc6de"),
+          GDK_RGBA ("f075b7"),
+          GDK_RGBA ("6be6e6"),
+          GDK_RGBA ("fdf0ed"),
+        },
+      },
+    },
+  },
+
+  {
+    .id = "tokyo-night",
+    .name = N_("Tokyo Night"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("565a6e"),
+        .background = GDK_RGBA ("d5d6db"),
+        .cursor = GDK_RGBA ("565a6e"),
+        .indexed = {
+          GDK_RGBA ("0f0f14"),
+          GDK_RGBA ("8c4351"),
+          GDK_RGBA ("485e30"),
+          GDK_RGBA ("8f5e15"),
+          GDK_RGBA ("34548a"),
+          GDK_RGBA ("5a4a78"),
+          GDK_RGBA ("0f4b6e"),
+          GDK_RGBA ("343b58"),
+          GDK_RGBA ("9699a3"),
+          GDK_RGBA ("8c4351"),
+          GDK_RGBA ("485e30"),
+          GDK_RGBA ("8f5e15"),
+          GDK_RGBA ("34548a"),
+          GDK_RGBA ("5a4a78"),
+          GDK_RGBA ("0f4b6e"),
+          GDK_RGBA ("343b58"),
+        },
+      },
+      {
+        .foreground = GDK_RGBA ("c0caf5"),
+        .background = GDK_RGBA ("1a1b26"),
+        .cursor = GDK_RGBA ("c0caf5"),
+        .indexed = {
+          GDK_RGBA ("414868"),
+          GDK_RGBA ("f7768e"),
+          GDK_RGBA ("9ece6a"),
+          GDK_RGBA ("e0af68"),
+          GDK_RGBA ("7aa2f7"),
+          GDK_RGBA ("bb9af7"),
+          GDK_RGBA ("7dcfff"),
+          GDK_RGBA ("a9b1d6"),
+          GDK_RGBA ("414868"),
+          GDK_RGBA ("f7768e"),
+          GDK_RGBA ("9ece6a"),
+          GDK_RGBA ("e0af68"),
+          GDK_RGBA ("7aa2f7"),
+          GDK_RGBA ("bb9af7"),
+          GDK_RGBA ("7dcfff"),
+          GDK_RGBA ("c0caf5"),
+        },
+      },
+    },
+  },
+
+    {
+    .id = "vscode",
+    .name = N_("VS Code"),
+    .faces = {
+      {
+        .foreground = GDK_RGBA ("020202"),
+        .background = GDK_RGBA ("f9f9f9"),
+        .cursor = GDK_RGBA ("020202"),
+        .indexed = {
+          GDK_RGBA ("020202"),
+          GDK_RGBA ("cd3232"),
+          GDK_RGBA ("00bc00"),
+          GDK_RGBA ("a5a900"),
+          GDK_RGBA ("0752a8"),
+          GDK_RGBA ("bc05bc"),
+          GDK_RGBA ("0598bc"),
+          GDK_RGBA ("343434"),
+          GDK_RGBA ("5e5e5e"),
+          GDK_RGBA ("cd3333"),
+          GDK_RGBA ("1bce1a"),
+          GDK_RGBA ("adbb5b"),
+          GDK_RGBA ("0752a8"),
+          GDK_RGBA ("c451ce"),
+          GDK_RGBA ("52a8c7"),
+          GDK_RGBA ("a6a3a6"),
+        },
+      },
+      {
+        .foreground = GDK_RGBA ("cccccc"),
+        .background = GDK_RGBA ("1e1e1e"),
+        .cursor = GDK_RGBA ("cccccc"),
+        .indexed = {
+          GDK_RGBA ("6a787a"),
+          GDK_RGBA ("e9653b"),
+          GDK_RGBA ("39e9a8"),
+          GDK_RGBA ("e5b684"),
+          GDK_RGBA ("44aae6"),
+          GDK_RGBA ("e17599"),
+          GDK_RGBA ("3dd5e7"),
+          GDK_RGBA ("c3dde1"),
+          GDK_RGBA ("598489"),
+          GDK_RGBA ("e65029"),
+          GDK_RGBA ("00ff9a"),
+          GDK_RGBA ("e89440"),
+          GDK_RGBA ("009afb"),
+          GDK_RGBA ("ff578f"),
+          GDK_RGBA ("5fffff"),
+          GDK_RGBA ("d9fbff"),
+        },
+      },
+    },
+  },
+
+    {
+      .id = "monokai-soda",
+      .name = N_("Monokai Soda"),
+      .faces = {
+        {
+          .foreground = GDK_RGBA ("c4c5b5"),
+          .background = GDK_RGBA ("1a1a1a"),
+          .cursor = GDK_RGBA ("c4c5b5"),
+          .indexed = {
+            GDK_RGBA ("1a1a1a"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("98e024"),
+            GDK_RGBA ("fa8419"),
+            GDK_RGBA ("9d65ff"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("58d1eb"),
+            GDK_RGBA ("c4c5b5"),
+            GDK_RGBA ("625e4c"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("98e024"),
+            GDK_RGBA ("e0d561"),
+            GDK_RGBA ("9d65ff"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("58d1eb"),
+            GDK_RGBA ("f6f6ef"),
+          },
+        },
+        {
+          .foreground = GDK_RGBA ("c4c5b5"),
+          .background = GDK_RGBA ("1a1a1a"),
+          .cursor = GDK_RGBA ("c4c5b5"),
+          .indexed = {
+            GDK_RGBA ("1a1a1a"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("98e024"),
+            GDK_RGBA ("fa8419"),
+            GDK_RGBA ("9d65ff"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("58d1eb"),
+            GDK_RGBA ("c4c5b5"),
+            GDK_RGBA ("625e4c"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("98e024"),
+            GDK_RGBA ("e0d561"),
+            GDK_RGBA ("9d65ff"),
+            GDK_RGBA ("f4005f"),
+            GDK_RGBA ("58d1eb"),
+            GDK_RGBA ("f6f6ef"),
+          },
+        },
+      },
+    },
+
 };
 
-
 G_END_DECLS
-

@@ -97,6 +97,8 @@ static void ide_run_manager_actions_text_direction      (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_interactive         (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_renderer            (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "restart", ide_run_manager_actions_restart },
@@ -104,6 +106,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
+  { "renderer", ide_run_manager_actions_renderer, "s", "'default'" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
   { "interactive", ide_run_manager_actions_interactive, NULL, "false" },
@@ -251,6 +254,25 @@ ide_run_manager_actions_color_scheme (IdeRunManager *self,
 
   ide_run_manager_set_action_state (self,
                                     "color-scheme",
+                                    g_variant_new_string (str));
+}
+
+static void
+ide_run_manager_actions_renderer (IdeRunManager *self,
+                                  GVariant      *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (!g_strv_contains (IDE_STRV_INIT ("default", "gl", "ngl", "vulkan", "cairo"), str))
+    str = "default";
+
+  ide_run_manager_set_action_state (self,
+                                    "renderer",
                                     g_variant_new_string (str));
 }
 
@@ -559,6 +581,25 @@ apply_messages_debug (IdeRunContext *run_context,
 
   if (messages_debug_all)
     ide_run_context_setenv (run_context, "G_MESSAGES_DEBUG", "all");
+
+  IDE_EXIT;
+}
+
+static void
+apply_renderer (IdeRunContext *run_context,
+                const char    *renderer)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (renderer != NULL);
+
+  g_debug ("Applying renderer \"%s\"", renderer);
+
+  if (ide_str_equal0 (renderer, "default"))
+    ide_run_context_unsetenv (run_context, "GSK_RENDERER");
+  else
+    ide_run_context_setenv (run_context, "GSK_RENDERER", renderer);
 
   IDE_EXIT;
 }
@@ -887,6 +928,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   ide_run_context_push (run_context, NULL, NULL, NULL);
   apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
+  apply_renderer (run_context, get_action_state_string (self, "renderer"));
   apply_gtk_debug (run_context,
                    get_action_state_string (self, "text-direction"),
                    get_action_state_bool (self, "interactive"));

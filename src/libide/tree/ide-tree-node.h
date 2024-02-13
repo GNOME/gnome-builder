@@ -110,6 +110,11 @@ IdeTreeNodeFlags  ide_tree_node_get_flags              (IdeTreeNode         *sel
 IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_flags              (IdeTreeNode         *self,
                                                         IdeTreeNodeFlags     flags);
+IDE_AVAILABLE_IN_46
+gboolean          ide_tree_node_get_vcs_ignored        (IdeTreeNode         *self);
+IDE_AVAILABLE_IN_46
+void              ide_tree_node_set_vcs_ignored        (IdeTreeNode         *self,
+                                                        gboolean             ignored);
 IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_has_error          (IdeTreeNode         *self);
 IDE_AVAILABLE_IN_ALL

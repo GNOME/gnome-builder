@@ -210,6 +210,42 @@
           </item>
         </section>
       </submenu>
+      <submenu id="run-menu-gpu">
+        <attribute name="label" translatable="yes">GPU</attribute>
+        <section id="run-menu-gpu-gsk-renderer">
+          <attribute name="label" translatable="yes">GTK Renderer</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Default</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.renderer</attribute>
+            <attribute name="target" type="s">'default'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Vulkan</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.renderer</attribute>
+            <attribute name="target" type="s">'vulkan'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">GL</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.renderer</attribute>
+            <attribute name="target" type="s">'ngl'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Legacy GL</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.renderer</attribute>
+            <attribute name="target" type="s">'gl'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Cairo</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.renderer</attribute>
+            <attribute name="target" type="s">'cairo'</attribute>
+          </item>
+        </section>
+      </submenu>
       <item>
         <attribute name="id">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Verbose Logging</attribute>

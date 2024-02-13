@@ -59,6 +59,11 @@ const char     *ide_tree_expander_get_title              (IdeTreeExpander *self)
 IDE_AVAILABLE_IN_ALL
 void            ide_tree_expander_set_title              (IdeTreeExpander *self,
                                                           const char      *title);
+IDE_AVAILABLE_IN_46
+gboolean        ide_tree_expander_get_ignored            (IdeTreeExpander *self);
+IDE_AVAILABLE_IN_46
+void            ide_tree_expander_set_ignored            (IdeTreeExpander *self,
+                                                          gboolean         ignored);
 IDE_AVAILABLE_IN_ALL
 GtkWidget      *ide_tree_expander_get_suffix             (IdeTreeExpander *self);
 IDE_AVAILABLE_IN_ALL

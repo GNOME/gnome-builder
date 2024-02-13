@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include <libide-gui.h>
+#include <libide-sourceview.h>
 
 #include "ide-terminal.h"
 
@@ -86,13 +87,19 @@ static const char * const builtin_dingus[] = {
 };
 static VteRegex *builtin_dingus_regex[G_N_ELEMENTS(builtin_dingus)];
 static GRegex *filename_regex;
+static GSettings *settings;
 
 static void
 ide_terminal_update_colors (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  g_autoptr(IdeTerminalPalette) palette = NULL;
   const IdeTerminalPaletteFace *face;
+  GtkSourceStyleSchemeManager *style_scheme_manager;
+  GtkSourceStyleScheme *scheme;
   AdwStyleManager *style_manager;
+  const char *style_scheme;
+  const char *palette_name = NULL;
   gboolean dark;
 
   g_assert (IDE_IS_TERMINAL (self));
@@ -100,10 +107,30 @@ ide_terminal_update_colors (IdeTerminal *self)
   style_manager = adw_style_manager_get_default ();
   dark = adw_style_manager_get_dark (style_manager);
 
-  if (priv->palette == NULL)
-    priv->palette = ide_terminal_palette_new_from_name ("gnome");
+  style_scheme = ide_application_get_style_scheme (IDE_APPLICATION_DEFAULT);
+  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, style_scheme);
 
-  face = ide_terminal_palette_get_face (priv->palette, dark);
+  if (scheme != NULL)
+    {
+      dark = ide_source_style_scheme_is_dark (scheme);
+      palette_name = gtk_source_style_scheme_get_metadata (scheme, "terminal-palette");
+    }
+
+  if (palette_name == NULL)
+    palette_name = style_scheme;
+
+  if (!g_set_object (&palette, priv->palette))
+    {
+      /* Special case solarized which doesn't have metadata
+       * upstream to work with.
+       */
+      if (g_str_has_prefix (style_scheme, "solarized"))
+        palette_name = "solarized";
+      palette = ide_terminal_palette_new_from_name (palette_name);
+    }
+
+  face = ide_terminal_palette_get_face (palette, dark);
 
   vte_terminal_set_colors (VTE_TERMINAL (self),
                            &face->foreground,
@@ -114,7 +141,9 @@ ide_terminal_update_colors (IdeTerminal *self)
   if (face->cursor.alpha > 0)
     vte_terminal_set_color_cursor (VTE_TERMINAL (self), &face->cursor);
   else
-    vte_terminal_set_color_cursor (VTE_TERMINAL (self), NULL);
+    vte_terminal_set_color_cursor (VTE_TERMINAL (self), &face->foreground);
+
+  vte_terminal_set_color_cursor_foreground (VTE_TERMINAL (self), &face->background);
 }
 
 static void
@@ -1058,7 +1087,6 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
   g_autoptr(GtkSnapshot) alternate = NULL;
   g_autoptr(GskRenderNode) root = NULL;
   g_autoptr(GPtrArray) children = NULL;
-  gboolean dropped_bg = FALSE;
 
   g_assert (GTK_IS_SNAPSHOT (snapshot));
 
@@ -1079,6 +1107,11 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
           GskRenderNode *node = gsk_container_node_get_child (root, i);
           GskRenderNodeType node_type = gsk_render_node_get_node_type (node);
 
+#if 0
+          /* NOTE: This should no longer be necessary because we disable
+           * clearing the background of IdeTerminal.
+           */
+
           /* Drop the color node because we get that for free from our
            * background recoloring. This avoids an extra large overdraw
            * as a bonus optimization while we fix clipping.
@@ -1088,6 +1121,7 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
               dropped_bg = TRUE;
               continue;
             }
+#endif
 
           /* If we get a clip node here, it's because we're in some
            * sort of window size that has partial line offset in the
@@ -1132,13 +1166,53 @@ ide_terminal_snapshot (GtkWidget   *widget,
 }
 
 static void
+ide_terminal_font_changed (IdeTerminal *self,
+                           const char  *key,
+                           GSettings   *settings_)
+{
+  g_autoptr(PangoFontDescription) font_desc = NULL;
+  g_autofree char *font_name = NULL;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings_));
+
+  font_name = g_settings_get_string (settings_, "font-name");
+
+  if (font_name != NULL)
+    font_desc = pango_font_description_from_string (font_name);
+
+  vte_terminal_set_font (VTE_TERMINAL (self), font_desc);
+}
+
+static void
+update_scrollback_cb (IdeTerminal *self,
+                      const char  *key,
+                      GSettings   *settings_)
+{
+  gboolean limit_scrollback;
+  guint scrollback_lines;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings_));
+
+  limit_scrollback = g_settings_get_boolean (settings_, "limit-scrollback");
+  scrollback_lines = g_settings_get_uint (settings_, "scrollback-lines");
+
+  if (limit_scrollback)
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), scrollback_lines);
+  else
+    vte_terminal_set_scrollback_lines (VTE_TERMINAL (self), -1);
+}
+
+static void
 ide_terminal_constructed (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
-  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
-  static IdeTerminalPalette *default_palette;
 
   g_assert (IDE_IS_TERMINAL (self));
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder.terminal");
 
   G_OBJECT_CLASS (ide_terminal_parent_class)->constructed (object);
 
@@ -1153,12 +1227,35 @@ ide_terminal_constructed (GObject *object)
                            G_CALLBACK (ide_terminal_update_colors),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (ide_terminal_update_colors),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  if (default_palette == NULL)
-    default_palette = ide_terminal_palette_new_from_name ("gnome");
+  ide_terminal_update_colors (self);
 
-  if (priv->palette == NULL)
-    ide_terminal_set_palette (self, default_palette);
+  g_settings_bind (settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "allow-hyperlink", self, "allow-hyperlink", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "scroll-on-output", self, "scroll-on-output", G_SETTINGS_BIND_GET);
+  g_settings_bind (settings, "scroll-on-keystroke", self, "scroll-on-keystroke", G_SETTINGS_BIND_GET);
+  g_signal_connect_object (settings,
+                           "changed::limit-scrollback",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (settings,
+                           "changed::scrollback-lines",
+                           G_CALLBACK (update_scrollback_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (settings,
+                           "changed::font-name",
+                           G_CALLBACK (ide_terminal_font_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_terminal_font_changed (self, NULL, settings);
+  update_scrollback_cb (self, "scrollback-lines", settings);
 }
 
 static void

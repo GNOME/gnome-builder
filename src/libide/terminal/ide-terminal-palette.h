@@ -29,34 +29,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_PALETTE (ide_terminal_palette_get_type())
 
-/* Scarf is unused in Builder, but keepking it here makes it easier
- * to copy code between prompt and Builder.
- */
-typedef struct _IdeTerminalPaletteScarf
-{
-  GdkRGBA foreground;
-  GdkRGBA background;
-} IdeTerminalPaletteScarf;
-
-#define IDE_TERMINAL_PALETTE_SCARF_VISUAL_BELL 0
-#define IDE_TERMINAL_PALETTE_SCARF_SUPERUSER   1
-#define IDE_TERMINAL_PALETTE_SCARF_REMOTE      2
-#define IDE_TERMINAL_PALETTE_N_SCARVES         3
-
 typedef struct _IdeTerminalPaletteFace
 {
   GdkRGBA background;
   GdkRGBA foreground;
   GdkRGBA cursor;
   GdkRGBA indexed[16];
-  union {
-    IdeTerminalPaletteScarf scarves[IDE_TERMINAL_PALETTE_N_SCARVES];
-    struct {
-      IdeTerminalPaletteScarf visual_bell;
-      IdeTerminalPaletteScarf superuser;
-      IdeTerminalPaletteScarf remote;
-    };
-  };
 } IdeTerminalPaletteFace;
 
 IDE_AVAILABLE_IN_46

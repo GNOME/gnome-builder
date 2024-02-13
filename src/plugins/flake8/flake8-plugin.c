@@ -1,6 +1,6 @@
-/* ide-recoloring-private.h
+/* flake8-plugin.c
  *
- * Copyright 2020 Christian Hergert <chergert@redhat.com>
+ * Copyright 2024 Denis Ollier <dollierp@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "flake8-plugin"
 
-#include <gtksourceview/gtksource.h>
+#include "config.h"
 
-G_BEGIN_DECLS
+#include <libpeas.h>
 
-char                 *_ide_recoloring_generate_css         (GtkSourceStyleScheme *style_scheme);
-GtkSourceStyleScheme *_ide_source_style_scheme_get_variant (GtkSourceStyleScheme *style_scheme,
-                                                            const char           *variant);
-G_END_DECLS
+#include <libide-code.h>
+
+#include "gbp-flake8-diagnostic-provider.h"
+
+_IDE_EXTERN void
+_gbp_flake8_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DIAGNOSTIC_PROVIDER,
+                                              GBP_TYPE_FLAKE8_DIAGNOSTIC_PROVIDER);
+}

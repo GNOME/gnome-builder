@@ -960,6 +960,7 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
   BIND_PROPERTY ("expanded-icon", "expanded-icon");
   BIND_PROPERTY ("icon", "icon");
   BIND_PROPERTY ("title", "title");
+  BIND_PROPERTY ("vcs-ignored", "ignored");
   BIND_PROPERTY ("title", "tooltip-text");
   BIND_PROPERTY ("use-markup", "use-markup");
 
@@ -1025,6 +1026,7 @@ ide_tree_list_item_unbind_cb (IdeTree                  *self,
   UNBIND_PROPERTY ("expanded-icon", "expanded-icon");
   UNBIND_PROPERTY ("icon", "icon");
   UNBIND_PROPERTY ("title", "title");
+  UNBIND_PROPERTY ("vcs-ignored", "ignored");
   UNBIND_PROPERTY ("title", "tooltip-text");
   UNBIND_PROPERTY ("use-markup", "use-markup");
   UNBIND_PROPERTY ("flags", "flags");

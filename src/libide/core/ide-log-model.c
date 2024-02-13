@@ -229,11 +229,11 @@ ide_log_model_init (IdeLogModel *self)
   self->items = g_sequence_new (g_object_unref);
   self->channel = dex_channel_new (0);
 
-  dex_scheduler_spawn (NULL,
-                       0,
-                       ide_log_model_fiber_func,
-                       channel_data_new (self),
-                       (GDestroyNotify)channel_data_free);
+  dex_future_disown (dex_scheduler_spawn (NULL,
+                                          0,
+                                          ide_log_model_fiber_func,
+                                          channel_data_new (self),
+                                          (GDestroyNotify)channel_data_free));
 }
 
 IdeLogModel *
