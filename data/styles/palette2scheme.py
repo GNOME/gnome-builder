@@ -52,9 +52,9 @@ def do_scheme(key_file, group, has_alt, _name):
     Foreground = get_color(key_file, group, 'Foreground')
     Background = get_color(key_file, group, 'Background')
 
-    if key_file.get_value(group, 'Cursor'):
+    try:
         Cursor = get_color(key_file, group, 'Cursor')
-    else:
+    except:
         Cursor = Foreground
 
     Comment = premix(Background, Foreground, .7)
