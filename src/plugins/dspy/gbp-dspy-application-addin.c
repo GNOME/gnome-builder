@@ -105,6 +105,8 @@ dspy_action_cb (GSimpleAction *action,
   workdir = g_file_new_for_path (ide_get_projects_dir ());
   ide_context_set_workdir (context, workdir);
 
+  ide_context_set_title (context, _("D-Spy"));
+
   workspace = gbp_dspy_workspace_new (IDE_APPLICATION_DEFAULT);
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
