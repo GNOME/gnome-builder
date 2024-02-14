@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-10 11:03+0000\n"
-"PO-Revision-Date: 2024-02-13 20:12+0200\n"
+"POT-Creation-Date: 2024-02-14 08:23+0000\n"
+"PO-Revision-Date: 2024-02-14 13:01+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1693,7 +1693,6 @@ msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Не вдалося завантажити HTML. Не передбачено підтримки WebKit."
 
 #: src/libide/gui/ide-primary-workspace.c:87
-#| msgid "No build configuration"
 msgid "Invalid configuration"
 msgstr "Некоректні налаштування"
 
@@ -2064,7 +2063,6 @@ msgstr "За_брати вибір"
 
 #: src/libide/terminal/ide-terminal.c:538
 #: src/libide/terminal/ide-terminal.c:571
-#| msgid "Clipboard"
 msgid "Copied to clipboard"
 msgstr "Скопійовано до буфера обміну"
 
@@ -2104,7 +2102,6 @@ msgid "GNOME"
 msgstr "GNOME"
 
 #: src/libide/terminal/ide-terminal-palettes.h:99
-#| msgid "Polari"
 msgid "Solarized"
 msgstr "Засвічена"
 
@@ -2125,7 +2122,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#| msgid "Terminal"
+#: src/libide/terminal/ide-terminal-palettes.h:829
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2138,7 +2135,6 @@ msgid "Fishtank"
 msgstr "Fishtank"
 
 #: src/libide/terminal/ide-terminal-palettes.h:511
-#| msgid "Spaces"
 msgid "Spacedust"
 msgstr "Spacedust"
 
@@ -2155,7 +2151,6 @@ msgid "Tokyo Night"
 msgstr "Ніч у Токіо"
 
 #: src/libide/terminal/ide-terminal-palettes.h:723
-#| msgid "Code"
 msgid "VS Code"
 msgstr "VS-код"
 
@@ -2184,7 +2179,6 @@ msgid "Allow Input"
 msgstr "Дозволити введення"
 
 #: src/libide/terminal/ide-terminal.ui:161
-#| msgid "Search for…"
 msgid "Search…"
 msgstr "Шукати…"
 
@@ -2740,7 +2734,6 @@ msgid "Vulkan"
 msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:230
-#| msgid "G"
 msgid "GL"
 msgstr "GL"
 
@@ -3694,6 +3687,10 @@ msgstr "Очікування на появу пов'язаного із прис
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
 msgstr "Показати «Інспектор D-Bus»"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:108
+msgid "D-Spy"
+msgstr "D-Spy"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
@@ -4878,12 +4875,10 @@ msgid "Close the current page"
 msgstr "Закрити поточну сторінку"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#| msgid "Removed Files"
 msgid "Reload Files"
 msgstr "Перезавантажити файли"
 
 #: src/plugins/menu-search/gtk/menus.ui:116
-#| msgid "Reload the current page"
 msgid "Reload the contents of open files"
 msgstr "Перезавантажити вміст відкритих файлів"
 
@@ -5325,7 +5320,6 @@ msgstr "Невдовзі файли буде скопійовано"
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:116
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 #: src/plugins/todo/gbp-todo-panel.ui:102
-#| msgid "Filter"
 msgid "Filter…"
 msgstr "Фільтрувати…"
 
