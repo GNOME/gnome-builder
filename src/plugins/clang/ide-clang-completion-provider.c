@@ -269,13 +269,12 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
     }
 
   /*
-   * If we are completing field or variable types, we might want to add
-   * a . or -> to the snippet based on the input character.
+   * If we are completing field or variable types, we might want to convert
+   * a . to a -> if it's a pointer type.
    */
   if (item->kind == IDE_SYMBOL_KIND_FIELD || item->kind == IDE_SYMBOL_KIND_VARIABLE)
     {
-      if (self->activation_keyval == GDK_KEY_period ||
-          self->activation_keyval == GDK_KEY_minus)
+      if (self->activation_keyval == GDK_KEY_period)
         {
           g_autoptr(GtkSourceSnippetChunk) chunk = gtk_source_snippet_chunk_new ();
           if (strchr (item->return_type, '*'))
