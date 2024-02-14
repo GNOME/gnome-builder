@@ -4,7 +4,7 @@
 
   <metadata>
     <property name="variant">light</property>
-    <property name="light-variant">xterm-dark</property>
+    <property name="dark-variant">xterm-dark</property>
     <property name="terminal-palette">xterm</property>
   </metadata>
 
