@@ -824,6 +824,59 @@ static const IdeTerminalPaletteData ide_terminal_palettes_inline[] = {
       },
     },
 
+    {
+      .id = "xterm",
+      .name = N_("XTerm"),
+      .faces = {
+        {
+          .cursor = GDK_RGBA ("000000"),
+          .foreground = GDK_RGBA ("000000"),
+          .background = GDK_RGBA ("ffffff"),
+          .indexed = {
+            GDK_RGBA ("000000"),
+            GDK_RGBA ("cd0000"),
+            GDK_RGBA ("00cd00"),
+            GDK_RGBA ("cdcd00"),
+            GDK_RGBA ("0000ee"),
+            GDK_RGBA ("cd00cd"),
+            GDK_RGBA ("00cdcd"),
+            GDK_RGBA ("e5e5e5"),
+            GDK_RGBA ("7f7f7f"),
+            GDK_RGBA ("ff0000"),
+            GDK_RGBA ("00ff00"),
+            GDK_RGBA ("ffff00"),
+            GDK_RGBA ("5c5cff"),
+            GDK_RGBA ("ff00ff"),
+            GDK_RGBA ("00ffff"),
+            GDK_RGBA ("ffffff"),
+          },
+        },
+        {
+          .cursor = GDK_RGBA ("ffffff"),
+          .foreground = GDK_RGBA ("ffffff"),
+          .background = GDK_RGBA ("000000"),
+          .indexed = {
+            GDK_RGBA ("000000"),
+            GDK_RGBA ("cd0000"),
+            GDK_RGBA ("00cd00"),
+            GDK_RGBA ("cdcd00"),
+            GDK_RGBA ("0000ee"),
+            GDK_RGBA ("cd00cd"),
+            GDK_RGBA ("00cdcd"),
+            GDK_RGBA ("e5e5e5"),
+            GDK_RGBA ("7f7f7f"),
+            GDK_RGBA ("ff0000"),
+            GDK_RGBA ("00ff00"),
+            GDK_RGBA ("ffff00"),
+            GDK_RGBA ("5c5cff"),
+            GDK_RGBA ("ff00ff"),
+            GDK_RGBA ("00ffff"),
+            GDK_RGBA ("ffffff"),
+          },
+        },
+      },
+    },
+
 };
 
 G_END_DECLS

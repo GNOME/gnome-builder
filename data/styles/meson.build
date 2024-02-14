@@ -6,6 +6,7 @@ install_data([
   'peninsula.xml', 'peninsula-dark.xml',
   'tokyo-night-light.xml', 'tokyo-night.xml',
   'vscode-light.xml', 'vscode-dark.xml',
+  'xterm-light.xml', 'xterm-dark.xml',
   'fishtank.xml',
   'monokai-soda.xml',
   'spacedust.xml',
