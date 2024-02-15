@@ -121,7 +121,7 @@ ide_application_can_load_plugin (IdeApplication *self,
 
   /*
    * If the plugin is not bundled within the Builder executable, then we
-   * require that an X-Builder-ABI=major.minor style extended data be
+   * require that an X-Builder-ABI=major style extended data be
    * provided to ensure we have proper ABI.
    *
    * You could get around this by loading a plugin that then loads resouces
@@ -141,8 +141,8 @@ ide_application_can_load_plugin (IdeApplication *self,
 
       if (g_strcmp0 (PACKAGE_ABI_S, abi) != 0)
         {
-          g_critical ("Refusing to load plugin %s, expected ABI %d.%d and got %s",
-                      module_name, IDE_MAJOR_VERSION, 0, abi);
+          g_critical ("Refusing to load plugin %s, expected ABI %d and got %s",
+                      module_name, IDE_MAJOR_VERSION, abi);
           return FALSE;
         }
     }
