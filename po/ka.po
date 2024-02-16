@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-10 11:03+0000\n"
-"PO-Revision-Date: 2024-02-12 14:16+0100\n"
+"POT-Creation-Date: 2024-02-14 08:23+0000\n"
+"PO-Revision-Date: 2024-02-16 21:49+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -524,7 +524,7 @@ msgstr "ნაგულისხმევი ლიცენზია ახა�
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Inherit Language Server stderr"
-msgstr ""
+msgstr "ენის სერვერის stderr-ის მემკვიდრეობით მიღება"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid ""
@@ -2024,7 +2024,6 @@ msgid "GNOME"
 msgstr "GNOME"
 
 #: src/libide/terminal/ide-terminal-palettes.h:99
-#| msgid "Polari"
 msgid "Solarized"
 msgstr "სოლარიზება"
 
@@ -2045,7 +2044,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#| msgid "Terminal"
+#: src/libide/terminal/ide-terminal-palettes.h:829
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2055,16 +2054,15 @@ msgstr "RXVT"
 
 #: src/libide/terminal/ide-terminal-palettes.h:458
 msgid "Fishtank"
-msgstr ""
+msgstr "Fishtank"
 
 #: src/libide/terminal/ide-terminal-palettes.h:511
-#| msgid "Spaces"
 msgid "Spacedust"
 msgstr "Spacedust"
 
 #: src/libide/terminal/ide-terminal-palettes.h:564
 msgid "Catppuccin"
-msgstr ""
+msgstr "Catppuccin"
 
 #: src/libide/terminal/ide-terminal-palettes.h:617
 msgid "Horizon"
@@ -2072,15 +2070,15 @@ msgstr "ჰორიზონტი"
 
 #: src/libide/terminal/ide-terminal-palettes.h:670
 msgid "Tokyo Night"
-msgstr ""
+msgstr "ტოკიოს ღამე"
 
 #: src/libide/terminal/ide-terminal-palettes.h:723
 msgid "VS Code"
-msgstr ""
+msgstr "VS Code"
 
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
-msgstr ""
+msgstr "Monokai Soda"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2100,7 +2098,7 @@ msgstr "სიტყვების გადატანა"
 
 #: src/libide/terminal/ide-terminal.ui:154
 msgid "Allow Input"
-msgstr ""
+msgstr "შეყვანის დაშვება"
 
 #: src/libide/terminal/ide-terminal.ui:161
 msgid "Search…"
@@ -2455,7 +2453,7 @@ msgstr "პროექტის პარამეტრების შეც�
 #: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/menus.ui:164
 msgid "Code Foundry"
-msgstr ""
+msgstr "Code Foundry"
 
 #: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
@@ -2639,7 +2637,7 @@ msgstr "GPU"
 
 #: src/plugins/buildui/gtk/menus.ui:216
 msgid "GTK Renderer"
-msgstr ""
+msgstr "GTK-ის რენდერერი"
 
 #: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
 #: src/plugins/buildui/tweaks.ui:443
@@ -2651,13 +2649,12 @@ msgid "Vulkan"
 msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:230
-#| msgid "G"
 msgid "GL"
 msgstr "GL"
 
 #: src/plugins/buildui/gtk/menus.ui:236
 msgid "Legacy GL"
-msgstr ""
+msgstr "Legacy GL"
 
 #: src/plugins/buildui/gtk/menus.ui:242
 msgid "Cairo"
@@ -2683,7 +2680,7 @@ msgstr "რედაქტორის ფონტი"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
-msgstr ""
+msgstr "პროგრამული კოდის რედაქტორში გამოყენებული ფონტი"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
@@ -2735,11 +2732,11 @@ msgstr "დოკუმენტების გადართვა ჩან�
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "მხტუნარებით ნავიგაცია"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr ""
+msgstr "დოკუმენტებს შორის მხტუნარით გადართვა"
 
 #: src/plugins/buildui/tweaks.ui:12
 #: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
@@ -2811,7 +2808,7 @@ msgstr "ისტორია"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
-msgstr ""
+msgstr "ვადაამოწურული არტეფაქტების გასუფთავება"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
@@ -2823,7 +2820,7 @@ msgstr "აგების ჟურნალის გასუფთავე�
 
 #: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
-msgstr ""
+msgstr "აგების ჟურნალის გასუფთავება ახალი აგების დაწყებისას"
 
 #: src/plugins/buildui/tweaks.ui:212
 msgid "Show Build Logs"
@@ -2831,7 +2828,7 @@ msgstr "აგების ჟურნალის ჩვენება"
 
 #: src/plugins/buildui/tweaks.ui:213
 msgid "Show the build log when a new build begins"
-msgstr ""
+msgstr "აგების ჟურნალის ჩვენება ახალი აგების დაწყებისას"
 
 #: src/plugins/buildui/tweaks.ui:229
 msgid "Log to Console"
@@ -2839,7 +2836,7 @@ msgstr "კონსოლში შესვლა"
 
 #: src/plugins/buildui/tweaks.ui:230
 msgid "Redirect language server error logs to stderr"
-msgstr ""
+msgstr "ენის სერვერის შეცდომის ჟურნალის გადამისამართება stderr-ზე"
 
 #: src/plugins/buildui/tweaks.ui:243
 msgid "Workers"
@@ -2937,7 +2934,7 @@ msgstr "ანონიმური"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "მრგვალი ფრჩხილების ავტომატური დახურვა"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
@@ -3016,7 +3013,7 @@ msgstr ""
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
 msgid "Failed to populate index plan: %s"
-msgstr ""
+msgstr "ჩავარდა შევსება ინდექსის გეგმისთვის: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
@@ -3057,7 +3054,7 @@ msgstr "მონიშნული ტექსტის გამოსახ�
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
-msgstr ""
+msgstr "შეიძლება შეგეშალათ \"%s\". გულისხმობდით \"%s\"-ს?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
@@ -3183,7 +3180,7 @@ msgstr ""
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "საავტორო უფლებების განახლება შენახვაზე"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
@@ -3195,11 +3192,11 @@ msgstr "ლიცენზიის განახლება"
 
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
-msgstr ""
+msgstr "საავტორო უფლებების თავსართების განახლება დოკუმენტების შენახვისას"
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
-msgstr ""
+msgstr "ფუნქციის პროტოტიპების გადაფორმატება"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3577,13 +3574,17 @@ msgstr ""
 msgid "Display D-Bus inspector"
 msgstr "D-Bus-ის ინსპექტორის ჩვენება"
 
+#: src/plugins/dspy/gbp-dspy-application-addin.c:108
+msgid "D-Spy"
+msgstr "D-Spy"
+
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
 msgstr "D-Bus-ის ინსპექტორი…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
-msgstr ""
+msgstr "Dub Run"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
@@ -4493,7 +4494,7 @@ msgstr "ელ-ფოსტა"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
-msgstr ""
+msgstr "go run"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4502,7 +4503,7 @@ msgstr "პროექტის საწყისი მომზადებ�
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
-msgstr ""
+msgstr "Gradle Run"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
@@ -4860,7 +4861,7 @@ msgstr "ხელსაწყოს დამატება"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
-msgstr ""
+msgstr "ხელსაწყოების ნაკრების წაშლა"
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
@@ -5598,7 +5599,7 @@ msgstr "ენები"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
-msgstr ""
+msgstr "swift run"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
@@ -6125,7 +6126,7 @@ msgstr ""
 
 #: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
-msgstr ""
+msgstr "გაჟონვის შემოწმება"
 
 #: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
