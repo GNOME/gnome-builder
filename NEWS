@@ -1,3 +1,25 @@
+# GNOME Builder 46.beta
+
+ * New elixer language server support
+ * Updated terminal styling which is closer to Ptyxis and will update to
+   match the given editor style scheme (when supported).
+ * New sidebar styling which matches GNOME applications better
+ * Various internal improvements to help with correctness of GtkExpression
+ * Many new style schemes based on Ptyxis palettes
+ * Ensure reload-files action is available to command palette
+ * New runtime menu toggle for GSK renderer used by your application
+ * Use AdwAboutDialog
+ * Fix codeshot plugin with varying GDK surface scales
+ * Avoid "crashing" gnome-builder-clang when there is a protocol error so
+   coredumpctl does not try to track them. This was generally from the
+   pipeline reloading and expected behavior.
+ * Don't try to complete - into -> with Clang, but continue for field
+   access converting . to -> as necessary.
+ * Add go icons to custom iconography for project sidebar
+ * Fix a critical in the buffer monitor
+ * Make ignored files less prominent when displayed in project sidebar
+ * Fix some license usage in project templates
+
 # GNOME Builder 46.alpha
 
  * Fix various shortcuts in editor
