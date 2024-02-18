@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-07 01:34+0000\n"
-"PO-Revision-Date: 2024-02-08 01:31+0300\n"
+"POT-Creation-Date: 2024-02-14 08:23+0000\n"
+"PO-Revision-Date: 2024-02-14 17:41+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -2092,6 +2092,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
+#: src/libide/terminal/ide-terminal-palettes.h:829
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -3641,6 +3642,10 @@ msgstr "Aygıtlı eşin görünmesi için beklenecek saniye"
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
 msgstr "D-Bus İnceleyiciyi Göster"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:108
+msgid "D-Spy"
+msgstr "D-Spy"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
 msgid "D-Bus Inspector…"
