@@ -398,7 +398,7 @@ ide_task_cache_populate (IdeTaskCache  *self,
 
   if (g_hash_table_contains (self->cache, key))
     ide_task_cache_evict (self, key);
-  g_hash_table_insert (self->cache, item->key, item);
+  g_hash_table_replace (self->cache, item->key, item);
   ide_heap_insert_val (self->evict_heap, item);
 
   if (self->evict_source != NULL)
@@ -591,9 +591,9 @@ ide_task_cache_get_async (IdeTaskCache        *self,
   if (!(queued = g_hash_table_lookup (self->queued, key)))
     {
       queued = g_ptr_array_new_with_free_func (g_object_unref);
-      g_hash_table_insert (self->queued,
-                           self->key_copy_func ((gpointer)key),
-                           queued);
+      g_hash_table_replace (self->queued,
+                            self->key_copy_func ((gpointer)key),
+                            queued);
     }
 
   g_ptr_array_add (queued, g_object_ref (task));
@@ -611,9 +611,9 @@ ide_task_cache_get_async (IdeTaskCache        *self,
                                fetch_cancellable,
                                ide_task_cache_fetch_cb,
                                self->key_copy_func ((gpointer)key));
-      g_hash_table_insert (self->in_flight,
-                           self->key_copy_func ((gpointer)key),
-                           g_object_ref (fetch_task));
+      g_hash_table_replace (self->in_flight,
+                            self->key_copy_func ((gpointer)key),
+                            g_object_ref (fetch_task));
     }
 
   if (cancellable != NULL)
