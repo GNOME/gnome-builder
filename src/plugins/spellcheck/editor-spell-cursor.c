@@ -93,7 +93,7 @@ static gboolean
 region_iter_next (RegionIter  *self,
                   GtkTextIter *iter)
 {
-  gsize pos, new_pos = 0;
+  gsize pos = 0, new_pos = 0;
 
   if (self->pos >= (gssize)_cjh_text_region_get_length (self->region))
     {
