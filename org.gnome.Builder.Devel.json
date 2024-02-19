@@ -491,14 +491,18 @@
         },
         {
             "name" : "flatpak",
+            "buildsystem" : "meson",
             "config-opts" : [
-                "--disable-documentation",
-                "--disable-seccomp",
-                "--disable-sandboxed-triggers",
-                "--disable-system-helper",
-                "--with-curl",
-                "--with-system-install-dir=/var/lib/flatpak",
-                "--sysconfdir=/var/run/host/etc"
+                "-Ddocbook_docs=disabled",
+                "-Dseccomp=disabled",
+                "-Dsandboxed_triggers=false",
+                "-Dsystem_helper=disabled",
+                "-Dsystem_install_dir=/var/lib/flatpak",
+                "--sysconfdir=/var/run/host/etc",
+                "-Dman=disabled",
+                "-Dhttp_backend=curl",
+                "-Dsystemd=disabled",
+                "-Dtests=false"
             ],
             "cleanup" : [
                 "/bin/flatpak-bisect",
