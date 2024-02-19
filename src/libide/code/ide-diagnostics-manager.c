@@ -646,7 +646,7 @@ ide_diagnostics_manager_add_diagnostic (IdeDiagnosticsManager *self,
   if (group == NULL)
     {
       group = ide_diagnostics_group_new (file);
-      g_hash_table_insert (self->groups_by_file, group->file, group);
+      g_hash_table_replace (self->groups_by_file, group->file, group);
     }
 
   g_assert (group != NULL);
@@ -668,7 +668,7 @@ ide_diagnostics_manager_find_group (IdeDiagnosticsManager *self,
   if (!(group = g_hash_table_lookup (self->groups_by_file, file)))
     {
       group = ide_diagnostics_group_new (file);
-      g_hash_table_insert (self->groups_by_file, group->file, group);
+      g_hash_table_replace (self->groups_by_file, group->file, group);
     }
 
   g_assert (group != NULL);
