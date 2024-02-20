@@ -464,6 +464,10 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   if (new_path != NULL)
     ide_run_context_append_formatted (run_context, "--env=PATH=%s", new_path);
 
+  /* If an "env" is set in the build-options for the module, set that */
+  if (GBP_IS_FLATPAK_MANIFEST (config))
+    gbp_flatpak_manifest_apply_primary_env (GBP_FLATPAK_MANIFEST (config), run_context);
+
   /* And last, before our child command, is the staging directory */
   ide_run_context_append_argv (run_context, staging_dir);
 

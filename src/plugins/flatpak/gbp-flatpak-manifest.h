@@ -63,6 +63,8 @@ void                  gbp_flatpak_manifest_resolve_extensions_async  (GbpFlatpak
 gboolean              gbp_flatpak_manifest_resolve_extensions_finish (GbpFlatpakManifest   *self,
                                                                       GAsyncResult         *result,
                                                                       GError              **error);
+void                  gbp_flatpak_manifest_apply_primary_env         (GbpFlatpakManifest   *self,
+                                                                      IdeRunContext        *run_context);
 
 
 G_END_DECLS

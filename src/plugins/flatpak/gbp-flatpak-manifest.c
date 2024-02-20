@@ -68,6 +68,7 @@ struct _GbpFlatpakManifest
   JsonObject       *primary;
   gchar            *primary_module;
   gchar           **config_opts;
+  JsonObject       *primary_env;
 };
 
 static void initable_iface_init (GInitableIface *iface);
@@ -538,7 +539,9 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   g_autoptr(GFile) workdir = NULL;
   JsonObject *root_obj;
   JsonObject *primary;
+  JsonObject *obj;
   JsonNode *root;
+  JsonNode *node;
   gsize len = 0;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
@@ -630,6 +633,16 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
 
       ide_config_set_config_opts (IDE_CONFIG (self), gstr->str);
     }
+
+  if (json_object_has_member (primary, "build-options") &&
+      (node = json_object_get_member (primary, "build-options")) &&
+      JSON_NODE_HOLDS_OBJECT (node) &&
+      (obj = json_node_get_object (node)) &&
+      json_object_has_member (obj, "env") &&
+      (node = json_object_get_member (obj, "env")) &&
+      JSON_NODE_HOLDS_OBJECT (node) &&
+      (obj = json_node_get_object (node)))
+    self->primary_env = json_object_ref (obj);
 
   if (discover_strv_field (primary, "build-commands", &build_commands))
     ide_config_set_build_commands (IDE_CONFIG (self),
@@ -861,6 +874,7 @@ gbp_flatpak_manifest_finalize (GObject *object)
   g_clear_pointer (&self->sdk_extensions, g_strfreev);
 
   g_clear_pointer (&self->primary, json_object_unref);
+  g_clear_pointer (&self->primary_env, json_object_unref);
   g_clear_pointer (&self->primary_module, g_free);
   g_clear_pointer (&self->config_opts, g_strfreev);
 
@@ -1542,3 +1556,33 @@ gbp_flatpak_manifest_get_base_version (GbpFlatpakManifest *self)
 
   return self->base_version;
 }
+
+void
+gbp_flatpak_manifest_apply_primary_env (GbpFlatpakManifest *self,
+                                        IdeRunContext      *run_context)
+{
+  JsonObjectIter iter;
+  const char *member_name;
+  JsonNode *member_node;
+
+  g_return_if_fail (GBP_IS_FLATPAK_MANIFEST (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (self->primary_env == NULL)
+    return;
+
+  json_object_iter_init_ordered (&iter, self->primary_env);
+
+  while (json_object_iter_next_ordered (&iter, &member_name, &member_node))
+    {
+      if (JSON_NODE_HOLDS_VALUE (member_node))
+        {
+          const char *key = member_name;
+          const char *value = json_node_get_string (member_node);
+          g_autofree char *arg = g_strdup_printf ("--env=%s=%s", key, value ? value : "");
+
+          ide_run_context_append_argv (run_context, arg);
+        }
+    }
+}
+
