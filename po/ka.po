@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-02-14 08:23+0000\n"
-"PO-Revision-Date: 2024-02-16 21:49+0100\n"
+"PO-Revision-Date: 2024-02-22 08:17+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -260,6 +260,8 @@ msgstr "ბოლო მდებარეობის აღდგენა"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
 msgstr ""
+"ფაილის გახსნისას, რომელიც ადრე უკვე გახსნილი იყო, უკანასკნელ მდებარეობაზე "
+"გადასვლა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
@@ -355,7 +357,7 @@ msgstr "ჰარეების დახატვა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
-msgstr ""
+msgstr "სხვადასხვა ტიპის გამოტოვებები რედაქტორში დასახატად."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:77
@@ -415,7 +417,7 @@ msgstr "მინიმალური სიმბოლოები მონ�
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
-msgstr ""
+msgstr "მინიმალური სიმბოლოების რაოდენობა მონიშნულთან დამთხვევისთვის."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
@@ -433,7 +435,7 @@ msgstr "აირჩიეთ პირველი დასრულება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
-msgstr ""
+msgstr "პირველი დასრულების ავტომატური მონიშვნა."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -1198,7 +1200,7 @@ msgstr "მომხმარებელმა მოითხოვა ხე�
 
 #: src/libide/foundry/ide-run-manager.c:567
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "სამიზნის გაშვება შეუძლებელია, რადგან გაშვებულია სხვა სამიზნე"
 
 #: src/libide/foundry/ide-run-manager.c:846
 #, c-format
@@ -1232,7 +1234,7 @@ msgstr "მომხმარებელმა აპლიკაციის �
 #: src/libide/foundry/ide-run-manager.c:1396
 #, c-format
 msgid "User requested application to run with tool “%s”"
-msgstr ""
+msgstr "მომხმარებელმა მოსთხოვა აპლიკაციას, რომ გაეშვას პროგრამით \"%s\""
 
 #: src/libide/foundry/ide-run-manager.c:1416
 msgid "User requested application to stop"
@@ -1259,12 +1261,12 @@ msgstr "გაშვების გარემოს \"%s\" წაშლა…
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
 msgid "Forcing subprocess %s to exit"
-msgstr ""
+msgstr "ქვეპროცესის %s ნაძალადევი დასრულება"
 
 #: src/libide/foundry/ide-run-tool.c:84
 #, c-format
 msgid "Sending signal %d to subprocess %s"
-msgstr ""
+msgstr "ვუგზავნი სიგნალს %d ქვეპროცესს %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1579,7 +1581,7 @@ msgstr "ვერსიის ჩვენება და გასვლა"
 
 #: src/libide/gui/ide-application-command-line.c:69
 msgid "Increase log verbosity (may be repeated)"
-msgstr ""
+msgstr "დიაგნოსტიკური შეტყობინებების სიხშირის გაზრდა (შეგიძლიათ, გაიმეოროთ)"
 
 #: src/libide/gui/ide-application-command-line.c:119
 #, c-format
@@ -1804,7 +1806,7 @@ msgstr "ვებსაიტი"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "სამიზნე ფაილი პროექტის ხეში უნდა იყოს."
 
 #: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
@@ -2300,7 +2302,7 @@ msgstr "მოწყობილობა"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr ""
+msgstr "მიმდინარე აგების კონფიგურაცია შეცდომებს შეიცავს."
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
@@ -2395,11 +2397,13 @@ msgstr "ავტომატური აღმოჩენა"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "ეს არჩევანი Builder-ს საშუალებას აძლევს, საუკეთესო კანდიდატი შეარჩიოს."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
 msgstr ""
+"კონტეინერი, რომელიც თქვენი აპლიკაციის ასაგებად და გასაშვებად იქნება "
+"გამოყენებული"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2844,7 +2848,7 @@ msgstr "აგების დამხმარე პროცესები"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Number of workers to use when performing builds"
-msgstr ""
+msgstr "აგებისას გამოყენებული დამხმარე პროცესების რაოდენობა"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
@@ -2926,7 +2930,7 @@ msgstr "Clang-თან ინტეგრაცია დასრულდა"
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "Clang-თან ინტეგრაციის სერვერი გაეშვა, როგორც პროცესი %s"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -2938,7 +2942,7 @@ msgstr "მრგვალი ფრჩხილების ავტომა�
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "უნდა იყოს მშობლობა ჩასმული დასრულებისას, თუ არა."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
@@ -3003,12 +3007,12 @@ msgstr "პროექტის_ფაილი"
 #: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
 msgid "Failed to load flags for plan: %s"
-msgstr ""
+msgstr "ჩავარდა ალმების ჩატვირთვა გეგმისთვის: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, c-format
 msgid "Failed to cull index plan: %s"
-msgstr ""
+msgstr "ჩავარდა მოცილება ინდექსის გეგმისთვის: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
@@ -3029,7 +3033,7 @@ msgstr "საწყისი კოდის ინდექსი"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr ""
+msgstr "ძებნა, დიაგნოსტიკა და ავტოდასრულება შეზღუდული იქნება დასრულებამდე."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3102,6 +3106,8 @@ msgstr "მიბმების გარეშე"
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
+"პროგრამირების ენის ხელსაწყოებს, შეიძლება, მიმართვების ძებნის მხარდაჭერა არ "
+"გააჩნია"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
@@ -3136,7 +3142,7 @@ msgstr "კოდის ქმედებები…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
-msgstr ""
+msgstr "შესაძლო კოდის ქმედებების სია კურსორის მდებარეობიდან"
 
 #: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
@@ -3144,7 +3150,7 @@ msgstr "დეკლარაციაზე _გადასვლა"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
-msgstr ""
+msgstr "გადასვლა ფაილზე და მდებარეობაზე, სადაც ეს ელემენტია აღწერილი"
 
 #: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
@@ -3152,7 +3158,7 @@ msgstr "_აღწერაზე გადასვლა"
 
 #: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
-msgstr ""
+msgstr "გადასვლა ფაილზე და მდებარეობაზე, სადაც ეს ელემენტია აღწერილი"
 
 #: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
@@ -3168,7 +3174,7 @@ msgstr "კოდის _კომენტარი"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr ""
+msgstr "მონიშნული კოდის კომენტარში ჩასმა"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
@@ -3176,7 +3182,7 @@ msgstr "კოდზე _კომენტარის მოხსნა"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
+msgstr "მონიშნული კოდის კომენტარის მოხსნა"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3184,7 +3190,7 @@ msgstr "საავტორო უფლებების განახლ�
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "დისკზე ჩაწერამდე მომხმარებლისთვის საავტორო უფლებების განახლება."
 
 #: src/plugins/copyright/tweaks.ui:16
 msgid "Update Copyright"
@@ -3370,7 +3376,7 @@ msgstr "გამობიჯება"
 
 #: src/plugins/debuggerui/gtk/menus.ui:73
 msgid "Run until the end of the function"
-msgstr ""
+msgstr "გაშვება ფუნქციის დასასრულამდე"
 
 #: src/plugins/debuggerui/gtk/menus.ui:83
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
@@ -3380,15 +3386,15 @@ msgstr "შეჩერების წერტილები"
 
 #: src/plugins/debuggerui/gtk/menus.ui:85
 msgid "Automatically Break at Program Start"
-msgstr ""
+msgstr "ავტომატური შეჩერება პროგრამის დასაწყისში"
 
 #: src/plugins/debuggerui/gtk/menus.ui:90
 msgid "Automatically Break at Warnings"
-msgstr ""
+msgstr "ავტომატური შეჩერება გაფრთხილებებისას"
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
-msgstr ""
+msgstr "ავტომატური შეჩერება კრიტიკულებისას"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3443,7 +3449,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
 msgid "Run until the end of the function (Shift+F8)"
-msgstr ""
+msgstr "გაშვება ფუნქციის დასასრულამდე (Shift+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -3451,7 +3457,7 @@ msgstr "დაშლა"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "გაჩერების გარეშე"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
@@ -3459,7 +3465,7 @@ msgstr "გამართვის წერტილი"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "გაჩერების წერტილში მოხვედრების რაოდენობა"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -3605,7 +3611,7 @@ msgstr "აპლიკაციის და რედაქტორის თ
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr ""
+msgstr "დააბრუნებს ენის პარამეტრებს აპლიკაციის ნაგულისხმევ მნიშვნელობებზე"
 
 #. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
@@ -3804,11 +3810,13 @@ msgstr "ზომა"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr ""
+msgstr "შეწევების რაოდენობა ტაბულაციისთვის"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
+"შესაწევი გამოტოვებების რაოდენობა. ტაბულაციის სიგანის გამოსაყენებლად მიუთითეთ "
+"-1"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -3837,7 +3845,7 @@ msgstr "ქცევა"
 
 #: src/plugins/editorui/tweaks-language.ui:206
 msgid "Overwrite Braces"
-msgstr ""
+msgstr "ფიგურული ფრჩხილების თავზე გადაწერა ნაგულისხმევად"
 
 #: src/plugins/editorui/tweaks-language.ui:207
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
@@ -3845,11 +3853,12 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
-msgstr ""
+msgstr "შესაბამისი ფიგურული ფრჩხილის ჩასმა"
 
 #: src/plugins/editorui/tweaks-language.ui:224
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
+"შესაბამისი სიმბოლოს ჩასმა ბრჭყალების, ფრჩხილების, მშობლობის და ციტატებისთვის"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -3901,11 +3910,11 @@ msgstr "პროგრამული კოდის რედაქტორ�
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr ""
+msgstr "ხაზებს შუა მანძილის მორგება"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "როგორ მოხდება ტექსტის გადატანა, როცა ის ჩარჩოზე ფართოა"
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
@@ -3921,7 +3930,7 @@ msgstr "ფონის შაბლონი"
 
 #: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
-msgstr ""
+msgstr "კოდის ქვეშ ფონის სურათის ნიმუშის ჩვენება"
 
 #: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
@@ -3941,7 +3950,7 @@ msgstr "საწყისი კოდის რედაქტორი"
 
 #: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
-msgstr ""
+msgstr "კოდის გადახედვის ფანჯრის ჩვენება რედაქტორთან"
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
@@ -3981,7 +3990,7 @@ msgstr "დიაგნოსტიკის ჩვენება"
 
 #: src/plugins/editorui/tweaks.ui:200
 msgid "Display diagnostics next to the line number"
-msgstr ""
+msgstr "ხაზის ნომრის გასწვრივ დიაგნოსტიკის ჩვენება"
 
 #: src/plugins/editorui/tweaks.ui:211
 msgid "Show Line Changes"
@@ -4025,11 +4034,11 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
-msgstr ""
+msgstr "ნორმალური გამოტოვების ნიშნის დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "ტაბულაციის ნიშნების დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:295
 msgid "Newlines"
@@ -4037,7 +4046,7 @@ msgstr "ახალი ხაზები"
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "ხაზის ბოლოს ნიშნების დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:308
 msgid "Non-breaking spaces"
@@ -4045,7 +4054,7 @@ msgstr "გადაუტანადი გამოტოვებები"
 
 #: src/plugins/editorui/tweaks.ui:309
 msgid "Draw a mark at non-breaking space characters"
-msgstr ""
+msgstr "გაუტეხავი გამოტოვების ნიშნების დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:325
 msgid "Leading"
@@ -4053,7 +4062,7 @@ msgstr "თავში მიწერილი"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Draw marks for leading spaces only"
-msgstr ""
+msgstr "ნიშნების, მხოლოდ, წინ მყოფი გამოტოვებებისთვის დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:338
 msgid "Inside Text"
@@ -4061,7 +4070,7 @@ msgstr "ტექსტში"
 
 #: src/plugins/editorui/tweaks.ui:339
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "ნიშნების, მხოლოდ, ტექსტის ხაზზე დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:351
 msgid "Trailing"
@@ -4069,7 +4078,7 @@ msgstr "ბოლოში"
 
 #: src/plugins/editorui/tweaks.ui:352
 msgid "Draw marks for trailing spaces only"
-msgstr ""
+msgstr "ნიშნების, მხოლოდ, ბოლოში მყოფი გამოტოვებებისთვის დახატვა"
 
 #: src/plugins/editorui/tweaks.ui:372
 msgid "Spelling"
@@ -4077,7 +4086,7 @@ msgstr "მართლწერა"
 
 #: src/plugins/editorui/tweaks.ui:376
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "კრეფისას პოტენციური მართლწერის შენიშვნების ხაზგასმა"
 
 #: src/plugins/editorui/tweaks.ui:389
 msgid "Selections"
@@ -4089,7 +4098,7 @@ msgstr "გამოკვეთილი სიმბოლოების მ�
 
 #: src/plugins/editorui/tweaks.ui:393
 msgid "The minimum selection length before highlighting matches"
-msgstr ""
+msgstr "მინიმალური მონიშნულის სიგრძე სანამ გამოკვეთა დაემთხვევა"
 
 #: src/plugins/editorui/tweaks.ui:406
 msgid "Snippets"
@@ -4097,11 +4106,11 @@ msgstr "ფრაგმენტები"
 
 #: src/plugins/editorui/tweaks.ui:409
 msgid "Expand Snippets"
-msgstr ""
+msgstr "კოდის ფრაგმენტების ამოკეცვა"
 
 #: src/plugins/editorui/tweaks.ui:410
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "რედაქტორში მორგებული ფრაგმენტების გასაშლელად \"Tab\"-ის გამოყენება"
 
 #: src/plugins/editorui/tweaks.ui:425
 msgid "Code Completion"
@@ -4117,23 +4126,23 @@ msgstr "კოდის დასრულების შეთავაზე�
 
 #: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "კრეფისას კოდის დასრულების ავტომატური შეთავაზება"
 
 #: src/plugins/editorui/tweaks.ui:444
 msgid "Select First Completion Proposal"
-msgstr ""
+msgstr "პირველი დასრულების შეთავაზების არჩევა"
 
 #: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically select the first completion proposal when displayed"
-msgstr ""
+msgstr "ჩვენებისას პირველი დასრულების შეთავაზების ავტომატური მონიშვნა"
 
 #: src/plugins/editorui/tweaks.ui:460
 msgid "Maximum Completion Proposals"
-msgstr ""
+msgstr "მაქსიმუმ დასრულებს შეთავაზებები"
 
 #: src/plugins/editorui/tweaks.ui:461
 msgid "The maximum number of completion rows that will be displayed at once"
-msgstr ""
+msgstr "ერთდროულად ნაჩვენები მინიშნებების მწკრივების მაქსიმალური რაოდენობა"
 
 #: src/plugins/editorui/tweaks.ui:480
 msgid "Movements"
@@ -4146,7 +4155,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:496
 msgid "Navigate to non-space characters"
-msgstr ""
+msgstr "არა-გამოტოვების სიმბოლოებზე გადასვლა"
 
 #: src/plugins/editorui/tweaks.ui:505
 msgid "Before line boundaries"
@@ -4186,7 +4195,7 @@ msgstr "ავტომატური შენახვის დაყოვ�
 
 #: src/plugins/editorui/tweaks.ui:555
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr ""
+msgstr "დაყოვნება წამებში, რომელიც დოკუმენტის ავტოშენახვამდე უნდა მოვიცადო"
 
 #: src/plugins/editorui/tweaks.ui:570
 msgid "Format on Save"
@@ -4307,7 +4316,7 @@ msgstr "Flatpak-ის აგების დასრულება"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
 msgid "Exporting staging directory"
-msgstr ""
+msgstr "მიმდინარეობს შუალედური საქაღალდის გატანა"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
 msgid "Creating flatpak bundle"
@@ -4356,7 +4365,7 @@ msgstr ""
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
-msgstr ""
+msgstr "ნარჩევი Flatpak-ის ვერსია"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
@@ -4389,13 +4398,13 @@ msgstr "ფაილის შემცველობასთან წვდ�
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "შემცველობა diff-სთვის დაყენებული არაა"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
+msgstr "ოპერაცია ჩავარდა. საწყისი შეცდომა იყო \"%s\""
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
@@ -4412,7 +4421,7 @@ msgstr ""
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:619
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr ""
+msgstr "ვერ დავაყენე AMEND და GPG_SIGN ალმები"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:628
 #, c-format
@@ -4427,7 +4436,7 @@ msgstr ""
 #: src/plugins/git/gbp-git-client.c:171
 #, c-format
 msgid "Git integration has started as process %s"
-msgstr ""
+msgstr "Git-თან ინტეგრაცია გაეშვა, როგორც პროცესი %s"
 
 #: src/plugins/git/gbp-git-client.c:195
 msgid "Git integration has exited"
@@ -4435,7 +4444,7 @@ msgstr "Git-თან ინტეგრაცია დასრულდა"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
-msgstr ""
+msgstr "Git ვერსიის კონტროლის მმართველი არ გამოიყენება"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
@@ -4447,7 +4456,7 @@ msgstr "Git-ის ქვემოდულების ინიციალი
 
 #: src/plugins/git/gbp-git-submodule-stage.c:133
 msgid "Network is not available, skipping submodule update"
-msgstr ""
+msgstr "ქსელი ხელმისაწვდომი არაა. ქვემოდულის განახლების გამოტოვება"
 
 #: src/plugins/git/gbp-git-vcs.c:228
 msgid "Pushed."
@@ -4456,7 +4465,7 @@ msgstr "პუში წარმატებულია."
 #: src/plugins/git/gbp-git-vcs.c:266
 #, c-format
 msgid "Pushing ref “%s”"
-msgstr ""
+msgstr "იგზავნება მიმართვა \"%s\""
 
 #: src/plugins/git/gbp-git-vcs.c:532
 msgid "Directory is not within repository"
@@ -4469,7 +4478,7 @@ msgstr "Git"
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
-msgstr ""
+msgstr "მისამართზე \"%s\" რეპოზიტორია აღმოჩენილი არაა."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
@@ -4631,7 +4640,7 @@ msgstr "ფაილების _ბრაუზერით…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
-msgstr ""
+msgstr "Make-ის ნაგულისხმევი სამიზნე"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
 msgid "Make Run"
@@ -4680,7 +4689,7 @@ msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
-msgstr ""
+msgstr "მარჯვენა პანელის გადართვა ხედის შიგნით ან გარეთ"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
@@ -4701,7 +4710,7 @@ msgstr "მუქ რეჟიმზე გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "სტილის სქემის შეცვლა მუქ ვარიანტზე"
 
 #: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
@@ -4709,7 +4718,7 @@ msgstr "ღია რეჟიმზე გადართვა"
 
 #: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "სტილის სქემის შეცვლა ღია ვარიანტზე"
 
 #: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
@@ -4717,7 +4726,7 @@ msgstr "აგების დიაგნოსტიკის ჩვენე�
 
 #: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
-msgstr ""
+msgstr "აგებისას აღმოჩენილი შეცდომებისა და გაფრთხილებების გამოტანა"
 
 #: src/plugins/menu-search/gtk/menus.ui:88
 msgid "Jump to a specific line or column"
@@ -4745,7 +4754,7 @@ msgstr "ძებნის შემდეგ შედეგზე გადა
 
 #: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
-msgstr ""
+msgstr "ძებნის შემდეგ შედეგზე გადასვლა და მისი მონიშვნა"
 
 #: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
@@ -4753,7 +4762,7 @@ msgstr "ძებნის წინა შედეგზე გადასვ
 
 #: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
-msgstr ""
+msgstr "ძებნის წინა შედეგზე გადასვლა და მისი მონიშვნა"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -4761,7 +4770,7 @@ msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:640
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Meson-ის ინტროსპექციის ჩატვირთვა"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
@@ -4873,7 +4882,7 @@ msgstr "GNOME-ის აპლიკაცია"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr ""
+msgstr "Meson-ზე დაფუძნებული GTK 4 და libadwaita პროექტი"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:189
 msgid "GTK 4 Application"
@@ -4881,7 +4890,7 @@ msgstr "GTK 4 აპლიკაცია"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "A Meson-based project using GTK 4"
-msgstr ""
+msgstr "Meson-ზე დაფუძნებული GTK 4 პროექტი"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:204
 msgid "Shared Library"
@@ -4889,7 +4898,7 @@ msgstr "გაზიარებული ბიბლიოთეკა"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "A Meson-based project for a shared library"
-msgstr ""
+msgstr "Meson-ზე დაფუძნებული პროექტი გაზიარებული ბიბლიოთეკისთვის"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:212
 msgid "Command Line Tool"
@@ -4897,7 +4906,7 @@ msgstr "ბრძანების სტრიქონის ხელსა�
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "An Meson-based project for a command-line program"
-msgstr ""
+msgstr "Meson-ზე დაფუძნებული პროექტი ბრძანების სტრიქონის პროგრამისთვის"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:222
 msgid "Empty Meson Project"
@@ -4959,7 +4968,7 @@ msgstr "ყუთები"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
-msgstr ""
+msgstr "GNOME აპლიკაცია დაშორებულ ან ვირტუალურ სისტემებთან წვდომისთვის"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
@@ -5244,11 +5253,11 @@ msgstr "პროექტის ხეში ფაილების შემ
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr ""
+msgstr "ფაილების ჩვენება, რომლებიც ძირითადად გამოტოვებულია"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
-msgstr ""
+msgstr "იგივე საქაღალდეში ფაილებამდე ჯერ საქაღალდეების დალაგება"
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
@@ -5260,7 +5269,7 @@ msgstr "წინა სესიის აღდგენა"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
-msgstr ""
+msgstr "პროექტის ჩატვირთვისას ადრე გახსნილი ფაილების გახსნა"
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
@@ -5268,11 +5277,11 @@ msgstr "პროექტის შექმნა"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
-msgstr ""
+msgstr "Builder-ით შექმნილი პროექტები ამ საქაღალდეში იქნება მოთავსებული"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
-msgstr ""
+msgstr "ნაგულისხმევი ლიცენზია ახალი პროექტების შექმნისას"
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
@@ -5426,7 +5435,7 @@ msgstr "გარსის ბრძანება"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:70
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "პარამეტრებისთვის ერთმაგი ან ორმაგი ბრჭყალები შეგიძლიათ გამოიყენოთ."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:85
 msgid "Environment"
@@ -5466,7 +5475,7 @@ msgstr "ქვეპროცესი"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
-msgstr ""
+msgstr "ბრძანების გაშვება Builder-ის ქვეპროცესის სახით."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
@@ -5553,7 +5562,7 @@ msgstr "_ყველა საწყისი მნიშვნელობი
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
 msgid "Reset all actions to original keyboard shortcut"
-msgstr ""
+msgstr "ყველა ქმედების ჩამოყრა საწყის კლავიატურის მალსახმობზე"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:85
 msgid "_Edit File"
@@ -5561,7 +5570,7 @@ msgstr "ფაილის _ჩასწორება"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:88
 msgid "Open keybindings.json in editor"
-msgstr ""
+msgstr "ფაილის keybindings.json რედაქტორში გახსნა"
 
 #: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
 msgid "Reset shortcut"
@@ -5569,7 +5578,7 @@ msgstr "მალსახმობების საწყის მნიშ�
 
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
-msgstr ""
+msgstr "მალსახმობების ნახვა და მორგება…"
 
 #: src/plugins/shortcutui/tweaks.ui:15
 msgid "Keyboard Theme"
@@ -5622,7 +5631,7 @@ msgstr "სიმბოლოს არჩევა (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
-msgstr ""
+msgstr "სიმბოლოზე გადასვლა მიმდნარე გვერდის ფარგლებში"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
@@ -5635,7 +5644,7 @@ msgstr "პროფილირების აპლიკაცია…"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
-msgstr ""
+msgstr "სიმბოლოების გაშიფვრა აპლიკაციის დასრულების შემდეგ დაიწყება"
 
 #: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
@@ -5747,7 +5756,7 @@ msgstr "იწერს CPU-ის გამოყენებას და ს�
 
 #: src/plugins/sysprof/tweaks.ui:31
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "გამოძახების სტეკის მაგალითები"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
@@ -5775,7 +5784,7 @@ msgstr "მმართველი არ შეიცვლება"
 
 #: src/plugins/sysprof/tweaks.ui:71
 msgid "Force Performance Mode"
-msgstr ""
+msgstr "ნაძალადევი წარმადობის რეჟიმი"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Simple memory statistics about the process such as total memory used"
@@ -5791,11 +5800,11 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:112
 msgid "Record D-Bus messages on the session bus"
-msgstr ""
+msgstr "D-Bus-ის სესიის მატარებლის შეტყობინებების ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:124
 msgid "Record D-Bus messages on the system bus"
-msgstr ""
+msgstr "D-Bus-ის სისტემური მატარებლის შეტყობინებების ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
@@ -5803,7 +5812,7 @@ msgstr "ენერგიის გამოყენება"
 
 #: src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about energy usage using RAPL"
-msgstr ""
+msgstr "ენერგიის გამოყენების სტატისტიკის ჩაწერა RAPL-ით"
 
 #: src/plugins/sysprof/tweaks.ui:151
 msgid "Battery Usage"
@@ -5811,7 +5820,7 @@ msgstr "ელემენტის მუხტი"
 
 #: src/plugins/sysprof/tweaks.ui:152 src/plugins/sysprof/tweaks.ui:180
 msgid "Record statistics about battery charge and discharge rates"
-msgstr ""
+msgstr "ელემენტის დატენვისა და დაცლის სიჩქარის სტატისტიკის ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:167
 msgid "Network Usage"
@@ -5819,7 +5828,7 @@ msgstr "ქსელის გამოყენება"
 
 #: src/plugins/sysprof/tweaks.ui:168
 msgid "Record statistics about network usage"
-msgstr ""
+msgstr "სტატისტიკის ჩაწერა ქსელის გამოყენების შესახებ"
 
 #: src/plugins/sysprof/tweaks.ui:179
 msgid "Disk Usage"
@@ -5827,11 +5836,11 @@ msgstr "დისკის გამოყენება"
 
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
-msgstr ""
+msgstr "GNOME გარემოს წარმადობა"
 
 #: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
-msgstr ""
+msgstr "წარმადობის და დროის ინფორმაციის მოგროვება GNOME Shell-დან"
 
 #: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
@@ -5843,7 +5852,7 @@ msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:213
 msgid "Collect information from GJS-based applications"
-msgstr ""
+msgstr "ინფორმაციის მოგროვება GJS-ზე დაწერილი აპლიკაციებიდან"
 
 #: src/plugins/sysprof/tweaks.ui:224
 msgid "Application Tracing"
@@ -5875,7 +5884,7 @@ msgstr "ახალი _ტერმინალი"
 
 #: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
-msgstr ""
+msgstr "ახალი ტერმინალის გახსნა ჰოსტ ოპერაციულ სისტემაზე"
 
 #: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
@@ -5887,7 +5896,7 @@ msgstr ""
 
 #: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
-msgstr ""
+msgstr "ახალი _გაშვების გარემოს ტერმინალი"
 
 #: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
@@ -5948,11 +5957,12 @@ msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:99
 msgid "Maximum Lines in Scrollback"
-msgstr ""
+msgstr "აჩოჩების ხაზების მაქსიმალური რიცხვი"
 
 #: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
+"ისტორიაში დამახსოვრებული მაქსიმალური ხაზების რაოდენობა აჩოჩების შეზღუდვისას"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:150
 msgid "Unit Test Output"
@@ -5996,11 +6006,11 @@ msgstr ""
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
-msgstr ""
+msgstr "გასაკეთებელი/გასასწორებლები"
 
 #: src/plugins/todo/gbp-todo-panel.ui:14
 msgid "Loading TODOs…"
-msgstr ""
+msgstr "გეგმების ჩატვირთვა…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
@@ -6008,7 +6018,7 @@ msgstr "დამოკიდებულებების განახლ�
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
-msgstr ""
+msgstr "Builder ანახლებს თქვენი პროექტის მორგებულ დამოკიდებულებებს."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -6016,7 +6026,7 @@ msgstr "დამოკიდებულებების განახლ�
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr ""
+msgstr "განახლებების გადმოწერა პროექტის დამოკიდებულებებისათვის"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6042,11 +6052,11 @@ msgstr "განახლებების დაყენება…"
 
 #: src/plugins/update-manager/gtk/menus.ui:8
 msgid "Install pending updates for Builder"
-msgstr ""
+msgstr "Builder-ის დარჩენილი განახლებების დაყენება"
 
 #: src/plugins/valgrind/gtk/menus.ui:11
 msgid "Run with Leak Detector"
-msgstr ""
+msgstr "გაჟონვების დეტექტორით გაშვება"
 
 #: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
@@ -6058,11 +6068,11 @@ msgstr "გაჟონვების დეტექტორი"
 
 #: src/plugins/valgrind/gtk/menus.ui:25
 msgid "Track Origin of Leaks"
-msgstr ""
+msgstr "გაჟონვის წყაროს პოვნა"
 
 #: src/plugins/valgrind/gtk/menus.ui:31
 msgid "Report Leaks"
-msgstr ""
+msgstr "გაჟონვების ანგარიში"
 
 #: src/plugins/valgrind/gtk/menus.ui:33
 msgid "Summary"
@@ -6074,7 +6084,7 @@ msgstr "სრული"
 
 #: src/plugins/valgrind/gtk/menus.ui:52 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
-msgstr ""
+msgstr "გაჟონვის ტიპები"
 
 #: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
@@ -6114,7 +6124,7 @@ msgstr "წყარომდე მიდევნება"
 
 #: src/plugins/valgrind/tweaks.ui:72
 msgid "Show origin of undefined values"
-msgstr ""
+msgstr "აღუწერელი მნიშვნელობებს წყაროს ჩვენება"
 
 #: src/plugins/valgrind/tweaks.ui:83
 msgid "Number of Callers"
@@ -6130,7 +6140,7 @@ msgstr "გაჟონვის შემოწმება"
 
 #: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
-msgstr ""
+msgstr "მეხსიერების გაჟონვების ძებნა გასვლისას"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
