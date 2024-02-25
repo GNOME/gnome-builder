@@ -1,5 +1,5 @@
 # Turkish translation for gnome-builder.
-# Copyright (C) 2015-2023 gnome-builder's COPYRIGHT HOLDER
+# Copyright (C) 2015-2024 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Mahmut Sami <mahmutsami106@hotmail.com>, 2015.
@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-14 08:23+0000\n"
+"POT-Creation-Date: 2024-02-19 19:31+0000\n"
 "PO-Revision-Date: 2024-02-14 17:41+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
@@ -5542,11 +5542,11 @@ msgstr "Çalışma Dizini"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için <tt>"
-"$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
+"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için "
+"<tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
@@ -6358,22 +6358,3 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
-
-#~ msgid "Filter Symbols…"
-#~ msgstr "Simgeleri Süz…"
-
-#~ msgctxt "menu label"
-#~ msgid "Open _Sysprof Capture…"
-#~ msgstr "_Sysprof Yakalama Aç…"
-
-#~ msgid "Go back"
-#~ msgstr "Geri git"
-
-#~ msgid "All Preferences"
-#~ msgstr "Tüm Tercihler"
-
-#~ msgid "Primary Menu"
-#~ msgstr "Birincil Menü"
-
-#~ msgid "Unnamed Symbol"
-#~ msgstr "Adsız Simge"
