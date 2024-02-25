@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-14 08:23+0000\n"
-"PO-Revision-Date: 2024-02-18 10:00+0100\n"
+"POT-Creation-Date: 2024-02-19 19:31+0000\n"
+"PO-Revision-Date: 2024-02-25 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -2099,7 +2099,7 @@ msgstr "Berrezarri"
 
 #: src/libide/terminal/ide-terminal.ui:174
 msgid "Reset and Clear"
-msgstr ""
+msgstr "Berrezarri eta garbitu"
 
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
