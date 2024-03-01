@@ -116,6 +116,9 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--interactive");
   ide_run_context_append_formatted (run_context, "--user=%s", g_get_user_name ());
 
+  /* Assume we have podman 1.8.1, reeleased 2020 */
+  ide_run_context_append_argv (run_context, "--detach-keys=");
+
   /* Make sure that we request TTY ioctls if necessary */
   if (has_tty)
     ide_run_context_append_argv (run_context, "--tty");
