@@ -31,6 +31,57 @@
 
 #include "ide-support-private.h"
 
+typedef struct
+{
+  GString *str;
+  guint depth;
+} ObjectPrintf;
+
+static void
+object_printf_recurse (IdeObject    *object,
+                       ObjectPrintf *state)
+{
+  g_autofree char *repr = ide_object_repr (object);
+
+  for (guint i = 0; i < state->depth; i++)
+    {
+      g_string_append_c (state->str, ' ');
+      g_string_append_c (state->str, ' ');
+    }
+
+  g_string_append (state->str, repr);
+  g_string_append_c (state->str, '\n');
+
+  state->depth++;
+  ide_object_foreach (object, (GFunc)object_printf_recurse, state);
+  state->depth--;
+}
+
+static void
+ide_support_foreach_workbench_cb (gpointer data,
+                                  gpointer user_data)
+{
+  IdeWorkbench *workbench = data;
+  g_autofree char *title = NULL;
+  GString *str = user_data;
+  IdeContext *context;
+  ObjectPrintf state;
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (str != NULL);
+
+  context = ide_workbench_get_context (workbench);
+  title = ide_context_dup_title (context);
+
+  g_string_append_c (str, '\n');
+  g_string_append_printf (str, "[Workbench %s]\n", title);
+
+  state.depth = 0;
+  state.str = str;
+
+  object_printf_recurse (IDE_OBJECT (context), &state);
+}
+
 gchar *
 ide_get_support_log (void)
 {
@@ -181,6 +232,10 @@ ide_get_support_log (void)
     }
   g_strfreev (env);
   g_string_append (str, "\n\n");
+
+  ide_application_foreach_workbench (IDE_APPLICATION_DEFAULT,
+                                     ide_support_foreach_workbench_cb,
+                                     str);
 
   /*
    * Add simple checksum for validation at the end.
