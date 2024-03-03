@@ -1,3 +1,11 @@
+# GNOME Builder 46.rc
+
+ * Spellcheck fixes
+ * Fix a potential crash with the diagnostic engine
+ * Apply build-options.env from primary flatpak module to build pipeline
+ * Use --detach-keys with podman-based toolboxes
+ * Fix developer-id for metainfo
+
 # GNOME Builder 46.beta
 
  * New elixer language server support
