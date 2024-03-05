@@ -914,6 +914,7 @@ ide_template_input_to_scope (IdeTemplateInput *self)
 {
   g_autoptr(TmplScope) scope = NULL;
   g_autoptr(GDateTime) now = NULL;
+  g_autoptr(GString) author_escape = NULL;
   g_autofree char *name_lower = NULL;
   g_autofree char *prefix_ = NULL;
   g_autofree char *prefix = NULL;
@@ -926,12 +927,16 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   now = g_date_time_new_now_local ();
   scope = tmpl_scope_new ();
 
+  author_escape = g_string_new (self->author);
+  g_string_replace (author_escape, "'", "\\'", 0);
+
   app_id = !ide_str_empty0 (self->app_id) ? self->app_id : "org.gnome.Example";
   tmpl_scope_set_string (scope, "appid", app_id);
   scope_take_string (scope, "appid_path", build_app_path (app_id));
 
   tmpl_scope_set_string (scope, "template", self->template);
   tmpl_scope_set_string (scope, "author", self->author);
+  tmpl_scope_set_string (scope, "author_escape", author_escape->str);
   tmpl_scope_set_string (scope, "project_version", self->project_version);
   scope_take_string (scope, "language", g_utf8_strdown (self->language, -1));
   tmpl_scope_set_boolean (scope, "versioning", ide_template_input_get_use_version_control (self));

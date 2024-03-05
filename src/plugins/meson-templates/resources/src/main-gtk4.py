@@ -40,18 +40,18 @@ class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name='{{name}}',
                                 application_icon='{{appid}}',
-                                developer_name='{{author}}',
+                                developer_name='{{author_escape}}',
                                 version='{{project_version}}',
-                                developers=['{{author}}'],
-                                copyright='© {{year}} {{author}}')
+                                developers=['{{author_escape}}'],
+                                copyright='© {{year}} {{author_escape}}')
 {{else}}
         about = Gtk.AboutDialog(transient_for=self.props.active_window,
                                 modal=True,
                                 program_name='{{name}}',
                                 logo_icon_name='{{appid}}',
                                 version='{{project_version}}',
-                                authors=['{{author}}'],
-                                copyright='© {{year}} {{author}}')
+                                authors=['{{author_escape}}'],
+                                copyright='© {{year}} {{author_escape}}')
 {{end}}
         about.present()
 
