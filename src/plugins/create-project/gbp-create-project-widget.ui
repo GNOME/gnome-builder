@@ -16,6 +16,7 @@
                   <object class="AdwEntryRow" id="name_row">
                     <property name="title" translatable="yes">Project Name</property>
                     <property name="text" bind-source="input" bind-property="name" bind-flags="sync-create|bidirectional" />
+                    <signal name="entry_activated" handler="text_activated_cb" swapped="true" object="GbpCreateProjectWidget" />
                     <child type="suffix">
                       <object class="GtkImage" id="directory_clash">
                         <property name="visible">false</property>
@@ -45,6 +46,7 @@
                   <object class="AdwEntryRow" id="app_id_row">
                     <property name="title" translatable="yes">Application ID…</property>
                     <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional" />
+                    <signal name="entry_activated" handler="text_activated_cb" swapped="true" object="GbpCreateProjectWidget" />
                   </object>
                 </child>
                 <child>
@@ -67,6 +69,7 @@
                   <object class="AdwEntryRow" id="location_row">
                     <property name="title" translatable="yes">Location</property>
                     <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpCreateProjectWidget" />
+                    <signal name="entry_activated" handler="text_activated_cb" swapped="true" object="GbpCreateProjectWidget" />
                     <child type="suffix">
                       <object class="GtkButton">
                         <property name="action-name">create-project.select-folder</property>

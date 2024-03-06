@@ -307,6 +307,15 @@ expand_action (GtkWidget  *widget,
   IDE_EXIT;
 }
 
+static void
+text_activated_cb (GbpCreateProjectWidget *self,
+                   gpointer                userdata)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  gtk_widget_activate_action (GTK_WIDGET (self), "create-project.expand", NULL);
+}
+
 static guint
 find_license (GbpCreateProjectWidget *self,
               const char             *license)
@@ -390,6 +399,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, template_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, language_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, text_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, license_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, input_notify_cb);
@@ -398,6 +408,10 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
 
   gtk_widget_class_install_action (widget_class, "create-project.select-folder", NULL, select_folder_action);
   gtk_widget_class_install_action (widget_class, "create-project.expand", NULL, expand_action);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "create-project.expand", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_ISO_Enter, GDK_CONTROL_MASK, "create-project.expand", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, GDK_CONTROL_MASK, "create-project.expand", NULL);
 
   g_type_ensure (IDE_TYPE_TEMPLATE_INPUT);
 }
