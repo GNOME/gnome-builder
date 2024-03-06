@@ -76,12 +76,13 @@
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">@app_id@.desktop</launchable>
-  <url type="homepage">https://wiki.gnome.org/Apps/Builder</url>
+  <url type="homepage">https://apps.gnome.org/Builder</url>
   <url type="bugtracker">https://gitlab.gnome.org/GNOME/gnome-builder/issues</url>
   <url type="donation">https://www.gnome.org/donate/</url>
   <url type="help">https://builder.readthedocs.io</url>
   <url type="translate">https://l10n.gnome.org/module/gnome-builder/</url>
   <url type="vcs-browser">https://gitlab.gnome.org/GNOME/gnome-builder</url>
+  <url type="contribute">https://welcome.gnome.org/app/Builder</url>
   <project_group>GNOME</project_group>
 
   <kudos>
