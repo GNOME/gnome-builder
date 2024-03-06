@@ -3,7 +3,7 @@
 .. _Flatpak: https://flatpak.org
 .. _Stable: https://flathub.org/repo/appstream/org.gnome.Builder.flatpakref
 .. _Nightly: https://nightly.gnome.org/repo/appstream/org.gnome.Builder.Devel.flatpakref
-.. _Software: https://wiki.gnome.org/Apps/Software
+.. _Software: https://apps.gnome.org/Software
 .. _GNOME: https://gnome.org/
 .. _JHBuild: https://wiki.gnome.org/Newcomers/BuildGnome
 .. _`Newcomers Tutorial`: https://wiki.gnome.org/Newcomers

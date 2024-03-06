@@ -173,7 +173,7 @@ ide_application_actions_about (GSimpleAction *action,
                          "support-url", "https://discourse.gnome.org/tags/c/applications/7/builder",
                          "translator-credits", _("translator-credits"),
                          "version", PACKAGE_VERSION,
-                         "website", "https://wiki.gnome.org/Apps/Builder",
+                         "website", "https://apps.gnome.org/Builder",
                          NULL);
   adw_about_dialog_add_acknowledgement_section (ADW_ABOUT_DIALOG (dialog),
                                                 _("Funded By"),

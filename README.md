@@ -8,7 +8,7 @@ Develop software for GNOME
  * [File a Bug in GitLab](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
  * [Download a Release Tarball](https://download.gnome.org/sources/gnome-builder/)
  * [Browse source code in Git version control](https://gitlab.gnome.org/GNOME/gnome-builder)
- * [Learn more about Builder](https://wiki.gnome.org/Apps/Builder)
+ * [Learn more about Builder](https://apps.gnome.org/Builder)
  * [Chat with the developers](irc://irc.gnome.org/#gnome-builder) in #gnome-builder on irc.gnome.org
  or [#gnome-builder:gnome.org](https://matrix.to/#/!owVIjvsVrBaEdelYem:matrix.org) on GNOME's Matrix.
 

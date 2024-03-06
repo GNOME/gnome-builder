@@ -8,7 +8,7 @@
   <name xml:lang="en">Builder</name>
   <shortdesc xml:lang="en">An IDE for writing GNOME-based software</shortdesc>
   <description xml:lang="en">Builder is an IDE for writing GNOME-based software.</description>
-  <homepage rdf:resource="https://wiki.gnome.org/Apps/Builder" />
+  <homepage rdf:resource="https://apps.gnome.org/Builder" />
   <download-page rdf:resource="https://download.gnome.org/sources/gnome-builder/" />
   <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gnome-builder/issues" />
   <developer-forum rdf:resource="https://discourse.gnome.org/tag/builder" />
