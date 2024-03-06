@@ -616,5 +616,12 @@ gbp_code_index_builder_run_finish (GbpCodeIndexBuilder  *self,
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
+  /* Drop extraneous resources immediately */
+  g_clear_object (&self->source_dir);
+  g_clear_object (&self->index_dir);
+  g_clear_pointer (&self->items, g_ptr_array_unref);
+  g_clear_object (&self->map);
+  g_clear_object (&self->fuzzy);
+
   IDE_RETURN (ret);
 }
