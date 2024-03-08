@@ -5,8 +5,9 @@
 .. _Nightly: https://nightly.gnome.org/repo/appstream/org.gnome.Builder.Devel.flatpakref
 .. _Software: https://apps.gnome.org/Software
 .. _GNOME: https://gnome.org/
-.. _JHBuild: https://wiki.gnome.org/Newcomers/BuildGnome
-.. _`Newcomers Tutorial`: https://wiki.gnome.org/Newcomers
+.. _JHBuild: https://handbook.gnome.org/development/building.html#jhbuild-legacy
+.. _`JHBuild manual`: https://gnome.pages.gitlab.gnome.org/jhbuild
+.. _`Welcome to GNOME`: https://welcome.gnome.org
 .. _`filing a bug`: https://gitlab.gnome.org/GNOME/gnome-builder/issues
 
 ############
@@ -55,14 +56,14 @@ via JHBuild
 -----------
 
 If you plan on contributing to the GNOME desktop and application suite, you may want to install Builder via JHBuild_.
-See the `Newcomers Tutorial`_ for more information on joining the community and installing JHBuild_.
+See the `Welcome to GNOME`_ for more information on joining the community and `JHBuild manual`_ for building GNOME application.
 
 We are aggressively moving towards using Flatpak for contributing to Builder, but we aren't quite there yet.
 
 Command Line
 ^^^^^^^^^^^^
 
-.. note:: Please review the GNOME `Newcomers Tutorial`_ on how to build a GNOME application before proceeding.
+.. note:: Please review the `JHBuild manual`_ on how to build a GNOME application before proceeding.
 
 .. code-block:: sh
 

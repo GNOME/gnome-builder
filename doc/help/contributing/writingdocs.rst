@@ -1,4 +1,4 @@
-.. _`merge request`: https://wiki.gnome.org/Newcomers/SubmitContribution
+.. _`merge request`: https://welcome.gnome.org/app/Builder/#submitting-your-work
 .. _`Gitlab`: https://gitlab.gnome.org/GNOME/gnome-builder
 
 
