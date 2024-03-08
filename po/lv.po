@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-03-01 21:56+0000\n"
-"PO-Revision-Date: 2024-03-08 21:51+0200\n"
+"PO-Revision-Date: 2024-03-08 23:42+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -359,13 +359,12 @@ msgstr "Ja ieslēgts, redaktors dokumentā rādīs režģa līnijas."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
-msgstr ""
+msgstr "Pārskata kartes politika"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:87
-#, fuzzy
 #| msgid "If enabled, the right panel will be displayed."
 msgid "When the overview map should be displayed."
-msgstr "Ja ieslēgts, labā rūts tiks attēlota."
+msgstr "Kad būtu jārāda pārskata karte."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 #: src/plugins/editorui/tweaks.ui:266
@@ -383,7 +382,7 @@ msgstr "Aplauzt tekstu"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
+msgstr "Vaids, kā aplauzt garu teksta rindu, lai uzlabotu redzamību."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
@@ -451,10 +450,9 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
-#, fuzzy
 #| msgid "Interactive Completion"
 msgid "Select First Completion"
-msgstr "Interaktīva pabeigšana"
+msgstr "Atlasīt pirmo pabeigšanu"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
@@ -2029,11 +2027,10 @@ msgid "_Copy"
 msgstr "_Kopēt"
 
 #: src/libide/terminal/gtk/menus.ui:17 src/libide/terminal/ide-terminal.ui:122
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
-msgstr "Kopēt izvēlēto starpliktuvē"
+msgstr "Kopēt izvēlēto no termināļa starpliktuvē"
 
 #: src/libide/terminal/gtk/menus.ui:22 src/libide/terminal/ide-terminal.ui:126
 msgid "_Copy Link"
@@ -2626,14 +2623,13 @@ msgid "Stop building project"
 msgstr "Apturēt projekta būvēšanu"
 
 #: src/plugins/buildui/gtk/menus.ui:108
-#, fuzzy
 #| msgid "Build Output"
 msgid "Show Bui_ld Output"
-msgstr "Būvēšanas izvade"
+msgstr "Rādīt būvēšanas i_zvadi"
 
 #: src/plugins/buildui/gtk/menus.ui:111
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Rādīt paneli, kurā ir būvēšanas žurnāls"
 
 #: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
 msgid "Running"
@@ -2759,20 +2755,18 @@ msgid "Editor Font"
 msgstr "Redaktora fonts"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#, fuzzy
 #| msgid "The source code editor"
 msgid "The font used in the source code editor"
-msgstr "Pirmkoda redaktors"
+msgstr "Fonts, ko izmantot pirmkoda redaktorā"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
 msgstr "Termināļa fonts"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#, fuzzy
 #| msgid "The word is not in the dictionary"
 msgid "The font used in the terminal"
-msgstr "Šis vārds nav vārdnīcā"
+msgstr "Fonts, ko izmantot terminālī"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
@@ -2788,7 +2782,7 @@ msgstr "Nekad"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "Pārskata karti nekad nerādīt"
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
@@ -2796,17 +2790,16 @@ msgstr "Vienmēr"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "Pārskata karti vienmēr rādīt"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
-#, fuzzy
 #| msgid "Autosave"
 msgid "Auto"
-msgstr "Automātiski saglabāt"
+msgstr "Automātiski"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
+msgstr "Pārskata karti tiek automātiski rādīta, balstoties uz lietotāja ievadi"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2835,10 +2828,9 @@ msgid "Run Command"
 msgstr "Izpildīt komandu"
 
 #: src/plugins/buildui/tweaks.ui:17
-#, fuzzy
 #| msgid "This command requires a view to be focused"
 msgid "This command is used to run your project"
-msgstr "Šai komandai vajag, lai skats būtu fokusēts"
+msgstr "Šo komandu izmanto, lai palaistu jūsu projektu"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2938,7 +2930,7 @@ msgstr "Būvētāju skaits būvēšanas laikā"
 
 #: src/plugins/buildui/tweaks.ui:262
 msgid "1 per CPU"
-msgstr ""
+msgstr "1 uz katru CPU"
 
 #: src/plugins/buildui/tweaks.ui:354
 msgid "Tooling"
@@ -5186,7 +5178,7 @@ msgstr "Kastes"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
-msgstr "GNOME lietotne, lai piekļūtu attālinātām vai virtuālām sistēmām"
+msgstr "GNOME lietotne, lai piekļūtu attālām vai virtuālām sistēmām"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
@@ -8927,4 +8919,5 @@ msgstr "Lai parsētu, datnei ir jābūt saglabātai lokāli."
 
 #~ msgid "Invalid snippet at line %d: %s"
 #~ msgstr "Nederīgs fragments rindā %d: %s"
+
 
