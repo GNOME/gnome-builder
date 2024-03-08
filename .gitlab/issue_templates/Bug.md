@@ -36,7 +36,7 @@
     Provide more information that could be relevant.
     
     If the issue is a crash, provide a stack trace following the steps in:
-    https://wiki.gnome.org/action/show/GettingInTouch/Bugzilla/GettingTraces
+    https://handbook.gnome.org/issues/stack-traces.html
 -->
 
 

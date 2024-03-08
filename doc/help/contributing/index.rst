@@ -46,5 +46,4 @@ We do expect this to change very soon in that you'll be able to easily contribut
 .. _`Builder IRC channel`: irc://irc.gnome.org/#gnome-builder
 .. _`Builder Bug Tracker`: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues
 .. _`newcomer bugs`: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/?label_name%5B%5D=4.%20Newcomers
-.. _`GNOME Newcomers Tutorial`: https://wiki.gnome.org/action/show/Newcomers
 .. _`git repository`: https://gitlab.gnome.org/GNOME/gnome-builder

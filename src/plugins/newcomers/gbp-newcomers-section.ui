@@ -15,7 +15,7 @@
             <property name="title" translatable="yes">Suggested GNOME Projects</property>
             <child type="header-suffix">
               <object class="GtkLabel">
-                <property name="label">&lt;a href="https://wiki.gnome.org/Newcomers/"&gt;Learn More…&lt;/a&gt;</property>
+                <property name="label">&lt;a href="https://welcome.gnome.org/"&gt;Learn More…&lt;/a&gt;</property>
                 <property name="use-markup">true</property>
                 <property name="xalign">1.0</property>
               </object>
