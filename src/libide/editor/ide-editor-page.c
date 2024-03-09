@@ -35,6 +35,7 @@
 #include "ide-editor-page-private.h"
 #include "ide-editor-print-operation.h"
 #include "ide-editor-save-delegate.h"
+#include "ide-source-map.h"
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GActionGroup, g_object_unref)
 
@@ -941,6 +942,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
+  g_type_ensure (IDE_TYPE_SOURCE_MAP);
 }
 
 static void

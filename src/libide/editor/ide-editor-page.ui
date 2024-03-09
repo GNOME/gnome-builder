@@ -33,7 +33,7 @@
           </object>
         </property>
         <property name="scrubber">
-          <object class="GtkSourceMap" id="map">
+          <object class="IdeSourceMap" id="map">
             <property name="left-margin">6</property>
             <property name="view">view</property>
           </object>
