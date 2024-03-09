@@ -50,7 +50,8 @@ ide_source_map_snapshot (GtkWidget   *widget,
    */
 
   if ((root = gtk_widget_get_root (widget)) &&
-      GTK_IS_NATIVE (root) &&
+      GTK_IS_WINDOW (root) &&
+      !gtk_window_is_maximized (GTK_WINDOW (root)) &&
       (surface = gtk_native_get_surface (GTK_NATIVE (root))) &&
       (double)gdk_surface_get_scale (surface) != gdk_surface_get_scale_factor (surface))
     {
