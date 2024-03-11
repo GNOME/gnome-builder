@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-02-29 21:55+0000\n"
-"PO-Revision-Date: 2024-03-10 06:14+0100\n"
+"PO-Revision-Date: 2024-03-11 18:52+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -45,12 +45,19 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
+"Builder აქტიურად განვითარებადი ინტეგრირებული დამუშავების გარემოა GNOME-"
+"სთვის. ის აერთიანებს ინტეგრირებულ მხარდაჭერას GNOME-ის ისეთი ძირითადი "
+"ტექნოლოგიებისას, როგორებიცაა GTK+, GLib და GNOME-ის API-ებს, რომლებსაც "
+"ნებისმიერი პროგრამისტი დააფასებს, მაგალითად, სინტაქსის გამოკვეთას და "
+"ფრაგმენტებს."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
+"თქვენ შეგიძლიათ დაეყრდნოთ Builder-ის ახალ ვერსიებს, რომლებიც GNOME-ის ახალ "
+"ვერსიასთან, ექვს თვეში ერთხელ გამოდის."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
@@ -129,10 +136,11 @@ msgstr "მხარდაჭერა jghbuild და flatpak გაშვე�
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr ""
+"თქვენს კოდში აღმოჩენილი მომავლისთვის დაგეგმილი გეგმების ნახვის მხარდაჭერა"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
-msgstr ""
+msgstr "სწრაფი არაზუსტი ტექსტის ძებნა ფაილებში და სიმბოლოებში"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
 msgid "Quickly access your projects"
@@ -278,6 +286,8 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
+"თუ ჩართულია, რედაქტორი გაჩვენებთ ხაზის დამატებებს და ცვლილებებს პროგრამის "
+"კოდში."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
@@ -330,6 +340,8 @@ msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
+"Backspace წაშლის დამატებით გამოტოვებებს, რომ თქვენი შეწევის გასწორების ზომა "
+"შეინარჩუნოს."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 #: src/plugins/editorui/tweaks.ui:495
@@ -346,7 +358,7 @@ msgstr "ბადის ხაზების ჩვენება"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
+msgstr "თუ ჩართულია, რედაქტორი დოკუმენტში ბადის ხაზებს გაჩვენებთ."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
@@ -416,6 +428,8 @@ msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
+"თუ ჩართულია, Builder ავტომატურად შემოგთავაზებთ დასრულების ვარიანტებს "
+"კრეფისას."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
@@ -538,6 +552,7 @@ msgstr "ენის სერვერის stderr-ის მემკვი�
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr ""
+"თუ ჩართულია, ენი სერვერის სტანდარტული შეცდომა კონსოლზე გადამისამართდება."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -564,6 +579,8 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
+"კონფიგურაცია, რომელიც არჩეულია და რომელიც აღდგება შემდეგ ჯერზე, როცა პროექტი "
+"ჩაიტვირთება."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
@@ -867,6 +884,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
+"კოდირებამ, რომელიც ფაილის ჩასატვირთად გამოიყენება, შეცდომები აღმოაჩინა. "
+"შეგიძლიათ, სხვა კოდირება აირჩიოთ და თავიდან ჩატვირთოთ."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -2838,7 +2857,7 @@ msgstr "ვადაამოწურული არტეფაქტებ�
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr ""
+msgstr "ვადაგასული არტეფაქტები წაიშლება, როცა Builder-ს გაუშვებთ"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
@@ -2888,7 +2907,7 @@ msgstr "დაყენების პრეფიქსი"
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
-msgstr ""
+msgstr "პროექტი დადგება ამ საქაღალდეში აგების კონვეიერის დაყენების ფაზისას."
 
 #: src/plugins/buildui/tweaks.ui:408
 msgid "Configure Options"
@@ -2926,6 +2945,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"SDK, რომელიც თქვენი აპლიკაციის ასაგებად იქნება გამოყენებული, ავტომატურად "
+"განისაზღვრება გაშვების გარემოს მიერ."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
@@ -2975,6 +2996,7 @@ msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"ჩაისმება თუ არა პარამეტრები დასრულების სიაში. მოითხოვს ორივე მრგვალ ფრჩხილს."
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
@@ -2995,6 +3017,7 @@ msgstr "სრული პარამეტრები"
 #: src/plugins/clang/tweaks.ui:30
 msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
+"პარამეტრებისა და ტიპის ინფორმაციის ჩასმა clang-ის შეთავაზებების დასრულებისას"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3257,6 +3280,9 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
+"უნიკალური სახელი, რომელიც პროექტის საქაღალდისა და სხვა რესურსებისთვის "
+"გამოყენება. სახელი უნდა იყოს პატარა ასოებით, გამოტოვებების გარეშე და ციფრით "
+"არ უნდა იწყებოდეს."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:46
 msgid "Application ID…"
@@ -3267,6 +3293,8 @@ msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
+"შებრუნებული დომენის სახელი იდენტიფიკატორი, რომელიც აპლიკაციის ამოსაცნობად "
+"გამოიყენება. მაგ: \"org.gnome.Builder\". ის არ შეიძლება, ტირეებს შეიცავდეს."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:68
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3312,6 +3340,8 @@ msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
 msgstr ""
+"ძებნა, ავტოდასრულება და სიმბოლოების ინფორმაცია შეზღუდულია, სანამ Ctags "
+"დაინდექსება დასრულდება."
 
 #: src/plugins/ctags/ide-ctags-service.c:980
 msgid "Indexing Source Code (Paused)"
@@ -3817,7 +3847,7 @@ msgstr "ბოლო ცარიელი ადგილის მოჭრა
 
 #: src/plugins/editorui/tweaks-language.ui:91
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr ""
+msgstr "შენახვისას, შეცვლილი ხაზებისთვის ბოლოში მიწერილი გამოტოვებების წაკვეთა"
 
 #: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
@@ -3851,7 +3881,7 @@ msgstr "მარჯვენა ზღვრის ჩვენება"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
+msgstr "რედაქტორში საზღვრის ჩვენება მაქსიმალური სასურველი სიგანის მისათითებლად"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -4058,6 +4088,8 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"სიმბოლოს ინფორმაციის გამოყენება კოდში სახელის სივრცეების, ფუნქციებისა და "
+"ცვლადის სახელების გამოსაკვეთად"
 
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Draw a mark representing normal spaces"
@@ -4399,6 +4431,7 @@ msgstr "Flatpak -ის დაყენება ახალი SDK-ები�
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
 msgstr ""
+"Flatpak-ის ვერსია ახალ SDK-ებთან და SDK გაფართოებისთვის გამოსაყენებლად."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
@@ -5577,6 +5610,7 @@ msgstr "ბრძანებების გაშვება"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr ""
+"გასაშვები ბრძანებების ID-ების სია აპლიკაციისთვის ან პროექტისთვის ჩასატვირთად."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -5826,6 +5860,7 @@ msgstr "ნაძალადევი წარმადობის რეჟ�
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
+"მარტივი მეხსიერების სტატისტიკა პროცესის შესახებ. მაგ: გამოყენებული მეხსიერება"
 
 #: src/plugins/sysprof/tweaks.ui:95
 msgid "Memory Profiling"
@@ -5929,7 +5964,7 @@ msgstr "აგების ახალი ტერმინალი"
 
 #: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
-msgstr ""
+msgstr "ახალი ტერმინალის გახსნა პროექტის აგების კონვეიერში"
 
 #: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
@@ -5953,7 +5988,7 @@ msgstr "სქელი ფონტის დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
-msgstr ""
+msgstr "სქელი სპეციალური სიმბოლოების დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
@@ -5961,7 +5996,7 @@ msgstr "ჰიპერბმულების დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "ჰიპერბმული სპეციალური სიმბოლოების დაშვება"
 
 #: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
@@ -5973,7 +6008,7 @@ msgstr "გამოტანისას აჩოჩება"
 
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
-msgstr ""
+msgstr "ავტომატური გადახვევა, როცა ტერმინალში ახალი ტექსტი გამოჩნდება"
 
 #: src/plugins/terminal/tweaks.ui:70
 msgid "Scroll On Keyboard Input"
@@ -5991,6 +6026,8 @@ msgstr "აჩოჩების ლიმიტი"
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
+"ტერმინალის აჩოჩებისთვის მეხსიერებაში დამახსოვრებული ხაზების რაოდენობის "
+"შეზღუდვა"
 
 #: src/plugins/terminal/tweaks.ui:99
 msgid "Maximum Lines in Scrollback"
@@ -6143,19 +6180,19 @@ msgstr "ხელმისაწვდომი"
 
 #: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
-msgstr ""
+msgstr "შეჯამების ანგარიშში გარკვეული გაჟონვების ჩასმა"
 
 #: src/plugins/valgrind/tweaks.ui:32
 msgid "Include possible leaks in report summary"
-msgstr ""
+msgstr "შეჯამების ანგარიშში შესაძლო გაჟონვების ჩასმა"
 
 #: src/plugins/valgrind/tweaks.ui:44
 msgid "Include indirect leaks in report summary"
-msgstr ""
+msgstr "შეჯამების ანგარიშში არაპირდაპირი გაჟონვების ჩასმა"
 
 #: src/plugins/valgrind/tweaks.ui:56
 msgid "Include reachable leaks in report summary"
-msgstr ""
+msgstr "შეჯამების ანგარისში ხელმისაწვდომი გაჟონვების ჩასმა"
 
 #: src/plugins/valgrind/tweaks.ui:71
 msgid "Track Origins"
@@ -6171,7 +6208,7 @@ msgstr "გამომძახებლების რაოდენობ�
 
 #: src/plugins/valgrind/tweaks.ui:84
 msgid "Set the limit to the number of entries in stack traces"
-msgstr ""
+msgstr "სტეკის ტრეისებში არსებული ჩანაწერების რაოდენობის შეზღუდვა"
 
 #: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
@@ -6219,6 +6256,8 @@ msgstr "ავტორის დეტალები"
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
 msgid "You may specify authorship information to override defaults."
 msgstr ""
+"შეგიძლიათ მიუთითოთ ავტორობის ინფორმაცია ნაგულისხმევი მნიშვნელობების "
+"გადასაფარად."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
 msgid "Status"
