@@ -523,7 +523,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git",
-                    "branch" : "main"
+                    "tag" : "1.15.6"
                 }
             ]
         },
