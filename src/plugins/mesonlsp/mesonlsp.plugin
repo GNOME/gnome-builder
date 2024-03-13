@@ -1,11 +1,11 @@
 [Plugin]
 Authors=JCWasmx86
-Copyright=Copyright © 2023 JCWasmx86
-Description=Meson code intelligence provided by Swift-MesonLSP
+Copyright=Copyright © 2024 JCWasmx86
+Description=Meson code intelligence provided by mesonlsp
 Embedded=ide_lsp_plugin_register_types
-Module=Swift-MesonLSP
-Name=Swift-MesonLSP
-Website=https://github.com/JCWasmx86/Swift-MesonLSP
+Module=mesonlsp
+Name=mesonlsp
+Website=https://github.com/JCWasmx86/mesonlsp
 X-Category=lsps
 X-Code-Action-Languages=meson
 X-Completion-Provider-Languages=meson
@@ -16,7 +16,7 @@ X-Formatter-Languages=meson
 X-Highlighter-Languages-Priority=100
 X-Highlighter-Languages=meson
 X-Hover-Provider-Languages=meson
-X-LSP-Command=Swift-MesonLSP --lsp
+X-LSP-Command=mesonlsp --lsp
 X-LSP-Languages=meson;
 X-LSP-Settings=settings.json
 X-Rename-Provider-Languages=meson
