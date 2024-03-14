@@ -25,6 +25,7 @@
 
 #include "ide-editor-page.h"
 #include "ide-editor-search-bar-private.h"
+#include "ide-source-map.h"
 
 G_BEGIN_DECLS
 
@@ -44,7 +45,7 @@ struct _IdeEditorPage
   /* Template widgets */
   IdeSourceView           *view;
   GtkScrolledWindow       *scroller;
-  GtkSourceMap            *map;
+  IdeSourceMap            *map;
   IdeScrubberRevealer     *scrubber_revealer;
   IdeEditorSearchBar      *search_bar;
   GtkRevealer             *search_revealer;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeSourceMap" parent="GtkWidget">
+    <child>
+      <object class="GtkSourceMap" id="map">
+        <property name="top-margin">5</property>
+        <property name="bottom-margin">5</property>
+        <property name="left-margin">0</property>
+        <property name="right-margin">0</property>
+        <property name="overflow">visible</property>
+      </object>
+    </child>
+  </template>
+</interface>

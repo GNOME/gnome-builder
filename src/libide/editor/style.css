@@ -1,14 +1,29 @@
-textview.GtkSourceMap {
+IdeSourceMap {
+  padding-left: 13px;
+  padding-right: 13px;
+}
+IdeSourceMap:dir(ltr) {
+  border-left: 1px solid alpha(@borders, .3);
+}
+IdeSourceMap:dir(rtl) {
+  border-right: 1px solid alpha(@borders, .3);
+}
+IdeSourceMap textview.GtkSourceMap {
+  background: transparent;
   font-family: BuilderBlocks;
   font-size: 1.75pt;
-  line-height: 3px;
-  color: alpha(currentColor, 0.75);
+  line-height: 5px;
+  margin: 0;
 }
-textview.GtkSourceMap:dir(ltr) {
-  border-left: 1px solid @borders;
+IdeSourceMap textview.GtkSourceMap slider {
+  padding-left: 13px;
+  padding-right: 13px;
+  margin-left: -13px;
+  margin-right: -13px;
 }
-textview.GtkSourceMap:dir(rtl) {
-  border-right: 1px solid @borders;
+IdeSourceMap textview.GtkSourceMap border,
+IdeSourceMap textview.GtkSourceMap gutter {
+  background: transparent;
 }
 
 .hover-display-row:not(:last-child) {

@@ -34,7 +34,6 @@
         </property>
         <property name="scrubber">
           <object class="IdeSourceMap" id="map">
-            <property name="left-margin">6</property>
             <property name="view">view</property>
           </object>
         </property>

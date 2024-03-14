@@ -962,8 +962,7 @@ ide_editor_page_init (IdeEditorPage *self)
   ide_source_view_append_menu (self->view, G_MENU_MODEL (menu));
 
   /* Add gutter changes to the overview map */
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->map),
-                                       GTK_TEXT_WINDOW_LEFT);
+  gutter = ide_source_map_get_gutter (self->map, GTK_TEXT_WINDOW_LEFT);
   renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
                            "width-request", 1,
                            NULL);

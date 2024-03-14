@@ -29,4 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSourceMap, ide_source_map, IDE, SOURCE_MAP, GtkSourceMap)
 
+GtkSourceGutter *ide_source_map_get_gutter (IdeSourceMap      *self,
+                                            GtkTextWindowType  window_type);
+
 G_END_DECLS
