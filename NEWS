@@ -1,3 +1,17 @@
+# GNOME Builder 46.0
+
+ * Fix name escaping in python template
+ * Print the IDE object tree with troubleshooting information
+ * Fix a leak of the mmap-based code-index builders
+ * Aggressively release code-index resources while processing.
+   This significantly lowers maximum runtime memory used while
+   indexing the Linux kernel with Builder.
+ * Port over the overview map scrolling performance work from
+   Builder into IdeEditorPage.
+ * Activate create-project form with keyboard typical keyboard
+   accelerators from all entries.
+ * Translation updates
+
 # GNOME Builder 46.rc
 
  * Spellcheck fixes
