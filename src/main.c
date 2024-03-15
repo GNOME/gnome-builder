@@ -194,15 +194,6 @@ main (gint   argc,
   gboolean version = FALSE;
   int ret;
 
-  {
-    /* For GNOME 46, we are disabling ngl/fractional-scaling at least until
-     * GTK 4.14.1 is out or when text rendering performance is a bit faster.
-     */
-    g_setenv ("GSK_RENDERER", "gl", FALSE);
-    if (g_strcmp0 (g_getenv ("GSK_RENDERER"), "gl") == 0)
-      g_setenv ("GDK_DEBUG", "gl-no-fractional", FALSE);
-  }
-
   /* Get environment variable early and clear it from GLib. We want to be
    * certain we don't pass this on to child processes so we clear it upfront.
    */
