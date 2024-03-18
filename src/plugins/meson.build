@@ -99,6 +99,7 @@ subdir('markdown-indenter')
 subdir('maven')
 subdir('menu-search')
 subdir('meson')
+subdir('mesonlsp')
 subdir('meson-templates')
 subdir('messages')
 subdir('modelines')
@@ -137,7 +138,6 @@ subdir('stylelint')
 subdir('swift')
 subdir('swiftlint')
 subdir('swift-format')
-subdir('swift-mesonlsp')
 subdir('symbol-tree')
 subdir('sysprof')
 subdir('terminal')
@@ -249,6 +249,7 @@ status += [
   'jdtls ......................... (Java) : @0@'.format(get_option('plugin_jdtls')),
   'jedi-language-server ........ (Python) : @0@ **'.format(get_option('plugin_jedi_language_server')),
   'lua-language-server ............ (Lua) : @0@'.format(get_option('plugin_lua_language_server')),
+  'mesonlsp ..................... (Meson) : @0@'.format(get_option('plugin_mesonlsp')),
   'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
   'serve-d .......................... (D) : @0@'.format(get_option('plugin_serve_d')),
   'SourceKit .................... (Swift) : @0@'.format(get_option('plugin_sourcekit_lsp')),

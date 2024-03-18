@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/plugins/swift-mesonlsp">
-    <file>swift-mesonlsp.plugin</file>
+  <gresource prefix="/plugins/mesonlsp">
+    <file>mesonlsp.plugin</file>
     <file>settings.json</file>
   </gresource>
 </gresources>
