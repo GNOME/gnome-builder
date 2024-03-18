@@ -630,6 +630,8 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
 
       /* Allow files that are untracked, but not ignored */
       ide_subprocess_launcher_push_argv (launcher, "--untracked");
+      /* untracked argument is incompatible with potential default recurse-submodules */
+      ide_subprocess_launcher_push_argv (launcher, "--no-recurse-submodules");
     }
 
   ide_subprocess_launcher_push_argv (launcher, "-E");
