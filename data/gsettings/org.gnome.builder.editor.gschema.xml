@@ -141,7 +141,7 @@
       <description>Allow expanding snippets from the editor by pressing tab after the snippet trigger.</description>
     </key>
     <key name="select-first-completion" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Select First Completion</summary>
       <description>Automatically select the first auto-completion entry.</description>
     </key>
