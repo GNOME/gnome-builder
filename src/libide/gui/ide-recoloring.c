@@ -276,12 +276,7 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
    else
     define_color_mixed (str, "sidebar_bg_color", &text_bg, &white, .1);
 
-  if (has_bg && has_fg)
-    define_color (str, "sidebar_fg_color", &text_fg);
-  else if (is_dark)
-    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .05);
-  else
-    define_color_mixed (str, "sidebar_fg_color", &text_bg, alt, .025);
+  define_color_mixed (str, "sidebar_fg_color", &text_fg, alt, .25);
 
   define_color_mixed (str, "popover_bg_color", &text_bg, &white, is_dark ? .07 : .25);
 
