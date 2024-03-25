@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-28 11:59+0000\n"
-"PO-Revision-Date: 2024-03-13 15:43+0100\n"
+"POT-Creation-Date: 2024-03-13 14:45+0000\n"
+"PO-Revision-Date: 2024-03-25 06:07+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -206,6 +206,8 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
+"ავტომატური გადაცემის ჩართვა, როცა აგებისას SDK-ის და დამოკიდებულებების "
+"გადმოწერაა საჭირო, მიერთება კი გაზომვადია."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -224,6 +226,8 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
+"თუ ჩართულია, დამატებითი გამოკვეთა ჩაირთვება მხარდაჭერილი ენებისთვის "
+"პროგრამული კოდიდან ამოღებული ინფორმაციის მიხედვით."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -271,7 +275,7 @@ msgstr "ბოლო მდებარეობის აღდგენა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
-msgstr ""
+msgstr "ფაილის თავიდან გახსნისას, უკანასკნელ მდებარეობაზე გადასვლა"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
@@ -444,6 +448,8 @@ msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
+"ფრაგმენტების ამოკეცვის დაშვება რედაქტორიდან ფრაგმენტის ტრიგერის შემდეგ Tab-"
+"ის დაჭერით."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
@@ -587,6 +593,8 @@ msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
+"აგების კონვეიერის დაყენების ფაზის პროქტის გაშვებამდე გაშვება. ეს, მხოლოდ, "
+"მაშინ გამოიყენეთ, თუ ზუსტად იცით, რას უშვრებით თქვენს პროექტს."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -606,6 +614,9 @@ msgid ""
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
 msgstr ""
+"ეს საშუალებას გაძლევთ, სამიზნე აპლიკაციას sigkill-ის გარდა კიდევ რამე "
+"გაუგზავნოთ. ეს შეიძლება გამოგადგეთ, როცა სერვერის პროცესის სწორი გამორთვა "
+"გნებავთ."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -2399,7 +2410,7 @@ msgstr "პროექტის პარამეტრების შეც�
 #: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/menus.ui:164
 msgid "Code Foundry"
-msgstr ""
+msgstr "Code Foundry"
 
 #: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
@@ -2799,6 +2810,8 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"ეს პარამეტრები, ჩვეულებრივ, აგების სისტემის მიერ პროექტის მოსარგებად "
+"გამოიყენება აგების კონვეიერის მორგების ფაზაში"
 
 #: src/plugins/buildui/tweaks.ui:428
 msgid "Build Environment"
@@ -3076,7 +3089,7 @@ msgstr "დეკლარაციაზე _გადასვლა"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
-msgstr ""
+msgstr "გადასვლა ფაილზე და მდებარეობაზე, სადაც ეს ელემენტია აღწერილი"
 
 #: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
@@ -3520,7 +3533,7 @@ msgstr "D-Bus-ის ინსპექტორი…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
-msgstr ""
+msgstr "Dub Run"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
 msgid "No file was provided."
@@ -3697,6 +3710,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
+"პარამეტრები, რომლებიც .editorconfig-დან იკითხება და modelines ქვემოთ "
+"მოყვანილებს გადაფარავს."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -4322,6 +4337,8 @@ msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
+"SDK-ების და SDK-ის გაფართოებებს დაყენებისას Builder-მა, შეიძლება, კონკრეტული "
+"Flatpak-ის ვერსია არჩიოს, რომელიც ამ გაფართოებას შეიცავს."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -4367,6 +4384,8 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
+"Builder-ს მცდელობა, მიეწოდებინა შესაბამისი ავტორიზაციის დეტალები "
+"რეპოზიტორიის დაკლონვისას, ჩავარდა."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:619
 #, c-format
@@ -5241,6 +5260,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
+"ეს იდენტიფიკატორი გამოიყენება თქვენი პროექტის პარამეტრებთან, აგების "
+"საქაღალდეებთან და დაკეშილ ინფორმაციაზე მიმართვისთვის."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5259,6 +5280,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
+"კონფიგურაცია გამოიყენება აგების კონვეიერის მოსარგებად, თქვენი აგების "
+"სისტემის კონფიგურაციისთვის და თქვენი პროექტის გასაშვებად."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5323,6 +5346,7 @@ msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
 msgstr ""
+"SDK-ების და დამოკიდებულებების გადმოწერის დაშვება გაზომვად ინტერნეტკავშირებზე"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Sources"
@@ -5391,6 +5415,8 @@ msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"ბრძანება ამ მდებარეობიდან გაეშვება. გამოიყენეთ <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, ან <tt>$HOME</tt> შედარებითი ბილიკის აღსაწერად."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
@@ -5405,6 +5431,8 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
+"Builder-ს თქვენი ბრძანების გაშვება ბევრი ადგილიდან შეუძლია, ჰოსტის სისტემის "
+"და აგების კონტეინერების ჩათვლით."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
@@ -5489,6 +5517,10 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
+"გამოიყენეთ ბრძანებები, რომ ააგოთ ხელსაწყოები, აპლიკაციები და გარსის "
+"სკრიპტები და ისინი კლავიატურის მალსახმობებზე ასახოთ. მათ ისეთი გარემოებიდან "
+"შეუძლიათ გაშვება, როგორებიცაა აგების კონვეიერი, გაშვების დროის გარემო ან "
+"ჰოსტის ოპერაციული სისტემა."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
@@ -5531,6 +5563,8 @@ msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
+"მალსახმობის თემები მოგაწვდით კლავიატურის მალსახმობებს ისე, როგორც ეს სხვა "
+"IDE-ებში და რედაქტორებშია"
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -5550,7 +5584,7 @@ msgstr "ენები"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
-msgstr ""
+msgstr "swift run"
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 msgid "Filter Symbols…"
@@ -5711,7 +5745,7 @@ msgstr "გამოძახების სტეკის მაგალი�
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
-msgstr ""
+msgstr "სტეკის ტრეისის რეგულარული ჩაწერა და გამოძახებების გრაფიკის აგება"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
@@ -5748,15 +5782,15 @@ msgstr "მეხსიერების პროფილირება"
 
 #: src/plugins/sysprof/tweaks.ui:96
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
+msgstr "მეხსიერების გამოყოფებისა და გათავისუფლების სტეკის ტრეისების ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:112
 msgid "Record D-Bus messages on the session bus"
-msgstr ""
+msgstr "D-Bus-ის სესიის მატარებლის შეტყობინებების ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:124
 msgid "Record D-Bus messages on the system bus"
-msgstr ""
+msgstr "D-Bus-ის სისტემური მატარებლის შეტყობინებების ჩაწერა"
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
@@ -5815,6 +5849,8 @@ msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
+"აპლიკაციებისთვის TRACE_FD გარემოს ცვლადის მიწოდება მომხმარებლის მოვლენები "
+"მისაწოდებლად"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
