@@ -5,6 +5,7 @@
       <item>
         <attribute name="label" translatable="yes">D-Bus Inspector…</attribute>
         <attribute name="action">app.dspy</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
     </section>
   </menu>
@@ -13,13 +14,8 @@
       <item>
         <attribute name="label" translatable="yes">D-Bus Inspector…</attribute>
         <attribute name="action">app.dspy</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
     </section>
-  </menu>
-  <menu id="dspy-workspace-menu">
-    <item>
-      <attribute name="label" translatable="yes">Close</attribute>
-      <attribute name="action">window.close</attribute>
-    </item>
   </menu>
 </interface>

@@ -25,63 +25,65 @@
 #include <glib/gi18n.h>
 
 #include "gbp-dspy-application-addin.h"
-#include "gbp-dspy-workspace.h"
 
 struct _GbpDspyApplicationAddin
 {
   GObject parent_instance;
 };
 
-static void
-gbp_dspy_application_addin_add_option_entries (IdeApplicationAddin *addin,
-                                               IdeApplication      *app)
+static GAppInfo *
+find_app_info (void)
 {
-  g_assert (GBP_IS_DSPY_APPLICATION_ADDIN (addin));
-  g_assert (G_IS_APPLICATION (app));
+  const char * const *alternates = IDE_STRV_INIT ("org.gnome.dspy.desktop",
+                                                  "org.gnome.dspy.devel.desktop",
+                                                  "org.gnome.Builder.dspy.desktop",
+                                                  "org.gnome.Builder.devel.dspy.desktop");
+  const char *preferred;
+  g_autolist(GAppInfo) all = NULL;
+  GAppInfo *found = NULL;
 
-  g_application_add_main_option (G_APPLICATION (app),
-                                 "dspy",
-                                 0,
-                                 G_OPTION_FLAG_IN_MAIN,
-                                 G_OPTION_ARG_NONE,
-                                 _("Display D-Bus inspector"),
-                                 NULL);
-}
+#ifdef DEVELOPMENT_BUILD
+  if (ide_is_flatpak ())
+    preferred = "org.gnome.Builder.Devel.dspy.desktop";
+  else
+    preferred = "org.gnome.dspy.desktop";
+#else
+  if (ide_is_flatpak ())
+    preferred = "org.gnome.Builder.dspy.desktop";
+  else
+    preferred = "org.gnome.dspy.desktop";
+#endif
 
-static void
-gbp_dspy_application_addin_handle_command_line (IdeApplicationAddin     *addin,
-                                                IdeApplication          *application,
-                                                GApplicationCommandLine *cmdline)
-{
-  IdeApplication *app = (IdeApplication *)application;
-  GVariantDict *options;
+  all = g_app_info_get_all ();
 
-  g_assert (IDE_IS_APPLICATION_ADDIN (addin));
-  g_assert (IDE_IS_APPLICATION (app));
-  g_assert (G_IS_APPLICATION_COMMAND_LINE (cmdline));
-
-  if ((options = g_application_command_line_get_options_dict (cmdline)) &&
-      g_variant_dict_contains (options, "dspy"))
+  for (const GList *iter = all; iter; iter = iter->next)
     {
-      g_autoptr(IdeWorkbench) workbench = NULL;
-      g_autoptr(GFile) workdir = NULL;
-      GbpDspyWorkspace *workspace;
-      IdeContext *context;
+      GAppInfo *app_info = iter->data;
+      const char *app_id = g_app_info_get_id (app_info);
 
-      workbench = ide_workbench_new ();
-      ide_application_add_workbench (app, workbench);
-
-      context = ide_workbench_get_context (workbench);
-
-      workdir = g_application_command_line_create_file_for_arg (cmdline, ".");
-      ide_context_set_workdir (context, workdir);
-
-      workspace = gbp_dspy_workspace_new (application);
-      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
-
-      ide_application_set_command_line_handled (application, cmdline, TRUE);
+      if (ide_str_equal0 (app_id, preferred))
+        {
+          found = app_info;
+          break;
+        }
     }
+
+  if (!found)
+    {
+      for (const GList *iter = all; iter; iter = iter->next)
+        {
+          GAppInfo *app_info = iter->data;
+          const char *app_id = g_app_info_get_id (app_info);
+
+          if (g_strv_contains (alternates, app_id))
+            {
+              found = app_info;
+              break;
+            }
+        }
+    }
+
+  return found ? g_object_ref (found) : NULL;
 }
 
 static void
@@ -89,27 +91,19 @@ dspy_action_cb (GSimpleAction *action,
                 GVariant      *param,
                 gpointer       user_data)
 {
-  g_autoptr(IdeWorkbench) workbench = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  GbpDspyWorkspace *workspace;
-  IdeContext *context;
+  g_autoptr(GdkAppLaunchContext) context = NULL;
+  g_autoptr(GAppInfo) app_info = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_DSPY_APPLICATION_ADDIN (user_data));
 
-  workbench = ide_workbench_new ();
-  ide_application_add_workbench (IDE_APPLICATION_DEFAULT, workbench);
+  if (!(app_info = find_app_info ()))
+    return;
 
-  context = ide_workbench_get_context (workbench);
-
-  workdir = g_file_new_for_path (ide_get_projects_dir ());
-  ide_context_set_workdir (context, workdir);
-
-  ide_context_set_title (context, _("D-Spy"));
-
-  workspace = gbp_dspy_workspace_new (IDE_APPLICATION_DEFAULT);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-  ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
+  context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+  if (!g_app_info_launch (app_info, NULL, G_APP_LAUNCH_CONTEXT (context), &error))
+    g_warning ("Failed to launch d-spy: %s", error->message);
 }
 
 static GActionEntry actions[] = {
@@ -120,14 +114,19 @@ static void
 gbp_dspy_application_addin_load (IdeApplicationAddin *addin,
                                  IdeApplication      *application)
 {
+  g_autoptr(GAppInfo) app_info = NULL;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION_ADDIN (addin));
   g_assert (IDE_IS_APPLICATION (application));
 
-  g_action_map_add_action_entries (G_ACTION_MAP (application),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   addin);
+  app_info = find_app_info ();
+
+  if (app_info != NULL)
+    g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                     actions,
+                                     G_N_ELEMENTS (actions),
+                                     addin);
 }
 
 static void
@@ -147,12 +146,10 @@ app_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
   iface->load = gbp_dspy_application_addin_load;
   iface->unload = gbp_dspy_application_addin_unload;
-  iface->add_option_entries = gbp_dspy_application_addin_add_option_entries;
-  iface->handle_command_line = gbp_dspy_application_addin_handle_command_line;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpDspyApplicationAddin, gbp_dspy_application_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, app_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, app_addin_iface_init))
 
 static void
 gbp_dspy_application_addin_class_init (GbpDspyApplicationAddinClass *klass)

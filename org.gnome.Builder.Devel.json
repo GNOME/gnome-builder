@@ -661,6 +661,11 @@
         {
             "name" : "d-spy",
             "buildsystem" : "meson",
+            "config-opts" : [
+                "--buildtype=debugoptimized",
+                "-Ddevelopment=true",
+                "-Dbuilder=true"
+            ],
             "sources" : [
                 {
                     "type" : "git",
