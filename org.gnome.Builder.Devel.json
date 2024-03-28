@@ -712,6 +712,7 @@
             "config-opts" : [
                 "--buildtype=debugoptimized",
                 "-Dapp-id=org.gnome.Builder.Devel.Ptyxis",
+                "-Ddevelopment=true",
                 "-Dgeneric=builder"
             ],
             "sources" : [
