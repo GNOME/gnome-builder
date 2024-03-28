@@ -707,6 +707,22 @@
             ]
         },
         {
+            "name" : "ptyxis",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "--buildtype=debugoptimized",
+                "-Dapp-id=org.gnome.Builder.Devel.Ptyxis",
+                "-Dgeneric=builder"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/ptyxis.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
