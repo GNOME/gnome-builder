@@ -299,6 +299,10 @@
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/vte.git",
                     "branch" : "master"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "build-aux/flatpak/vte-add-notification-and-shell-precmd-preexec.patch"
                 }
             ]
         },
