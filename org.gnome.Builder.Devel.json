@@ -10,7 +10,6 @@
     "tags" : [
         "nightly"
     ],
-    "desktop-file-name-suffix" : " (Nightly)",
     "add-extensions" : {
         "org.gnome.Builder.Plugin" : {
             "version" : "master",
