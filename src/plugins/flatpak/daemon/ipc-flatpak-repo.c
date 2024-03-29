@@ -79,6 +79,31 @@ list_remote_refs_worker (gpointer data)
 }
 
 static void
+setup_cachedir_tag (GFile *file)
+{
+  static GBytes *bytes;
+
+  g_assert (G_IS_FILE (file));
+
+  if (g_file_query_exists (file, NULL))
+    return;
+
+  if (bytes == NULL)
+    {
+#     define CACHEDIR_TAG_DATA "Signature: 8a477f597d28d172789f06886806bc55\n"
+      bytes = g_bytes_new_static (CACHEDIR_TAG_DATA, strlen (CACHEDIR_TAG_DATA));
+#     undef CACHEDIR_TAG_DATA
+    }
+
+  g_file_replace_contents_bytes_async (file,
+                                       bytes,
+                                       NULL,
+                                       TRUE,
+                                       G_FILE_CREATE_NONE,
+                                       NULL, NULL, NULL);
+}
+
+static void
 ipc_flatpak_repo_constructed (GObject *object)
 {
   IpcFlatpakRepo *self = (IpcFlatpakRepo *)object;
@@ -88,6 +113,7 @@ ipc_flatpak_repo_constructed (GObject *object)
   g_autoptr(GFile) gnome_builder_conf = NULL;
   g_autoptr(GFile) filter_file = NULL;
   g_autoptr(GFile) flatpak = NULL;
+  g_autoptr(GFile) cachedir_tag = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GKeyFile) keyfile = NULL;
   UpdateState *state;
@@ -109,6 +135,10 @@ ipc_flatpak_repo_constructed (GObject *object)
       g_warning ("Failed to create private flatpak installation: %s", error->message);
       return;
     }
+
+  /* Setup the directory to be ignored by backups */
+  cachedir_tag = g_file_get_child (flatpak, "CACHEDIR.TAG");
+  setup_cachedir_tag (cachedir_tag);
 
   /* Create filter list to only allow runtimes */
   if (!g_file_replace_contents (filter_file, filter_file_contents, strlen (filter_file_contents),
