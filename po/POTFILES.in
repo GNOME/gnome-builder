@@ -179,7 +179,6 @@ src/plugins/debuggerui/ide-debugger-workspace-addin.c
 src/plugins/debuggerui/tweaks.ui
 src/plugins/deviced/gnome-builder-deviced.c
 src/plugins/dspy/gbp-dspy-application-addin.c
-src/plugins/dspy/gbp-dspy-workspace.ui
 src/plugins/dspy/gtk/menus.ui
 src/plugins/dub/gbp-dub-pipeline-addin.c
 src/plugins/dub/gbp-dub-run-command-provider.c
