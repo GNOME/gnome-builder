@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Matej Urbančič <mateju@src.gnome.org>, 2015–2022.
-# Martin Srebotnjak <miles@filmsi.net>, 2023.
+# Martin Srebotnjak <miles@filmsi.net>, 2023,2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-03-30 22:48+0000\n"
-"PO-Revision-Date: 2024-03-31 12:31+0200\n"
+"PO-Revision-Date: 2024-03-31 12:42+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -355,9 +355,8 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 #: src/plugins/editorui/tweaks.ui:495
-#, fuzzy
 msgid "Smart Home/End"
-msgstr "Pametni tipki HOME in END"
+msgstr "Pametni tipki Domov (Home) in Konec (End)"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
@@ -2983,7 +2982,6 @@ msgid "Build project"
 msgstr "Izgradi projekt"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
-#, fuzzy
 msgid "Cargo Run"
 msgstr "Zagon Cargo"
 
@@ -3649,10 +3647,8 @@ msgid "A PTY to bidirectionally proxy to the device"
 msgstr "PTY za dvosmerni posredovalnik do naprave"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
-#, fuzzy
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
-"Število sekund čakanja, da se prikaže naprava v omrežju enakovrednih naprav"
+msgstr "Število sekund čakanja, da se prikaže vrstnik na napravi"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -3667,7 +3663,6 @@ msgid "D-Bus Inspector…"
 msgstr "Nadzornik vodila D-Bus …"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
-#, fuzzy
 msgid "Dub Run"
 msgstr "Zagon Dub"
 
@@ -4381,9 +4376,9 @@ msgid "Creating flatpak workspace"
 msgstr "Poteka ustvarjanje delovne površine flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Removing stale flatpak staging directory: %s"
-msgstr "Odstranjevanje zastarele mape za uprizarjanje flatpaka: %s"
+msgstr "Odstranjevanje zastarele mape flatpak s spremembami: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
 msgid "Preparing build directory"
@@ -4597,7 +4592,6 @@ msgid "Email"
 msgstr "Elektronski naslov"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
-#, fuzzy
 msgid "go run"
 msgstr "Pojdi izvajat"
 
@@ -4607,9 +4601,8 @@ msgid "Bootstrapping project"
 msgstr "Projekt začetnega nalagalnika"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
-#, fuzzy
 msgid "Gradle Run"
-msgstr "Zaženi Gradle"
+msgstr "Zagon Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:169
 msgid "Display a new greeter window"
@@ -4740,9 +4733,8 @@ msgid "Default Make Target"
 msgstr "Privzeti cilj make"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#, fuzzy
 msgid "Make Run"
-msgstr "Naredi in zaženi"
+msgstr "Naredi in izvedi"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -4753,9 +4745,8 @@ msgid "Create a new empty project using a simple Makefile"
 msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
-#, fuzzy
 msgid "Maven Run"
-msgstr "Zaženi Maven"
+msgstr "Zagon Maven"
 
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
@@ -5725,7 +5716,6 @@ msgid "Languages"
 msgstr "Jeziki"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
-#, fuzzy
 msgid "swift run"
 msgstr "Hitro izvajanje"
 
@@ -6037,9 +6027,8 @@ msgid "Allow Bold"
 msgstr "Dovoli krepko besedilo"
 
 #: src/plugins/terminal/tweaks.ui:30
-#, fuzzy
 msgid "Allows the use of bold escape sequences"
-msgstr "Omogoča uporabo krepkih ubežnih zaporedij"
+msgstr "Omogoča uporabo krepkih zaporedij izhodov v sili"
 
 #: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
