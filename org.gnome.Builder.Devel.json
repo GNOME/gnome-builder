@@ -533,7 +533,8 @@
             "builddir" : true,
             "config-opts" : [
                 "-Ddocs=disabled",
-                "-Dtests=false"
+                "-Dtests=false",
+                "-Dfuse=2"
             ],
             "sources" : [
                 {
