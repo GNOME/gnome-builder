@@ -101,15 +101,6 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Photos</property>
-                    <property name="description" translatable="yes">Access, organize and share your photos on GNOME</property>
-                    <property name="icon-name">org.gnome.Photos-symbolic</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-photos.git</property>
-                    <property name="languages">C</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Polari</property>
                     <property name="description" translatable="yes">An IRC Client for GNOME</property>
                     <property name="icon-name">org.gnome.Polari-symbolic</property>
