@@ -41,7 +41,7 @@
                     <property name="icon-name">org.gnome.Builder-symbolic</property>
                     <property name="uri">https://gitlab.gnome.org/GNOME/gnome-builder.git</property>
                     <property name="languages">C
-    Python</property>
+    JavaScript</property>
                   </object>
                 </child>
                 <child>
