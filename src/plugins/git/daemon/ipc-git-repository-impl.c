@@ -550,7 +550,10 @@ commit_create_with_signature (GgitRepository  *repository,
                                   message,
                                   _ggit_native_get (tree),
                                   parent_count,
-                                  (const git_commit **)parents_native);
+                                  /* just cast to (void*) to avoid the differences
+                                   * between various libgit2 versions. See #2183.
+                                   */
+                                  (gpointer)parents_native);
 
   if (ret != GIT_OK)
     {
