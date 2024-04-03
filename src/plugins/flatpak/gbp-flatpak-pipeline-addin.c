@@ -106,6 +106,7 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autofree char *stdout_buf = NULL;
+  const char *str;
   int major = 0;
   int minor = 0;
   int micro = 0;
@@ -125,7 +126,15 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
   if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, NULL))
     return;
 
-  if (sscanf (stdout_buf, "flatpak-builder %d.%d.%d", &major, &minor, &micro) != 3)
+  /* flatpak-builder changed to "flatpak-builder-1.2.3" at some point */
+  if (g_str_has_prefix (stdout_buf, "flatpak-builder-"))
+    str = stdout_buf + strlen ("flatpak-builder-");
+  else if (g_str_has_prefix (stdout_buf, "flatpak-builder "))
+    str = stdout_buf + strlen ("flatpak-builder ");
+  else
+    str = stdout_buf; /* unlikely, but lets try */
+
+  if (sscanf (str, "%d.%d.%d", &major, &minor, &micro) != 3)
     return;
 
   self->version.major = major;
