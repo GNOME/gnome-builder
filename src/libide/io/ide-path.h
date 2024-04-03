@@ -29,10 +29,6 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-gchar    *ide_path_collapse             (const gchar *path);
-IDE_AVAILABLE_IN_ALL
-gchar    *ide_path_expand               (const gchar *path);
-IDE_AVAILABLE_IN_ALL
 gboolean  ide_path_is_c_like            (const gchar *path);
 IDE_AVAILABLE_IN_ALL
 gboolean  ide_path_is_cpp_like          (const gchar *path);

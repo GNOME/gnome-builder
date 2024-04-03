@@ -29,6 +29,7 @@
 #include <sys/user.h>
 #include <sys/utsname.h>
 #include <unistd.h>
+#include <wordexp.h>
 
 #include "../../gconstructor.h"
 
@@ -349,6 +350,91 @@ _ide_host_environ (void)
   return (const char * const *)host_environ;
 }
 
+/**
+ * ide_path_expand:
+ *
+ * This function will expand various "shell-like" features of the provided
+ * path using the POSIX wordexp(3) function. Command substitution will
+ * not be enabled, but path features such as ~user will be expanded.
+ *
+ * Returns: (transfer full): A newly allocated string containing the
+ *   expansion. A copy of the input string upon failure to expand.
+ */
+gchar *
+ide_path_expand (const gchar *path)
+{
+  wordexp_t state = { 0 };
+  char *replace_home = NULL;
+  char *ret = NULL;
+  char *escaped;
+  int r;
+
+  if (path == NULL)
+    return NULL;
+
+  /* Special case some path prefixes */
+  if (path[0] == '~')
+    {
+      if (path[1] == 0)
+        path = g_get_home_dir ();
+      else if (path[1] == G_DIR_SEPARATOR)
+        path = replace_home = g_strdup_printf ("%s%s", g_get_home_dir (), &path[1]);
+    }
+  else if (strncmp (path, "$HOME", 5) == 0)
+    {
+      if (path[5] == 0)
+        path = g_get_home_dir ();
+      else if (path[5] == G_DIR_SEPARATOR)
+        path = replace_home = g_strdup_printf ("%s%s", g_get_home_dir (), &path[5]);
+    }
+
+  escaped = g_shell_quote (path);
+  r = wordexp (escaped, &state, WRDE_NOCMD);
+  if (r == 0 && state.we_wordc > 0)
+    ret = g_strdup (state.we_wordv [0]);
+  wordfree (&state);
+
+  if (!g_path_is_absolute (ret))
+    {
+      g_autofree gchar *freeme = ret;
+
+      ret = g_build_filename (g_get_home_dir (), freeme, NULL);
+    }
+
+  g_free (replace_home);
+  g_free (escaped);
+
+  return ret;
+}
+
+/**
+ * ide_path_collapse:
+ *
+ * This function will collapse a path that starts with the users home
+ * directory into a shorthand notation using ~/ for the home directory.
+ *
+ * If the path does not have the home directory as a prefix, it will
+ * simply return a copy of @path.
+ *
+ * Returns: (transfer full): A new path, possibly collapsed.
+ */
+gchar *
+ide_path_collapse (const gchar *path)
+{
+  g_autofree gchar *expanded = NULL;
+
+  if (path == NULL)
+    return NULL;
+
+  expanded = ide_path_expand (path);
+
+  if (g_str_has_prefix (expanded, g_get_home_dir ()))
+    return g_build_filename ("~",
+                             expanded + strlen (g_get_home_dir ()),
+                             NULL);
+
+  return g_steal_pointer (&expanded);
+}
 char *
 ide_dup_default_cache_dir (void)
 {
