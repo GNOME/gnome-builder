@@ -60,6 +60,7 @@ gbp_flatpak_client_reset (GbpFlatpakClient *self)
   g_autoptr(GDBusConnection) service_connection = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GError) error = NULL;
+  g_autofree char *data_dir = NULL;
   struct {
     int read;
     int write;
@@ -118,6 +119,11 @@ gbp_flatpak_client_reset (GbpFlatpakClient *self)
   ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-flatpak");
   ide_subprocess_launcher_push_argv (launcher, "--read-fd=3");
   ide_subprocess_launcher_push_argv (launcher, "--write-fd=4");
+
+  /* Setup our data-dir to be the build artifact directory */
+  data_dir = ide_dup_default_cache_dir ();
+  ide_subprocess_launcher_push_argv (launcher, "--data-dir");
+  ide_subprocess_launcher_push_argv (launcher, data_dir);
 
   if (ide_log_get_verbosity () > 0)
     ide_subprocess_launcher_push_argv (launcher, "--verbose");
