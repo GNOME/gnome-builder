@@ -518,8 +518,8 @@ completed:
   return projects_directory;
 }
 
-char *
-ide_dup_default_cache_dir (void)
+static char *
+ide_dup_default_cache_dir_internal (void)
 {
   g_autoptr(GSettings) settings = g_settings_new_with_path ("org.gnome.builder.project", "/org/gnome/builder/projects/");
   g_autofree char *cache_dir = g_settings_get_string (settings, "cache-root");
@@ -530,4 +530,20 @@ ide_dup_default_cache_dir (void)
   return g_build_filename (ide_get_projects_dir (),
                            ".gnome-builder",
                            NULL);
+}
+
+char *
+ide_dup_default_cache_dir (void)
+{
+  char *default_cache_dir = ide_dup_default_cache_dir_internal ();
+  static gboolean initialized;
+
+  if (!initialized)
+    {
+      if (!g_file_test (default_cache_dir, G_FILE_TEST_EXISTS))
+        g_mkdir_with_parents (default_cache_dir, 0750);
+      initialized = TRUE;
+    }
+
+  return default_cache_dir;
 }
