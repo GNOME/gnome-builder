@@ -527,7 +527,7 @@ ide_dup_default_cache_dir (void)
   if (!ide_str_empty0 (cache_dir))
     return g_steal_pointer (&cache_dir);
 
-  return g_build_filename (g_get_user_cache_dir (),
-                           ide_get_program_name (),
+  return g_build_filename (ide_get_projects_dir (),
+                           ".gnome-builder",
                            NULL);
 }
