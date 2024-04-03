@@ -108,27 +108,16 @@ ide_runtime_real_prepare_configuration (IdeRuntime *self,
 
   if (!ide_config_get_prefix_set (config))
     {
-      g_autofree gchar *install_path = NULL;
-      g_autofree gchar *project_id = NULL;
-      g_autofree gchar *id = NULL;
-      IdeContext *context;
+      g_autoptr(IdeContext) context = NULL;
+      g_autofree char *install_path = NULL;
+      g_autofree char *project_id = NULL;
+      g_autofree char *id = NULL;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
+      context = ide_object_ref_context (IDE_OBJECT (self));
       project_id = ide_context_dup_project_id (context);
-      id = g_strdup (priv->id);
+      id = g_strdelimit (g_strdup (priv->id), "@:/", '-');
 
-      /* Make sure we don't have things that can muck up PATH type
-       * environment variables like ":".
-       */
-      g_strdelimit (project_id, "@:/", '-');
-      g_strdelimit (id, "@:/", '-');
-
-      install_path = g_build_filename (g_get_user_cache_dir (),
-                                       "gnome-builder",
-                                       "install",
-                                       project_id,
-                                       id,
-                                       NULL);
+      install_path = ide_context_cache_filename (context, "install", id, NULL);
 
       ide_config_set_prefix (config, install_path);
       ide_config_set_prefix_set (config, FALSE);

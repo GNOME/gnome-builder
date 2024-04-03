@@ -824,6 +824,8 @@ gbp_flatpak_pipeline_addin_load (IdePipelineAddin *addin,
 
   if (VERSION_CHECK (&self->version, 0, 10, 5))
     {
+      g_autofree char *default_cache_root = ide_dup_default_cache_dir ();
+
       /* Use a single flatpak-builder state directory that is
        * kept within .cache (or appropriate mapping directory)
        * instead of littering it within the project checkout.
@@ -834,10 +836,7 @@ gbp_flatpak_pipeline_addin_load (IdePipelineAddin *addin,
        * prune existing data and we may want to address that
        * in the future (either upstream or in here).
        */
-      self->state_dir = g_build_filename (g_get_user_cache_dir (),
-                                          ide_get_program_name (),
-                                          "flatpak-builder",
-                                          NULL);
+      self->state_dir = g_build_filename (default_cache_root, "flatpak-builder", NULL);
     }
 
   if (!register_mkdirs_stage (self, pipeline, context, &error) ||

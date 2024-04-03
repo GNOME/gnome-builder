@@ -66,11 +66,9 @@ gchar          *ide_context_build_filename       (IdeContext     *self,
                                                   ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
 GFile          *ide_context_cache_file           (IdeContext     *self,
-                                                  const gchar    *first_part,
                                                   ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
 gchar          *ide_context_cache_filename       (IdeContext     *self,
-                                                  const gchar    *first_part,
                                                   ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
 GSettings      *ide_context_ref_project_settings (IdeContext     *self);

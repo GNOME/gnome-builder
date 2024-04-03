@@ -389,14 +389,14 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
        * might expect to be reomved.
        */
 
-      id = ide_create_project_id (name);
+      id = g_strdelimit (ide_create_project_id (name), "@:/", '-');
 
       if (name != NULL)
         {
+          g_autofree char *default_cache_root = ide_dup_default_cache_dir ();
           g_autoptr(GFile) cache = NULL;
 
-          cache = g_file_new_build_filename (g_get_user_cache_dir (),
-                                             ide_get_program_name (),
+          cache = g_file_new_build_filename (default_cache_root,
                                              "projects",
                                              id,
                                              NULL);

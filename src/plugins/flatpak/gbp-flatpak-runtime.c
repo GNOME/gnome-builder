@@ -357,6 +357,7 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   g_autofree char *staging_dir = NULL;
   g_autofree char *ccache_dir = NULL;
   g_autofree char *new_path = NULL;
+  g_autofree char *default_cache_root = NULL;
   const char *path;
   const char *prepend_path;
   const char *append_path;
@@ -395,8 +396,8 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
    *
    * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
    */
-  ccache_dir = g_build_filename (g_get_user_cache_dir (),
-                                 ide_get_program_name (),
+  default_cache_root = ide_dup_default_cache_dir ();
+  ccache_dir = g_build_filename (default_cache_root,
                                  "flatpak-builder",
                                  "ccache",
                                  NULL);
@@ -421,7 +422,7 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   /* Make sure we have access to the build directory */
   ide_run_context_append_formatted (run_context, "--filesystem=%s", srcdir);
   ide_run_context_append_formatted (run_context, "--filesystem=%s", builddir);
-  ide_run_context_append_formatted (run_context, "--filesystem=%s/gnome-builder", g_get_user_cache_dir ());
+  ide_run_context_append_formatted (run_context, "--filesystem=%s", default_cache_root);
   ide_run_context_append_argv (run_context, "--nofilesystem=host");
 
   /* Ensure build-args are passed down */

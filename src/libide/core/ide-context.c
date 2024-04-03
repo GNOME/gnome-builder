@@ -29,6 +29,7 @@
 #include "ide-context.h"
 #include "ide-context-private.h"
 #include "ide-debug.h"
+#include "ide-global.h"
 #include "ide-gsettings-action-group.h"
 #include "ide-log-model-private.h"
 #include "ide-macros.h"
@@ -533,10 +534,35 @@ ide_context_set_workdir (IdeContext *self,
   ide_object_unlock (IDE_OBJECT (self));
 }
 
+static GFile *
+ide_context_dup_cache_root (IdeContext *self)
+{
+  g_autoptr(GSettings) project_settings = NULL;
+  g_autofree char *project_id = NULL;
+  g_autofree char *cache_root = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  project_settings = ide_context_ref_project_settings (self);
+  cache_root = ide_dup_default_cache_dir ();
+
+  /* Make sure we don't have things that can muck up PATH type
+   * environment variables like ":".
+   */
+  project_id = g_strdelimit (ide_context_dup_project_id (self), "@:/", '-');
+
+  /* NOTE: We do not support "~/" style paths here. Otherwise we need
+   *       to bring in libide-io for ide_path_expand(). But the UI
+   *       in IdeTweaksDirectory should handle that for us by pre-expanding
+   *       when applying the gsetting.
+   */
+
+  return g_file_new_build_filename (cache_root, "projects", project_id, NULL);
+}
+
 /**
  * ide_context_cache_file:
  * @self: a #IdeContext
- * @first_part: (nullable): The first part of the path
  *
  * Like ide_context_cache_filename() but returns a #GFile.
  *
@@ -544,40 +570,19 @@ ide_context_set_workdir (IdeContext *self,
  */
 GFile *
 ide_context_cache_file (IdeContext  *self,
-                        const gchar *first_part,
                         ...)
 {
-  g_autoptr(GPtrArray) ar = NULL;
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *project_id = NULL;
-  const gchar *part = first_part;
+  g_autoptr(GFile) cache_root = NULL;
+  g_autofree char *path = NULL;
   va_list args;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  project_id = ide_context_dup_project_id (self);
+  cache_root = ide_context_dup_cache_root (self);
 
-  ar = g_ptr_array_new ();
-  g_ptr_array_add (ar, (gchar *)g_get_user_cache_dir ());
-  g_ptr_array_add (ar, (gchar *)ide_get_program_name ());
-  g_ptr_array_add (ar, (gchar *)"projects");
-  g_ptr_array_add (ar, (gchar *)project_id);
-
-  if (part != NULL)
-    {
-      va_start (args, first_part);
-      do
-        {
-          g_ptr_array_add (ar, (gchar *)part);
-          part = va_arg (args, const gchar *);
-        }
-      while (part != NULL);
-      va_end (args);
-    }
-
-  g_ptr_array_add (ar, NULL);
-
-  path = g_build_filenamev ((gchar **)ar->pdata);
+  va_start (args, self);
+  path = g_build_filename_valist (g_file_peek_path (cache_root), &args);
+  va_end (args);
 
   return g_file_new_for_path (path);
 }
@@ -585,7 +590,6 @@ ide_context_cache_file (IdeContext  *self,
 /**
  * ide_context_cache_filename:
  * @self: a #IdeContext
- * @first_part: the first part of the filename
  *
  * Creates a new filename that will be located in the projects cache directory.
  * This makes it convenient to remove files when a project is deleted as all
@@ -597,41 +601,23 @@ ide_context_cache_file (IdeContext  *self,
  *
  * Returns: (transfer full): A new string containing the cache filename
  */
-gchar *
+char *
 ide_context_cache_filename (IdeContext  *self,
-                            const gchar *first_part,
                             ...)
 {
-  g_autofree gchar *project_id = NULL;
-  g_autofree gchar *base = NULL;
+  g_autoptr(GFile) cache_root = NULL;
+  g_autofree char *path = NULL;
   va_list args;
-  gchar *ret;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  project_id = ide_context_dup_project_id (self);
+  cache_root = ide_context_dup_cache_root (self);
 
-  g_return_val_if_fail (project_id != NULL, NULL);
+  va_start (args, self);
+  path = g_build_filename_valist (g_file_peek_path (cache_root), &args);
+  va_end (args);
 
-  base = g_build_filename (g_get_user_cache_dir (),
-                           ide_get_program_name (),
-                           "projects",
-                           project_id,
-                           first_part,
-                           NULL);
-
-  if (first_part != NULL)
-    {
-      va_start (args, first_part);
-      ret = g_build_filename_valist (base, &args);
-      va_end (args);
-    }
-  else
-    {
-      ret = g_steal_pointer (&base);
-    }
-
-  return g_steal_pointer (&ret);
+  return g_steal_pointer (&path);
 }
 
 /**

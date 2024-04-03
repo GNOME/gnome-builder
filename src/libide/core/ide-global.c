@@ -348,3 +348,17 @@ _ide_host_environ (void)
 
   return (const char * const *)host_environ;
 }
+
+char *
+ide_dup_default_cache_dir (void)
+{
+  g_autoptr(GSettings) settings = g_settings_new_with_path ("org.gnome.builder.project", "/org/gnome/builder/projects/");
+  g_autofree char *cache_dir = g_settings_get_string (settings, "cache-root");
+
+  if (!ide_str_empty0 (cache_dir))
+    return g_steal_pointer (&cache_dir);
+
+  return g_build_filename (g_get_user_cache_dir (),
+                           ide_get_program_name (),
+                           NULL);
+}

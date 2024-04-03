@@ -51,5 +51,11 @@
       <description>If G_MESSAGES_DEBUG=all should be used when running the target application</description>
     </key>
 
+    <key name="cache-root" type="s">
+      <default>''</default>
+      <summary>Cache Root</summary>
+      <description>A directory to use as the root for cache data of the project like builds and flatpak staging directories</description>
+    </key>
+
   </schema>
 </schemalist>

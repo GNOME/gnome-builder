@@ -182,6 +182,24 @@
                     <property name="title" translatable="yes">General</property>
                     <child>
                       <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Storage</property>
+                        <child>
+                          <object class="IdeTweaksDirectory">
+                            <property name="title" translatable="yes">Artifacts and Cached Files</property>
+                            <property name="subtitle" translatable="yes">Directory used for storing build artifacts and cached files from the build pipeline. Requires restarting Builder to take effect.</property>
+                            <property name="is-directory">true</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.project</property>
+                                <property name="schema-key">cache-root</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
                         <property name="title" translatable="yes">History</property>
                         <child>
                           <object class="IdeTweaksSwitch">

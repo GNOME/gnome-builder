@@ -3670,20 +3670,23 @@ can_remove_builddir (IdePipeline *self)
   g_autofree gchar *_build = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GFile) cache = NULL;
-  IdeContext *context;
+  g_autoptr(IdeContext) context = NULL;
 
   g_assert (IDE_IS_PIPELINE (self));
 
+  context = ide_object_ref_context (IDE_OBJECT (self));
+
   /*
    * Only remove builddir if it is in ~/.cache/ or our XDG data dirs
-   * equivalent. We don't want to accidentally remove data that might
-   * be important to the user.
+   * equivalent or where the user has their builds artifacts configured.
+   * We don't want to accidentally remove data that might be important
+   * to the user.
    *
    * However, if the build dir is our special case "_build" inside the
    * project directory, we'll allow that too.
    */
 
-  cache = g_file_new_for_path (g_get_user_cache_dir ());
+  cache = ide_context_cache_file (context, NULL);
   builddir = g_file_new_for_path (self->builddir);
   if (g_file_has_prefix (builddir, cache))
     return TRUE;
@@ -3691,7 +3694,6 @@ can_remove_builddir (IdePipeline *self)
   /* If this is _build in the project tree, we will allow that too
    * since we create those sometimes.
    */
-  context = ide_object_get_context (IDE_OBJECT (self));
   _build = ide_context_build_filename (context, "_build", NULL);
   if (g_str_equal (_build, self->builddir) &&
       g_file_test (_build, G_FILE_TEST_IS_DIR) &&
