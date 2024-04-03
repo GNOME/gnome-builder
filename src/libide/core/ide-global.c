@@ -540,8 +540,18 @@ ide_dup_default_cache_dir (void)
 
   if (!initialized)
     {
+      g_autofree char *cachedir_tag = NULL;
+
       if (!g_file_test (default_cache_dir, G_FILE_TEST_EXISTS))
         g_mkdir_with_parents (default_cache_dir, 0750);
+
+      /* Tell backup systems to ignore this directory */
+      cachedir_tag = g_build_filename (default_cache_dir, "CACHEDIR.TAG", NULL);
+      g_file_set_contents (cachedir_tag,
+                           "Signature: 8a477f597d28d172789f06886806bc55\n",
+                           -1,
+                           NULL);
+
       initialized = TRUE;
     }
 
