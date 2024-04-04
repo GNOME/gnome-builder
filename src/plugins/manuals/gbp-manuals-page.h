@@ -1,4 +1,4 @@
-/* gbp-manuals-workspace-addin.h
+/* gbp-manuals-page.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -20,16 +20,14 @@
 
 #pragma once
 
-#include <libide-gui.h>
-
-#include "gbp-manuals-page.h"
+#include <libide-webkit.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MANUALS_WORKSPACE_ADDIN (gbp_manuals_workspace_addin_get_type())
+#define GBP_TYPE_MANUALS_PAGE (gbp_manuals_page_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpManualsPage, gbp_manuals_page, GBP, MANUALS_PAGE, IdeWebkitPage)
 
-GbpManualsPage *gbp_manuals_workspace_addin_get_page (GbpManualsWorkspaceAddin *self);
+GbpManualsPage *gbp_manuals_page_new (void);
 
 G_END_DECLS

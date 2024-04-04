@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gbp-manuals-application-addin.h"
+#include "gbp-manuals-page.h"
 #include "gbp-manuals-panel.h"
 #include "gbp-manuals-workspace-addin.h"
 
@@ -114,4 +115,39 @@ gbp_manuals_workspace_addin_class_init (GbpManualsWorkspaceAddinClass *klass)
 static void
 gbp_manuals_workspace_addin_init (GbpManualsWorkspaceAddin *self)
 {
+}
+
+static void
+gbp_manuals_workspace_addin_get_page_cb (IdePage  *page,
+                                         gpointer  user_data)
+{
+  IdePage **out_page = user_data;
+
+  if (*out_page == NULL && GBP_IS_MANUALS_PAGE (page))
+    *out_page = page;
+}
+
+GbpManualsPage *
+gbp_manuals_workspace_addin_get_page (GbpManualsWorkspaceAddin *self)
+{
+  GbpManualsPage *page = NULL;
+
+  g_return_val_if_fail (GBP_IS_MANUALS_WORKSPACE_ADDIN (self), NULL);
+
+  ide_workspace_foreach_page (self->workspace,
+                              gbp_manuals_workspace_addin_get_page_cb,
+                              &page);
+
+  if (page == NULL)
+    {
+      g_autoptr(PanelPosition) position = panel_position_new ();
+
+      panel_position_set_area (position, PANEL_AREA_CENTER);
+
+      page = gbp_manuals_page_new ();
+      ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+      panel_widget_raise (PANEL_WIDGET (page));
+    }
+
+  return page;
 }
