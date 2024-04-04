@@ -17,7 +17,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparator"/>
+          <object class="GtkSeparator" id="separator"/>
         </child>
         <child>
           <object class="GtkCenterBox" id="toolbar">

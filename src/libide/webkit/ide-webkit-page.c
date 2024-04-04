@@ -30,6 +30,7 @@
 typedef struct
 {
   GtkStack           *reload_stack;
+  GtkSeparator       *separator;
   GtkCenterBox       *toolbar;
   IdeUrlBar          *url_bar;
   WebKitSettings     *web_settings;
@@ -426,6 +427,7 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/webkit/ide-webkit-page.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, reload_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, separator);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_settings);
@@ -529,6 +531,7 @@ ide_webkit_page_set_show_toolbar (IdeWebkitPage *self,
   g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
 
   gtk_widget_set_visible (GTK_WIDGET (priv->toolbar), show_toolbar);
+  gtk_widget_set_visible (GTK_WIDGET (priv->separator), show_toolbar);
 }
 
 gboolean
