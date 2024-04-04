@@ -1302,61 +1302,6 @@ gbp_flatpak_manifest_save_finish (GbpFlatpakManifest  *self,
   IDE_RETURN (ret);
 }
 
-gchar **
-gbp_flatpak_manifest_get_runtimes (GbpFlatpakManifest *self,
-                                   const gchar        *for_arch)
-{
-  const gchar *runtime_version = "master";
-  const gchar *sdk;
-  GPtrArray *ar;
-
-  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
-
-  ar = g_ptr_array_new ();
-
-  if (for_arch == NULL)
-    for_arch = gbp_flatpak_get_default_arch (IDE_OBJECT (self));
-
-  if (self->runtime_version != NULL)
-    runtime_version = self->runtime_version;
-
-  if (self->sdk == NULL)
-    sdk = self->runtime;
-  else
-    sdk = self->sdk;
-
-  /* First discover the runtime needed for building */
-  g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", sdk, for_arch, runtime_version));
-
-#if 0
-  /* XXX: Ignore docs for now, since they aren't reliable */
-  /* Now add the documentation SDK so the user can get docs */
-  g_ptr_array_add (ar, g_strdup_printf ("%s.Docs/%s/%s", sdk, for_arch, runtime_version));
-#endif
-
-  /* Now discover the runtime needed for running */
-  g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", self->runtime, for_arch, runtime_version));
-
-  if (self->base != NULL && self->base_version != NULL)
-    g_ptr_array_add (ar, g_strdup_printf ("%s/%s/%s", self->base, for_arch, self->base_version));
-
-  /* Now discover any necessary SDK extensions */
-  if (self->sdk_extensions != NULL)
-    {
-      for (guint i = 0; self->sdk_extensions[i]; i++)
-        {
-          if (strchr (self->sdk_extensions[i], '/') != NULL)
-            g_ptr_array_add (ar, g_strdup (self->sdk_extensions[i]));
-          else
-            g_ptr_array_add (ar, g_strdup_printf ("%s/%s/", self->sdk_extensions[i], for_arch));
-        }
-    }
-
-  g_ptr_array_add (ar, NULL);
-
-  return (gchar **)g_ptr_array_free (ar, FALSE);
-}
-
 const char *
 gbp_flatpak_manifest_get_platform (GbpFlatpakManifest *self)
 {
