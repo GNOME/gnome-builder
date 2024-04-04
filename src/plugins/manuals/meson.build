@@ -1,0 +1,35 @@
+if get_option('plugin_manuals')
+
+plugins_sources += files([
+  'gbp-manuals-application-addin.c',
+  'manuals-book.c',
+  'manuals-devhelp-importer.c',
+  # 'manuals-flatpak-importer.c',
+  'manuals-gio.c',
+  'manuals-heading.c',
+  'manuals-importer.c',
+  'manuals-jhbuild-importer.c',
+  'manuals-job.c',
+  'manuals-keyword.c',
+  'manuals-navigatable.c',
+  'manuals-plugin.c',
+  'manuals-progress.c',
+  'manuals-repository.c',
+  'manuals-sdk.c',
+  'manuals-system-importer.c',
+  'manuals-utils.c',
+])
+
+plugin_manuals_resources = gnome.compile_resources(
+  'manuals-resources',
+  'manuals.gresource.xml',
+  c_name: 'gbp_manuals',
+)
+
+plugins_deps += [
+  dependency('gom-1.0'),
+]
+
+plugins_sources += plugin_manuals_resources
+
+endif
