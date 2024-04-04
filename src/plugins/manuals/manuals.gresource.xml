@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/manuals">
     <file>manuals.plugin</file>
+    <file preprocess="xml-stripblanks">gbp-manuals-panel.ui</file>
   </gresource>
 </gresources>

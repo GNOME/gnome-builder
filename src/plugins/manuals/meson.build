@@ -2,6 +2,8 @@ if get_option('plugin_manuals')
 
 plugins_sources += files([
   'gbp-manuals-application-addin.c',
+  'gbp-manuals-panel.c',
+  'gbp-manuals-tree-addin.c',
   'gbp-manuals-workspace-addin.c',
   'manuals-book.c',
   'manuals-devhelp-importer.c',

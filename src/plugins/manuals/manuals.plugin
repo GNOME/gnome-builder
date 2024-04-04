@@ -8,4 +8,5 @@ Module=manuals
 Name=Manuals
 X-At-Startup=true
 X-Category=desktop
+X-Tree-Kind=manuals;
 X-Workspace-Kind=primary;editor;

@@ -23,8 +23,10 @@
 #include <libpeas.h>
 
 #include <libide-gui.h>
+#include <libide-tree.h>
 
 #include "gbp-manuals-application-addin.h"
+#include "gbp-manuals-tree-addin.h"
 #include "gbp-manuals-workspace-addin.h"
 
 _IDE_EXTERN void
@@ -36,4 +38,7 @@ _gbp_manuals_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_MANUALS_WORKSPACE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TREE_ADDIN,
+                                              GBP_TYPE_MANUALS_TREE_ADDIN);
 }

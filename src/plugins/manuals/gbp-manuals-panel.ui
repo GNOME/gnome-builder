@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpManualsPanel" parent="IdePane">
+    <property name="icon-name">builder-documentation-symbolic</property>
+    <property name="title" translatable="yes">Manuals</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="IdeTree" id="tree">
+            <property name="kind">manuals</property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <style>
+              <class name="statusbar"/>
+            </style>
+            <property name="placeholder-text" translatable="yes">Filter…</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
