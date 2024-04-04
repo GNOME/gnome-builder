@@ -26,24 +26,97 @@
 
 #include "gbp-manuals-application-addin.h"
 
+#include "manuals-importer.h"
+#include "manuals-flatpak-importer.h"
+#include "manuals-jhbuild-importer.h"
+#include "manuals-progress.h"
+#include "manuals-purge-missing.h"
+#include "manuals-system-importer.h"
+
 struct _GbpManualsApplicationAddin
 {
-  GObject parent_instance;
+  GObject          parent_instance;
+
+  ManualsProgress *import_progress;
+  char            *storage_dir;
+  DexFuture       *repository;
 };
+
+static DexFuture *
+gbp_manuals_application_addin_import (DexFuture *completed,
+                                      gpointer   user_data)
+{
+  GbpManualsApplicationAddin *self = user_data;
+  g_autoptr(ManualsRepository) repository = NULL;
+  g_autoptr(ManualsImporter) purge = NULL;
+  g_autoptr(ManualsImporter) flatpak = NULL;
+  g_autoptr(ManualsImporter) jhbuild = NULL;
+  g_autoptr(ManualsImporter) system = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (self));
+
+  repository = dex_await_object (dex_ref (completed), NULL);
+  purge = manuals_purge_missing_new ();
+  //flatpak = manuals_flatpak_importer_new ();
+  system = manuals_system_importer_new ();
+  jhbuild = manuals_jhbuild_importer_new ();
+
+  return dex_future_all (manuals_importer_import (purge, repository, self->import_progress),
+                         manuals_importer_import (system, repository, self->import_progress),
+                         //manuals_importer_import (flatpak, repository, self->import_progress),
+                         manuals_importer_import (jhbuild, repository, self->import_progress),
+                         NULL);
+
+}
+
+static DexFuture *
+gbp_manuals_application_addin_import_complete (DexFuture *completed,
+                                               gpointer   user_data)
+{
+  GbpManualsApplicationAddin *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (self));
+
+  /* TODO: Invalidate list model */
+
+  return NULL;
+}
 
 static void
 gbp_manuals_application_addin_load (IdeApplicationAddin *addin,
                                     IdeApplication      *application)
 {
+  GbpManualsApplicationAddin *self = (GbpManualsApplicationAddin *)addin;
+  g_autofree char *storage_path = NULL;
+  DexFuture *future;
+
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (addin));
+  g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (application));
 
+  /* Ensure our storage directory is created */
+  storage_path = g_build_filename (self->storage_dir, "manuals.sqlite", NULL);
+  g_mkdir_with_parents (self->storage_dir, 0750);
+
+  /* Start loading repository asynchronously */
+  self->repository = manuals_repository_open (storage_path);
+
+  future = dex_future_then (dex_ref (self->repository),
+                            gbp_manuals_application_addin_import,
+                            g_object_ref (self),
+                            g_object_unref);
+  future = dex_future_finally (future,
+                               gbp_manuals_application_addin_import_complete,
+                               g_object_ref (self),
+                               g_object_unref);
+  dex_future_disown (future);
 }
 
 static void
 gbp_manuals_application_addin_unload (IdeApplicationAddin *addin,
-                                   IdeApplication      *application)
+                                      IdeApplication      *application)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (addin));
@@ -62,11 +135,30 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpManualsApplicationAddin, gbp_manuals_applicati
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, app_addin_iface_init))
 
 static void
+gbp_manuals_application_addin_finalize (GObject *object)
+{
+  GbpManualsApplicationAddin *self = (GbpManualsApplicationAddin *)object;
+
+  dex_clear (&self->repository);
+  g_clear_object (&self->import_progress);
+  g_clear_pointer (&self->storage_dir, g_free);
+
+  G_OBJECT_CLASS (gbp_manuals_application_addin_parent_class)->finalize (object);
+}
+
+static void
 gbp_manuals_application_addin_class_init (GbpManualsApplicationAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_manuals_application_addin_finalize;
 }
 
 static void
 gbp_manuals_application_addin_init (GbpManualsApplicationAddin *self)
 {
+  g_autofree char *cache_root = ide_dup_default_cache_dir ();
+
+  self->import_progress = manuals_progress_new ();
+  self->storage_dir = g_build_filename (cache_root, "manuals", NULL);
 }

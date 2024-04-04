@@ -14,6 +14,7 @@ plugins_sources += files([
   'manuals-navigatable.c',
   'manuals-plugin.c',
   'manuals-progress.c',
+  'manuals-purge-missing.c',
   'manuals-repository.c',
   'manuals-sdk.c',
   'manuals-system-importer.c',
