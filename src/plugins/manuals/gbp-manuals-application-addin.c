@@ -29,8 +29,6 @@
 #include "manuals-importer.h"
 #include "manuals-flatpak-importer.h"
 #include "manuals-jhbuild-importer.h"
-#include "manuals-navigatable.h"
-#include "manuals-navigatable-model.h"
 #include "manuals-progress.h"
 #include "manuals-purge-missing.h"
 #include "manuals-system-importer.h"
@@ -43,14 +41,6 @@ struct _GbpManualsApplicationAddin
   char            *storage_dir;
   DexFuture       *repository;
 };
-
-enum {
-  PROP_0,
-  PROP_MODEL,
-  N_PROPS
-};
-
-static GParamSpec *properties[N_PROPS];
 
 static DexFuture *
 gbp_manuals_application_addin_import (DexFuture *completed,
@@ -89,7 +79,7 @@ gbp_manuals_application_addin_import_complete (DexFuture *completed,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (self));
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+  /* TODO: Notify UI at all? */
 
   return NULL;
 }
@@ -157,39 +147,11 @@ gbp_manuals_application_addin_finalize (GObject *object)
 }
 
 static void
-gbp_manuals_application_addin_get_property (GObject    *object,
-                                            guint       prop_id,
-                                            GValue     *value,
-                                            GParamSpec *pspec)
-{
-  GbpManualsApplicationAddin *self = GBP_MANUALS_APPLICATION_ADDIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_MODEL:
-      g_value_take_object (value, gbp_manuals_application_addin_dup_model (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_manuals_application_addin_class_init (GbpManualsApplicationAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_manuals_application_addin_finalize;
-  object_class->get_property = gbp_manuals_application_addin_get_property;
-
-  properties[PROP_MODEL] =
-    g_param_spec_object ("model", NULL, NULL,
-                         G_TYPE_LIST_MODEL,
-                         (G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -199,25 +161,6 @@ gbp_manuals_application_addin_init (GbpManualsApplicationAddin *self)
 
   self->import_progress = manuals_progress_new ();
   self->storage_dir = g_build_filename (cache_root, "manuals", NULL);
-}
-
-GListModel *
-gbp_manuals_application_addin_dup_model (GbpManualsApplicationAddin *self)
-{
-  g_autoptr(ManualsRepository) repository = NULL;
-  g_autoptr(ManualsNavigatable) navigatable = NULL;
-
-  g_return_val_if_fail (GBP_IS_MANUALS_APPLICATION_ADDIN (self), NULL);
-
-  if (!dex_future_is_resolved (self->repository))
-    return NULL;
-
-  if (!(repository = dex_await_object (dex_ref (self->repository), NULL)))
-    return NULL;
-
-  navigatable = manuals_navigatable_new_for_resource (G_OBJECT (repository));
-
-  return G_LIST_MODEL (manuals_navigatable_model_new (navigatable));
 }
 
 DexFuture *

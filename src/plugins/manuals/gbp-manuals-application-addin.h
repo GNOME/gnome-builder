@@ -28,7 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpManualsApplicationAddin, gbp_manuals_application_addin, GBP, MANUALS_APPLICATION_ADDIN, GObject)
 
-GListModel *gbp_manuals_application_addin_dup_model       (GbpManualsApplicationAddin *self);
 DexFuture  *gbp_manuals_application_addin_load_repository (GbpManualsApplicationAddin *self);
 
 G_END_DECLS
