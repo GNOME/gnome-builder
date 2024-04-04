@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-03-30 22:48+0000\n"
-"PO-Revision-Date: 2024-03-31 12:42+0200\n"
+"POT-Creation-Date: 2024-04-03 22:46+0000\n"
+"PO-Revision-Date: 2024-04-05 00:11+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -168,7 +168,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Uporabite mali zemljevid za pregled strukture datoteke"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:246
+#: src/plugins/buildui/tweaks.ui:264
 msgid "Build Parallelism"
 msgstr "Vzporednost izgradnje"
 
@@ -645,6 +645,18 @@ msgid ""
 msgstr ""
 "Ali naj bo uporabljeno G_MESSAGES_DEBUG=all pri zagonu ciljnega programa"
 
+#: data/gsettings/org.gnome.builder.project.gschema.xml:56
+msgid "Cache Root"
+msgstr "Korenska mapa predpomnilnika"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:57
+msgid ""
+"A directory to use as the root for cache data of the project like builds and "
+"flatpak staging directories"
+msgstr ""
+"Mapa, ki ga lahko uporabite kot korensko mapo za podatke predpomnilnika "
+"projekta, kot so izgradnje in stopenjske mape flatpak"
+
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
 msgid "Show Icons"
@@ -748,7 +760,7 @@ msgstr "Začenjanje postopka s privzetimi vrednostmi je spodletelo"
 msgid "Failed to save draft: %s"
 msgstr "Shranjevanje osnutka je spodletelo: %s"
 
-#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
+#: src/libide/core/ide-context.c:349 src/libide/core/ide-context.c:797
 msgid "Untitled"
 msgstr "Neimenovano"
 
@@ -1212,12 +1224,12 @@ msgid "Preparing…"
 msgstr "Poteka priprava …"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3770
+#: src/libide/foundry/ide-pipeline.c:3772
 #, c-format
 msgid "Removing %s"
 msgstr "Poteka odstranjevanje %s"
 
-#: src/libide/foundry/ide-pipeline.c:3829
+#: src/libide/foundry/ide-pipeline.c:3831
 msgid "Removing build directories…"
 msgstr "Odstranjevanje map gradnje …"
 
@@ -1283,7 +1295,7 @@ msgstr "Uporabnik je zahteval zagon programa z orodjem »%s«"
 msgid "User requested application to stop"
 msgstr "Uporabnik je zahteval ustavitev programa"
 
-#: src/libide/foundry/ide-runtime.c:406
+#: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
@@ -1316,7 +1328,6 @@ msgid "Default (Host operating system)"
 msgstr "Privzeto (gostiteljski operacijski sistem)"
 
 #: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
-#: src/libide/projects/ide-projects-global.c:103
 #: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
 msgstr "Projekti"
@@ -1559,7 +1570,7 @@ msgid "Close Project"
 msgstr "Zapri projekt"
 
 #: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "Splošno"
 
@@ -1792,7 +1803,7 @@ msgstr "Nadzor različic"
 msgid "SDKs"
 msgstr "Zbirka SDK"
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Jezikovni strežniki"
 
@@ -2694,8 +2705,8 @@ msgstr "GPE"
 msgid "GTK Renderer"
 msgstr "Izrisovalnik GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
-#: src/plugins/buildui/tweaks.ui:443
+#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Privzeto"
 
@@ -2862,73 +2873,90 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Gradnja in orodja"
 
-#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
+#: src/plugins/buildui/tweaks.ui:185
+msgid "Storage"
+msgstr "Shramba"
+
+#: src/plugins/buildui/tweaks.ui:188
+msgid "Artifacts and Cached Files"
+msgstr "Artefakti in predpomnjene datoteke"
+
+#: src/plugins/buildui/tweaks.ui:189
+msgid ""
+"Directory used for storing build artifacts and cached files from the build "
+"pipeline. Requires restarting Builder to take effect."
+msgstr ""
+"Mapa, ki se uporablja za shranjevanje gradbenih artefaktov in predpomnjenih "
+"datotek iz cevovoda izgradnje. Če želite, da začne veljati, potrebujete "
+"vnovični zagon programa Builder."
+
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
 msgstr "Zgodovina"
 
-#: src/plugins/buildui/tweaks.ui:188
+#: src/plugins/buildui/tweaks.ui:206
 msgid "Clear Expired Artifacts"
 msgstr "Počisti potekle artefakte"
 
-#: src/plugins/buildui/tweaks.ui:189
+#: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Ko bo program Builder zagnan, bodo potekli artefakti izbrisani"
 
-#: src/plugins/buildui/tweaks.ui:200
+#: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
 msgstr "Počisti dnevnike izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:201
+#: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
 msgstr "Počisti zgodovino dnevnika izgradnje ob začetku nove izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:212
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Show Build Logs"
 msgstr "Pokaži dnevnike izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:213
+#: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
 msgstr "Pokaži dnevnik izgradnje, ko se začne nova izgradnja"
 
-#: src/plugins/buildui/tweaks.ui:229
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
 msgstr "Beleži v konzolo"
 
-#: src/plugins/buildui/tweaks.ui:230
+#: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
 msgstr "Preusmeri zapisnike napak jezikovnega strežnika v stderr"
 
-#: src/plugins/buildui/tweaks.ui:243
+#: src/plugins/buildui/tweaks.ui:261
 msgid "Workers"
 msgstr "Opravila izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:247
+#: src/plugins/buildui/tweaks.ui:265
 msgid "Number of workers to use when performing builds"
 msgstr "Število opravil, ki naj se sočasno izvajajo med izgradnjo."
 
-#: src/plugins/buildui/tweaks.ui:262
+#: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
 msgstr "1 na CPE"
 
-#: src/plugins/buildui/tweaks.ui:354
+#: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
 msgstr "Nabor orodij"
 
-#: src/plugins/buildui/tweaks.ui:389
+#: src/plugins/buildui/tweaks.ui:407
 msgid "Installation Prefix"
 msgstr "Predpona namestitve"
 
-#: src/plugins/buildui/tweaks.ui:390
+#: src/plugins/buildui/tweaks.ui:408
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr "Projekt bo nameščen v to mapo v fazi namestitve cevovoda izgradnje."
 
-#: src/plugins/buildui/tweaks.ui:408
+#: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
 msgstr "Nastavitev možnosti"
 
-#: src/plugins/buildui/tweaks.ui:421
+#: src/plugins/buildui/tweaks.ui:439
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
@@ -2936,28 +2964,28 @@ msgstr ""
 "Te možnosti uporablja sistem gradnje za prilagajanje projekta med fazo "
 "prilagajanja gradbenega cevovoda"
 
-#: src/plugins/buildui/tweaks.ui:428
+#: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
 msgstr "Okolje izgradnje"
 
-#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/buildui/tweaks.ui:449
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Krajevnost"
 
-#: src/plugins/buildui/tweaks.ui:432
+#: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
 msgstr "Kje se vaš projekt izgrajuje"
 
-#: src/plugins/buildui/tweaks.ui:449
+#: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
 msgstr "V drevesu izvorne kode"
 
-#: src/plugins/buildui/tweaks.ui:455
+#: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
 msgstr "Drevo zunanje izvorne kode"
 
-#: src/plugins/buildui/tweaks.ui:476
+#: src/plugins/buildui/tweaks.ui:494
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -4307,7 +4335,7 @@ msgstr "Namestitev je spodletela"
 msgid "Installation complete"
 msgstr "Nameščanje je končano"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:454
+#: src/plugins/flatpak/gbp-flatpak-client.c:460
 #: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr "Odjemalec je zaprt"
@@ -4359,36 +4387,36 @@ msgstr "Builder išče ustrezne razširitve kompleta SDK za izgradnjo projekta"
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
 msgid "Creating flatpak workspace"
 msgstr "Poteka ustvarjanje delovne površine flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Odstranjevanje zastarele mape flatpak s spremembami: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
 msgid "Preparing build directory"
 msgstr "Poteka pripravljanja mape izgradnje"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
 msgid "Downloading dependencies"
 msgstr "Prejemanje paketov odvisnosti"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
 msgid "Building dependencies"
 msgstr "Izgrajevanje odvisnosti"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
 msgid "Finalizing flatpak build"
 msgstr "Zaključevanje izgradnje flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
 msgid "Exporting staging directory"
 msgstr "Poteka izvažanje mape s spremembami …"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
 msgid "Creating flatpak bundle"
 msgstr "Ustvarjanje paket programov flatpak"
 
@@ -4494,12 +4522,12 @@ msgid ""
 "repository."
 msgstr "Podajanje ustreznih poveril med kloniranjem skladišča je spodletelo."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Ni mogoče nastaviti zastavic AMEND in GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
@@ -5101,26 +5129,18 @@ msgid "Default file manager for GNOME"
 msgstr "Privzeti upravljalnik datotek za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
-msgid "Photos"
-msgstr "Fotografije"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "Access, organize and share your photos on GNOME"
-msgstr "Urejanje in izmenjava fotografij za namizje GNOME"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "An IRC Client for GNOME"
 msgstr "Odjemalec IRC za GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
 msgstr "Snemalnik zvoka"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
 msgstr "Sodoben snemalnik zvoka za GNOME"
 
