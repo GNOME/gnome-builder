@@ -71,6 +71,7 @@ struct _IpcFlatpakServiceImpl
   GHashTable *installs;
   GPtrArray *runtimes;
   GPtrArray *installs_ordered;
+  GHashTable *known;
   guint ignore_system_installations : 1;
 };
 
@@ -227,16 +228,30 @@ static gboolean
 is_installed (IpcFlatpakServiceImpl *self,
               FlatpakRef            *ref)
 {
+  g_autofree char *key = NULL;
+  const char *lookup_name;
+  const char *lookup_arch;
+  const char *lookup_branch;
+
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
+
+  lookup_name = flatpak_ref_get_name (ref);
+  lookup_arch = flatpak_ref_get_arch (ref);
+  lookup_branch = flatpak_ref_get_branch (ref);
+
+  key = g_strdup_printf ("%s/%s/%s", lookup_name, lookup_arch, lookup_branch);
+
+  if (g_hash_table_contains (self->known, key))
+    return TRUE;
 
   for (guint i = 0; i < self->runtimes->len; i++)
     {
       const Runtime *r = g_ptr_array_index (self->runtimes, i);
 
-      if (str_equal0 (r->name, flatpak_ref_get_name (ref)) &&
-          str_equal0 (r->arch, flatpak_ref_get_arch (ref)) &&
-          str_equal0 (r->branch, flatpak_ref_get_branch (ref)))
+      if (str_equal0 (r->name, lookup_name) &&
+          str_equal0 (r->arch, lookup_arch) &&
+          str_equal0 (r->branch, lookup_branch))
         return TRUE;
     }
 
@@ -349,6 +364,13 @@ install_reload (IpcFlatpakServiceImpl *self,
       g_autofree char *sdk = NULL;
       g_autofree char *exten_of = NULL;
       Runtime *state;
+
+      g_hash_table_insert (self->known,
+                           g_strdup_printf ("%s/%s/%s",
+                                            flatpak_ref_get_name (FLATPAK_REF (ref)),
+                                            flatpak_ref_get_arch (FLATPAK_REF (ref)),
+                                            flatpak_ref_get_branch (FLATPAK_REF (ref))),
+                           NULL);
 
       if (!(bytes = flatpak_installed_ref_load_metadata (ref, NULL, NULL)) ||
           !g_key_file_load_from_bytes (keyfile, bytes, G_KEY_FILE_NONE, NULL))
@@ -1663,6 +1685,7 @@ ipc_flatpak_service_impl_finalize (GObject *object)
   g_clear_pointer (&self->installs_ordered, g_ptr_array_unref);
   g_clear_pointer (&self->installs, g_hash_table_unref);
   g_clear_pointer (&self->runtimes, g_ptr_array_unref);
+  g_clear_pointer (&self->known, g_hash_table_unref);
 
   G_OBJECT_CLASS (ipc_flatpak_service_impl_parent_class)->finalize (object);
 }
@@ -1733,6 +1756,7 @@ ipc_flatpak_service_impl_init (IpcFlatpakServiceImpl *self)
                                           g_object_unref,
                                           (GDestroyNotify) install_free);
   self->runtimes = g_ptr_array_new_with_free_func ((GDestroyNotify) runtime_free);
+  self->known = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 IpcFlatpakService *
