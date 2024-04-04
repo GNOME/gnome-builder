@@ -522,3 +522,32 @@ manuals_heading_list_alternates (ManualsHeading *self)
                               g_object_ref (self),
                               g_object_unref);
 }
+
+static DexFuture *
+item_found (DexFuture *future,
+            gpointer   user_data)
+{
+  return dex_future_new_for_boolean (TRUE);
+}
+
+DexFuture *
+manuals_heading_has_children (ManualsHeading *self)
+{
+  g_autoptr(ManualsRepository) repository = NULL;
+  g_autoptr(GomFilter) filter = NULL;
+  g_auto(GValue) parent_id = G_VALUE_INIT;
+  DexFuture *future;
+
+  g_return_val_if_fail (MANUALS_IS_HEADING (self), NULL);
+
+  g_object_get (self, "repository", &repository, NULL);
+
+  g_value_init (&parent_id, G_TYPE_INT64);
+  g_value_set_int64 (&parent_id, self->id);
+  filter = gom_filter_new_eq (MANUALS_TYPE_HEADING, "parent-id", &parent_id);
+
+  future = manuals_repository_find_one (repository, MANUALS_TYPE_HEADING, filter);
+  future = dex_future_then (future, item_found, NULL, NULL);
+
+  return g_steal_pointer (&future);
+}

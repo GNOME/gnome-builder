@@ -55,5 +55,6 @@ DexFuture  *manuals_heading_find_sdk        (ManualsHeading    *self);
 DexFuture  *manuals_heading_find_book       (ManualsHeading    *self);
 DexFuture  *manuals_heading_list_headings   (ManualsHeading    *self);
 DexFuture  *manuals_heading_list_alternates (ManualsHeading    *self);
+DexFuture  *manuals_heading_has_children    (ManualsHeading    *self);
 
 G_END_DECLS
