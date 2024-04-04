@@ -504,6 +504,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autofree char *full_sdk = NULL;
   g_autofree char *full_platform = NULL;
+  g_autofree char *full_docs = NULL;
   g_autofree char *arch = NULL;
   Bootstrap *state;
   IdeConfig *config;
@@ -545,6 +546,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
       full_sdk = g_strdup_printf ("runtime/%s/%s/%s", sdk, arch, branch);
       full_platform = g_strdup_printf ("runtime/%s/%s/%s", platform, arch, branch);
+      full_docs = g_strdup_printf ("runtime/%s.Docs/%s/%s", sdk, arch, branch);
 
       g_ptr_array_add (state->to_install, g_strdup (full_sdk));
       if (g_strcmp0 (full_sdk, full_platform) != 0)
@@ -562,6 +564,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
           for (guint i = 0; extensions[i]; i++)
             g_ptr_array_add (state->to_install, g_strdup (extensions[i]));
         }
+
+      g_ptr_array_add (state->to_install, g_strdup (full_docs));
     }
   else
     {
