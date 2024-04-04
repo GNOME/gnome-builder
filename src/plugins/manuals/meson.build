@@ -22,6 +22,9 @@ plugins_sources += files([
   'manuals-purge-missing.c',
   'manuals-repository.c',
   'manuals-sdk.c',
+  'manuals-search-query.c',
+  'manuals-search-model.c',
+  'manuals-search-result.c',
   'manuals-system-importer.c',
   'manuals-utils.c',
 ])
