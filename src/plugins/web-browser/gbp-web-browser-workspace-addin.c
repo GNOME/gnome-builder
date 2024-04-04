@@ -69,7 +69,10 @@ gbp_web_browser_workspace_addin_save_session_page_cb (IdePage  *page,
   g_assert (IDE_IS_PAGE (page));
   g_assert (IDE_IS_SESSION (session));
 
-  if (IDE_IS_WEBKIT_PAGE (page) &&
+  /* Ignore subclasses of IdeWebkitPage, they need to handle session
+   * saving themselves.
+   */
+  if (G_OBJECT_TYPE (page) == IDE_TYPE_WEBKIT_PAGE &&
       !ide_webkit_page_has_generator (IDE_WEBKIT_PAGE (page)))
     {
       g_autoptr(PanelPosition) position = ide_page_get_position (page);
