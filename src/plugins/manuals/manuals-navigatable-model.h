@@ -1,4 +1,5 @@
-/* gbp-manuals-application-addin.h
+/*
+ * manuals-navigatable-model.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -20,14 +21,17 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <gio/gio.h>
+
+#include "manuals-navigatable.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MANUALS_APPLICATION_ADDIN (gbp_manuals_application_addin_get_type())
+#define MANUALS_TYPE_NAVIGATABLE_MODEL (manuals_navigatable_model_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpManualsApplicationAddin, gbp_manuals_application_addin, GBP, MANUALS_APPLICATION_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (ManualsNavigatableModel, manuals_navigatable_model, MANUALS, NAVIGATABLE_MODEL, GObject)
 
-GListModel *gbp_manuals_application_addin_dup_model (GbpManualsApplicationAddin *self);
+ManualsNavigatableModel *manuals_navigatable_model_new           (ManualsNavigatable      *navigatable);
+GListModel              *manuals_navigatable_model_list_children (ManualsNavigatableModel *self);
 
 G_END_DECLS

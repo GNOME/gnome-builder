@@ -12,6 +12,7 @@ plugins_sources += files([
   'manuals-job.c',
   'manuals-keyword.c',
   'manuals-navigatable.c',
+  'manuals-navigatable-model.c',
   'manuals-plugin.c',
   'manuals-progress.c',
   'manuals-purge-missing.c',
