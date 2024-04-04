@@ -1,6 +1,6 @@
-/* manuals-plugin.c
+/* gbp-manuals-workspace-addin.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
-#include <libpeas.h>
+#pragma once
 
 #include <libide-gui.h>
 
-#include "gbp-manuals-application-addin.h"
-#include "gbp-manuals-workspace-addin.h"
+G_BEGIN_DECLS
 
-_IDE_EXTERN void
-_gbp_manuals_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_ADDIN,
-                                              GBP_TYPE_MANUALS_APPLICATION_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_MANUALS_WORKSPACE_ADDIN);
-}
+#define GBP_TYPE_MANUALS_WORKSPACE_ADDIN (gbp_manuals_workspace_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
+
+G_END_DECLS
