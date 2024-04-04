@@ -219,3 +219,11 @@ gbp_manuals_application_addin_dup_model (GbpManualsApplicationAddin *self)
 
   return G_LIST_MODEL (manuals_navigatable_model_new (navigatable));
 }
+
+DexFuture *
+gbp_manuals_application_addin_load_repository (GbpManualsApplicationAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_MANUALS_APPLICATION_ADDIN (self), NULL);
+
+  return dex_ref (self->repository);
+}
