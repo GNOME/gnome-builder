@@ -90,6 +90,10 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
   if (is_extension)
     IDE_EXIT;
 
+  /* Ignore things we don't want in this list */
+  if (gbp_flatpak_is_ignored (name))
+    IDE_EXIT;
+
   context = ide_object_ref_context (IDE_OBJECT (self));
   runtime = gbp_flatpak_runtime_new (name,
                                      arch,
