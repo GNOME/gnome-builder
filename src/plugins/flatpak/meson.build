@@ -37,6 +37,8 @@ plugins_sources += files([
   'ipc-flatpak-transfer-impl.c',
 ])
 
+config_h.set10('HAVE_FLATPAK', true)
+
 plugin_flatpak_resources = gnome.compile_resources(
   'flatpak-resources',
   'flatpak.gresource.xml',
