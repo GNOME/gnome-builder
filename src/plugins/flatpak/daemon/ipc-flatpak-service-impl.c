@@ -379,7 +379,30 @@ install_reload (IpcFlatpakServiceImpl *self,
       if (!(name = g_key_file_get_string (keyfile, "Runtime", "name", NULL)) ||
           !(runtime = g_key_file_get_string (keyfile, "Runtime", "runtime", NULL)) ||
           !(sdk = g_key_file_get_string (keyfile, "Runtime", "sdk", NULL)))
-        continue;
+        {
+          /* Special case .Docs so they show up in our list of runtimes
+           * but treat them as if they were just the SDK. That way we can
+           * extract information from them for manuals/etc but also filter
+           * them from the user selecting as an option.
+           */
+          if (name != NULL && g_str_has_suffix (name, ".Docs"))
+            {
+              g_autofree char *shortname = g_strndup (name, strlen (name) - strlen (".Docs"));
+
+              g_clear_pointer (&runtime, g_free);
+              g_clear_pointer (&sdk, g_free);
+
+              runtime = g_strdup_printf ("%s/%s/%s",
+                                         flatpak_ref_get_name (FLATPAK_REF (ref)),
+                                         flatpak_ref_get_arch (FLATPAK_REF (ref)),
+                                         flatpak_ref_get_branch (FLATPAK_REF (ref)));
+              sdk = g_strdup (runtime);
+
+              goto special_case_docs;
+            }
+
+          continue;
+        }
 
       if (g_key_file_has_group (keyfile, "ExtensionOf"))
         {
@@ -390,6 +413,8 @@ install_reload (IpcFlatpakServiceImpl *self,
 
           exten_of = g_key_file_get_string (keyfile, "ExtensionOf", "ref", NULL);
         }
+
+special_case_docs:
 
       if (!g_str_has_prefix (sdk, "runtime/"))
         sdk_full_ref = g_strdup_printf ("runtime/%s", sdk);
