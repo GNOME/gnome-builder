@@ -27,11 +27,14 @@
 #include "gbp-manuals-application-addin.h"
 
 #include "manuals-importer.h"
-#include "manuals-flatpak-importer.h"
 #include "manuals-jhbuild-importer.h"
 #include "manuals-progress.h"
 #include "manuals-purge-missing.h"
 #include "manuals-system-importer.h"
+
+#ifdef HAVE_FLATPAK
+# include "manuals-flatpak-importer.h"
+#endif
 
 struct _GbpManualsApplicationAddin
 {
@@ -49,22 +52,28 @@ gbp_manuals_application_addin_import (DexFuture *completed,
   GbpManualsApplicationAddin *self = user_data;
   g_autoptr(ManualsRepository) repository = NULL;
   g_autoptr(ManualsImporter) purge = NULL;
-  g_autoptr(ManualsImporter) flatpak = NULL;
   g_autoptr(ManualsImporter) jhbuild = NULL;
   g_autoptr(ManualsImporter) system = NULL;
+#ifdef HAVE_FLATPAK
+  g_autoptr(ManualsImporter) flatpak = NULL;
+#endif
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MANUALS_APPLICATION_ADDIN (self));
 
   repository = dex_await_object (dex_ref (completed), NULL);
   purge = manuals_purge_missing_new ();
-  //flatpak = manuals_flatpak_importer_new ();
   system = manuals_system_importer_new ();
   jhbuild = manuals_jhbuild_importer_new ();
+#ifdef HAVE_FLATPAK
+  flatpak = manuals_flatpak_importer_new ();
+#endif
 
   return dex_future_all (manuals_importer_import (purge, repository, self->import_progress),
                          manuals_importer_import (system, repository, self->import_progress),
-                         //manuals_importer_import (flatpak, repository, self->import_progress),
+#ifdef HAVE_FLATPAK
+                         manuals_importer_import (flatpak, repository, self->import_progress),
+#endif
                          manuals_importer_import (jhbuild, repository, self->import_progress),
                          NULL);
 
