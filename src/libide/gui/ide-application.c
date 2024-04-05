@@ -1143,3 +1143,24 @@ ide_application_find_project_workbench (IdeApplication *self,
 
   return NULL;
 }
+
+gboolean
+ide_application_control_is_pressed (IdeApplication *self)
+{
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *keyboard;
+  GdkModifierType modifiers;
+
+  if (self == NULL)
+    self = IDE_APPLICATION_DEFAULT;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+
+  display = gdk_display_get_default ();
+  seat = gdk_display_get_default_seat (display);
+  keyboard = gdk_seat_get_keyboard (seat);
+  modifiers = gdk_device_get_modifier_state (keyboard) & gtk_accelerator_get_default_mod_mask ();
+
+  return !!(modifiers & GDK_CONTROL_MASK);
+}

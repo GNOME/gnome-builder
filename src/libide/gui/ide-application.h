@@ -112,5 +112,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean       ide_application_install_schemes_finish    (IdeApplication           *self,
                                                           GAsyncResult             *result,
                                                           GError                  **error);
+IDE_AVAILABLE_IN_47
+gboolean       ide_application_control_is_pressed        (IdeApplication           *self);
 
 G_END_DECLS
