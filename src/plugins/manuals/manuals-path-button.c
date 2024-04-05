@@ -118,13 +118,16 @@ manuals_path_button_show_popover (DexFuture *completed,
 
   gtk_widget_grab_focus (GTK_WIDGET (self->box));
 
-  gtk_widget_set_state_flags (GTK_WIDGET (self->box),
-                              GTK_STATE_FLAG_ACTIVE,
-                              FALSE);
-
   model = dex_await_object (dex_ref (completed), NULL);
-  gtk_no_selection_set_model (self->selection, model);
-  gtk_popover_popup (self->popover);
+
+  if (g_list_model_get_n_items (model) > 0)
+    {
+      gtk_widget_set_state_flags (GTK_WIDGET (self->box),
+                                  GTK_STATE_FLAG_ACTIVE,
+                                  FALSE);
+      gtk_no_selection_set_model (self->selection, model);
+      gtk_popover_popup (self->popover);
+    }
 
   return dex_future_new_for_boolean (TRUE);
 }
@@ -196,6 +199,9 @@ manuals_path_button_pressed_cb (ManualsPathButton *self,
 
   gbp_manuals_workspace_addin_navigate_to (GBP_MANUALS_WORKSPACE_ADDIN (addin),
                                            MANUALS_NAVIGATABLE (object));
+
+  gtk_widget_unset_state_flags (GTK_WIDGET (self->box),
+                                GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
