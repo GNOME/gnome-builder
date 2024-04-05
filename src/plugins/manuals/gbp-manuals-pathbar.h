@@ -1,4 +1,5 @@
-/* gbp-manuals-workspace-addin.h
+/*
+ * gbp-manuals-pathbar.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -20,20 +21,21 @@
 
 #pragma once
 
-#include <libide-gui.h>
-
-#include "gbp-manuals-page.h"
+#include <gtk/gtk.h>
 
 #include "manuals-navigatable.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MANUALS_WORKSPACE_ADDIN (gbp_manuals_workspace_addin_get_type())
+#define GBP_TYPE_MANUALS_PATHBAR (gbp_manuals_pathbar_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpManualsPathbar, gbp_manuals_pathbar, GBP, MANUALS_PATHBAR, GtkWidget)
 
-GbpManualsPage *gbp_manuals_workspace_addin_get_page    (GbpManualsWorkspaceAddin *self);
-void            gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
-                                                         ManualsNavigatable       *navigatable);
+GbpManualsPathbar  *gbp_manuals_pathbar_new              (void);
+ManualsNavigatable *gbp_manuals_pathbar_get_navigatable  (GbpManualsPathbar  *self);
+void                gbp_manuals_pathbar_set_navigatable  (GbpManualsPathbar  *self,
+                                                          ManualsNavigatable *navigatable);
+void                gbp_manuals_pathbar_inhibit_scroll   (GbpManualsPathbar  *self);
+void                gbp_manuals_pathbar_uninhibit_scroll (GbpManualsPathbar  *self);
 
 G_END_DECLS

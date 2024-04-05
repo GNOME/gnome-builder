@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpManualsPathbar" parent="GtkWidget">
+    <property name="focusable">false</property>
+    <child>
+      <object class="GtkBox">
+        <property name="css-name">path</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scroller">
+            <property name="hscrollbar-policy">external</property>
+            <property name="vscrollbar-policy">never</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="scroll-to-focus">false</property>
+                <child>
+                  <object class="GtkBox" id="elements">
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,4 +1,5 @@
-/* gbp-manuals-workspace-addin.h
+/*
+ * manuals-path-button.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -20,20 +21,19 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <gtk/gtk.h>
 
-#include "gbp-manuals-page.h"
-
-#include "manuals-navigatable.h"
+#include "manuals-path-element.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MANUALS_WORKSPACE_ADDIN (gbp_manuals_workspace_addin_get_type())
+#define MANUALS_TYPE_PATH_BUTTON (manuals_path_button_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (ManualsPathButton, manuals_path_button, MANUALS, PATH_BUTTON, GtkWidget)
 
-GbpManualsPage *gbp_manuals_workspace_addin_get_page    (GbpManualsWorkspaceAddin *self);
-void            gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
-                                                         ManualsNavigatable       *navigatable);
+ManualsPathButton  *manuals_path_button_new         (void);
+ManualsPathElement *manuals_path_button_get_element (ManualsPathButton  *self);
+void                manuals_path_button_set_element (ManualsPathButton  *self,
+                                                     ManualsPathElement *element);
 
 G_END_DECLS

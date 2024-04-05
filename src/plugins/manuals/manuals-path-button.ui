@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ManualsPathButton" parent="GtkWidget">
+    <property name="focusable">false</property>
+    <child>
+      <object class="GtkPopover" id="popover">
+        <style>
+          <class name="menu"/>
+        </style>
+        <signal name="closed" handler="manuals_path_button_popover_closed_cb" swapped="true"/>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">true</property>
+            <property name="propagate-natural-width">true</property>
+            <property name="max-content-height">600</property>
+            <child>
+              <object class="GtkListView">
+                <signal name="activate" handler="manuals_path_button_list_item_activate_cb" swapped="true"/>
+                <property name="single-click-activate">true</property>
+                <property name="model">
+                  <object class="GtkNoSelection" id="selection">
+                  </object>
+                </property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">9</property>
+        <child>
+          <object class="GtkImage" id="image">
+            <binding name="gicon">
+              <lookup name="menu-icon" type="ManualsNavigatable">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="ellipsize">middle</property>
+            <binding name="label">
+              <lookup name="menu-title" type="ManualsNavigatable">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkLabel" id="separator">
+            <property name="focusable">false</property>
+            <property name="label">/</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <binding name="visible">
+              <closure function="invert_boolean" type="gboolean">
+                <lookup name="is-root" type="ManualsPathElement">
+                  <lookup name="element">ManualsPathButton</lookup>
+                </lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="box">
+            <property name="css-name">button</property>
+            <property name="spacing">3</property>
+            <property name="focusable">true</property>
+            <property name="receives-default">true</property>
+            <style>
+              <class name="flat"/>
+            </style>
+            <child>
+              <object class="GtkGestureClick">
+                <property name="propagation-phase">capture</property>
+                <property name="button">3</property>
+                <signal name="pressed" handler="manuals_path_button_context_pressed_cb" swapped="true"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGestureClick">
+                <property name="button">1</property>
+                <signal name="pressed" handler="manuals_path_button_pressed_cb" swapped="true"/>
+              </object>
+            </child>
+            <binding name="tooltip-text">
+              <lookup name="title" type="ManualsPathElement">
+                <lookup name="element">ManualsPathButton</lookup>
+              </lookup>
+            </binding>
+            <child>
+              <object class="GtkImage" id="image">
+                <binding name="gicon">
+                  <lookup name="icon" type="ManualsPathElement">
+                    <lookup name="element">ManualsPathButton</lookup>
+                  </lookup>
+                </binding>
+                <binding name="visible">
+                  <lookup name="show-icon" type="ManualsPathElement">
+                    <lookup name="element">ManualsPathButton</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label">
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

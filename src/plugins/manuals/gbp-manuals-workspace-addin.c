@@ -23,13 +23,19 @@
 #include "gbp-manuals-application-addin.h"
 #include "gbp-manuals-page.h"
 #include "gbp-manuals-panel.h"
+#include "gbp-manuals-pathbar.h"
 #include "gbp-manuals-workspace-addin.h"
 
 struct _GbpManualsWorkspaceAddin
 {
-  GObject          parent_instance;
-  IdeWorkspace    *workspace;
-  GbpManualsPanel *panel;
+  GObject            parent_instance;
+
+  GBindingGroup     *bindings;
+
+  IdeWorkspace      *workspace;
+
+  GbpManualsPanel   *panel;
+  GbpManualsPathbar *pathbar;
 };
 
 static DexFuture *
@@ -57,6 +63,7 @@ gbp_manuals_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpManualsWorkspaceAddin *self = (GbpManualsWorkspaceAddin *)addin;
   g_autoptr(PanelPosition) position = NULL;
+  PanelStatusbar *statusbar;
   IdeApplicationAddin *app_addin;
   DexFuture *future;
 
@@ -69,11 +76,18 @@ gbp_manuals_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
   self->panel = gbp_manuals_panel_new ();
+  self->pathbar = gbp_manuals_pathbar_new ();
 
   position = panel_position_new ();
   panel_position_set_area (position, PANEL_AREA_START);
 
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
+
+  gtk_widget_set_hexpand (GTK_WIDGET (self->pathbar), TRUE);
+  gtk_widget_hide (GTK_WIDGET (self->pathbar));
+
+  statusbar = ide_workspace_get_statusbar (workspace);
+  panel_statusbar_add_prefix (statusbar, 10000, GTK_WIDGET (self->pathbar));
 
   future = gbp_manuals_application_addin_load_repository (GBP_MANUALS_APPLICATION_ADDIN (app_addin));
   future = dex_future_then (future,
@@ -81,6 +95,11 @@ gbp_manuals_workspace_addin_load (IdeWorkspaceAddin *addin,
                             g_object_ref (self),
                             g_object_unref);
   dex_future_disown (future);
+
+  self->bindings = g_binding_group_new ();
+  g_binding_group_bind (self->bindings, "navigatable",
+                        self->pathbar, "navigatable",
+                        G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -88,13 +107,34 @@ gbp_manuals_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                     IdeWorkspace      *workspace)
 {
   GbpManualsWorkspaceAddin *self = (GbpManualsWorkspaceAddin *)addin;
+  PanelStatusbar *statusbar;
 
   g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (addin));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  g_clear_pointer ((IdePane **)&self->panel, ide_pane_destroy);
+  statusbar = ide_workspace_get_statusbar (workspace);
+  panel_statusbar_remove (statusbar, GTK_WIDGET (self->pathbar));
 
+  g_clear_pointer ((IdePane **)&self->panel, ide_pane_destroy);
+  g_clear_object (&self->bindings);
+
+  self->pathbar = NULL;
   self->workspace = NULL;
+}
+
+static void
+gbp_manuals_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
+                                          IdePage           *page)
+{
+  GbpManualsWorkspaceAddin *self = (GbpManualsWorkspaceAddin *)addin;
+
+  g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (self));
+
+  if (!GBP_IS_MANUALS_PAGE (page))
+    page = NULL;
+
+  gtk_widget_set_visible (GTK_WIDGET (self->pathbar), GBP_IS_MANUALS_PAGE (page));
+  g_binding_group_set_source (self->bindings, page);
 }
 
 static void
@@ -102,6 +142,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_manuals_workspace_addin_load;
   iface->unload = gbp_manuals_workspace_addin_unload;
+  iface->page_changed = gbp_manuals_workspace_addin_page_changed;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, G_TYPE_OBJECT,
@@ -150,4 +191,37 @@ gbp_manuals_workspace_addin_get_page (GbpManualsWorkspaceAddin *self)
     }
 
   return page;
+}
+
+static void
+gbp_manuals_workspace_addin_reveal (GbpManualsWorkspaceAddin *self,
+                                    ManualsNavigatable       *navigatable)
+{
+  g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (self));
+  g_assert (MANUALS_IS_NAVIGATABLE (navigatable));
+
+  /* TODO: show the item in the panel */
+}
+
+void
+gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
+                                         ManualsNavigatable       *navigatable)
+{
+  const char *uri;
+
+  g_return_if_fail (GBP_IS_MANUALS_WORKSPACE_ADDIN (self));
+  g_return_if_fail (MANUALS_IS_NAVIGATABLE (navigatable));
+
+  if ((uri = manuals_navigatable_get_uri (navigatable)))
+    {
+      GbpManualsPage *page = gbp_manuals_workspace_addin_get_page (self);
+
+      gbp_manuals_page_navigate_to (page, navigatable);
+      panel_widget_raise (PANEL_WIDGET (page));
+      gtk_widget_grab_focus (GTK_WIDGET (page));
+    }
+  else
+    {
+      gbp_manuals_workspace_addin_reveal (self, navigatable);
+    }
 }

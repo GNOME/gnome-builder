@@ -1,0 +1,12 @@
+GbpManualsPathbar {
+  padding: 0;
+}
+
+GbpManualsPathbar pathbutton button {
+  padding: 0px 9px;
+  margin: 1px 3px;
+}
+
+GbpManualsPathbar pathbutton:not(.leaf) button > * {
+  opacity: 0.55;
+}

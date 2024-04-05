@@ -120,6 +120,7 @@ gbp_manuals_panel_search_view_activate_cb (GbpManualsPanel *self,
   gbp_manuals_page_navigate_to (page, navigatable);
 
   panel_widget_raise (PANEL_WIDGET (page));
+  gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
 static void

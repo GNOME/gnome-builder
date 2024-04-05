@@ -222,6 +222,7 @@ gbp_manuals_tree_addin_node_activated (IdeTreeAddin *addin,
       gbp_manuals_page_navigate_to (page, navigatable);
 
       panel_widget_raise (PANEL_WIDGET (page));
+      gtk_widget_grab_focus (GTK_WIDGET (page));
     }
 
   return !ide_tree_node_get_children_possible (node);

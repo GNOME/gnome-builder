@@ -28,10 +28,19 @@
 
 struct _GbpManualsPage
 {
-  IdeWebkitPage parent_instance;
+  IdeWebkitPage       parent_instance;
+  ManualsNavigatable *navigatable;
 };
 
 G_DEFINE_FINAL_TYPE (GbpManualsPage, gbp_manuals_page, IDE_TYPE_WEBKIT_PAGE)
+
+enum {
+  PROP_0,
+  PROP_NAVIGATABLE,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static const char style_sheet_css[] =
   "#main { box-shadow: none !important; }\n"
@@ -77,11 +86,50 @@ gbp_manuals_page_constructed (GObject *object)
 }
 
 static void
+gbp_manuals_page_dispose (GObject *object)
+{
+  GbpManualsPage *self = (GbpManualsPage *)object;
+
+  g_clear_object (&self->navigatable);
+
+  G_OBJECT_CLASS (gbp_manuals_page_parent_class)->dispose (object);
+}
+
+static void
+gbp_manuals_page_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GbpManualsPage *self = GBP_MANUALS_PAGE (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAVIGATABLE:
+      g_value_set_object (value, self->navigatable);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_manuals_page_class_init (GbpManualsPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gbp_manuals_page_constructed;
+  object_class->dispose = gbp_manuals_page_dispose;
+  object_class->get_property = gbp_manuals_page_get_property;
+
+  properties[PROP_NAVIGATABLE] =
+    g_param_spec_object ("navigatable", NULL, NULL,
+                         MANUALS_TYPE_NAVIGATABLE,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -107,8 +155,9 @@ gbp_manuals_page_navigate_to (GbpManualsPage     *self,
   g_return_if_fail (GBP_IS_MANUALS_PAGE (self));
   g_return_if_fail (MANUALS_IS_NAVIGATABLE (navigatable));
 
-  if (!(uri = manuals_navigatable_get_uri (navigatable)))
-    return;
+  if (g_set_object (&self->navigatable, navigatable))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NAVIGATABLE]);
 
-  ide_webkit_page_load_uri (IDE_WEBKIT_PAGE (self), uri);
+  if ((uri = manuals_navigatable_get_uri (navigatable)))
+    ide_webkit_page_load_uri (IDE_WEBKIT_PAGE (self), uri);
 }

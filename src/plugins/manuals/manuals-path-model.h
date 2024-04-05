@@ -1,4 +1,5 @@
-/* gbp-manuals-workspace-addin.h
+/*
+ * manuals-path-model.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -20,20 +21,18 @@
 
 #pragma once
 
-#include <libide-gui.h>
-
-#include "gbp-manuals-page.h"
+#include <gio/gio.h>
 
 #include "manuals-navigatable.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MANUALS_WORKSPACE_ADDIN (gbp_manuals_workspace_addin_get_type())
+#define MANUALS_TYPE_PATH_MODEL (manuals_path_model_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (ManualsPathModel, manuals_path_model, MANUALS, PATH_MODEL, GObject)
 
-GbpManualsPage *gbp_manuals_workspace_addin_get_page    (GbpManualsWorkspaceAddin *self);
-void            gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
-                                                         ManualsNavigatable       *navigatable);
+ManualsPathModel *manuals_path_model_new             (void);
+void              manuals_path_model_set_navigatable (ManualsPathModel   *self,
+                                                      ManualsNavigatable *navigatable);
 
 G_END_DECLS
