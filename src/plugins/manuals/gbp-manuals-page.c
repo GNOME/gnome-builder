@@ -24,7 +24,13 @@
 
 #include <webkit/webkit.h>
 
+#include "gbp-manuals-application-addin.h"
+#include "gbp-manuals-workspace-addin.h"
 #include "gbp-manuals-page.h"
+
+#include "manuals-sdk.h"
+#include "manuals-heading.h"
+#include "manuals-keyword.h"
 
 struct _GbpManualsPage
 {
@@ -51,6 +57,130 @@ static const char style_sheet_css[] =
   "  :root { --body-bg: #1e1e1e !important; }\n"
   "}\n"
   ;
+
+typedef struct _DecidePolicy
+{
+  GbpManualsPage           *self;
+  WebKitPolicyDecision     *decision;
+  WebKitPolicyDecisionType  decision_type;
+} DecidePolicy;
+
+static void
+decide_policy_free (DecidePolicy *state)
+{
+  g_clear_object (&state->self);
+  g_clear_object (&state->decision);
+  g_free (state);
+}
+
+static DexFuture *
+gbp_manuals_page_decide_policy_fiber (gpointer user_data)
+{
+  WebKitNavigationPolicyDecision *navigation_decision;
+  WebKitNavigationAction *navigation_action;
+  g_autoptr(GObject) resource = NULL;
+  g_auto(GValue) uri_value = G_VALUE_INIT;
+  IdeApplicationAddin *app_addin;
+  ManualsRepository *repository;
+  DecidePolicy *state = user_data;
+  IdeWorkspaceAddin *addin;
+  IdeWorkspace *workspace;
+  const char *uri;
+  gboolean open_new_tab = FALSE;
+  int button;
+  int modifiers;
+
+  g_assert (state != NULL);
+  g_assert (GBP_IS_MANUALS_PAGE (state->self));
+  g_assert (WEBKIT_IS_NAVIGATION_POLICY_DECISION (state->decision));
+
+  if (!(app_addin = ide_application_find_addin_by_module_name (IDE_APPLICATION_DEFAULT, "manuals")) ||
+      !(workspace = ide_widget_get_workspace (GTK_WIDGET (state->self))) ||
+      !(addin = ide_workspace_addin_find_by_module_name (workspace, "manuals")) ||
+      !(repository = dex_await_object (gbp_manuals_application_addin_load_repository (GBP_MANUALS_APPLICATION_ADDIN (app_addin)), NULL)))
+    goto ignore;
+
+  navigation_decision = WEBKIT_NAVIGATION_POLICY_DECISION (state->decision);
+  navigation_action = webkit_navigation_policy_decision_get_navigation_action (navigation_decision);
+  uri = webkit_uri_request_get_uri (webkit_navigation_action_get_request (navigation_action));
+
+  /* middle click or ctrl-click -> new tab */
+  button = webkit_navigation_action_get_mouse_button (navigation_action);
+  modifiers = webkit_navigation_action_get_modifiers (navigation_action);
+  open_new_tab = (button == 2 || (button == 1 && modifiers == GDK_CONTROL_MASK));
+
+  /* Pass-through API requested things */
+  if (button == 0 && modifiers == 0)
+    {
+      webkit_policy_decision_use (state->decision);
+      return dex_future_new_for_boolean (TRUE);
+    }
+
+  if (g_str_equal (uri, "about:blank"))
+    {
+      gbp_manuals_workspace_addin_add_page (GBP_MANUALS_WORKSPACE_ADDIN (addin));
+      goto ignore;
+    }
+
+  if (g_strcmp0 ("file", g_uri_peek_scheme (uri)) != 0)
+    {
+      g_autoptr(GtkUriLauncher) launcher = gtk_uri_launcher_new (uri);
+      gtk_uri_launcher_launch (launcher, GTK_WINDOW (workspace), NULL, NULL, NULL);
+      goto ignore;
+    }
+
+  if ((resource = dex_await_object (manuals_heading_find_by_uri (repository, uri), NULL)) ||
+      (resource = dex_await_object (manuals_keyword_find_by_uri (repository, uri), NULL)))
+    {
+      g_autoptr(ManualsNavigatable) navigatable = NULL;
+      GbpManualsPage *page = state->self;
+
+      if (open_new_tab)
+        page = gbp_manuals_workspace_addin_add_page (GBP_MANUALS_WORKSPACE_ADDIN (addin));
+
+      navigatable = manuals_navigatable_new_for_resource (resource);
+      gbp_manuals_page_navigate_to (page, navigatable);
+
+      goto ignore;
+    }
+
+  webkit_policy_decision_use (state->decision);
+
+  return dex_future_new_for_boolean (TRUE);
+
+ignore:
+  webkit_policy_decision_ignore (state->decision);
+
+  return dex_future_new_for_boolean (TRUE);
+}
+
+static gboolean
+manuals_tab_web_view_decide_policy_cb (GbpManualsPage           *self,
+                                       WebKitPolicyDecision     *decision,
+                                       WebKitPolicyDecisionType  decision_type,
+                                       WebKitWebView            *web_view)
+{
+  DecidePolicy *state;
+
+  g_assert (GBP_IS_MANUALS_PAGE (self));
+  g_assert (WEBKIT_IS_POLICY_DECISION (decision));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+    return GDK_EVENT_PROPAGATE;
+
+  state = g_new0 (DecidePolicy, 1);
+  state->self = g_object_ref (self);
+  state->decision = g_object_ref (decision);
+  state->decision_type = decision_type;
+
+  dex_future_disown (dex_scheduler_spawn (NULL, 0,
+                                          gbp_manuals_page_decide_policy_fiber,
+                                          state,
+                                          (GDestroyNotify)decide_policy_free));
+
+  return GDK_EVENT_STOP;
+}
 
 static void
 gbp_manuals_page_constructed (GObject *object)
@@ -83,6 +213,12 @@ gbp_manuals_page_constructed (GObject *object)
   session = webkit_web_view_get_network_session (web_view);
   manager = webkit_network_session_get_website_data_manager (session);
   webkit_website_data_manager_set_favicons_enabled (manager, TRUE);
+
+  g_signal_connect_object (web_view,
+                           "decide-policy",
+                           G_CALLBACK (manuals_tab_web_view_decide_policy_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
