@@ -76,7 +76,8 @@ gbp_flatpak_is_ignored (const gchar *name)
          strstr (name, ".Extension") != NULL ||
          strstr (name, ".Gtk3theme") != NULL ||
          strstr (name, ".KStyle") != NULL ||
-         strstr (name, ".PlatformTheme") != NULL;
+         strstr (name, ".PlatformTheme") != NULL ||
+         strstr (name, ".openh264") != NULL;
 }
 
 static gboolean
