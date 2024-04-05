@@ -373,8 +373,6 @@ if libportal_dep.found()
   config_h.set10('ENABLE_LIBPORTAL', true)
 endif
 
-configure_file(output: 'config.h', configuration: config_h)
-
 gnome = import('gnome')
 i18n = import('i18n')
 pkgconfig = import('pkgconfig')
@@ -386,6 +384,8 @@ subdir('data')
 subdir('src')
 subdir('po')
 subdir('doc')
+
+configure_file(output: 'config.h', configuration: config_h)
 
 gnome.post_install(
   glib_compile_schemas: true,
