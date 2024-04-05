@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, GBP, MANUALS_WORKSPACE_ADDIN, GObject)
 
 GbpManualsPage *gbp_manuals_workspace_addin_get_page    (GbpManualsWorkspaceAddin *self);
+GbpManualsPage *gbp_manuals_workspace_addin_add_page    (GbpManualsWorkspaceAddin *self);
 void            gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
                                                          ManualsNavigatable       *navigatable);
 

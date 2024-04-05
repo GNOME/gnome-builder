@@ -225,3 +225,22 @@ gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
       gbp_manuals_workspace_addin_reveal (self, navigatable);
     }
 }
+
+GbpManualsPage *
+gbp_manuals_workspace_addin_add_page (GbpManualsWorkspaceAddin *self)
+{
+  g_autoptr(PanelPosition) position = NULL;
+  GbpManualsPage *page;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (GBP_IS_MANUALS_WORKSPACE_ADDIN (self), NULL);
+
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_CENTER);
+
+  page = gbp_manuals_page_new ();
+  ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+  panel_widget_raise (PANEL_WIDGET (page));
+
+  return page;
+}
