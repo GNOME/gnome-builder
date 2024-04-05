@@ -882,3 +882,11 @@ gbp_flatpak_runtime_get_refs (GbpFlatpakRuntime *self)
 
   return (char **)g_ptr_array_free (ar, FALSE);
 }
+
+const char *
+gbp_flatpak_runtime_get_deploy_dir (GbpFlatpakRuntime *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
+
+  return self->deploy_dir;
+}

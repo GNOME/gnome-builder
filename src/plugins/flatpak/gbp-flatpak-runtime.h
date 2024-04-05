@@ -28,19 +28,20 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
-GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (const char        *name,
-                                                       const char        *arch,
-                                                       const char        *branch,
-                                                       const char        *sdk_name,
-                                                       const char        *sdk_branch,
-                                                       const char        *deploy_dir,
-                                                       const char        *metadata,
-                                                       gboolean           is_extension);
-IdeTriplet          *gbp_flatpak_runtime_get_triplet  (GbpFlatpakRuntime *self);
-const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime *self);
-const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self);
-const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime *self);
-gchar               *gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self);
-char               **gbp_flatpak_runtime_get_refs     (GbpFlatpakRuntime *self);
+GbpFlatpakRuntime   *gbp_flatpak_runtime_new            (const char        *name,
+                                                         const char        *arch,
+                                                         const char        *branch,
+                                                         const char        *sdk_name,
+                                                         const char        *sdk_branch,
+                                                         const char        *deploy_dir,
+                                                         const char        *metadata,
+                                                         gboolean           is_extension);
+IdeTriplet          *gbp_flatpak_runtime_get_triplet    (GbpFlatpakRuntime *self);
+const gchar         *gbp_flatpak_runtime_get_branch     (GbpFlatpakRuntime *self);
+const gchar         *gbp_flatpak_runtime_get_platform   (GbpFlatpakRuntime *self);
+const gchar         *gbp_flatpak_runtime_get_sdk        (GbpFlatpakRuntime *self);
+gchar               *gbp_flatpak_runtime_get_sdk_name   (GbpFlatpakRuntime *self);
+char               **gbp_flatpak_runtime_get_refs       (GbpFlatpakRuntime *self);
+const char          *gbp_flatpak_runtime_get_deploy_dir (GbpFlatpakRuntime *self);
 
 G_END_DECLS
