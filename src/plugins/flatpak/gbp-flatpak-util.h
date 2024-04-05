@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 const char *gbp_flatpak_get_a11y_bus     (const char       **out_unix_path,
                                           const char       **out_address_suffix);
 const char *gbp_flatpak_get_config_dir   (void);
-const char *gbp_flatpak_get_default_arch (IdeObject         *object);
+const char *gbp_flatpak_get_default_arch (void);
 gboolean    gbp_flatpak_is_ignored       (const gchar       *name);
 gchar      *gbp_flatpak_get_repo_dir     (IdeContext        *context);
 gchar      *gbp_flatpak_get_staging_dir  (IdePipeline       *pipeline);

@@ -260,7 +260,7 @@ validate_properties (GbpFlatpakManifest  *self,
     }
 
   name = self->runtime;
-  arch = gbp_flatpak_get_default_arch (IDE_OBJECT (self));
+  arch = gbp_flatpak_get_default_arch ();
   branch = "master";
   if (self->runtime_version != NULL)
     branch = self->runtime_version;
@@ -1400,7 +1400,7 @@ gbp_flatpak_manifest_resolve_extensions (GbpFlatpakManifest *self,
 
   sdk = g_strdup_printf ("%s/%s/%s",
                          self->sdk,
-                         gbp_flatpak_get_default_arch (IDE_OBJECT (self)),
+                         gbp_flatpak_get_default_arch (),
                          self->runtime_version);
 
   all = g_ptr_array_new_with_free_func (dex_unref);
