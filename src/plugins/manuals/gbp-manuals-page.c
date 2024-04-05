@@ -97,3 +97,18 @@ gbp_manuals_page_new (void)
 {
   return g_object_new (GBP_TYPE_MANUALS_PAGE, NULL);
 }
+
+void
+gbp_manuals_page_navigate_to (GbpManualsPage     *self,
+                              ManualsNavigatable *navigatable)
+{
+  const char *uri;
+
+  g_return_if_fail (GBP_IS_MANUALS_PAGE (self));
+  g_return_if_fail (MANUALS_IS_NAVIGATABLE (navigatable));
+
+  if (!(uri = manuals_navigatable_get_uri (navigatable)))
+    return;
+
+  ide_webkit_page_load_uri (IDE_WEBKIT_PAGE (self), uri);
+}

@@ -22,12 +22,16 @@
 
 #include <libide-webkit.h>
 
+#include "manuals-navigatable.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MANUALS_PAGE (gbp_manuals_page_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpManualsPage, gbp_manuals_page, GBP, MANUALS_PAGE, IdeWebkitPage)
 
-GbpManualsPage *gbp_manuals_page_new (void);
+GbpManualsPage *gbp_manuals_page_new         (void);
+void            gbp_manuals_page_navigate_to (GbpManualsPage     *self,
+                                              ManualsNavigatable *navigatable);
 
 G_END_DECLS

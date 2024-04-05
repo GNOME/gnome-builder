@@ -97,7 +97,9 @@ gbp_manuals_panel_search_view_activate_cb (GbpManualsPanel *self,
   g_autoptr(ManualsSearchResult) result = NULL;
   ManualsNavigatable *navigatable;
   GtkSelectionModel *model;
-  const char *uri;
+  IdeWorkspaceAddin *workspace_addin;
+  IdeWorkspace *workspace;
+  GbpManualsPage *page;
 
   g_assert (GBP_IS_MANUALS_PANEL (self));
   g_assert (GTK_IS_LIST_VIEW (list_view));
@@ -111,20 +113,13 @@ gbp_manuals_panel_search_view_activate_cb (GbpManualsPanel *self,
 
   g_assert (MANUALS_IS_NAVIGATABLE (navigatable));
 
-  if ((uri = manuals_navigatable_get_uri (navigatable)))
-    {
-      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-      IdeWorkspaceAddin *workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "manuals");
-      GbpManualsPage *page;
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "manuals");
+  page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
 
-      g_assert (IDE_IS_WORKSPACE (workspace));
-      g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (workspace_addin));
+  gbp_manuals_page_navigate_to (page, navigatable);
 
-      page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
-
-      ide_webkit_page_load_uri (IDE_WEBKIT_PAGE (page), uri);
-      panel_widget_raise (PANEL_WIDGET (page));
-    }
+  panel_widget_raise (PANEL_WIDGET (page));
 }
 
 static void

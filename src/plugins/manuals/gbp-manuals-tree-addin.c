@@ -206,35 +206,21 @@ gbp_manuals_tree_addin_node_activated (IdeTreeAddin *addin,
                                        IdeTree      *tree,
                                        IdeTreeNode  *node)
 {
-  const char *uri = NULL;
 
   g_assert (GBP_IS_MANUALS_TREE_ADDIN (addin));
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_NODE (node));
 
-  if (ide_tree_node_holds (node, MANUALS_TYPE_BOOK))
-    {
-      ManualsBook *book = ide_tree_node_get_item (node);
-      uri = manuals_book_get_default_uri (book);
-    }
-  else if (ide_tree_node_holds (node, MANUALS_TYPE_HEADING))
-    {
-      ManualsHeading *heading = ide_tree_node_get_item (node);
-      uri = manuals_heading_get_uri (heading);
-    }
-
-  if (uri != NULL)
+  if (ide_tree_node_holds (node, MANUALS_TYPE_BOOK) ||
+      ide_tree_node_holds (node, MANUALS_TYPE_HEADING))
     {
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (tree));
       IdeWorkspaceAddin *workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "manuals");
-      GbpManualsPage *page;
+      GbpManualsPage *page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
+      g_autoptr(ManualsNavigatable) navigatable = manuals_navigatable_new_for_resource (ide_tree_node_get_item (node));
 
-      g_assert (IDE_IS_WORKSPACE (workspace));
-      g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (workspace_addin));
+      gbp_manuals_page_navigate_to (page, navigatable);
 
-      page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
-
-      ide_webkit_page_load_uri (IDE_WEBKIT_PAGE (page), uri);
       panel_widget_raise (PANEL_WIDGET (page));
     }
 
