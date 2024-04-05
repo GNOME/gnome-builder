@@ -21,14 +21,14 @@
 
 #include "config.h"
 
-#include <flatpak.h>
-
 #include "manuals-book.h"
 #include "manuals-devhelp-importer.h"
 #include "manuals-flatpak.h"
 #include "manuals-flatpak-importer.h"
 #include "manuals-gom.h"
 #include "manuals-sdk.h"
+
+#include "../flatpak/gbp-flatpak-util.h"
 
 struct _ManualsFlatpakImporter
 {
@@ -60,33 +60,30 @@ import_installations_free (gpointer data)
 }
 
 static char *
-rewrite_uri (FlatpakInstalledRef *ref,
-             char                *uri)
+rewrite_uri (ManualsFlatpakRuntime *runtime,
+             char                  *uri)
 {
-  g_autofree char *freeme = uri;
-  const char *commit;
-  GString *str;
+  const char *beginptr;
 
-  g_assert (FLATPAK_IS_INSTALLED_REF (ref));
+  g_assert (MANUALS_IS_FLATPAK_RUNTIME (runtime));
   g_assert (uri != NULL);
 
-  commit = flatpak_ref_get_commit (FLATPAK_REF (ref));
-  str = g_string_new (uri);
+  if (!g_str_has_suffix (uri, "/active") && (beginptr = strrchr (uri, '/')))
+    {
+      GString *str = g_string_new (uri);
 
-  /* We want to give a path which contains "active" instead of the commit
-   * ID if we are able to. Otherwise we'd have to keep re-importing the
-   * documents each time the SDK is updated and the old files would be
-   * missing. This could result in duplicated SDK entries.
-   */
-  if (strstr (str->str, commit) != NULL)
-    g_string_replace (str, commit, "active", 0);
+      g_string_truncate (str, beginptr - uri);
+      g_string_append (str, "/active");
 
-  return g_string_free (str, FALSE);
+      return g_string_free (str, FALSE);
+    }
+
+  return uri;
 }
 
 static DexFuture *
-find_or_create_sdk_for_ref (ManualsRepository   *repository,
-                            FlatpakInstalledRef *ref)
+find_or_create_sdk_for_runtime (ManualsRepository     *repository,
+                                ManualsFlatpakRuntime *runtime)
 {
   g_autoptr(ManualsSdk) sdk = NULL;
   g_autoptr(GError) error = NULL;
@@ -95,11 +92,11 @@ find_or_create_sdk_for_ref (ManualsRepository   *repository,
   const char *deploy_dir;
 
   g_assert (MANUALS_IS_REPOSITORY (repository));
-  g_assert (FLATPAK_IS_INSTALLED_REF (ref));
+  g_assert (MANUALS_IS_FLATPAK_RUNTIME (runtime));
 
-  deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
+  deploy_dir = manuals_flatpak_runtime_get_deploy_dir (runtime);
   file = g_file_new_for_path (deploy_dir);
-  uri = rewrite_uri (ref, g_file_get_uri (file));
+  uri = rewrite_uri (runtime, g_file_get_uri (file));
 
   sdk = dex_await_object (manuals_repository_find_sdk (repository, uri), NULL);
 
@@ -110,8 +107,8 @@ find_or_create_sdk_for_ref (ManualsRepository   *repository,
                       "repository", repository,
                       "kind", "flatpak",
                       "uri", uri,
-                      "name", flatpak_ref_get_name (FLATPAK_REF (ref)),
-                      "version", flatpak_ref_get_branch (FLATPAK_REF (ref)),
+                      "name", manuals_flatpak_runtime_get_name (runtime),
+                      "version", manuals_flatpak_runtime_get_branch (runtime),
                       NULL);
 
   if (dex_await (gom_resource_save (GOM_RESOURCE (sdk)), &error))
@@ -171,79 +168,74 @@ manuals_flatpak_importer_import_fiber (gpointer user_data)
   ImportInstallations *import = user_data;
   g_autoptr(GPtrArray) installations = NULL;
   g_autoptr(GPtrArray) futures = NULL;
+  g_autoptr(GListModel) runtimes = NULL;
   g_autoptr(GError) error = NULL;
   const char *default_arch;
+  guint n_runtimes;
 
   g_assert (import != NULL);
   g_assert (MANUALS_IS_REPOSITORY (import->repository));
   g_assert (MANUALS_IS_PROGRESS (import->progress));
 
-  default_arch = flatpak_get_default_arch ();
+  default_arch = gbp_flatpak_get_default_arch ();
 
-  if (!(installations = dex_await_boxed (load_installations (), &error)))
+  if (!(runtimes = dex_await_object (manuals_flatpak_list_runtimes (), &error)))
     return dex_future_new_for_error (g_steal_pointer (&error));
 
+  n_runtimes = g_list_model_get_n_items (runtimes);
   futures = g_ptr_array_new_with_free_func (dex_unref);
 
-  for (guint i = 0; i < installations->len; i++)
+  for (guint i = 0; i < n_runtimes; i++)
     {
-      FlatpakInstallation *installation = g_ptr_array_index (installations, i);
-      g_autoptr(GPtrArray) refs = NULL;
+      g_autoptr(ManualsFlatpakRuntime) runtime = g_list_model_get_item (runtimes, i);
+      const char *name = manuals_flatpak_runtime_get_name (runtime);
+      const char *arch = manuals_flatpak_runtime_get_arch (runtime);
+      const char *deploy_dir = manuals_flatpak_runtime_get_deploy_dir (runtime);
+      g_autoptr(ManualsDevhelpImporter) devhelp = NULL;
+      g_autoptr(ManualsSdk) sdk = NULL;
+      g_autoptr(GFile) file = g_file_new_for_path (deploy_dir);
+      g_autofree char *uri = rewrite_uri (runtime, g_file_get_uri (file));
+      g_autoptr(GFile) active_file = g_file_new_for_uri (uri);
+      g_autofree char *doc_dir = NULL;
+      g_autofree char *gtk_doc_dir = NULL;
+      gint64 sdk_id;
 
-      if (!(refs = dex_await_boxed (list_installed_refs_by_kind (installation,
-                                                                 FLATPAK_REF_KIND_RUNTIME),
-                                    NULL)))
+      if (g_strcmp0 (arch, default_arch) != 0)
         continue;
 
-      for (guint j = 0; j < refs->len; j++)
+      /* Only try to import runtimes that end in .Docs such as
+       * org.gnome.Sdk.Docs until this sort of convention changes
+       * in various runtime/sdks.
+       */
+      if (!g_str_has_suffix (name, ".Docs"))
+        continue;
+
+      devhelp = manuals_devhelp_importer_new ();
+
+      for (guint k = 0; suffixes[k]; k++)
         {
-          g_autoptr(ManualsDevhelpImporter) devhelp = manuals_devhelp_importer_new ();
-          FlatpakInstalledRef *ref = g_ptr_array_index (refs, j);
-          const char *arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
-          const char *name = flatpak_ref_get_name (FLATPAK_REF (ref));
-          const char *deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
-          g_autoptr(ManualsSdk) sdk = NULL;
-          g_autoptr(GFile) file = g_file_new_for_path (deploy_dir);
-          g_autofree char *uri = rewrite_uri (ref, g_file_get_uri (file));
-          g_autoptr(GFile) active_file = g_file_new_for_uri (uri);
-          g_autofree char *doc_dir = NULL;
-          g_autofree char *gtk_doc_dir = NULL;
-          gint64 sdk_id;
+          g_autoptr(GFile) dir = g_file_get_child (active_file, suffixes[k]);
 
-          if (g_strcmp0 (arch, default_arch) != 0)
-            continue;
-
-          /* Only try to import runtimes that end in .Docs such as
-           * org.gnome.Sdk.Docs.
-           */
-          if (!g_str_has_suffix (name, ".Docs"))
-            continue;
-
-          for (guint k = 0; suffixes[k]; k++)
-            {
-              g_autoptr(GFile) dir = g_file_get_child (active_file, suffixes[k]);
-
-              if (g_file_query_file_type (dir, G_FILE_QUERY_INFO_NONE, NULL) == G_FILE_TYPE_DIRECTORY)
-                manuals_devhelp_importer_add_directory (devhelp, g_file_peek_path (dir), 0);
-            }
-
-          if (manuals_devhelp_importer_get_size (devhelp) == 0)
-            continue;
-
-          if (!(sdk = dex_await_object (find_or_create_sdk_for_ref (import->repository, ref), NULL)))
-            continue;
-
-          sdk_id = manuals_sdk_get_id (sdk);
-          manuals_devhelp_importer_set_sdk_id (devhelp, sdk_id);
-
-          g_ptr_array_add (futures,
-                           dex_future_finally (manuals_importer_import (MANUALS_IMPORTER (devhelp),
-                                                                        import->repository,
-                                                                        import->progress),
-                                               delete_sdk_if_unused,
-                                               g_object_ref (sdk),
-                                               g_object_unref));
+          if (g_file_query_file_type (dir, G_FILE_QUERY_INFO_NONE, NULL) == G_FILE_TYPE_DIRECTORY)
+            manuals_devhelp_importer_add_directory (devhelp, g_file_peek_path (dir), 0);
         }
+
+      if (manuals_devhelp_importer_get_size (devhelp) == 0)
+        continue;
+
+      if (!(sdk = dex_await_object (find_or_create_sdk_for_runtime (import->repository, runtime), NULL)))
+        continue;
+
+      sdk_id = manuals_sdk_get_id (sdk);
+      manuals_devhelp_importer_set_sdk_id (devhelp, sdk_id);
+
+      g_ptr_array_add (futures,
+                       dex_future_finally (manuals_importer_import (MANUALS_IMPORTER (devhelp),
+                                                                    import->repository,
+                                                                    import->progress),
+                                           delete_sdk_if_unused,
+                                           g_object_ref (sdk),
+                                           g_object_unref));
     }
 
   if (futures->len > 0)

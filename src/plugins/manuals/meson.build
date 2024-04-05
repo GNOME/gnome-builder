@@ -8,7 +8,6 @@ plugins_sources += files([
   'gbp-manuals-workspace-addin.c',
   'manuals-book.c',
   'manuals-devhelp-importer.c',
-  # 'manuals-flatpak-importer.c',
   'manuals-gio.c',
   'manuals-heading.c',
   'manuals-importer.c',
@@ -28,6 +27,13 @@ plugins_sources += files([
   'manuals-system-importer.c',
   'manuals-utils.c',
 ])
+
+if get_option('plugin_flatpak')
+  plugins_sources += files([
+    'manuals-flatpak-runtime.c',
+    'manuals-flatpak-importer.c',
+  ])
+endif
 
 plugin_manuals_resources = gnome.compile_resources(
   'manuals-resources',
