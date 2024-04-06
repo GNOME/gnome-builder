@@ -23,6 +23,7 @@
 
 #include <libide-gui.h>
 
+#include "manuals-navigatable.h"
 #include "manuals-repository.h"
 
 G_BEGIN_DECLS
@@ -32,7 +33,9 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpManualsPanel, gbp_manuals_panel, GBP, MANUALS_PANEL, IdePane)
 
 GbpManualsPanel *gbp_manuals_panel_new            (void);
-void             gbp_manuals_panel_set_repository (GbpManualsPanel   *self,
-                                                   ManualsRepository *repository);
+void             gbp_manuals_panel_set_repository (GbpManualsPanel    *self,
+                                                   ManualsRepository  *repository);
+void             gbp_manuals_panel_reveal         (GbpManualsPanel    *self,
+                                                   ManualsNavigatable *navigatable);
 
 G_END_DECLS

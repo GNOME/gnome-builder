@@ -193,16 +193,6 @@ gbp_manuals_workspace_addin_get_page (GbpManualsWorkspaceAddin *self)
   return page;
 }
 
-static void
-gbp_manuals_workspace_addin_reveal (GbpManualsWorkspaceAddin *self,
-                                    ManualsNavigatable       *navigatable)
-{
-  g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (self));
-  g_assert (MANUALS_IS_NAVIGATABLE (navigatable));
-
-  /* TODO: show the item in the panel */
-}
-
 void
 gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
                                          ManualsNavigatable       *navigatable)
@@ -222,7 +212,7 @@ gbp_manuals_workspace_addin_navigate_to (GbpManualsWorkspaceAddin *self,
     }
   else
     {
-      gbp_manuals_workspace_addin_reveal (self, navigatable);
+      gbp_manuals_panel_reveal (self->panel, navigatable);
     }
 }
 

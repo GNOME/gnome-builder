@@ -34,14 +34,15 @@
 
 struct _GbpManualsPanel
 {
-  IdePane            parent_instance;
+  IdePane             parent_instance;
 
-  ManualsRepository *repository;
-  DexFuture         *query;
+  ManualsRepository  *repository;
+  DexFuture          *query;
+  ManualsNavigatable *reveal;
 
-  IdeTree           *tree;
-  GtkListView       *search_view;
-  GtkStack          *stack;
+  IdeTree            *tree;
+  GtkListView        *search_view;
+  GtkStack           *stack;
 };
 
 enum {
@@ -132,6 +133,7 @@ gbp_manuals_panel_dispose (GObject *object)
 
   dex_clear (&self->query);
   g_clear_object (&self->repository);
+  g_clear_object (&self->reveal);
 
   G_OBJECT_CLASS (gbp_manuals_panel_parent_class)->dispose (object);
 }
@@ -230,4 +232,131 @@ GbpManualsPanel *
 gbp_manuals_panel_new (void)
 {
   return g_object_new (GBP_TYPE_MANUALS_PANEL, NULL);
+}
+
+static void
+expand_node_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  g_autoptr(DexPromise) promise = user_data;
+  g_autoptr(GError) error = NULL;
+
+  if (!ide_tree_expand_node_finish (IDE_TREE (object), result, &error))
+    dex_promise_reject (promise, g_steal_pointer (&error));
+  else
+    dex_promise_resolve_boolean (promise, TRUE);
+}
+
+static DexFuture *
+expand_node (IdeTree     *tree,
+             IdeTreeNode *node)
+{
+  DexPromise *promise = dex_promise_new_cancellable ();
+  ide_tree_expand_node_async (tree,
+                              node,
+                              dex_promise_get_cancellable (promise),
+                              expand_node_cb,
+                              dex_ref (promise));
+  return DEX_FUTURE (promise);
+}
+
+static gboolean
+node_matches (IdeTreeNode        *node,
+              ManualsNavigatable *navigatable)
+{
+  gpointer node_item = ide_tree_node_get_item (node);
+  gpointer nav_item = manuals_navigatable_get_item (navigatable);
+  gint64 node_id = 0;
+  gint64 nav_id = 0;
+
+  if (node_item == nav_item)
+    return TRUE;
+
+  if (G_OBJECT_TYPE (node_item) != G_OBJECT_TYPE (nav_item))
+    return FALSE;
+
+  g_object_get (node_item, "id", &node_id, NULL);
+  g_object_get (nav_item, "id", &nav_id, NULL);
+
+  return node_id == nav_id;
+}
+
+static DexFuture *
+gbp_manuals_panel_reveal_fiber (gpointer user_data)
+{
+  GbpManualsPanel *self = user_data;
+  g_autoptr(ManualsNavigatable) reveal = NULL;
+  g_autoptr(GPtrArray) chain = NULL;
+  ManualsNavigatable *parent;
+  IdeTreeNode *node;
+
+  g_assert (GBP_IS_MANUALS_PANEL (self));
+
+  if (!(reveal = g_steal_pointer (&self->reveal)))
+    goto completed;
+
+  chain = g_ptr_array_new_with_free_func (g_object_unref);
+  parent = g_object_ref (reveal);
+
+  while (parent != NULL)
+    {
+      g_ptr_array_insert (chain, 0, parent);
+      parent = dex_await_object (manuals_navigatable_find_parent (parent), NULL);
+    }
+
+  /* repository is always index 0 */
+  g_ptr_array_remove_index (chain, 0);
+
+  node = ide_tree_get_root (self->tree);
+
+  while (node != NULL && chain->len > 0)
+    {
+      g_autoptr(ManualsNavigatable) navigatable = g_object_ref (g_ptr_array_index (chain, 0));
+      IdeTreeNode *child;
+      gboolean found = FALSE;
+
+      g_ptr_array_remove_index (chain, 0);
+
+      dex_await (expand_node (self->tree, node), NULL);
+
+      for (child = ide_tree_node_get_first_child (node);
+           child != NULL;
+           child = ide_tree_node_get_next_sibling (child))
+        {
+          if (node_matches (child, navigatable))
+            {
+              node = child;
+              found = TRUE;
+              break;
+            }
+        }
+
+      if (!found)
+        break;
+    }
+
+  if (node != NULL)
+    ide_tree_set_selected_node (self->tree, node);
+
+  gtk_stack_set_visible_child_name (self->stack, "tree");
+  panel_widget_raise (PANEL_WIDGET (self));
+
+completed:
+  return dex_future_new_for_boolean (TRUE);
+}
+
+void
+gbp_manuals_panel_reveal (GbpManualsPanel    *self,
+                          ManualsNavigatable *navigatable)
+{
+  g_return_if_fail (GBP_IS_MANUALS_PANEL (self));
+  g_return_if_fail (MANUALS_IS_NAVIGATABLE (navigatable));
+
+  g_set_object (&self->reveal, navigatable);
+
+  dex_future_disown (dex_scheduler_spawn (NULL, 0,
+                                          gbp_manuals_panel_reveal_fiber,
+                                          g_object_ref (self),
+                                          g_object_unref));
 }
