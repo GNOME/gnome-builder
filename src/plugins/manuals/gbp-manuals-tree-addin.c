@@ -216,8 +216,13 @@ gbp_manuals_tree_addin_node_activated (IdeTreeAddin *addin,
     {
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (tree));
       IdeWorkspaceAddin *workspace_addin = ide_workspace_addin_find_by_module_name (workspace, "manuals");
-      GbpManualsPage *page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
       g_autoptr(ManualsNavigatable) navigatable = manuals_navigatable_new_for_resource (ide_tree_node_get_item (node));
+      GbpManualsPage *page;
+
+      if (ide_application_control_is_pressed (NULL))
+        page = gbp_manuals_workspace_addin_add_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
+      else
+        page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
 
       gbp_manuals_page_navigate_to (page, navigatable);
 
