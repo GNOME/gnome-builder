@@ -172,8 +172,13 @@ GbpManualsPage *
 gbp_manuals_workspace_addin_get_page (GbpManualsWorkspaceAddin *self)
 {
   GbpManualsPage *page = NULL;
+  IdePage *mrp;
 
   g_return_val_if_fail (GBP_IS_MANUALS_WORKSPACE_ADDIN (self), NULL);
+
+  if ((mrp = ide_workspace_get_most_recent_page (self->workspace)) &&
+      GBP_IS_MANUALS_PAGE (mrp))
+    return GBP_MANUALS_PAGE (mrp);
 
   ide_workspace_foreach_page (self->workspace,
                               gbp_manuals_workspace_addin_get_page_cb,
