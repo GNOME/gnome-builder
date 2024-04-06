@@ -34,8 +34,9 @@
 
 struct _GbpManualsPage
 {
-  IdeWebkitPage       parent_instance;
-  ManualsNavigatable *navigatable;
+  IdeWebkitPage         parent_instance;
+  ManualsNavigatable   *navigatable;
+  WebKitUserStyleSheet *style_sheet;
 };
 
 G_DEFINE_FINAL_TYPE (GbpManualsPage, gbp_manuals_page, IDE_TYPE_WEBKIT_PAGE)
@@ -48,13 +49,13 @@ enum {
 
 static GParamSpec *properties[N_PROPS];
 
-static const char style_sheet_css[] =
+static const char style_sheet_css_template[] =
   "#main { box-shadow: none !important; }\n"
   ".devhelp-hidden { display: none; }\n"
   ".toc { background: transparent !important; }\n"
-  ":root { --body-bg: #ffffff !important; }\n"
+  ":root { --body-bg: @BODY_BG@ !important; }\n"
   "@media (prefers-color-scheme: dark) {\n"
-  "  :root { --body-bg: #1e1e1e !important; }\n"
+  "  :root { --body-bg: @BODY_BG@ !important; }\n"
   "}\n"
   ;
 
@@ -183,11 +184,54 @@ manuals_tab_web_view_decide_policy_cb (GbpManualsPage           *self,
 }
 
 static void
+gbp_manuals_page_update_style_sheet (GbpManualsPage *self)
+{
+  g_autoptr(WebKitUserStyleSheet) old_style_sheet = NULL;
+  g_autoptr(GString) style_sheet_css = NULL;
+  g_autofree char *bg_color_str = NULL;
+  GtkSourceStyleSchemeManager *style_scheme_manager;
+  WebKitUserContentManager *ucm;
+  GtkSourceStyleScheme *style_scheme;
+  GtkSourceStyle *style;
+  WebKitWebView *web_view;
+  const char *style_scheme_name;
+
+  g_assert (GBP_IS_MANUALS_PAGE (self));
+
+  style_scheme_name = ide_application_get_style_scheme (IDE_APPLICATION_DEFAULT);
+  style_scheme_manager = gtk_source_style_scheme_manager_get_default ();
+  style_scheme = gtk_source_style_scheme_manager_get_scheme (style_scheme_manager, style_scheme_name);
+
+  g_assert (style_scheme != NULL);
+
+  /* Unlikely, but bail if there is no text style */
+  if (!(style = gtk_source_style_scheme_get_style (style_scheme, "text")))
+    return;
+
+  g_object_get (style,
+                "background", &bg_color_str,
+                NULL);
+
+  web_view = WEBKIT_WEB_VIEW (ide_webkit_page_get_view (IDE_WEBKIT_PAGE (self)));
+  ucm = webkit_web_view_get_user_content_manager (web_view);
+
+  if ((old_style_sheet = g_steal_pointer (&self->style_sheet)))
+    webkit_user_content_manager_remove_style_sheet (ucm, old_style_sheet);
+
+  style_sheet_css = g_string_new (style_sheet_css_template);
+  g_string_replace (style_sheet_css, "@BODY_BG@", bg_color_str, 0);
+
+  self->style_sheet = webkit_user_style_sheet_new (style_sheet_css->str,
+                                                   WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
+                                                   WEBKIT_USER_STYLE_LEVEL_USER,
+                                                   NULL, NULL);
+  webkit_user_content_manager_add_style_sheet (ucm, self->style_sheet);
+}
+
+static void
 gbp_manuals_page_constructed (GObject *object)
 {
   GbpManualsPage *self = (GbpManualsPage *)object;
-  g_autoptr(WebKitUserStyleSheet) style_sheet = NULL;
-  WebKitUserContentManager *ucm;
   WebKitWebsiteDataManager *manager;
   WebKitNetworkSession *session;
   WebKitSettings *webkit_settings;
@@ -203,13 +247,6 @@ gbp_manuals_page_constructed (GObject *object)
   webkit_settings_set_enable_html5_local_storage (webkit_settings, FALSE);
   webkit_settings_set_user_agent_with_application_details (webkit_settings, "GNOME-Builder", PACKAGE_VERSION);
 
-  style_sheet = webkit_user_style_sheet_new (style_sheet_css,
-                                             WEBKIT_USER_CONTENT_INJECT_ALL_FRAMES,
-                                             WEBKIT_USER_STYLE_LEVEL_USER,
-                                             NULL, NULL);
-  ucm = webkit_web_view_get_user_content_manager (web_view);
-  webkit_user_content_manager_add_style_sheet (ucm, style_sheet);
-
   session = webkit_web_view_get_network_session (web_view);
   manager = webkit_network_session_get_website_data_manager (session);
   webkit_website_data_manager_set_favicons_enabled (manager, TRUE);
@@ -219,6 +256,14 @@ gbp_manuals_page_constructed (GObject *object)
                            G_CALLBACK (manuals_tab_web_view_decide_policy_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (IDE_APPLICATION_DEFAULT,
+                           "notify::style-scheme",
+                           G_CALLBACK (gbp_manuals_page_update_style_sheet),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gbp_manuals_page_update_style_sheet (self);
 }
 
 static void
@@ -227,6 +272,7 @@ gbp_manuals_page_dispose (GObject *object)
   GbpManualsPage *self = (GbpManualsPage *)object;
 
   g_clear_object (&self->navigatable);
+  g_clear_pointer (&self->style_sheet, webkit_user_style_sheet_unref);
 
   G_OBJECT_CLASS (gbp_manuals_page_parent_class)->dispose (object);
 }
