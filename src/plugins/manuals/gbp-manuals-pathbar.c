@@ -51,6 +51,69 @@ G_DEFINE_FINAL_TYPE (GbpManualsPathbar, gbp_manuals_pathbar, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS];
 
+static void
+gbp_manuals_pathbar_scroll_to_end (GbpManualsPathbar *self)
+{
+  GtkAdjustment *hadj;
+  double page_size;
+  double upper;
+
+  g_assert (GBP_IS_MANUALS_PATHBAR (self));
+
+  if (self->inhibit_scroll)
+    return;
+
+  hadj = gtk_scrolled_window_get_hadjustment (self->scroller);
+  upper = gtk_adjustment_get_upper (hadj);
+  page_size = gtk_adjustment_get_page_size (hadj);
+
+  gtk_adjustment_set_value (hadj, upper - page_size);
+}
+
+static gboolean
+gbp_manuals_pathbar_scroll_to_end_idle (gpointer data)
+{
+  GbpManualsPathbar *self = data;
+
+  g_assert (GBP_IS_MANUALS_PATHBAR (self));
+
+  self->scroll_source = 0;
+  gbp_manuals_pathbar_scroll_to_end (self);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gbp_manuals_pathbar_queue_scroll (GbpManualsPathbar *self)
+{
+  g_assert (GBP_IS_MANUALS_PATHBAR (self));
+
+  g_clear_handle_id (&self->scroll_source, g_source_remove);
+  self->scroll_source = g_idle_add_full (G_PRIORITY_LOW,
+                                         gbp_manuals_pathbar_scroll_to_end_idle,
+                                         g_object_ref (self),
+                                         g_object_unref);
+}
+
+static void
+gbp_manuals_pathbar_notify_upper_cb (GbpManualsPathbar *self,
+                                     GParamSpec        *pspec,
+                                     GtkAdjustment     *hadj)
+{
+  GtkWidget *focus;
+  GtkRoot *root;
+
+  g_assert (GBP_IS_MANUALS_PATHBAR (self));
+  g_assert (GTK_IS_ADJUSTMENT (hadj));
+
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  focus = gtk_root_get_focus (root);
+
+  if (focus && gtk_widget_is_ancestor (focus, GTK_WIDGET (self)))
+    return;
+
+  gbp_manuals_pathbar_queue_scroll (self);
+}
+
 static GtkWidget *
 create_button (ManualsPathElement *element)
 {
@@ -206,6 +269,12 @@ gbp_manuals_pathbar_init (GbpManualsPathbar *self)
 
   if (n_items > 0)
     gbp_manuals_pathbar_path_items_changed_cb (self, 0, n_items, 0, self->model);
+
+  g_signal_connect_object (gtk_scrolled_window_get_hadjustment (self->scroller),
+                           "notify::upper",
+                           G_CALLBACK (gbp_manuals_pathbar_notify_upper_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 GbpManualsPathbar *
