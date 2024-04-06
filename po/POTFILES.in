@@ -24,6 +24,7 @@ src/libide/code/ide-buffer-manager.c
 src/libide/code/ide-language-defaults.c
 src/libide/code/ide-unsaved-files.c
 src/libide/core/ide-context.c
+src/libide/core/ide-global.c
 src/libide/core/ide-transfer.c
 src/libide/debugger/ide-debug-manager.c
 src/libide/editor/gtk/menus.ui
@@ -241,7 +242,6 @@ src/plugins/make/gbp-make-run-command-provider.c
 src/plugins/make-templates/gbp-make-template-provider.c
 src/plugins/manuals/gbp-manuals-application-addin.c
 src/plugins/manuals/gbp-manuals-page.c
-src/plugins/manuals/gbp-manuals-page.ui
 src/plugins/manuals/gbp-manuals-panel.ui
 src/plugins/manuals/manuals-book.c
 src/plugins/manuals/manuals-devhelp-importer.c
