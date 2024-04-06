@@ -50,7 +50,7 @@
  * Additionally, we can render faster because we can coalesce work.
  */
 
-#define RIGHT_MARGIN 2
+#define RIGHT_MARGIN 6
 #define CHANGE_WIDTH 2
 #define DELETE_WIDTH 5
 #define DELETE_HEIGHT 2
