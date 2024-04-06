@@ -24,7 +24,7 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include <libide-core.h>
 #include <libide-search.h>
@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_SEARCH_POPOVER (ide_search_popover_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
+G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, AdwDialog)
 
 IDE_AVAILABLE_IN_44
 gboolean ide_search_popover_get_show_preview (IdeSearchPopover *self);

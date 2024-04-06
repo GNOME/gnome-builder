@@ -34,7 +34,7 @@
 
 struct _IdeSearchPopover
 {
-  GtkPopover          parent_instance;
+  AdwDialog           parent_instance;
 
   GCancellable       *cancellable;
   IdeSearchEngine    *search_engine;
@@ -74,7 +74,7 @@ enum {
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER,
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSearchPopover, ide_search_popover, ADW_TYPE_DIALOG,
                                G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
@@ -120,7 +120,7 @@ ide_search_popover_activate (IdeSearchPopover *self,
   if (last_focus == NULL)
     last_focus = GTK_WIDGET (workspace);
 
-  gtk_popover_popdown (GTK_POPOVER (self));
+  adw_dialog_close (ADW_DIALOG (self));
 
   ide_search_result_activate (result, last_focus);
 
@@ -140,7 +140,7 @@ ide_search_popover_hide_action (GtkWidget  *widget,
   workspace = ide_widget_get_workspace (widget);
   page = ide_workspace_get_most_recent_page (workspace);
 
-  gtk_popover_popdown (GTK_POPOVER (widget));
+  adw_dialog_close (ADW_DIALOG (widget));
 
   if (page != NULL)
     gtk_widget_grab_focus (GTK_WIDGET (page));

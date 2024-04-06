@@ -446,9 +446,6 @@ ide_workspace_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
 
-  if (priv->search_popover != NULL)
-    ide_search_popover_present (priv->search_popover, width, height);
-
   if (priv->queued_window_save == 0 &&
       IDE_WORKSPACE_GET_CLASS (self)->save_size != NULL)
     priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
@@ -591,7 +588,7 @@ ide_workspace_dispose (GObject *object)
 
   g_assert (IDE_IS_WORKSPACE (self));
 
-  g_clear_pointer ((GtkWidget **)&priv->search_popover, gtk_widget_unparent);
+  g_clear_object (&priv->search_popover);
 
   g_clear_weak_pointer (&priv->current_page_ptr);
 
@@ -1416,8 +1413,7 @@ _ide_workspace_begin_global_search (IdeWorkspace *self)
       IdeWorkbench *workbench = ide_workspace_get_workbench (self);
       IdeSearchEngine *search_engine = ide_workbench_get_search_engine (workbench);
 
-      priv->search_popover = IDE_SEARCH_POPOVER (ide_search_popover_new (search_engine));
-      gtk_widget_set_parent (GTK_WIDGET (priv->search_popover), GTK_WIDGET (self));
+      priv->search_popover = g_object_ref_sink (IDE_SEARCH_POPOVER (ide_search_popover_new (search_engine)));
 
       /* Popovers don't appear (as of GTK 4.7) to capture/bubble from the GtkRoot
        * when running controllers. So we need to manually attach them for the popovers
@@ -1426,8 +1422,7 @@ _ide_workspace_begin_global_search (IdeWorkspace *self)
       ide_workspace_attach_shortcuts (self, GTK_WIDGET (priv->search_popover));
     }
 
-  if (!gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
-    gtk_popover_popup (GTK_POPOVER (priv->search_popover));
+  adw_dialog_present (ADW_DIALOG (priv->search_popover), GTK_WIDGET (self));
 }
 
 void
