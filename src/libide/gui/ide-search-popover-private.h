@@ -24,10 +24,7 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *ide_search_popover_new     (IdeSearchEngine  *search_engine);
-void       ide_search_popover_present (IdeSearchPopover *self,
-                                       int               parent_width,
-                                       int               parent_height);
+GtkWidget *ide_search_popover_new (IdeSearchEngine *search_engine);
 
 
 G_END_DECLS

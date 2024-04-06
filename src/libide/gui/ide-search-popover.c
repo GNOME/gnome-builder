@@ -737,23 +737,6 @@ ide_search_popover_new (IdeSearchEngine *search_engine)
                        NULL);
 }
 
-void
-ide_search_popover_present (IdeSearchPopover *self,
-                            int               parent_width,
-                            int               parent_height)
-{
-  GtkRequisition left, right;
-
-  g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (self->left), &left, NULL);
-  gtk_widget_get_preferred_size (GTK_WIDGET (self->preview_revealer), &right, NULL);
-
-  gtk_popover_set_offset (GTK_POPOVER (self), -(left.width/2) + (right.width/2), 0);
-  gtk_popover_set_pointing_to (GTK_POPOVER (self), &(GdkRectangle) { parent_width/2, 100, 1, 1 });
-  gtk_popover_present (GTK_POPOVER (self));
-}
-
 gboolean
 ide_search_popover_get_show_preview (IdeSearchPopover *self)
 {
