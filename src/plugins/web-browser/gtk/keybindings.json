@@ -2,3 +2,4 @@
 { "trigger" : "<Control><Shift>r", "action" : "workspace.web-browser.page.reload", "args" : "true", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
 { "trigger" : "<Control>r", "action" : "workspace.web-browser.page.reload", "args" : "false", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
 { "trigger" : "<Control>l", "action" : "workspace.web-browser.page.location.focus", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
+{ "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
