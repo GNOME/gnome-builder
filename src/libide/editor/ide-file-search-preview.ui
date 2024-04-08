@@ -15,6 +15,7 @@
             <property name="editable">false</property>
             <property name="cursor-visible">false</property>
             <property name="highlight-current-line">true</property>
+            <property name="show-line-numbers">true</property>
           </object>
         </child>
       </object>
