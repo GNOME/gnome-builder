@@ -64,19 +64,20 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_file_search_preview_apply_scroll (IdeFileSearchPreview *self)
 {
+  GtkTextIter iter;
+
   g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
 
   if (self->scroll_to_line >= 0)
-    {
-      GtkTextIter iter;
+    gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self->buffer),
+                                             &iter,
+                                             self->scroll_to_line,
+                                             MAX (0, self->scroll_to_line_offset));
+  else
+    gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), &iter, 0);
 
-      gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self->buffer),
-                                               &iter,
-                                               self->scroll_to_line,
-                                               MAX (0, self->scroll_to_line_offset));
-      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
-      ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self->view), &iter, .25, TRUE, 1.0, 0.5);
-    }
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
+  ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self->view), &iter, .25, TRUE, 1.0, 0.5);
 }
 
 static void
