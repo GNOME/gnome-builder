@@ -43,6 +43,7 @@ struct _IdeSearchPopover
   GtkListView        *list_view;
   AdwBin             *preview_bin;
   GtkSingleSelection *selection;
+  GtkStack           *stack;
 
   IdeSearchCategory   last_category;
 
@@ -190,6 +191,8 @@ ide_search_popover_search_cb (GObject      *object,
 
   gtk_single_selection_set_model (self->selection, G_LIST_MODEL (results));
 
+  gtk_stack_set_visible_child_name (self->stack, "results");
+
   ide_search_popover_after_search (self);
 
   IDE_EXIT;
@@ -280,6 +283,7 @@ ide_search_popover_search_source_func (gpointer data)
 failure:
   self->activate_after_search = FALSE;
   gtk_single_selection_set_model (self->selection, NULL);
+  gtk_stack_set_visible_child_name (self->stack, "empty");
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -597,6 +601,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_bin);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, text);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_category_changed_cb);
