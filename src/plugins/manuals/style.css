@@ -10,3 +10,25 @@ GbpManualsPathbar pathbutton button {
 GbpManualsPathbar pathbutton:not(.leaf) button > * {
   opacity: 0.55;
 }
+
+GbpManualsPanel tag {
+  border-radius: 33px;
+  padding: 1px 8px;
+  font-size: .8333em;
+  font-weight: normal;
+}
+
+GbpManualsPanel tag.since {
+  background: #3584e4;
+  color: white;
+}
+
+GbpManualsPanel tag.deprecated {
+  background: #ed333b;
+  color: white;
+}
+
+GbpManualsPanel tag.stability {
+  background: #e5a50a;
+  color: black;
+}

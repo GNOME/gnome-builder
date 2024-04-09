@@ -27,10 +27,12 @@
 #include "gbp-manuals-page.h"
 #include "gbp-manuals-workspace-addin.h"
 
+#include "manuals-keyword.h"
 #include "manuals-navigatable.h"
 #include "manuals-navigatable-model.h"
 #include "manuals-search-query.h"
 #include "manuals-search-result.h"
+#include "manuals-tag.h"
 
 struct _GbpManualsPanel
 {
@@ -124,6 +126,13 @@ gbp_manuals_panel_search_view_activate_cb (GbpManualsPanel *self,
   gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
+static gboolean
+nonempty_to_boolean (gpointer    instance,
+                     const char *data)
+{
+  return !ide_str_empty0 (data);
+}
+
 static void
 gbp_manuals_panel_dispose (GObject *object)
 {
@@ -193,14 +202,17 @@ gbp_manuals_panel_class_init (GbpManualsPanelClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_set_css_name (widget_class, "GbpManualsPanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/manuals/gbp-manuals-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, search_view);
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, tree);
   gtk_widget_class_bind_template_callback (widget_class, gbp_manuals_panel_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, gbp_manuals_panel_search_view_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, nonempty_to_boolean);
 
   g_type_ensure (MANUALS_TYPE_NAVIGATABLE);
+  g_type_ensure (MANUALS_TYPE_TAG);
 }
 
 static void

@@ -247,7 +247,6 @@ static DexFuture *
 manuals_search_query_completed_cb (DexFuture *completed,
                                    gpointer   user_data)
 {
-  g_autoptr(GtkFlattenListModel) model = NULL;
   GListStore *store = user_data;
 
   g_assert (DEX_IS_FUTURE (completed));

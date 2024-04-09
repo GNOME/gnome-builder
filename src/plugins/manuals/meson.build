@@ -31,6 +31,7 @@ plugins_sources += files([
   'manuals-search-model.c',
   'manuals-search-result.c',
   'manuals-system-importer.c',
+  'manuals-tag.c',
   'manuals-utils.c',
 ])
 
