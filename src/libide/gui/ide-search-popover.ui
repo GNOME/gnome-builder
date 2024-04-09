@@ -1,93 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeSearchPopover" parent="AdwDialog">
-    <property name="height-request">400</property>
-    <property name="default-widget">entry</property>
+    <property name="default-widget">text</property>
+    <property name="content-width">1000</property>
+    <property name="content-height">600</property>
     <style>
       <class name="global-search"/>
     </style>
     <child>
       <object class="GtkBox" id="main_box">
-        <property name="orientation">horizontal</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="AdwToolbarView" id="left">
-            <property name="width-request">180</property>
-            <property name="halign">end</property>
-            <property name="hexpand">false</property>
+          <object class="GtkBox">
+            <property name="css-name">search</property>
             <style>
-              <class name="sidebar-pane"/>
+              <class name="view"/>
             </style>
-            <child type="top">
-              <object class="AdwHeaderBar">
-                <property name="show-start-title-buttons">false</property>
-                <property name="show-end-title-buttons">false</property>
-                <child type="title">
-                  <object class="AdwWindowTitle">
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">edit-find-symbolic</property>
+                <property name="pixel-size">24</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkText" id="text">
+                <property name="width-chars">30</property>
+                <property name="hexpand">true</property>
+                <property name="placeholder-text" translatable="yes">Search for anything</property>
+                <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name='propagation-phase'>capture</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name='trigger'>Up</property>
+                        <property name='action'>action(search.move-up)</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name='trigger'>Down</property>
+                        <property name='action'>action(search.move-down)</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkListBox" id="providers_list_box">
-                    <style>
-                      <class name="navigation-sidebar"/>
-                    </style>
-                    <signal name="row-selected" handler="ide_search_popover_category_changed_cb" swapped="true" object="IdeSearchPopover"/>
-                  </object>
-                </child>
+              <object class="GtkMenuButton">
+                <property name="icon-name">funnel-symbolic</property>
+                <property name="tooltip-text">Filter Results</property>
+                <property name="menu-model">filter_menu</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <!-- disable until we have funnel controls -->
+                <property name="visible">false</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">window-close-symbolic</property>
+                <property name="tooltip-text">Close Search</property>
+                <property name="valign">center</property>
+                <property name="action-name">window.close</property>
+                <style>
+                  <class name="close"/>
+                  <class name="circular"/>
+                </style>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="AdwToolbarView" id="center">
-            <property name="width-request">500</property>
-            <property name="hexpand">true</property>
-            <child type="top">
-              <object class="AdwHeaderBar">
-                <property name="show-start-title-buttons">false</property>
-                <property name="show-end-title-buttons">false</property>
-                <child type="title">
-                  <object class="GtkSearchEntry" id="entry">
-                    <property name="width-chars">30</property>
-                    <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                    <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
-                    <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
-                    <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
-                    <property name="placeholder-text" translatable="yes">Search for anything</property>
-                    <child>
-                      <object class="GtkShortcutController">
-                        <child>
-                          <object class="GtkShortcut">
-                            <property name='trigger'>Up</property>
-                            <property name='action'>signal(previous-match)</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkShortcut">
-                            <property name='trigger'>Down</property>
-                            <property name='action'>signal(next-match)</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="end">
-                  <object class="GtkToggleButton" id="preview_toggle">
-                    <property name="icon-name">panel-right-symbolic</property>
-                    <property name="active" bind-source="IdeSearchPopover" bind-property="show-preview" bind-flags="bidirectional|sync-create"/>
-                  </object>
-                </child>
-              </object>
-            </child>
+          <object class="GtkBox">
+            <property name="homogeneous">true</property>
+            <property name="vexpand">true</property>
             <child>
               <object class="GtkScrolledWindow">
+                <property name="hexpand">true</property>
                 <property name="hscrollbar-policy">never</property>
-                <property name="min-content-height">400</property>
                 <child>
                   <object class="GtkListView" id="list_view">
                     <style>
@@ -192,40 +190,12 @@
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkRevealer" id="preview_revealer">
-            <property name="transition-type">slide-left</property>
-            <property name="halign">start</property>
-            <property name="hexpand">false</property>
             <child>
-              <object class="AdwClamp" id="right">
-                <property name="orientation">horizontal</property>
-                <property name="maximum-size">375</property>
+              <object class="AdwBin" id="preview_bin">
+                <property name="visible">false</property>
                 <style>
-                  <class name="sidebar-pane"/>
-                  <class name="end"/>
+                  <class name="preview-bin"/>
                 </style>
-                <child>
-                  <object class="AdwToolbarView">
-                    <child type="top">
-                      <object class="AdwHeaderBar">
-                        <property name="show-start-title-buttons">false</property>
-                        <property name="show-end-title-buttons">false</property>
-                        <child type="title">
-                          <object class="AdwWindowTitle" id="preview_title">
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwBin" id="preview_bin">
-                        <property name="width-request">375</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -268,5 +238,6 @@
       </object>
     </child>
   </template>
-</interface
->
+  <menu id="filter_menu">
+  </menu>
+</interface>

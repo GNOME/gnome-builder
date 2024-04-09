@@ -9,26 +9,29 @@ stylevariantpreview widget.wallpaper {
   border-radius: 6px;
 }
 
-popover.global-search contents {
-  padding: 0;
-  margin: 0;
+.global-search search {
+  padding: 12px;
+  border-bottom: 1px solid @borders;
 }
-popover.global-search listview.results {
-  padding: 6px 0;
-  background: none;
-  color: inherit;
+.global-search search > image {
+  -gtk-icon-size: 24px;
 }
-popover.global-search listview.results row {
-  min-height: 36px;
-  padding: 2px 8px;
-  border-radius: 6px;
-  margin: 0 6px 4px;
+.global-search search > text {
+  font-size: 1.66666em;
+  margin-left: 6px;
+  margin-right: 6px;
 }
-.global-search textview {
-  background: none;
+.global-search search > text placeholder {
+  opacity: 0.55;
 }
-.global-search .sidebar-pane {
-  background: alpha(currentColor, .05);
+.global-search search > button.close {
+  padding: 2px;
+  min-width: 24px;
+  min-height: 24px;
+  margin-right: 6px;
+}
+.global-search .preview-bin {
+  border-left: 1px solid alpha(@borders, .25);
 }
 
 notificationstack button {
