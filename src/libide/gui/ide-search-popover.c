@@ -198,7 +198,8 @@ ide_search_popover_search_cb (GObject      *object,
 static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
-  IdeSearchCategory category = IDE_SEARCH_CATEGORY_EVERYTHING;
+  g_autofree char *query_stripped = NULL;
+  IdeSearchCategory category;
   IdeSearchPopover *self = data;
   GListModel *model;
   const char *query;
@@ -220,9 +221,42 @@ ide_search_popover_search_source_func (gpointer data)
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
 
+  switch (*query)
+    {
+    case '?':
+      category = IDE_SEARCH_CATEGORY_DOCUMENTATION;
+      query++;
+      break;
+
+    case '@':
+      category = IDE_SEARCH_CATEGORY_SYMBOLS;
+      query++;
+      break;
+
+    case '>':
+      /* TODO: Maybe commands here too? */
+      category = IDE_SEARCH_CATEGORY_ACTIONS;
+      query++;
+      break;
+
+    case '~':
+      category = IDE_SEARCH_CATEGORY_FILES;
+      query++;
+      break;
+
+    default:
+      category = IDE_SEARCH_CATEGORY_EVERYTHING;
+      break;
+    }
+
+  query = query_stripped = g_strstrip (g_strdup (query));
+
+  if (ide_str_empty0 (query))
+    IDE_GOTO (failure);
 
   /* Fast path to just filter our previous result set */
   if (category == self->last_category &&
+      !ide_str_empty0 (query) &&
       (model = gtk_single_selection_get_model (self->selection)) &&
       IDE_IS_SEARCH_RESULTS (model) &&
       ide_search_results_refilter (IDE_SEARCH_RESULTS (model), query))
