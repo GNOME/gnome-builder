@@ -133,6 +133,26 @@ nonempty_to_boolean (gpointer    instance,
   return !ide_str_empty0 (data);
 }
 
+static char *
+lookup_sdk_title (gpointer        instance,
+                  ManualsKeyword *keyword)
+{
+  g_autoptr(ManualsRepository) repository = NULL;
+  gint64 book_id;
+  gint64 sdk_id;
+
+  g_assert (!keyword || MANUALS_IS_KEYWORD (keyword));
+
+  if (keyword == NULL)
+    return NULL;
+
+  g_object_get (keyword, "repository", &repository, NULL);
+  book_id = manuals_keyword_get_book_id (keyword);
+  sdk_id = manuals_repository_get_cached_sdk_id (repository, book_id);
+
+  return g_strdup (manuals_repository_get_cached_sdk_title (repository, sdk_id));
+}
+
 static void
 gbp_manuals_panel_dispose (GObject *object)
 {
@@ -210,8 +230,10 @@ gbp_manuals_panel_class_init (GbpManualsPanelClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, gbp_manuals_panel_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, gbp_manuals_panel_search_view_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, nonempty_to_boolean);
+  gtk_widget_class_bind_template_callback (widget_class, lookup_sdk_title);
 
   g_type_ensure (MANUALS_TYPE_NAVIGATABLE);
+  g_type_ensure (MANUALS_TYPE_SEARCH_RESULT);
   g_type_ensure (MANUALS_TYPE_TAG);
 }
 
