@@ -204,7 +204,6 @@ ide_search_popover_search_source_func (gpointer data)
   g_autofree char *query_stripped = NULL;
   IdeSearchCategory category;
   IdeSearchPopover *self = data;
-  GListModel *model;
   const char *query;
 
   IDE_ENTRY;
@@ -257,7 +256,14 @@ ide_search_popover_search_source_func (gpointer data)
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
 
-  /* Fast path to just filter our previous result set */
+#if 0
+  /* Drop refiltering because the performance is extremely bad for
+   * lazy loaded search results. Instead, it would be better to
+   * allow for the provider to refilter their listmodel like I
+   * did in GtkSourceCompletion.
+   */
+
+  GListModel *model;
   if (category == self->last_category &&
       !ide_str_empty0 (query) &&
       (model = gtk_single_selection_get_model (self->selection)) &&
@@ -267,6 +273,7 @@ ide_search_popover_search_source_func (gpointer data)
       ide_search_popover_after_search (self);
       IDE_RETURN (G_SOURCE_REMOVE);
     }
+#endif
 
   self->last_category = category;
 
