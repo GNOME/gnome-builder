@@ -69,6 +69,7 @@ gbp_manuals_tree_addin_build_node (IdeTreeAddin *addin,
       ide_tree_node_set_title (node, title);
       ide_tree_node_set_icon_name (node, icon_name);
       ide_tree_node_set_children_possible (node, TRUE);
+      ide_tree_node_set_is_header (node, TRUE);
     }
   else if (ide_tree_node_holds (node, MANUALS_TYPE_BOOK))
     {
@@ -78,6 +79,7 @@ gbp_manuals_tree_addin_build_node (IdeTreeAddin *addin,
       ide_tree_node_set_title (node, title);
       ide_tree_node_set_icon_name (node, "builder-documentation-symbolic");
       ide_tree_node_set_children_possible (node, TRUE);
+      ide_tree_node_set_is_header (node, TRUE);
     }
   else if (ide_tree_node_holds (node, MANUALS_TYPE_HEADING))
     {
