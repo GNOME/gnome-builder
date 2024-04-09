@@ -25,7 +25,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-search-popover-private.h"
-#include "ide-search-popover-group-private.h"
 #include "ide-search-resources.h"
 #include "ide-gui-global.h"
 
@@ -40,12 +39,11 @@ struct _IdeSearchPopover
   IdeSearchEngine    *search_engine;
   GSettings          *settings;
 
-  GListStore         *groups;
-
   GtkText            *text;
   GtkListView        *list_view;
   AdwBin             *preview_bin;
   GtkSingleSelection *selection;
+  GtkStack           *stack;
 
   IdeSearchCategory   last_category;
 
@@ -64,13 +62,9 @@ enum {
   N_PROPS
 };
 
-static void buildable_iface_init (GtkBuildableIface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSearchPopover, ide_search_popover, ADW_TYPE_DIALOG,
-                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, ADW_TYPE_DIALOG)
 
 static GParamSpec *properties [N_PROPS];
-static GtkBuildableIface *parent_buildable_iface;
 
 static void
 ide_search_popover_cancel (IdeSearchPopover *self)
@@ -139,71 +133,6 @@ ide_search_popover_hide_action (GtkWidget  *widget,
 }
 
 static void
-group_header_func (GtkListBoxRow *row,
-                   GtkListBoxRow *before,
-                   gpointer       user_data)
-{
-  IdeSearchPopoverGroup *before_group;
-
-  if (before == NULL)
-    return;
-
-  if ((before_group = g_object_get_data (G_OBJECT (before), "GROUP")) &&
-      ide_str_equal (("_Everything"), ide_search_popover_group_get_title (before_group)))
-    gtk_list_box_row_set_header (row,
-                                 g_object_new (GTK_TYPE_SEPARATOR,
-                                               "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                               NULL));
-}
-
-static GtkWidget *
-create_group_row (gpointer item,
-                  gpointer user_data)
-{
-  IdeSearchPopoverGroup *group = item;
-  const char *title;
-  const char *icon_name;
-  GtkWidget *box;
-  GtkWidget *image;
-  GtkWidget *label;
-  GtkWidget *row;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SEARCH_POPOVER_GROUP (group));
-
-  title = ide_search_popover_group_get_title (group);
-  icon_name = ide_search_popover_group_get_icon_name (group);
-
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "spacing", 9,
-                      NULL);
-  image = g_object_new (GTK_TYPE_IMAGE,
-                        "icon-name", icon_name,
-                        NULL);
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "label", title,
-                        "xalign", .0f,
-                        "ellipsize", PANGO_ELLIPSIZE_END,
-                        "use-underline", TRUE,
-                        NULL);
-  gtk_box_append (GTK_BOX (box), image);
-  gtk_box_append (GTK_BOX (box), label);
-
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "css-classes", IDE_STRV_INIT ("sidebar-row"),
-                      "child", box,
-                      NULL);
-
-  g_object_set_data_full (G_OBJECT (row),
-                          "GROUP",
-                          g_object_ref (group),
-                          g_object_unref);
-
-  return GTK_WIDGET (row);
-}
-
-static void
 ide_search_popover_set_search_engine (IdeSearchPopover *self,
                                       IdeSearchEngine  *search_engine)
 {
@@ -262,6 +191,8 @@ ide_search_popover_search_cb (GObject      *object,
 
   gtk_single_selection_set_model (self->selection, G_LIST_MODEL (results));
 
+  gtk_stack_set_visible_child_name (self->stack, "results");
+
   ide_search_popover_after_search (self);
 
   IDE_EXIT;
@@ -270,7 +201,8 @@ ide_search_popover_search_cb (GObject      *object,
 static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
-  IdeSearchCategory category = IDE_SEARCH_CATEGORY_EVERYTHING;
+  g_autofree char *query_stripped = NULL;
+  IdeSearchCategory category;
   IdeSearchPopover *self = data;
   GListModel *model;
   const char *query;
@@ -292,17 +224,42 @@ ide_search_popover_search_source_func (gpointer data)
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
 
-#if 0
-  /* Get the category for the query */
-  IdeSearchPopoverGroup *group;
-  if ((row = gtk_list_box_get_selected_row (self->providers_list_box)) &&
-      (group = g_object_get_data (G_OBJECT (row), "GROUP")) &&
-      IDE_IS_SEARCH_POPOVER_GROUP (group))
-    category = ide_search_popover_group_get_category (group);
-#endif
+  switch (*query)
+    {
+    case '?':
+      category = IDE_SEARCH_CATEGORY_DOCUMENTATION;
+      query++;
+      break;
+
+    case '@':
+      category = IDE_SEARCH_CATEGORY_SYMBOLS;
+      query++;
+      break;
+
+    case '>':
+      /* TODO: Maybe commands here too? */
+      category = IDE_SEARCH_CATEGORY_ACTIONS;
+      query++;
+      break;
+
+    case '~':
+      category = IDE_SEARCH_CATEGORY_FILES;
+      query++;
+      break;
+
+    default:
+      category = IDE_SEARCH_CATEGORY_EVERYTHING;
+      break;
+    }
+
+  query = query_stripped = g_strstrip (g_strdup (query));
+
+  if (ide_str_empty0 (query))
+    IDE_GOTO (failure);
 
   /* Fast path to just filter our previous result set */
   if (category == self->last_category &&
+      !ide_str_empty0 (query) &&
       (model = gtk_single_selection_get_model (self->selection)) &&
       IDE_IS_SEARCH_RESULTS (model) &&
       ide_search_results_refilter (IDE_SEARCH_RESULTS (model), query))
@@ -326,6 +283,7 @@ ide_search_popover_search_source_func (gpointer data)
 failure:
   self->activate_after_search = FALSE;
   gtk_single_selection_set_model (self->selection, NULL);
+  gtk_stack_set_visible_child_name (self->stack, "empty");
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -560,7 +518,6 @@ ide_search_popover_dispose (GObject *object)
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->search_engine);
-  g_clear_object (&self->groups);
 
   G_OBJECT_CLASS (ide_search_popover_parent_class)->dispose (object);
 }
@@ -644,6 +601,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_bin);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, text);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_category_changed_cb);
@@ -659,30 +617,15 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_k, GDK_CONTROL_MASK, "search.focus", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "search.focus", NULL);
-
-  g_type_ensure (IDE_TYPE_SEARCH_POPOVER_GROUP);
 }
 
 static void
 ide_search_popover_init (IdeSearchPopover *self)
 {
   self->show_preview = TRUE;
-  self->groups = g_list_store_new (IDE_TYPE_SEARCH_POPOVER_GROUP);
   self->settings = g_settings_new ("org.gnome.builder");
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-#if 0
-  gtk_list_box_set_header_func (self->providers_list_box,
-                                group_header_func, self, NULL);
-  gtk_list_box_bind_model (self->providers_list_box,
-                           G_LIST_MODEL (self->groups),
-                           create_group_row, self, NULL);
-
-  g_settings_bind (self->settings, "preview-search-results",
-                   self->preview_toggle, "active",
-                   G_SETTINGS_BIND_DEFAULT);
-#endif
 }
 
 GtkWidget *
@@ -718,25 +661,4 @@ ide_search_popover_set_show_preview (IdeSearchPopover *self,
 
       ide_search_popover_selection_changed_cb (self, NULL, self->selection);
     }
-}
-
-static void
-ide_search_popover_add_child (GtkBuildable *buildable,
-                              GtkBuilder   *builder,
-                              GObject      *object,
-                              const char   *type)
-{
-  IdeSearchPopover *self = IDE_SEARCH_POPOVER (buildable);
-
-  if (IDE_IS_SEARCH_POPOVER_GROUP (object))
-    g_list_store_append (self->groups, object);
-  else
-    parent_buildable_iface->add_child (buildable, builder, object, type);
-}
-
-static void
-buildable_iface_init (GtkBuildableIface *iface)
-{
-  parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = ide_search_popover_add_child;
 }

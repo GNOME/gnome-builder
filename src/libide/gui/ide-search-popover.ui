@@ -51,20 +51,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuButton">
-                <property name="icon-name">funnel-symbolic</property>
-                <property name="tooltip-text">Filter Results</property>
-                <property name="menu-model">filter_menu</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <!-- disable until we have funnel controls -->
-                <property name="visible">false</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-            </child>
-            <child>
               <object class="GtkButton">
                 <property name="icon-name">window-close-symbolic</property>
                 <property name="tooltip-text">Close Search</property>
@@ -79,165 +65,243 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="homogeneous">true</property>
-            <property name="vexpand">true</property>
+          <object class="GtkStack" id="stack">
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="hexpand">true</property>
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkListView" id="list_view">
+              <object class="GtkStackPage">
+                <property name="name">empty</property>
+                <property name="child">
+                  <object class="AdwStatusPage">
+                    <property name="title" translatable="yes">Type to Search</property>
+                    <property name="description" translatable="yes">Prefix your query with one of the following to filter results</property>
                     <style>
-                      <class name="results"/>
+                      <class name="view"/>
                     </style>
-                    <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                    <property name="orientation">vertical</property>
-                    <property name="model">
-                      <object class="GtkSingleSelection" id="selection">
-                        <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                    <property name="child">
+                      <object class="GtkGrid">
+                        <property name="halign">center</property>
+                        <property name="width-request">400</property>
+                        <property name="column-spacing">18</property>
+                        <property name="row-spacing">12</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="label" translatable="yes">Files</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkShortcutsShortcut">
+                            <property name="accelerator">asciitilde</property>
+                            <property name="halign">end</property>
+                            <layout>
+                              <property name="row">0</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="label" translatable="yes">Symbols</property>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkShortcutsShortcut">
+                            <property name="accelerator">at</property>
+                            <property name="halign">end</property>
+                            <layout>
+                              <property name="row">1</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="label" translatable="yes">Documentation</property>
+                            <layout>
+                              <property name="row">2</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkShortcutsShortcut">
+                            <property name="accelerator">question</property>
+                            <property name="halign">end</property>
+                            <layout>
+                              <property name="row">2</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="xalign">0</property>
+                            <property name="hexpand">true</property>
+                            <property name="label" translatable="yes">Actions</property>
+                            <layout>
+                              <property name="row">3</property>
+                              <property name="column">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkShortcutsShortcut">
+                            <property name="accelerator">greater</property>
+                            <property name="halign">end</property>
+                            <layout>
+                              <property name="row">3</property>
+                              <property name="column">1</property>
+                            </layout>
+                          </object>
+                        </child>
                       </object>
                     </property>
-                    <property name="factory">
-                      <object class="GtkBuilderListItemFactory">
-                        <property name="bytes"><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<interface>
-<template class="GtkListItem">
-<property name="child">
-  <object class="GtkBox">
-    <property name="orientation">horizontal</property>
-    <property name="margin-top">3</property>
-    <property name="margin-bottom">3</property>
-    <property name="margin-start">9</property>
-    <property name="margin-end">6</property>
-    <property name="spacing">6</property>
-    <child>
-      <object class="GtkImage">
-        <property name="pixel-size">16</property>
-        <property name="valign">center</property>
-        <property name="margin-end">6</property>
-        <binding name="gicon">
-          <lookup name="gicon" type="IdeSearchResult">
-            <lookup name="item">GtkListItem</lookup>
-          </lookup>
-        </binding>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="hexpand">true</property>
-            <property name="xalign">0</property>
-            <property name="ellipsize">end</property>
-            <property name="single-line-mode">true</property>
-            <binding name="use-markup">
-              <lookup name="use-markup" type="IdeSearchResult">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-            <binding name="use-underline">
-              <lookup name="use-underline" type="IdeSearchResult">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-            <binding name="label">
-              <lookup name="title" type="IdeSearchResult">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
-        <child>
-          <object class="GtkInscription">
-            <property name="xalign">0</property>
-            <property name="text-overflow">ellipsize-end</property>
-            <style>
-              <class name="caption"/>
-              <class name="dim-label"/>
-            </style>
-            <binding name="markup">
-              <lookup name="subtitle" type="IdeSearchResult">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkShortcutLabel">
-        <property name="valign">center</property>
-        <binding name="accelerator">
-          <lookup name="accelerator" type="IdeSearchResult">
-            <lookup name="item">GtkListItem</lookup>
-          </lookup>
-        </binding>
-      </object>
-    </child>
-  </object>
-</property>
-</template>
-</interface>
-]]>
-                        </property>
-                      </object>
-                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">results</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="homogeneous">true</property>
+                    <property name="vexpand">true</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="hexpand">true</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <child>
+                          <object class="GtkListView" id="list_view">
+                            <style>
+                              <class name="results"/>
+                            </style>
+                            <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                            <property name="orientation">vertical</property>
+                            <property name="model">
+                              <object class="GtkSingleSelection" id="selection">
+                                <signal name="notify::selected-item" handler="ide_search_popover_selection_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                              </object>
+                            </property>
+                            <property name="factory">
+                              <object class="GtkBuilderListItemFactory">
+                                <property name="bytes"><![CDATA[
+        <?xml version="1.0" encoding="UTF-8"?>
+        <interface>
+        <template class="GtkListItem">
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">9</property>
+            <property name="margin-end">6</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkImage">
+                <property name="pixel-size">16</property>
+                <property name="valign">center</property>
+                <property name="margin-end">6</property>
+                <binding name="gicon">
+                  <lookup name="gicon" type="IdeSearchResult">
+                    <lookup name="item">GtkListItem</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="hexpand">true</property>
+                    <property name="xalign">0</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">true</property>
+                    <binding name="use-markup">
+                      <lookup name="use-markup" type="IdeSearchResult">
+                        <lookup name="item">GtkListItem</lookup>
+                      </lookup>
+                    </binding>
+                    <binding name="use-underline">
+                      <lookup name="use-underline" type="IdeSearchResult">
+                        <lookup name="item">GtkListItem</lookup>
+                      </lookup>
+                    </binding>
+                    <binding name="label">
+                      <lookup name="title" type="IdeSearchResult">
+                        <lookup name="item">GtkListItem</lookup>
+                      </lookup>
+                    </binding>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkInscription">
+                    <property name="xalign">0</property>
+                    <property name="text-overflow">ellipsize-end</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                    <binding name="markup">
+                      <lookup name="subtitle" type="IdeSearchResult">
+                        <lookup name="item">GtkListItem</lookup>
+                      </lookup>
+                    </binding>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="AdwBin" id="preview_bin">
-                <property name="visible">false</property>
-                <style>
-                  <class name="preview-bin"/>
-                </style>
+              <object class="GtkShortcutLabel">
+                <property name="valign">center</property>
+                <binding name="accelerator">
+                  <lookup name="accelerator" type="IdeSearchResult">
+                    <lookup name="item">GtkListItem</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </property>
+        </template>
+        </interface>
+]]>
+                                </property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwBin" id="preview_bin">
+                        <property name="visible">false</property>
+                        <style>
+                          <class name="preview-bin"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
         </child>
       </object>
     </child>
-    <child>
-      <object class="IdeSearchPopoverGroup">
-        <property name="title" translatable="yes">_Everything</property>
-        <property name="icon-name">edit-find-symbolic</property>
-        <property name="category">everything</property>
-      </object>
-    </child>
-    <child>
-      <object class="IdeSearchPopoverGroup">
-        <property name="title" translatable="yes">_Actions</property>
-        <property name="icon-name">search-menus-symbolic</property>
-        <property name="category">actions</property>
-      </object>
-    </child>
-    <child>
-      <object class="IdeSearchPopoverGroup">
-        <property name="title" translatable="yes">_Commands</property>
-        <property name="icon-name">text-x-script-symbolic</property>
-        <property name="category">commands</property>
-      </object>
-    </child>
-    <child>
-      <object class="IdeSearchPopoverGroup">
-        <property name="title" translatable="yes">_Files</property>
-        <property name="icon-name">folder-symbolic</property>
-        <property name="category">files</property>
-      </object>
-    </child>
-    <child>
-      <object class="IdeSearchPopoverGroup">
-        <property name="title" translatable="yes">_Symbols</property>
-        <property name="icon-name">lang-function-symbolic</property>
-        <property name="category">symbols</property>
-      </object>
-    </child>
   </template>
-  <menu id="filter_menu">
-  </menu>
 </interface>

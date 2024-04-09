@@ -549,3 +549,40 @@ ide_search_engine_list_providers (IdeSearchEngine *self)
 
   return g_object_ref (G_LIST_MODEL (self->list));
 }
+
+typedef struct
+{
+  const char *module_name;
+  GObject *extension;
+} FindByModuleName;
+
+static void
+ide_search_engine_find_by_module_name_cb (IdeExtensionSetAdapter *adapter,
+                                          PeasPluginInfo         *plugin_info,
+                                          GObject                *extension,
+                                          gpointer                user_data)
+{
+  FindByModuleName *find = user_data;
+
+  if (find->extension != NULL)
+    return;
+
+  if (ide_str_equal0 (peas_plugin_info_get_module_name (plugin_info), find->module_name))
+    find->extension = extension;
+}
+
+IdeSearchProvider *
+ide_search_engine_find_by_module_name (IdeSearchEngine *self,
+                                       const char      *module_name)
+{
+  FindByModuleName find = {
+    .module_name = module_name,
+    .extension = NULL
+  };
+
+  ide_extension_set_adapter_foreach (self->extensions,
+                                     ide_search_engine_find_by_module_name_cb,
+                                     &find);
+
+  return IDE_SEARCH_PROVIDER (find.extension);
+}

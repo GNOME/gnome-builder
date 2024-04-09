@@ -1,6 +1,7 @@
-/* ide-search-popover-group-private.h
+/*
+ * gbp-manuals-search-result.h
  *
- * Copyright 2023 Christian Hergert <chergert@redhat.com>
+ * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +23,14 @@
 
 #include <libide-search.h>
 
+#include "manuals-search-result.h"
+
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SEARCH_POPOVER_GROUP (ide_search_popover_group_get_type())
+#define GBP_TYPE_MANUALS_SEARCH_RESULT (gbp_manuals_search_result_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSearchPopoverGroup, ide_search_popover_group, IDE, SEARCH_POPOVER_GROUP, GObject)
+G_DECLARE_FINAL_TYPE (GbpManualsSearchResult, gbp_manuals_search_result, GBP, MANUALS_SEARCH_RESULT, IdeSearchResult)
 
-const char        *ide_search_popover_group_get_title     (IdeSearchPopoverGroup *self);
-const char        *ide_search_popover_group_get_icon_name (IdeSearchPopoverGroup *self);
-IdeSearchCategory  ide_search_popover_group_get_category  (IdeSearchPopoverGroup *self);
+GbpManualsSearchResult *gbp_manuals_search_result_new (ManualsSearchResult *result);
 
 G_END_DECLS
