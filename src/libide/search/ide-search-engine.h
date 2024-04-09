@@ -37,28 +37,31 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeSearchEngine  *ide_search_engine_new             (void);
+IdeSearchEngine   *ide_search_engine_new                 (void);
 IDE_AVAILABLE_IN_ALL
-gboolean          ide_search_engine_get_busy        (IdeSearchEngine      *self);
+gboolean           ide_search_engine_get_busy            (IdeSearchEngine      *self);
 IDE_AVAILABLE_IN_44
-void              ide_search_engine_search_async    (IdeSearchEngine      *self,
-                                                     IdeSearchCategory     category,
-                                                     const char           *query,
-                                                     guint                 max_results,
-                                                     GCancellable         *cancellable,
-                                                     GAsyncReadyCallback   callback,
-                                                     gpointer              user_data);
+void               ide_search_engine_search_async        (IdeSearchEngine      *self,
+                                                          IdeSearchCategory     category,
+                                                          const char           *query,
+                                                          guint                 max_results,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-IdeSearchResults *ide_search_engine_search_finish   (IdeSearchEngine      *self,
-                                                     GAsyncResult         *result,
-                                                     GError              **error);
+IdeSearchResults  *ide_search_engine_search_finish       (IdeSearchEngine      *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 IDE_AVAILABLE_IN_ALL
-void              ide_search_engine_add_provider    (IdeSearchEngine      *self,
-                                                     IdeSearchProvider    *provider);
+void               ide_search_engine_add_provider        (IdeSearchEngine      *self,
+                                                          IdeSearchProvider    *provider);
 IDE_AVAILABLE_IN_ALL
-void              ide_search_engine_remove_provider (IdeSearchEngine      *self,
-                                                     IdeSearchProvider    *provider);
+void               ide_search_engine_remove_provider     (IdeSearchEngine      *self,
+                                                          IdeSearchProvider    *provider);
 IDE_AVAILABLE_IN_44
-GListModel       *ide_search_engine_list_providers  (IdeSearchEngine      *self);
+GListModel        *ide_search_engine_list_providers      (IdeSearchEngine      *self);
+IDE_AVAILABLE_IN_47
+IdeSearchProvider *ide_search_engine_find_by_module_name (IdeSearchEngine      *self,
+                                                          const char           *module_name);
 
 G_END_DECLS
