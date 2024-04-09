@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeEditorWorkspace" parent="IdeWorkspace">
+    <property name="height-request">400</property>
+    <property name="width-request">700</property>
     <child>
       <object class="PanelDock" id="dock">
         <property name="start-width">300</property>
