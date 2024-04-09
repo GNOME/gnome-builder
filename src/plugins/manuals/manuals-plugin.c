@@ -26,6 +26,7 @@
 #include <libide-tree.h>
 
 #include "gbp-manuals-application-addin.h"
+#include "gbp-manuals-search-provider.h"
 #include "gbp-manuals-tree-addin.h"
 #include "gbp-manuals-workspace-addin.h"
 
@@ -38,6 +39,9 @@ _gbp_manuals_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_MANUALS_WORKSPACE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GBP_TYPE_MANUALS_SEARCH_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TREE_ADDIN,
                                               GBP_TYPE_MANUALS_TREE_ADDIN);

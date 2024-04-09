@@ -5,6 +5,8 @@ plugins_sources += files([
   'gbp-manuals-page.c',
   'gbp-manuals-panel.c',
   'gbp-manuals-pathbar.c',
+  'gbp-manuals-search-provider.c',
+  'gbp-manuals-search-result.c',
   'gbp-manuals-tree-addin.c',
   'gbp-manuals-workspace-addin.c',
   'manuals-book.c',
