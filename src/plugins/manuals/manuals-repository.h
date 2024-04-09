@@ -46,6 +46,7 @@ DexFuture  *manuals_repository_find_one              (ManualsRepository *self,
                                                       GType              resource_type,
                                                       GomFilter         *filter);
 DexFuture  *manuals_repository_list_sdks             (ManualsRepository *self);
+DexFuture  *manuals_repository_list_sdks_by_newest   (ManualsRepository *self);
 DexFuture  *manuals_repository_delete                (ManualsRepository *self,
                                                       GType              resource_type,
                                                       GomFilter         *filter);

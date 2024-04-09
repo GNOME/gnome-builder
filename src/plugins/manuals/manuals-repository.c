@@ -540,3 +540,85 @@ manuals_repository_get_cached_sdk_id (ManualsRepository *self,
 
   return sdk_id;
 }
+
+static int
+compare_version (const char *a,
+                 const char *b)
+{
+  if (g_strcmp0 (a, "master") == 0)
+    return -1;
+
+  if (g_strcmp0 (b, "master") == 0)
+    return 1;
+
+  return g_strcmp0 (a, b);
+}
+
+static int
+sort_by_name (gconstpointer a,
+              gconstpointer b)
+{
+  ManualsSdk * const *sdk_a = a;
+  ManualsSdk * const *sdk_b = b;
+
+  if (g_strcmp0 (manuals_sdk_get_name (*sdk_a), "org.gnome.Sdk.Docs") == 0)
+    return -1;
+  else if (g_strcmp0 (manuals_sdk_get_name (*sdk_b), "org.gnome.Sdk.Docs") == 0)
+    return 1;
+
+  if (g_strcmp0 (manuals_sdk_get_name (*sdk_a), "JHBuild") == 0)
+    return -1;
+  else if (g_strcmp0 (manuals_sdk_get_name (*sdk_b), "JHBuild") == 0)
+    return 1;
+
+  return g_strcmp0 (manuals_sdk_get_name (*sdk_a),
+                    manuals_sdk_get_name (*sdk_b));
+}
+
+static DexFuture *
+manuals_repository_filter_sdk_by_newest (DexFuture *completed,
+                                         gpointer user_data)
+{
+  g_autoptr(GListModel) model = dex_await_object (dex_ref (completed), NULL);
+  g_autoptr(GListStore) newest = g_list_store_new (MANUALS_TYPE_SDK);
+  g_autoptr(GHashTable) hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  g_autoptr(GPtrArray) values = NULL;
+  guint n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(ManualsSdk) sdk = g_list_model_get_item (model, i);
+      const char *name = manuals_sdk_get_name (sdk);
+      ManualsSdk *prev;
+
+      if (name == NULL)
+        name = "host";
+
+      if (!(prev = g_hash_table_lookup (hash, name)) ||
+          compare_version (manuals_sdk_get_version (sdk), manuals_sdk_get_version (prev)) > 0)
+        g_hash_table_replace (hash, g_strdup (name), g_object_ref (sdk));
+    }
+
+  values = g_hash_table_get_values_as_ptr_array (hash);
+  g_ptr_array_sort (values, sort_by_name);
+
+  g_list_store_splice (newest, 0, 0, values->pdata, values->len);
+
+  return dex_future_new_take_object (g_steal_pointer (&newest));
+}
+
+DexFuture *
+manuals_repository_list_sdks_by_newest (ManualsRepository *self)
+{
+  DexFuture *future;
+
+  g_return_val_if_fail (MANUALS_IS_REPOSITORY (self), NULL);
+
+  future = manuals_repository_list_sdks (self);
+  future = dex_future_then (future,
+                            manuals_repository_filter_sdk_by_newest,
+                            g_object_ref (self),
+                            g_object_unref);
+
+  return future;
+}
