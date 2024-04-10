@@ -60,18 +60,19 @@ static gboolean
 gbp_menu_search_result_matches (IdeSearchResult *result,
                                 const char      *query)
 {
-  const char *title = ide_search_result_get_title (result);
+  const char *title;
   const char *subtitle;
   guint prio = 0;
 
-  if (title && gtk_source_completion_fuzzy_match (title, query, &prio))
-    {
-      ide_search_result_set_priority (result, prio);
-      return TRUE;
-    }
+  /* Only show items with descriptions otherwise they aren't really
+   * meant for use in the global search.
+   */
+  if (!(title = ide_search_result_get_title (result)) ||
+      !(subtitle = ide_search_result_get_subtitle (result)))
+    return FALSE;
 
-  subtitle = ide_search_result_get_subtitle (result);
-  if (subtitle && gtk_source_completion_fuzzy_match (subtitle, query, &prio))
+  if (gtk_source_completion_fuzzy_match (title, query, &prio) ||
+      gtk_source_completion_fuzzy_match (subtitle, query, &prio))
     {
       ide_search_result_set_priority (result, prio);
       return TRUE;
