@@ -91,16 +91,6 @@
         <attribute name="verb-icon">builder-build-symbolic</attribute>
       </item>
     </section>
-    <section id="build-cork">
-      <attribute name="page" translatable="yes">Code Foundry</attribute>
-      <attribute name="group" translatable="yes">Building</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Stop Build</attribute>
-        <attribute name="action">context.build-manager.cancel</attribute>
-        <attribute name="description" translatable="yes">Stop building project</attribute>
-        <attribute name="verb-icon">builder-build-stop-symbolic</attribute>
-      </item>
-    </section>
     <section id="build-output">
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Building</attribute>
