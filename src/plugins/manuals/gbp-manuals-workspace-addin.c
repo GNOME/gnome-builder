@@ -145,8 +145,26 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
   iface->page_changed = gbp_manuals_workspace_addin_page_changed;
 }
 
+static void
+gbp_manuals_workspace_addin_filter_action (GbpManualsWorkspaceAddin *self,
+                                           GVariant                 *param)
+{
+  g_assert (GBP_IS_MANUALS_WORKSPACE_ADDIN (self));
+
+  if (self->panel != NULL)
+    {
+      panel_widget_raise (PANEL_WIDGET (self->panel));
+      gbp_manuals_panel_begin_search (self->panel);
+    }
+}
+
+IDE_DEFINE_ACTION_GROUP (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, {
+  { "filter", gbp_manuals_workspace_addin_filter_action },
+})
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpManualsWorkspaceAddin, gbp_manuals_workspace_addin, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init)
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_manuals_workspace_addin_init_action_group))
 
 static void
 gbp_manuals_workspace_addin_class_init (GbpManualsWorkspaceAddinClass *klass)

@@ -45,6 +45,7 @@ struct _GbpManualsPanel
   IdeTree            *tree;
   GtkListView        *search_view;
   GtkStack           *stack;
+  GtkSearchEntry     *search_entry;
 };
 
 enum {
@@ -224,6 +225,7 @@ gbp_manuals_panel_class_init (GbpManualsPanelClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "GbpManualsPanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/manuals/gbp-manuals-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, search_view);
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpManualsPanel, tree);
@@ -393,4 +395,13 @@ gbp_manuals_panel_reveal (GbpManualsPanel    *self,
                                           gbp_manuals_panel_reveal_fiber,
                                           g_object_ref (self),
                                           g_object_unref));
+}
+
+void
+gbp_manuals_panel_begin_search (GbpManualsPanel *self)
+{
+  g_return_if_fail (GBP_IS_MANUALS_PANEL (self));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+  gtk_editable_select_region (GTK_EDITABLE (self->search_entry), 0, -1);
 }

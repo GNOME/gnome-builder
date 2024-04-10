@@ -37,5 +37,6 @@ void             gbp_manuals_panel_set_repository (GbpManualsPanel    *self,
                                                    ManualsRepository  *repository);
 void             gbp_manuals_panel_reveal         (GbpManualsPanel    *self,
                                                    ManualsNavigatable *navigatable);
+void             gbp_manuals_panel_begin_search   (GbpManualsPanel    *self);
 
 G_END_DECLS
