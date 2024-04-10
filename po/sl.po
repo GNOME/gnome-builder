@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-04-06 16:20+0000\n"
-"PO-Revision-Date: 2024-04-07 13:40+0200\n"
+"POT-Creation-Date: 2024-04-10 05:03+0000\n"
+"PO-Revision-Date: 2024-04-10 15:16+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -24,8 +24,8 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:38
-#: src/libide/editor/ide-editor-workspace.ui:61
+#: src/libide/editor/ide-editor-workspace.ui:40
+#: src/libide/editor/ide-editor-workspace.ui:63
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -635,7 +635,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Katero okolje želite uporabiti pri izvajanju preizkusov enot"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:252 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Shranjuj podroben izpis"
 
@@ -1055,8 +1055,8 @@ msgstr "Konec vrstice:"
 msgid "Language"
 msgstr "Jezik"
 
-#: src/libide/editor/ide-editor-workspace.ui:105
-#: src/libide/gui/ide-primary-workspace.ui:112
+#: src/libide/editor/ide-editor-workspace.ui:107
+#: src/libide/gui/ide-primary-workspace.ui:114
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Preklopi spodnji pladenj (krmilka+F9)"
 
@@ -1528,29 +1528,38 @@ msgstr "%u od %u"
 msgid "Search"
 msgstr "Poišči"
 
-#: src/libide/gui/ide-search-popover.ui:61
+#: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
 msgstr "Iščite karkoli"
 
-#: src/libide/gui/ide-search-popover.ui:238
-msgid "_Everything"
-msgstr "_Vse"
+#: src/libide/gui/ide-search-popover.ui:74
+msgid "Type to Search"
+msgstr "Iskana vrsta"
 
-#: src/libide/gui/ide-search-popover.ui:245
-msgid "_Actions"
-msgstr "_Dejanja"
+#: src/libide/gui/ide-search-popover.ui:75
+msgid "Prefix your query with one of the following to filter results"
+msgstr ""
+"Poizvedbi dodaj predpono z eno od teh možnosti za filtriranje rezultatov"
 
-#: src/libide/gui/ide-search-popover.ui:252
-msgid "_Commands"
-msgstr "_Ukazi"
+#: src/libide/gui/ide-search-popover.ui:89
+#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Datoteke"
 
-#: src/libide/gui/ide-search-popover.ui:259
-msgid "_Files"
-msgstr "_Datoteke"
+#: src/libide/gui/ide-search-popover.ui:110
+msgid "Symbols"
+msgstr "Simboli"
 
-#: src/libide/gui/ide-search-popover.ui:266
-msgid "_Symbols"
-msgstr "_Simboli"
+#: src/libide/gui/ide-search-popover.ui:131
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: src/libide/gui/ide-search-popover.ui:152
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Dejanja"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
@@ -1686,17 +1695,17 @@ msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 msgid "Invalid configuration"
 msgstr "Neveljavna nastavitev"
 
-#: src/libide/gui/ide-primary-workspace.ui:44
+#: src/libide/gui/ide-primary-workspace.ui:46
 msgid "Toggle Left Panel (F9)"
 msgstr "Preklopi levi pladenj (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:79
+#: src/libide/gui/ide-primary-workspace.ui:81
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Preklopi desni pladenj"
 
-#: src/libide/gui/ide-primary-workspace.ui:87
-#: src/libide/gui/ide-primary-workspace.ui:134
+#: src/libide/gui/ide-primary-workspace.ui:89
+#: src/libide/gui/ide-primary-workspace.ui:136
 msgid "Search (Ctrl+Enter)"
 msgstr "Poišči (krmilka+vnašalka)"
 
@@ -1737,11 +1746,11 @@ msgstr "Projekt naložen"
 msgid "Loading project “%s”"
 msgstr "Nalaganje projekta »%s«"
 
-#: src/libide/gui/ide-workspace.c:1676
+#: src/libide/gui/ide-workspace.c:1689
 msgid "There are unsaved documents"
 msgstr "Odprti so neshranjeni dokumenti"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -2222,7 +2231,7 @@ msgstr "Brez"
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "Nastavitve"
 
@@ -2516,9 +2525,8 @@ msgstr "Prilagodite nastavitve, povezane s projektom"
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
 #: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr "Livarna kode"
 
@@ -2544,7 +2552,6 @@ msgid "Change default build target"
 msgstr "Spremenite privzeti cilj gradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Izgradnja paketov"
 
@@ -2609,127 +2616,171 @@ msgid "Export project"
 msgstr "Izvozi projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-msgid "Stop Build"
-msgstr "Ustavi gradnjo"
-
-#: src/plugins/buildui/gtk/menus.ui:100
-msgid "Stop building project"
-msgstr "Zaustavi izgradnjo projekta"
-
-#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr "Po_kaži odvod izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr "Prikaži zaslonsko ploščo z dnevnikom izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "V teku"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr "Izbor ukaza za zagon …"
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Zaženi"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr "Zaženi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:144
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr "Znova zaženi program"
 
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
 msgstr "Znova zaženi program v izvajanju"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr "Ustavi program"
 
-#: src/plugins/buildui/gtk/menus.ui:156
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
 msgstr "Zaustavi izvajanje projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr "Razhroščevanje"
 
-#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Preizkusi enot"
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Sledi slogu sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:166
+msgid "Follow the system style when running the project"
+msgstr "Pri izvajanju projekta sledi slogu sistema"
+
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
 msgstr "Vsili svetlo"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:173
+msgid "Force light theme when running the project"
+msgstr "Vsili svetlo temo med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr "Vsili temno"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:180
+msgid "Force dark theme when running the project"
+msgstr "Vsili temno temo med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:184
 msgid "Accessibility"
 msgstr "Dostopnost"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:186
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Use high contrast theme when running the project"
+msgstr "Uporabi visokokontrastno temo med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:192
 msgid "Text Direction"
 msgstr "Smer besedila"
 
-#: src/plugins/buildui/gtk/menus.ui:200
+#: src/plugins/buildui/gtk/menus.ui:194
 msgid "Left-to-Right"
 msgstr "Z leve proti desni"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:198
+msgid "Force left-to-right text when running the project"
+msgstr "Vsili besedilo od leve proti desni med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:201
 msgid "Right-to-Left"
 msgstr "Z desne proti levi"
 
-#: src/plugins/buildui/gtk/menus.ui:214
+#: src/plugins/buildui/gtk/menus.ui:205
+msgid "Force right-to-left text when running the project"
+msgstr "Vsili besedilo od desne proti levi med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:210
 msgid "GPU"
 msgstr "GPE"
 
-#: src/plugins/buildui/gtk/menus.ui:216
+#: src/plugins/buildui/gtk/menus.ui:212
 msgid "GTK Renderer"
 msgstr "Izrisovalnik GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:214 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Privzeto"
 
-#: src/plugins/buildui/gtk/menus.ui:224
+#: src/plugins/buildui/gtk/menus.ui:218
+msgid "Use the default GTK renderer when running the project"
+msgstr "Uporabi privzti izrisovalnk GTK med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:221
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:230
+#: src/plugins/buildui/gtk/menus.ui:225
+msgid "Use the Vulkan renderer when running the project"
+msgstr "Uporabi izrisovalnk Vulkan med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:228
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:236
+#: src/plugins/buildui/gtk/menus.ui:232
+msgid "Use the GL renderer when running the project"
+msgstr "Uporabi izrisovalnk GL med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:235
 msgid "Legacy GL"
 msgstr "Opuščeni GL"
+
+#: src/plugins/buildui/gtk/menus.ui:239
+msgid "Use the legacy GL renderer when running the project"
+msgstr "Uporabi opuščeni izrisovalnk GL med izvajanjem projekta"
 
 #: src/plugins/buildui/gtk/menus.ui:242
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:257
+#: src/plugins/buildui/gtk/menus.ui:246
+msgid "Use the Cairo software renderer when running the project"
+msgstr "Uporabi programski izrisovalnk Cairo med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:255
+msgid "Request verbose logging when running the project"
+msgstr "Zahtevaj obsežno beleženje zapisnika med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "Show Inspector"
 msgstr "Pokaži inšpektorja"
+
+#: src/plugins/buildui/gtk/menus.ui:262
+msgid "Request the GTK inspector be shown when running the project"
+msgstr "Zahtevaj prikaz inšpektorja GTK med izvajanjem projekta"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -4318,12 +4369,6 @@ msgstr "Skoči na zadnji položaj ob ponovnem odprtju datoteke"
 msgid "Open file or folder"
 msgstr "Odpri datoteko ali mapo"
 
-#: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/menu-search/gtk/menus.ui:112
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "Datoteke"
-
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Podobne datoteke (Ctrl+Shift+O)"
@@ -4761,13 +4806,13 @@ msgstr "Izprazni projekt Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 
-#: src/plugins/manuals/gbp-manuals-page.c:275
+#: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
 #: src/plugins/manuals/manuals-navigatable.c:391
 msgid "Manuals"
 msgstr "Priročniki"
 
-#: src/plugins/manuals/gbp-manuals-panel.ui:91
+#: src/plugins/manuals/gbp-manuals-panel.ui:174
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:116
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 #: src/plugins/todo/gbp-todo-panel.ui:102
@@ -4810,10 +4855,6 @@ msgstr "Pregledovanje sistema za novo dokumentacijo"
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr "Zagon Maven"
-
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "Dejanja"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
