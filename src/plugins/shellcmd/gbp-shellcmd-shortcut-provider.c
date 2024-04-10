@@ -46,9 +46,11 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
   GbpShellcmdRunCommand *run_command = user_data;
   g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
+  g_auto(GStrv) override_environ = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
   const char *title;
+  IdePage *current_page;
   IdePage *page;
 
   IDE_ENTRY;
@@ -73,6 +75,32 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
     title = _("Untitled command");
 
   launcher = ide_terminal_launcher_new (context, IDE_RUN_COMMAND (run_command));
+
+  if ((current_page = ide_workspace_get_most_recent_page (workspace)) &&
+      IDE_IS_EDITOR_PAGE (current_page))
+    {
+      GFile *file = ide_editor_page_get_file (IDE_EDITOR_PAGE (current_page));
+
+      if (file != NULL)
+        {
+          g_autofree char *uri = g_file_get_uri (file);
+
+          if (uri != NULL)
+            override_environ = g_environ_setenv (override_environ,
+                                                 "CURRENT_FILE_URI",
+                                                 uri,
+                                                 FALSE);
+
+          if (g_file_is_native (file))
+            override_environ = g_environ_setenv (override_environ,
+                                                 "CURRENT_FILE_PATH",
+                                                 g_file_peek_path (file),
+                                                 FALSE);
+        }
+    }
+
+  ide_terminal_launcher_set_override_environ (launcher,
+                                              (const char * const *)override_environ);
 
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "close-on-exit", FALSE,
