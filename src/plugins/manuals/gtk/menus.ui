@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="gbp-manuals-menu">
+    <item>
+      <attribute name="id">org.gnome.builder.manuals.filter</attribute>
+      <attribute name="label" translatable="yes">Search Manuals…</attribute>
+      <attribute name="action">workspace.manuals.filter</attribute>
+      <attribute name="description" translatable="yes">Search documentation for installed SDKs</attribute>
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Search</attribute>
+      <attribute name="accel">&lt;control&gt;parenright</attribute>
+    </item>
+  </menu>
+</interface>

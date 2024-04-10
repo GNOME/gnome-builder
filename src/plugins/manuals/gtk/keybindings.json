@@ -1,0 +1,1 @@
+{ "id" : "org.gnome.builder.manuals.filter", "trigger" : "<Control>parenright", "action" : "workspace.manuals.filter", "when" : "true", "phase" : "capture" },

@@ -3,6 +3,8 @@
   <gresource prefix="/plugins/manuals">
     <file>manuals.plugin</file>
     <file>style.css</file>
+    <file>gtk/keybindings.json</file>
+    <file>gtk/menus.ui</file>
     <file preprocess="xml-stripblanks">gbp-manuals-panel.ui</file>
     <file preprocess="xml-stripblanks">gbp-manuals-pathbar.ui</file>
     <file preprocess="xml-stripblanks">manuals-path-button.ui</file>
