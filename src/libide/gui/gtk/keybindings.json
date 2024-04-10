@@ -16,6 +16,9 @@
 { "trigger" : "<Alt>8", "action" : "frame.page", "args" : "8", "when" : "inGrid()", "phase" : "capture" },
 { "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
 
+/* Focus most recent page in grid */
+{ "id" : "org.gnome.builder.workspace.last-page", "trigger" : "<Control>0", "action" : "workspace.focus-last-page", "phase" : "bubble" },
+
 /* Workspace Actions */
 { "id" : "org.gnome.builder.preferences", "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
 { "id" : "org.gnome.builder.project.configure", "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
