@@ -9,3 +9,4 @@ Name=Manuals
 X-Category=desktop
 X-Tree-Kind=manuals;
 X-Workspace-Kind=primary;editor;
+X-Search-Provider-Priority=10000
