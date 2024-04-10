@@ -34,13 +34,29 @@
 _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 
 static gboolean
-ide_webkit_plugin_show_help_cb (IdeApplication *app,
-                                gpointer        user_data)
+load_page_in_idle (gpointer user_data)
 {
   g_autoptr(PanelPosition) position = NULL;
   g_autoptr(GFile) file = NULL;
-  GtkWindowGroup *group;
+  IdeWorkspace *workspace = user_data;
   IdeWebkitPage *page;
+
+  g_assert (IDE_IS_WEBKIT_WORKSPACE (workspace));
+
+  page = ide_webkit_page_new ();
+  position = panel_position_new ();
+  ide_workspace_add_page (workspace, IDE_PAGE (page), position);
+
+  ide_webkit_page_load_uri (page, "file://" PACKAGE_DOCDIR "/en/index.html");
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+ide_webkit_plugin_show_help_cb (IdeApplication *app,
+                                gpointer        user_data)
+{
+  GtkWindowGroup *group;
   IdeWorkbench *workbench;
   IdeWorkspace *workspace;
   GtkWindow *window;
@@ -63,13 +79,18 @@ ide_webkit_plugin_show_help_cb (IdeApplication *app,
   workspace = ide_webkit_workspace_new ();
   ide_workbench_add_workspace (workbench, workspace);
 
-  page = ide_webkit_page_new ();
-  ide_webkit_page_load_uri (page, "file://" PACKAGE_DOCDIR "/en/index.html");
-
-  position = panel_position_new ();
-  ide_workspace_add_page (workspace, IDE_PAGE (page), position);
-
   gtk_window_present (GTK_WINDOW (workspace));
+
+  /* WebKit seems to fail without any sort of fallbacks if
+   * the surface resources are not available. So make sure that
+   * we load the page after resources are likely created by the
+   * compositor/EGL peer/etc.
+   */
+  g_timeout_add_full (G_PRIORITY_LOW,
+                      100, /* 100 msec */
+                      load_page_in_idle,
+                      g_object_ref (workspace),
+                      g_object_unref);
 
   IDE_RETURN (TRUE);
 }
