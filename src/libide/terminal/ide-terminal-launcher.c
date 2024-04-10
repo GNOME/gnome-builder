@@ -33,9 +33,10 @@
 
 struct _IdeTerminalLauncher
 {
-  GObject        parent_instance;
-  IdeRunCommand *run_command;
-  IdeContext    *context;
+  GObject         parent_instance;
+  IdeRunCommand  *run_command;
+  IdeContext     *context;
+  char          **override_environ;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTerminalLauncher, ide_terminal_launcher, G_TYPE_OBJECT)
@@ -114,6 +115,10 @@ ide_terminal_launcher_spawn_async (IdeTerminalLauncher *self,
   ide_run_context_setenv (run_context, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
   ide_run_context_setenv (run_context, "TERM", "xterm-256color");
 
+  /* Apply override environment if specified */
+  if (self->override_environ)
+    ide_run_context_add_environ (run_context, (const char * const *)self->override_environ);
+
   /* Attach the PTY to stdin/stdout/stderr */
   ide_run_context_set_pty (run_context, pty);
 
@@ -162,6 +167,7 @@ ide_terminal_launcher_dispose (GObject *object)
 
   g_clear_object (&self->context);
   g_clear_object (&self->run_command);
+  g_clear_pointer (&self->override_environ, g_strfreev);
 
   G_OBJECT_CLASS (ide_terminal_launcher_parent_class)->dispose (object);
 }
@@ -282,4 +288,17 @@ ide_terminal_launcher_copy (IdeTerminalLauncher *self)
                        "context", self->context,
                        "run-command", self->run_command,
                        NULL);
+}
+
+void
+ide_terminal_launcher_set_override_environ (IdeTerminalLauncher *self,
+                                            const char * const  *override_environ)
+{
+  char **copy;
+
+  g_return_if_fail (IDE_IS_TERMINAL_LAUNCHER (self));
+
+  copy = g_strdupv ((char **)override_environ);
+  g_strfreev (self->override_environ);
+  self->override_environ = copy;
 }

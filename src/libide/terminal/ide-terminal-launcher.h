@@ -49,5 +49,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean             ide_terminal_launcher_spawn_finish          (IdeTerminalLauncher    *self,
                                                                   GAsyncResult           *result,
                                                                   GError                **error);
+IDE_AVAILABLE_IN_47
+void                 ide_terminal_launcher_set_override_environ  (IdeTerminalLauncher    *self,
+                                                                  const char * const     *override_environ);
 
 G_END_DECLS
