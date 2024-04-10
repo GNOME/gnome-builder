@@ -23,9 +23,12 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
+#include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-project-tree-workspace-addin.h"
+#include "gbp-project-tree.h"
 #include "gbp-project-tree-pane.h"
 
 struct _GbpProjectTreeWorkspaceAddin
@@ -73,10 +76,34 @@ gbp_project_tree_workspace_addin_unload (IdeWorkspaceAddin *addin,
 }
 
 static void
+gbp_project_tree_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
+                                               IdePage           *page)
+{
+  GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
+  GbpProjectTree *tree;
+  GFile *file;
+
+  g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
+  g_assert (!page || IDE_IS_PAGE (page));
+
+  if (!IDE_IS_EDITOR_PAGE (page))
+    return;
+
+  tree = gbp_project_tree_pane_get_tree (self->pane);
+  file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page));
+
+  if (tree == NULL || file == NULL)
+    return;
+
+  gbp_project_tree_reveal (tree, file);
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_project_tree_workspace_addin_load;
   iface->unload = gbp_project_tree_workspace_addin_unload;
+  iface->page_changed = gbp_project_tree_workspace_addin_page_changed;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpProjectTreeWorkspaceAddin, gbp_project_tree_workspace_addin, G_TYPE_OBJECT,
