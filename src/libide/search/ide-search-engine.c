@@ -571,6 +571,16 @@ ide_search_engine_find_by_module_name_cb (IdeExtensionSetAdapter *adapter,
     find->extension = extension;
 }
 
+/**
+ * ide_search_engine_find_by_module_name:
+ * @self: a #IdeSearchEngine
+ *
+ * Locates a search provider for a specific plugin module-name.
+ *
+ * Returns: (transfer none) (nullable): a #IdeSearchProvider or %NULL
+ *
+ * Since: 47
+ */
 IdeSearchProvider *
 ide_search_engine_find_by_module_name (IdeSearchEngine *self,
                                        const char      *module_name)
