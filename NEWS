@@ -1,3 +1,20 @@
+# GNOME Builder 46.1
+
+ * Improvements to sidebar legibility.
+ * Setup CACHEDIR.TAG for private Flatpak installation to avoid
+   automatic backups by various backup software.
+ * Fix compilation issue with newer libgit2 due to -Werror.
+ * Update to newcomers project list.
+ * Fix parsing of `flatpak-builder --version` output for which the
+   format has changed since earlier implementations of Builder's
+   flatpak plugin.
+ * Workaround a DMA-BUF issue in WebKit for showing help documentation.
+ * Menu search filtering improvements.
+ * File search preview improvements.
+ * Stylistic improvements to editor gutter.
+ * Improved flatpak runtime lists from gnome-builder-flatpak daemon.
+ * Translation updates.
+
 # GNOME Builder 46.0
 
  * Fix name escaping in python template
