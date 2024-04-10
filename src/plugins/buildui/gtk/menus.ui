@@ -173,18 +173,21 @@
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'follow'</attribute>
+          <attribute name="description" translatable="yes">Follow the system style when running the project</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Force Light</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-light'</attribute>
+          <attribute name="description" translatable="yes">Force light theme when running the project</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Force Dark</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-dark'</attribute>
+          <attribute name="description" translatable="yes">Force dark theme when running the project</attribute>
         </item>
       </submenu>
       <submenu id="run-menu-a11y">
@@ -193,6 +196,7 @@
           <attribute name="label" translatable="yes">High Contrast</attribute>
           <attribute name="role">check</attribute>
           <attribute name="action">context.run-manager.high-contrast</attribute>
+          <attribute name="description" translatable="yes">Use high contrast theme when running the project</attribute>
         </item>
         <section id="run-menu-a11y-text-direction">
           <attribute name="label" translatable="yes">Text Direction</attribute>
@@ -201,12 +205,14 @@
             <attribute name="role">check</attribute>
             <attribute name="action">context.run-manager.text-direction</attribute>
             <attribute name="target" type="s">'ltr'</attribute>
+            <attribute name="description" translatable="yes">Force left-to-right text when running the project</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Right-to-Left</attribute>
             <attribute name="role">check</attribute>
             <attribute name="action">context.run-manager.text-direction</attribute>
             <attribute name="target" type="s">'rtl'</attribute>
+            <attribute name="description" translatable="yes">Force right-to-left text when running the project</attribute>
           </item>
         </section>
       </submenu>
@@ -219,30 +225,35 @@
             <attribute name="role">radio</attribute>
             <attribute name="action">context.run-manager.renderer</attribute>
             <attribute name="target" type="s">'default'</attribute>
+            <attribute name="description" translatable="yes">Use the default GTK renderer when running the project</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Vulkan</attribute>
             <attribute name="role">radio</attribute>
             <attribute name="action">context.run-manager.renderer</attribute>
             <attribute name="target" type="s">'vulkan'</attribute>
+            <attribute name="description" translatable="yes">Use the Vulkan renderer when running the project</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">GL</attribute>
             <attribute name="role">radio</attribute>
             <attribute name="action">context.run-manager.renderer</attribute>
             <attribute name="target" type="s">'ngl'</attribute>
+            <attribute name="description" translatable="yes">Use the GL renderer when running the project</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Legacy GL</attribute>
             <attribute name="role">radio</attribute>
             <attribute name="action">context.run-manager.renderer</attribute>
             <attribute name="target" type="s">'gl'</attribute>
+            <attribute name="description" translatable="yes">Use the legacy GL renderer when running the project</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Cairo</attribute>
             <attribute name="role">radio</attribute>
             <attribute name="action">context.run-manager.renderer</attribute>
             <attribute name="target" type="s">'cairo'</attribute>
+            <attribute name="description" translatable="yes">Use the Cairo software renderer when running the project</attribute>
           </item>
         </section>
       </submenu>
@@ -251,12 +262,14 @@
         <attribute name="label" translatable="yes">Verbose Logging</attribute>
         <attribute name="action">context.settings.project:org.gnome.builder.project.verbose-logging</attribute>
         <attribute name="role">check</attribute>
+        <attribute name="description" translatable="yes">Request verbose logging when running the project</attribute>
       </item>
       <item>
         <attribute name="id">run-menu-interactive</attribute>
         <attribute name="label" translatable="yes">Show Inspector</attribute>
         <attribute name="action">context.run-manager.interactive</attribute>
         <attribute name="role">check</attribute>
+        <attribute name="description" translatable="yes">Request the GTK inspector be shown when running the project</attribute>
       </item>
     </section>
   </menu>
