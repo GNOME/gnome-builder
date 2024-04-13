@@ -2,26 +2,32 @@
 # Copyright (C) 2024 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Rachida SACI <rgebbid@gmail.com>, 2024.
+# ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-46\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-03-23 10:43+0000\n"
-"PO-Revision-Date: 2024-03-30 23:11+0100\n"
-"Last-Translator: sa\n"
-"Language-Team: Kabyle <kab@li.org>\n"
+"POT-Creation-Date: 2024-04-10 05:03+0000\n"
+"PO-Revision-Date: 2024-04-13 15:12+0100\n"
+"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"Language-Team: Kabyle <>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Gtranslator 41.0\n"
+"X-DL-Team: kab\n"
+"X-DL-Module: gnome-builder\n"
+"X-DL-Branch: main\n"
+"X-DL-Domain: po\n"
+"X-DL-State: None\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:38
-#: src/libide/editor/ide-editor-workspace.ui:61
+#: src/libide/editor/ide-editor-workspace.ui:40
+#: src/libide/editor/ide-editor-workspace.ui:63
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -155,7 +161,7 @@ msgid "Use the minimap to see more of the file"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:246
+#: src/plugins/buildui/tweaks.ui:264
 msgid "Build Parallelism"
 msgstr ""
 
@@ -475,7 +481,7 @@ msgstr ""
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:27
 msgid "\"Projects\""
-msgstr ""
+msgstr "\"Isenfaṛen\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
 msgid "Projects directory"
@@ -586,13 +592,23 @@ msgid "What environment to use when running unit tests"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:252 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:56
+msgid "Cache Root"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:57
+msgid ""
+"A directory to use as the root for cache data of the project like builds and "
+"flatpak staging directories"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
@@ -645,7 +661,7 @@ msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:20
 msgid "Open a Project"
-msgstr ""
+msgstr "Ldi asenfaṛ"
 
 #: data/org.gnome.Builder.desktop.in.in:24
 msgid "Start New Project"
@@ -659,10 +675,6 @@ msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
-msgstr ""
-
-#: data/org.gnome.Builder.desktop.in.in:36
-msgid "D-Bus Inspector"
 msgstr ""
 
 #: src/libide/code/ide-buffer.c:3834
@@ -699,9 +711,15 @@ msgstr ""
 msgid "Failed to save draft: %s"
 msgstr ""
 
-#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
+#: src/libide/core/ide-context.c:349 src/libide/core/ide-context.c:797
 msgid "Untitled"
 msgstr "War azwel"
+
+#: src/libide/core/ide-global.c:512 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Isenfaṛen"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:528
@@ -714,7 +732,7 @@ msgstr "War azwel"
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 #: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
@@ -727,7 +745,7 @@ msgstr ""
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
 #: src/libide/gui/ide-workbench.c:1560
 msgid "Open File…"
-msgstr ""
+msgstr "Ldi afaylu…"
 
 #: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
@@ -892,7 +910,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
-msgstr ""
+msgstr "Sekles afaylu"
 
 #: src/libide/editor/ide-editor-page.c:1136
 #: src/libide/gtk/ide-file-chooser-entry.c:109
@@ -986,8 +1004,8 @@ msgstr "Taggara n yizirig:"
 msgid "Language"
 msgstr "Tutlayt"
 
-#: src/libide/editor/ide-editor-workspace.ui:105
-#: src/libide/gui/ide-primary-workspace.ui:112
+#: src/libide/editor/ide-editor-workspace.ui:107
+#: src/libide/gui/ide-primary-workspace.ui:114
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr ""
 
@@ -1052,13 +1070,13 @@ msgstr ""
 #: src/libide/foundry/ide-local-device.c:140
 #, c-format
 msgid "My Computer (%s)"
-msgstr ""
+msgstr "Aselkim-iw (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
-msgstr ""
+msgstr "Aselkim-iw (%s) — %s"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
@@ -1157,12 +1175,12 @@ msgid "Preparing…"
 msgstr ""
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3770
+#: src/libide/foundry/ide-pipeline.c:3772
 #, c-format
 msgid "Removing %s"
 msgstr ""
 
-#: src/libide/foundry/ide-pipeline.c:3829
+#: src/libide/foundry/ide-pipeline.c:3831
 msgid "Removing build directories…"
 msgstr ""
 
@@ -1228,7 +1246,7 @@ msgstr ""
 msgid "User requested application to stop"
 msgstr ""
 
-#: src/libide/foundry/ide-runtime.c:406
+#: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
@@ -1260,12 +1278,6 @@ msgstr ""
 msgid "Default (Host operating system)"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr ""
-
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
@@ -1275,13 +1287,13 @@ msgstr ""
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:147
+#: src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Mdel"
 
 #: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
-msgstr ""
+msgstr "Ldi-d asenfaṛ"
 
 #: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
@@ -1293,7 +1305,7 @@ msgstr ""
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr ""
+msgstr "_Fren akaram…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
@@ -1330,11 +1342,11 @@ msgstr ""
 #: src/libide/greeter/ide-greeter-workspace.c:623
 #: src/libide/greeter/ide-greeter-workspace.c:662
 msgid "Select Project Folder"
-msgstr ""
+msgstr "Fren akaram n usenfaṛ"
 
 #: src/libide/greeter/ide-greeter-workspace.c:628
 msgid "Select Project File"
-msgstr ""
+msgstr "Fren afaylu n usenfaṛ"
 
 #: src/libide/greeter/ide-greeter-workspace.c:667
 #: src/libide/gui/ide-workbench.c:1563
@@ -1459,29 +1471,39 @@ msgstr "%u n %u"
 msgid "Search"
 msgstr "Nadi"
 
-#: src/libide/gui/ide-search-popover.ui:61
+#: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
 msgstr ""
 
-#: src/libide/gui/ide-search-popover.ui:238
-msgid "_Everything"
+#: src/libide/gui/ide-search-popover.ui:74
+#| msgid "Search"
+msgid "Type to Search"
+msgstr "Aru iwakken ad tnadiḍ"
+
+#: src/libide/gui/ide-search-popover.ui:75
+msgid "Prefix your query with one of the following to filter results"
 msgstr ""
 
-#: src/libide/gui/ide-search-popover.ui:245
-msgid "_Actions"
-msgstr ""
+#: src/libide/gui/ide-search-popover.ui:89
+#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Ifuyla"
 
-#: src/libide/gui/ide-search-popover.ui:252
-msgid "_Commands"
-msgstr ""
+#: src/libide/gui/ide-search-popover.ui:110
+msgid "Symbols"
+msgstr "Izamulen"
 
-#: src/libide/gui/ide-search-popover.ui:259
-msgid "_Files"
-msgstr "Ifuyla (_F)"
+#: src/libide/gui/ide-search-popover.ui:131
+#| msgid "Document"
+msgid "Documentation"
+msgstr "Isemli"
 
-#: src/libide/gui/ide-search-popover.ui:266
-msgid "_Symbols"
-msgstr ""
+#: src/libide/gui/ide-search-popover.ui:152
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Tigawin"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
@@ -1499,10 +1521,10 @@ msgstr ""
 
 #: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
-msgstr ""
+msgstr "Mdel asenfaṛ"
 
 #: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "Amatu"
 
@@ -1617,19 +1639,19 @@ msgstr ""
 msgid "Invalid configuration"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:44
+#: src/libide/gui/ide-primary-workspace.ui:46
 msgid "Toggle Left Panel (F9)"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:79
+#: src/libide/gui/ide-primary-workspace.ui:81
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:87
-#: src/libide/gui/ide-primary-workspace.ui:134
+#: src/libide/gui/ide-primary-workspace.ui:89
+#: src/libide/gui/ide-primary-workspace.ui:136
 msgid "Search (Ctrl+Enter)"
-msgstr ""
+msgstr "Anadi (Ctrl+S)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1668,11 +1690,11 @@ msgstr ""
 msgid "Loading project “%s”"
 msgstr ""
 
-#: src/libide/gui/ide-workspace.c:1676
+#: src/libide/gui/ide-workspace.c:1689
 msgid "There are unsaved documents"
 msgstr "Llan yisemliyen ur yettwaskelsen ara"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1733,9 +1755,9 @@ msgstr ""
 msgid "SDKs"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
-msgstr ""
+msgstr "Iqeddacen n tutlayt"
 
 #: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
@@ -1768,7 +1790,7 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
@@ -1814,15 +1836,15 @@ msgstr "Tacfawt"
 
 #: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut (Ctrl+X)"
-msgstr ""
+msgstr "Gzem (Ctrl+X)"
 
 #: src/libide/sourceview/gtk/menus.ui:16
 msgid "_Copy (Ctrl+C)"
-msgstr ""
+msgstr "Nɣel (Ctrl+C)"
 
 #: src/libide/sourceview/gtk/menus.ui:22
 msgid "_Paste (Ctrl+V)"
-msgstr ""
+msgstr "Senṭeḍ (Ctrl+V)"
 
 #: src/libide/sourceview/gtk/menus.ui:29
 msgid "Undo"
@@ -1830,11 +1852,11 @@ msgstr "Sefsex"
 
 #: src/libide/sourceview/gtk/menus.ui:31
 msgid "Undo & Redo"
-msgstr ""
+msgstr "Asefsex akked tririt"
 
 #: src/libide/sourceview/gtk/menus.ui:33
 msgid "Undo (Ctrl+Z)"
-msgstr ""
+msgstr "Err-d (Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:39
 msgid "Redo (Shift+Ctrl+Z)"
@@ -1961,7 +1983,7 @@ msgstr ""
 
 #: src/libide/terminal/gtk/menus.ui:22 src/libide/terminal/ide-terminal.ui:126
 msgid "_Copy Link"
-msgstr ""
+msgstr "Nɣel asaɣ (_C)"
 
 #: src/libide/terminal/gtk/menus.ui:27 src/libide/terminal/ide-terminal.ui:132
 msgid "_Paste"
@@ -2033,16 +2055,16 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal-palettes.h:305
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
 #: src/libide/terminal/ide-terminal-palettes.h:829
 msgid "XTerm"
-msgstr ""
+msgstr "XTerm"
 
 #: src/libide/terminal/ide-terminal-palettes.h:407
 msgid "RXVT"
-msgstr ""
+msgstr "RXVT"
 
 #: src/libide/terminal/ide-terminal-palettes.h:458
 msgid "Fishtank"
@@ -2094,7 +2116,7 @@ msgstr ""
 
 #: src/libide/terminal/ide-terminal.ui:161
 msgid "Search…"
-msgstr ""
+msgstr "Nadi…"
 
 #: src/libide/terminal/ide-terminal.ui:168
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
@@ -2148,7 +2170,7 @@ msgstr "Ula yiwen"
 msgid "Blank page"
 msgstr ""
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "Iɣewaren"
 
@@ -2269,7 +2291,7 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
-msgstr ""
+msgstr "Ixuṣ"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
@@ -2307,7 +2329,7 @@ msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
 msgid "Errors"
-msgstr ""
+msgstr "Tuccḍiwin"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:262
 msgid "Warnings"
@@ -2440,9 +2462,8 @@ msgstr ""
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
 #: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr ""
 
@@ -2468,7 +2489,6 @@ msgid "Change default build target"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr ""
 
@@ -2533,126 +2553,170 @@ msgid "Export project"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:98
-msgid "Stop Build"
-msgstr ""
-
-#: src/plugins/buildui/gtk/menus.ui:100
-msgid "Stop building project"
-msgstr ""
-
-#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "Aseddu"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Selkem"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:144
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:156
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Ḍfer aɣanib n unagraw"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:166
+msgid "Follow the system style when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:173
+msgid "Force light theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:180
+msgid "Force dark theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:184
 msgid "Accessibility"
 msgstr "Tanekcumt"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:186
 msgid "High Contrast"
 msgstr "Amyeẓli afellay"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Use high contrast theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:192
 msgid "Text Direction"
 msgstr "Tanila n uḍris"
 
-#: src/plugins/buildui/gtk/menus.ui:200
+#: src/plugins/buildui/gtk/menus.ui:194
 msgid "Left-to-Right"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:198
+msgid "Force left-to-right text when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:201
 msgid "Right-to-Left"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:214
-msgid "GPU"
+#: src/plugins/buildui/gtk/menus.ui:205
+msgid "Force right-to-left text when running the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:216
+#: src/plugins/buildui/gtk/menus.ui:210
+msgid "GPU"
+msgstr "GPU"
+
+#: src/plugins/buildui/gtk/menus.ui:212
 msgid "GTK Renderer"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
-#: src/plugins/buildui/tweaks.ui:443
+#: src/plugins/buildui/gtk/menus.ui:214 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Amezwer"
 
-#: src/plugins/buildui/gtk/menus.ui:224
+#: src/plugins/buildui/gtk/menus.ui:218
+msgid "Use the default GTK renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:221
 msgid "Vulkan"
+msgstr "Vulkan"
+
+#: src/plugins/buildui/gtk/menus.ui:225
+msgid "Use the Vulkan renderer when running the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:230
+#: src/plugins/buildui/gtk/menus.ui:228
 msgid "GL"
+msgstr "GL"
+
+#: src/plugins/buildui/gtk/menus.ui:232
+msgid "Use the GL renderer when running the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:236
+#: src/plugins/buildui/gtk/menus.ui:235
 msgid "Legacy GL"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:239
+msgid "Use the legacy GL renderer when running the project"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:242
 msgid "Cairo"
 msgstr "Le Caire"
 
-#: src/plugins/buildui/gtk/menus.ui:257
+#: src/plugins/buildui/gtk/menus.ui:246
+msgid "Use the Cairo software renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:255
+msgid "Request verbose logging when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "Show Inspector"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:262
+msgid "Request the GTK inspector be shown when running the project"
 msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:36
@@ -2793,100 +2857,114 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
-msgid "History"
-msgstr "Azray"
+#: src/plugins/buildui/tweaks.ui:185
+msgid "Storage"
+msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:188
-msgid "Clear Expired Artifacts"
+msgid "Artifacts and Cached Files"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:189
+msgid ""
+"Directory used for storing build artifacts and cached files from the build "
+"pipeline. Requires restarting Builder to take effect."
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+msgid "History"
+msgstr "Azray"
+
+#: src/plugins/buildui/tweaks.ui:206
+msgid "Clear Expired Artifacts"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:200
+#: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:201
+#: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:212
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Show Build Logs"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:213
+#: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:229
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:230
+#: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:243
+#: src/plugins/buildui/tweaks.ui:261
 msgid "Workers"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:247
+#: src/plugins/buildui/tweaks.ui:265
 msgid "Number of workers to use when performing builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:262
+#: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:354
+#: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:389
+#: src/plugins/buildui/tweaks.ui:407
 msgid "Installation Prefix"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:390
+#: src/plugins/buildui/tweaks.ui:408
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:408
+#: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:421
+#: src/plugins/buildui/tweaks.ui:439
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:428
+#: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:431
+#: src/plugins/buildui/tweaks.ui:449
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Tamnaḍt"
 
-#: src/plugins/buildui/tweaks.ui:432
+#: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:449
+#: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:455
+#: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:476
+#: src/plugins/buildui/tweaks.ui:494
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
@@ -3036,7 +3114,7 @@ msgstr ""
 
 #: src/plugins/codeshot/gtk/menus.ui:6
 msgid "Copy as Image"
-msgstr ""
+msgstr "Nɣel amzun d tugna"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
 msgid "Copy selected text as an image"
@@ -3208,7 +3286,7 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:17
 msgid "Project Name"
-msgstr ""
+msgstr "Isem n usenfaṛ"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
@@ -3254,7 +3332,7 @@ msgstr "Taneɣruft"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:182
 msgid "Create Project"
-msgstr ""
+msgstr "Snulfu-d asenfaṛ"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
@@ -3264,7 +3342,7 @@ msgstr ""
 #: src/plugins/create-project/gtk/menus.ui:21
 #: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
-msgstr ""
+msgstr "Snulfu-d asefaṛ amaynut…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
@@ -3561,15 +3639,7 @@ msgstr ""
 msgid "Number of seconds to wait for the deviced peer to appear"
 msgstr ""
 
-#: src/plugins/dspy/gbp-dspy-application-addin.c:47
-msgid "Display D-Bus inspector"
-msgstr ""
-
-#: src/plugins/dspy/gbp-dspy-application-addin.c:108
-msgid "D-Spy"
-msgstr ""
-
-#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:15
 msgid "D-Bus Inspector…"
 msgstr ""
 
@@ -3652,7 +3722,7 @@ msgstr "4"
 
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
@@ -3673,7 +3743,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
-msgstr ""
+msgstr "Windows (CR/LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
@@ -3685,11 +3755,11 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:124
 msgid "New _File"
-msgstr ""
+msgstr "A_faylu amaynut"
 
 #: src/plugins/editorui/gtk/menus.ui:133
 msgid "_Open File…"
-msgstr ""
+msgstr "Ldi afaylu… (O)"
 
 #: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
@@ -4201,25 +4271,19 @@ msgstr ""
 msgid "Open file or folder"
 msgstr ""
 
-#: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/menu-search/gtk/menus.ui:112
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "Ifuyla"
-
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr ""
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
 msgid "Installation failed"
 msgstr "Asbeddi ur yeddi ara"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
 msgid "Installation complete"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:454
+#: src/plugins/flatpak/gbp-flatpak-client.c:460
 #: src/plugins/git/gbp-git-client.c:398
 msgid "The client has been closed"
 msgstr ""
@@ -4267,50 +4331,50 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:852
 msgid "Flatpak"
-msgstr ""
+msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
 msgid "Creating flatpak workspace"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
 msgid "Preparing build directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
 msgid "Downloading dependencies"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
 msgid "Building dependencies"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
 msgid "Finalizing flatpak build"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
 msgid "Exporting staging directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
 msgid "Creating flatpak bundle"
 msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
 msgid "Flatpak Application"
-msgstr ""
+msgstr "Asnas n Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
 msgid "Installing Necessary SDKs"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4398,12 +4462,12 @@ msgid ""
 "repository."
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr ""
@@ -4453,7 +4517,7 @@ msgstr ""
 
 #: src/plugins/git/gbp-git-vcs.c:560
 msgid "Git"
-msgstr ""
+msgstr "Git"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
@@ -4552,7 +4616,7 @@ msgstr ""
 
 #: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
-msgstr ""
+msgstr "Nadi ɣef…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
@@ -4634,13 +4698,55 @@ msgstr ""
 msgid "Create a new empty project using a simple Makefile"
 msgstr ""
 
+#: src/plugins/manuals/gbp-manuals-page.c:321
+#: src/plugins/manuals/gbp-manuals-panel.ui:5
+#: src/plugins/manuals/manuals-navigatable.c:391
+msgid "Manuals"
+msgstr ""
+
+#: src/plugins/manuals/gbp-manuals-panel.ui:174
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
+#: src/plugins/todo/gbp-todo-panel.ui:102
+msgid "Filter…"
+msgstr ""
+
+#: src/plugins/manuals/manuals-book.c:505
+#: src/plugins/manuals/manuals-heading.c:501
+#: src/plugins/manuals/manuals-keyword.c:526
+#, c-format
+msgid "View in %s"
+msgstr ""
+
+#. Note to the user we're importing this book
+#: src/plugins/manuals/manuals-devhelp-importer.c:697
+#, c-format
+msgid "Importing %s…"
+msgstr ""
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:116
+msgid "Importing JHBuild Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:117
+msgid "Scanning jhbuild for new documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-sdk.c:282
+msgid "GNOME Nightly"
+msgstr ""
+
+#: src/plugins/manuals/manuals-system-importer.c:77
+msgid "Importing System Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-system-importer.c:78
+msgid "Scanning system for new documentation"
+msgstr ""
+
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr ""
-
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "Tigawin"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
@@ -4779,7 +4885,7 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
-msgstr ""
+msgstr "Rnu afecku:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
 #: src/plugins/meson/gbp-meson-utils.c:98
@@ -4822,31 +4928,31 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "C++"
-msgstr ""
+msgstr "C++"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
 msgid "Vala"
-msgstr ""
+msgstr "Vala"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
 msgid "Fortran"
-msgstr ""
+msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
 msgid "Add Tool"
-msgstr ""
+msgstr "Rnu afecku"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
@@ -4854,11 +4960,11 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
-msgstr ""
+msgstr "Kkes fecku"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:174
 msgid "GNOME Application"
-msgstr ""
+msgstr "Asnas n GNOME"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
@@ -4972,7 +5078,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
-msgstr ""
+msgstr "Gitg"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Gitg is a graphical Git client"
@@ -4996,33 +5102,25 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
-msgstr ""
+msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
 msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
-msgid "Photos"
-msgstr "Tiwlafin"
+msgid "Polari"
+msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "Access, organize and share your photos on GNOME"
-msgstr ""
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:113
-msgid "Polari"
-msgstr ""
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr ""
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
 msgstr "Amaklas n imesli"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
 msgstr ""
 
@@ -5158,12 +5256,6 @@ msgstr ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
-msgstr ""
-
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
-#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#: src/plugins/todo/gbp-todo-panel.ui:102
-msgid "Filter…"
 msgstr ""
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
@@ -5317,7 +5409,7 @@ msgstr ""
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
-msgstr ""
+msgstr "Aselkim-iw (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
@@ -5661,11 +5753,11 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:46
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
-msgstr ""
+msgstr "Azrug n tɣimit"
 
 #: src/plugins/sysprof/gtk/menus.ui:53 src/plugins/sysprof/tweaks.ui:123
 msgid "System Bus"
@@ -5681,15 +5773,15 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
-msgstr ""
+msgstr "Imesmiḍanen"
 
 #: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr ""
+msgstr "Aseqdec n CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:74 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
-msgstr ""
+msgstr "Aseqdec n tkatut"
 
 #: src/plugins/sysprof/gtk/menus.ui:79
 msgid "Storage I/O"
@@ -5701,7 +5793,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:90
 msgid "Energy"
-msgstr ""
+msgstr "Tazmert"
 
 #: src/plugins/sysprof/gtk/menus.ui:92
 msgid "Consumption"
@@ -5789,7 +5881,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
-msgstr ""
+msgstr "Aseqdec n tezmert"
 
 #: src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about energy usage using RAPL"
@@ -5885,7 +5977,7 @@ msgstr ""
 
 #: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
-msgstr ""
+msgstr "Bḍu"
 
 #: src/plugins/terminal/tweaks.ui:14
 msgid "The font used within terminals"
@@ -6190,7 +6282,7 @@ msgstr ""
 
 #: src/plugins/web-browser/gtk/menus.ui:9
 msgid "Open a web browser in a new page"
-msgstr ""
+msgstr "Ldi iminig Web deg usebtar amaynut"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 #: src/plugins/web-browser/gtk/menus.ui:25
@@ -6225,3 +6317,9 @@ msgstr ""
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr ""
+
+#~ msgid "_Files"
+#~ msgstr "Ifuyla (_F)"
+
+#~ msgid "Photos"
+#~ msgstr "Tiwlafin"
