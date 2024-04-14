@@ -91,6 +91,7 @@ struct _GbpOmniGutterRenderer
   } text, current, bkpt, ctpt, sel, view;
   GdkRGBA stopped_bg;
   GdkRGBA current_line;
+  GdkRGBA margin_bg;
   struct {
     GdkRGBA add;
     GdkRGBA remove;
@@ -491,7 +492,9 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   GtkStyleContext *context;
   GtkSourceView *view;
   GdkRGBA fg;
+  GdkRGBA margin_bg;
   gboolean had_sel_fg = FALSE;
+  gboolean has_margin_border;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
@@ -516,6 +519,8 @@ reload_style_colors (GbpOmniGutterRenderer *self,
       if (!lookup_color (context, "view_fg_color", &self->view.fg))
         self->view.fg = fg;
     }
+
+  has_margin_border = get_style_rgba (scheme, "line-numbers-border", BACKGROUND, &margin_bg);
 
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
     {
@@ -561,6 +566,11 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   if (!get_style_rgba (scheme, "current-line", BACKGROUND, &self->current_line))
     self->current_line = transparent;
+
+  if (has_margin_border)
+    self->margin_bg = self->text.bg;
+  else
+    self->margin_bg = self->view.bg;
 
   /* These -0uilder: prefix values come from Builder's style-scheme xml
    * files, but other style schemes may also support them now too.
@@ -1294,7 +1304,7 @@ gbp_omni_gutter_renderer_snapshot (GtkWidget   *widget,
 
 
   gtk_snapshot_append_color (snapshot,
-                             &self->view.bg,
+                             &self->margin_bg,
                              &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, 0, RIGHT_MARGIN + CHANGE_WIDTH, height));
 
   GTK_WIDGET_CLASS (gbp_omni_gutter_renderer_parent_class)->snapshot (widget, snapshot);
