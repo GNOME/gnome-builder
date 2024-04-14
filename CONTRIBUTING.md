@@ -9,6 +9,8 @@ Additional compiled languages can also be supported with some work.
 Remember that the GNOME community is largely made up of part-time contributors
 that do this for fun. Be respectful and assume the best of each other.
 
+Here you can find [documentation for libide](https://devsuite.app/docs/libide/).
+
 ## Filing a bug
 
 Please file issues for bugs on our

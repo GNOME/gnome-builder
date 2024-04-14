@@ -5,6 +5,7 @@ Develop software for GNOME
 ## Helpful Links
 
  * [Read the documentation](https://builder.readthedocs.io/)
+ * [API Reference](https://devsuite.app/docs/libide/)
  * [File a Bug in GitLab](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
  * [Download a Release Tarball](https://download.gnome.org/sources/gnome-builder/)
  * [Browse source code in Git version control](https://gitlab.gnome.org/GNOME/gnome-builder)
