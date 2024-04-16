@@ -243,6 +243,8 @@ src/plugins/make-templates/gbp-make-template-provider.c
 src/plugins/manuals/gbp-manuals-application-addin.c
 src/plugins/manuals/gbp-manuals-page.c
 src/plugins/manuals/gbp-manuals-panel.ui
+src/plugins/manuals/gbp-manuals-search-result.c
+src/plugins/manuals/gtk/menus.ui
 src/plugins/manuals/manuals-book.c
 src/plugins/manuals/manuals-devhelp-importer.c
 src/plugins/manuals/manuals-heading.c
