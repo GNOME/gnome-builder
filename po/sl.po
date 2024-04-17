@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-04-10 05:03+0000\n"
-"PO-Revision-Date: 2024-04-10 15:16+0200\n"
+"POT-Creation-Date: 2024-04-16 23:47+0000\n"
+"PO-Revision-Date: 2024-04-17 15:40+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -837,7 +837,7 @@ msgstr "Dokument"
 #: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
 #: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
-#: src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9
 #: src/plugins/menu-search/gtk/menus.ui:10
 #: src/plugins/menu-search/gtk/menus.ui:24
 #: src/plugins/menu-search/gtk/menus.ui:56
@@ -1245,7 +1245,7 @@ msgstr "Ni mogoče izgraditi prenosa pri povezavi z omejeno merjeno porabo."
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
-#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
 msgid "Untitled command"
 msgstr "Neimenovan ukaz"
 
@@ -1524,7 +1524,7 @@ msgstr "%u od %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Poišči"
 
@@ -4819,6 +4819,20 @@ msgstr "Priročniki"
 msgid "Filter…"
 msgstr "Filtriraj …"
 
+#: src/plugins/manuals/gbp-manuals-search-result.c:215
+msgid "Open Documentation"
+msgstr "Odpri dokumentacijo"
+
+#: src/plugins/manuals/gtk/menus.ui:6
+msgid "Search Manuals…"
+msgstr "Išči po priročnikih ..."
+
+#: src/plugins/manuals/gtk/menus.ui:8
+msgid "Search documentation for installed SDKs"
+msgstr ""
+"Preiščite dokumentacijo za nameščene SDK (komplete za razvoj programske "
+"opreme)"
+
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
 #: src/plugins/manuals/manuals-keyword.c:526
@@ -5368,7 +5382,7 @@ msgstr "Poteka kopiranje datotek …"
 msgid "Files will be copied in a moment"
 msgstr "Datoteke bodo v kratkem kopirane"
 
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:51
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
 msgstr "Projektna drevesna zgradba"
