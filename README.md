@@ -4,6 +4,7 @@ Develop software for GNOME
 
 ## Helpful Links
 
+ * [Read a Book on Contributing to Builder (PDF)](https://gitlab.gnome.org/chergert/builder-a-developers-notebook/-/raw/main/builder-a-developers-notebook.pdf?ref_type=heads)
  * [Read the documentation](https://builder.readthedocs.io/)
  * [API Reference](https://devsuite.app/docs/libide/)
  * [File a Bug in GitLab](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
