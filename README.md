@@ -11,10 +11,6 @@ Develop software for GNOME
  * [Browse source code in Git version control](https://gitlab.gnome.org/GNOME/gnome-builder)
  * [Learn more about Builder](https://apps.gnome.org/Builder)
  * [Chat with the developers](irc://irc.gnome.org/#gnome-builder) in #gnome-builder on irc.gnome.org
- or [#gnome-builder:gnome.org](https://matrix.to/#/!owVIjvsVrBaEdelYem:matrix.org) on GNOME's Matrix.
-
-The IRC and Matrix channels are bridged to each other, which means that messages sent on one also come through on
-the other. In other words, you will be part of the same conversation regardless of which you join.
 
 ----
 
