@@ -193,7 +193,7 @@
       <attribute name="id">org.gnome.builder.editor.document.format</attribute>
       <attribute name="label" translatable="yes">Format Document</attribute>
       <attribute name="action">page.editor.format-document</attribute>
-      <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;f</attribute>
+      <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;f</attribute>
     </item>
     <item>
       <attribute name="id">org.gnome.builder.editor.selection.format</attribute>
