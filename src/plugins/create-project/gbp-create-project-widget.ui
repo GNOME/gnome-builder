@@ -44,7 +44,7 @@
               <object class="AdwPreferencesGroup">
                 <child>
                   <object class="AdwEntryRow" id="app_id_row">
-                    <property name="title" translatable="yes">Application ID…</property>
+                    <property name="title" translatable="yes">Application ID</property>
                     <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional" />
                     <signal name="entry_activated" handler="text_activated_cb" swapped="true" object="GbpCreateProjectWidget" />
                   </object>
