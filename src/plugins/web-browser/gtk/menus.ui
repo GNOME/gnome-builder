@@ -10,7 +10,6 @@
       </item>
     </section>
   </menu>
-
   <menu id="menu-search-web-browser">
     <section id="menu-search-web-browser-section">
       <attribute name="page" translatable="yes">Application</attribute>
@@ -33,6 +32,20 @@
         <attribute name="action">workspace.web-browser.page.location.focus</attribute>
         <attribute name="accel">&lt;ctrl&gt;l</attribute>
       </item>
+    </section>
+  </menu>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-open-section">
+      <submenu id="project-tree-menu-open-with-menu">
+        <section id="project-tree-menu-open-with-section">
+          <item>
+            <attribute name="id">project-tree-menu-open-editor</attribute>
+            <attribute name="label" translatable="yes">_Web Browser</attribute>
+            <attribute name="action">project-tree.open-with-hint</attribute>
+            <attribute name="target" type="s">'web-browser'</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
 </interface>
