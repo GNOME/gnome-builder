@@ -777,6 +777,8 @@ gbp_omni_gutter_renderer_load_basic (GbpOmniGutterRenderer *self,
     return;
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
+  if (file == NULL)
+    return;
 
   state.lines = lines;
   state.begin_line = gtk_text_iter_get_line (begin);
