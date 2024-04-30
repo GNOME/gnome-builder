@@ -199,6 +199,7 @@ ide_diagnostics_group_new (GFile *file)
   group = g_rc_box_new0 (IdeDiagnosticsGroup);
   group->magic = DIAG_GROUP_MAGIC;
   group->file = g_object_ref (file);
+  group->diagnostics_by_provider = g_hash_table_new_full (NULL, NULL, NULL, free_diagnostics);
 
   return group;
 }
@@ -226,24 +227,21 @@ ide_diagnostics_group_unref (IdeDiagnosticsGroup *group)
 static guint
 ide_diagnostics_group_has_diagnostics (IdeDiagnosticsGroup *group)
 {
+  GHashTableIter iter;
+  gpointer value;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
-  if (group->diagnostics_by_provider != NULL)
+  g_hash_table_iter_init (&iter, group->diagnostics_by_provider);
+
+  while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      GHashTableIter iter;
-      gpointer value;
+      IdeDiagnostics *diagnostics = value;
 
-      g_hash_table_iter_init (&iter, group->diagnostics_by_provider);
-
-      while (g_hash_table_iter_next (&iter, NULL, &value))
-        {
-          IdeDiagnostics *diagnostics = value;
-
-          if (diagnostics_get_size (diagnostics) > 0)
-            return TRUE;
-        }
+      if (diagnostics_get_size (diagnostics) > 0)
+        return TRUE;
     }
 
   return FALSE;
@@ -278,9 +276,6 @@ ide_diagnostics_group_add (IdeDiagnosticsGroup   *group,
   g_assert (IS_DIAGNOSTICS_GROUP (group));
   g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
   g_assert (diagnostic != NULL);
-
-  if (group->diagnostics_by_provider == NULL)
-    group->diagnostics_by_provider = g_hash_table_new_full (NULL, NULL, NULL, free_diagnostics);
 
   diagnostics = g_hash_table_lookup (group->diagnostics_by_provider, provider);
 
@@ -743,6 +738,8 @@ ide_diagnostics_manager_extension_added (IdeExtensionSetAdapter *adapter,
 
   group = ide_diagnostics_manager_find_group_from_adapter (self, adapter);
 
+  g_assert (IS_DIAGNOSTICS_GROUP (group));
+
   /*
    * We will need access to the group upon completion of the diagnostics,
    * so we add a reference to the group and allow it to be automatically
@@ -798,17 +795,9 @@ ide_diagnostics_manager_clear_by_provider (IdeDiagnosticsManager *self,
       g_assert (group != NULL);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
 
-      if (group->diagnostics_by_provider != NULL)
+      if (g_hash_table_contains (group->diagnostics_by_provider, provider))
         {
           g_hash_table_remove (group->diagnostics_by_provider, provider);
-
-          /*
-           * If we caused this hashtable to become empty, we can release the
-           * hashtable. The hashtable is guaranteed to not be empty if there
-           * are other providers loaded for this group.
-           */
-          if (g_hash_table_size (group->diagnostics_by_provider) == 0)
-            g_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
 
           /*
            * TODO: If this provider is not part of this group, we can possibly
@@ -918,7 +907,9 @@ ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnosticsManager *self,
 
   group = g_hash_table_lookup (self->groups_by_file, file);
 
-  if (group != NULL && group->diagnostics_by_provider != NULL)
+  g_assert (group == NULL || IS_DIAGNOSTICS_GROUP (group));
+
+  if (group != NULL)
     {
       GHashTableIter iter;
       gpointer value;
@@ -996,6 +987,9 @@ ide_diagnostics_manager_rediagnose (IdeDiagnosticsManager *self,
   file = ide_buffer_get_file (buffer);
   group = ide_diagnostics_manager_find_group (self, file);
 
+  g_assert (group != NULL);
+  g_assert (IS_DIAGNOSTICS_GROUP (group));
+
   ide_diagnostics_group_queue_diagnose (group, self);
 }
 
@@ -1072,17 +1066,6 @@ _ide_diagnostics_manager_file_closed (IdeDiagnosticsManager *self,
    */
   ide_clear_and_destroy_object (&group->adapter);
 
-  /*
-   * Even after unloading the diagnostic providers, we might still have
-   * diagnostics that were created from other files (this could happen when
-   * one diagnostic is created for a header from a source file). So we don't
-   * want to wipe out the hashtable unless everything was unloaded. The other
-   * provider will cleanup during its own destruction.
-   */
-  if (group->diagnostics_by_provider != NULL &&
-      g_hash_table_size (group->diagnostics_by_provider) == 0)
-    g_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
-
   group->has_diagnostics = has_diagnostics;
 
   IDE_EXIT;
@@ -1101,6 +1084,9 @@ _ide_diagnostics_manager_file_changed (IdeDiagnosticsManager *self,
   g_return_if_fail (G_IS_FILE (file));
 
   group = ide_diagnostics_manager_find_group (self, file);
+
+  g_assert (group != NULL);
+  g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   g_clear_pointer (&group->contents, g_bytes_unref);
 
@@ -1121,6 +1107,10 @@ _ide_diagnostics_manager_language_changed (IdeDiagnosticsManager *self,
   g_return_if_fail (IDE_IS_DIAGNOSTICS_MANAGER (self));
 
   group = ide_diagnostics_manager_find_group (self, file);
+
+  g_assert (group != NULL);
+  g_assert (IS_DIAGNOSTICS_GROUP (group));
+
   group->lang_id = g_intern_string (lang_id);
 
   if (group->adapter != NULL)
@@ -1144,9 +1134,8 @@ _ide_diagnostics_manager_file_opened (IdeDiagnosticsManager *self,
 
   group = ide_diagnostics_manager_find_group (self, file);
 
-  if (group->diagnostics_by_provider == NULL)
-    group->diagnostics_by_provider =
-      g_hash_table_new_full (NULL, NULL, NULL, free_diagnostics);
+  g_assert (group != NULL);
+  g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   group->lang_id = g_intern_string (lang_id);
 
