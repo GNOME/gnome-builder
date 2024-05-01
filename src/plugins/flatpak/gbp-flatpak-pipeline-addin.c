@@ -360,6 +360,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   IdeConfig *config;
   IdeRuntime *runtime;
   const char *app_id;
+  const char *config_dir;
   const char *platform;
   const char *branch;
   guint stage_id;
@@ -388,6 +389,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
+  config_dir = gbp_flatpak_get_config_dir ();
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     sdk_extensions = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (config));
@@ -413,6 +415,8 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   if (sdk == NULL)
     sdk = g_strdup (platform);
+
+  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", config_dir);
 
   ide_run_command_append_argv (run_command, "flatpak");
   ide_run_command_append_argv (run_command, "build-init");
