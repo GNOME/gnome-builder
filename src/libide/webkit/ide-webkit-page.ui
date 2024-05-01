@@ -7,19 +7,6 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
-          <object class="WebKitWebView" id="web_view">
-            <property name="settings">web_settings</property>
-            <property name="hexpand">true</property>
-            <property name="vexpand">true</property>
-            <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
-            <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
-            <signal name="decide-policy" handler="on_web_view_decide_policy_cb" swapped="true" object="IdeWebkitPage"/>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="separator"/>
-        </child>
-        <child>
           <object class="GtkCenterBox" id="toolbar">
             <signal name="notify::visible" handler="on_toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
             <property name="orientation">horizontal</property>
@@ -85,6 +72,19 @@
                 <property name="direction">up</property>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator" id="separator"/>
+        </child>
+        <child>
+          <object class="WebKitWebView" id="web_view">
+            <property name="settings">web_settings</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="decide-policy" handler="on_web_view_decide_policy_cb" swapped="true" object="IdeWebkitPage"/>
           </object>
         </child>
       </object>
