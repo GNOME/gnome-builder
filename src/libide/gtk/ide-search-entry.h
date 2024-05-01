@@ -38,8 +38,12 @@ G_DECLARE_FINAL_TYPE (IdeSearchEntry, ide_search_entry, IDE, SEARCH_ENTRY, GtkWi
 IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_search_entry_new                     (void);
 IDE_AVAILABLE_IN_ALL
+guint      ide_search_entry_get_occurrence_count    (IdeSearchEntry *self);
+IDE_AVAILABLE_IN_ALL
 void       ide_search_entry_set_occurrence_count    (IdeSearchEntry *self,
                                                      guint           occurrence_count);
+IDE_AVAILABLE_IN_ALL
+guint      ide_search_entry_get_occurrence_position (IdeSearchEntry *self);
 IDE_AVAILABLE_IN_ALL
 void       ide_search_entry_set_occurrence_position (IdeSearchEntry *self,
                                                      int             occurrence_position);

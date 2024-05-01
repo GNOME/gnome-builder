@@ -186,6 +186,14 @@ ide_search_entry_update_position (IdeSearchEntry *self)
     }
 }
 
+guint
+ide_search_entry_get_occurrence_count (IdeSearchEntry *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_ENTRY (self), 0);
+
+  return self->occurrence_count;
+}
+
 void
 ide_search_entry_set_occurrence_count (IdeSearchEntry *self,
                                        guint           occurrence_count)
@@ -197,6 +205,14 @@ ide_search_entry_set_occurrence_count (IdeSearchEntry *self,
       self->occurrence_count = occurrence_count;
       ide_search_entry_update_position (self);
     }
+}
+
+guint
+ide_search_entry_get_occurrence_position (IdeSearchEntry *self)
+{
+  g_return_val_if_fail (IDE_IS_SEARCH_ENTRY (self), 0);
+
+  return self->occurrence_position;
 }
 
 void
