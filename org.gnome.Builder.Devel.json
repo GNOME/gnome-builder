@@ -734,22 +734,6 @@
             ]
         },
         {
-            "name" : "manuals",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Ddevelopment=true",
-                "-Dbuilder=true"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/manuals.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
