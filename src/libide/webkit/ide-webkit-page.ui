@@ -76,13 +76,6 @@
                 <property name="web_view">web_view</property>
               </object>
             </child>
-            <child type="end">
-              <object class="GtkMenuButton">
-                <property name="icon-name">open-menu-symbolic</property>
-                <property name="menu-model">primary_menu</property>
-                <property name="direction">up</property>
-              </object>
-            </child>
           </object>
         </child>
         <child>
@@ -174,19 +167,4 @@
     </child>
   </template>
   <object class="WebKitSettings" id="web_settings"/>
-  <menu id="primary_menu">
-    <section>
-      <attribute name="label" translatable="yes">Settings</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Allow JavaScript</attribute>
-        <attribute name="action">page.web.enable-javascript</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Print</attribute>
-        <attribute name="action">page.web.print</attribute>
-      </item>
-    </section>
-  </menu>
 </interface>

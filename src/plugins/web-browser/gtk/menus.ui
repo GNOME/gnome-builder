@@ -48,4 +48,44 @@
       </submenu>
     </section>
   </menu>
+  <menu id="ide-webkit-page-menu">
+    <section id="ide-webkit-page-navigation-section">
+      <item>
+        <attribute name="label" translatable="yes">Stop Loading</attribute>
+        <attribute name="id">org.gnome.Builder.Webkit.Stop</attribute>
+        <attribute name="action">page.web.stop</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reload</attribute>
+        <attribute name="id">org.gnome.Builder.Webkit.Reload</attribute>
+        <attribute name="action">page.web.reload</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+        <attribute name="accel">&lt;ctrl&gt;r</attribute>
+      </item>
+    </section>
+    <section id="ide-webkit-page-find-section">
+      <item>
+        <attribute name="label" translatable="yes">_Find in Page</attribute>
+        <attribute name="id">org.gnome.Builder.Webkit.Find</attribute>
+        <attribute name="action">page.search.show</attribute>
+        <attribute name="accel">&lt;ctrl&gt;f</attribute>
+      </item>
+    </section>
+    <section id="ide-webkit-page-print-section">
+      <item>
+        <attribute name="label" translatable="yes">Print</attribute>
+        <attribute name="id">org.gnome.Builder.Webkit.Print</attribute>
+        <attribute name="action">page.web.print</attribute>
+      </item>
+    </section>
+    <section id="ide-webkit-page-settings-section">
+      <attribute name="label" translatable="yes">Settings</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Enable _JavaScript</attribute>
+        <attribute name="id">org.gnome.Builder.Webkit.JavaScript</attribute>
+        <attribute name="action">page.web.enable-javascript</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

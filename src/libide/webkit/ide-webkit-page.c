@@ -675,6 +675,7 @@ ide_webkit_page_init (IdeWebkitPage *self)
   WebKitWebsiteDataManager *manager;
 #endif
 
+  ide_page_set_menu_id (IDE_PAGE (self), "ide-webkit-page-menu");
   panel_widget_set_can_maximize (PANEL_WIDGET (self), TRUE);
 
   gtk_widget_init_template (GTK_WIDGET (self));
