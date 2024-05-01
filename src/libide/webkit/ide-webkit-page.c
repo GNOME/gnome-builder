@@ -30,6 +30,8 @@
 typedef struct
 {
   GtkStack           *reload_stack;
+  IdeSearchEntry     *search_entry;
+  GtkRevealer        *search_revealer;
   GtkSeparator       *separator;
   GtkCenterBox       *toolbar;
   IdeUrlBar          *url_bar;
@@ -37,6 +39,8 @@ typedef struct
   WebKitWebView      *web_view;
 
   IdeHtmlGenerator   *generator;
+
+  int                 search_dir;
 
   guint               dirty : 1;
   guint               generating : 1;
@@ -152,6 +156,156 @@ ide_webkit_page_grab_focus (GtkWidget *widget)
     return gtk_widget_grab_focus (GTK_WIDGET (priv->web_view));
 }
 
+static void
+notify_search_revealed_cb (IdeWebkitPage *self,
+                           GParamSpec    *pspec,
+                           GtkRevealer   *revealer)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (GTK_IS_REVEALER (revealer));
+
+  if (!gtk_revealer_get_child_revealed (revealer))
+    {
+      WebKitFindController *find;
+
+      find = webkit_web_view_get_find_controller (priv->web_view);
+      gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
+      webkit_find_controller_search_finish (find);
+    }
+}
+
+static void
+search_entry_changed_cb (IdeWebkitPage  *self,
+                         GParamSpec     *pspec,
+                         IdeSearchEntry *entry)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitFindController *find;
+  WebKitFindOptions options = 0;
+  const char *text;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (IDE_IS_SEARCH_ENTRY (entry));
+
+  find = webkit_web_view_get_find_controller (priv->web_view);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (ide_str_empty0 (text))
+    {
+      webkit_find_controller_search_finish (find);
+      ide_search_entry_set_occurrence_count (priv->search_entry, 0);
+      return;
+    }
+
+  options = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE;
+  options |= WEBKIT_FIND_OPTIONS_WRAP_AROUND;
+
+  priv->search_dir = 1;
+
+  webkit_find_controller_count_matches (find, text, options, G_MAXUINT);
+  webkit_find_controller_search (find, text, options, G_MAXUINT);
+}
+
+static void
+search_counted_matches_cb (IdeWebkitPage        *self,
+                           guint                 match_count,
+                           WebKitFindController *find)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_FIND_CONTROLLER (find));
+
+  if (match_count == G_MAXUINT)
+    match_count = 0;
+
+  ide_search_entry_set_occurrence_position (priv->search_entry, 0);
+  ide_search_entry_set_occurrence_count (priv->search_entry, match_count);
+}
+
+static void
+search_found_text_cb (IdeWebkitPage        *self,
+                      guint                 match_count,
+                      WebKitFindController *find)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  int count;
+  int position;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_FIND_CONTROLLER (find));
+
+  count = ide_search_entry_get_occurrence_count (priv->search_entry);
+  position = ide_search_entry_get_occurrence_position (priv->search_entry);
+
+  position += priv->search_dir;
+
+  if (position < 1)
+    position = count;
+  else if (position > count)
+    position = 1;
+
+  ide_search_entry_set_occurrence_position (priv->search_entry, position);
+
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "search.move-next", TRUE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "search.move-previous", TRUE);
+}
+
+static void
+search_failed_to_find_text_cb (IdeWebkitPage        *self,
+                               WebKitFindController *find)
+{
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_FIND_CONTROLLER (find));
+
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "search.move-next", FALSE);
+  panel_widget_action_set_enabled (PANEL_WIDGET (self), "search.move-previous", FALSE);
+}
+
+static void
+search_next_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitFindController *find;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  priv->search_dir = 1;
+
+  find = webkit_web_view_get_find_controller (priv->web_view);
+  webkit_find_controller_search_next (find);
+
+  IDE_EXIT;
+}
+
+static void
+search_previous_action (GtkWidget  *widget,
+                        const char *action_name,
+                        GVariant   *param)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitFindController *find;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  priv->search_dir = -1;
+
+  find = webkit_web_view_get_find_controller (priv->web_view);
+  webkit_find_controller_search_previous (find);
+
+  IDE_EXIT;
+}
+
 static gboolean
 on_web_view_decide_policy_cb (IdeWebkitPage            *self,
                               WebKitPolicyDecision     *decision,
@@ -241,6 +395,41 @@ stop_action (GtkWidget  *widget,
 }
 
 static void
+hide_search_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  gtk_revealer_set_reveal_child (priv->search_revealer, FALSE);
+
+  IDE_EXIT;
+}
+
+static void
+show_search_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  gtk_revealer_set_reveal_child (priv->search_revealer, TRUE);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->search_entry));
+
+  IDE_EXIT;
+}
+
+static void
 on_back_forward_list_changed_cb (IdeWebkitPage             *self,
                                  WebKitBackForwardListItem *item_added,
                                  const GList               *items_removed,
@@ -316,10 +505,29 @@ ide_webkit_page_constructed (GObject *object)
 {
   IdeWebkitPage *self = (IdeWebkitPage *)object;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitFindController *find;
   GtkStyleContext *context;
   GdkRGBA color;
 
   G_OBJECT_CLASS (ide_webkit_page_parent_class)->constructed (object);
+
+  find = webkit_web_view_get_find_controller (priv->web_view);
+
+  g_signal_connect_object (find,
+                           "counted-matches",
+                           G_CALLBACK (search_counted_matches_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (find,
+                           "found-text",
+                           G_CALLBACK (search_found_text_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (find,
+                           "failed-to-find-text",
+                           G_CALLBACK (search_failed_to_find_text_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (priv->web_view));
   if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
@@ -427,6 +635,8 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/webkit/ide-webkit-page.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, reload_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, search_revealer);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, separator);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
@@ -435,16 +645,23 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_toolbar_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_webkit_page_update_reload);
   gtk_widget_class_bind_template_callback (widget_class, on_web_view_decide_policy_cb);
+  gtk_widget_class_bind_template_callback (widget_class, search_entry_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, notify_search_revealed_cb);
 
   panel_widget_class_install_action (p_widget_class, "web.print", NULL, ide_webkit_page_print_action);
   panel_widget_class_install_action (p_widget_class, "web.go-forward", NULL, go_forward_action);
   panel_widget_class_install_action (p_widget_class, "web.go-back", NULL, go_back_action);
   panel_widget_class_install_action (p_widget_class, "web.reload", NULL, reload_action);
   panel_widget_class_install_action (p_widget_class, "web.stop", NULL, stop_action);
+  panel_widget_class_install_action (p_widget_class, "search.hide", NULL, hide_search_action);
+  panel_widget_class_install_action (p_widget_class, "search.show", NULL, show_search_action);
+  panel_widget_class_install_action (p_widget_class, "search.move-next", NULL, search_next_action);
+  panel_widget_class_install_action (p_widget_class, "search.move-previous", NULL, search_previous_action);
   panel_widget_class_install_property_action (p_widget_class, "web.enable-javascript", "enable-javascript");
 
   g_type_ensure (WEBKIT_TYPE_SETTINGS);
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
+  g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
   g_type_ensure (IDE_TYPE_URL_BAR);
 }
 

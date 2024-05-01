@@ -7,6 +7,17 @@
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
+          <object class="GtkShortcutController">
+            <property name="propagation-phase">capture</property>
+            <child>
+              <object class="GtkShortcut">
+                <property name="trigger">&lt;ctrl&gt;f</property>
+                <property name="action">action(page.search.show)</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkCenterBox" id="toolbar">
             <signal name="notify::visible" handler="on_toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
             <property name="orientation">horizontal</property>
@@ -85,6 +96,78 @@
             <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
             <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
             <signal name="decide-policy" handler="on_web_view_decide_policy_cb" swapped="true" object="IdeWebkitPage"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="search_revealer">
+            <property name="transition-type">slide-up</property>
+            <signal name="notify::child-revealed" handler="notify_search_revealed_cb" swapped="true"/>
+            <child>
+              <object class="GtkShortcutController">
+                <child>
+                  <object class="GtkShortcut">
+                    <property name="trigger">Escape</property>
+                    <property name="action">action(page.search.hide)</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="halign">center</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="IdeSearchEntry" id="search_entry">
+                        <property name="max-width-chars">30</property>
+                        <signal name="notify::text" handler="search_entry_changed_cb" swapped="true"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkButton">
+                            <property name="action-name">page.search.move-previous</property>
+                            <property name="icon-name">go-up-symbolic</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="action-name">page.search.move-next</property>
+                            <property name="icon-name">go-down-symbolic</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <style>
+                          <class name="circular"/>
+                          <class name="flat"/>
+                          <class name="small-button"/>
+                        </style>
+                        <property name="action-name">page.search.hide</property>
+                        <property name="icon-name">window-close-symbolic</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
           </object>
         </child>
       </object>
