@@ -63,7 +63,8 @@
                 <property name="child">
                   <object class="GtkBox">
                     <child>
-                      <object class="GtkBox" id="edit_controls">
+                      <object class="GtkImage" id="edit_image">
+                        <property name="icon-name">web-browser-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -94,7 +95,7 @@
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
-      <widget name="edit_controls"/>
+      <widget name="edit_image"/>
       <widget name="display_controls"/>
     </widgets>
   </object>
