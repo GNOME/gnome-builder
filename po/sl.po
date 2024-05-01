@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-04-29 20:02+0000\n"
-"PO-Revision-Date: 2024-05-01 11:01+0200\n"
+"POT-Creation-Date: 2024-05-01 21:27+0000\n"
+"PO-Revision-Date: 2024-05-02 00:09+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2231,18 +2231,6 @@ msgstr "Brez"
 msgid "Blank page"
 msgstr "Prazna stran"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
-msgid "Settings"
-msgstr "Nastavitve"
-
-#: src/libide/webkit/ide-webkit-page.ui:98
-msgid "Allow JavaScript"
-msgstr "Dovoli JavaScript"
-
-#: src/libide/webkit/ide-webkit-page.ui:104
-msgid "Print"
-msgstr "Natisni"
-
 #: src/main.c:128
 msgid "Run a new instance of Builder"
 msgstr "Zaženi nov primerek programa Builder"
@@ -2664,6 +2652,10 @@ msgstr "Razhroščevanje"
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Preizkusi enot"
+
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/web-browser/gtk/menus.ui:83
+msgid "Settings"
+msgstr "Nastavitve"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
@@ -4442,27 +4434,27 @@ msgstr "Poteka ustvarjanje delovne površine flatpak"
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Odstranjevanje zastarele mape flatpak s spremembami: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:443
 msgid "Preparing build directory"
 msgstr "Poteka pripravljanja mape izgradnje"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:503
 msgid "Downloading dependencies"
 msgstr "Prejemanje paketov odvisnosti"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:579
 msgid "Building dependencies"
 msgstr "Izgrajevanje odvisnosti"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:639
 msgid "Finalizing flatpak build"
 msgstr "Zaključevanje izgradnje flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:689
 msgid "Exporting staging directory"
 msgstr "Poteka izvažanje mape s spremembami …"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:779
 msgid "Creating flatpak bundle"
 msgstr "Ustvarjanje paket programov flatpak"
 
@@ -6456,6 +6448,26 @@ msgstr "Postavi trenutno mesto strani v žarišče"
 #: src/plugins/web-browser/gtk/menus.ui:43
 msgid "_Web Browser"
 msgstr "_Spletni brskalnik"
+
+#: src/plugins/web-browser/gtk/menus.ui:54
+msgid "Stop Loading"
+msgstr "Ustavi nalaganje"
+
+#: src/plugins/web-browser/gtk/menus.ui:60
+msgid "Reload"
+msgstr "Ponovno naloži"
+
+#: src/plugins/web-browser/gtk/menus.ui:69
+msgid "_Find in Page"
+msgstr "_Najdi na strani"
+
+#: src/plugins/web-browser/gtk/menus.ui:77
+msgid "Print"
+msgstr "Natisni"
+
+#: src/plugins/web-browser/gtk/menus.ui:85
+msgid "Enable _JavaScript"
+msgstr "Omogoči _JavaScript"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
