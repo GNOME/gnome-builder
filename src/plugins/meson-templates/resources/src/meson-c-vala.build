@@ -11,6 +11,9 @@
 ]
 
 {{name_}}_deps = [
+{{if language == "vala"}}
+  config_dep,
+{{end}}
   dependency('gtk4'),
 {{if is_adwaita}}
   dependency('libadwaita-1', version: '>= 1.4'),
@@ -24,5 +27,8 @@
 
 executable('{{name}}', {{name_}}_sources,
   dependencies: {{name_}}_deps,
+{{if language == "vala"}}
+  include_directories: config_inc,
+{{end}}
        install: true,
 )

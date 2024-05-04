@@ -107,6 +107,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "src/application-gtk4.vala", "src/application.vala", IDE_STRV_INIT ("Vala") },
   { "src/hello.gresource.xml", "src/{{prefix}}.gresource.xml", IDE_STRV_INIT ("Vala") },
   { "src/main-gtk4.vala", "src/main.vala", IDE_STRV_INIT ("Vala") },
+  { "src/config.vapi", "src/config.vapi", IDE_STRV_INIT ("Vala") },
   { "src/meson-c-vala.build", "src/meson.build", IDE_STRV_INIT ("Vala") },
   { "src/window-gtk4.ui", "src/window.ui", IDE_STRV_INIT ("Vala") },
   { "src/window-gtk4.vala", "src/window.vala", IDE_STRV_INIT ("Vala") },
