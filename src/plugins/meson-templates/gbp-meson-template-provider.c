@@ -76,7 +76,6 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
 
   /* JavaScript */
   { "src/hello.gresource.xml", "src/{{appid}}.data.gresource.xml", IDE_STRV_INIT ("JavaScript") },
-  { "src/hello.gresource.xml", "src/{{prefix}}.data.gresource.xml", IDE_STRV_INIT ("JavaScript") },
   { "src/hello.js.in", "src/{{appid}}.in", IDE_STRV_INIT ("JavaScript"), TRUE },
   { "src/hello.src.gresource.xml", "src/{{appid}}.src.gresource.xml", IDE_STRV_INIT ("JavaScript") },
   { "src/main-gtk4.js.tmpl", "src/main.js", IDE_STRV_INIT ("JavaScript") },
