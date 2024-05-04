@@ -5,6 +5,7 @@
   <requires lib="Adw" version="1.0"/>
 {{end}}
   <template class="{{PreFix}}Window" parent="{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow">
+    <property name="title" translatable="yes">{{Title}}</property>
     <property name="default-width">600</property>
     <property name="default-height">300</property>
 {{if is_adwaita}}
