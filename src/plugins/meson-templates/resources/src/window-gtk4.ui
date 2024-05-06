@@ -5,6 +5,7 @@
   <requires lib="Adw" version="1.0"/>
 {{end}}
   <template class="{{PreFix}}Window" parent="{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow">
+    <property name="title" translatable="yes">{{Title}}</property>
     <property name="default-width">600</property>
     <property name="default-height">300</property>
 {{if is_adwaita}}
@@ -16,7 +17,7 @@
               <object class="GtkMenuButton">
                 <property name="primary">True</property>
                 <property name="icon-name">open-menu-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Menu</property>
+                <property name="tooltip-text" translatable="yes">Main Menu</property>
                 <property name="menu-model">primary_menu</property>
               </object>
             </child>
@@ -24,7 +25,7 @@
         </child>
         <property name="content">
           <object class="GtkLabel" id="label">
-            <property name="label">Hello, World!</property>
+            <property name="label" translatable="yes">Hello, World!</property>
             <style>
               <class name="title-1"/>
             </style>
@@ -39,7 +40,7 @@
           <object class="GtkMenuButton">
             <property name="primary">True</property>
             <property name="icon-name">open-menu-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Menu</property>
+            <property name="tooltip-text" translatable="yes">Main Menu</property>
             <property name="menu-model">primary_menu</property>
           </object>
         </child>
@@ -47,7 +48,7 @@
     </property>
     <property name="child">
       <object class="GtkLabel" id="label">
-        <property name="label">Hello, World!</property>
+        <property name="label" translatable="yes">Hello, World!</property>
         <style>
           <class name="title-1"/>
         </style>

@@ -1,5 +1,6 @@
 {{include "license.rs"}}
 
+use gettextrs::gettext;
 use gtk::prelude::*;
 {{if is_adwaita}}
 use adw::subclass::prelude::*;
@@ -94,6 +95,8 @@ impl {{PreFix}}Application {
             .developer_name("{{author}}")
             .version(VERSION)
             .developers(vec!["{{author}}"])
+            // Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+            .translator_credits(&gettext("translator-credits"))
             .copyright("© {{year}} {{author}}")
             .build();
 {{else}}
@@ -104,6 +107,8 @@ impl {{PreFix}}Application {
             .logo_icon_name("{{appid}}")
             .version(VERSION)
             .authors(vec!["{{author}}"])
+            // Translators: Replace translator-credits with your name/username, and optionally an email or URL.
+            .translator_credits(&gettext("translator-credits"))
             .copyright("© {{year}} {{author}}")
             .build();
 {{end}}

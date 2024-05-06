@@ -20,6 +20,7 @@
     <file compressed="true">resources/src/application-gtk4.h</file>
     <file compressed="true">resources/src/application-gtk4.rs</file>
     <file compressed="true">resources/src/__init__.py</file>
+    <file compressed="true">resources/src/config.vapi</file>
     <file compressed="true">resources/src/meson-c-vala.build</file>
     <file compressed="true">resources/src/meson-empty.build</file>
     <file compressed="true">resources/src/main-gtk4.js.tmpl</file>

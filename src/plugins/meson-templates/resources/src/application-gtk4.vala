@@ -33,6 +33,7 @@ namespace {{PreFix}} {
                 application_name = "{{name}}",
                 application_icon = "{{appid}}",
                 developer_name = "{{author}}",
+                translator_credits = _("translator-credits"),
                 version = "{{project_version}}",
                 developers = developers,
                 copyright = "© {{year}} {{author}}",
@@ -45,6 +46,7 @@ namespace {{PreFix}} {
                                    "program-name", "{{name}}",
                                    "logo-icon-name", "{{appid}}",
                                    "authors", authors,
+                                   "translator-credits", _("translator-credits"),
                                    "version", "{{project_version}}",
                                    "copyright", "© {{year}} {{author}}");
 {{end}}

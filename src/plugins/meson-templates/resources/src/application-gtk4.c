@@ -1,6 +1,7 @@
 {{include "license.c"}}
 
 #include "config.h"
+#include <glib/gi18n.h>
 
 #include "{{prefix}}-application.h"
 #include "{{prefix}}-window.h"
@@ -75,6 +76,7 @@ static void
 	                       "application-name", "{{name}}",
 	                       "application-icon", "{{appid}}",
 	                       "developer-name", "{{author}}",
+	                       "translator-credits", _("translator-credits"),
 	                       "version", "{{project_version}}",
 	                       "developers", developers,
 	                       "copyright", "© {{year}} {{author}}",
@@ -84,6 +86,7 @@ static void
 	                       "program-name", "{{name}}",
 	                       "logo-icon-name", "{{appid}}",
 	                       "authors", authors,
+	                       "translator-credits", _("translator-credits"),
 	                       "version", "{{project_version}}",
 	                       "copyright", "© {{year}} {{author}}",
 	                       NULL);

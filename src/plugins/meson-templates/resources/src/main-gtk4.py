@@ -34,7 +34,7 @@ class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
             win = {{PreFix}}Window(application=self)
         win.present()
 
-    def on_about_action(self, widget, _):
+    def on_about_action(self, *args):
         """Callback for the app.about action."""
 {{if is_adwaita}}
         about = Adw.AboutWindow(transient_for=self.props.active_window,
@@ -53,6 +53,8 @@ class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
                                 authors=['{{author_escape}}'],
                                 copyright='© {{year}} {{author_escape}}')
 {{end}}
+        # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+        about.set_translator_credits(_('translator-credits'))
         about.present()
 
     def on_preferences_action(self, widget, _):
