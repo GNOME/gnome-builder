@@ -99,8 +99,8 @@ gb_clang_format_get_config_file_dir (IdeBuffer    *buffer,
   gchar *ret = NULL;
   g_autoptr (IdeContext) context = NULL;
   g_autoptr (GFile) workdir = NULL;
-  g_autoptr (GFile) file = NULL;
   g_autoptr (GFile) parent = NULL;
+  GFile *file;
 
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (G_IS_CANCELLABLE (cancellable));
