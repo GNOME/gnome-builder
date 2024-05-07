@@ -53,7 +53,26 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
 
   user_shell = ide_get_user_shell ();
   workdir = ide_context_ref_workdir (context);
-  workdir_path = g_file_get_path (workdir);
+
+  if (g_file_is_native (workdir))
+    workdir_path = g_file_get_path (workdir);
+  else
+    workdir_path = g_strdup (g_get_home_dir ());
+
+  if (ide_is_flatpak ())
+    {
+      /* Special case to ignore things like /run/user/1000/gvfs which
+       * might exist outside the Flatpak container but not inside of it.
+       *
+       * This can happen when opening a remotely mounted file which is
+       * synthesized on the local file system (and therefore is_native()
+       * check above returns TRUE).
+       *
+       * See #2207
+       */
+      if (g_str_has_prefix (workdir_path, "/run/"))
+        g_set_str (&workdir_path, g_get_home_dir ());
+    }
 
   switch (self->locality)
     {
