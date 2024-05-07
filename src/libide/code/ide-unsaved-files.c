@@ -137,7 +137,7 @@ unsaved_file_copy (const UnsavedFile *uf)
   g_assert (uf != NULL);
 
   copy = g_slice_new0 (UnsavedFile);
-  copy->file = g_object_ref (uf->file);
+  copy->file = g_file_dup (uf->file);
   copy->content = g_bytes_ref (uf->content);
 
   return copy;
@@ -419,7 +419,7 @@ ide_unsaved_files_restore_worker (IdeTask      *task,
         }
 
       unsaved = g_slice_new0 (UnsavedFile);
-      unsaved->file = g_object_ref (file);
+      unsaved->file = g_file_dup (file);
       unsaved->content = g_bytes_new_take (g_steal_pointer (&contents), data_len);
 
       g_ptr_array_add (state->unsaved_files, g_steal_pointer (&unsaved));
@@ -659,7 +659,7 @@ ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
     }
 
   unsaved = g_slice_new0 (UnsavedFile);
-  unsaved->file = g_object_ref (file);
+  unsaved->file = g_file_dup (file);
   unsaved->content = g_bytes_ref (content);
   unsaved->sequence = self->sequence;
   setup_tempfile (context, file, &unsaved->temp_fd, &unsaved->temp_path);
