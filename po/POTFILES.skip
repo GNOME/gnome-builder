@@ -8,8 +8,10 @@ src/plugins/color-picker/gstyle/tests/data/gstyle-color-editor.ui
 src/plugins/color-picker/gstyle/tests/data/palette.xml
 src/plugins/gdb/gdbwire.c
 src/plugins/meson-templates/resources/data/hello.gschema.xml
+src/plugins/meson-templates/resources/src/application-gtk4.c
 src/plugins/meson-templates/resources/src/help-overlay.ui
 src/plugins/meson-templates/resources/src/main-cli.c
+src/plugins/meson-templates/resources/src/main-gtk4.py
 src/plugins/meson-templates/resources/src/window-gtk4.ui
 # Damned Lies only reads master POTFILES.skip, and that can
 # have an affect on branches (which do have submodules), even
