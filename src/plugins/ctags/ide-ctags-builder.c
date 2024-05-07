@@ -170,7 +170,7 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   ide_subprocess_launcher_push_argv (launcher, "-L");
   ide_subprocess_launcher_push_argv (launcher, "-");
 
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error);
 
   if (subprocess == NULL)
     {
