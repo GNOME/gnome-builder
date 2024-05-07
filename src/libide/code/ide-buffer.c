@@ -345,14 +345,18 @@ _ide_buffer_set_file (IdeBuffer *self,
 
   if (location == NULL || !g_file_equal (file, location))
     {
-      gtk_source_file_set_location (self->source_file, file);
+      g_autoptr(GFile) copy = g_file_dup (file);
+
+      gtk_source_file_set_location (self->source_file, copy);
+
       g_clear_object (&self->readlink_file);
-      self->readlink_file = _ide_g_file_readlink (file);
+      self->readlink_file = _ide_g_file_readlink (copy);
+
       ide_buffer_reload_file_settings (self);
 
       if (self->addins != NULL && self->enable_addins)
         {
-          IdeBufferFileLoad closure = { self, file };
+          IdeBufferFileLoad closure = { self, copy };
           ide_extension_set_adapter_foreach (self->addins,
                                              _ide_buffer_addin_file_loaded_cb,
                                              &closure);
