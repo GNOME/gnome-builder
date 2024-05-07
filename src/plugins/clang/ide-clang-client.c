@@ -1036,7 +1036,7 @@ ide_clang_client_get_symbol_tree_async (IdeClangClient      *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_client_get_symbol_tree_async);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_set_task_data (task, g_file_dup (file), g_object_unref);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
 
   if (!g_file_is_native (file))
