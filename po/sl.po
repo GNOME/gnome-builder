@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-05-01 21:27+0000\n"
-"PO-Revision-Date: 2024-05-02 00:09+0200\n"
+"POT-Creation-Date: 2024-05-06 21:44+0000\n"
+"PO-Revision-Date: 2024-05-07 09:41+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -3373,8 +3373,8 @@ msgstr ""
 "s številko."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
-msgid "Application ID…"
-msgstr "ID programa …"
+msgid "Application ID"
+msgstr "ID programa"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
