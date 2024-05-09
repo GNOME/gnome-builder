@@ -97,6 +97,7 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="46.2" date="2024-05-09"/>
     <release version="46.1" date="2024-04-10"/>
   </releases>
 

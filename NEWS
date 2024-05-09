@@ -1,3 +1,11 @@
+# GNOME Builder 46.2
+
+ * Avoid spawning terminals in /run/ which helps when the project
+   directory is inside a GVFS remote mount.
+ * Fix ownership transfer in clang-format plugin.
+ * Fix shortcut accelerator in menu/dialog.
+ * Translation updates.
+
 # GNOME Builder 46.1
 
  * Improvements to sidebar legibility.
