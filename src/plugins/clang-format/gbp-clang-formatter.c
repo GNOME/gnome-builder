@@ -203,24 +203,37 @@ gb_clang_format_communicate_cb (GObject      *object,
 
   if (ide_subprocess_get_exit_status (subprocess) != 0)
     {
-      ide_object_warning (context,
-                          _("clang-format failed to format document: %s"),
-                          stderr_buf);
-      ide_task_return_boolean (task, FALSE);
+      g_autofree char *message = g_strdup_printf (_("clang-format failed to format document: %s"), stderr_buf);
+
+      ide_object_warning (context, "%s", message);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "%s", message);
       IDE_EXIT;
     }
 
   if (!(formatted = strchr (stdout_buf, '\n')))
     {
-      ide_object_warning (context,
-                          _("Missing or corrupted data from clang-format"));
-      ide_task_return_boolean (task, FALSE);
+      const char *message = _("Missing or corrupted data from clang-format");
+
+      ide_object_warning (context, "%s", message);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "%s", message);
       IDE_EXIT;
     }
 
   if ((cursor_position = get_cursor_position (stdout_buf, formatted - stdout_buf)) < 0)
     {
-      ide_task_return_boolean (task, FALSE);
+      const char *message = _("Invalid cursor position provided from clang-format");
+
+      ide_object_warning (context, "%s", message);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "%s", message);
       IDE_EXIT;
     }
 
