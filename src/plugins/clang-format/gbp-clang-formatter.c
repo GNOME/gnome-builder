@@ -160,6 +160,7 @@ gb_clang_format_communicate_cb (GObject      *object,
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autofree gchar *stdout_buf = NULL;
+  g_autofree gchar *stderr_buf = NULL;
   g_autoptr(GError) error = NULL;
   const char *formatted = NULL;
   IdeBuffer *buffer = NULL;
@@ -174,7 +175,7 @@ gb_clang_format_communicate_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
+  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -182,6 +183,13 @@ gb_clang_format_communicate_cb (GObject      *object,
 
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
+
+  if (ide_subprocess_get_exit_status (subprocess) != 0)
+    {
+      g_debug ("clang-format failed: %s", stderr_buf);
+      ide_task_return_boolean (task, FALSE);
+      IDE_EXIT;
+    }
 
   if (!(formatted = strchr (stdout_buf, '\n')))
     {
@@ -269,7 +277,7 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
   ide_subprocess_launcher_set_cwd (launcher, config_dir);
   ide_subprocess_launcher_push_argv (launcher, "clang-format");
   ide_subprocess_launcher_push_argv (launcher, cursor_arg);
