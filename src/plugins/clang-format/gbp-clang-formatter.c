@@ -22,10 +22,14 @@
 
 #include "config.h"
 
+#include <sys/wait.h>
+
+#include <glib/gi18n.h>
+
 #include <json-glib/json-glib.h>
+
 #include <libide-editor.h>
 #include <libide-lsp.h>
-#include <sys/wait.h>
 
 #include "gbp-clang-formatter.h"
 
@@ -175,8 +179,21 @@ gb_clang_format_communicate_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  buffer = ide_task_get_task_data (task);
+
+  g_assert (buffer != NULL);
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  context = ide_buffer_ref_context (buffer);
+
+  g_assert (context != NULL);
+  g_assert (IDE_IS_CONTEXT (context));
+
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
+      ide_object_warning (context,
+                          _("Failed to execute clang-format: %s"),
+                          error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
@@ -186,15 +203,18 @@ gb_clang_format_communicate_cb (GObject      *object,
 
   if (ide_subprocess_get_exit_status (subprocess) != 0)
     {
-      g_debug ("clang-format failed: %s", stderr_buf);
+      ide_object_warning (context,
+                          _("clang-format failed to format document: %s"),
+                          stderr_buf);
       ide_task_return_boolean (task, FALSE);
       IDE_EXIT;
     }
 
   if (!(formatted = strchr (stdout_buf, '\n')))
     {
+      ide_object_warning (context,
+                          _("Missing or corrupted data from clang-format"));
       ide_task_return_boolean (task, FALSE);
-      g_debug ("Missing or corrupted data from clang-format");
       IDE_EXIT;
     }
 
@@ -204,10 +224,6 @@ gb_clang_format_communicate_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  buffer = ide_task_get_task_data (task);
-  g_assert (buffer != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
   gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &start_iter, &end_iter);
   gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &start_iter, &end_iter);
@@ -216,7 +232,6 @@ gb_clang_format_communicate_cb (GObject      *object,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &pos_iter, &pos_iter);
   gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 
-  context = ide_buffer_ref_context (buffer);
   workbench = ide_workbench_from_context (context);
   ide_workbench_foreach_page (workbench, scroll_page_to_insert, buffer);
 

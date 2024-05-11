@@ -137,6 +137,7 @@ src/plugins/clang/ide-clang-client.c
 src/plugins/clang/ide-clang-symbol-node.c
 src/plugins/clang/org.gnome.builder.clang.gschema.xml
 src/plugins/clang/tweaks.ui
+src/plugins/clang-format/gbp-clang-formatter.c
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/cmake/gbp-cmake-toolchain.c
