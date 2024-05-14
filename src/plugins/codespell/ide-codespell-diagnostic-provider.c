@@ -26,6 +26,7 @@
 struct _IdeCodespellDiagnosticProvider
 {
   IdeDiagnosticTool parent_instance;
+  GSettings *settings;
 };
 
 G_DEFINE_FINAL_TYPE (IdeCodespellDiagnosticProvider, ide_codespell_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
@@ -38,11 +39,16 @@ ide_codespell_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
                                                        const char         *language_id,
                                                        GError            **error)
 {
+  IdeCodespellDiagnosticProvider *self = (IdeCodespellDiagnosticProvider *)tool;
+
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (self));
   g_assert (!file || G_IS_FILE (file));
   g_assert (file != NULL || contents != NULL);
+
+  if (!g_settings_get_boolean (self->settings, "check-spelling"))
+    IDE_RETURN (FALSE);
 
   if (IDE_DIAGNOSTIC_TOOL_CLASS (ide_codespell_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
     {
@@ -125,9 +131,22 @@ ide_codespell_diagnostic_provider_populate_diagnostics (IdeDiagnosticTool *tool,
 }
 
 static void
+ide_codespell_diagnostic_provider_finalize (GObject *object)
+{
+  IdeCodespellDiagnosticProvider *self = (IdeCodespellDiagnosticProvider *)object;
+
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (ide_codespell_diagnostic_provider_parent_class)->finalize (object);
+}
+
+static void
 ide_codespell_diagnostic_provider_class_init (IdeCodespellDiagnosticProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeDiagnosticToolClass *tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
+
+  object_class->finalize = ide_codespell_diagnostic_provider_finalize;
 
   tool_class->prepare_run_context = ide_codespell_diagnostic_provider_prepare_run_context;
   tool_class->populate_diagnostics = ide_codespell_diagnostic_provider_populate_diagnostics;
@@ -137,4 +156,6 @@ static void
 ide_codespell_diagnostic_provider_init (IdeCodespellDiagnosticProvider *self)
 {
   ide_diagnostic_tool_set_program_name (IDE_DIAGNOSTIC_TOOL (self), "codespell");
+
+  self->settings = g_settings_new ("org.gnome.builder.spelling");
 }
