@@ -80,24 +80,28 @@
           <attribute name="page" translatable="yes">Text Editor</attribute>
           <attribute name="group" translatable="yes">Formatting</attribute>
           <item>
+            <attribute name="id">org.gnome.builder.sourceview.change-case.upper</attribute>
             <attribute name="label" translatable="yes">All _Upper Case</attribute>
             <attribute name="description" translatable="yes">Convert the text selection to upper case</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'upper'</attribute>
           </item>
           <item>
+            <attribute name="id">org.gnome.builder.sourceview.change-case.lower</attribute>
             <attribute name="label" translatable="yes">All _Lower Case</attribute>
             <attribute name="description" translatable="yes">Convert the text selection to lower case</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'lower'</attribute>
           </item>
           <item>
+            <attribute name="id">org.gnome.builder.sourceview.change-case.invert</attribute>
             <attribute name="label" translatable="yes">In_vert Case</attribute>
             <attribute name="description" translatable="yes">Invert case of the text selection</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'toggle'</attribute>
           </item>
           <item>
+            <attribute name="id">org.gnome.builder.sourceview.change-case.title</attribute>
             <attribute name="label" translatable="yes">_Title Case</attribute>
             <attribute name="description" translatable="yes">Convert the text selection to title case</attribute>
             <attribute name="action">source.change-case</attribute>
