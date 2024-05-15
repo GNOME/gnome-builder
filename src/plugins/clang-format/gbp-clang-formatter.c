@@ -53,8 +53,7 @@ scroll_page_to_insert (IdePage  *page,
   if (buffer != ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page)))
     return;
 
-  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (ide_editor_page_get_view (IDE_EDITOR_PAGE (page))),
-                                      gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)));
+  ide_source_view_jump_to_insert (ide_editor_page_get_view (IDE_EDITOR_PAGE (page)));
 }
 
 static gboolean
