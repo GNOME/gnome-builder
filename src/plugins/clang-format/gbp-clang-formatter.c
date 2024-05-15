@@ -106,7 +106,7 @@ gb_clang_format_get_config_file_dir (IdeBuffer    *buffer,
   GFile *file;
 
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (!(context = ide_buffer_ref_context (buffer)))
     return NULL;
