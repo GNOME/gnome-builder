@@ -61,7 +61,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "data/icons/hicolor/symbolic/apps/hello-symbolic.svg", "data/icons/hicolor/symbolic/apps/{{appid}}-symbolic.svg" },
   { "po/LINGUAS",                                          "po/LINGUAS" },
   { "po/meson.build",                                      "po/meson.build" },
-  { "po/POTFILES",                                         "po/POTFILES" },
+  { "po/POTFILES.in",                                      "po/POTFILES.in" },
   { "src/help-overlay.ui",                                 "src/gtk/help-overlay.ui" },
 
   /* C */

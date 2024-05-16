@@ -55,7 +55,7 @@
     <file compressed="true">resources/data/icons/hicolor/scalable/apps/hello.svg</file>
     <file compressed="true">resources/data/icons/hicolor/symbolic/apps/hello-symbolic.svg</file>
     <file compressed="true">resources/po/meson.build</file>
-    <file compressed="true">resources/po/POTFILES</file>
+    <file compressed="true">resources/po/POTFILES.in</file>
     <file compressed="true">resources/po/LINGUAS</file>
   </gresource>
   <gresource prefix="/plugins/meson-templates/resources">
