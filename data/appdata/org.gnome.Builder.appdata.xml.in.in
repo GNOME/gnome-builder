@@ -7,9 +7,9 @@
   <name>Builder</name>
   <summary>Create Applications for GNOME</summary>
   <!-- developer_name tag deprecated with Appstream 1.0 -->
-  <developer_name>Christian Hergert, et al.</developer_name>
+  <developer_name>Christian Hergert</developer_name>
   <developer id="org.gnome">
-    <name>Christian Hergert, et al.</name>
+    <name>Christian Hergert</name>
   </developer>
 
   <description>
