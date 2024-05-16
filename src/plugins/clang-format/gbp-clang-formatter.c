@@ -96,8 +96,8 @@ get_cursor_position (const char *str,
  * assume that the subproject does not use clang-format for formatting.
  */
 static gchar *
-gb_clang_format_get_config_file_dir (IdeBuffer    *buffer,
-                                     GCancellable *cancellable)
+gbp_clang_format_get_config_file_dir (IdeBuffer    *buffer,
+                                      GCancellable *cancellable)
 {
   gchar *ret = NULL;
   g_autoptr (IdeContext) context = NULL;
@@ -156,9 +156,9 @@ gb_clang_format_get_config_file_dir (IdeBuffer    *buffer,
 
 
 static void
-gb_clang_format_communicate_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
+gbp_clang_format_communicate_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
@@ -253,12 +253,12 @@ gb_clang_format_communicate_cb (GObject      *object,
 }
 
 static void
-gb_clang_format_format_async (IdeFormatter         *formatter,
-                              IdeBuffer            *buffer,
-                              IdeFormatterOptions  *options,
-                              GCancellable         *cancellable,
-                              GAsyncReadyCallback   callback,
-                              gpointer              user_data)
+gbp_clang_format_format_async (IdeFormatter        *formatter,
+                               IdeBuffer           *buffer,
+                               IdeFormatterOptions *options,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
 {
   GbpClangFormatter *self = (GbpClangFormatter *)formatter;
   g_autoptr(IdeTask) task = NULL;
@@ -278,7 +278,7 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gb_clang_format_format_async);
+  ide_task_set_source_tag (task, gbp_clang_format_format_async);
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   if (!(language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))) ||
@@ -289,7 +289,7 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
   }
 
   // Locate closest .clang-format file (if NULL, the file was not found -> do not format the code)
-  config_dir = gb_clang_format_get_config_file_dir (buffer, cancellable);
+  config_dir = gbp_clang_format_get_config_file_dir (buffer, cancellable);
   if (config_dir == NULL)
     {
       ide_task_return_boolean (task, TRUE);
@@ -319,15 +319,15 @@ gb_clang_format_format_async (IdeFormatter         *formatter,
   ide_subprocess_communicate_utf8_async (subprocess,
                                          stdin_buf,
                                          cancellable,
-                                         gb_clang_format_communicate_cb,
+                                         gbp_clang_format_communicate_cb,
                                          g_steal_pointer (&task));
   IDE_EXIT;
 }
 
 static gboolean
-gb_clang_format_format_finish(IdeFormatter         *formatter,
-                              GAsyncResult         *result,
-                              GError              **error)
+gbp_clang_format_format_finish (IdeFormatter  *formatter,
+                                GAsyncResult  *result,
+                                GError       **error)
 {
   IDE_ENTRY;
 
@@ -340,8 +340,8 @@ gb_clang_format_format_finish(IdeFormatter         *formatter,
 static void
 ide_formatter_iface_init (IdeFormatterInterface *iface)
 {
-  iface->format_async = gb_clang_format_format_async;
-  iface->format_finish = gb_clang_format_format_finish;
+  iface->format_async = gbp_clang_format_format_async;
+  iface->format_finish = gbp_clang_format_format_finish;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpClangFormatter, gbp_clang_formatter, G_TYPE_OBJECT,
