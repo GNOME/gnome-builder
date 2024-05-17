@@ -38,12 +38,12 @@ search_index = true
   [dependencies."GtkSource-4"]
   name = "GtkSourceView 4"
   description = "A GNOME library that extends GtkTextView"
-  docs_url = "https://developer-old.gnome.org/gtksourceview/stable/"
+  docs_url = "https://gitlab.gnome.org/GNOME/gtksourceview"
 
   [dependencies."Peas-2"]
   name = "Libpeas"
   description = "A GObject based plugin engine"
-  docs_url = "https://developer-old.gnome.org/libpeas/stable/"
+  docs_url = "https://gitlab.gnome.org/GNOME/libpeas"
 
 [theme]
 name = "basic"
