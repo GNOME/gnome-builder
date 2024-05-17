@@ -591,6 +591,9 @@ format_selection_cb (GObject      *object,
                            _("Failed to format selection: %s"),
                            error->message);
 
+  panel_widget_raise (PANEL_WIDGET (self));
+  gtk_widget_grab_focus (GTK_WIDGET (self));
+
 #if 0
   gtk_text_view_set_editable (GTK_TEXT_VIEW (self->view), TRUE);
 #endif
