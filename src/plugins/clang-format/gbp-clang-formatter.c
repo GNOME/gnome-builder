@@ -28,8 +28,11 @@
 
 #include <json-glib/json-glib.h>
 
+#include <libide-code.h>
 #include <libide-editor.h>
 #include <libide-lsp.h>
+
+#include "ide-buffer-private.h"
 
 #include "gbp-clang-formatter.h"
 
@@ -37,24 +40,6 @@ struct _GbpClangFormatter
 {
   GObject parent_instance;
 };
-
-static void
-scroll_page_to_insert (IdePage  *page,
-                       gpointer  data)
-{
-  IdeBuffer *buffer = data;
-
-  g_assert (IDE_IS_PAGE (page));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (!IDE_IS_EDITOR_PAGE (page))
-    return;
-
-  if (buffer != ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page)))
-    return;
-
-  ide_source_view_jump_to_insert (ide_editor_page_get_view (IDE_EDITOR_PAGE (page)));
-}
 
 static gboolean
 clang_supports_language (GtkSourceLanguage *language)
@@ -168,7 +153,6 @@ gbp_clang_format_communicate_cb (GObject      *object,
   const char *formatted = NULL;
   IdeBuffer *buffer = NULL;
   g_autoptr(IdeContext) context = NULL;
-  IdeWorkbench *workbench = NULL;
   int cursor_position = -1;
   GtkTextIter start_iter, end_iter, pos_iter;
 
@@ -244,8 +228,7 @@ gbp_clang_format_communicate_cb (GObject      *object,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &pos_iter, &pos_iter);
   gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 
-  workbench = ide_workbench_from_context (context);
-  ide_workbench_foreach_page (workbench, scroll_page_to_insert, buffer);
+  _ide_buffer_request_scroll_to_cursor (buffer);
 
   ide_task_return_boolean (task, TRUE);
 
