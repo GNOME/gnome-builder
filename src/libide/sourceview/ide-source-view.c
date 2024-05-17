@@ -285,22 +285,78 @@ ide_source_view_key_released_cb (IdeSourceView         *self,
   return FALSE;
 }
 
+static gboolean
+ide_source_view_do_jump_to_insert (IdeSourceView *self)
+{
+  GdkRectangle area;
+  GtkTextIter iter;
+  GtkTextIter reverse;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (!self->buffer || IDE_IS_BUFFER (self->buffer));
+
+  if (self->buffer == NULL)
+    return FALSE;
+
+  /* To make sure that we can really jump to the target location
+   * we get the buffer coordinates of the iter then look up the
+   * iter at that location. If they match, then the forward line
+   * validation has gone far enough to locate this iter and allow
+   * us to scroll to it.
+   *
+   * Otherwise, we need to delay a bit more until we have enough
+   * information to scroll there. We return FALSE in this case
+   * so the caller can detect the situation.
+   */
+
+  ide_buffer_get_selection_bounds (self->buffer, &iter, NULL);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &area);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self),
+                                      &reverse,
+                                      area.x + (area.width/2),
+                                      area.y + (area.height/2));
+
+  /* Not the same line? Must not have forward validated enough. */
+  if (gtk_text_iter_get_line (&iter) != gtk_text_iter_get_line (&reverse))
+    return FALSE;
+
+  ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self), &iter, 0, TRUE, 1.0, 0.5);
+
+  return TRUE;
+}
+
+static gboolean
+ide_source_view_pending_scroll_idle_cb (gpointer data)
+{
+  IdeSourceView *self = data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (ide_source_view_do_jump_to_insert (self))
+    {
+      self->pending_scroll_source = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 ide_source_view_buffer_request_jump_to_insert_cb (IdeSourceView *self,
                                                   IdeBuffer     *buffer)
 {
-  GtkTextMark *mark;
-  GtkTextIter iter;
-
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, mark);
-  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self),
-                                &iter, 0.25, TRUE, 1.0, 0.5);
+  if (self->pending_scroll_source == 0)
+    self->pending_scroll_source = g_idle_add_full (G_PRIORITY_LOW,
+                                                   ide_source_view_pending_scroll_idle_cb,
+                                                   self,
+                                                   NULL);
 
   IDE_EXIT;
 }
@@ -1223,6 +1279,7 @@ ide_source_view_dispose (GObject *object)
   IDE_ENTRY;
 
   g_clear_handle_id (&self->overscroll_source, g_source_remove);
+  g_clear_handle_id (&self->pending_scroll_source, g_source_remove);
 
   ide_source_view_disconnect_buffer (self);
 
