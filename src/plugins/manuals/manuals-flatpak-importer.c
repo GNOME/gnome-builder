@@ -75,6 +75,8 @@ rewrite_uri (ManualsFlatpakRuntime *runtime,
       g_string_truncate (str, beginptr - uri);
       g_string_append (str, "/active");
 
+      g_free (uri);
+
       return g_string_free (str, FALSE);
     }
 
