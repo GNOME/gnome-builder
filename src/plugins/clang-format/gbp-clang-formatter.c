@@ -24,8 +24,6 @@
 
 #include <sys/wait.h>
 
-#include <glib/gi18n.h>
-
 #include <json-glib/json-glib.h>
 
 #include <libide-editor.h>
@@ -191,7 +189,7 @@ gbp_clang_format_communicate_cb (GObject      *object,
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
       ide_object_warning (context,
-                          _("Failed to execute clang-format: %s"),
+                          "Failed to execute clang-format: %s",
                           error->message);
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -202,7 +200,7 @@ gbp_clang_format_communicate_cb (GObject      *object,
 
   if (ide_subprocess_get_exit_status (subprocess) != 0)
     {
-      g_autofree char *message = g_strdup_printf (_("clang-format failed to format document: %s"), stderr_buf);
+      g_autofree char *message = g_strdup_printf ("clang-format failed to format document: %s", stderr_buf);
 
       ide_object_warning (context, "%s", message);
       ide_task_return_new_error (task,
@@ -214,7 +212,7 @@ gbp_clang_format_communicate_cb (GObject      *object,
 
   if (!(formatted = strchr (stdout_buf, '\n')))
     {
-      const char *message = _("Missing or corrupted data from clang-format");
+      const char *message = "Missing or corrupted data from clang-format";
 
       ide_object_warning (context, "%s", message);
       ide_task_return_new_error (task,
@@ -226,7 +224,7 @@ gbp_clang_format_communicate_cb (GObject      *object,
 
   if ((cursor_position = get_cursor_position (stdout_buf, formatted - stdout_buf)) < 0)
     {
-      const char *message = _("Invalid cursor position provided from clang-format");
+      const char *message = "Invalid cursor position provided from clang-format";
 
       ide_object_warning (context, "%s", message);
       ide_task_return_new_error (task,
