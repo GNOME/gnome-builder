@@ -80,6 +80,9 @@ struct _IdeSourceView
   guint undo_recurse_count;
   guint redo_recurse_count;
 
+  /* Pending jump_to_insert */
+  guint pending_scroll_source;
+
   /* Bitfield values go here */
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;
