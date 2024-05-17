@@ -314,7 +314,7 @@ libm_dep = cc.find_library('m', required: false)
 libpeas_dep = dependency('libpeas-2', version: '>= 1.99.0')
 libportal_dep = dependency('libportal-gtk4', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.36.1')
-libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.70.0')
+libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.75.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
