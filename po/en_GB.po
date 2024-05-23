@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-22 18:05+0000\n"
-"PO-Revision-Date: 2024-02-23 11:56+0000\n"
+"POT-Creation-Date: 2024-05-20 12:38+0000\n"
+"PO-Revision-Date: 2024-05-21 11:54+0100\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English - United Kingdom <en@li.org>\n"
 "Language: en_GB\n"
@@ -42,9 +42,8 @@ msgstr "An IDE for GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr "Christian Hergert, et al."
+msgid "Christian Hergert"
+msgstr "Christian Hergert"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
@@ -628,7 +627,7 @@ msgid "What environment to use when running unit tests"
 msgstr "What environment to use when running unit tests"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:241 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Verbose Logging"
 
@@ -759,7 +758,7 @@ msgstr "Untitled"
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 #: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
@@ -833,11 +832,11 @@ msgstr "Pages"
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
-#: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
+#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:108
+#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:149
+#: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -856,7 +855,7 @@ msgid "Documents"
 msgstr "Documents"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:112
+#: src/libide/sourceview/gtk/menus.ui:109
 msgid "Selection"
 msgstr "Selection"
 
@@ -924,31 +923,31 @@ msgid "_Discard…"
 msgstr "_Discard…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:514
+#: src/libide/editor/ide-editor-page.c:515
 #, c-format
 msgid "Print failed: %s"
 msgstr "Print failed: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:590
+#: src/libide/editor/ide-editor-page.c:591
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Failed to format selection: %s"
 
-#: src/libide/editor/ide-editor-page.c:1132
+#: src/libide/editor/ide-editor-page.c:1136
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Save File"
 
-#: src/libide/editor/ide-editor-page.c:1135
+#: src/libide/editor/ide-editor-page.c:1139
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
 msgid "Save"
 msgstr "Save"
 
-#: src/libide/editor/ide-editor-page.c:1135
+#: src/libide/editor/ide-editor-page.c:1139
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1029,7 +1028,7 @@ msgid "Line Ending:"
 msgstr "Line Ending:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "Language"
 
@@ -1590,6 +1589,10 @@ msgstr "Terminal"
 msgid "New Terminals"
 msgstr "New Terminals"
 
+#: src/libide/gui/ide-application-actions.c:168
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert, et al."
+
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr ""
@@ -1725,7 +1728,7 @@ msgstr "Loading project “%s”"
 msgid "There are unsaved documents"
 msgstr "There are unsaved documents"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1777,7 +1780,7 @@ msgid "Language server “%s” spawned as process %s"
 msgstr "Language server “%s” spawned as process %s"
 
 #: src/libide/plugins/ide-plugin.c:336
-#: src/plugins/create-project/gbp-create-project-widget.ui:114
+#: src/plugins/create-project/gbp-create-project-widget.ui:117
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Version Control"
@@ -1794,7 +1797,7 @@ msgstr "Language Servers"
 msgid "Devices & Simulators"
 msgstr "Devices & Simulators"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:156
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnostics"
@@ -1918,7 +1921,7 @@ msgstr "_Selection"
 msgid "Select _All"
 msgstr "Select _All"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:142
 msgid "Formatting"
 msgstr "Formatting"
 
@@ -1930,71 +1933,71 @@ msgstr "All _Upper Case"
 msgid "Convert the text selection to upper case"
 msgstr "Convert the text selection to upper case"
 
-#: src/libide/sourceview/gtk/menus.ui:90
+#: src/libide/sourceview/gtk/menus.ui:89
 msgid "All _Lower Case"
 msgstr "All _Lower Case"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "Convert the text selection to lower case"
 msgstr "Convert the text selection to lower case"
 
-#: src/libide/sourceview/gtk/menus.ui:97
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "In_vert Case"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:96
 msgid "Invert case of the text selection"
 msgstr "Invert case of the text selection"
 
-#: src/libide/sourceview/gtk/menus.ui:104
+#: src/libide/sourceview/gtk/menus.ui:101
 msgid "_Title Case"
 msgstr "_Title Case"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "Convert the text selection to title case"
 msgstr "Convert the text selection to title case"
 
-#: src/libide/sourceview/gtk/menus.ui:114
+#: src/libide/sourceview/gtk/menus.ui:111
 msgid "Select _Line"
 msgstr "Select _Line"
 
-#: src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Delete Line"
 msgstr "_Delete Line"
 
-#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:121
 msgid "_Join Lines"
 msgstr "_Join Lines"
 
-#: src/libide/sourceview/gtk/menus.ui:129
+#: src/libide/sourceview/gtk/menus.ui:126
 msgid "S_ort Lines"
 msgstr "S_ort Lines"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "D_uplicate Line"
 msgstr "D_uplicate Line"
 
-#: src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:139
 msgid "_Formatting"
 msgstr "_Formatting"
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:150
+#: src/libide/sourceview/gtk/menus.ui:154
+#: src/libide/sourceview/gtk/menus.ui:160
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Code Navigation"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1663
+#: src/libide/sourceview/ide-source-view.c:1720
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Ln %u, Col %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1665
+#: src/libide/sourceview/ide-source-view.c:1722
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2201,7 +2204,7 @@ msgstr "None"
 msgid "Blank page"
 msgstr "Blank page"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "Settings"
 
@@ -2494,9 +2497,8 @@ msgstr "Configure settings related to the project"
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
 #: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr "Code Foundry"
 
@@ -2522,7 +2524,6 @@ msgid "Change default build target"
 msgstr "Change default build target"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Building"
 
@@ -2587,125 +2588,117 @@ msgid "Export project"
 msgstr "Export project"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-msgid "Stop Build"
-msgstr "Stop Build"
-
-#: src/plugins/buildui/gtk/menus.ui:100
-msgid "Stop building project"
-msgstr "Stop building project"
-
-#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr "Show Bui_ld Output"
 
-#: src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr "Display panel containing the build log"
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "Running"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr "Select Run Command…"
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Run"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr "Run the project"
 
-#: src/plugins/buildui/gtk/menus.ui:144
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr "Restart Program"
 
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
 msgstr "Restart the running program"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr "Stop Program"
 
-#: src/plugins/buildui/gtk/menus.ui:156
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
 msgstr "Stop running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr "Debugging"
 
-#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Unit Tests"
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Follow System Style"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:168
 msgid "Force Light"
 msgstr "Force Light"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Force Dark"
 msgstr "Force Dark"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Accessibility"
 msgstr "Accessibility"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "High Contrast"
 msgstr "High Contrast"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:188
 msgid "Text Direction"
 msgstr "Text Direction"
 
-#: src/plugins/buildui/gtk/menus.ui:200
+#: src/plugins/buildui/gtk/menus.ui:190
 msgid "Left-to-Right"
 msgstr "Left-to-Right"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Right-to-Left"
 msgstr "Right-to-Left"
 
-#: src/plugins/buildui/gtk/menus.ui:214
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "GPU"
 msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:216
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "GTK Renderer"
 msgstr "GTK Renderer"
 
-#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/gtk/menus.ui:208 src/plugins/buildui/tweaks.ui:256
 #: src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Default"
 
-#: src/plugins/buildui/gtk/menus.ui:224
+#: src/plugins/buildui/gtk/menus.ui:214
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:230
+#: src/plugins/buildui/gtk/menus.ui:220
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:236
+#: src/plugins/buildui/gtk/menus.ui:226
 msgid "Legacy GL"
 msgstr "Legacy GL"
 
-#: src/plugins/buildui/gtk/menus.ui:242
+#: src/plugins/buildui/gtk/menus.ui:232
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:257
+#: src/plugins/buildui/gtk/menus.ui:247
 msgid "Show Inspector"
 msgstr "Show Inspector"
 
@@ -3112,7 +3105,7 @@ msgstr "Copy as Image"
 msgid "Copy selected text as an image"
 msgstr "Copy selected text as an image"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Possible typo in “%s”. Did you mean “%s”?"
@@ -3280,11 +3273,11 @@ msgstr "Create New Project"
 msgid "Project Name"
 msgstr "Project Name"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
 msgstr "A subdirectory with this name already exists"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:30
+#: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -3294,11 +3287,11 @@ msgstr ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:46
+#: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
 msgstr "Application ID…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:52
+#: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -3306,7 +3299,7 @@ msgstr ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:68
+#: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
 #: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
@@ -3314,20 +3307,20 @@ msgstr ""
 msgid "Location"
 msgstr "Location"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:84
+#: src/plugins/create-project/gbp-create-project-widget.ui:87
 msgid "The project will be created in a new subdirectory."
 msgstr "The project will be created in a new subdirectory."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Licence"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:120
+#: src/plugins/create-project/gbp-create-project-widget.ui:123
 msgid "Template"
 msgstr "Template"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:179
+#: src/plugins/create-project/gbp-create-project-widget.ui:182
 msgid "Create Project"
 msgstr "Create Project"
 
@@ -4298,11 +4291,11 @@ msgstr "Files"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Similar Files (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:916
 msgid "Installation failed"
 msgstr "Installation failed"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:926
 msgid "Installation complete"
 msgstr "Installation complete"
 
@@ -4359,36 +4352,36 @@ msgstr ""
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
 msgid "Creating flatpak workspace"
 msgstr "Creating flatpak workspace"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Removing stale flatpak staging directory: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
 msgid "Preparing build directory"
 msgstr "Preparing build directory"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
 msgid "Downloading dependencies"
 msgstr "Downloading dependencies"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
 msgid "Building dependencies"
 msgstr "Building dependencies"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
 msgid "Finalizing flatpak build"
 msgstr "Finalising flatpak build"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
 msgid "Exporting staging directory"
 msgstr "Exporting staging directory"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
 msgid "Creating flatpak bundle"
 msgstr "Creating flatpak bundle"
 
@@ -4396,11 +4389,11 @@ msgstr "Creating flatpak bundle"
 msgid "Flatpak Application"
 msgstr "Flatpak Application"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
 msgid "Installing Necessary SDKs"
 msgstr "Installing Necessary SDKs"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4496,12 +4489,12 @@ msgstr ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Cannot set AMEND and GPG_SIGN flags"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Cannot sign commit without GPG_KEY_ID"
@@ -5101,26 +5094,18 @@ msgid "Default file manager for GNOME"
 msgstr "Default file manager for GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
-msgid "Photos"
-msgstr "Photos"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "Access, organize and share your photos on GNOME"
-msgstr "Access, organise and share your photos on GNOME"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "An IRC Client for GNOME"
 msgstr "An IRC Client for GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
 msgstr "Sound Recorder"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
 msgstr "A modern sound recorder for GNOME"
 
@@ -5188,12 +5173,12 @@ msgid "Drop Down"
 msgstr "Drop Down"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:672
+#: src/plugins/podman/gbp-podman-runtime.c:675
 msgid "Containers/Toolbox"
 msgstr "Containers/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:678
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Podman"
 msgstr "Containers/Podman"
 
@@ -6345,6 +6330,18 @@ msgstr "Failed to create the XML tree."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
+
+#~ msgid "Stop Build"
+#~ msgstr "Stop Build"
+
+#~ msgid "Stop building project"
+#~ msgstr "Stop building project"
+
+#~ msgid "Photos"
+#~ msgstr "Photos"
+
+#~ msgid "Access, organize and share your photos on GNOME"
+#~ msgstr "Access, organise and share your photos on GNOME"
 
 #~ msgid "Go back"
 #~ msgstr "Go back"
