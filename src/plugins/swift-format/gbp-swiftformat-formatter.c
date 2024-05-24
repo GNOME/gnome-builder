@@ -48,14 +48,13 @@ create_run_context (GbpSwiftformatFormatter *self,
 
   if (ide_context_has_project (context))
     {
-      IdeConfigManager *config_manager = ide_config_manager_from_context (context);
-      IdeConfig *config = ide_config_manager_get_current (config_manager);
-      IdeRuntime *runtime;
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+      IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
 
-      if ((runtime = ide_config_get_runtime (config)) &&
-          ide_runtime_contains_program_in_path (runtime, argv0, NULL))
+      if (pipeline != NULL &&
+          ide_pipeline_contains_program_in_path (pipeline, argv0, NULL))
         {
-          ide_runtime_prepare_to_build (runtime, NULL, run_context);
+          ide_pipeline_prepare_run_context (pipeline, run_context);
           ide_run_context_append_argv (run_context, argv0);
 
           return g_steal_pointer (&run_context);
