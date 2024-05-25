@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <libide-threading.h>
-
 #include "ide-tree-addin.h"
 
 G_DEFINE_INTERFACE (IdeTreeAddin, ide_tree_addin, G_TYPE_OBJECT)
@@ -35,20 +33,20 @@ ide_tree_addin_real_build_children_async (IdeTreeAddin        *self,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
 {
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GTask) task = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_NODE (node));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_tree_addin_real_build_children_async);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_tree_addin_real_build_children_async);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->build_children)
     IDE_TREE_ADDIN_GET_IFACE (self)->build_children (self, node);
 
-  ide_task_return_boolean (task, TRUE);
+  g_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -58,9 +56,9 @@ ide_tree_addin_real_build_children_finish (IdeTreeAddin  *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_ADDIN (self));
-  g_assert (IDE_IS_TASK (result));
+  g_assert (G_IS_TASK (result));
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -354,4 +352,47 @@ ide_tree_addin_node_dropped_finish (IdeTreeAddin  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_finish (self, result, error);
+}
+
+static void
+ide_tree_addin_build_children_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  g_autoptr(DexPromise) promise = user_data;
+  GError *error = NULL;
+
+  if (!ide_tree_addin_build_children_finish (IDE_TREE_ADDIN (object), result, &error))
+    dex_promise_reject (promise, g_steal_pointer (&error));
+  else
+    dex_promise_resolve_boolean (promise, TRUE);
+}
+
+/**
+ * ide_tree_addin_build_children:
+ * @self: a #IdeTreeAddin
+ * @node: the node to be built
+ *
+ * Returns a future which resolves when the children are
+ * built or rejects with failure.
+ *
+ * Returns: (transfer full): a #DexFuture
+ */
+DexFuture *
+ide_tree_addin_build_children (IdeTreeAddin *self,
+                               IdeTreeNode  *node)
+{
+  DexPromise *promise;
+
+  g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), NULL);
+
+  promise = dex_promise_new_cancellable ();
+
+  ide_tree_addin_build_children_async (self,
+                                       node,
+                                       dex_promise_get_cancellable (promise),
+                                       ide_tree_addin_build_children_cb,
+                                       dex_ref (promise));
+
+  return DEX_FUTURE (promise);
 }

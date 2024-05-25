@@ -101,6 +101,9 @@ IDE_AVAILABLE_IN_ALL
 gboolean            ide_tree_addin_build_children_finish (IdeTreeAddin         *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);
+IDE_AVAILABLE_IN_47
+DexFuture          *ide_tree_addin_build_children        (IdeTreeAddin         *self,
+                                                          IdeTreeNode          *node);
 IDE_AVAILABLE_IN_ALL
 gboolean            ide_tree_addin_node_activated        (IdeTreeAddin         *self,
                                                           IdeTree              *tree,

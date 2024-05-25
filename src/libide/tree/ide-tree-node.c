@@ -22,8 +22,9 @@
 
 #include "config.h"
 
+#include <libdex.h>
+
 #include <libide-gtk.h>
-#include <libide-threading.h>
 
 #include "ide-marshal.h"
 
@@ -43,9 +44,11 @@ struct _IdeTreeNode
   GIcon *icon;
   GIcon *expanded_icon;
 
+  DexFuture *expand;
+
   GObject *item;
 
-  IdeTask *build_children_task;
+  guint sequence;
 
   IdeTreeNodeFlags flags : 8;
   guint vcs_ignored : 1;
@@ -162,6 +165,7 @@ _ide_tree_node_collapsed (IdeTreeNode *self)
       guint length;
 
       self->children_built = FALSE;
+      dex_clear (&self->expand);
 
       children = g_list_copy (self->children.head);
       length = self->children.length;
@@ -194,6 +198,7 @@ ide_tree_node_dispose (GObject *object)
     ide_tree_node_unparent (self);
 
   g_clear_pointer (&self->title, g_free);
+  dex_clear (&self->expand);
 
   g_clear_object (&self->icon);
   g_clear_object (&self->expanded_icon);
@@ -210,6 +215,7 @@ ide_tree_node_dispose (GObject *object)
   g_assert (self->children.length == 0);
   g_assert (self->link.prev == NULL);
   g_assert (self->link.next == NULL);
+  g_assert (self->expand == NULL);
 }
 
 static void
@@ -1173,202 +1179,97 @@ ide_tree_node_traverse (IdeTreeNode         *self,
   do_traversal (self, &traverse);
 }
 
-static void
-ide_tree_node_expand_completed_cb (IdeTreeNode *self,
-                                   GParamSpec  *pspec,
-                                   IdeTask     *task)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_NODE (self));
-  g_assert (IDE_IS_TASK (task));
-
-  if (self->build_children_task == task)
-    {
-      g_clear_object (&self->build_children_task);
-      self->children_built = TRUE;
-      _ide_tree_node_set_loading (self, FALSE);
-    }
-}
-
 typedef struct
 {
-  IdeTreeNode            *node;
-  GPtrArray              *active;
-  IdeTask                *task;
-  IdeExtensionSetAdapter *addins;
+  IdeTreeNode *node;
+  GListModel  *addins;
+  guint        sequence;
 } Expand;
 
 static void
 expand_free (Expand *state)
 {
   g_clear_object (&state->node);
-  g_clear_pointer (&state->active, g_ptr_array_unref);
   g_clear_object (&state->addins);
-  state->task = NULL;
-  g_slice_free (Expand, state);
+  g_free (state);
 }
 
-static void
-ide_tree_node_build_node_cb (IdeExtensionSetAdapter *addins,
-                             PeasPluginInfo         *plugin_info,
-                             GObject          *extension,
-                             gpointer                user_data)
+static DexFuture *
+ide_tree_node_expand_fiber (gpointer user_data)
 {
-  IdeTreeAddin *addin = (IdeTreeAddin *)extension;
   Expand *state = user_data;
-
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (addins));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TREE_ADDIN (addin));
-  g_assert (state != NULL);
-  g_assert (IDE_IS_TREE_NODE (state->node));
-
-  for (IdeTreeNode *child = ide_tree_node_get_first_child (state->node);
-       child != NULL;
-       child = ide_tree_node_get_next_sibling (child))
-    ide_tree_addin_build_node (addin, child);
-}
-
-static void
-ide_tree_node_expand_build_children_cb (GObject      *object,
-                                        GAsyncResult *result,
-                                        gpointer      user_data)
-{
-  IdeTreeAddin *addin = (IdeTreeAddin *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  Expand *state;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE_ADDIN (addin));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  state = ide_task_get_task_data (task);
+  g_autoptr(GPtrArray) futures = NULL;
+  GListModel *model;
+  guint n_items;
 
   g_assert (state != NULL);
-  g_assert (state->active != NULL);
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (state->addins));
   g_assert (IDE_IS_TREE_NODE (state->node));
-  g_assert (IDE_IS_TASK (state->task));
-  g_assert (state->task == task);
+  g_assert (G_IS_LIST_MODEL (state->addins));
 
-  g_ptr_array_remove (state->active, addin);
+  _ide_tree_node_set_loading (state->node, TRUE);
 
-  if (!ide_tree_addin_build_children_finish (addin, result, &error))
+  futures = g_ptr_array_new_with_free_func (dex_unref);
+  model = G_LIST_MODEL (state->addins);
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
     {
-      if (!ide_error_ignore (error))
-        g_warning ("%s", error->message);
+      g_autoptr(IdeTreeAddin) addin = g_list_model_get_item (model, i);
+
+      g_ptr_array_add (futures, ide_tree_addin_build_children (addin, state->node));
     }
 
-  if (state->active->len == 0)
+  if (futures->len > 0)
+    dex_await (dex_future_allv ((DexFuture **)futures->pdata, futures->len), NULL);
+
+  if (state->node->sequence == state->sequence)
     {
-      ide_extension_set_adapter_foreach (state->addins,
-                                         ide_tree_node_build_node_cb,
-                                         state);
-      ide_task_return_boolean (task, TRUE);
+      state->node->children_built = TRUE;
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeTreeAddin) addin = g_list_model_get_item (model, i);
+
+          for (IdeTreeNode *child = ide_tree_node_get_first_child (state->node);
+               child != NULL;
+               child = ide_tree_node_get_next_sibling (child))
+            ide_tree_addin_build_node (addin, child);
+        }
     }
+
+  state->node->children_built = TRUE;
+
+  _ide_tree_node_set_loading (state->node, FALSE);
+
+  return dex_future_new_for_boolean (TRUE);
 }
 
-static void
-ide_tree_node_expand_foreach_cb (IdeExtensionSetAdapter *adapter,
-                                 PeasPluginInfo         *plugin_info,
-                                 GObject          *extension,
-                                 gpointer                user_data)
+DexFuture *
+_ide_tree_node_expand (IdeTreeNode *self,
+                       GListModel  *addins)
 {
-  IdeTreeAddin *addin = (IdeTreeAddin *)extension;
-  Expand *expand = user_data;
-
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TREE_ADDIN (addin));
-  g_assert (expand != NULL);
-  g_assert (IDE_IS_TREE_NODE (expand->node));
-  g_assert (expand->active != NULL);
-  g_assert (IDE_IS_TASK (expand->task));
-
-  g_ptr_array_add (expand->active, g_object_ref (addin));
-
-  ide_tree_addin_build_children_async (addin,
-                                       expand->node,
-                                       ide_task_get_cancellable (expand->task),
-                                       ide_tree_node_expand_build_children_cb,
-                                       g_object_ref (expand->task));
-}
-
-void
-_ide_tree_node_expand_async (IdeTreeNode            *self,
-                             IdeExtensionSetAdapter *addins,
-                             GCancellable           *cancellable,
-                             GAsyncReadyCallback     callback,
-                             gpointer                user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GPtrArray) active = NULL;
   Expand *state;
 
-  g_return_if_fail (IDE_IS_TREE_NODE (self));
-  g_return_if_fail (!addins || IDE_IS_EXTENSION_SET_ADAPTER (addins));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_val_if_fail (IDE_IS_TREE_NODE (self), NULL);
+  g_return_val_if_fail (!addins || G_IS_LIST_MODEL (addins), NULL);
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, _ide_tree_node_expand_async);
+  if (addins == NULL || self->children_built)
+    return dex_future_new_for_boolean (TRUE);
 
-  if (self->children_built)
-    {
-      ide_task_return_boolean (task, TRUE);
-      return;
-    }
+  if (self->expand)
+    return dex_ref (self->expand);
 
-  if (self->build_children_task)
-    {
-      ide_task_chain (self->build_children_task, task);
-      return;
-    }
-
-  _ide_tree_node_set_loading (self, TRUE);
-
-  g_set_object (&self->build_children_task, task);
-
-  g_signal_connect_object (task,
-                           "notify::completed",
-                           G_CALLBACK (ide_tree_node_expand_completed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  if (addins == NULL)
-    {
-      ide_task_return_boolean (task, TRUE);
-      return;
-    }
-
-  active = g_ptr_array_new_with_free_func (g_object_unref);
-
-  state = g_slice_new0 (Expand);
-  state->active = g_ptr_array_ref (active);
+  state = g_new0 (Expand, 1);
   state->addins = g_object_ref (addins);
   state->node = g_object_ref (self);
-  state->task = task;
+  state->sequence = ++self->sequence;
 
-  ide_task_set_task_data (task, state, expand_free);
+  self->expand = dex_scheduler_spawn (NULL, 0,
+                                      ide_tree_node_expand_fiber,
+                                      state,
+                                      (GDestroyNotify)expand_free);
 
-  ide_extension_set_adapter_foreach (addins,
-                                     ide_tree_node_expand_foreach_cb,
-                                     state);
-
-  if (active->len == 0)
-    ide_task_return_boolean (task, TRUE);
-}
-
-gboolean
-_ide_tree_node_expand_finish (IdeTreeNode   *self,
-                              GAsyncResult  *result,
-                              GError       **error)
-{
-  g_return_val_if_fail (IDE_IS_TREE_NODE (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
-
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  return dex_ref (self->expand);
 }
 
 gboolean

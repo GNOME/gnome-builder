@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <libide-plugins.h>
-
 #include "ide-tree.h"
 #include "ide-tree-node.h"
 
@@ -35,14 +33,8 @@ guint           _ide_tree_node_get_child_index (IdeTreeNode             *parent,
                                                 IdeTreeNode             *child);
 IdeTree        *_ide_tree_node_get_tree        (IdeTreeNode             *self);
 void            _ide_tree_node_collapsed       (IdeTreeNode             *self);
-void            _ide_tree_node_expand_async    (IdeTreeNode             *self,
-                                                IdeExtensionSetAdapter  *addins,
-                                                GCancellable            *cancellable,
-                                                GAsyncReadyCallback      callback,
-                                                gpointer                 user_data);
-gboolean        _ide_tree_node_expand_finish   (IdeTreeNode             *self,
-                                                GAsyncResult            *result,
-                                                GError                 **error);
+DexFuture      *_ide_tree_node_expand          (IdeTreeNode             *self,
+                                                GListModel              *addins);
 gboolean        _ide_tree_node_show_popover    (IdeTreeNode             *self,
                                                 GtkPopover              *popover);
 

@@ -24,7 +24,6 @@
 
 #include <libide-gtk.h>
 #include <libide-plugins.h>
-#include <libide-threading.h>
 
 #include "ide-tree.h"
 #include "ide-tree-addin.h"
@@ -216,7 +215,7 @@ ide_tree_root (GtkWidget *widget)
                                      self);
 
   if (priv->root != NULL)
-    _ide_tree_node_expand_async (priv->root, priv->addins, NULL, NULL, NULL);
+    dex_future_disown (_ide_tree_node_expand (priv->root, G_LIST_MODEL (priv->addins)));
 }
 
 static void
@@ -866,7 +865,7 @@ ide_tree_row_notify_expanded_cb (IdeTree        *self,
   if (gtk_tree_list_row_get_expanded (row))
     {
       if (!_ide_tree_node_children_built (node))
-        _ide_tree_node_expand_async (node, priv->addins, NULL, NULL, NULL);
+        dex_future_disown (_ide_tree_node_expand (node, G_LIST_MODEL (priv->addins)));
     }
   else
     {
@@ -1269,7 +1268,7 @@ ide_tree_set_root (IdeTree     *self,
       gtk_single_selection_set_model (priv->selection, G_LIST_MODEL (priv->tree_model));
 
       if (priv->addins != NULL)
-        _ide_tree_node_expand_async (priv->root, priv->addins, NULL, NULL, NULL);
+        dex_future_disown (_ide_tree_node_expand (priv->root, G_LIST_MODEL (priv->addins)));
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT]);
@@ -1464,37 +1463,28 @@ ide_tree_expand_to_node (IdeTree     *self,
   row = _ide_tree_get_row_at_node (self, node, TRUE);
 }
 
-static void
-ide_tree_expand_node_cb (GObject      *object,
-                         GAsyncResult *result,
-                         gpointer      user_data)
+static DexFuture *
+ide_tree_expand_node_cb (DexFuture *completed,
+                         gpointer   user_data)
 {
-  IdeTreeNode *node = (IdeTreeNode *)object;
+  IdeTreeNode *node = user_data;
   g_autoptr(GtkTreeListRow) row = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
   IdeTree *self;
 
   IDE_ENTRY;
 
+  g_assert (DEX_IS_FUTURE (completed));
   g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
 
-  if (!_ide_tree_node_expand_finish (node, result, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  if (!(self = _ide_tree_node_get_tree (node)))
+    return dex_future_new_for_boolean (TRUE);
 
-  self = ide_task_get_source_object (task);
+  g_assert (IDE_IS_TREE (self));
 
   if ((row = _ide_tree_get_row_at_node (self, node, TRUE)))
     gtk_tree_list_row_set_expanded (row, TRUE);
 
-  ide_task_return_boolean (task, TRUE);
-
-  IDE_EXIT;
+  return dex_future_new_for_boolean (TRUE);
 }
 
 void
@@ -1505,20 +1495,20 @@ ide_tree_expand_node_async (IdeTree             *self,
                             gpointer             user_data)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(DexAsyncResult) result = NULL;
 
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_tree_expand_node_async);
+  result = dex_async_result_new (self, cancellable, callback, user_data);
 
-  _ide_tree_node_expand_async (node,
-                               priv->addins,
-                               cancellable,
-                               ide_tree_expand_node_cb,
-                               g_steal_pointer (&task));
+  dex_async_result_await (result,
+                          dex_future_then (_ide_tree_node_expand (node,
+                                                                  G_LIST_MODEL (priv->addins)),
+                                           ide_tree_expand_node_cb,
+                                           g_object_ref (node),
+                                           g_object_unref));
 }
 
 gboolean
@@ -1527,9 +1517,9 @@ ide_tree_expand_node_finish (IdeTree       *self,
                              GError       **error)
 {
   g_return_val_if_fail (IDE_IS_TREE (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (DEX_IS_ASYNC_RESULT (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  return dex_async_result_propagate_boolean (DEX_ASYNC_RESULT (result), error);
 }
 
 void
