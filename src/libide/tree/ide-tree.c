@@ -1477,14 +1477,14 @@ ide_tree_expand_node_cb (DexFuture *completed,
   g_assert (IDE_IS_TREE_NODE (node));
 
   if (!(self = _ide_tree_node_get_tree (node)))
-    return dex_future_new_for_boolean (TRUE);
+    IDE_RETURN (dex_future_new_for_boolean (TRUE));
 
   g_assert (IDE_IS_TREE (self));
 
   if ((row = _ide_tree_get_row_at_node (self, node, TRUE)))
     gtk_tree_list_row_set_expanded (row, TRUE);
 
-  return dex_future_new_for_boolean (TRUE);
+  IDE_RETURN (dex_future_new_for_boolean (TRUE));
 }
 
 void
