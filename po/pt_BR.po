@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-04-10 22:14+0000\n"
-"PO-Revision-Date: 2024-04-11 17:10-0300\n"
+"POT-Creation-Date: 2024-05-16 21:59+0000\n"
+"PO-Revision-Date: 2024-05-27 20:45-0300\n"
 "Last-Translator: Leônidas Araújo <leorusvellt@hotmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -50,9 +50,9 @@ msgstr "Uma IDE para o GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr "Christian Hergert, et al."
+#| msgid "Christian Hergert, et al."
+msgid "Christian Hergert"
+msgstr "Christian Hergert"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
@@ -859,11 +859,11 @@ msgstr "Páginas"
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
-#: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
+#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:108
+#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:149
+#: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -882,7 +882,7 @@ msgid "Documents"
 msgstr "Documentos"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:112
+#: src/libide/sourceview/gtk/menus.ui:109
 msgid "Selection"
 msgstr "Seleção"
 
@@ -1623,6 +1623,10 @@ msgstr "Terminal"
 msgid "New Terminals"
 msgstr "Novos terminais"
 
+#: src/libide/gui/ide-application-actions.c:168
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert, et al."
+
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr ""
@@ -1828,7 +1832,7 @@ msgstr "Servidores de idiomas"
 msgid "Devices & Simulators"
 msgstr "Dispositivos e Simuladores"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:156
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnósticos"
@@ -1952,7 +1956,7 @@ msgstr "_Seleção"
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:142
 msgid "Formatting"
 msgstr "Formatando"
 
@@ -1964,57 +1968,57 @@ msgstr "Todas as letras em m_aiúsculas"
 msgid "Convert the text selection to upper case"
 msgstr "Converte o texto selecionado para maiúsculo"
 
-#: src/libide/sourceview/gtk/menus.ui:90
+#: src/libide/sourceview/gtk/menus.ui:89
 msgid "All _Lower Case"
 msgstr "Todas as letras em mi_núsculas"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "Convert the text selection to lower case"
 msgstr "Converte o texto selecionado para minúsculo"
 
-#: src/libide/sourceview/gtk/menus.ui:97
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "_Inverter caixa"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:96
 msgid "Invert case of the text selection"
 msgstr "Inverte maiúsculo com minúsculo na seleção de texto"
 
-#: src/libide/sourceview/gtk/menus.ui:104
+#: src/libide/sourceview/gtk/menus.ui:101
 msgid "_Title Case"
 msgstr "Ini_ciais em maiúsculas"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "Convert the text selection to title case"
 msgstr "Converte o texto selecionado para iniciais maiúsculas (title case)"
 
-#: src/libide/sourceview/gtk/menus.ui:114
+#: src/libide/sourceview/gtk/menus.ui:111
 msgid "Select _Line"
 msgstr "Selecionar _Linha"
 
-#: src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Delete Line"
 msgstr "E_xcluir Linha"
 
-#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:121
 msgid "_Join Lines"
 msgstr "_Juntar linhas"
 
-#: src/libide/sourceview/gtk/menus.ui:129
+#: src/libide/sourceview/gtk/menus.ui:126
 msgid "S_ort Lines"
 msgstr "_Ordenar linhas"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "D_uplicate Line"
 msgstr "D_uplicar Linha"
 
-#: src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:139
 msgid "_Formatting"
 msgstr "_Formatando"
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:150
+#: src/libide/sourceview/gtk/menus.ui:154
+#: src/libide/sourceview/gtk/menus.ui:160
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2103,7 +2107,7 @@ msgstr "Terminal sem título"
 msgid "GNOME"
 msgstr "GNOME"
 
-# Leônidas -- Este e as próximas strings se referem ao tema utilizada na IDE. Resolvi não traduzi-las. 
+# Leônidas -- Este e as próximas strings se referem ao tema utilizada na IDE. Resolvi não traduzi-las.
 #: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
 msgstr "Solarized"
@@ -2126,7 +2130,6 @@ msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
 #: src/libide/terminal/ide-terminal-palettes.h:829
-#| msgid "Terminal"
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2724,7 +2727,6 @@ msgstr "Vulkan"
 
 # RGB, componente verde
 #: src/plugins/buildui/gtk/menus.ui:220
-#| msgid "G"
 msgid "GL"
 msgstr "GL"
 
@@ -3148,7 +3150,7 @@ msgstr "Copiar como imagem"
 msgid "Copy selected text as an image"
 msgstr "Copia o texto selecionado como uma imagem"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Possível erro em “%s”. Você quis dizer “%s”?"
