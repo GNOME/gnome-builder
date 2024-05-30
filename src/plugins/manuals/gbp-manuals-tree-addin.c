@@ -43,12 +43,20 @@ apply_children_posible (DexFuture *completed,
                         gpointer   user_data)
 {
   IdeTreeNode *node = user_data;
+  gboolean children_possible;
 
   g_assert (DEX_IS_FUTURE (completed));
   g_assert (dex_future_is_resolved (completed));
   g_assert (IDE_IS_TREE_NODE (node));
 
-  ide_tree_node_set_children_possible (node, dex_await_boolean (dex_ref (completed), NULL));
+  children_possible = dex_await_boolean (dex_ref (completed), NULL);
+
+  if (children_possible)
+    {
+      ide_tree_node_set_children_possible (node, TRUE);
+      ide_tree_node_set_icon_name (node, "pan-end-symbolic");
+      ide_tree_node_set_expanded_icon_name (node, "pan-down-symbolic");
+    }
 
   return NULL;
 }
