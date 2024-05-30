@@ -423,7 +423,8 @@ ide_terminal_capture_click_pressed_cb (IdeTerminal  *self,
 
   if (n_press == 1 &&
       !handled &&
-      (button == 1 || button == 2))
+      (button == 1 || button == 2) &&
+      (state & GDK_CONTROL_MASK))
     {
       if (hyperlink != NULL)
         handled = ide_terminal_match_clicked (self, x, y, button, state, hyperlink);
