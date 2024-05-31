@@ -321,6 +321,21 @@ ide_run_context_host_handler (IdeRunContext       *self,
   return TRUE;
 }
 
+static gboolean
+is_empty (IdeRunContext *self)
+{
+  IdeRunContextLayer *root;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+
+  if (self->layers.length > 1)
+    return FALSE;
+
+  root = g_queue_peek_head (&self->layers);
+
+  return root->argv->len == 0;
+}
+
 /**
  * ide_run_context_push_host:
  * @self: a #IdeRunContext
@@ -337,7 +352,10 @@ ide_run_context_push_host (IdeRunContext *self)
 {
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
 
-  if (ide_is_flatpak ())
+  /* We use flatpak-spawn to jump to the host even if we're
+   * inside a container like toolbox first.
+   */
+  if (ide_is_flatpak () || !is_empty (self))
     {
       self->setup_tty = FALSE;
       ide_run_context_push (self,
