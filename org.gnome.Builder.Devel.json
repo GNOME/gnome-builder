@@ -734,6 +734,16 @@
             ]
         },
         {
+            "name" : "gitlab-glib",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/gitlab-glib.git"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="projects_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="projects_page">
+          <object class="IdeTweaksPage">
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Gitlab</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

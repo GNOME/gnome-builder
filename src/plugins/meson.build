@@ -76,6 +76,7 @@ subdir('gdb')
 subdir('gdiagnose')
 subdir('gettext')
 subdir('git')
+subdir('gitlab')
 subdir('glsl-language-server')
 subdir('golang')
 subdir('gopls')
@@ -195,6 +196,7 @@ status += [
   'GDB .................................. : @0@'.format(get_option('plugin_gdb')),
   'Gettext .............................. : @0@'.format(get_option('plugin_gettext')),
   'Git .................................. : @0@'.format(get_option('plugin_git')),
+  'GitLab ............................... : @0@'.format(get_option('plugin_gitlab')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
   'Hadolint ............................. : @0@'.format(get_option('plugin_hadolint')),

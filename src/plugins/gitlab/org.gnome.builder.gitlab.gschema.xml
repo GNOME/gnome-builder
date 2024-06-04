@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.gitlab" gettext-domain="gnome-builder">
+    <key type="s" name="api-key"><default>''</default></key>
+    <key type="s" name="host"><default>''</default></key>
+  </schema>
+</schemalist>

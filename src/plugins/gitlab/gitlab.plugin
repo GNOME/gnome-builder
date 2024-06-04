@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2024 Christian Hergert
+Depends=buildui;project-tree;
+Description=Gitlab Integration
+Embedded=_gbp_gitlab_register_types
+Module=gitlab
+Name=Gitlab
+X-Category=services
+X-Settings-Schemas=org.gnome.builder.gitlab;

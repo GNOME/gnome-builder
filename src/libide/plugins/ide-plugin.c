@@ -273,6 +273,7 @@ ide_plugin_init_sections (void)
       ADD_SECTION ("templates", "projects");
       ADD_SECTION ("editing", "editing");
       ADD_SECTION ("keybindings", "integration");
+      ADD_SECTION ("services", "projects");
       ADD_SECTION ("search", "history");
       ADD_SECTION ("web", "integration");
       ADD_SECTION ("language", "tooling");
@@ -345,6 +346,7 @@ ide_plugin_get_category (IdePlugin *self)
       ADD_TITLE ("editing", _("Editing & Formatting"));
       ADD_TITLE ("keybindings", _("Keyboard Shortcuts"));
       ADD_TITLE ("search", _("Search"));
+      ADD_TITLE ("services", _("Services"));
       ADD_TITLE ("web", _("Web"));
       ADD_TITLE ("language", _("Language Enablement"));
       ADD_TITLE ("desktop", _("Desktop Integration"));
