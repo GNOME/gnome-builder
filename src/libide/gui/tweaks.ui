@@ -51,6 +51,11 @@
       </object>
     </child>
     <child>
+      <object class="IdeTweaksSection" id="services_section">
+        <property name="title">services</property>
+      </object>
+    </child>
+    <child>
       <object class="IdeTweaksSection" id="vcs_section">
         <property name="title">vcs</property>
         <property name="hidden-when">app</property>
