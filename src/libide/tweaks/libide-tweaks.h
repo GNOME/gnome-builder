@@ -36,6 +36,7 @@
 # include "ide-tweaks-info.h"
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
+# include "ide-tweaks-password.h"
 # include "ide-tweaks-property.h"
 # include "ide-tweaks-radio.h"
 # include "ide-tweaks-section.h"
