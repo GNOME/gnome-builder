@@ -28,6 +28,7 @@
 
 #include "gbp-gitlab-tweaks-addin.h"
 #include "gbp-gitlab-workbench-addin.h"
+#include "gbp-gitlab-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_gitlab_register_types (PeasObjectModule *module)
@@ -38,4 +39,7 @@ _gbp_gitlab_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_GITLAB_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_GITLAB_WORKSPACE_ADDIN);
 }

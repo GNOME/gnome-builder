@@ -1,3 +1,17 @@
 <?xml version="1.0"?>
 <interface>
+  <menu id="gitlab-menu">
+    <section id="gitlab-menu-online-section">
+      <item>
+        <attribute name="label" translatable="yes">Open Project on Gitlab…</attribute>
+        <attribute name="action">workspace.gitlab.open-project</attribute>
+      </item>
+    </section>
+    <section id="gitlab-menu-issues-section">
+      <item>
+        <attribute name="label" translatable="yes">View Open Issues</attribute>
+        <attribute name="action">workspace.gitlab.view-issues</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

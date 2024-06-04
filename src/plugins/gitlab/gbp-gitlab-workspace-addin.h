@@ -1,6 +1,6 @@
-/* gbp-gitlab-workbench-addin.h
+/* gbp-gitlab-workspace-addin.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GITLAB_WORKBENCH_ADDIN (gbp_gitlab_workbench_addin_get_type())
+#define GBP_TYPE_GITLAB_WORKSPACE_ADDIN (gbp_gitlab_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitlabWorkbenchAddin, gbp_gitlab_workbench_addin, GBP, GITLAB_WORKBENCH_ADDIN, GObject)
-
-gboolean  gbp_gitlab_workbench_addin_get_enabled     (GbpGitlabWorkbenchAddin *self);
-char     *gbp_gitlab_workbench_addin_get_project_url (GbpGitlabWorkbenchAddin *self);
+G_DECLARE_FINAL_TYPE (GbpGitlabWorkspaceAddin, gbp_gitlab_workspace_addin, GBP, GITLAB_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

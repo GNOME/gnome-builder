@@ -4,6 +4,7 @@ plugins_sources += files([
   'gitlab-plugin.c',
   'gbp-gitlab-tweaks-addin.c',
   'gbp-gitlab-workbench-addin.c',
+  'gbp-gitlab-workspace-addin.c',
 ])
 
 plugin_gitlab_resources = gnome.compile_resources(

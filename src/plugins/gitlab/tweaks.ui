@@ -1,13 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child internal-child="projects_section">
+    <child internal-child="services_section">
       <object class="IdeTweaksSection">
-        <child internal-child="projects_page">
-          <object class="IdeTweaksPage">
+        <child>
+          <object class="IdeTweaksPage" id="gitlab_page">
+            <property name="icon-name">gitlab-symbolic</property>
+            <property name="title" translatable="yes">Gitlab</property>
             <child>
               <object class="IdeTweaksGroup">
-                <property name="title" translatable="yes">Gitlab</property>
+                <property name="title" translatable="yes">Instance</property>
+                <child>
+                  <object class="IdeTweaksEntry">
+                    <property name="title" translatable="yes">Host</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.gitlab</property>
+                        <property name="schema-key">host</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksCaption">
+                    <property name="text" translatable="yes">The host of your gitlab server such as “gitlab.gnome.org”.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Credentials</property>
+                <child>
+                  <object class="IdeTweaksPassword">
+                    <property name="title" translatable="yes">Personal Access Token</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.gitlab</property>
+                        <property name="schema-key">api-key</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksCaption">
+                    <property name="text" translatable="yes">You may generate an API token in User Settings → Access Tokens from your gitlab instance.</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

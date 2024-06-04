@@ -9,3 +9,4 @@ Module=gitlab
 Name=Gitlab
 X-Category=services
 X-Settings-Schemas=org.gnome.builder.gitlab;
+X-Workspace-Kind=primary;
