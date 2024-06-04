@@ -30,7 +30,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGitVcs, gbp_git_vcs, GBP, GIT_VCS, IdeObject)
 
-GbpGitVcs        *gbp_git_vcs_new            (IpcGitRepository *repository);
-IpcGitRepository *gbp_git_vcs_get_repository (GbpGitVcs        *self);
+GbpGitVcs        *gbp_git_vcs_new            (IpcGitRepository  *repository);
+IpcGitRepository *gbp_git_vcs_get_repository (GbpGitVcs         *self);
+char             *gbp_git_vcs_get_remote_url (GbpGitVcs         *self,
+                                              const char        *remote_name,
+                                              GCancellable      *cancellable,
+                                              GError           **error);
 
 G_END_DECLS
