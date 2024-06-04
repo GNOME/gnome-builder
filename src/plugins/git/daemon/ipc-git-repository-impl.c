@@ -1076,6 +1076,31 @@ ipc_git_repository_impl_handle_update_submodules (IpcGitRepository      *reposit
   return TRUE;
 }
 
+static gboolean
+ipc_git_repository_impl_handle_get_remote_url (IpcGitRepository      *repository,
+                                               GDBusMethodInvocation *invocation,
+                                               const gchar           *remote_name)
+{
+  IpcGitRepositoryImpl *self = (IpcGitRepositoryImpl *)repository;
+  g_autoptr(GgitRemote) remote = NULL;
+  g_autoptr(GError) error = NULL;
+  const char *url = NULL;
+
+  g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (remote_name != NULL);
+
+  if ((remote = ggit_repository_lookup_remote (self->repository, remote_name, &error)))
+    url = ggit_remote_get_url (remote);
+
+  if (url == NULL)
+    url = "";
+
+  ipc_git_repository_complete_get_remote_url (repository, g_steal_pointer (&invocation), url);
+
+  return TRUE;
+}
+
 static void
 git_repository_iface_init (IpcGitRepositoryIface *iface)
 {
@@ -1090,10 +1115,11 @@ git_repository_iface_init (IpcGitRepositoryIface *iface)
   iface->handle_stage_file = ipc_git_repository_impl_handle_stage_file;
   iface->handle_switch_branch = ipc_git_repository_impl_handle_switch_branch;
   iface->handle_update_submodules = ipc_git_repository_impl_handle_update_submodules;
+  iface->handle_get_remote_url = ipc_git_repository_impl_handle_get_remote_url;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitRepositoryImpl, ipc_git_repository_impl, IPC_TYPE_GIT_REPOSITORY_SKELETON,
-                         G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_REPOSITORY, git_repository_iface_init))
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_REPOSITORY, git_repository_iface_init))
 
 static void
 ipc_git_repository_impl_finalize (GObject *object)

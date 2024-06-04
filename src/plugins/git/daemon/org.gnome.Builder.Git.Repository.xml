@@ -171,5 +171,14 @@
       <arg name="init" direction="in" type="b"/>
       <arg name="progress_path" direction="in" type="o"/>
     </method>
+    <!--
+      GetRemoteUrl:
+
+      Get the URL of a known remote.
+    -->
+    <method name="GetRemoteUrl">
+      <arg name="remote_name" direction="in" type="s"/>
+      <arg name="url" direction="out" type="s"/>
+    </method>
   </interface>
 </node>

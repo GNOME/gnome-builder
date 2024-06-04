@@ -726,3 +726,25 @@ gbp_git_vcs_get_repository (GbpGitVcs *self)
 
   return self->repository;
 }
+
+char *
+gbp_git_vcs_get_remote_url (GbpGitVcs     *self,
+                            const char    *remote_name,
+                            GCancellable  *cancellable,
+                            GError       **error)
+{
+  g_autofree char *url = NULL;
+
+  g_return_val_if_fail (GBP_IS_GIT_VCS (self), NULL);
+  g_return_val_if_fail (remote_name != NULL, NULL);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+
+  if (ipc_git_repository_call_get_remote_url_sync (self->repository,
+                                                   remote_name,
+                                                   &url,
+                                                   cancellable,
+                                                   error))
+    return g_steal_pointer (&url);
+
+  return NULL;
+}
