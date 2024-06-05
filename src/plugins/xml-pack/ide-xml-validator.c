@@ -61,10 +61,10 @@ ide_xml_validator_get_kind (IdeXmlValidator *self)
 }
 
 static IdeDiagnostic *
-create_diagnostic (IdeXmlValidator        *self,
-                   GFile                  *file,
-                   xmlError               *error,
-                   IdeDiagnosticSeverity   severity)
+create_diagnostic (IdeXmlValidator       *self,
+                   GFile                 *file,
+                   const xmlError        *error,
+                   IdeDiagnosticSeverity  severity)
 {
   g_autoptr(IdeLocation) loc = NULL;
   gint line;
