@@ -362,7 +362,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
 {
   IdeDiagnostic *diagnostic;
   xmlParserCtxt *context;
-  xmlError *error;
+  const xmlError *error;
   const gchar *base;
   const gchar *current;
   g_autofree gchar *msg = NULL;
