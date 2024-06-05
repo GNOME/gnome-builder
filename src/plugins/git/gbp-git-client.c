@@ -123,7 +123,20 @@ gbp_git_client_subprocess_supervise (GbpGitClient            *self,
   g_clear_object (&self->service);
   g_clear_object (&self->connection);
 
+#ifdef __APPLE__
+  res = socketpair (AF_UNIX, SOCK_STREAM, 0, pair);
+
+  if (res != -1)
+    {
+      fcntl (pair[0], F_SETFD, FD_CLOEXEC);
+      fcntl (pair[1], F_SETFD, FD_CLOEXEC);
+
+      g_unix_set_fd_nonblocking (pair[0], TRUE);
+      g_unix_set_fd_nonblocking (pair[1], TRUE);
+    }
+#else
   res = socketpair (AF_UNIX, SOCK_STREAM|SOCK_NONBLOCK|SOCK_CLOEXEC, 0, pair);
+#endif
 
   if (res == 0)
     {
