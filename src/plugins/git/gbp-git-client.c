@@ -131,8 +131,8 @@ gbp_git_client_subprocess_supervise (GbpGitClient            *self,
       fcntl (pair[0], F_SETFD, FD_CLOEXEC);
       fcntl (pair[1], F_SETFD, FD_CLOEXEC);
 
-      g_unix_set_fd_nonblocking (pair[0], TRUE);
-      g_unix_set_fd_nonblocking (pair[1], TRUE);
+      g_unix_set_fd_nonblocking (pair[0], TRUE, NULL);
+      g_unix_set_fd_nonblocking (pair[1], TRUE, NULL);
     }
 #else
   res = socketpair (AF_UNIX, SOCK_STREAM|SOCK_NONBLOCK|SOCK_CLOEXEC, 0, pair);
