@@ -1,5 +1,9 @@
 if get_option('plugin_manuals')
 
+if not get_option('webkit').enabled()
+  error('-Dwebkit=enabled is required for manuals plugin')
+endif
+
 plugins_sources += files([
   'gbp-manuals-application-addin.c',
   'gbp-manuals-page.c',
