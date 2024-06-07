@@ -29,8 +29,9 @@
 
 struct _GbpGitWorkspaceAddin
 {
-  GObject       parent_instance;
-  IdeWorkspace *workspace;
+  GObject             parent_instance;
+  IdeWorkspace       *workspace;
+  GbpGitCommitDialog *commit_dialog;
 };
 
 static void begin_commit_action (GbpGitWorkspaceAddin *self,
@@ -60,6 +61,8 @@ gbp_git_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   g_assert (GBP_IS_GIT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) || IDE_IS_EDITOR_WORKSPACE (workspace));
+
+  g_clear_weak_pointer (&self->commit_dialog);
 
   self->workspace = NULL;
 }
@@ -97,11 +100,14 @@ begin_commit_action (GbpGitWorkspaceAddin *self,
   g_assert (GBP_IS_GIT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (self->workspace));
 
+  if (self->commit_dialog != NULL)
+    IDE_EXIT;
+
   context = ide_workspace_get_context (self->workspace);
   dialog = gbp_git_commit_dialog_new (context);
-
-  adw_dialog_set_content_width (ADW_DIALOG (dialog), 800);
   adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (self->workspace));
+
+  g_set_weak_pointer (&self->commit_dialog, dialog);
 
   IDE_EXIT;
 }
