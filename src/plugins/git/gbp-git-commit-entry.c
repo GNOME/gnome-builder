@@ -22,12 +22,17 @@
 #include "config.h"
 
 #include <libide-gui.h>
+#include <libide-sourceview.h>
+
+#include "ide-source-view-private.h"
 
 #include "gbp-git-commit-entry.h"
 
 struct _GbpGitCommitEntry
 {
-  GtkSourceView parent_instance;
+  GtkSourceView   parent_instance;
+  GSettings      *editor_settings;
+  GtkCssProvider *css_provider;
 };
 
 enum {
@@ -57,9 +62,57 @@ style_scheme_name_to_object (GBinding     *binding,
 }
 
 static void
+editor_settings_changed_cb (GbpGitCommitEntry *self,
+                            const char        *key,
+                            GSettings         *settings)
+{
+  GtkSourceBuffer *buffer;
+  gboolean update_css = FALSE;
+
+  g_assert (GBP_IS_GIT_COMMIT_ENTRY (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self)));
+
+  if (!key || ide_str_equal0 (key, "show-grid-lines"))
+    gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
+                                            g_settings_get_boolean (settings, "show-grid-lines") ?
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+
+  if (!key || ide_str_equal0 (key, "line-height"))
+    update_css = TRUE;
+
+  if (!key || ide_str_equal0 (key, "font-name"))
+    update_css = TRUE;
+
+  if (update_css)
+    {
+      g_autofree char *css = NULL;
+      g_autofree char *font_name = NULL;
+      PangoFontDescription *font_desc;
+      double line_height;
+
+      line_height = g_settings_get_double (settings, "line-height");
+      font_name = g_settings_get_string (settings, "font-name");
+      font_desc = pango_font_description_from_string (font_name);
+
+      if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), font_desc, 1, line_height)))
+        gtk_css_provider_load_from_data (self->css_provider, css, -1);
+
+      g_clear_pointer (&font_desc, pango_font_description_free);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+static void
 gbp_git_commit_entry_dispose (GObject *object)
 {
   GbpGitCommitEntry *self = (GbpGitCommitEntry *)object;
+
+  g_clear_object (&self->editor_settings);
+  g_clear_object (&self->css_provider);
 
   G_OBJECT_CLASS (gbp_git_commit_entry_parent_class)->dispose (object);
 }
@@ -114,6 +167,8 @@ gbp_git_commit_entry_init (GbpGitCommitEntry *self)
   GtkSourceLanguage *lang;
   GtkTextBuffer *buffer;
 
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (self), 12);
   gtk_text_view_set_right_margin (GTK_TEXT_VIEW (self), 12);
   gtk_text_view_set_top_margin (GTK_TEXT_VIEW (self), 12);
@@ -126,8 +181,20 @@ gbp_git_commit_entry_init (GbpGitCommitEntry *self)
   lang = gtk_source_language_manager_get_language (lm, "git-commit");
   gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), lang);
 
+  self->css_provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self)),
+                                  GTK_STYLE_PROVIDER (self->css_provider),
+                                  G_MAXINT);
+
   g_object_bind_property_full (IDE_APPLICATION_DEFAULT, "style-scheme",
                                buffer, "style-scheme",
                                G_BINDING_SYNC_CREATE,
                                style_scheme_name_to_object, NULL, NULL, NULL);
+
+  g_signal_connect_object (self->editor_settings,
+                           "changed",
+                           G_CALLBACK (editor_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  editor_settings_changed_cb (self, NULL, self->editor_settings);
 }
