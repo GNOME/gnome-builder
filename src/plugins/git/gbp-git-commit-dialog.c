@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gbp-git-commit-dialog.h"
+#include "gbp-git-commit-entry.h"
 
 struct _GbpGitCommitDialog
 {
@@ -109,6 +110,8 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/git/gbp-git-commit-dialog.ui");
+
+  g_type_ensure (GBP_TYPE_GIT_COMMIT_ENTRY);
 }
 
 static void
