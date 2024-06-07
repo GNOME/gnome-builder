@@ -9,6 +9,7 @@ plugins_sources += files([
   'gbp-git-buffer-change-monitor.c',
   'gbp-git-client.c',
   'gbp-git-commit-dialog.c',
+  'gbp-git-commit-entry.c',
   'gbp-git-dependency-updater.c',
   'gbp-git-pipeline-addin.c',
   'gbp-git-progress.c',
