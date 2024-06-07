@@ -8,6 +8,7 @@ plugins_sources += files([
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
   'gbp-git-client.c',
+  'gbp-git-commit-dialog.c',
   'gbp-git-dependency-updater.c',
   'gbp-git-pipeline-addin.c',
   'gbp-git-progress.c',
@@ -19,6 +20,7 @@ plugins_sources += files([
   'gbp-git-vcs-initializer.c',
   'gbp-git-vcs.c',
   'gbp-git-workbench-addin.c',
+  'gbp-git-workspace-addin.c',
   'git-plugin.c',
 ])
 

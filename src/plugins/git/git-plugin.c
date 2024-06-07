@@ -35,6 +35,7 @@
 #include "gbp-git-vcs-config.h"
 #include "gbp-git-vcs-initializer.h"
 #include "gbp-git-workbench-addin.h"
+#include "gbp-git-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_git_register_types (PeasObjectModule *module)
@@ -62,6 +63,9 @@ _gbp_git_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_GIT_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_GIT_WORKSPACE_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               GBP_TYPE_GIT_TWEAKS_ADDIN);
