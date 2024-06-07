@@ -28,6 +28,7 @@
     <style id="signed-off-by" name="Signed-off-by" map-to="def:doc-comment-element"/>
     <style id="fixes" name="Fixes" map-to="def:type"/>
     <style id="title" name="Title" map-to="def:shebang"/>
+    <style id="url" name="Url" map-to="def:net-address"/>
   </styles>
   <definitions>
     <context id="title" style-ref="title" first-line-only="true">
@@ -42,16 +43,19 @@
       <start>^Signed-off-by:</start>
       <end>$</end>
     </context>
-    <context id="fixes" style-ref="fixes" end-at-line-end="true" class="no-spell-check">
-      <start>^\s*(Fixes|Resolves|Related|See also):</start>
-      <end>$</end>
+    <context id="fixes" style-ref="fixes">
+      <match>^\s*(\w+|See also):</match>
+    </context>
+    <context id="url" style-ref="url">
+      <match>((http)|(https)|(file))://\S*</match>
     </context>
     <context id="git-commit">
       <include>
+        <context ref="title"/>
         <context ref="comment"/>
+        <context ref="url"/>
         <context ref="signed-off-by"/>
         <context ref="fixes"/>
-        <context ref="title"/>
       </include>
     </context>
   </definitions>
