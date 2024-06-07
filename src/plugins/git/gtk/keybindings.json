@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Shift><Alt>m", "action" : "workspace.git.begin-commit", "when" : "hasProject()", "phase" : "capture" },
