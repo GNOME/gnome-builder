@@ -104,8 +104,8 @@ gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
   if (!key || ide_str_equal0 (key, "show-grid-lines"))
     gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
                                             g_settings_get_boolean (settings, "show-grid-lines") ?
-                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
-                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+                                            GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
+                                            GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
 
   if (!key || ide_str_equal0 (key, "highlight-current-line"))
     gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self),
