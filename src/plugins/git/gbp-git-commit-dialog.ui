@@ -12,8 +12,10 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkScrolledWindow">
+                <property name="propagate-natural-height">true</property>
+                <property name="propagate-natural-width">true</property>
                 <child>
-                  <object class="GtkSourceView" id="source_view">
+                  <object class="GbpGitCommitEntry" id="entry">
                   </object>
                 </child>
               </object>
