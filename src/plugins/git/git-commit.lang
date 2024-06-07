@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ Authors: Christian Hergert
+ Copyright 2024 Christian Hergert
+
+ GtkSourceView is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+
+ GtkSourceView is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+-->
+<language id="git-commit" name="Git Commit" version="2.0" _section="Other">
+  <metadata>
+    <property name="line-comment-start">#</property>
+    <property name="globs">COMMIT_EDITMSG</property>
+  </metadata>
+  <styles>
+    <style id="comment" name="Comment" map-to="def:comment"/>
+    <style id="signed-off-by" name="Signed-off-by" map-to="def:doc-comment-element"/>
+    <style id="fixes" name="Fixes" map-to="def:type"/>
+    <style id="title" name="Title" map-to="def:shebang"/>
+  </styles>
+  <definitions>
+    <context id="title" style-ref="title" first-line-only="true">
+      <start>^</start>
+      <end>$</end>
+    </context>
+    <context id="comment" style-ref="comment" end-at-line-end="true" class-disabled="no-spell-check" class="comment">
+      <start>^#</start>
+      <end>$</end>
+    </context>
+    <context id="signed-off-by" style-ref="signed-off-by" end-at-line-end="true" class="no-spell-check">
+      <start>^Signed-off-by:</start>
+      <end>$</end>
+    </context>
+    <context id="fixes" style-ref="fixes" end-at-line-end="true" class="no-spell-check">
+      <start>^\s*(Fixes|Resolves|Related|See also):</start>
+      <end>$</end>
+    </context>
+    <context id="git-commit">
+      <include>
+        <context ref="comment"/>
+        <context ref="signed-off-by"/>
+        <context ref="fixes"/>
+        <context ref="title"/>
+      </include>
+    </context>
+  </definitions>
+</language>

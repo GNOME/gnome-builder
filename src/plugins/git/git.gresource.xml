@@ -5,4 +5,7 @@
     <file preprocess="xml-stripblanks">gbp-git-commit-dialog.ui</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">
+    <file>git-commit.lang</file>
+  </gresource>
 </gresources>
