@@ -107,6 +107,63 @@ editor_settings_changed_cb (GbpGitCommitEntry *self,
 }
 
 static void
+gbp_git_commit_entry_measure (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              int             for_size,
+                              int            *minimum,
+                              int            *natural,
+                              int            *minimum_baseline,
+                              int            *natural_baseline)
+{
+  GbpGitCommitEntry *self = (GbpGitCommitEntry *)widget;
+
+  g_assert (GBP_IS_GIT_COMMIT_ENTRY (self));
+
+  GTK_WIDGET_CLASS (gbp_git_commit_entry_parent_class)->measure (widget,
+                                                                 orientation,
+                                                                 for_size,
+                                                                 minimum,
+                                                                 natural,
+                                                                 minimum_baseline,
+                                                                 natural_baseline);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      static const char empty72[] = "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+      g_autoptr(PangoLayout) layout = gtk_widget_create_pango_layout (widget, empty72);
+      int width;
+
+      pango_layout_get_pixel_size (layout, &width, NULL);
+
+      *natural = MAX (*natural, width);
+    }
+  else
+    {
+      g_autoptr(GString) str = g_string_new (NULL);
+      g_autoptr(PangoLayout) layout = gtk_widget_create_pango_layout (widget, NULL);
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+      GtkTextIter begin, end;
+      int n_lines;
+      int height;
+
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
+      n_lines = gtk_text_iter_get_line (&end) + 1;
+
+      for (int i = 0; i < n_lines; i++)
+        g_string_append_len (str, "m\n", 2);
+
+      if (n_lines > 1)
+        g_string_truncate (str, str->len-1);
+
+      pango_layout_set_text (layout, str->str, -1);
+
+      pango_layout_get_pixel_size (layout, NULL, &height);
+
+      *natural = MAX (*natural, MAX (150, height));
+    }
+}
+
+static void
 gbp_git_commit_entry_dispose (GObject *object)
 {
   GbpGitCommitEntry *self = (GbpGitCommitEntry *)object;
@@ -157,7 +214,7 @@ gbp_git_commit_entry_class_init (GbpGitCommitEntryClass *klass)
   object_class->get_property = gbp_git_commit_entry_get_property;
   object_class->set_property = gbp_git_commit_entry_set_property;
 
-  //widget_class->measure = gbp_git_commit_entry_measure;
+  widget_class->measure = gbp_git_commit_entry_measure;
 }
 
 static void
@@ -174,8 +231,17 @@ gbp_git_commit_entry_init (GbpGitCommitEntry *self)
   gtk_text_view_set_top_margin (GTK_TEXT_VIEW (self), 12);
   gtk_text_view_set_bottom_margin (GTK_TEXT_VIEW (self), 12);
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (self), TRUE);
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (self), GTK_WRAP_NONE);
+  gtk_source_view_set_right_margin_position (GTK_SOURCE_VIEW (self), 72);
+  gtk_source_view_set_show_right_margin (GTK_SOURCE_VIEW (self), TRUE);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  g_signal_connect_object (buffer,
+                           "changed",
+                           G_CALLBACK (gtk_widget_queue_resize),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   lm = gtk_source_language_manager_get_default ();
   lang = gtk_source_language_manager_get_language (lm, "git-commit");
