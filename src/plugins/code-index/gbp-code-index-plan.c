@@ -272,7 +272,8 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
 
   g_mutex_unlock (&self->mutex);
 
-  ide_task_return_boolean (task, TRUE);
+  if (!ide_task_had_error (task))
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
