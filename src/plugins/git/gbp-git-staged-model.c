@@ -42,20 +42,24 @@ struct _GbpGitStagedModel
 static guint
 gbp_git_staged_model_get_n_items (GListModel *model)
 {
-  return 0;
+  GbpGitStagedModel *self = GBP_GIT_STAGED_MODEL (model);
+
+  return g_list_model_get_n_items (G_LIST_MODEL (self->model));
 }
 
 static GType
 gbp_git_staged_model_get_item_type (GListModel *model)
 {
-  return G_TYPE_OBJECT;
+  return GBP_TYPE_GIT_STAGED_ITEM;
 }
 
 static gpointer
 gbp_git_staged_model_get_item (GListModel *model,
                                guint       position)
 {
-  return NULL;
+  GbpGitStagedModel *self = GBP_GIT_STAGED_MODEL (model);
+
+  return g_list_model_get_item (G_LIST_MODEL (self->model), position);
 }
 
 static void
@@ -106,6 +110,15 @@ gbp_git_staged_model_update_apply (DexFuture *completed,
     {
       guint old_n_items = g_list_model_get_n_items (self->model);
       guint new_n_items = g_list_model_get_n_items (model);
+
+      g_signal_handlers_disconnect_by_func (self->model,
+                                            G_CALLBACK (g_list_model_items_changed),
+                                            self);
+      g_signal_connect_object (model,
+                               "items-changed",
+                               G_CALLBACK (g_list_model_items_changed),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_set_object (&self->model, model);
 
@@ -239,6 +252,7 @@ gbp_git_staged_model_dispose (GObject *object)
 
   g_clear_object (&self->context);
   g_clear_object (&self->repository);
+  g_clear_object (&self->model);
   dex_clear (&self->update);
 
   G_OBJECT_CLASS (gbp_git_staged_model_parent_class)->dispose (object);
