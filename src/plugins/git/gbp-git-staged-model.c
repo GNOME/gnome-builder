@@ -21,8 +21,12 @@
 
 #include "config.h"
 
+#include <gio/gio.h>
+
 #include <libgit2-glib/ggit.h>
 
+#include "gbp-git-dex.h"
+#include "gbp-git-staged-item.h"
 #include "gbp-git-staged-model.h"
 #include "gbp-git-vcs.h"
 
@@ -31,7 +35,8 @@ struct _GbpGitStagedModel
   GObject           parent_instance;
   IdeContext       *context;
   IpcGitRepository *repository;
-  DexPromise       *update;
+  DexFuture        *update;
+  GListModel       *model;
 };
 
 static guint
@@ -82,41 +87,86 @@ gbp_git_staged_model_new (IdeContext *context)
                        NULL);
 }
 
-static void
-gbp_git_staged_model_update_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
+static DexFuture *
+gbp_git_staged_model_update_apply (DexFuture *completed,
+                                   gpointer   user_data)
 {
-  IpcGitRepository *repository = (IpcGitRepository *)object;
-  g_autoptr(DexPromise) promise = user_data;
+  GbpGitStagedModel *self = user_data;
+  g_autoptr(GListModel) model = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (DEX_IS_FUTURE (completed));
+  g_assert (GBP_IS_GIT_STAGED_MODEL (self));
+
+  model = dex_await_object (dex_ref (completed), NULL);
+
+  g_assert (G_IS_LIST_STORE (model));
+
+  if (completed == self->update)
+    {
+      guint old_n_items = g_list_model_get_n_items (self->model);
+      guint new_n_items = g_list_model_get_n_items (model);
+
+      g_set_object (&self->model, model);
+
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, old_n_items, new_n_items);
+    }
+
+  return NULL;
+}
+
+static DexFuture *
+gbp_git_staged_model_update_fiber (gpointer user_data)
+{
+  IpcGitRepository *repository = user_data;
+  g_autoptr(GListStore) store = NULL;
   g_autoptr(GVariant) files = NULL;
   g_autoptr(GError) error = NULL;
+  GgitStatusOption status_option;
+  g_autofree char *workdir = NULL;
   GVariantIter iter;
   const char *path;
   guint flags;
 
-  IDE_ENTRY;
-
+  g_assert (!IDE_IS_MAIN_THREAD ());
   g_assert (IPC_IS_GIT_REPOSITORY (repository));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (DEX_IS_PROMISE (promise));
 
-  if (!ipc_git_repository_call_list_status_finish (repository, &files, result, &error))
-    {
-      dex_promise_reject (promise, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  status_option = (GGIT_STATUS_OPTION_INCLUDE_UNTRACKED |
+                   GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS |
+                   GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES |
+                   GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH |
+                   GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY);
+
+  if (!g_set_str (&workdir, ipc_git_repository_get_workdir (repository)))
+    return dex_future_new_reject (G_IO_ERROR,
+                                  G_IO_ERROR_NOT_INITIALIZED,
+                                  "Git repository is in broken state");
+
+  if (!(files = dex_await_variant (ipc_git_repository_list_status (repository, status_option, ""), &error)))
+    return dex_future_new_for_error (g_steal_pointer (&error));
+
+  store = g_list_store_new (GBP_TYPE_GIT_STAGED_ITEM);
 
   g_variant_iter_init (&iter, files);
 
   while (g_variant_iter_next (&iter, "(^&ayu)", &path, &flags))
     {
-      g_print ("%s: %u\n", path, flags);
+      g_autoptr(GbpGitStagedItem) item = NULL;
+      g_autoptr(GFile) file = NULL;
+      g_autofree char *title = NULL;
+
+      file = g_file_new_build_filename (workdir, path, NULL);
+      title = g_filename_to_utf8 (path, -1, NULL, NULL, NULL);
+      item = g_object_new (GBP_TYPE_GIT_STAGED_ITEM,
+                           "file", file,
+                           "title", title,
+                           "icon-name", NULL,
+                           NULL);
+
+      g_list_store_append (store, item);
     }
 
-  dex_promise_resolve_boolean (promise, TRUE);
-
-  IDE_EXIT;
+  return dex_future_new_take_object (g_steal_pointer (&store));
 }
 
 static void
@@ -129,18 +179,16 @@ gbp_git_staged_model_update (GbpGitStagedModel *self)
 
   dex_clear (&self->update);
 
-  self->update = dex_promise_new_cancellable ();
+  self->update = dex_scheduler_spawn (dex_thread_pool_scheduler_get_default (),
+                                      0,
+                                      gbp_git_staged_model_update_fiber,
+                                      g_object_ref (self->repository),
+                                      g_object_unref);
 
-  ipc_git_repository_call_list_status (self->repository,
-                                       (GGIT_STATUS_OPTION_INCLUDE_UNTRACKED |
-                                        GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS |
-                                        GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES |
-                                        GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH |
-                                        GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY),
-                                       "",
-                                       dex_promise_get_cancellable (self->update),
-                                       gbp_git_staged_model_update_cb,
-                                       dex_ref (self->update));
+  dex_future_disown (dex_future_then (dex_ref (self->update),
+                                      gbp_git_staged_model_update_apply,
+                                      g_object_ref (self),
+                                      g_object_unref));
 
   IDE_EXIT;
 }
@@ -257,4 +305,5 @@ gbp_git_staged_model_class_init (GbpGitStagedModelClass *klass)
 static void
 gbp_git_staged_model_init (GbpGitStagedModel *self)
 {
+  self->model = G_LIST_MODEL (g_list_store_new (GBP_TYPE_GIT_COMMIT_ITEM));
 }

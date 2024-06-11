@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "gbp-git-commit-model.h"
+#include "gbp-git-commit-item.h"
 #include "gbp-git-staged-model.h"
 
 struct _GbpGitCommitModel
@@ -168,7 +169,7 @@ gbp_git_commit_model_init (GbpGitCommitModel *self)
 static GType
 gbp_git_commit_model_get_item_type (GListModel *model)
 {
-  return G_TYPE_OBJECT;
+  return GBP_TYPE_GIT_COMMIT_ITEM;
 }
 
 static gpointer
