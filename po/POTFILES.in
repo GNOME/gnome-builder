@@ -231,7 +231,9 @@ src/plugins/git/daemon/ipc-git-repository-impl.c
 src/plugins/git/daemon/ipc-git-util.h
 src/plugins/git/gbp-git-buffer-change-monitor.c
 src/plugins/git/gbp-git-client.c
+src/plugins/git/gbp-git-commit-dialog.ui
 src/plugins/git/gbp-git-dependency-updater.c
+src/plugins/git/gbp-git-staged-item.c
 src/plugins/git/gbp-git-submodule-stage.c
 src/plugins/git/gbp-git-vcs.c
 src/plugins/git/gbp-git-vcs-cloner.c

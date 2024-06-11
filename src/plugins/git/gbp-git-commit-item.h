@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -32,6 +32,9 @@ G_DECLARE_DERIVABLE_TYPE (GbpGitCommitItem, gbp_git_commit_item, GBP, GIT_COMMIT
 struct _GbpGitCommitItemClass
 {
   GObjectClass parent_class;
+
+  const char *(*get_section_title) (GbpGitCommitItem *self);
+  GtkWidget  *(*create_row)        (GbpGitCommitItem *self);
 };
 
 const char *gbp_git_commit_item_get_title     (GbpGitCommitItem *self);
@@ -40,5 +43,6 @@ void        gbp_git_commit_item_set_title     (GbpGitCommitItem *self,
 const char *gbp_git_commit_item_get_icon_name (GbpGitCommitItem *self);
 void        gbp_git_commit_item_set_icon_name (GbpGitCommitItem *self,
                                                const char       *icon_name);
+GtkWidget  *gbp_git_commit_item_create_row    (GbpGitCommitItem *self);
 
 G_END_DECLS
