@@ -132,7 +132,11 @@ gbp_git_staged_model_update (GbpGitStagedModel *self)
   self->update = dex_promise_new_cancellable ();
 
   ipc_git_repository_call_list_status (self->repository,
-                                       GGIT_STATUS_OPTION_DEFAULT,
+                                       (GGIT_STATUS_OPTION_INCLUDE_UNTRACKED |
+                                        GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS |
+                                        GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES |
+                                        GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH |
+                                        GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY),
                                        "",
                                        dex_promise_get_cancellable (self->update),
                                        gbp_git_staged_model_update_cb,
