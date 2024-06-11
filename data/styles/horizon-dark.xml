@@ -37,6 +37,7 @@
   <style name="current-line" background="CurrentLine"/>
   <style name="current-line-number" background="CurrentLine"/>
   <style name="right-margin" foreground="Foreground" background="Gutter"/>
+  <style name="bracket-match" bold="true"/>
 
   <style name="def:base-n-integer" foreground="Color5"/>
   <style name="def:boolean" foreground="Color5"/>
@@ -57,5 +58,7 @@
   <style name="def:strong-emphasis" bold="true"/>
   <style name="def:identifier" foreground="Color2"/>
   <style name="def:type" foreground="Color2"/>
+  <style name="def:shebang" bold="true"/>
+  <style name="def:emphasis" italic="true"/>
 
 </style-scheme>
