@@ -77,6 +77,7 @@ def do_scheme(key_file, group, has_alt, _name):
     gstr.append('  <style name="current-line" background="CurrentLine"/>\n')
     gstr.append('  <style name="current-line-number" background="CurrentLine"/>\n')
     gstr.append('  <style name="right-margin" foreground="Foreground" background="Gutter"/>\n')
+    gstr.append('  <style name="bracket-match" bold="true"/>\n')
     gstr.append('\n')
     gstr.append('  <style name="def:base-n-integer" foreground="Color5"/>\n')
     gstr.append('  <style name="def:boolean" foreground="Color5"/>\n')
@@ -97,6 +98,8 @@ def do_scheme(key_file, group, has_alt, _name):
     gstr.append('  <style name="def:strong-emphasis" bold="true"/>\n')
     gstr.append('  <style name="def:identifier" foreground="Color2"/>\n')
     gstr.append('  <style name="def:type" foreground="Color2"/>\n')
+    gstr.append('  <style name="def:shebang" bold="true"/>\n')
+    gstr.append('  <style name="def:emphasis" italic="true"/>\n')
     gstr.append('\n')
     gstr.append('</style-scheme>')
 
