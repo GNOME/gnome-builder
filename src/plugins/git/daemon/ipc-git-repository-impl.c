@@ -158,7 +158,7 @@ ipc_git_repository_impl_handle_list_status_cb (const gchar     *path,
   g_assert (path != NULL);
   g_assert (builder != NULL);
 
-  g_variant_builder_add (builder, "(su)", path, translate_status (flags));
+  g_variant_builder_add (builder, "(^ayu)", path, translate_status (flags));
 
   return GIT_OK;
 }
@@ -191,7 +191,7 @@ ipc_git_repository_impl_handle_list_status (IpcGitRepository      *repository,
                                      GGIT_STATUS_SHOW_INDEX_AND_WORKDIR,
                                      paths);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(su)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ayu)"));
 
   if (!ggit_repository_file_status_foreach (repo,
                                             options,

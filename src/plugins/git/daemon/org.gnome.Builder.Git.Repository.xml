@@ -88,7 +88,7 @@
     -->
     <method name="ListStatus">
       <arg name="path" direction="in" type="ay"/>
-      <arg name="files" direction="out" type="a(su)"/>
+      <arg name="files" direction="out" type="a(ayu)"/>
     </method>
     <!--
       SwitchBranch:

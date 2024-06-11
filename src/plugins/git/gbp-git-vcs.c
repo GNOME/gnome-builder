@@ -452,7 +452,7 @@ create_status_model (GbpGitVcs *self,
 {
   g_autoptr(GListStore) store = NULL;
   GVariantIter iter;
-  const gchar *path = NULL;
+  char *path = NULL;
   guint flags = 0;
 
   g_assert (GBP_IS_GIT_VCS (self));
@@ -462,7 +462,7 @@ create_status_model (GbpGitVcs *self,
 
   g_variant_iter_init (&iter, files);
 
-  while (g_variant_iter_next (&iter, "(&su)", &path, &flags))
+  while (g_variant_iter_next (&iter, "(^&ayu)", &path, &flags))
     {
       g_autoptr(GFile) file = g_file_get_child (self->workdir, path);
       g_autoptr(IdeVcsFileInfo) info = NULL;
