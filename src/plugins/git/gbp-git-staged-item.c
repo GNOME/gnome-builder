@@ -48,6 +48,27 @@ gbp_git_staged_item_get_section_title (GbpGitCommitItem *item)
 }
 
 static void
+gbp_git_staged_item_bind (GbpGitCommitItem *item,
+                          GtkListItem      *list_item)
+{
+  GbpGitStagedItem *self = (GbpGitStagedItem *)item;
+  GtkLabel *label;
+
+  g_assert (GBP_IS_GIT_STAGED_ITEM (self));
+  g_assert (GTK_IS_LIST_ITEM (list_item));
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "label", gbp_git_commit_item_get_title (item),
+                        "xalign", .0f,
+                        "margin-top", 6,
+                        "margin-bottom", 6,
+                        "margin-start", 6,
+                        "margin-end", 6,
+                        NULL);
+  gtk_list_item_set_child (list_item, GTK_WIDGET (label));
+}
+
+static void
 gbp_git_staged_item_dispose (GObject *object)
 {
   GbpGitStagedItem *self = (GbpGitStagedItem *)object;
@@ -106,6 +127,7 @@ gbp_git_staged_item_class_init (GbpGitStagedItemClass *klass)
   object_class->set_property = gbp_git_staged_item_set_property;
 
   item_class->get_section_title = gbp_git_staged_item_get_section_title;
+  item_class->bind = gbp_git_staged_item_bind;
 
   properties[PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,

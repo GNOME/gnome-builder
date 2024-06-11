@@ -110,6 +110,12 @@
                         </property>
                       </object>
                     </property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory">
+                        <signal name="bind" handler="gbp_git_commit_dialog_bind_cb" swapped="true"/>
+                        <signal name="unbind" handler="gbp_git_commit_dialog_unbind_cb" swapped="true"/>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
