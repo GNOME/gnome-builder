@@ -17,6 +17,7 @@ plugins_sources += files([
   'gbp-git-progress.c',
   'gbp-git-staged-item.c',
   'gbp-git-staged-model.c',
+  'gbp-git-staged-row.c',
   'gbp-git-submodule-stage.c',
   'gbp-git-tag.c',
   'gbp-git-tweaks-addin.c',
