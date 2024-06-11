@@ -30,6 +30,12 @@ plugins_sources += [
   ipc_git_service_src,
 ]
 
+# We don't actually want to link against libgit2-glib or libgit2 but
+# we need access to the headers for enumerations. Since we automatically
+# drop unused libraries at link time, we can get this effect even by
+# adding libgit2-glib as a dep.
+plugins_deps += libgit2_glib_dep
+
 plugin_git_resources = gnome.compile_resources(
   'git-resources',
   'git.gresource.xml',
