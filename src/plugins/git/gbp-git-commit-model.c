@@ -26,13 +26,14 @@
 #include <gtk/gtk.h>
 
 #include "gbp-git-commit-model.h"
+#include "gbp-git-staged-model.h"
 
 struct _GbpGitCommitModel
 {
   GObject              parent_instance;
 
   IdeContext          *context;
-
+  GbpGitStagedModel   *staged;
   GListStore          *toplevel_models;
   GtkFlattenListModel *flatten;
 };
@@ -61,6 +62,17 @@ gbp_git_commit_model_new (IdeContext *context)
   return g_object_new (GBP_TYPE_GIT_COMMIT_MODEL,
                        "context", context,
                        NULL);
+}
+
+static void
+gbp_git_commit_model_constructed (GObject *object)
+{
+  GbpGitCommitModel *self = (GbpGitCommitModel *)object;
+
+  G_OBJECT_CLASS (gbp_git_commit_model_parent_class)->constructed (object);
+
+  self->staged = gbp_git_staged_model_new (self->context);
+  g_list_store_append (self->toplevel_models, self->staged);
 }
 
 static void
@@ -118,6 +130,7 @@ gbp_git_commit_model_class_init (GbpGitCommitModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gbp_git_commit_model_constructed;
   object_class->dispose = gbp_git_commit_model_dispose;
   object_class->get_property = gbp_git_commit_model_get_property;
   object_class->set_property = gbp_git_commit_model_set_property;
