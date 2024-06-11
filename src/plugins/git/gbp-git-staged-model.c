@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <libgit2-glib/ggit.h>
+
 #include "gbp-git-staged-model.h"
 #include "gbp-git-vcs.h"
 
@@ -130,6 +132,7 @@ gbp_git_staged_model_update (GbpGitStagedModel *self)
   self->update = dex_promise_new_cancellable ();
 
   ipc_git_repository_call_list_status (self->repository,
+                                       GGIT_STATUS_OPTION_DEFAULT,
                                        "",
                                        dex_promise_get_cancellable (self->update),
                                        gbp_git_staged_model_update_cb,

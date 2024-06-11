@@ -119,6 +119,7 @@ ipc_git_repository_impl_handle_list_status_cb (const gchar     *path,
 static gboolean
 ipc_git_repository_impl_handle_list_status (IpcGitRepository      *repository,
                                             GDBusMethodInvocation *invocation,
+                                            guint                  status_option,
                                             const gchar           *path)
 {
   IpcGitRepositoryImpl *self = (IpcGitRepositoryImpl *)repository;
@@ -140,7 +141,7 @@ ipc_git_repository_impl_handle_list_status (IpcGitRepository      *repository,
   if (!(repo = ggit_repository_open (location, &error)))
     return complete_wrapped_error (invocation, error);
 
-  options = ggit_status_options_new (GGIT_STATUS_OPTION_DEFAULT,
+  options = ggit_status_options_new (status_option,
                                      GGIT_STATUS_SHOW_INDEX_AND_WORKDIR,
                                      paths);
 

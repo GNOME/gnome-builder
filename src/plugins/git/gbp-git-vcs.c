@@ -691,6 +691,7 @@ gbp_git_vcs_list_status_async (IdeVcs              *vcs,
   relative_path = g_file_get_relative_path (self->workdir, directory_or_file);
 
   ipc_git_repository_call_list_status (self->repository,
+                                       GGIT_STATUS_OPTION_DEFAULT,
                                        relative_path ?: "",
                                        cancellable,
                                        gbp_git_vcs_list_status_cb,

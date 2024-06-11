@@ -282,7 +282,7 @@ test_clone (IpcGitService *service)
   g_assert_true (ret);
 
   g_message ("Listing status");
-  ret = ipc_git_repository_call_list_status_sync (repository, "", &files, NULL, &error);
+  ret = ipc_git_repository_call_list_status_sync (repository, 0, "", &files, NULL, &error);
   g_assert_no_error (error);
   g_assert_true (ret);
 
