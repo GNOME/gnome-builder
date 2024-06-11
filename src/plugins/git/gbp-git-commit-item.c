@@ -187,11 +187,3 @@ gbp_git_commit_item_set_icon_name (GbpGitCommitItem *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
     }
 }
-
-GtkWidget *
-gbp_git_commit_item_create_row (GbpGitCommitItem *self)
-{
-  g_return_val_if_fail (GBP_IS_GIT_COMMIT_ITEM (self), NULL);
-
-  return GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->create_row (self);
-}
