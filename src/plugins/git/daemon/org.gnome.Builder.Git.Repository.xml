@@ -81,12 +81,14 @@
     </method>
     <!--
       ListStatus:
+      @status_options: GgitStatusOption
       @path: the path within the repository to list
       @recursive: if all descendants should be checked too
 
       Lists the status of files within the repository, starting from @path
     -->
     <method name="ListStatus">
+      <arg name="status_option" direction="in" type="u"/>
       <arg name="path" direction="in" type="ay"/>
       <arg name="files" direction="out" type="a(ayu)"/>
     </method>
