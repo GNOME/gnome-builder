@@ -24,6 +24,8 @@
 
 #include <glib/gi18n.h>
 
+#include <libgit2-glib/ggit.h>
+
 #include "daemon/ipc-git-types.h"
 
 #include "gbp-git-branch.h"
@@ -446,6 +448,42 @@ gbp_git_vcs_list_tags_finish (IdeVcs        *vcs,
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
+static guint
+translate_status (GgitStatusFlags flags)
+{
+  switch (flags)
+    {
+    case GGIT_STATUS_INDEX_DELETED:
+    case GGIT_STATUS_WORKING_TREE_DELETED:
+      return IDE_VCS_FILE_STATUS_DELETED;
+
+    case GGIT_STATUS_INDEX_RENAMED:
+      return IDE_VCS_FILE_STATUS_RENAMED;
+
+    case GGIT_STATUS_INDEX_NEW:
+    case GGIT_STATUS_WORKING_TREE_NEW:
+      return IDE_VCS_FILE_STATUS_ADDED;
+
+    case GGIT_STATUS_INDEX_MODIFIED:
+    case GGIT_STATUS_INDEX_TYPECHANGE:
+    case GGIT_STATUS_WORKING_TREE_MODIFIED:
+    case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
+    case GGIT_STATUS_CONFLICTED:
+      return IDE_VCS_FILE_STATUS_CHANGED;
+
+    case GGIT_STATUS_IGNORED:
+      return IDE_VCS_FILE_STATUS_IGNORED;
+
+    case GGIT_STATUS_CURRENT:
+      return IDE_VCS_FILE_STATUS_UNCHANGED;
+
+    case GGIT_STATUS_WORKING_TREE_RENAMED:
+    case GGIT_STATUS_WORKING_TREE_UNREADABLE:
+    default:
+      return IDE_VCS_FILE_STATUS_UNTRACKED;
+    }
+}
+
 static GListModel *
 create_status_model (GbpGitVcs *self,
                      GVariant  *files)
@@ -469,7 +507,7 @@ create_status_model (GbpGitVcs *self,
 
       info = g_object_new (IDE_TYPE_VCS_FILE_INFO,
                            "file", file,
-                           "status", flags,
+                           "status", translate_status (flags),
                            NULL);
 
       g_list_store_append (store, info);
