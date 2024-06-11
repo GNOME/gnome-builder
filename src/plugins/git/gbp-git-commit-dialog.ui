@@ -82,6 +82,7 @@
             </child>
             <child>
               <object class="GtkScrolledWindow" id="list_view_scroller">
+                <property name="propagate-natural-height">true</property>
                 <child>
                   <object class="GtkListView" id="list_view">
                     <property name="header-factory">
