@@ -32,7 +32,35 @@ struct _GbpGitStagedModel
   DexPromise       *update;
 };
 
-G_DEFINE_FINAL_TYPE (GbpGitStagedModel, gbp_git_staged_model, G_TYPE_OBJECT)
+static guint
+gbp_git_staged_model_get_n_items (GListModel *model)
+{
+  return 0;
+}
+
+static GType
+gbp_git_staged_model_get_item_type (GListModel *model)
+{
+  return G_TYPE_OBJECT;
+}
+
+static gpointer
+gbp_git_staged_model_get_item (GListModel *model,
+                               guint       position)
+{
+  return NULL;
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_n_items = gbp_git_staged_model_get_n_items;
+  iface->get_item = gbp_git_staged_model_get_item;
+  iface->get_item_type = gbp_git_staged_model_get_item_type;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitStagedModel, gbp_git_staged_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,
@@ -79,8 +107,9 @@ gbp_git_staged_model_update_cb (GObject      *object,
 
   g_variant_iter_init (&iter, files);
 
-  while (g_variant_iter_iter (&iter, "(^&ayu)", &path, &flags))
+  while (g_variant_iter_next (&iter, "(^&ayu)", &path, &flags))
     {
+      g_print ("%s: %u\n", path, flags);
     }
 
   dex_promise_resolve_boolean (promise, TRUE);
