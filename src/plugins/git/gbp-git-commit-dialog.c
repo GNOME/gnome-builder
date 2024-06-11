@@ -25,6 +25,7 @@
 #include "gbp-git-commit-entry.h"
 #include "gbp-git-commit-item.h"
 #include "gbp-git-commit-model.h"
+#include "gbp-git-vcs.h"
 
 struct _GbpGitCommitDialog
 {
@@ -34,11 +35,13 @@ struct _GbpGitCommitDialog
   GbpGitCommitModel *model;
 
   GtkListView       *list_view;
+  GbpGitCommitEntry *entry;
 };
 
 enum {
   PROP_0,
   PROP_CONTEXT,
+  PROP_REPOSITORY,
   N_PROPS
 };
 
@@ -78,6 +81,32 @@ cancel_action (GtkWidget  *widget,
   adw_dialog_close (ADW_DIALOG (widget));
 }
 
+static IpcGitRepository *
+gbp_git_commit_dialog_get_repository (GbpGitCommitDialog *self)
+{
+  IdeVcs *vcs;
+
+  g_assert (GBP_IS_GIT_COMMIT_DIALOG (self));
+
+  if (self->context == NULL)
+    return NULL;
+
+  if ((vcs = ide_vcs_from_context (self->context)) && GBP_IS_GIT_VCS (vcs))
+    return gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs));
+
+  return NULL;
+}
+
+static gboolean
+gbp_git_commit_dialog_grab_focus (GtkWidget *widget)
+{
+  GbpGitCommitDialog *self = (GbpGitCommitDialog *)widget;
+
+  g_assert (GBP_IS_GIT_COMMIT_DIALOG (self));
+
+  return gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
 static void
 gbp_git_commit_dialog_constructed (GObject *object)
 {
@@ -89,6 +118,8 @@ gbp_git_commit_dialog_constructed (GObject *object)
   self->model = gbp_git_commit_model_new (self->context);
   gtk_no_selection_set_model (no, G_LIST_MODEL (self->model));
   gtk_list_view_set_model (self->list_view, GTK_SELECTION_MODEL (no));
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
 
 static void
@@ -118,6 +149,10 @@ gbp_git_commit_dialog_get_property (GObject    *object,
       g_value_set_object (value, self->context);
       break;
 
+    case PROP_REPOSITORY:
+      g_value_set_object (value, gbp_git_commit_dialog_get_repository (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -135,6 +170,7 @@ gbp_git_commit_dialog_set_property (GObject      *object,
     {
     case PROP_CONTEXT:
       self->context = g_value_dup_object (value);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REPOSITORY]);
       break;
 
     default:
@@ -153,6 +189,8 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
   object_class->get_property = gbp_git_commit_dialog_get_property;
   object_class->set_property = gbp_git_commit_dialog_set_property;
 
+  widget_class->grab_focus = gbp_git_commit_dialog_grab_focus;
+
   properties[PROP_CONTEXT] =
     g_param_spec_object ("context", NULL, NULL,
                          IDE_TYPE_CONTEXT,
@@ -160,10 +198,17 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_REPOSITORY] =
+    g_param_spec_object ("repository", NULL, NULL,
+                         IPC_TYPE_GIT_REPOSITORY,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/git/gbp-git-commit-dialog.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, GbpGitCommitDialog, entry);
   gtk_widget_class_bind_template_child (widget_class, GbpGitCommitDialog, list_view);
 
   gtk_widget_class_bind_template_callback (widget_class, gbp_git_commit_dialog_bind_cb);
@@ -172,6 +217,7 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
   gtk_widget_class_install_action (widget_class, "dialog.cancel", NULL, cancel_action);
 
   g_type_ensure (GBP_TYPE_GIT_COMMIT_ENTRY);
+  g_type_ensure (IPC_TYPE_GIT_REPOSITORY);
 }
 
 static void
