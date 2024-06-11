@@ -3,7 +3,9 @@
   <gresource prefix="/plugins/git">
     <file>git.plugin</file>
     <file>gtk/keybindings.json</file>
+    <file>style.css</file>
     <file preprocess="xml-stripblanks">gbp-git-commit-dialog.ui</file>
+    <file preprocess="xml-stripblanks">gbp-git-staged-row.ui</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
   <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">

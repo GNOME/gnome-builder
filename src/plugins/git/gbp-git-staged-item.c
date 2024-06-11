@@ -24,16 +24,20 @@
 #include <glib/gi18n.h>
 
 #include "gbp-git-staged-item.h"
+#include "gbp-git-staged-row.h"
 
 struct _GbpGitStagedItem
 {
   GbpGitCommitItem parent_instance;
   GFile *file;
+  char *title;
 };
 
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_ICON,
+  PROP_TITLE,
   N_PROPS
 };
 
@@ -52,20 +56,20 @@ gbp_git_staged_item_bind (GbpGitCommitItem *item,
                           GtkListItem      *list_item)
 {
   GbpGitStagedItem *self = (GbpGitStagedItem *)item;
-  GtkLabel *label;
+  GtkWidget *child;
 
   g_assert (GBP_IS_GIT_STAGED_ITEM (self));
   g_assert (GTK_IS_LIST_ITEM (list_item));
 
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "label", gbp_git_commit_item_get_title (item),
-                        "xalign", .0f,
-                        "margin-top", 6,
-                        "margin-bottom", 6,
-                        "margin-start", 6,
-                        "margin-end", 6,
-                        NULL);
-  gtk_list_item_set_child (list_item, GTK_WIDGET (label));
+  child = gtk_list_item_get_child (list_item);
+
+  if (!GBP_IS_GIT_STAGED_ROW (child))
+    {
+      child = gbp_git_staged_row_new ();
+      gtk_list_item_set_child (list_item, child);
+    }
+
+  gbp_git_staged_row_set_item (GBP_GIT_STAGED_ROW (child), self);
 }
 
 static void
@@ -92,6 +96,14 @@ gbp_git_staged_item_get_property (GObject    *object,
       g_value_set_object (value, gbp_git_staged_item_get_file (self));
       break;
 
+    case PROP_ICON:
+      g_value_take_object (value, gbp_git_staged_item_dup_icon (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, gbp_git_staged_item_get_title (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -108,7 +120,11 @@ gbp_git_staged_item_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FILE:
-      gbp_git_staged_item_set_file (self, g_value_get_object (value));
+      self->file = g_value_dup_object (value);
+      break;
+
+    case PROP_TITLE:
+      self->title = g_value_dup_string (value);
       break;
 
     default:
@@ -133,7 +149,20 @@ gbp_git_staged_item_class_init (GbpGitStagedItemClass *klass)
     g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE |
-                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_ICON] =
+    g_param_spec_object ("icon", NULL, NULL,
+                         G_TYPE_ICON,
+                         (G_PARAM_READABLE |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -152,13 +181,29 @@ gbp_git_staged_item_get_file (GbpGitStagedItem *self)
   return self->file;
 }
 
-void
-gbp_git_staged_item_set_file (GbpGitStagedItem *self,
-                              GFile            *file)
+const char *
+gbp_git_staged_item_get_title (GbpGitStagedItem *self)
 {
-  g_return_if_fail (GBP_IS_GIT_STAGED_ITEM (self));
-  g_return_if_fail (!file || G_IS_FILE (file));
+  g_return_val_if_fail (GBP_IS_GIT_STAGED_ITEM (self), NULL);
 
-  if (g_set_object (&self->file, file))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILE]);
+  return self->title;
+}
+
+GIcon *
+gbp_git_staged_item_dup_icon (GbpGitStagedItem *self)
+{
+  g_autofree char *content_type = NULL;
+  const char *filename = NULL;
+  gboolean uncertan;
+
+  g_return_val_if_fail (GBP_IS_GIT_STAGED_ITEM (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (self->file), NULL);
+  g_return_val_if_fail (g_file_is_native (self->file), NULL);
+
+  filename = g_file_peek_path (self->file);
+
+  if ((content_type = g_content_type_guess (filename, NULL, 0, &uncertan)))
+    return g_content_type_get_symbolic_icon (content_type);
+
+  return NULL;
 }

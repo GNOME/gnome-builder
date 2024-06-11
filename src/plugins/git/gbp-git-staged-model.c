@@ -173,7 +173,6 @@ gbp_git_staged_model_update_fiber (gpointer user_data)
       item = g_object_new (GBP_TYPE_GIT_STAGED_ITEM,
                            "file", file,
                            "title", title,
-                           "icon-name", NULL,
                            NULL);
 
       g_list_store_append (store, item);

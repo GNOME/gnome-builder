@@ -40,13 +40,6 @@ struct _GbpGitCommitItemClass
                                     GtkListItem      *list_item);
 };
 
-const char *gbp_git_commit_item_get_title     (GbpGitCommitItem *self);
-void        gbp_git_commit_item_set_title     (GbpGitCommitItem *self,
-                                               const char       *title);
-const char *gbp_git_commit_item_get_icon_name (GbpGitCommitItem *self);
-void        gbp_git_commit_item_set_icon_name (GbpGitCommitItem *self,
-                                               const char       *icon_name);
-
 static inline void
 gbp_git_commit_item_bind (GbpGitCommitItem *self,
                           GtkListItem      *list_item)

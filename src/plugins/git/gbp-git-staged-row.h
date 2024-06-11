@@ -1,5 +1,5 @@
 /*
- * gbp-git-staged-item.h
+ * gbp-git-staged-row.h
  *
  * Copyright 2024 Christian Hergert <chergert@redhat.com>
  *
@@ -21,18 +21,19 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <gtk/gtk.h>
 
-#include "gbp-git-commit-item.h"
+#include "gbp-git-staged-item.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GIT_STAGED_ITEM (gbp_git_staged_item_get_type())
+#define GBP_TYPE_GIT_STAGED_ROW (gbp_git_staged_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitStagedItem, gbp_git_staged_item, GBP, GIT_STAGED_ITEM, GbpGitCommitItem)
+G_DECLARE_FINAL_TYPE (GbpGitStagedRow, gbp_git_staged_row, GBP, GIT_STAGED_ROW, GtkWidget)
 
-GFile      *gbp_git_staged_item_get_file  (GbpGitStagedItem *self);
-const char *gbp_git_staged_item_get_title (GbpGitStagedItem *self);
-GIcon      *gbp_git_staged_item_dup_icon  (GbpGitStagedItem *self);
+GtkWidget        *gbp_git_staged_row_new      (void);
+void              gbp_git_staged_row_set_item (GbpGitStagedRow  *self,
+                                               GbpGitStagedItem *item);
+GbpGitStagedItem *gbp_git_staged_row_get_item (GbpGitStagedRow  *self);
 
 G_END_DECLS
