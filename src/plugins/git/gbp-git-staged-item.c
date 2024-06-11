@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "gbp-git-staged-item.h"
 
 struct _GbpGitStagedItem
@@ -38,6 +40,12 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpGitStagedItem, gbp_git_staged_item, GBP_TYPE_GIT_COMMIT_ITEM)
 
 static GParamSpec *properties[N_PROPS];
+
+static const char *
+gbp_git_staged_item_get_section_title (GbpGitCommitItem *item)
+{
+  return _("Staged Files");
+}
 
 static void
 gbp_git_staged_item_dispose (GObject *object)
@@ -91,10 +99,13 @@ static void
 gbp_git_staged_item_class_init (GbpGitStagedItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GbpGitCommitItemClass *item_class = GBP_GIT_COMMIT_ITEM_CLASS (klass);
 
   object_class->dispose = gbp_git_staged_item_dispose;
   object_class->get_property = gbp_git_staged_item_get_property;
   object_class->set_property = gbp_git_staged_item_set_property;
+
+  item_class->get_section_title = gbp_git_staged_item_get_section_title;
 
   properties[PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,

@@ -32,6 +32,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_ICON_NAME,
+  PROP_SECTION_TITLE,
   PROP_TITLE,
   N_PROPS
 };
@@ -63,6 +64,10 @@ gbp_git_commit_item_get_property (GObject    *object,
     {
     case PROP_ICON_NAME:
       g_value_set_string (value, gbp_git_commit_item_get_icon_name (self));
+      break;
+
+    case PROP_SECTION_TITLE:
+      g_value_set_string (value, GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->get_section_title (self));
       break;
 
     case PROP_TITLE:
@@ -111,6 +116,12 @@ gbp_git_commit_item_class_init (GbpGitCommitItemClass *klass)
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SECTION_TITLE] =
+    g_param_spec_string ("section-title", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE |
                           G_PARAM_STATIC_STRINGS));
 
   properties[PROP_TITLE] =
@@ -175,4 +186,12 @@ gbp_git_commit_item_set_icon_name (GbpGitCommitItem *self,
       priv->icon_name = icon_name;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
     }
+}
+
+GtkWidget *
+gbp_git_commit_item_create_row (GbpGitCommitItem *self)
+{
+  g_return_val_if_fail (GBP_IS_GIT_COMMIT_ITEM (self), NULL);
+
+  return GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->create_row (self);
 }
