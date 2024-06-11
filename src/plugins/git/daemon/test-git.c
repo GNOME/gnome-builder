@@ -291,7 +291,7 @@ test_clone (IpcGitService *service)
       const gchar *path;
       guint32 state;
 
-      while (g_variant_iter_next (&iter, "(&su)", &path, &state))
+      while (g_variant_iter_next (&iter, "(^&ayu)", &path, &state))
         g_message ("  %s: %u", path, state);
     }
 
