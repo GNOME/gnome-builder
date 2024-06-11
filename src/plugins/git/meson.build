@@ -14,6 +14,7 @@ plugins_sources += files([
   'gbp-git-dependency-updater.c',
   'gbp-git-pipeline-addin.c',
   'gbp-git-progress.c',
+  'gbp-git-staged-model.c',
   'gbp-git-submodule-stage.c',
   'gbp-git-tag.c',
   'gbp-git-tweaks-addin.c',

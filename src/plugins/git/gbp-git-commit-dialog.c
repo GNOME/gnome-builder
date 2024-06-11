@@ -23,11 +23,13 @@
 
 #include "gbp-git-commit-dialog.h"
 #include "gbp-git-commit-entry.h"
+#include "gbp-git-commit-model.h"
 
 struct _GbpGitCommitDialog
 {
-  AdwDialog   parent_instance;
-  IdeContext *context;
+  AdwDialog          parent_instance;
+  IdeContext        *context;
+  GbpGitCommitModel *model;
 };
 
 enum {
@@ -41,6 +43,16 @@ G_DEFINE_FINAL_TYPE (GbpGitCommitDialog, gbp_git_commit_dialog, ADW_TYPE_DIALOG)
 static GParamSpec *properties[N_PROPS];
 
 static void
+gbp_git_commit_dialog_constructed (GObject *object)
+{
+  GbpGitCommitDialog *self = (GbpGitCommitDialog *)object;
+
+  G_OBJECT_CLASS (gbp_git_commit_dialog_parent_class)->constructed (object);
+
+  self->model = gbp_git_commit_model_new (self->context);
+}
+
+static void
 gbp_git_commit_dialog_dispose (GObject *object)
 {
   GbpGitCommitDialog *self = (GbpGitCommitDialog *)object;
@@ -48,6 +60,7 @@ gbp_git_commit_dialog_dispose (GObject *object)
   gtk_widget_dispose_template (GTK_WIDGET (self), GBP_TYPE_GIT_COMMIT_DIALOG);
 
   g_clear_object (&self->context);
+  g_clear_object (&self->model);
 
   G_OBJECT_CLASS (gbp_git_commit_dialog_parent_class)->dispose (object);
 }
@@ -96,6 +109,7 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = gbp_git_commit_dialog_constructed;
   object_class->dispose = gbp_git_commit_dialog_dispose;
   object_class->get_property = gbp_git_commit_dialog_get_property;
   object_class->set_property = gbp_git_commit_dialog_set_property;
