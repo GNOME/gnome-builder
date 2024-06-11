@@ -34,7 +34,10 @@ struct _GbpGitCommitItemClass
   GObjectClass parent_class;
 
   const char *(*get_section_title) (GbpGitCommitItem *self);
-  GtkWidget  *(*create_row)        (GbpGitCommitItem *self);
+  void        (*bind)              (GbpGitCommitItem *self,
+                                    GtkListItem      *list_item);
+  void        (*unbind)            (GbpGitCommitItem *self,
+                                    GtkListItem      *list_item);
 };
 
 const char *gbp_git_commit_item_get_title     (GbpGitCommitItem *self);
@@ -43,6 +46,21 @@ void        gbp_git_commit_item_set_title     (GbpGitCommitItem *self,
 const char *gbp_git_commit_item_get_icon_name (GbpGitCommitItem *self);
 void        gbp_git_commit_item_set_icon_name (GbpGitCommitItem *self,
                                                const char       *icon_name);
-GtkWidget  *gbp_git_commit_item_create_row    (GbpGitCommitItem *self);
+
+static inline void
+gbp_git_commit_item_bind (GbpGitCommitItem *self,
+                          GtkListItem      *list_item)
+{
+  if (GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->bind)
+    GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->bind (self, list_item);
+}
+
+static inline void
+gbp_git_commit_item_unbind (GbpGitCommitItem *self,
+                            GtkListItem      *list_item)
+{
+  if (GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->unbind)
+    GBP_GIT_COMMIT_ITEM_GET_CLASS (self)->unbind (self, list_item);
+}
 
 G_END_DECLS

@@ -23,13 +23,17 @@
 
 #include "gbp-git-commit-dialog.h"
 #include "gbp-git-commit-entry.h"
+#include "gbp-git-commit-item.h"
 #include "gbp-git-commit-model.h"
 
 struct _GbpGitCommitDialog
 {
   AdwDialog          parent_instance;
+
   IdeContext        *context;
   GbpGitCommitModel *model;
+
+  GtkListView       *list_view;
 };
 
 enum {
@@ -43,13 +47,40 @@ G_DEFINE_FINAL_TYPE (GbpGitCommitDialog, gbp_git_commit_dialog, ADW_TYPE_DIALOG)
 static GParamSpec *properties[N_PROPS];
 
 static void
+gbp_git_commit_dialog_bind_cb (GbpGitCommitDialog       *self,
+                               GtkListItem              *list_item,
+                               GtkSignalListItemFactory *factory)
+{
+  g_assert (GBP_IS_GIT_COMMIT_DIALOG (self));
+  g_assert (GTK_IS_LIST_ITEM (list_item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
+
+  gbp_git_commit_item_bind (gtk_list_item_get_item (list_item), list_item);
+}
+
+static void
+gbp_git_commit_dialog_unbind_cb (GbpGitCommitDialog       *self,
+                                 GtkListItem              *list_item,
+                                 GtkSignalListItemFactory *factory)
+{
+  g_assert (GBP_IS_GIT_COMMIT_DIALOG (self));
+  g_assert (GTK_IS_LIST_ITEM (list_item));
+  g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
+
+  gbp_git_commit_item_unbind (gtk_list_item_get_item (list_item), list_item);
+}
+
+static void
 gbp_git_commit_dialog_constructed (GObject *object)
 {
   GbpGitCommitDialog *self = (GbpGitCommitDialog *)object;
+  g_autoptr(GtkNoSelection) no = gtk_no_selection_new (NULL);
 
   G_OBJECT_CLASS (gbp_git_commit_dialog_parent_class)->constructed (object);
 
   self->model = gbp_git_commit_model_new (self->context);
+  gtk_no_selection_set_model (no, G_LIST_MODEL (self->model));
+  gtk_list_view_set_model (self->list_view, GTK_SELECTION_MODEL (no));
 }
 
 static void
@@ -124,6 +155,11 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/git/gbp-git-commit-dialog.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, GbpGitCommitDialog, list_view);
+
+  gtk_widget_class_bind_template_callback (widget_class, gbp_git_commit_dialog_bind_cb);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_git_commit_dialog_unbind_cb);
 
   g_type_ensure (GBP_TYPE_GIT_COMMIT_ENTRY);
 }
