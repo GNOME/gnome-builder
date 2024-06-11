@@ -71,6 +71,14 @@ gbp_git_commit_dialog_unbind_cb (GbpGitCommitDialog       *self,
 }
 
 static void
+cancel_action (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *param)
+{
+  adw_dialog_close (ADW_DIALOG (widget));
+}
+
+static void
 gbp_git_commit_dialog_constructed (GObject *object)
 {
   GbpGitCommitDialog *self = (GbpGitCommitDialog *)object;
@@ -160,6 +168,8 @@ gbp_git_commit_dialog_class_init (GbpGitCommitDialogClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, gbp_git_commit_dialog_bind_cb);
   gtk_widget_class_bind_template_callback (widget_class, gbp_git_commit_dialog_unbind_cb);
+
+  gtk_widget_class_install_action (widget_class, "dialog.cancel", NULL, cancel_action);
 
   g_type_ensure (GBP_TYPE_GIT_COMMIT_ENTRY);
 }
