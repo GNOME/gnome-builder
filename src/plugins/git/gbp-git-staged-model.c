@@ -176,6 +176,8 @@ gbp_git_staged_model_constructed (GObject *object)
                            G_CALLBACK (gbp_git_staged_model_repository_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gbp_git_staged_model_update (self);
 }
 
 static void
