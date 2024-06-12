@@ -1,3 +1,7 @@
-GbpGitStagedRow {
-  margin: 6px 12px;
+listview.commit-dialog row {
+  padding: 6px 12px;
+}
+
+listview.commit-dialog row:last-child {
+  margin-bottom: 12px;
 }

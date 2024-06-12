@@ -144,11 +144,7 @@ gbp_git_staged_model_update_fiber (gpointer user_data)
   g_assert (!IDE_IS_MAIN_THREAD ());
   g_assert (IPC_IS_GIT_REPOSITORY (repository));
 
-  status_option = (GGIT_STATUS_OPTION_INCLUDE_UNTRACKED |
-                   GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS |
-                   GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES |
-                   GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH |
-                   GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY);
+  status_option = 0;
 
   if (!g_set_str (&workdir, ipc_git_repository_get_workdir (repository)))
     return dex_future_new_reject (G_IO_ERROR,
@@ -167,6 +163,13 @@ gbp_git_staged_model_update_fiber (gpointer user_data)
       g_autoptr(GbpGitStagedItem) item = NULL;
       g_autoptr(GFile) file = NULL;
       g_autofree char *title = NULL;
+
+      if ((flags & (GGIT_STATUS_INDEX_NEW |
+                    GGIT_STATUS_INDEX_MODIFIED |
+                    GGIT_STATUS_INDEX_DELETED |
+                    GGIT_STATUS_INDEX_RENAMED |
+                    GGIT_STATUS_INDEX_TYPECHANGE)) == 0)
+        continue;
 
       file = g_file_new_build_filename (workdir, path, NULL);
       title = g_filename_to_utf8 (path, -1, NULL, NULL, NULL);

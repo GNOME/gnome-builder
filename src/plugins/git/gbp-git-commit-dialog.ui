@@ -102,6 +102,9 @@
                 <property name="propagate-natural-height">true</property>
                 <child>
                   <object class="GtkListView" id="list_view">
+                    <style>
+                      <class name="commit-dialog"/>
+                    </style>
                     <property name="header-factory">
                       <object class="GtkBuilderListItemFactory">
                         <property name="bytes"><![CDATA[
