@@ -3,6 +3,9 @@
   <template class="GbpGitCommitDialog" parent="AdwDialog">
     <property name="follows-content-size">true</property>
     <property name="title" translatable="yes">Commit</property>
+    <style>
+      <class name="commit-dialog"/>
+    </style>
     <property name="child">
       <object class="AdwToolbarView">
         <child type="top">
@@ -41,10 +44,9 @@
             <child>
               <object class="GtkBox">
                 <property name="spacing">12</property>
-                <property name="margin-top">6</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-bottom">6</property>
+                <style>
+                  <class name="view"/>
+                </style>
                 <child type="start">
                   <object class="GtkLabel">
                     <style>
