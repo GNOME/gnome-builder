@@ -28,6 +28,9 @@
     <style id="signed-off-by" name="Signed-off-by" map-to="def:doc-comment-element"/>
     <style id="fixes" name="Fixes" map-to="def:type"/>
     <style id="title" name="Title" map-to="def:shebang"/>
+    <style id="issue" name="Issue" map-to="def:number"/>
+    <style id="merge-request" name="Merge Request" map-to="def:number"/>
+    <style id="commit-id" name="Commit Id" map-to="def:net-address"/>
     <style id="url" name="Url" map-to="def:net-address"/>
   </styles>
   <definitions>
@@ -49,11 +52,23 @@
     <context id="url" style-ref="url">
       <match>((http)|(https)|(file))://\S*</match>
     </context>
+    <context id="issue" style-ref="issue">
+      <match>#[0-9]+</match>
+    </context>
+    <context id="merge-request" style-ref="merge-request">
+      <match>![0-9]+</match>
+    </context>
+    <context id="commit-id" style-ref="commit-id">
+      <match>(@?[0-9a-f]{40}|@[0-9a-f]{7})(?![\w\.])</match>
+    </context>
     <context id="git-commit">
       <include>
         <context ref="title"/>
         <context ref="comment"/>
         <context ref="url"/>
+        <context ref="issue"/>
+        <context ref="merge-request"/>
+        <context ref="commit-id"/>
         <context ref="signed-off-by"/>
         <context ref="fixes"/>
       </include>
