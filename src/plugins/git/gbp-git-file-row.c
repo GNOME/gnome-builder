@@ -21,7 +21,13 @@
 
 #include "config.h"
 
+#include <libide-gui.h>
+
+#include "ipc-git-repository.h"
+
+#include "gbp-git-dex.h"
 #include "gbp-git-file-row.h"
+#include "gbp-git-vcs.h"
 
 struct _GbpGitFileRow
 {
@@ -38,6 +44,50 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpGitFileRow, gbp_git_file_row, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS];
+
+static void
+gbp_git_file_row_stage_all (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *param)
+{
+  GbpGitFileRow *self = (GbpGitFileRow *)widget;
+  IpcGitRepository *repository;
+  g_autofree char *relative = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_FILE_ROW (self));
+
+  if (self->item == NULL)
+    IDE_EXIT;
+
+  if (!(context = ide_widget_get_context (widget)))
+    IDE_EXIT;
+
+  if (!(vcs = ide_vcs_from_context (context)))
+    IDE_EXIT;
+
+  if (!GBP_IS_GIT_VCS (vcs))
+    IDE_EXIT;
+
+  if (!(repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs))))
+    IDE_EXIT;
+
+  workdir = ide_context_ref_workdir (context);
+  file = gbp_git_file_item_get_file (self->item);
+  relative = g_file_get_relative_path (workdir, file);
+
+  if (relative == NULL)
+    IDE_EXIT;
+
+  dex_future_disown (ipc_git_repository_stage_file (repository, relative));
+
+  IDE_EXIT;
+}
 
 static void
 gbp_git_file_row_dispose (GObject *object)
@@ -115,6 +165,7 @@ gbp_git_file_row_class_init (GbpGitFileRowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/git/gbp-git-file-row.ui");
   gtk_widget_class_set_css_name (widget_class, "GbpGitFileRow");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_install_action (widget_class, "file.stage", NULL, gbp_git_file_row_stage_all);
 }
 
 static void
