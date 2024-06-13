@@ -34,6 +34,7 @@
             </child>
             <child>
               <object class="GtkButton">
+                <property name="action-name">file.stage</property>
                 <property name="icon-name">list-add-symbolic</property>
                 <style>
                   <class name="circular"/>
