@@ -27,6 +27,7 @@
 
 #include "gbp-git-commit-model.h"
 #include "gbp-git-commit-item.h"
+#include "gbp-git-file-model.h"
 #include "gbp-git-staged-model.h"
 
 struct _GbpGitCommitModel
@@ -35,6 +36,7 @@ struct _GbpGitCommitModel
 
   IdeContext          *context;
   GbpGitStagedModel   *staged;
+  GbpGitFileModel     *files;
   GListStore          *toplevel_models;
   GtkFlattenListModel *flatten;
 };
@@ -74,6 +76,9 @@ gbp_git_commit_model_constructed (GObject *object)
 
   self->staged = gbp_git_staged_model_new (self->context);
   g_list_store_append (self->toplevel_models, self->staged);
+
+  self->files = gbp_git_file_model_new (self->context);
+  g_list_store_append (self->toplevel_models, self->files);
 }
 
 static void
@@ -83,6 +88,8 @@ gbp_git_commit_model_dispose (GObject *object)
 
   g_clear_object (&self->context);
   g_clear_object (&self->flatten);
+  g_clear_object (&self->files);
+  g_clear_object (&self->staged);
   g_clear_object (&self->toplevel_models);
 
   G_OBJECT_CLASS (gbp_git_commit_model_parent_class)->dispose (object);
