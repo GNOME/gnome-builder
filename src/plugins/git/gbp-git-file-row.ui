@@ -2,34 +2,47 @@
 <interface>
   <template class="GbpGitFileRow" parent="GtkWidget">
     <child>
-      <object class="GtkBox">
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkImage" id="image">
-            <binding name="gicon">
-              <lookup name="icon" type="GbpGitFileItem">
-                <lookup name="item">GbpGitFileRow</lookup>
-              </lookup>
-            </binding>
+      <object class="GtkTreeExpander">
+        <property name="child">
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkImage" id="image">
+                <binding name="gicon">
+                  <lookup name="icon" type="GbpGitFileItem">
+                    <lookup name="item">GbpGitFileRow</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="title">
+                <property name="xalign">0</property>
+                <property name="hexpand">true</property>
+                <property name="ellipsize">start</property>
+                <binding name="tooltip-text">
+                  <lookup name="title" type="GbpGitFileItem">
+                    <lookup name="item">GbpGitFileRow</lookup>
+                  </lookup>
+                </binding>
+                <binding name="label">
+                  <lookup name="title" type="GbpGitFileItem">
+                    <lookup name="item">GbpGitFileRow</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">list-add-symbolic</property>
+                <style>
+                  <class name="circular"/>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
           </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="title">
-            <property name="xalign">0</property>
-            <property name="hexpand">true</property>
-            <property name="ellipsize">start</property>
-            <binding name="tooltip-text">
-              <lookup name="title" type="GbpGitFileItem">
-                <lookup name="item">GbpGitFileRow</lookup>
-              </lookup>
-            </binding>
-            <binding name="label">
-              <lookup name="title" type="GbpGitFileItem">
-                <lookup name="item">GbpGitFileRow</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>
