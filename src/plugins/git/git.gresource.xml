@@ -5,6 +5,7 @@
     <file>gtk/keybindings.json</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">gbp-git-commit-dialog.ui</file>
+    <file preprocess="xml-stripblanks">gbp-git-file-row.ui</file>
     <file preprocess="xml-stripblanks">gbp-git-staged-row.ui</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
