@@ -78,6 +78,7 @@ gbp_git_staged_item_dispose (GObject *object)
   GbpGitStagedItem *self = (GbpGitStagedItem *)object;
 
   g_clear_object (&self->file);
+  g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (gbp_git_staged_item_parent_class)->dispose (object);
 }
