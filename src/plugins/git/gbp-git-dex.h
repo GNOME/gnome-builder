@@ -22,6 +22,7 @@
 #pragma once
 
 #include <libdex.h>
+#include <libgit2-glib/ggit.h>
 
 #include "ipc-git-repository.h"
 
@@ -54,6 +55,33 @@ ipc_git_repository_list_status (IpcGitRepository *repository,
                                        dex_promise_get_cancellable (promise),
                                        ipc_git_repository_list_status_cb,
                                        dex_ref (promise));
+  return DEX_FUTURE (promise);
+}
+
+static inline void
+ipc_git_repository_stage_file_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  g_autoptr(DexPromise) promise = user_data;
+  GError *error = NULL;
+
+  if (!ipc_git_repository_call_stage_file_finish (IPC_GIT_REPOSITORY (object), result, &error))
+    dex_promise_reject (promise, g_steal_pointer (&error));
+  else
+    dex_promise_resolve_boolean (promise, TRUE);
+}
+
+static inline DexFuture *
+ipc_git_repository_stage_file (IpcGitRepository *repository,
+                               const char       *path)
+{
+  DexPromise *promise = dex_promise_new_cancellable ();
+  ipc_git_repository_call_stage_file (repository,
+                                      path,
+                                      dex_promise_get_cancellable (promise),
+                                      ipc_git_repository_stage_file_cb,
+                                      dex_ref (promise));
   return DEX_FUTURE (promise);
 }
 
