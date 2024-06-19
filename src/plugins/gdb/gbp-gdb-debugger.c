@@ -2610,7 +2610,7 @@ gbp_gdb_debugger_destroy (IdeObject *object)
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_CANCELLED,
-                                 "The task was canceled");
+                                 "The task was cancelled");
     }
 
   if (!g_cancellable_is_cancelled (self->read_cancellable))
