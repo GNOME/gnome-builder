@@ -99,7 +99,7 @@ ipc_git_remote_callbacks_real_credentials (GgitRemoteCallbacks  *callbacks,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_CANCELLED,
-                   _("The operation has been canceled"));
+                   _("The operation has been cancelled"));
       return NULL;
     }
 
