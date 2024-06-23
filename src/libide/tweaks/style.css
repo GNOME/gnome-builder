@@ -4,7 +4,7 @@
   outline: none;
   box-shadow: none;
   border: none;
-  color: @window_fg_color;
+  color: var(--window-fg-color);
   -gtk-icon-source: none;
   -gtk-icon-size: 18px;
 }
@@ -19,5 +19,5 @@
 
 .IdeTweaksWindow:backdrop IdeTweaksPanelList,
 .IdeTweaksWindow:backdrop IdeTweaksPanel {
-  color: alpha(currentColor, .5);
+  color: color-mix(in srgb, currentColor, transparent);
 }

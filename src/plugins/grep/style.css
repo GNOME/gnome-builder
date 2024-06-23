@@ -1,9 +1,9 @@
 gbpgreppanel {
-  background-color: @theme_bg_color;
+  background-color: var(--window-bg-color);
 }
 gbpgreppanel button {
   min-height: 0px;
 }
 gbpgreppanel {
-  border-left: 1px solid alpha(@borders,.1);
+  border-left: 1px solid color-mix(in srgb, var(--border-color) 10%, transparent);
 }

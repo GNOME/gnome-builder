@@ -1,8 +1,11 @@
 window.workspace headerbar {
   box-shadow: none;
 }
-window.workspace:not(:backdrop) tabbar {
-  background: @headerbar_bg_color;
+window.workspace tabbar {
+  background: var(--headerbar-bg-color);
+}
+window.workspace:backdrop tabbar {
+  background: var(--headerbar-backdrop-color);
 }
 
 stylevariantpreview widget.wallpaper {
@@ -11,7 +14,7 @@ stylevariantpreview widget.wallpaper {
 
 .global-search search {
   padding: 12px;
-  border-bottom: 1px solid @borders;
+  border-bottom: 1px solid var(--border-color);
 }
 .global-search search > image {
   -gtk-icon-size: 24px;
@@ -31,7 +34,7 @@ stylevariantpreview widget.wallpaper {
   margin-right: 6px;
 }
 .global-search .preview-bin {
-  border-left: 1px solid alpha(@borders, .25);
+  border-left: 1px solid color-mix(in srgb, var(--border-color) 25%, transparent);
 }
 
 notificationstack button {
@@ -49,19 +52,19 @@ button.pill.small {
 
 /* Styling for search bars */
 .searchbar {
-  background-color: @popover_bg_color;
+  background-color: var(--popover-bg-color);
   background-clip: padding-box;
-  color: @popover_fg_color;
+  color: var(--popover-fg-color);
   padding: 6px;
   border-style: solid;
-  border-color: alpha(black, .14);
+  border-color: rgb(0 0 0 / 14%);
   border-left-width: 1px;
   border-right-width: 1px;
   border-bottom-width: 1px;
   border-radius: 0 0 12px 12px;
   margin: 0 10px 20px 10px;
-  box-shadow: 0 1px 5px 1px alpha(black, .09),
-              0 2px 14px 3px alpha(black, .05);
+  box-shadow: 0 1px 5px 1px rgb(0 0 0 / 9%),
+              0 2px 14px 3px rgb(0 0 0 / 5%);
 }
 .searchbar button.flat.circular {
   min-width: 24px;
@@ -77,7 +80,7 @@ button.pill.small {
   outline: none;
   box-shadow: none;
   border: none;
-  color: @window_fg_color;
+  color: var(--window-fg-color);
   -gtk-icon-source: none;
   -gtk-icon-size: 18px;
 }
@@ -95,19 +98,19 @@ panelstatusbar {
 entry.statusbar {
   min-height: 28px;
   font-size: 0.9em;
-  border-top: 1px solid @sidebar_shade_color;
+  border-top: 1px solid var(--sidebar-shade-color);
   border-radius: 0;
 }
 window:not(.maximized) paneldockchild.start panelframe:last-child entry.statusbar { border-radius: 0 0 0 11px; }
 window:not(.maximized) paneldockchild.end panelframe:last-child entry.statusbar { border-radius: 0 0 11px 0; }
 paneldockchild.start,
 paneldockchild.end {
-  background: @sidebar_bg_color;
-  color: @sidebar_fg_color;
+  background: var(--sidebar-bg-color);
+  color: var(--sidebar-fg-color);
 }
 paneldockchild.start:backdrop,
 paneldockchild.end:backdrop {
-  background: @sidebar_backdrop_color;
+  background: var(--sidebar-backdrop-color);
   transition: 200ms ease-in-out;
 }
 paneldockchild.start .frameheader,
@@ -116,15 +119,5 @@ paneldockchild.end .frameheader {
 }
 paneldockchild.start panelresizer > widget > separator,
 paneldockchild.end panelresizer > widget > separator {
-  background-color: @sidebar_shade_color;
-}
-paneldockchild.start scrolledwindow.undershoot-bottom > undershoot.bottom,
-paneldockchild.end scrolledwindow.undershoot-bottom > undershoot.bottom {
-  box-shadow: inset 0 -1px alpha(@sidebar_shade_color, .75);
-  background: linear-gradient(to top, alpha(@sidebar_shade_color, .75), transparent 4px);
-}
-paneldockchild.start scrolledwindow > undershoot.top,
-paneldockchild.end scrolledwindow > undershoot.top {
-  box-shadow: inset 0 1px alpha(@sidebar_shade_color, .75);
-  background: linear-gradient(to bottom, alpha(@sidebar_shade_color, .75), transparent 4px);
+  background-color: var(--sidebar-shade-color);
 }

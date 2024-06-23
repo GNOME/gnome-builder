@@ -11,7 +11,7 @@ window.preferences preferencesgroup flowbox.style-schemes flowboxchild GtkSource
 }
 .IdeTweaksWindow preferencesgroup flowbox.style-schemes flowboxchild GtkSourceStyleSchemePreview:not(.selected),
 window.preferences preferencesgroup flowbox.style-schemes flowboxchild GtkSourceStyleSchemePreview:not(.selected) {
-  box-shadow: 0 0 0 1px alpha(black, 0.03),
-              0 1px 3px 1px alpha(black, .07),
-              0 2px 6px 2px alpha(black, .03);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 3%),
+              0 1px 3px 1px rgb(0 0 0 / 7%),
+              0 2px 6px 2px rgb(0 0 0 / 3%);
 }

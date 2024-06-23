@@ -8,9 +8,9 @@ vte-terminal
 
 vte-terminal revealer.size label
 {
-  background: @theme_bg_color;
+  background: var(--window-bg-color);
   padding: 3px 12px;
   border-top-left-radius: 9px;
-  border-top: 1px solid alpha(@borders,.5);
-  border-left: 1px solid alpha(@borders,.5);
+  border-top: 1px solid color-mix(in srgb, var(--border-color), transparent);
+  border-left: 1px solid color-mix(in srgb, var(--border-color), transparent);
 }
