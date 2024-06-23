@@ -602,7 +602,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (!get_style_rgba (scheme, "-Builder:breakpoint", LINE_BACKGROUND, &self->bkpt.bg) &&
       !get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg))
     {
-      gdk_rgba_parse (&self->bkpt.bg, "#1c71d8");
+      lookup_color (context, "accent_bg_color", &self->bkpt.bg);
       gdk_rgba_parse (&self->bkpt.fg, "#ffffff");
     }
 
@@ -1766,6 +1766,15 @@ gbp_omni_gutter_renderer_set_property (GObject      *object,
 }
 
 static void
+gbp_omni_gutter_renderer_css_changed (GtkWidget         *widget,
+                                      GtkCssStyleChange *change)
+{
+  GTK_WIDGET_CLASS (gbp_omni_gutter_renderer_parent_class)->css_changed (widget, change);
+
+  ide_gutter_style_changed (IDE_GUTTER (widget));
+}
+
+static void
 gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1777,6 +1786,7 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
   object_class->set_property = gbp_omni_gutter_renderer_set_property;
 
   widget_class->snapshot = gbp_omni_gutter_renderer_snapshot;
+  widget_class->css_changed = gbp_omni_gutter_renderer_css_changed;
 
   renderer_class->snapshot_line = gbp_omni_gutter_renderer_snapshot_line;
   renderer_class->begin = gbp_omni_gutter_renderer_begin;
