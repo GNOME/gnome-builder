@@ -8,7 +8,7 @@ GbpManualsPathbar pathbutton button {
 }
 
 GbpManualsPathbar pathbutton:not(.leaf) button > * {
-  opacity: 0.55;
+  opacity: var(--dim-opacity);
 }
 
 GbpManualsPanel tag {
@@ -19,16 +19,16 @@ GbpManualsPanel tag {
 }
 
 GbpManualsPanel tag.since {
-  background: #3584e4;
+  background: var(--blue-3);
   color: white;
 }
 
 GbpManualsPanel tag.deprecated {
-  background: #ed333b;
+  background: var(--red-2);
   color: white;
 }
 
 GbpManualsPanel tag.stability {
-  background: #e5a50a;
+  background: var(--yellow-5);
   color: black;
 }

@@ -1,5 +1,5 @@
 window.shortcutui list row.has-header {
-  border-top: 1px solid @card_shade_color;
+  border-top: 1px solid var(--card-shade-color);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }

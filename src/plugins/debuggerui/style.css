@@ -4,5 +4,5 @@
 }
 
 .commandbox {
-  background-color: @theme_bg_color;
+  background-color: var(--window-bg-color);
 }

@@ -3,10 +3,10 @@ IdeSourceMap {
   padding-right: 13px;
 }
 IdeSourceMap:dir(ltr) {
-  border-left: 1px solid alpha(@borders, .3);
+  border-left: 1px solid color-mix(in srgb, var(--border-color) 30%, transparent);
 }
 IdeSourceMap:dir(rtl) {
-  border-right: 1px solid alpha(@borders, .3);
+  border-right: 1px solid color-mix(in srgb, var(--border-color) 30%, transparent);
 }
 IdeSourceMap textview.GtkSourceMap {
   background: transparent;
@@ -27,7 +27,7 @@ IdeSourceMap textview.GtkSourceMap gutter {
 }
 
 .hover-display-row:not(:last-child) {
-  border-bottom: 1px solid @borders;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .hover-display-row {
@@ -39,8 +39,8 @@ IdeSourceMap textview.GtkSourceMap gutter {
 GtkSourceAssistant.hover-assistant {
   background: @popover_bg_color;
   color: @popover_fg_color;
-  box-shadow: 0 3px 14px 7px @shadow_color,
-              0 0 0 1px mix(@popover_bg_color, @popover_fg_color, .15),
-	      /* give a bit more pointer space to avoid flickering display */
-	      0 0 20px 20px transparent;
+  box-shadow: 0 3px 14px 7px var(--popover-shade-color),
+              0 0 0 1px color-mix(in srgb, var(--popover-bg-color) 15%, var(--popover-fg-color)),
+              /* give a bit more pointer space to avoid flickering display */
+              0 0 20px 20px transparent;
 }

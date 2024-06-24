@@ -4,9 +4,6 @@
     <child>
       <object class="GtkScrolledWindow" id="scroller">
         <property name="hscrollbar-policy">never</property>
-        <style>
-          <class name="undershoot-bottom"/>
-        </style>
         <child>
           <object class="GtkListView" id="list_view">
             <signal name="activate" handler="ide_tree_activate_cb" swapped="true" object="IdeTree"/>

@@ -1,5 +1,7 @@
 .install-progress {
-  background-image: linear-gradient(to top, @accent_bg_color 2px, alpha(@accent_bg_color, 0) 2px);
+  background-image: linear-gradient(to top,
+                                    var(--accent-bg-color) 2px,
+                                    rgb(from var(--accent-bg-color) r g b / 0) 2px);
   background-repeat: no-repeat;
   background-position: 0 bottom;
   transition: none;

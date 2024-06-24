@@ -6,5 +6,5 @@
   background: transparent;
 }
 .IdeTweaksWindow list.boxed-list.style-variant button:checked {
-  border-color: @theme_selected_bg_color;
+  border-color: var(--accent-bg-color);
 }
