@@ -367,8 +367,10 @@ ide_terminal_page_get_file_or_directory (IdePage *page)
   if (self->destroyed)
     return NULL;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!(uri = vte_terminal_get_current_file_uri (VTE_TERMINAL (self->terminal))))
     uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (uri != NULL)
     return g_file_new_for_uri (uri);
@@ -648,7 +650,9 @@ ide_terminal_page_get_current_directory_uri (IdeTerminalPage *self)
   g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
   g_return_val_if_fail (self->destroyed == FALSE, NULL);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
