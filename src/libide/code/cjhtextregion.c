@@ -30,7 +30,7 @@
  *
  * This data-structure is a hybrid between a PieceTable and a B+Tree, which I've
  * decided to call a Piece+Tree. It allows for very fast tracking of regions of
- * text (in a single dimention, meaning no sub-regions).
+ * text (in a single dimension, meaning no sub-regions).
  *
  * This is very useful for tracking where work still needs to be done in a text
  * buffer such as for spelling mistakes, syntax highlighting, error checking, or
