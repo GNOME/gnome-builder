@@ -2348,6 +2348,22 @@ ide_workbench_open_finish (IdeWorkbench  *self,
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
+gboolean
+ide_workbench_open_at_finish (IdeWorkbench  *self,
+                              GAsyncResult  *result,
+                              GError       **error)
+{
+  return ide_workbench_open_finish (self, result, error);
+}
+
+gboolean
+ide_workbench_open_all_finish (IdeWorkbench  *self,
+                               GAsyncResult  *result,
+                               GError       **error)
+{
+  return ide_workbench_open_finish (self, result, error);
+}
+
 /**
  * ide_workbench_get_current_workspace:
  * @self: a #IdeWorkbench

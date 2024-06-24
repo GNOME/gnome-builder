@@ -109,6 +109,10 @@ void             ide_workbench_open_async            (IdeWorkbench         *self
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
+gboolean         ide_workbench_open_finish           (IdeWorkbench         *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
+IDE_AVAILABLE_IN_ALL
 void             ide_workbench_open_at_async         (IdeWorkbench         *self,
                                                       GFile                *file,
                                                       const gchar          *hint,
@@ -119,6 +123,10 @@ void             ide_workbench_open_at_async         (IdeWorkbench         *self
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_47
+gboolean         ide_workbench_open_at_finish        (IdeWorkbench         *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 IDE_AVAILABLE_IN_ALL
 void             ide_workbench_open_all_async        (IdeWorkbench         *self,
                                                       GFile               **files,
@@ -127,8 +135,8 @@ void             ide_workbench_open_all_async        (IdeWorkbench         *self
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-gboolean         ide_workbench_open_finish           (IdeWorkbench         *self,
+IDE_AVAILABLE_IN_47
+gboolean         ide_workbench_open_all_finish       (IdeWorkbench         *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
 IDE_AVAILABLE_IN_ALL
