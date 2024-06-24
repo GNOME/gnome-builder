@@ -49,10 +49,13 @@ pkg.generate(
 
 gnome = import('gnome')
 {{name_}}_gir = gnome.generate_gir({{name_}}_lib,
+              sources: {{name_}}_sources,
+               header: '{{name}}.h',
+      export_packages: '{{name}}-' + api_version,
             nsversion: api_version,
             namespace: '{{Prefix}}',
         symbol_prefix: '{{prefix}}',
     identifier_prefix: '{{Prefix}}',
-             includes: [ 'Gio-2.0' ],
+             includes: ['Gio-2.0'],
               install: true,
 )
