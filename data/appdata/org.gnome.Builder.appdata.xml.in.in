@@ -5,7 +5,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
-  <summary>Create Applications for GNOME</summary>
+  <summary>Create applications for GNOME</summary>
   <!-- developer_name tag deprecated with Appstream 1.0 -->
   <developer_name>Christian Hergert</developer_name>
   <developer id="org.gnome">
