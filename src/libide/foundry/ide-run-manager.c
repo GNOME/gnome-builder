@@ -91,6 +91,8 @@ static void ide_run_manager_actions_stop                (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_color_scheme        (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_accent_color        (IdeRunManager  *self,
+                                                         GVariant       *param);
 static void ide_run_manager_actions_high_contrast       (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_text_direction      (IdeRunManager  *self,
@@ -106,6 +108,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
+  { "accent-color", ide_run_manager_actions_accent_color, "s", "'default'" },
   { "renderer", ide_run_manager_actions_renderer, "s", "'default'" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
@@ -254,6 +257,28 @@ ide_run_manager_actions_color_scheme (IdeRunManager *self,
 
   ide_run_manager_set_action_state (self,
                                     "color-scheme",
+                                    g_variant_new_string (str));
+}
+
+static void
+ide_run_manager_actions_accent_color (IdeRunManager *self,
+                                      GVariant      *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (!g_strv_contains (IDE_STRV_INIT ("system", "blue", "teal", "green", "yellow", "orange",
+                                       "red", "pink", "purple", "slate"), str))
+    {
+      str = "system";
+    }
+
+  ide_run_manager_set_action_state (self,
+                                    "accent-color",
                                     g_variant_new_string (str));
 }
 
@@ -639,6 +664,25 @@ apply_color_scheme (IdeRunContext *run_context,
 }
 
 static void
+apply_accent_color (IdeRunContext *run_context,
+                    const char    *accent_color)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (accent_color != NULL);
+
+  g_debug ("Applying accent-color \"%s\"", accent_color);
+
+  if (ide_str_equal0 (accent_color, "system"))
+    ide_run_context_unsetenv (run_context, "ADW_DEBUG_ACCENT_COLOR");
+  else
+    ide_run_context_setenv (run_context, "ADW_DEBUG_ACCENT_COLOR", accent_color);
+
+  IDE_EXIT;
+}
+
+static void
 apply_high_contrast (IdeRunContext *run_context,
                      gboolean       high_contrast)
 {
@@ -927,6 +971,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
    */
   ide_run_context_push (run_context, NULL, NULL, NULL);
   apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
+  apply_accent_color (run_context, get_action_state_string (self, "accent-color"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
   apply_renderer (run_context, get_action_state_string (self, "renderer"));
   apply_gtk_debug (run_context,

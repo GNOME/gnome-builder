@@ -179,6 +179,79 @@
           <attribute name="target" type="s">'force-dark'</attribute>
           <attribute name="description" translatable="yes">Force dark theme when running the project</attribute>
         </item>
+        <section id="run-menu-appearance-accent-color">
+          <attribute name="label" translatable="yes">Accent Color</attribute>
+          <item>
+            <attribute name="label" translatable="yes">System</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'system'</attribute>
+            <attribute name="description" translatable="yes">Use system accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Blue</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'blue'</attribute>
+            <attribute name="description" translatable="yes">Use blue accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Teal</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'teal'</attribute>
+            <attribute name="description" translatable="yes">Use teal accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Green</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'green'</attribute>
+            <attribute name="description" translatable="yes">Use green accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Yellow</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'yellow'</attribute>
+            <attribute name="description" translatable="yes">Use yellow accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Orange</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'orange'</attribute>
+            <attribute name="description" translatable="yes">Use orange accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Red</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'red'</attribute>
+            <attribute name="description" translatable="yes">Use red accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Pink</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'pink'</attribute>
+            <attribute name="description" translatable="yes">Use pink accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Purple</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'purple'</attribute>
+            <attribute name="description" translatable="yes">Use purple accent color when running the project</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Slate</attribute>
+            <attribute name="role">radio</attribute>
+            <attribute name="action">context.run-manager.accent-color</attribute>
+            <attribute name="target" type="s">'slate'</attribute>
+            <attribute name="description" translatable="yes">Use slate accent color when running the project</attribute>
+          </item>
+        </section>
       </submenu>
       <submenu id="run-menu-a11y">
         <attribute name="label" translatable="yes">Accessibility</attribute>
