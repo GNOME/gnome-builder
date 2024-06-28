@@ -328,12 +328,11 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
 
   if (!ide_workbench_load_project_finish (workbench, result, &error))
     {
-      GtkWidget *dialog;
+      AdwDialog *dialog;
 
-      dialog = adw_message_dialog_new (GTK_WINDOW (self),
-                                       _("Failed to load the project"),
-                                       error->message);
-      adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("_Close"));
+      dialog = adw_alert_dialog_new (_("Failed to load the project"),
+                                     error->message);
+      adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "close", _("_Close"));
 
       g_signal_connect_object (dialog,
                                "response",
@@ -341,7 +340,7 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
                                workbench,
                                G_CONNECT_SWAPPED);
 
-      gtk_window_present (GTK_WINDOW (dialog));
+      adw_dialog_present (dialog, GTK_WIDGET (workbench));
 
       ide_greeter_workspace_end (self);
     }
@@ -513,30 +512,27 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
                                            gpointer       user_data)
 {
   IdeGreeterWorkspace *self = user_data;
-  GtkWindow *parent;
-  GtkWidget *dialog;
+  AdwDialog *dialog;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (param == NULL);
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
 
-  parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
-  dialog = adw_message_dialog_new (GTK_WINDOW (parent),
-                                   _("Delete Project Sources?"),
-                                   _("Deleting the project source code from your computer cannot be undone."));
-  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
-                                    "cancel", _("_Cancel"),
-                                    "delete", _("_Delete Project Sources"),
-                                    NULL);
-  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
-                                              "delete",
-                                              ADW_RESPONSE_DESTRUCTIVE);
+  dialog = adw_alert_dialog_new (_("Delete Project Sources?"),
+                                 _("Deleting the project source code from your computer cannot be undone."));
+  adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
+                                  "cancel", _("_Cancel"),
+                                  "delete", _("_Delete Project Sources"),
+                                  NULL);
+  adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
+                                            "delete",
+                                            ADW_RESPONSE_DESTRUCTIVE);
   g_signal_connect_object (dialog,
                            "response::delete",
                            G_CALLBACK (purge_selected_rows_response),
                            self,
                            G_CONNECT_SWAPPED);
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (self));
 }
 
 static void
