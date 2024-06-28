@@ -254,13 +254,12 @@ gbp_create_project_widget_expand_cb (GObject      *object,
       /* Make sure it wasn't closed/cancelled */
       if (gtk_widget_get_visible (GTK_WIDGET (greeter)))
         {
-          GtkWidget *dialog;
+          AdwDialog *dialog;
 
-          dialog = adw_message_dialog_new (GTK_WINDOW (greeter),
-                                           _("Failed to Create Project"),
-                                           error->message);
-          adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("_Close"));
-          gtk_window_present (GTK_WINDOW (dialog));
+          dialog = adw_alert_dialog_new (_("Failed to Create Project"),
+                                         error->message);
+          adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "close", _("_Close"));
+          adw_dialog_present (dialog, GTK_WIDGET (greeter));
         }
     }
   else
