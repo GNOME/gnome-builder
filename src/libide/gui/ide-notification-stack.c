@@ -304,66 +304,75 @@ ide_notification_stack_get_can_move (IdeNotificationStack *self)
     return FALSE;
 }
 
+static void
+ide_notification_stack_move (IdeNotificationStack *self,
+                             int                   direction)
+{
+  GtkStackPage *page;
+  GtkWidget *child;
+  int position = -1;
+
+  g_return_if_fail (IDE_IS_NOTIFICATION_STACK (self));
+  g_return_if_fail (direction == -1 || direction == 1);
+
+  if (!self->in_carousel)
+    g_clear_handle_id (&self->carousel_source, g_source_remove);
+
+  if (self->pages->len == 0)
+    return;
+
+  child = gtk_stack_get_visible_child (self->stack);
+
+  for (guint i = 0; i < self->pages->len; i++)
+    {
+      page = g_ptr_array_index (self->pages, i);
+
+      if (child == gtk_stack_page_get_child (page))
+        {
+          position = i;
+          break;
+        }
+    }
+
+  if (position == -1)
+    return;
+
+  g_assert (position >= 0);
+  g_assert (self->pages->len > 0);
+
+  if (direction == -1 && position == 0)
+    position = self->pages->len - 1;
+  else if (direction == 1 && position == self->pages->len - 1)
+    position = 0;
+  else
+    position += direction;
+
+  g_assert (position >= 0);
+  g_assert (position < self->pages->len);
+
+  page = g_ptr_array_index (self->pages, position);
+
+  g_assert (page != NULL);
+  g_assert (GTK_IS_STACK_PAGE (page));
+
+  child = gtk_stack_page_get_child (page);
+
+  g_assert (child != NULL);
+  g_assert (GTK_IS_WIDGET (child));
+
+  gtk_stack_set_visible_child (self->stack, child);
+}
+
 void
 ide_notification_stack_move_next (IdeNotificationStack *self)
 {
-  GtkWidget *child;
-
-  g_return_if_fail (IDE_IS_NOTIFICATION_STACK (self));
-
-  if ((child = gtk_stack_get_visible_child (self->stack)))
-    {
-      for (guint i = 0; i < self->pages->len; i++)
-        {
-          GtkStackPage *page = g_ptr_array_index (self->pages, i);
-
-          if (child == gtk_stack_page_get_child (page) && i + 1 < self->pages->len)
-            {
-              page = g_ptr_array_index (self->pages, i + 1);
-              child = gtk_stack_page_get_child (page);
-
-              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN);
-              gtk_stack_set_visible_child (self->stack, child);
-              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
-
-              break;
-            }
-        }
-
-      if (!self->in_carousel)
-        g_clear_handle_id (&self->carousel_source, g_source_remove);
-    }
+  ide_notification_stack_move (self, 1);
 }
 
 void
 ide_notification_stack_move_previous (IdeNotificationStack *self)
 {
-  GtkWidget *child;
-
-  g_return_if_fail (IDE_IS_NOTIFICATION_STACK (self));
-
-  if ((child = gtk_stack_get_visible_child (self->stack)))
-    {
-      for (guint i = 0; i < self->pages->len; i++)
-        {
-          GtkStackPage *page = g_ptr_array_index (self->pages, i);
-
-          if (child == gtk_stack_page_get_child (page) && i > 0)
-            {
-              page = g_ptr_array_index (self->pages, i - 1);
-              child = gtk_stack_page_get_child (page);
-
-              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP);
-              gtk_stack_set_visible_child (self->stack, child);
-              gtk_stack_set_transition_type (self->stack, GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
-
-              break;
-            }
-        }
-
-      if (!self->in_carousel)
-        g_clear_handle_id (&self->carousel_source, g_source_remove);
-    }
+  ide_notification_stack_move (self, -1);
 }
 
 /**
