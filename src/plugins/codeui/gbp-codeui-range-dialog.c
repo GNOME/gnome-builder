@@ -33,14 +33,14 @@
 
 struct _GbpCodeuiRangeDialog
 {
-  AdwMessageDialog parent_instance;
+  AdwAlertDialog parent_instance;
   GtkListBox *list_box;
   AdwActionRow *loading;
   AdwPreferencesGroup *group;
   guint count;
 };
 
-G_DEFINE_FINAL_TYPE (GbpCodeuiRangeDialog, gbp_codeui_range_dialog, ADW_TYPE_MESSAGE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpCodeuiRangeDialog, gbp_codeui_range_dialog, ADW_TYPE_ALERT_DIALOG)
 
 enum {
   PROP_0,

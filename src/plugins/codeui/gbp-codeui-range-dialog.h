@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CODEUI_RANGE_DIALOG (gbp_codeui_range_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCodeuiRangeDialog, gbp_codeui_range_dialog, GBP, CODEUI_RANGE_DIALOG, AdwMessageDialog)
+G_DECLARE_FINAL_TYPE (GbpCodeuiRangeDialog, gbp_codeui_range_dialog, GBP, CODEUI_RANGE_DIALOG, AdwAlertDialog)
 
 void gbp_codeui_range_dialog_done (GbpCodeuiRangeDialog *self);
 

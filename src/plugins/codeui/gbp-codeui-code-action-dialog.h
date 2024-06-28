@@ -28,8 +28,8 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CODEUI_CODE_ACTION_DIALOG (gbp_codeui_code_action_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCodeuiCodeActionDialog, gbp_codeui_code_action_dialog, GBP, CODEUI_CODE_ACTION_DIALOG, AdwMessageDialog)
+G_DECLARE_FINAL_TYPE (GbpCodeuiCodeActionDialog, gbp_codeui_code_action_dialog, GBP, CODEUI_CODE_ACTION_DIALOG, AdwAlertDialog)
 
-GtkWidget *gbp_codeui_code_action_dialog_new (IdeBuffer *buffer);
+AdwDialog *gbp_codeui_code_action_dialog_new (IdeBuffer *buffer);
 
 G_END_DECLS

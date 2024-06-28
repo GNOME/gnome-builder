@@ -26,7 +26,7 @@
 
 struct _GbpCodeuiCodeActionDialog
 {
-  AdwMessageDialog  parent_instance;
+  AdwAlertDialog    parent_instance;
 
   IdeBuffer        *buffer;
   IdeCodeAction    *selected_action;
@@ -46,7 +46,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (GbpCodeuiCodeActionDialog, gbp_codeui_code_action_dialog, ADW_TYPE_MESSAGE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpCodeuiCodeActionDialog, gbp_codeui_code_action_dialog, ADW_TYPE_ALERT_DIALOG)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -178,9 +178,9 @@ gbp_codeui_code_action_dialog_row_selected_cb (GbpCodeuiCodeActionDialog *self,
     action = g_object_get_data (G_OBJECT (row), "CODE_ACTION");
 
   if (g_set_object (&self->selected_action, action))
-    adw_message_dialog_set_response_enabled (ADW_MESSAGE_DIALOG (self),
-                                             "apply",
-                                             !!self->selected_action);
+    adw_alert_dialog_set_response_enabled (ADW_ALERT_DIALOG (self),
+                                           "apply",
+                                           !!self->selected_action);
 
   IDE_EXIT;
 }
@@ -269,12 +269,14 @@ gbp_codeui_code_action_dialog_init (GbpCodeuiCodeActionDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  adw_message_dialog_set_response_enabled (ADW_MESSAGE_DIALOG (self), "apply", FALSE);
+  adw_alert_dialog_set_response_enabled (ADW_ALERT_DIALOG (self), "apply", FALSE);
 }
 
-GtkWidget *
+AdwDialog *
 gbp_codeui_code_action_dialog_new (IdeBuffer *buffer)
 {
+  g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
+
   return g_object_new (GBP_TYPE_CODEUI_CODE_ACTION_DIALOG,
                        "buffer", buffer,
                        NULL);

@@ -156,8 +156,7 @@ static void
 code_actions_action (GbpCodeuiEditorPageAddin *self,
                      GVariant                 *param)
 {
-  GtkWidget *dialog;
-  GtkRoot *toplevel;
+  AdwDialog *dialog;
 
   IDE_ENTRY;
 
@@ -165,11 +164,8 @@ code_actions_action (GbpCodeuiEditorPageAddin *self,
   g_assert (GBP_IS_CODEUI_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_BUFFER (self->buffer));
 
-  toplevel = gtk_widget_get_root (GTK_WIDGET (self->page));
   dialog = gbp_codeui_code_action_dialog_new (self->buffer);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (toplevel));
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (self->page));
 
   IDE_EXIT;
 }
@@ -182,9 +178,8 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
   IdeRenameProvider *provider;
   GtkTextBuffer *buffer;
   GtkTextIter begin, end;
-  GtkWidget *dialog;
+  AdwDialog *dialog;
   g_autofree char *word = NULL;
-  GtkWindow *toplevel;
   gboolean failed = FALSE;
 
   IDE_ENTRY;
@@ -216,15 +211,12 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
         }
     }
 
-  toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self->page)));
-
   if (failed)
     {
-      dialog = adw_message_dialog_new (toplevel,
-                                       _("Symbol Not Selected"),
-                                       _("A symbol to rename must be selected"));
-      adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("Close"));
-      gtk_window_present (GTK_WINDOW (dialog));
+      dialog = adw_alert_dialog_new (_("Symbol Not Selected"),
+                                     _("A symbol to rename must be selected"));
+      adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "close", _("Close"));
+      adw_dialog_present (dialog, GTK_WIDGET (self));
 
       IDE_EXIT;
     }
@@ -233,9 +225,7 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
   location = ide_buffer_get_iter_location (self->buffer, &begin);
 
   dialog = gbp_codeui_rename_dialog_new (provider, location, word);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), toplevel);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (self));
 
   IDE_EXIT;
 }
@@ -432,8 +422,8 @@ find_references_cb (GObject      *object,
 
   if (state->active->len == 0)
     {
-      adw_message_dialog_set_response_label (ADW_MESSAGE_DIALOG (state->dialog),
-                                             "close", _("Close"));
+      adw_alert_dialog_set_response_label (ADW_ALERT_DIALOG (state->dialog),
+                                           "close", _("Close"));
       gbp_codeui_range_dialog_done (state->dialog);
       ide_task_return_boolean (task, TRUE);
     }
@@ -447,8 +437,7 @@ find_references_action (GbpCodeuiEditorPageAddin *self,
   g_autoptr(IdeTask) task = NULL;
   FindReferences *state;
   const char *language_id;
-  GtkWidget *dialog;
-  GtkRoot *toplevel;
+  AdwDialog *dialog;
 
   IDE_ENTRY;
 
@@ -484,17 +473,14 @@ find_references_action (GbpCodeuiEditorPageAddin *self,
                                                  g_object_ref (task));
     }
 
-  toplevel = gtk_widget_get_root (GTK_WIDGET (self->page));
   dialog = g_object_new (GBP_TYPE_CODEUI_RANGE_DIALOG,
-                         "transient-for", toplevel,
-                         "modal", FALSE,
                          "model", state->references,
                          "heading", _("Find References"),
                          NULL);
 
   state->dialog = g_object_ref_sink (GBP_CODEUI_RANGE_DIALOG (dialog));
 
-  gtk_window_present (GTK_WINDOW (dialog));
+  adw_dialog_present (dialog, GTK_WIDGET (self->page));
 
   IDE_EXIT;
 }

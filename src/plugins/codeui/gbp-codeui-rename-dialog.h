@@ -28,9 +28,9 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CODEUI_RENAME_DIALOG (gbp_codeui_rename_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCodeuiRenameDialog, gbp_codeui_rename_dialog, GBP, CODEUI_RENAME_DIALOG, AdwMessageDialog)
+G_DECLARE_FINAL_TYPE (GbpCodeuiRenameDialog, gbp_codeui_rename_dialog, GBP, CODEUI_RENAME_DIALOG, AdwAlertDialog)
 
-GtkWidget *gbp_codeui_rename_dialog_new (IdeRenameProvider *provider,
+AdwDialog *gbp_codeui_rename_dialog_new (IdeRenameProvider *provider,
                                          IdeLocation       *location,
                                          const char        *word);
 

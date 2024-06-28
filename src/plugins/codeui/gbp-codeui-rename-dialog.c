@@ -30,7 +30,7 @@
 
 struct _GbpCodeuiRenameDialog
 {
-  AdwMessageDialog   parent_instance;
+  AdwAlertDialog     parent_instance;
 
   AdwEntryRow       *old_symbol;
   AdwEntryRow       *new_symbol;
@@ -40,7 +40,7 @@ struct _GbpCodeuiRenameDialog
   char              *word;
 };
 
-G_DEFINE_FINAL_TYPE (GbpCodeuiRenameDialog, gbp_codeui_rename_dialog, ADW_TYPE_MESSAGE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpCodeuiRenameDialog, gbp_codeui_rename_dialog, ADW_TYPE_ALERT_DIALOG)
 
 static void
 gbp_codeui_rename_dialog_notify_text_cb (GbpCodeuiRenameDialog *self,
@@ -66,7 +66,7 @@ gbp_codeui_rename_dialog_notify_text_cb (GbpCodeuiRenameDialog *self,
         enabled = FALSE;
     }
 
-  adw_message_dialog_set_response_enabled (ADW_MESSAGE_DIALOG (self), "rename", enabled);
+  adw_alert_dialog_set_response_enabled (ADW_ALERT_DIALOG (self), "rename", enabled);
 }
 
 static void
@@ -163,7 +163,7 @@ gbp_codeui_rename_dialog_init (GbpCodeuiRenameDialog *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-GtkWidget *
+AdwDialog *
 gbp_codeui_rename_dialog_new (IdeRenameProvider *provider,
                               IdeLocation       *location,
                               const char        *word)
@@ -179,5 +179,5 @@ gbp_codeui_rename_dialog_new (IdeRenameProvider *provider,
   gtk_editable_set_text (GTK_EDITABLE (self->new_symbol), word);
   gtk_widget_grab_focus (GTK_WIDGET (self->new_symbol));
 
-  return GTK_WIDGET (self);
+  return ADW_DIALOG (self);
 }
