@@ -1586,18 +1586,18 @@ _ide_workspace_agree_to_close_run_cb (GObject      *object,
                                       GAsyncResult *result,
                                       gpointer      user_data)
 {
-  PanelSaveDialog *dialog = (PanelSaveDialog *)object;
+  PanelChangesDialog *dialog = (PanelChangesDialog *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (PANEL_IS_SAVE_DIALOG (dialog));
+  g_assert (PANEL_IS_CHANGES_DIALOG (dialog));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!panel_save_dialog_run_finish (dialog, result, &error))
+  if (!panel_changes_dialog_run_finish (dialog, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -1609,15 +1609,15 @@ static void
 _ide_workspace_agree_to_close_page_cb (IdePage  *page,
                                        gpointer  user_data)
 {
-  PanelSaveDialog *dialog = user_data;
+  PanelChangesDialog *dialog = user_data;
   PanelSaveDelegate *delegate;
 
   g_assert (IDE_IS_PAGE (page));
-  g_assert (PANEL_IS_SAVE_DIALOG (dialog));
+  g_assert (PANEL_IS_CHANGES_DIALOG (dialog));
 
   if ((delegate = panel_widget_get_save_delegate (PANEL_WIDGET (page))) &&
       panel_widget_get_modified (PANEL_WIDGET (page)))
-    panel_save_dialog_add_delegate (dialog, delegate);
+    panel_changes_dialog_add_delegate (dialog, delegate);
 }
 
 void
@@ -1628,7 +1628,7 @@ _ide_workspace_agree_to_close_async (IdeWorkspace        *self,
                                      gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  PanelSaveDialog *dialog;
+  PanelChangesDialog *dialog;
 
   IDE_ENTRY;
 
@@ -1640,16 +1640,15 @@ _ide_workspace_agree_to_close_async (IdeWorkspace        *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_workspace_agree_to_close_async);
 
-  dialog = PANEL_SAVE_DIALOG (panel_save_dialog_new ());
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (self));
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  dialog = PANEL_CHANGES_DIALOG (panel_changes_dialog_new ());
 
   ide_grid_foreach_page (grid, _ide_workspace_agree_to_close_page_cb, dialog);
 
-  panel_save_dialog_run_async (dialog,
-                               cancellable,
-                               _ide_workspace_agree_to_close_run_cb,
-                               g_steal_pointer (&task));
+  panel_changes_dialog_run_async (dialog,
+                                  GTK_WIDGET (self),
+                                  cancellable,
+                                  _ide_workspace_agree_to_close_run_cb,
+                                  g_steal_pointer (&task));
 
   IDE_EXIT;
 }
