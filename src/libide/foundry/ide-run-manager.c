@@ -108,7 +108,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
-  { "accent-color", ide_run_manager_actions_accent_color, "s", "'default'" },
+  { "accent-color", ide_run_manager_actions_accent_color, "s", "'system'" },
   { "renderer", ide_run_manager_actions_renderer, "s", "'default'" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
