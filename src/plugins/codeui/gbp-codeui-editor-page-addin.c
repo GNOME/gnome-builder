@@ -216,7 +216,7 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
       dialog = adw_alert_dialog_new (_("Symbol Not Selected"),
                                      _("A symbol to rename must be selected"));
       adw_alert_dialog_add_response (ADW_ALERT_DIALOG (dialog), "close", _("Close"));
-      adw_dialog_present (dialog, GTK_WIDGET (self));
+      adw_dialog_present (dialog, GTK_WIDGET (self->page));
 
       IDE_EXIT;
     }
@@ -225,7 +225,7 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
   location = ide_buffer_get_iter_location (self->buffer, &begin);
 
   dialog = gbp_codeui_rename_dialog_new (provider, location, word);
-  adw_dialog_present (dialog, GTK_WIDGET (self));
+  adw_dialog_present (dialog, GTK_WIDGET (self->page));
 
   IDE_EXIT;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpCodeuiCodeActionDialog" parent="AdwMessageDialog">
+  <template class="GbpCodeuiCodeActionDialog" parent="AdwAlertDialog">
     <property name="heading" translatable="yes">Code Actions</property>
     <property name="default-response">apply</property>
     <property name="close-response">close</property>
