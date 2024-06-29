@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpCodeuiRenameDialog" parent="AdwMessageDialog">
+  <template class="GbpCodeuiRenameDialog" parent="AdwAlertDialog">
     <property name="heading" translatable="yes">Rename Symbol</property>
     <property name="default-response">rename</property>
     <property name="close-response">close</property>

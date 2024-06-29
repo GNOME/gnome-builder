@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpCodeuiRangeDialog" parent="AdwMessageDialog">
+  <template class="GbpCodeuiRangeDialog" parent="AdwAlertDialog">
     <property name="heading" translatable="yes">Find References</property>
     <property name="close-response">close</property>
     <responses>
