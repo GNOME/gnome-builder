@@ -37,10 +37,10 @@ IdeSourceMap textview.GtkSourceMap gutter {
 }
 
 GtkSourceAssistant.hover-assistant {
-  background: @popover_bg_color;
-  color: @popover_fg_color;
-  box-shadow: 0 3px 14px 7px var(--popover-shade-color),
-              0 0 0 1px color-mix(in srgb, var(--popover-bg-color) 15%, var(--popover-fg-color)),
+  background: var(--popover-bg-color);
+  color: var(--popover-fg-color);
+  box-shadow: 0 1px 5px 1px rgb(0 0 0 / 9%),
+              0 2px 14px 3px rgb(0 0 0 / 5%),
               /* give a bit more pointer space to avoid flickering display */
               0 0 20px 20px transparent;
 }
