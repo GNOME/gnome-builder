@@ -10,25 +10,19 @@
       <response id="rename" translatable="yes" appearance="destructive">_Rename</response>
     </responses>
     <property name="extra-child">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="margin-top">18</property>
-        <property name="width-request">375</property>
-        <property name="spacing">18</property>
+      <object class="AdwPreferencesGroup">
+        <property name="width-request">360</property>
+        <property name="separate-rows">True</property>
         <child>
-          <object class="AdwPreferencesGroup">
-            <child>
-              <object class="AdwEntryRow" id="old_symbol">
-                <property name="title" translatable="yes">Current Symbol name</property>
-                <property name="editable">false</property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwEntryRow" id="new_symbol">
-                <property name="title" translatable="yes">New Symbol name</property>
-                <signal name="notify::text" handler="gbp_codeui_rename_dialog_notify_text_cb" swapped="true" object="GbpCodeuiRenameDialog"/>
-              </object>
-            </child>
+          <object class="AdwEntryRow" id="old_symbol">
+            <property name="title" translatable="yes">Current Symbol Name</property>
+            <property name="editable">false</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwEntryRow" id="new_symbol">
+            <property name="title" translatable="yes">New Symbol Name</property>
+            <signal name="notify::text" handler="gbp_codeui_rename_dialog_notify_text_cb" swapped="true" object="GbpCodeuiRenameDialog"/>
           </object>
         </child>
       </object>

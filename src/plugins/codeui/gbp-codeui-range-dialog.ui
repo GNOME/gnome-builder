@@ -7,26 +7,19 @@
       <response id="close" translatable="yes">_Cancel</response>
     </responses>
     <property name="extra-child">
-      <object class="AdwPreferencesPage">
+      <object class="AdwPreferencesGroup" id="group">
         <child>
-          <object class="AdwPreferencesGroup" id="group">
-            <property name="width-request">375</property>
-            <property name="height-request">75</property>
-            <child>
-              <object class="AdwActionRow" id="loading">
-                <property name="title" translatable="yes">Loading…</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBox" id="list_box">
-                <property name="margin-top">18</property>
-                <property name="visible">false</property>
-                <signal name="row-activated" handler="gbp_codeui_range_dialog_activate_row_cb" swapped="true" object="GbpCodeuiRangeDialog"/>
-                <style>
-                  <class name="boxed-list"/>
-                </style>
-              </object>
-            </child>
+          <object class="AdwActionRow" id="loading">
+            <property name="title" translatable="yes">Loading…</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="visible">false</property>
+            <signal name="row-activated" handler="gbp_codeui_range_dialog_activate_row_cb" swapped="true" object="GbpCodeuiRangeDialog"/>
+            <style>
+              <class name="boxed-list"/>
+            </style>
           </object>
         </child>
       </object>
