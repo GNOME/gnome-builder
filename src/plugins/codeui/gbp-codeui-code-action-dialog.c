@@ -33,7 +33,7 @@ struct _GbpCodeuiCodeActionDialog
 
   GtkStackPage     *empty;
   GtkStackPage     *failed;
-  AdwStatusPage    *failed_page;
+  AdwActionRow     *failed_row;
   GtkStackPage     *list;
   GtkListBox       *list_box;
   GtkStackPage     *loading;
@@ -114,7 +114,7 @@ list_code_actions_cb (GObject      *object,
   if (!(ar = ide_buffer_code_action_query_finish (buffer, result, &error)))
     {
       g_autofree char *markup = g_markup_escape_text (error->message, -1);
-      adw_status_page_set_description (self->failed_page, markup);
+      adw_action_row_set_subtitle (self->failed_row, markup);
       gtk_stack_set_visible_child (self->stack, gtk_stack_page_get_child (self->failed));
       IDE_EXIT;
     }
@@ -255,7 +255,7 @@ gbp_codeui_code_action_dialog_class_init (GbpCodeuiCodeActionDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/codeui/gbp-codeui-code-action-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, empty);
   gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, failed);
-  gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, failed_page);
+  gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, failed_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, list);
   gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpCodeuiCodeActionDialog, loading);
