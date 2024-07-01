@@ -302,6 +302,9 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
       }
   }
 
+  /* Make sure we have access to user installed fonts for gbp-flatpak-aux.c */
+  ide_run_context_append_argv (run_context, "--filesystem=~/.local/share/fonts:ro");
+
   /* And last, before our child command, is the staging directory */
   ide_run_context_append_argv (run_context, staging_dir);
 
