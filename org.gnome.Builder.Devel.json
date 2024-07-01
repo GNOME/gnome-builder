@@ -108,7 +108,8 @@
             "name" : "uncrustify",
             "buildsystem" : "cmake-ninja",
             "config-opts" : [
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib"
             ],
             "builddir" : true,
             "sources" : [
@@ -236,7 +237,12 @@
         {
             "name" : "libeditorconfig",
             "buildsystem" : "cmake-ninja",
-            "config-opts" : [ "-DBUILD_DOCUMENTATION=OFF", "-DINSTALL_HTML_DOC=OFF" ],
+            "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
+                "-DBUILD_DOCUMENTATION=OFF",
+                "-DINSTALL_HTML_DOC=OFF"
+            ],
             "sources" : [
                 {
                     "type" : "git",
@@ -427,6 +433,10 @@
         {
             "name" : "libstemmer",
             "buildsystem" : "cmake-ninja",
+            "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib"
+            ],
             "sources" : [
                 {
                     "type" : "git",
@@ -564,7 +574,8 @@
             "name" : "html-tidy",
             "buildsystem" : "cmake-ninja",
             "config-opts" : [
-                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
                 "-DBUILD_SHARED_LIB=OFF"
             ],
             "sources" : [
@@ -580,6 +591,8 @@
             "buildsystem" : "cmake-ninja",
             "builddir" : true,
             "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
                 "-DCMARK_TESTS=OFF",
                 "-DCMARK_SHARED=OFF"
             ],
