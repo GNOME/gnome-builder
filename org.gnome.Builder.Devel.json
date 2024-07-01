@@ -205,6 +205,7 @@
             "buildsystem" : "cmake-ninja",
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
                 "-DBUILD_SHARED_LIBS:BOOL=ON",
                 "-DUSE_SSH:BOOL=ON",
                 "-DUSE_THREADS:BOOL=ON"
