@@ -373,33 +373,6 @@
             ]
         },
         {
-            "name" : "sysprof",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Dexamples=false",
-                "-Dgtk=true",
-                "-Dsysprofd=host",
-                "-Dtests=true",
-                "-Dtools=true"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "cleanup" : [
-                "/libexec/sysprof",
-                "/share/appdata",
-                "/share/applications",
-                "/share/metainfo",
-                "/share/mime/packages"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
             "name" : "ostree",
             "config-opts" : [
                 "--disable-man",
