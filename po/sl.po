@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-05-17 13:12+0000\n"
-"PO-Revision-Date: 2024-05-17 19:13+0200\n"
+"POT-Creation-Date: 2024-07-01 20:15+0000\n"
+"PO-Revision-Date: 2024-07-02 12:24+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -33,11 +33,12 @@ msgid "Builder"
 msgstr "Izgrajevalnik"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
-msgid "Create Applications for GNOME"
+msgid "Create applications for GNOME"
 msgstr "Ustvarite programe za GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
+#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -634,7 +635,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Katero okolje želite uporabiti pri izvajanju preizkusov enot"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:252 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Shranjuj podroben izpis"
 
@@ -770,8 +771,8 @@ msgid "Projects"
 msgstr "Projekti"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:528
-#: src/libide/greeter/ide-greeter-workspace.c:666
+#: src/libide/greeter/ide-greeter-workspace.c:524
+#: src/libide/greeter/ide-greeter-workspace.c:662
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
 #: src/libide/gui/ide-workbench.c:1564
@@ -1253,50 +1254,50 @@ msgid "Unit Test"
 msgstr "Preskus enote"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:187
+#: src/libide/foundry/ide-run-manager.c:190
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Uporabniško zahtevano orodje za zagon »%s«"
 
-#: src/libide/foundry/ide-run-manager.c:567
+#: src/libide/foundry/ide-run-manager.c:592
 msgid "Cannot run target, another target is running"
 msgstr "Ni mogoče zagnati ciljne datoteke, ta je že zagnana"
 
-#: src/libide/foundry/ide-run-manager.c:846
+#: src/libide/foundry/ide-run-manager.c:890
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Program je izstopil z napako: %s"
 
-#: src/libide/foundry/ide-run-manager.c:849
+#: src/libide/foundry/ide-run-manager.c:893
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Program je izstopil"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1083
 #, c-format
 msgid "Running %s…"
 msgstr "Poteka zaganjanje %s …"
 
-#: src/libide/foundry/ide-run-manager.c:1105
+#: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
 msgstr "Postavitev na napravo ..."
 
-#: src/libide/foundry/ide-run-manager.c:1334
+#: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
 msgstr "Uporabnik je zahteval zagon programa"
 
-#: src/libide/foundry/ide-run-manager.c:1366
+#: src/libide/foundry/ide-run-manager.c:1411
 msgid "User requested application to restart"
 msgstr "Uporabnik je zahteval ponoven zagon programa"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1396
+#: src/libide/foundry/ide-run-manager.c:1441
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Uporabnik je zahteval zagon programa z orodjem »%s«"
 
-#: src/libide/foundry/ide-run-manager.c:1416
+#: src/libide/foundry/ide-run-manager.c:1461
 msgid "User requested application to stop"
 msgstr "Uporabnik je zahteval ustavitev programa"
 
@@ -1339,8 +1340,8 @@ msgid "_Clone Repository…"
 msgstr "_Kloniraj skladišče …"
 
 #: src/libide/greeter/gtk/menus.ui:22
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:426
 #: src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Zapri"
@@ -1371,43 +1372,43 @@ msgstr "Mapa"
 msgid "Builder — %s"
 msgstr "Builder – %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:334
+#: src/libide/greeter/ide-greeter-workspace.c:333
 msgid "Failed to load the project"
 msgstr "Nalaganje projekta je spodletelo"
 
-#: src/libide/greeter/ide-greeter-workspace.c:336
-#: src/plugins/create-project/gbp-create-project-widget.c:262
+#: src/libide/greeter/ide-greeter-workspace.c:335
+#: src/plugins/create-project/gbp-create-project-widget.c:261
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Zapri"
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:521
 msgid "Delete Project Sources?"
 msgstr "Ali želite izbrisati vire projekta?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:526
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr "Brisanje izvorne kode projekta z računalnika ni mogoče razveljaviti."
 
-#: src/libide/greeter/ide-greeter-workspace.c:529
+#: src/libide/greeter/ide-greeter-workspace.c:525
 msgid "_Delete Project Sources"
 msgstr "Iz_briši vire projekta"
 
-#: src/libide/greeter/ide-greeter-workspace.c:623
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:619
+#: src/libide/greeter/ide-greeter-workspace.c:658
 msgid "Select Project Folder"
 msgstr "Izbor mape projekta"
 
-#: src/libide/greeter/ide-greeter-workspace.c:628
+#: src/libide/greeter/ide-greeter-workspace.c:624
 msgid "Select Project File"
 msgstr "Izbor datoteke projekta"
 
-#: src/libide/greeter/ide-greeter-workspace.c:667
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "_Odpri"
 
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:674
 msgid "All Project Types"
 msgstr "Vse vrste projekta"
 
@@ -1618,10 +1619,6 @@ msgstr "Terminal"
 msgid "New Terminals"
 msgstr "Nova okna terminala"
 
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr "Christian Hergert in drugi"
-
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr "Matej Urbančič <mateju@src.gnome.org>"
@@ -1749,7 +1746,7 @@ msgstr "Projekt naložen"
 msgid "Loading project “%s”"
 msgstr "Nalaganje projekta »%s«"
 
-#: src/libide/gui/ide-workspace.c:1689
+#: src/libide/gui/ide-workspace.c:1688
 msgid "There are unsaved documents"
 msgstr "Odprti so neshranjeni dokumenti"
 
@@ -1777,6 +1774,8 @@ msgstr[2] "Poteka nameščanje %u paketov."
 msgstr[3] "Poteka nameščanje %u paketov."
 
 #: src/libide/lsp/ide-lsp-client.c:169
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
+#, c-format
 msgid "The operation has been cancelled"
 msgstr "Operacija je bila preklicana"
 
@@ -2062,8 +2061,8 @@ msgstr "Izbor celotnega besedila s terminala, vključno z drsenjem nazaj"
 msgid "Select _None"
 msgstr "_Brez izbora"
 
-#: src/libide/terminal/ide-terminal.c:538
-#: src/libide/terminal/ide-terminal.c:571
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "Kopirano na odložišče"
 
@@ -2684,96 +2683,180 @@ msgstr "Vsili temno"
 msgid "Force dark theme when running the project"
 msgstr "Vsili temno temo med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:183
+msgid "Accent Color"
+msgstr "Barva poudarkov"
+
+#: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "Sistem"
+
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Use system accent color when running the project"
+msgstr "Uporabi sistemsko barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:192
+msgid "Blue"
+msgstr "Modra"
+
+#: src/plugins/buildui/gtk/menus.ui:196
+msgid "Use blue accent color when running the project"
+msgstr "Uporabi modro barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:199
+msgid "Teal"
+msgstr "Zelenomodra"
+
+#: src/plugins/buildui/gtk/menus.ui:203
+msgid "Use teal accent color when running the project"
+msgstr "Uporabi zelenomodro barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:206
+msgid "Green"
+msgstr "Zelena"
+
+#: src/plugins/buildui/gtk/menus.ui:210
+msgid "Use green accent color when running the project"
+msgstr "Uporabi zeleno barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:213
+msgid "Yellow"
+msgstr "Rumena"
+
+#: src/plugins/buildui/gtk/menus.ui:217
+msgid "Use yellow accent color when running the project"
+msgstr "Uporabi rumeno barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:220
+msgid "Orange"
+msgstr "Oranžna"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Use orange accent color when running the project"
+msgstr "Uporabi oranžno barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:227
+msgid "Red"
+msgstr "Rdeča"
+
+#: src/plugins/buildui/gtk/menus.ui:231
+msgid "Use red accent color when running the project"
+msgstr "Uporabi rdečo barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:234
+msgid "Pink"
+msgstr "Rožnata"
+
+#: src/plugins/buildui/gtk/menus.ui:238
+msgid "Use pink accent color when running the project"
+msgstr "Uporabi rožnato barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:241
+msgid "Purple"
+msgstr "Vijolična"
+
+#: src/plugins/buildui/gtk/menus.ui:245
+msgid "Use purple accent color when running the project"
+msgstr "Uporabi vijolično barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:248
+msgid "Slate"
+msgstr "Skrilasto modra"
+
+#: src/plugins/buildui/gtk/menus.ui:252
+msgid "Use slate accent color when running the project"
+msgstr "Uporabi skrilasto modro barvo poudarkov med izvajanjem projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
 msgstr "Dostopnost"
 
-#: src/plugins/buildui/gtk/menus.ui:186
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
 msgstr "Uporabi visokokontrastno temo med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
 msgstr "Smer besedila"
 
-#: src/plugins/buildui/gtk/menus.ui:194
+#: src/plugins/buildui/gtk/menus.ui:267
 msgid "Left-to-Right"
 msgstr "Z leve proti desni"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:271
 msgid "Force left-to-right text when running the project"
 msgstr "Vsili besedilo od leve proti desni med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:201
+#: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
 msgstr "Z desne proti levi"
 
-#: src/plugins/buildui/gtk/menus.ui:205
+#: src/plugins/buildui/gtk/menus.ui:278
 msgid "Force right-to-left text when running the project"
 msgstr "Vsili besedilo od desne proti levi med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:210
+#: src/plugins/buildui/gtk/menus.ui:283
 msgid "GPU"
 msgstr "GPE"
 
-#: src/plugins/buildui/gtk/menus.ui:212
+#: src/plugins/buildui/gtk/menus.ui:285
 msgid "GTK Renderer"
 msgstr "Izrisovalnik GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:214 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Privzeto"
 
-#: src/plugins/buildui/gtk/menus.ui:218
+#: src/plugins/buildui/gtk/menus.ui:291
 msgid "Use the default GTK renderer when running the project"
 msgstr "Uporabi privzti izrisovalnk GTK med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:294
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:225
+#: src/plugins/buildui/gtk/menus.ui:298
 msgid "Use the Vulkan renderer when running the project"
 msgstr "Uporabi izrisovalnk Vulkan med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:228
+#: src/plugins/buildui/gtk/menus.ui:301
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:232
+#: src/plugins/buildui/gtk/menus.ui:305
 msgid "Use the GL renderer when running the project"
 msgstr "Uporabi izrisovalnk GL med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:235
+#: src/plugins/buildui/gtk/menus.ui:308
 msgid "Legacy GL"
 msgstr "Opuščeni GL"
 
-#: src/plugins/buildui/gtk/menus.ui:239
+#: src/plugins/buildui/gtk/menus.ui:312
 msgid "Use the legacy GL renderer when running the project"
 msgstr "Uporabi opuščeni izrisovalnk GL med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:242
+#: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:246
+#: src/plugins/buildui/gtk/menus.ui:319
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Uporabi programski izrisovalnk Cairo med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:255
+#: src/plugins/buildui/gtk/menus.ui:328
 msgid "Request verbose logging when running the project"
 msgstr "Zahtevaj obsežno beleženje zapisnika med izvajanjem projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:259
+#: src/plugins/buildui/gtk/menus.ui:332
 msgid "Show Inspector"
 msgstr "Pokaži inšpektorja"
 
-#: src/plugins/buildui/gtk/menus.ui:262
+#: src/plugins/buildui/gtk/menus.ui:335
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Zahtevaj prikaz inšpektorja GTK med izvajanjem projekta"
 
@@ -3229,12 +3312,12 @@ msgstr "Dejanja kode"
 msgid "_Apply"
 msgstr "_Uveljavi"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
 msgid "Loading…"
 msgstr "Poteka nalaganje …"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
 msgid "No code actions available"
 msgstr "Dejanja kode niso na voljo"
 
@@ -3242,15 +3325,15 @@ msgstr "Dejanja kode niso na voljo"
 msgid "Code Action Failure"
 msgstr "Neuspešno dejanje kode"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
 msgid "Symbol Not Selected"
 msgstr "Simbol ni izbran"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
 msgstr "Izbrati morate simbol, ki ga želite preimenovati"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
 msgstr "Najdi sklice"
@@ -3278,12 +3361,12 @@ msgstr "Preimenuj simbol"
 msgid "_Rename"
 msgstr "P_reimenuj"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
-msgid "Current Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
+msgid "Current Symbol Name"
 msgstr "Trenutno ime simbola"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
-msgid "New Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:24
+msgid "New Symbol Name"
 msgstr "Novo ime simbola"
 
 #: src/plugins/codeui/gtk/menus.ui:7
@@ -3367,7 +3450,7 @@ msgstr "Pokaži vodnik ustvarjanja projekta"
 msgid "Select Location"
 msgstr "Izberite mesto"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:260
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 msgid "Failed to Create Project"
 msgstr "Ustvarjanje projekta ni uspelo"
 
@@ -4395,7 +4478,7 @@ msgid "Installation complete"
 msgstr "Nameščanje je končano"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:460
-#: src/plugins/git/gbp-git-client.c:398
+#: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "Odjemalec je zaprt"
 
@@ -4544,10 +4627,6 @@ msgstr "GNOME Builder"
 msgid "User"
 msgstr "Uporabnik"
 
-#: src/plugins/flatpak/tweaks.ui:34
-msgid "System"
-msgstr "Sistem"
-
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4569,11 +4648,6 @@ msgstr "Ni določene vsebine za primerjavo"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Opravilo je spodletelo. Izvorna napaka je »%s«."
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
-#, c-format
-msgid "The operation has been canceled"
-msgstr "Opravilo je preklicano"
-
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
@@ -4581,12 +4655,12 @@ msgid ""
 "repository."
 msgstr "Podajanje ustreznih poveril med kloniranjem skladišča je spodletelo."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Ni mogoče nastaviti zastavic AMEND in GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
@@ -4596,12 +4670,12 @@ msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "Ni mogoče nadzorovati datotek izven delovne mape."
 
-#: src/plugins/git/gbp-git-client.c:171
+#: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
 msgstr "Integracija z Git se je začela kot proces %s"
 
-#: src/plugins/git/gbp-git-client.c:195
+#: src/plugins/git/gbp-git-client.c:208
 msgid "Git integration has exited"
 msgstr "Integracija Git je izstopila"
 
@@ -4623,20 +4697,20 @@ msgstr ""
 "Povezava z omrežjem ni na voljo, posodabljanje podrejenega modela je "
 "ustavljeno"
 
-#: src/plugins/git/gbp-git-vcs.c:228
+#: src/plugins/git/gbp-git-vcs.c:230
 msgid "Pushed."
 msgstr "Uspešno obljavljeno."
 
-#: src/plugins/git/gbp-git-vcs.c:266
+#: src/plugins/git/gbp-git-vcs.c:268
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Poteka objavljanje sklica »%s«"
 
-#: src/plugins/git/gbp-git-vcs.c:532
+#: src/plugins/git/gbp-git-vcs.c:570
 msgid "Directory is not within repository"
 msgstr "Mapa ni znotraj predvidenega skladišča"
 
-#: src/plugins/git/gbp-git-vcs.c:560
+#: src/plugins/git/gbp-git-vcs.c:598
 msgid "Git"
 msgstr "Git"
 
@@ -4828,7 +4902,7 @@ msgstr "Priročniki"
 #: src/plugins/manuals/gbp-manuals-panel.ui:174
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:116
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#: src/plugins/todo/gbp-todo-panel.ui:102
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter…"
 msgstr "Filtriraj …"
 
@@ -6217,7 +6291,6 @@ msgid "Running all unit tests at %s"
 msgstr "Zaganjanje vseh preizkusov enot ob %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr "Preizkusi enot končani po %lf s"
 
