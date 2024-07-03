@@ -292,7 +292,8 @@ ide_extension_adapter_set_interface_type (IdeExtensionAdapter *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
-  g_assert (G_TYPE_IS_INTERFACE (interface_type));
+  g_assert (G_TYPE_IS_INTERFACE (interface_type) ||
+            G_TYPE_IS_ABSTRACT (interface_type));
 
   if (self->interface_type != interface_type)
     {
@@ -444,7 +445,7 @@ ide_extension_adapter_class_init (IdeExtensionAdapterClass *klass)
     g_param_spec_gtype ("interface-type",
                         "Interface Type",
                         "The GType of the extension interface.",
-                        G_TYPE_INTERFACE,
+                        G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KEY] =
@@ -601,7 +602,8 @@ ide_extension_adapter_new (IdeObject   *parent,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
-  g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type), NULL);
+  g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type) ||
+                        G_TYPE_IS_ABSTRACT (interface_type), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
   self = g_object_new (IDE_TYPE_EXTENSION_ADAPTER,
