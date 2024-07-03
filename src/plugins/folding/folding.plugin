@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2024 Christian Hergert
+Depends=editorui;
+Description=Provides Code Folding Integration
+Embedded=_folding_register_types
+Module=folding
+Name=Code Folding
+X-Category=editing

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/folding">
+    <file>folding.plugin</file>
+  </gresource>
+  <gresource prefix="/plugins/folding/icons">
+    <file preprocess="xml-stripblanks">folding-collapse-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">folding-expand-symbolic.svg</file>
+  </gresource>
+</gresources>

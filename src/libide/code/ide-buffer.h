@@ -31,6 +31,7 @@
 #include "ide-code-action-provider.h"
 #include "ide-diagnostics.h"
 #include "ide-file-settings.h"
+#include "ide-fold-regions.h"
 #include "ide-formatter.h"
 #include "ide-location.h"
 #include "ide-range.h"
@@ -215,5 +216,13 @@ void                    ide_buffer_set_newline_type              (IdeBuffer     
                                                                   GtkSourceNewlineType     newline_type);
 IDE_AVAILABLE_IN_44
 gboolean                ide_buffer_has_encoding_error            (IdeBuffer               *self);
+IDE_AVAILABLE_IN_47
+IdeFoldRegions         *ide_buffer_get_fold_regions              (IdeBuffer               *self);
+IDE_AVAILABLE_IN_47
+void                    ide_buffer_set_fold_regions              (IdeBuffer               *self,
+                                                                  IdeFoldRegions          *fold_regions);
+IDE_AVAILABLE_IN_47
+void                    ide_buffer_toggle_fold_at_line           (IdeBuffer               *self,
+                                                                  guint                    line);
 
 G_END_DECLS

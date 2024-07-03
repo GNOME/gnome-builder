@@ -45,6 +45,8 @@ G_BEGIN_DECLS
 #include "ide-diagnostics.h"
 #include "ide-diagnostics-manager.h"
 #include "ide-file-settings.h"
+#include "ide-fold-provider.h"
+#include "ide-fold-regions.h"
 #include "ide-formatter-options.h"
 #include "ide-formatter.h"
 #include "ide-highlight-engine.h"

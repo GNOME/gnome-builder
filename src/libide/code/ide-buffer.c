@@ -40,6 +40,7 @@
 #include "ide-diagnostic.h"
 #include "ide-diagnostics.h"
 #include "ide-file-settings.h"
+#include "ide-fold-regions-private.h"
 #include "ide-formatter.h"
 #include "ide-formatter-options.h"
 #include "ide-gfile-private.h"
@@ -91,6 +92,7 @@ struct _IdeBuffer
   IdeHighlightEngine     *highlight_engine;
   GtkSourceFile          *source_file;
   GFile                  *readlink_file;
+  IdeFoldRegions         *fold_regions;
 
   GSignalGroup           *file_settings_signals;
 
@@ -101,6 +103,7 @@ struct _IdeBuffer
   guint                   settling_source;
   int                     hold;
   guint                   release_in_idle;
+  guint                   stash_fold_regions_source;
 
   GArray                 *commit_funcs;
   guint                   next_commit_handler;
@@ -267,6 +270,7 @@ static void     settle_async                       (IdeBuffer              *self
 static gboolean settle_finish                      (IdeBuffer              *self,
                                                     GAsyncResult           *result,
                                                     GError                **error);
+static gboolean ide_buffer_stash_fold_regions      (gpointer                user_data);
 
 static void
 load_state_free (LoadState *state)
@@ -546,6 +550,8 @@ ide_buffer_dispose (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  g_clear_handle_id (&self->stash_fold_regions_source, g_source_remove);
+
   if (self->source_file != NULL)
     {
       GFile *file = gtk_source_file_get_location (self->source_file);
@@ -576,6 +582,7 @@ ide_buffer_dispose (GObject *object)
 
   g_clear_object (&self->diagnostics);
   g_clear_object (&self->buffer_manager);
+  g_clear_object (&self->fold_regions);
 
   /* Remove ourselves from the object-tree if necessary */
   if ((box = ide_object_box_from_object (object)) &&
@@ -1154,6 +1161,7 @@ ide_buffer_init (IdeBuffer *self)
   self->highlight_diagnostics = TRUE;
   self->enable_addins = TRUE;
   self->newline_type = GTK_SOURCE_NEWLINE_TYPE_DEFAULT;
+  self->fold_regions = _ide_fold_regions_new ();
 
   self->file_settings_signals = g_signal_group_new (IDE_TYPE_FILE_SETTINGS);
 
@@ -2154,6 +2162,10 @@ ide_buffer_changed (GtkTextBuffer *buffer)
   self->change_count++;
   g_clear_pointer (&self->content, g_bytes_unref);
   ide_buffer_delay_settling (self);
+
+  if (self->stash_fold_regions_source == 0)
+    self->stash_fold_regions_source =
+      g_idle_add (ide_buffer_stash_fold_regions, self);
 }
 
 static void
@@ -2561,6 +2573,21 @@ ide_buffer_get_change_count (IdeBuffer *self)
 }
 
 static gboolean
+ide_buffer_stash_fold_regions (gpointer user_data)
+{
+  IdeBuffer *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->stash_fold_regions_source = 0;
+
+  _ide_fold_regions_stash (self->fold_regions, GTK_TEXT_BUFFER (self));
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
 ide_buffer_settled_cb (gpointer user_data)
 {
   IdeBuffer *self = user_data;
@@ -2569,6 +2596,7 @@ ide_buffer_settled_cb (gpointer user_data)
   g_assert (IDE_IS_BUFFER (self));
 
   self->settling_source = 0;
+
   g_signal_emit (self, signals [CHANGE_SETTLED], 0);
 
   if (self->addins != NULL && self->enable_addins)
@@ -4550,4 +4578,67 @@ ide_buffer_has_encoding_error (IdeBuffer *self)
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return self->has_encoding_error;
+}
+
+void
+ide_buffer_set_fold_regions (IdeBuffer      *self,
+                             IdeFoldRegions *fold_regions)
+{
+  g_autoptr(IdeFoldRegions) empty = NULL;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (!fold_regions || IDE_IS_FOLD_REGIONS (fold_regions));
+
+  if (fold_regions == NULL)
+    fold_regions = empty = _ide_fold_regions_new ();
+
+  _ide_fold_regions_merge (self->fold_regions, fold_regions, GTK_TEXT_BUFFER (self));
+}
+
+/**
+ * ide_buffer_get_fold_regions:
+ * @self: a #IdeBuffer
+ *
+ * Gets the fold regions for the buffer.
+ *
+ * Returns: (transfer none): an #IdeFoldRegions
+ *
+ * Since: 47
+ */
+IdeFoldRegions *
+ide_buffer_get_fold_regions (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->fold_regions;
+}
+
+void
+ide_buffer_toggle_fold_at_line (IdeBuffer *self,
+                                guint      line)
+{
+  const IdeFoldRegion *region;
+  gboolean invisible = FALSE;
+  gboolean invisible_set = FALSE;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (!(region = _ide_fold_regions_find_at_line (self->fold_regions, line)))
+    return;
+
+  g_assert (region != NULL);
+  g_assert (region->tag != NULL);
+  g_assert (GTK_IS_TEXT_TAG (region->tag));
+
+  g_object_get (region->tag,
+                "invisible", &invisible,
+                "invisible-set", &invisible_set,
+                NULL);
+
+  if (!invisible_set)
+    invisible = FALSE;
+
+  g_object_set (region->tag,
+                "invisible", !invisible,
+                NULL);
 }
