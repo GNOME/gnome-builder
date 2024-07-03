@@ -193,12 +193,14 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   GdkRGBA numbers_bg;
   GdkRGBA numbers_fg;
   GdkRGBA right_margin;
+  GdkRGBA current_bg;
   const char *name;
   GString *str;
   GdkRGBA color;
   gboolean is_dark;
   gboolean has_fg, has_bg;
   gboolean has_numbers_fg, has_numbers_bg;
+  gboolean has_current_bg;
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
@@ -224,8 +226,17 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   has_fg = get_foreground (style_scheme, "text", &text_fg);
   has_numbers_bg = get_background (style_scheme, "line-numbers", &numbers_bg);
   has_numbers_fg = get_foreground (style_scheme, "line-numbers", &numbers_fg);
+  has_current_bg = get_background (style_scheme, "current-line", &current_bg);
   get_background (style_scheme, "right-margin", &right_margin);
   right_margin.alpha = 1;
+
+  define_color (str, "scheme_text_bg", &text_bg);
+  define_color (str, "scheme_text_fg", &text_fg);
+
+  if (has_current_bg)
+    define_color (str, "scheme_current_line_bg", &current_bg);
+  else
+    define_color (str, "scheme_current_line_bg", &text_bg);
 
   if (has_numbers_bg && gdk_rgba_equal (&numbers_bg, &text_bg))
     has_numbers_bg = FALSE;
