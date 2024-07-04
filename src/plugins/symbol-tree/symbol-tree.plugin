@@ -9,3 +9,5 @@ Name=Symbol Tree
 X-Category=editing
 X-Workspace-Kind=primary;editor;
 X-Search-Provider-Priority=-100
+X-Fold-Provider-Languages=*
+X-Fold-Provider-Languages-Priority=0

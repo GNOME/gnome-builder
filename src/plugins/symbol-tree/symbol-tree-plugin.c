@@ -26,6 +26,7 @@
 #include <libide-search.h>
 #include <libide-sourceview.h>
 
+#include "gbp-symbol-fold-provider.h"
 #include "gbp-symbol-hover-provider.h"
 #include "gbp-symbol-search-provider.h"
 #include "gbp-symbol-workspace-addin.h"
@@ -33,6 +34,9 @@
 _IDE_EXTERN void
 _gbp_symbol_tree_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_FOLD_PROVIDER,
+                                              GBP_TYPE_SYMBOL_FOLD_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               GBP_TYPE_SYMBOL_HOVER_PROVIDER);

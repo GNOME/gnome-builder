@@ -1,4 +1,5 @@
 plugins_sources += files([
+  'gbp-symbol-fold-provider.c',
   'gbp-symbol-hover-provider.c',
   'gbp-symbol-list-model.c',
   'gbp-symbol-search-provider.c',
