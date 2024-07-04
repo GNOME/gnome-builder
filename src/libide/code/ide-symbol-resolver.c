@@ -402,3 +402,41 @@ ide_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver  *self,
 
   return IDE_SYMBOL_RESOLVER_GET_IFACE (self)->find_nearest_scope_finish (self, result, error);
 }
+
+static void
+ide_symbol_resolver_get_symbol_tree_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  g_autoptr(DexPromise) promise = user_data;
+  IdeSymbolTree *res;
+  GError *error = NULL;
+
+  res = ide_symbol_resolver_get_symbol_tree_finish (IDE_SYMBOL_RESOLVER (object), result, &error);
+
+  if (res != NULL)
+    dex_promise_resolve_object (promise, res);
+  else
+    dex_promise_reject (promise, error);
+}
+
+DexFuture *
+ide_symbol_resolver_get_symbol_tree (IdeSymbolResolver *self,
+                                     GFile             *file,
+                                     GBytes            *bytes)
+{
+  DexPromise *promise;
+
+  g_return_val_if_fail (IDE_IS_SYMBOL_RESOLVER (self), NULL);
+  g_return_val_if_fail (!file || G_IS_FILE (file), NULL);
+  g_return_val_if_fail (file || bytes, NULL);
+
+  promise = dex_promise_new_cancellable ();
+
+  ide_symbol_resolver_get_symbol_tree_async (self, file, bytes,
+                                             dex_promise_get_cancellable (promise),
+                                             ide_symbol_resolver_get_symbol_tree_cb,
+                                             dex_ref (promise));
+
+  return DEX_FUTURE (promise);
+}

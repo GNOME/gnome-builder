@@ -73,5 +73,7 @@ IDE_AVAILABLE_IN_ALL
 IdeLocation    *ide_symbol_node_get_location_finish (IdeSymbolNode        *self,
                                                      GAsyncResult         *result,
                                                      GError              **error);
+IDE_AVAILABLE_IN_47
+DexFuture      *ide_symbol_node_get_location        (IdeSymbolNode        *self);
 
 G_END_DECLS

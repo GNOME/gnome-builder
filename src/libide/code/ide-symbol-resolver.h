@@ -102,6 +102,10 @@ IDE_AVAILABLE_IN_ALL
 IdeSymbolTree *ide_symbol_resolver_get_symbol_tree_finish    (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
+IDE_AVAILABLE_IN_47
+DexFuture     *ide_symbol_resolver_get_symbol_tree           (IdeSymbolResolver    *self,
+                                                              GFile                *file,
+                                                              GBytes               *bytes);
 IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_find_references_async     (IdeSymbolResolver    *self,
                                                               IdeLocation          *location,

@@ -326,3 +326,21 @@ ide_symbol_node_get_location_finish (IdeSymbolNode  *self,
 
   return IDE_SYMBOL_NODE_GET_CLASS (self)->get_location_finish (self, result, error);
 }
+
+/**
+ * ide_symbol_node_get_location:
+ * @self: a #IdeSymbolNode
+ *
+ * Returns: (transfer full): a #DexFuture
+ */
+DexFuture *
+ide_symbol_node_get_location (IdeSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_SYMBOL_NODE (self), NULL);
+
+  return dex_async_pair_new (self,
+                             &DEX_ASYNC_PAIR_INFO_OBJECT (
+                                ide_symbol_node_get_location_async,
+                                ide_symbol_node_get_location_finish
+                             ));
+}
