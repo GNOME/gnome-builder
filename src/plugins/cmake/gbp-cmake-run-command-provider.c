@@ -57,7 +57,7 @@ parse_manifest_text (char  *contents,
   ide_line_reader_init (&reader, contents, length);
   while ((line = ide_line_reader_next (&reader, &line_length)))
     {
-      const char *slash_bin_slash;
+      const char *binary_path;
       const char *name;
 
       /* Allow us to treat this as a \0 terminated line. We can do
@@ -67,13 +67,14 @@ parse_manifest_text (char  *contents,
        */
       line[line_length] = 0;
 
-      if (!(slash_bin_slash = strstr (line, "/bin/")))
+      if ((binary_path = strstr (line, "/bin/")))
+        name = binary_path + strlen ("/bin/");
+      else if ((binary_path = strstr (line, "/libexec/")))
+        name = binary_path + strlen ("/libexec/");
+      else
         continue;
 
-      /* Get the remaining text after /bin/ */
-      name = slash_bin_slash + strlen ("/bin/");
-
-      /* Just the /bin/ directory, skip it */
+      /* Just a directory, skip it */
       if (name[0] == 0)
         continue;
 
