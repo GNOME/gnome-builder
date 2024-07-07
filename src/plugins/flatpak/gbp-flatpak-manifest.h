@@ -46,6 +46,7 @@ const char           *gbp_flatpak_manifest_get_base                  (GbpFlatpak
 const char           *gbp_flatpak_manifest_get_base_version          (GbpFlatpakManifest   *self);
 const gchar          *gbp_flatpak_manifest_get_platform              (GbpFlatpakManifest   *self);
 const char           *gbp_flatpak_manifest_get_branch                (GbpFlatpakManifest   *self);
+const char           *gbp_flatpak_manifest_get_primary_build_system  (GbpFlatpakManifest   *self);
 void                  gbp_flatpak_manifest_save_async                (GbpFlatpakManifest   *self,
                                                                       GCancellable         *cancellable,
                                                                       GAsyncReadyCallback   callback,

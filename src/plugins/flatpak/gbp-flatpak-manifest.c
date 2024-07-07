@@ -1531,3 +1531,18 @@ gbp_flatpak_manifest_apply_primary_env (GbpFlatpakManifest *self,
     }
 }
 
+const char *
+gbp_flatpak_manifest_get_primary_build_system (GbpFlatpakManifest *self)
+{
+  JsonNode *node;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  if (self->primary == NULL)
+    return NULL;
+
+  if ((node = json_object_get_member (self->primary, "buildsystem")))
+    return json_node_get_string (node);
+
+  return NULL;
+}
