@@ -3342,7 +3342,7 @@ ide_pipeline_get_message (IdePipeline *self)
   g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
   /* Use any message the Pty has given us while building. */
-  if (self->busy && self->message != NULL)
+  if (self->busy && !ide_str_empty0 (self->message))
     return g_strdup (self->message);
 
   if (self->in_clean)
