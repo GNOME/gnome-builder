@@ -3424,6 +3424,8 @@ ide_pipeline_get_message (IdePipeline *self)
       g_assert_not_reached ();
     }
 
+  g_assert (ret != NULL);
+
   return g_strdup (ret);
 }
 
