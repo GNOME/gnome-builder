@@ -26,13 +26,14 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_INSTALL_DIALOG (gbp_flatpak_install_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GBP, FLATPAK_INSTALL_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GBP, FLATPAK_INSTALL_DIALOG, AdwDialog)
 
-GbpFlatpakInstallDialog  *gbp_flatpak_install_dialog_new              (GtkWindow                *transient_for);
+GbpFlatpakInstallDialog  *gbp_flatpak_install_dialog_new              (void);
 gboolean                  gbp_flatpak_install_dialog_is_empty         (GbpFlatpakInstallDialog  *self);
 void                      gbp_flatpak_install_dialog_add_runtime      (GbpFlatpakInstallDialog  *self,
                                                                        const gchar              *runtime_id);
 void                      gbp_flatpak_install_dialog_run_async        (GbpFlatpakInstallDialog  *self,
+                                                                       GtkWidget                *parent,
                                                                        GCancellable             *cancellable,
                                                                        GAsyncReadyCallback       callback,
                                                                        gpointer                  user_data);

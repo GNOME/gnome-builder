@@ -57,7 +57,7 @@ ipc_flatpak_transfer_impl_destroy (IpcFlatpakTransferImpl *self)
   g_assert (IPC_IS_FLATPAK_TRANSFER_IMPL (self));
 
   if ((dialog = g_steal_pointer (&self->dialog)))
-    gtk_window_destroy (GTK_WINDOW (dialog));
+    adw_dialog_force_close (ADW_DIALOG (dialog));
 
   IDE_EXIT;
 }
@@ -106,14 +106,13 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (refs != NULL);
 
-  dialog = gbp_flatpak_install_dialog_new (self->toplevel);
+  dialog = gbp_flatpak_install_dialog_new ();
 
   for (guint i = 0; refs[i]; i++)
     gbp_flatpak_install_dialog_add_runtime (dialog, refs[i]);
 
   if (gbp_flatpak_install_dialog_is_empty (dialog))
     {
-      gtk_window_destroy (GTK_WINDOW (dialog));
       ipc_flatpak_transfer_complete_confirm (transfer, g_steal_pointer (&invocation));
       return TRUE;
     }
@@ -125,6 +124,7 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
   state->invocation = g_object_ref (invocation);
 
   gbp_flatpak_install_dialog_run_async (dialog,
+                                        GTK_WIDGET (self->toplevel),
                                         NULL,
                                         gbp_flatpak_runtime_provider_handle_confirm_cb,
                                         state);
