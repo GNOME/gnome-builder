@@ -190,7 +190,7 @@ ide_application_load_typelibs (IdeApplication *self)
 #endif
                                           "Ide", PACKAGE_ABI_S,
                                           NULL))
-    g_critical ("Cannot enable Python 3 plugins: %s", error->message);
+    g_critical ("Cannot enable GJS plugins: %s", error->message);
   else
     self->loaded_typelibs = TRUE;
 
