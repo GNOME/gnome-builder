@@ -170,7 +170,7 @@ state_stack_pop (MatchingState *state)
   item = &g_array_index (state->stack, StateStackItem, len - 1);
   g_clear_pointer (&state->children, g_ptr_array_unref);
 
-  state->children = item->children;
+  state->children = g_steal_pointer (&item->children);
   state->candidate_node = item->candidate_node;
 
   g_array_remove_index (state->stack, len - 1);
