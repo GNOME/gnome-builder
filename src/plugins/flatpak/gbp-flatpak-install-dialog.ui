@@ -11,12 +11,34 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <template class="GbpFlatpakInstallDialog" parent="GtkDialog">
-    <property name="modal">True</property>
-    <child internal-child="content_area">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
+  <template class="GbpFlatpakInstallDialog" parent="AdwDialog">
+    <property name="title" translatable="yes">Install or Update SDK?</property>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="cancel_clicked_cb" swapped="true" object="GbpFlatpakInstallDialog"/>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Install</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="install_clicked_cb" swapped="true" object="GbpFlatpakInstallDialog"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <property name="content">
           <object class="GtkBox" id="content">
             <property name="visible">True</property>
             <property name="margin_start">12</property>
@@ -92,8 +114,8 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

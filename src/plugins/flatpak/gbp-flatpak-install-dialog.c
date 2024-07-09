@@ -32,48 +32,36 @@
 
 struct _GbpFlatpakInstallDialog
 {
-  GtkDialog     parent_instance;
+  AdwDialog     parent_instance;
   GtkListStore *liststore1;
   IdeTask      *close_task;
-  gint          response_id;
 };
 
-G_DEFINE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_FINAL_TYPE (GbpFlatpakInstallDialog, gbp_flatpak_install_dialog, ADW_TYPE_DIALOG)
 
-GbpFlatpakInstallDialog *
-gbp_flatpak_install_dialog_new (GtkWindow *transient_for)
+static void
+cancel_clicked_cb (GbpFlatpakInstallDialog *self,
+                   GtkButton               *button)
 {
-  g_return_val_if_fail (GTK_IS_WINDOW (transient_for), NULL);
-
-  return g_object_new (GBP_TYPE_FLATPAK_INSTALL_DIALOG,
-                       "use-header-bar", TRUE,
-                       "transient-for", transient_for,
-                       "modal", TRUE,
-                       NULL);
+  ide_task_return_new_error (self->close_task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_CANCELLED,
+                             "User cancelled the request");
+  adw_dialog_close (ADW_DIALOG (self));
 }
 
 static void
-gbp_flatpak_install_dialog_response (GtkDialog *dialog,
-                                     gint       response_id)
+install_clicked_cb (GbpFlatpakInstallDialog *self,
+                    GtkButton               *button)
 {
-  GbpFlatpakInstallDialog *self = (GbpFlatpakInstallDialog *)dialog;
+  ide_task_return_boolean (self->close_task, TRUE);
+  adw_dialog_close (ADW_DIALOG (self));
+}
 
-  g_assert (GBP_IS_FLATPAK_INSTALL_DIALOG (self));
-
-  self->response_id = response_id;
-
-  if (self->close_task && response_id == GTK_RESPONSE_OK)
-    ide_task_return_boolean (self->close_task, TRUE);
-  else
-    ide_task_return_new_error (self->close_task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_CANCELLED,
-                               "User cancelled the request");
-
-  if (GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response)
-    GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response (dialog, response_id);
-
-  gtk_window_destroy (GTK_WINDOW (dialog));
+GbpFlatpakInstallDialog *
+gbp_flatpak_install_dialog_new (void)
+{
+  return g_object_new (GBP_TYPE_FLATPAK_INSTALL_DIALOG, NULL);
 }
 
 static void
@@ -90,41 +78,25 @@ static void
 gbp_flatpak_install_dialog_class_init (GbpFlatpakInstallDialogClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  dialog_class->response = gbp_flatpak_install_dialog_response;
 
   object_class->finalize = gbp_flatpak_install_dialog_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/flatpak/gbp-flatpak-install-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpFlatpakInstallDialog, liststore1);
+  gtk_widget_class_bind_template_callback (widget_class, cancel_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, install_clicked_cb);
 }
 
 static void
 gbp_flatpak_install_dialog_init (GbpFlatpakInstallDialog *self)
 {
-  GtkWidget *button;
-
-  self->response_id = GTK_RESPONSE_CANCEL;
-
-  gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_window_set_title (GTK_WINDOW (self), _("Install or Update SDK?"));
-  gtk_window_set_application (GTK_WINDOW (self), GTK_APPLICATION (IDE_APPLICATION_DEFAULT));
-
-  gtk_dialog_add_buttons (GTK_DIALOG (self),
-                          _("_Cancel"), GTK_RESPONSE_CANCEL,
-                          _("_Install"), GTK_RESPONSE_OK,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
-
-  button = gtk_dialog_get_widget_for_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
-  gtk_widget_add_css_class (button, "suggested-action");
+ gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 void
 gbp_flatpak_install_dialog_run_async (GbpFlatpakInstallDialog *self,
+                                      GtkWidget               *parent,
                                       GCancellable            *cancellable,
                                       GAsyncReadyCallback      callback,
                                       gpointer                 user_data)
@@ -149,11 +121,11 @@ gbp_flatpak_install_dialog_run_async (GbpFlatpakInstallDialog *self,
   if (cancellable != NULL)
     g_signal_connect_object (cancellable,
                              "cancelled",
-                             G_CALLBACK (gtk_window_close),
+                             G_CALLBACK (adw_dialog_close),
                              self,
                              G_CONNECT_SWAPPED);
 
-  ide_gtk_window_present (GTK_WINDOW (self));
+  adw_dialog_present (ADW_DIALOG (self), parent);
 }
 
 gboolean
