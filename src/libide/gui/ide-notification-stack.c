@@ -116,6 +116,7 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
                                          guint                 added,
                                          GListModel           *model)
 {
+  g_autoptr(GtkSelectionModel) pages = NULL;
   GtkWidget *urgent = NULL;
 
   g_assert (IDE_IS_NOTIFICATION_STACK (self));
@@ -149,6 +150,17 @@ ide_notification_stack_items_changed_cb (IdeNotificationStack *self,
     {
       gtk_stack_set_visible_child (self->stack, urgent);
       g_clear_handle_id (&self->carousel_source, g_source_remove);
+    }
+
+  if (gtk_stack_get_visible_child (self->stack) == NULL &&
+      (pages = gtk_stack_get_pages (self->stack)) &&
+      g_list_model_get_n_items (G_LIST_MODEL (pages)) > 0)
+    {
+      g_autoptr(GtkStackPage) page = g_list_model_get_item (G_LIST_MODEL (pages), 0);
+
+      gtk_stack_set_visible_child (self->stack,
+                                   gtk_stack_page_get_child (page));
+
     }
 
   if (self->carousel_source == 0 && g_list_model_get_n_items (model))
