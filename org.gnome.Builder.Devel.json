@@ -1,7 +1,7 @@
 {
     "id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "master",
+    "runtime-version" : "46",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.llvm16"
@@ -705,9 +705,9 @@
             "config-opts" : [
                 "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
-                "-Ddevelopment=true",
+                "-Ddevelopment=false",
                 "-Dtcmalloc=true",
-                "-Dtracing=true",
+                "-Dtracing=false",
                 "-Dhelp=true",
                 "-Dchannel=flatpak-nightly",
                 "-Dnetwork_tests=false",
@@ -733,7 +733,7 @@
                     "disable-shallow-clone" : true,
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git",
-                    "branch" : "main"
+                    "branch" : "gnome-builder-46"
                 }
             ],
             "post-install" : [
