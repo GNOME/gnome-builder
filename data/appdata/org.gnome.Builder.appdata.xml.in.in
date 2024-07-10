@@ -97,6 +97,11 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="46.3" date="2024-07-10">
+      <description>
+        <p>This release contains bug fixes to numerous plugins.</p>
+      </description>
+    </release>
     <release version="46.2" date="2024-05-09"/>
     <release version="46.1" date="2024-04-10"/>
   </releases>

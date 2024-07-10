@@ -1,3 +1,15 @@
+# GNOME Builder 46.3
+
+ * Ignore codespell plugin if spellchecking is disabled
+ * Clang-format plugin has had numerous robustness fixes
+ * Ensure focus returns to editor after formatting a document
+ * Swift-format plugin will use the build pipeline to locate
+   SDK extension with tooling.
+ * Terminal now properly checks for ctrl mask to ctrl+click
+   opening links
+ * Xml-pack plugin has an ownership transfer issue fixed
+ * Fix re-use of grep panel after closing
+
 # GNOME Builder 46.2
 
  * Avoid spawning terminals in /run/ which helps when the project
