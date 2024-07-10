@@ -34,8 +34,9 @@
 
 struct _GbpGrepWorkspaceAddin
 {
-  GObject  parent_instance;
-  IdePane *panel;
+  GObject       parent_instance;
+  IdeWorkspace *workspace;
+  IdePane      *panel;
 };
 
 static void
@@ -44,8 +45,11 @@ panel_show_action (GbpGrepWorkspaceAddin *self,
 {
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
 
-  panel_widget_raise (PANEL_WIDGET (self->panel));
-  gtk_widget_grab_focus (GTK_WIDGET (self->panel));
+  if (self->panel != NULL)
+    {
+      panel_widget_raise (PANEL_WIDGET (self->panel));
+      gtk_widget_grab_focus (GTK_WIDGET (self->panel));
+    }
 }
 
 IDE_DEFINE_ACTION_GROUP (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, {
@@ -57,16 +61,11 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
                                IdeWorkspace      *workspace)
 {
   GbpGrepWorkspaceAddin *self = (GbpGrepWorkspaceAddin *)addin;
-  g_autoptr(PanelPosition) position = NULL;
 
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  self->panel = g_object_new (GBP_TYPE_GREP_PANEL, NULL);
-
-  position = panel_position_new ();
-  panel_position_set_area (position, PANEL_AREA_BOTTOM);
-  ide_workspace_add_pane (workspace, self->panel, position);
+  self->workspace = workspace;
 }
 
 static void
@@ -79,6 +78,8 @@ gbp_grep_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
 
   g_clear_pointer (&self->panel, ide_pane_destroy);
+
+  self->workspace = NULL;
 }
 
 static void
@@ -105,7 +106,21 @@ gbp_grep_workspace_addin_init (GbpGrepWorkspaceAddin *self)
 GbpGrepPanel *
 gbp_grep_workspace_addin_get_panel (GbpGrepWorkspaceAddin *self)
 {
+  g_autoptr(PanelPosition) position = NULL;
+
   g_return_val_if_fail (GBP_IS_GREP_WORKSPACE_ADDIN (self), NULL);
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self->workspace), NULL);
+
+  if (self->panel == NULL)
+    {
+      self->panel = g_object_new (GBP_TYPE_GREP_PANEL, NULL);
+      ide_pane_observe (self->panel, &self->panel);
+
+      position = panel_position_new ();
+      panel_position_set_area (position, PANEL_AREA_BOTTOM);
+      ide_workspace_add_pane (self->workspace, self->panel, position);
+    }
 
   return GBP_GREP_PANEL (self->panel);
 }
+
