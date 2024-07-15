@@ -846,6 +846,13 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
 
           gtk_widget_set_visible (GTK_WIDGET (self->recursive_button), is_dir);
         }
+      else
+        {
+          gtk_button_set_label (self->find_button, _("Find in Project"));
+          gtk_button_set_label (self->replace_button, _("Replace in Project"));
+
+          gtk_widget_set_visible (GTK_WIDGET (self->recursive_button), TRUE);
+        }
 
       gtk_check_button_set_active (GTK_CHECK_BUTTON (self->regex_button),
                                    gbp_grep_model_get_use_regex (model));
