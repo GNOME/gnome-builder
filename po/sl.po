@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-07-01 20:15+0000\n"
-"PO-Revision-Date: 2024-07-02 12:24+0200\n"
+"POT-Creation-Date: 2024-07-15 22:41+0000\n"
+"PO-Revision-Date: 2024-07-16 23:01+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -780,7 +780,7 @@ msgstr "Projekti"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 #: src/plugins/testui/gbp-testui-output-panel.c:105
@@ -1230,12 +1230,12 @@ msgid "Preparing…"
 msgstr "Poteka priprava …"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3772
+#: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
 msgstr "Poteka odstranjevanje %s"
 
-#: src/libide/foundry/ide-pipeline.c:3831
+#: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
 msgstr "Odstranjevanje map gradnje …"
 
@@ -1512,7 +1512,7 @@ msgstr[2] "Pred približno %u letoma"
 msgstr[3] "Pred približno %u leti"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "_Namesti"
 
@@ -2347,7 +2347,7 @@ msgid "Missing"
 msgstr "Manjkajoče"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
 msgid "Branch"
 msgstr "Veja"
 
@@ -4491,11 +4491,11 @@ msgstr "Odstranitev vnosa flatpak je spodletela: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Povezava z omrežjem ni na voljo, prejemanje bo ustavljeno"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
 msgstr "Ali želite namestiti oziroma posodobiti SDK?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
@@ -4503,7 +4503,7 @@ msgstr ""
 "Program zahteva namestitev razvojnega programskega orodja za izgradnjo "
 "projekta."
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
@@ -4511,7 +4511,7 @@ msgstr ""
 msgid "Name"
 msgstr "Ime"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 msgid "Architecture"
 msgstr "Okolje"
@@ -4776,6 +4776,14 @@ msgstr "_Najdi v %s"
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Zamenjaj v %sz"
+
+#: src/plugins/grep/gbp-grep-panel.c:851
+msgid "Find in Project"
+msgstr "Najdi v projektu"
+
+#: src/plugins/grep/gbp-grep-panel.c:852
+msgid "Replace in Project"
+msgstr "Zamenjaj v projektu"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
