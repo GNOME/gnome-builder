@@ -18,6 +18,7 @@
             <property name="top-edge">
               <object class="IdeHeaderBar" id="header_bar">
                 <property name="menu-id">ide-editor-workspace-menu</property>
+                <property name="show-start-title-buttons" bind-source="dock" bind-property="reveal-start" bind-flags="sync-create|invert-boolean"/>
                 <binding name="show-end-title-buttons">
                   <closure function="invert_boolean" type="gboolean">
                     <lookup name="reveal-end">dock</lookup>
