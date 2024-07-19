@@ -504,6 +504,9 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
   g_assert (state != NULL);
   g_assert (IDE_IS_XML_PARSER (state->self));
 
+  if (!data)
+    return;
+
   if (NULL != (schema_url = get_schema_url ((const gchar *)data)))
     {
       if (NULL != (extension = strrchr (schema_url, '.')))
