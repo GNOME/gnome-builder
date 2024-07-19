@@ -52,6 +52,9 @@ get_schema_url (const gchar *data)
   gchar *begin;
   gchar *end;
 
+  if (!data)
+    return NULL;
+
   if (NULL != (begin = strstr (data, "href=\"")))
     {
       end = begin += HREF_LEN;
