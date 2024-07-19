@@ -143,6 +143,7 @@ create_row_cb (gpointer item,
 
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "activatable", TRUE,
+                      "use-markup", FALSE,
                       NULL);
   g_object_bind_property (command, "display-name", row, "title",
                           G_BINDING_SYNC_CREATE);
