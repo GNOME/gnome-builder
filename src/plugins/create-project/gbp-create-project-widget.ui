@@ -115,7 +115,7 @@
                 <child>
                   <object class="AdwSwitchRow">
                     <property name="title" translatable="yes">Version Control</property>
-                    <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create" />
+                    <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create|bidirectional" />
                   </object>
                 </child>
                 <child>
