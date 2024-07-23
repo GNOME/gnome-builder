@@ -120,6 +120,123 @@ gbp_git_vcs_is_ignored (IdeVcs  *vcs,
   return !!(ret & FILE_IGNORED);
 }
 
+static void
+is_ignored_cb (GObject      *object,
+               GAsyncResult *result,
+               gpointer      user_data)
+{
+  g_autoptr(DexPromise) promise = user_data;
+  GError *error = NULL;
+  gboolean ignored = FALSE;
+
+  if (!ipc_git_repository_call_path_is_ignored_finish (IPC_GIT_REPOSITORY (object), &ignored, result, &error))
+    return dex_promise_reject (promise, error);
+  else
+    return dex_promise_resolve_boolean (promise, ignored);
+}
+
+static DexFuture *
+is_ignored (IpcGitRepository *repository,
+            const char       *relative_path)
+{
+  DexPromise *promise = dex_promise_new ();
+  ipc_git_repository_call_path_is_ignored (repository,
+                                           relative_path,
+                                           NULL,
+                                           is_ignored_cb,
+                                           dex_ref (promise));
+  return DEX_FUTURE (promise);
+}
+
+typedef struct
+{
+  GbpGitVcs *self;
+  GFile *file;
+} Query;
+
+static void
+query_free (Query *state)
+{
+  g_clear_object (&state->self);
+  g_clear_object (&state->file);
+  g_free (state);
+}
+
+static DexFuture *
+cache_result (DexFuture *completed,
+              gpointer   user_data)
+{
+  Query *state = user_data;
+  const GValue *value;
+  gboolean ret = FILE_CACHED;
+  GError *error = NULL;
+
+  if ((value = dex_future_get_value (completed, &error)))
+    {
+      if (g_value_get_boolean (value))
+        ret |= FILE_IGNORED;
+    }
+
+  g_rw_lock_writer_lock (&state->self->ignored_rw_lock);
+  g_hash_table_insert (state->self->ignored_cache,
+                       g_file_dup (state->file),
+                       GUINT_TO_POINTER (ret));
+  g_rw_lock_writer_unlock (&state->self->ignored_rw_lock);
+
+  return dex_future_new_for_boolean (!!(ret & FILE_IGNORED));
+}
+
+static DexFuture *
+gbp_git_vcs_query_ignored (IdeVcs  *vcs,
+                           GFile   *file)
+{
+  GbpGitVcs *self = (GbpGitVcs *)vcs;
+  g_autofree char *relative_path = NULL;
+  DexFuture *future = NULL;
+  Query *state;
+  guint ret = 0;
+
+  g_assert (GBP_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (file));
+
+  g_rw_lock_reader_lock (&self->ignored_rw_lock);
+  ret = GPOINTER_TO_UINT (g_hash_table_lookup (self->ignored_cache, file));
+  g_rw_lock_reader_unlock (&self->ignored_rw_lock);
+
+  if (ret != 0)
+    return dex_future_new_for_boolean (!!(ret & FILE_IGNORED));
+
+  ret = FILE_CACHED;
+
+  if (g_file_equal (file, self->workdir) || !g_file_has_prefix (file, self->workdir))
+    return dex_future_new_for_boolean (!!(ret & FILE_IGNORED));
+
+  /*
+   * This may be called from threads.
+   *
+   * However, we do not change our GbpGitVcs.repository field after the
+   * creation of the GbpGitVcs. Also, the GDBusProxy (IpcGitRepository)
+   * is thread-safe in terms of calling operations on the remote object
+   * from multiple threads.
+   *
+   * Also, GbpGitVcs.workdir is not changed after creation, so we can
+   * use that to for determining the relative path.
+   */
+  relative_path = g_file_get_relative_path (self->workdir, file);
+
+  state = g_new0 (Query, 1);
+  state->self = g_object_ref (self);
+  state->file = g_object_ref (file);
+
+  future = is_ignored (self->repository, relative_path);
+  future = dex_future_then (future,
+                            cache_result,
+                            state,
+                            (GDestroyNotify)query_free);
+
+  return future;
+}
+
 static IdeVcsConfig *
 gbp_git_vcs_get_config (IdeVcs *vcs)
 {
