@@ -352,9 +352,6 @@ result_info_merge (gpointer user_data)
           removed++;
         }
 
-      if (removed > 0)
-        iter = g_sequence_iter_prev (iter);
-
       if (added > 0)
         g_sequence_move_range (iter,
                                g_sequence_get_begin_iter (r->items),
