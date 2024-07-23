@@ -89,6 +89,8 @@ struct _IdeVcsInterface
   gboolean                (*push_branch_finish)        (IdeVcs               *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
+  DexFuture              *(*query_ignored)             (IdeVcs               *self,
+                                                        GFile                *file);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -165,5 +167,8 @@ gboolean      ide_vcs_push_branch_finish   (IdeVcs               *self,
                                             GError              **error);
 IDE_AVAILABLE_IN_ALL
 char         *ide_vcs_get_display_name     (IdeVcs               *self);
+IDE_AVAILABLE_IN_47
+DexFuture    *ide_vcs_query_ignored        (IdeVcs               *self,
+                                            GFile                *file);
 
 G_END_DECLS

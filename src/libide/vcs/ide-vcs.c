@@ -257,6 +257,46 @@ ide_vcs_is_ignored (IdeVcs  *self,
 }
 
 /**
+ * ide_vcs_query_ignored:
+ * @self: a #IdeVcs
+ *
+ * Returns: (transfer full): a #DexFuture to a gboolean
+ *
+ * Since: 47
+ */
+DexFuture *
+ide_vcs_query_ignored (IdeVcs *self,
+                       GFile  *file)
+{
+  g_return_val_if_fail (!self || IDE_IS_VCS (self), NULL);
+  g_return_val_if_fail (!file || G_IS_FILE (file), NULL);
+
+  if (file == NULL)
+    return dex_future_new_for_boolean (TRUE);
+
+  if (ide_g_file_is_ignored (file))
+    return dex_future_new_for_boolean (TRUE);
+
+  if (self == NULL)
+    return dex_future_new_for_boolean (FALSE);
+
+  if (IDE_VCS_GET_IFACE (self)->query_ignored == NULL)
+    {
+      GError *error = NULL;
+      gboolean ret;
+
+      ret = ide_vcs_is_ignored (self, file, NULL);
+
+      if (error != NULL)
+        return dex_future_new_for_error (g_steal_pointer (&error));
+      else
+        return dex_future_new_for_boolean (ret);
+    }
+
+  return IDE_VCS_GET_IFACE (self)->query_ignored (self, file);
+}
+
+/**
  * ide_vcs_path_is_ignored:
  * @self: An #IdeVcs
  * @path: (nullable): The path to check
