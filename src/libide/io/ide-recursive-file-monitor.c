@@ -251,7 +251,8 @@ ide_recursive_file_monitor_collect_finish (IdeRecursiveFileMonitor  *self,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-static gboolean
+G_GNUC_WARN_UNUSED_RESULT
+static DexFuture *
 ide_recursive_file_monitor_ignored (IdeRecursiveFileMonitor *self,
                                     GFile                   *file)
 {
@@ -262,27 +263,49 @@ ide_recursive_file_monitor_ignored (IdeRecursiveFileMonitor *self,
   if (self->ignore_func != NULL)
     return self->ignore_func (file, self->ignore_func_data);
 
-  return FALSE;
+  return dex_future_new_for_boolean (FALSE);
 }
 
-static void
-ide_recursive_file_monitor_changed (IdeRecursiveFileMonitor *self,
-                                    GFile                   *file,
-                                    GFile                   *other_file,
-                                    GFileMonitorEvent        event,
-                                    GFileMonitor            *monitor)
+typedef struct
 {
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (!other_file || G_IS_FILE (file));
-  g_assert (G_IS_FILE_MONITOR (monitor));
+  IdeRecursiveFileMonitor *self;
+  GFile                   *file;
+  GFile                   *other_file;
+  GFileMonitorEvent        event;
+} Changed;
 
-  if (g_cancellable_is_cancelled (self->cancellable))
-    return;
+static void
+change_free (Changed *state)
+{
+  g_clear_object (&state->self);
+  g_clear_object (&state->file);
+  g_clear_object (&state->other_file);
+  g_free (state);
+}
 
-  if (ide_recursive_file_monitor_ignored (self, file))
-    return;
+static DexFuture *
+change_process (DexFuture *completed,
+                gpointer   user_data)
+{
+  Changed *state = user_data;
+  IdeRecursiveFileMonitor *self;
+  GFileMonitorEvent event;
+  GFile *file;
+  GFile *other_file;
+
+  g_assert (DEX_IS_FUTURE (completed));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (state->self));
+  g_assert (G_IS_FILE (state->file));
+  g_assert (!state->other_file || G_IS_FILE (state->other_file));
+
+  if (!dex_await_boolean (dex_ref (completed), NULL))
+    return NULL;
+
+  self = state->self;
+  event = state->event;
+  file = state->file;
+  other_file = state->other_file;
 
   if (event == G_FILE_MONITOR_EVENT_DELETED)
     {
@@ -312,8 +335,43 @@ ide_recursive_file_monitor_changed (IdeRecursiveFileMonitor *self,
     }
 
   g_signal_emit (self, signals [CHANGED], 0, file, other_file, event);
+
+  return NULL;
 }
 
+static void
+ide_recursive_file_monitor_changed (IdeRecursiveFileMonitor *self,
+                                    GFile                   *file,
+                                    GFile                   *other_file,
+                                    GFileMonitorEvent        event,
+                                    GFileMonitor            *monitor)
+{
+  DexFuture *future;
+  Changed *state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (file));
+  g_assert (G_IS_FILE_MONITOR (monitor));
+
+  if (g_cancellable_is_cancelled (self->cancellable))
+    return;
+
+  state = g_new0 (Changed, 1);
+  state->event = event;
+  g_set_object (&state->self, self);
+  g_set_object (&state->file, file);
+  g_set_object (&state->other_file, other_file);
+
+  future = ide_recursive_file_monitor_ignored (self, file);
+  future = dex_future_then (future,
+                            change_process,
+                            state,
+                            (GDestroyNotify)change_free);
+
+  dex_future_disown (future);
+}
 
 static void
 ide_recursive_file_monitor_track (IdeRecursiveFileMonitor *self,
@@ -340,6 +398,127 @@ ide_recursive_file_monitor_track (IdeRecursiveFileMonitor *self,
                            G_CONNECT_SWAPPED);
 }
 
+typedef struct
+{
+  IdeRecursiveFileMonitor *self;
+  GPtrArray *dirs;
+} Filter;
+
+static void
+filter_free (Filter *filter)
+{
+  g_clear_object (&filter->self);
+  g_clear_pointer (&filter->dirs, g_ptr_array_unref);
+  g_free (filter);
+}
+
+static DexFuture *
+filter_ignored_fiber (gpointer user_data)
+{
+  Filter *filter = user_data;
+  g_autoptr(GPtrArray) futures = NULL;
+  guint pos = 0;
+
+#define FILTER_CHUNK_SIZE 1000
+#define MONITOR_CHUNK_SIZE 100
+
+  g_assert (filter != NULL);
+  g_assert (IDE_IS_RECURSIVE_FILE_MONITOR (filter->self));
+  g_assert (filter->dirs != NULL);
+
+  futures = g_ptr_array_new_with_free_func (dex_unref);
+
+  for (guint i = 0; i < filter->dirs->len; i++)
+    {
+      GFile *dir = g_ptr_array_index (filter->dirs, i);
+
+      g_ptr_array_add (futures,
+                       ide_recursive_file_monitor_ignored (filter->self, dir));
+
+      /* If our number of futures is == FILTER_CHUNK_SIZE, then we want to take
+       * a break to avoid stalling the main loop and wait for those to finish.
+       */
+      if (i - pos == FILTER_CHUNK_SIZE)
+        {
+          dex_await (dex_future_allv ((DexFuture **)&futures->pdata[pos], FILTER_CHUNK_SIZE), NULL);
+          pos += FILTER_CHUNK_SIZE;
+        }
+    }
+
+  /* Now await on the remaining directories */
+  if (pos != futures->len)
+    dex_await (dex_future_allv ((DexFuture **)&futures->pdata[pos], futures->len - pos), NULL);
+
+  pos = 0;
+  for (guint i = 0; i < filter->dirs->len; i++)
+    {
+      GFile *dir = g_ptr_array_index (filter->dirs, i);
+      DexFuture *future = g_ptr_array_index (futures, i);
+      g_autoptr(GFileMonitor) monitor = NULL;
+      g_autoptr(GError) error = NULL;
+      const GValue *value;
+
+      if (!(value = dex_future_get_value (future, NULL)))
+        continue;
+
+      if (g_value_get_boolean (value))
+        continue;
+
+      monitor = g_file_monitor_directory (dir,
+                                          MONITOR_FLAGS,
+                                          filter->self->cancellable,
+                                          &error);
+
+      if (monitor == NULL)
+        {
+          g_warning ("Failed to monitor directory: %s", error->message);
+          continue;
+        }
+
+      ide_recursive_file_monitor_track (filter->self, dir, monitor);
+
+      /* If we've created 100 monitors, then wait for the next main loop
+       * iteration before we steal too much main loop time.
+       */
+      pos++;
+      if (pos % MONITOR_CHUNK_SIZE == 0)
+        dex_await (dex_timeout_new_msec (0), NULL);
+    }
+
+  return dex_future_new_for_boolean (TRUE);
+}
+
+static DexFuture *
+filter_ignored (IdeRecursiveFileMonitor *self,
+                GPtrArray               *dir)
+{
+  Filter *filter;
+
+  filter = g_new0 (Filter, 1);
+  filter->self = g_object_ref (self);
+  filter->dirs = g_ptr_array_ref (dir);
+
+  return dex_scheduler_spawn (NULL, 0,
+                              filter_ignored_fiber,
+                              filter,
+                              (GDestroyNotify)filter_free);
+}
+
+static DexFuture *
+complete_start_task (DexFuture *future,
+                     gpointer   user_data)
+{
+  GTask *task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  if (!dex_future_get_value (future, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  return NULL;
+}
+
 static void
 ide_recursive_file_monitor_start_cb (GObject      *object,
                                      GAsyncResult *result,
@@ -347,6 +526,7 @@ ide_recursive_file_monitor_start_cb (GObject      *object,
 {
   IdeRecursiveFileMonitor *self = (IdeRecursiveFileMonitor *)object;
   g_autoptr(GPtrArray) dirs = NULL;
+  g_autoptr(GPtrArray) futures = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
 
@@ -355,54 +535,14 @@ ide_recursive_file_monitor_start_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  dirs = ide_recursive_file_monitor_collect_finish (self, result, &error);
-
-  if (dirs == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  for (guint i = 0; i < dirs->len; i++)
-    {
-      GFile *dir = g_ptr_array_index (dirs, i);
-      g_autoptr(GFileMonitor) monitor = NULL;
-
-      g_assert (G_IS_FILE (dir));
-
-      if (ide_recursive_file_monitor_ignored (self, dir))
-        {
-          /*
-           * Skip ahead to the next directory that does not have this directory
-           * as a prefix. We can do this because we know the descendants are
-           * guaranteed to immediately follow this directory.
-           */
-
-          for (guint j = i + 1; j < dirs->len; j++, i++)
-            {
-              GFile *next = g_ptr_array_index (dirs, j);
-
-              if (!g_file_has_prefix (next, dir))
-                break;
-            }
-
-          continue;
-        }
-
-      monitor = g_file_monitor_directory (dir, MONITOR_FLAGS, self->cancellable, &error);
-
-      if (monitor == NULL)
-        {
-          g_warning ("Failed to monitor directory: %s", error->message);
-          g_clear_error (&error);
-          continue;
-        }
-
-      ide_recursive_file_monitor_track (self, dir, monitor);
-    }
-
-  g_task_return_boolean (task, TRUE);
-}
+  if (!(dirs = ide_recursive_file_monitor_collect_finish (self, result, &error)))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    dex_future_disown (dex_future_finally (filter_ignored (self, dirs),
+                                           complete_start_task,
+                                           g_object_ref (task),
+                                           g_object_unref));
+                       }
 
 void
 ide_recursive_file_monitor_start_async (IdeRecursiveFileMonitor *self,

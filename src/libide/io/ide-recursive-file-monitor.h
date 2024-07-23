@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <libdex.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
@@ -27,8 +29,8 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRecursiveFileMonitor, ide_recursive_file_monitor, IDE, RECURSIVE_FILE_MONITOR, GObject)
 
-typedef gboolean (*IdeRecursiveIgnoreFunc) (GFile    *file,
-                                            gpointer  user_data);
+typedef DexFuture *(*IdeRecursiveIgnoreFunc) (GFile    *file,
+                                              gpointer  user_data);
 
 IDE_AVAILABLE_IN_ALL
 IdeRecursiveFileMonitor *ide_recursive_file_monitor_new             (GFile                    *root);

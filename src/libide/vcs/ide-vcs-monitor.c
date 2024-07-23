@@ -261,17 +261,17 @@ ide_vcs_monitor_vcs_changed_cb (IdeVcsMonitor *self,
   IDE_EXIT;
 }
 
-static gboolean
+static DexFuture *
 ide_vcs_monitor_ignore_func (GFile    *file,
                              gpointer  data)
 {
   IdeVcsMonitor *self = data;
-  gboolean ret;
+  DexFuture *ret;
 
   g_assert (IDE_IS_VCS_MONITOR (self));
 
   ide_object_lock (IDE_OBJECT (self));
-  ret = ide_vcs_is_ignored (self->vcs, file, NULL);
+  ret = ide_vcs_query_ignored (self->vcs, file);
   ide_object_unlock (IDE_OBJECT (self));
 
   return ret;
