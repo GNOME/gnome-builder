@@ -565,13 +565,12 @@ ide_dup_default_cache_dir_internal (void)
 {
   g_autoptr(GSettings) settings = g_settings_new_with_path ("org.gnome.builder.project", "/org/gnome/builder/projects/");
   g_autofree char *cache_dir = g_settings_get_string (settings, "cache-root");
+  g_autofree char *projects_dir = ide_dup_projects_dir ();
 
   if (!ide_str_empty0 (cache_dir))
     return g_steal_pointer (&cache_dir);
 
-  return g_build_filename (ide_get_projects_dir (),
-                           ".gnome-builder",
-                           NULL);
+  return g_build_filename (projects_dir, ".gnome-builder", NULL);
 }
 
 char *
