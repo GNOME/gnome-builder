@@ -39,8 +39,11 @@
 #include "ide-private.h"
 
 static GThread *main_thread;
-static const gchar *application_id = "org.gnome.Builder";
+static const char *application_id = "org.gnome.Builder";
 static IdeProcessKind kind = IDE_PROCESS_KIND_HOST;
+static GSettings *g_settings;
+static G_LOCK_DEFINE (projects_directory);
+static char *projects_directory;
 
 #if defined (G_HAS_CONSTRUCTORS)
 # ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
@@ -51,6 +54,11 @@ G_DEFINE_CONSTRUCTOR(ide_init_ctor)
 # error Your platform/compiler is missing constructor support
 #endif
 
+static void  on_projects_directory_changed_cb (GSettings   *settings,
+                                               const gchar *key,
+                                               gpointer     user_data);
+static char *dup_projects_dir                 (GSettings   *settings);
+
 static void
 ide_init_ctor (void)
 {
@@ -58,6 +66,16 @@ ide_init_ctor (void)
 
   if (g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS))
     kind = IDE_PROCESS_KIND_FLATPAK;
+
+  /* Get projects directory on main-thread at startup so that we
+   * can be certain GSettings is created on main-thread.
+   */
+  g_settings = g_settings_new ("org.gnome.builder");
+  g_signal_connect (g_settings,
+                    "changed::projects-directory",
+                    G_CALLBACK (on_projects_directory_changed_cb),
+                    NULL);
+  projects_directory = dup_projects_dir (g_settings);
 }
 
 /**
@@ -436,18 +454,83 @@ ide_path_collapse (const gchar *path)
   return g_steal_pointer (&expanded);
 }
 
-static GSettings *g_settings;
-static gchar *projects_directory;
+static char *
+dup_projects_dir (GSettings *settings)
+{
+  g_autofree char *dir = NULL;
+  g_autofree char *expanded = NULL;
+  g_autofree char *projects = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_SETTINGS (settings));
+
+  dir = g_settings_get_string (g_settings, "projects-directory");
+  expanded = ide_path_expand (dir);
+
+  if (g_file_test (expanded, G_FILE_TEST_IS_DIR))
+    return g_steal_pointer (&expanded);
+
+  projects = g_build_filename (g_get_home_dir (), "Projects", NULL);
+
+  if (g_file_test (projects, G_FILE_TEST_IS_DIR))
+    return g_steal_pointer (&projects);
+
+  if (!ide_str_empty0 (dir) && !ide_str_empty0 (expanded))
+    return g_steal_pointer (&expanded);
+
+  return g_build_filename (g_get_home_dir (), _("Projects"), NULL);
+}
 
 static void
 on_projects_directory_changed_cb (GSettings   *settings,
                                   const gchar *key,
                                   gpointer     user_data)
 {
+  g_autofree char *new_dir = NULL;
+
   g_assert (G_IS_SETTINGS (settings));
   g_assert (key != NULL);
 
-  g_clear_pointer (&projects_directory, g_free);
+  new_dir = dup_projects_dir (settings);
+
+  G_LOCK (projects_directory);
+  g_set_str (&projects_directory, new_dir);
+  G_UNLOCK (projects_directory);
+}
+
+/**
+ * ide_dup_projects_dir:
+ *
+ * Like ide_get_projects_dir() but may be called from threads.
+ *
+ * Gets the directory to store projects within.
+ *
+ * First, this checks GSettings for a directory. If that directory exists,
+ * it is returned.
+ *
+ * If not, it then checks for the non-translated name "Projects" in the
+ * users home directory. If it exists, that is returned.
+ *
+ * If that does not exist, and a GSetting path existed, but was non-existant
+ * that is returned.
+ *
+ * If the GSetting was empty, the translated name "Projects" is returned.
+ *
+ * Returns: (transfer full): a string containing the projects dir
+ */
+char *
+ide_dup_projects_dir (void)
+{
+  char *copy;
+
+  G_LOCK (projects_directory);
+  g_assert (projects_directory != NULL);
+  copy = g_strdup (projects_directory);
+  G_UNLOCK (projects_directory);
+
+  g_assert (copy != NULL);
+
+  return copy;
 }
 
 /**
@@ -468,52 +551,11 @@ on_projects_directory_changed_cb (GSettings   *settings,
  *
  * Returns: (not nullable) (transfer full): a #GFile
  */
-const gchar *
+const char *
 ide_get_projects_dir (void)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-
-  if G_UNLIKELY (g_settings == NULL)
-    {
-      g_settings = g_settings_new ("org.gnome.builder");
-      g_signal_connect (g_settings,
-                        "changed::projects-directory",
-                        G_CALLBACK (on_projects_directory_changed_cb),
-                        NULL);
-    }
-
-  if G_UNLIKELY (projects_directory == NULL)
-    {
-      g_autofree gchar *dir = g_settings_get_string (g_settings, "projects-directory");
-      g_autofree gchar *expanded = ide_path_expand (dir);
-      g_autofree gchar *projects = NULL;
-      g_autofree gchar *translated = NULL;
-
-      if (g_file_test (expanded, G_FILE_TEST_IS_DIR))
-        {
-          projects_directory = g_steal_pointer (&expanded);
-          goto completed;
-        }
-
-      projects = g_build_filename (g_get_home_dir (), "Projects", NULL);
-
-      if (g_file_test (projects, G_FILE_TEST_IS_DIR))
-        {
-          projects_directory = g_steal_pointer (&projects);
-          goto completed;
-        }
-
-      if (!ide_str_empty0 (dir) && !ide_str_empty0 (expanded))
-        {
-          projects_directory = g_steal_pointer (&expanded);
-          goto completed;
-        }
-
-      translated = g_build_filename (g_get_home_dir (), _("Projects"), NULL);
-      projects_directory = g_steal_pointer (&translated);
-    }
-
-completed:
+  g_return_val_if_fail (G_IS_SETTINGS (g_settings), NULL);
 
   return projects_directory;
 }

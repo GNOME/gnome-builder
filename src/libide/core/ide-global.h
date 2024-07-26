@@ -68,6 +68,8 @@ IDE_AVAILABLE_IN_ALL
 gchar          *ide_get_relocatable_path  (const gchar *path);
 IDE_AVAILABLE_IN_ALL
 const char     *ide_get_projects_dir      (void);
+IDE_AVAILABLE_IN_47
+char           *ide_dup_projects_dir      (void);
 IDE_AVAILABLE_IN_ALL
 gchar          *ide_path_collapse         (const gchar *path);
 IDE_AVAILABLE_IN_ALL
