@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <sys/types.h>
@@ -30,6 +29,10 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 #include <wordexp.h>
+
+#include <gio/gio.h>
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
 
 #include "../../gconstructor.h"
 
@@ -59,6 +62,15 @@ static void  on_projects_directory_changed_cb (GSettings   *settings,
                                                gpointer     user_data);
 static char *dup_projects_dir                 (GSettings   *settings);
 
+static gboolean
+has_schema_installed (const char *schema_id)
+{
+  GSettingsSchemaSource *source = g_settings_schema_source_get_default ();
+  g_autoptr(GSettingsSchema) schema = g_settings_schema_source_lookup (source, schema_id, TRUE);
+
+  return !!schema;
+}
+
 static void
 ide_init_ctor (void)
 {
@@ -69,13 +81,19 @@ ide_init_ctor (void)
 
   /* Get projects directory on main-thread at startup so that we
    * can be certain GSettings is created on main-thread.
+   *
+   * Skip this if the GSettings is not yet installed as will be
+   * the case if we're doing introspection discovery.
    */
-  g_settings = g_settings_new ("org.gnome.builder");
-  g_signal_connect (g_settings,
-                    "changed::projects-directory",
-                    G_CALLBACK (on_projects_directory_changed_cb),
-                    NULL);
-  projects_directory = dup_projects_dir (g_settings);
+  if (has_schema_installed ("org.gnome.builder"))
+    {
+      g_settings = g_settings_new ("org.gnome.builder");
+      g_signal_connect (g_settings,
+                        "changed::projects-directory",
+                        G_CALLBACK (on_projects_directory_changed_cb),
+                        NULL);
+      projects_directory = dup_projects_dir (g_settings);
+    }
 }
 
 /**
