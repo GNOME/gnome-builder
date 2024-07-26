@@ -723,6 +723,7 @@ vcs_iface_init (IdeVcsInterface *iface)
   iface->is_ignored = gbp_git_vcs_is_ignored;
   iface->get_config = gbp_git_vcs_get_config;
   iface->get_branch_name = gbp_git_vcs_get_branch_name;
+  iface->query_ignored = gbp_git_vcs_query_ignored;
   iface->switch_branch_async = gbp_git_vcs_switch_branch_async;
   iface->switch_branch_finish = gbp_git_vcs_switch_branch_finish;
   iface->push_branch_async = gbp_git_vcs_push_branch_async;
