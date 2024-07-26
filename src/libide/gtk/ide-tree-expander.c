@@ -131,10 +131,17 @@ ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
                                       GParamSpec      *pspec,
                                       GtkTreeListRow  *list_row)
 {
+  gboolean expanded;
+
   g_assert (IDE_IS_TREE_EXPANDER (self));
   g_assert (GTK_IS_TREE_LIST_ROW (list_row));
 
   ide_tree_expander_update_icon (self);
+
+  expanded = gtk_tree_list_row_get_expanded (list_row);
+  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                               GTK_ACCESSIBLE_STATE_EXPANDED, expanded,
+                               -1);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED]);
 }
@@ -446,6 +453,10 @@ ide_tree_expander_init (IdeTreeExpander *self)
                               "margin-end", 3,
                               NULL);
   gtk_widget_insert_after (self->title, GTK_WIDGET (self), self->image);
+
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->title, NULL,
+                                  -1);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   g_signal_connect_object (controller,
