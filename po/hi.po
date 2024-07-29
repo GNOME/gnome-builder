@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-07-04 17:12+0000\n"
-"PO-Revision-Date: 2024-07-06 08:25+0530\n"
+"POT-Creation-Date: 2024-07-15 22:41+0000\n"
+"PO-Revision-Date: 2024-07-19 19:58+0530\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -752,7 +752,7 @@ msgstr "परियोजनाएं"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 #: src/plugins/testui/gbp-testui-output-panel.c:105
@@ -1200,12 +1200,12 @@ msgid "Preparing…"
 msgstr "तैयार कर रहे हैं…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3772
+#: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
 msgstr "%s को हटाया जा रहा है"
 
-#: src/libide/foundry/ide-pipeline.c:3831
+#: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
 msgstr "निर्माण निर्देशिकाएं हटाई जा रही हैं…"
 
@@ -1480,7 +1480,7 @@ msgstr[0] "लगभग %u वर्ष पहले"
 msgstr[1] "लगभग %u वर्षों पहले"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "स्थापित करें (_I)"
 
@@ -2310,7 +2310,7 @@ msgid "Missing"
 msgstr "अनुपलब्ध"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
 msgid "Branch"
 msgstr "शाखा"
 
@@ -4442,11 +4442,11 @@ msgstr "Flatpak मेनिफ़ेस्ट हटाने में वि�
 msgid "Network is not available, skipping downloads"
 msgstr "नेटवर्क उपलब्ध नहीं है, डाउनलोड रुक रहा है"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
 msgstr "SDK स्थापित या अद्यतन करें?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
@@ -4454,7 +4454,7 @@ msgstr ""
 "बिल्डर को आपका परियोजना बनाने के लिए निम्नलिखित सॉफ्टवेयर डेवलपमेंट किट स्थापित करने की "
 "आवश्यकता है।"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
@@ -4462,7 +4462,7 @@ msgstr ""
 msgid "Name"
 msgstr "नाम"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 msgid "Architecture"
 msgstr "आर्किटेक्चर"
@@ -4723,6 +4723,14 @@ msgstr "%s में खोजें (_F)"
 #, c-format
 msgid "_Replace in %s"
 msgstr "%s में प्रतिस्थापित करें (_R)"
+
+#: src/plugins/grep/gbp-grep-panel.c:851
+msgid "Find in Project"
+msgstr "परियोजना में खोजें"
+
+#: src/plugins/grep/gbp-grep-panel.c:852
+msgid "Replace in Project"
+msgstr "परियोजना में प्रतिस्थापित करें"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -6508,10 +6516,3 @@ msgstr "XML ट्री बनाने में विफल।"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "विश्लेषण करने के लिए फाइल को स्थानीय रूप से सहेजा जाना चाहिए।"
-
-#~ msgid "Christian Hergert, et al."
-#~ msgstr "क्रिश्चियन हेर्गर्ट, और अन्य।"
-
-#, c-format
-#~ msgid "The operation has been canceled"
-#~ msgstr "अभियान रद्द कर दिया गया है"
