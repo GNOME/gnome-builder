@@ -193,17 +193,6 @@ IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_set_style_scheme_name         (IdeBuffer               *self,
                                                                   const gchar             *style_scheme_name);
 IDE_AVAILABLE_IN_ALL
-guint                   ide_buffer_add_commit_funcs              (IdeBuffer               *self,
-                                                                  IdeBufferCommitFunc      before_insert_text,
-                                                                  IdeBufferCommitFunc      after_insert_text,
-                                                                  IdeBufferCommitFunc      before_delete_range,
-                                                                  IdeBufferCommitFunc      after_delete_range,
-                                                                  gpointer                 user_data,
-                                                                  GDestroyNotify           user_data_destroy);
-IDE_AVAILABLE_IN_ALL
-void                    ide_buffer_remove_commit_funcs           (IdeBuffer               *self,
-                                                                  guint                    commit_funcs_handler);
-IDE_AVAILABLE_IN_ALL
 const char             *ide_buffer_get_charset                   (IdeBuffer               *self);
 IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_set_charset                   (IdeBuffer               *self,

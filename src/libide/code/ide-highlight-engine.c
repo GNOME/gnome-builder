@@ -602,10 +602,10 @@ mark_unchecked (IdeHighlightEngine *self,
 }
 
 static void
-ide_highlight_engine_insert_before_cb (IdeBuffer *buffer,
-                                       guint      offset,
-                                       guint      length,
-                                       gpointer   user_data)
+ide_highlight_engine_insert_before_cb (GtkTextBuffer *buffer,
+                                       guint          offset,
+                                       guint          length,
+                                       gpointer       user_data)
 {
   IdeHighlightEngine *self = user_data;
 
@@ -615,15 +615,16 @@ ide_highlight_engine_insert_before_cb (IdeBuffer *buffer,
 }
 
 static void
-ide_highlight_engine_insert_after_cb (IdeBuffer *buffer,
-                                      guint      offset,
-                                      guint      length,
-                                      gpointer   user_data)
+ide_highlight_engine_insert_after_cb (GtkTextBuffer *buffer,
+                                      guint          offset,
+                                      guint          length,
+                                      gpointer       user_data)
 {
   IdeHighlightEngine *self = user_data;
   GtkTextIter begin;
   GtkTextIter end;
 
+  g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
   /* Mark the whole line as unchecked */
@@ -638,16 +639,16 @@ ide_highlight_engine_insert_after_cb (IdeBuffer *buffer,
     gtk_text_iter_forward_to_line_end (&end);
 
   mark_unchecked (self,
-                  buffer,
+                  IDE_BUFFER (buffer),
                   gtk_text_iter_get_offset (&begin),
                   gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin));
 }
 
 static void
-ide_highlight_engine_delete_before_cb (IdeBuffer *buffer,
-                                       guint      offset,
-                                       guint      length,
-                                       gpointer   user_data)
+ide_highlight_engine_delete_before_cb (GtkTextBuffer *buffer,
+                                       guint          offset,
+                                       guint          length,
+                                       gpointer       user_data)
 {
   IdeHighlightEngine *self = user_data;
 
@@ -657,15 +658,16 @@ ide_highlight_engine_delete_before_cb (IdeBuffer *buffer,
 }
 
 static void
-ide_highlight_engine_delete_after_cb (IdeBuffer *buffer,
-                                      guint      offset,
-                                      guint      length,
-                                      gpointer   user_data)
+ide_highlight_engine_delete_after_cb (GtkTextBuffer *buffer,
+                                      guint          offset,
+                                      guint          length,
+                                      gpointer       user_data)
 {
   IdeHighlightEngine *self = user_data;
   GtkTextIter begin;
   GtkTextIter end;
 
+  g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
   /* Mark the whole line as unchecked */
@@ -680,7 +682,7 @@ ide_highlight_engine_delete_after_cb (IdeBuffer *buffer,
     gtk_text_iter_forward_to_line_end (&end);
 
   mark_unchecked (self,
-                  buffer,
+                  IDE_BUFFER (buffer),
                   gtk_text_iter_get_offset (&begin),
                   gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin));
 }
@@ -701,12 +703,12 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
   g_weak_ref_set (&self->buffer_wref, buffer);
 
   self->commit_funcs_handler =
-    ide_buffer_add_commit_funcs (IDE_BUFFER (text_buffer),
-                                 ide_highlight_engine_insert_before_cb,
-                                 ide_highlight_engine_insert_after_cb,
-                                 ide_highlight_engine_delete_before_cb,
-                                 ide_highlight_engine_delete_after_cb,
-                                 self, NULL);
+    gtk_text_buffer_add_commit_notify (text_buffer,
+                                       ide_highlight_engine_insert_before_cb,
+                                       ide_highlight_engine_insert_after_cb,
+                                       ide_highlight_engine_delete_before_cb,
+                                       ide_highlight_engine_delete_after_cb,
+                                       self, NULL);
 
   ide_highlight_engine__notify_style_scheme_cb (self, NULL, buffer);
   ide_highlight_engine__notify_language_cb (self, NULL, buffer);
@@ -745,8 +747,8 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
 
       if (self->commit_funcs_handler)
         {
-          ide_buffer_remove_commit_funcs (IDE_BUFFER (text_buffer),
-                                          self->commit_funcs_handler);
+          gtk_text_buffer_remove_commit_notify (text_buffer,
+                                                self->commit_funcs_handler);
           self->commit_funcs_handler = 0;
         }
 
