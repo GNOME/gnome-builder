@@ -229,9 +229,8 @@ ide_lsp_service_create_launcher (IdeLspService    *self,
   if (ide_pipeline_contains_program_in_path (pipeline, priv->program, NULL))
     {
       g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
-      IdeRuntime *runtime = ide_pipeline_get_runtime (pipeline);
 
-      ide_runtime_prepare_to_build (runtime, pipeline, run_context);
+      ide_pipeline_prepare_run_context (pipeline, run_context);
       ide_lsp_service_prepare_tooling (self, run_context);
       ide_run_context_append_argv (run_context, priv->program);
       ide_run_context_set_cwd (run_context, srcdir);
