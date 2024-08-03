@@ -49,6 +49,11 @@
       <summary>Show relative line numbers</summary>
       <description>If enabled, the editor will show relative line numbers.</description>
     </key>
+    <key name="show-line-selection-styling" type="b">
+      <default>true</default>
+      <summary>Use line selection styling</summary>
+      <description>If enabled, the editor will use selected style for line numbers for whole lines selected.</description>
+    </key>
     <key name="smart-backspace" type="b">
       <default>true</default>
       <summary>Smart Backspace</summary>

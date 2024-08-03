@@ -33,6 +33,7 @@ gboolean               gbp_omni_gutter_renderer_get_show_line_changes          (
 gboolean               gbp_omni_gutter_renderer_get_show_line_diagnostics      (GbpOmniGutterRenderer *self);
 gboolean               gbp_omni_gutter_renderer_get_show_line_numbers          (GbpOmniGutterRenderer *self);
 gboolean               gbp_omni_gutter_renderer_get_show_relative_line_numbers (GbpOmniGutterRenderer *self);
+gboolean               gbp_omni_gutter_renderer_get_show_line_selection_styling (GbpOmniGutterRenderer *self);
 void                   gbp_omni_gutter_renderer_set_show_line_changes          (GbpOmniGutterRenderer *self,
                                                                                 gboolean               show_line_changes);
 void                   gbp_omni_gutter_renderer_set_show_line_diagnostics      (GbpOmniGutterRenderer *self,
@@ -41,5 +42,7 @@ void                   gbp_omni_gutter_renderer_set_show_line_numbers          (
                                                                                 gboolean               show_line_numbers);
 void                   gbp_omni_gutter_renderer_set_show_relative_line_numbers (GbpOmniGutterRenderer *self,
                                                                                 gboolean               show_relative_line_numbers);
+void                   gbp_omni_gutter_renderer_set_show_line_selection_styling (GbpOmniGutterRenderer *self,
+                                                                                 gboolean              show_line_selection_styling);
 
 G_END_DECLS

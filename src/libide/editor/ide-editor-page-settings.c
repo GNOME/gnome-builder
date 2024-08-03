@@ -366,6 +366,9 @@ _ide_editor_page_settings_connect_gutter (IdeEditorPage *self,
   g_settings_bind (editor_settings, "show-line-diagnostics",
                    gutter, "show-line-diagnostics",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-line-selection-styling",
+                   gutter, "show-line-selection-styling",
+                   G_SETTINGS_BIND_GET);
 
   IDE_EXIT;
 }
@@ -383,6 +386,7 @@ _ide_editor_page_settings_disconnect_gutter (IdeEditorPage *self,
   g_settings_unbind (gutter, "show-line-numbers");
   g_settings_unbind (gutter, "show-relative-line-numbers");
   g_settings_unbind (gutter, "show-line-diagnostics");
+  g_settings_unbind (gutter, "show-line-selection-styling");
 
   IDE_EXIT;
 }

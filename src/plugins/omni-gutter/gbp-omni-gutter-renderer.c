@@ -174,6 +174,7 @@ struct _GbpOmniGutterRenderer
   guint show_line_numbers : 1;
   guint show_relative_line_numbers : 1;
   guint show_line_diagnostics : 1;
+  guint show_line_selection_styling : 1;
 };
 
 enum {
@@ -188,6 +189,7 @@ enum {
   PROP_SHOW_LINE_NUMBERS,
   PROP_SHOW_RELATIVE_LINE_NUMBERS,
   PROP_SHOW_LINE_DIAGNOSTICS,
+  PROP_SHOW_LINE_SELECTION_STYLING,
   N_PROPS
 };
 
@@ -1005,31 +1007,35 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
    * left margin so that we can draw selection borders (rounded corners
    * which extend under the line numbers).
    */
-  if (gtk_text_buffer_get_selection_bounds (buffer, &sel_begin, &sel_end))
+  if (self->show_line_selection_styling)
     {
-      int first_sel = -1, last_sel = -1;
-
-      gtk_text_iter_order (&sel_begin, &sel_end);
-
-      if (gtk_text_iter_starts_line (&sel_begin))
-        first_sel = gtk_text_iter_get_line (&sel_begin);
-      else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
-        first_sel = gtk_text_iter_get_line (&sel_begin) + 1;
-
-      if (!gtk_text_iter_starts_line (&sel_end))
-        last_sel = gtk_text_iter_get_line (&sel_end);
-      else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
-        last_sel = gtk_text_iter_get_line (&sel_end) - 1;
-
-      if (first_sel != -1 && last_sel != -1)
+      if (gtk_text_buffer_get_selection_bounds (buffer, &sel_begin, &sel_end))
         {
-          first_sel = MAX (first_sel, gtk_source_gutter_lines_get_first (lines));
-          last_sel = MIN (last_sel, gtk_source_gutter_lines_get_last (lines));
+          int first_sel = -1, last_sel = -1;
 
-          for (int i = first_sel; i <= last_sel; i++)
-            gtk_source_gutter_lines_add_qclass (lines, i, selection_quark);
+          gtk_text_iter_order (&sel_begin, &sel_end);
+
+          if (gtk_text_iter_starts_line (&sel_begin))
+            first_sel = gtk_text_iter_get_line (&sel_begin);
+          else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
+            first_sel = gtk_text_iter_get_line (&sel_begin) + 1;
+
+          if (!gtk_text_iter_starts_line (&sel_end))
+            last_sel = gtk_text_iter_get_line (&sel_end);
+          else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
+            last_sel = gtk_text_iter_get_line (&sel_end) - 1;
+
+          if (first_sel != -1 && last_sel != -1)
+            {
+              first_sel = MAX (first_sel, gtk_source_gutter_lines_get_first (lines));
+              last_sel = MIN (last_sel, gtk_source_gutter_lines_get_last (lines));
+
+              for (int i = first_sel; i <= last_sel; i++)
+                gtk_source_gutter_lines_add_qclass (lines, i, selection_quark);
+            }
         }
     }
+
 
   /*
    * This function is called before we render any of the lines in
@@ -1747,6 +1753,10 @@ gbp_omni_gutter_renderer_get_property (GObject    *object,
       g_value_set_boolean (value, self->show_relative_line_numbers);
       break;
 
+    case PROP_SHOW_LINE_SELECTION_STYLING:
+      g_value_set_boolean (value, self->show_line_selection_styling);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1778,6 +1788,9 @@ gbp_omni_gutter_renderer_set_property (GObject      *object,
       gbp_omni_gutter_renderer_set_show_relative_line_numbers (self, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_LINE_SELECTION_STYLING:
+      gbp_omni_gutter_renderer_set_show_line_selection_styling (self, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1829,6 +1842,10 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
 
   properties [PROP_SHOW_LINE_DIAGNOSTICS] =
     g_param_spec_boolean ("show-line-diagnostics", NULL, NULL, TRUE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties [PROP_SHOW_LINE_SELECTION_STYLING] =
+    g_param_spec_boolean ("show-line-selection-styling", NULL, NULL, TRUE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -1938,6 +1955,14 @@ gbp_omni_gutter_renderer_get_show_relative_line_numbers (GbpOmniGutterRenderer *
   return self->show_relative_line_numbers;
 }
 
+gboolean
+gbp_omni_gutter_renderer_get_show_line_selection_styling (GbpOmniGutterRenderer *self)
+{
+  g_return_val_if_fail (GBP_IS_OMNI_GUTTER_RENDERER (self), FALSE);
+
+  return self->show_line_selection_styling;
+}
+
 void
 gbp_omni_gutter_renderer_set_show_line_changes (GbpOmniGutterRenderer *self,
                                                 gboolean               show_line_changes)
@@ -1998,6 +2023,22 @@ gbp_omni_gutter_renderer_set_show_relative_line_numbers (GbpOmniGutterRenderer *
     {
       self->show_relative_line_numbers = show_relative_line_numbers;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_RELATIVE_LINE_NUMBERS]);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+}
+
+void
+gbp_omni_gutter_renderer_set_show_line_selection_styling (GbpOmniGutterRenderer *self,
+                                                          gboolean               show_line_selection_styling)
+{
+  g_return_if_fail (GBP_IS_OMNI_GUTTER_RENDERER (self));
+
+  show_line_selection_styling = !!show_line_selection_styling;
+
+  if (show_line_selection_styling != self->show_line_selection_styling)
+    {
+      self->show_line_selection_styling = show_line_selection_styling;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_SELECTION_STYLING]);
       gtk_widget_queue_draw (GTK_WIDGET (self));
     }
 }

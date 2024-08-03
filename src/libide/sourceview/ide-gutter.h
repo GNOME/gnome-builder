@@ -50,6 +50,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_relative_line_numbers (IdeGutter *self);
 IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_line_diagnostics      (IdeGutter *self);
+IDE_AVAILABLE_IN_47
+gboolean ide_gutter_get_show_line_selection_styling(IdeGutter *self);
 IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_line_changes          (IdeGutter *self,
                                                     gboolean   show_line_changes);
@@ -62,6 +64,9 @@ void     ide_gutter_set_show_relative_line_numbers (IdeGutter *self,
 IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_line_diagnostics      (IdeGutter *self,
                                                     gboolean   show_line_diagnostics);
+IDE_AVAILABLE_IN_47
+void     ide_gutter_set_show_line_selection_styling(IdeGutter *self,
+                                                    gboolean   show_line_selection_styling);
 IDE_AVAILABLE_IN_ALL
 void     ide_gutter_style_changed                  (IdeGutter *self);
 

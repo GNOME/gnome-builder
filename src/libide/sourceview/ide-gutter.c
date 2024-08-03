@@ -64,6 +64,13 @@ ide_gutter_default_init (IdeGutterInterface *iface)
                                                              FALSE,
                                                              (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("show-line-selection-styling",
+                                                             "Show Line Selection Styling",
+                                                             "If selection styling should be used for line numbers",
+                                                             FALSE,
+                                                             (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+
   signals [STYLE_CHANGED] =
     g_signal_new ("style-changed",
                   G_TYPE_FROM_INTERFACE (iface),
@@ -114,6 +121,14 @@ ide_gutter_get_show_line_diagnostics (IdeGutter *self)
   return ret;
 }
 
+gboolean
+ide_gutter_get_show_line_selection_styling (IdeGutter *self)
+{
+  gboolean ret;
+  g_object_get (self, "show-line-selection-styling", &ret, NULL);
+  return ret;
+}
+
 void
 ide_gutter_set_show_line_changes (IdeGutter *self,
                                   gboolean   show_line_changes)
@@ -148,4 +163,13 @@ ide_gutter_set_show_line_diagnostics (IdeGutter *self,
   g_return_if_fail (IDE_IS_GUTTER (self));
 
   g_object_set (self, "show-line-diagnostics", show_line_diagnostics, NULL);
+}
+
+void
+ide_gutter_set_show_line_selection_styling (IdeGutter *self,
+                                            gboolean show_line_selection_styling)
+{
+  g_return_if_fail (IDE_IS_GUTTER (self));
+
+  g_object_set (self, "show-line-selection-styling", show_line_selection_styling, NULL);
 }

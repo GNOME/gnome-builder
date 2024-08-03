@@ -218,6 +218,18 @@
                             </property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_changesd">
+                            <property name="title" translatable="yes">Use Line Selection Styling</property>
+                            <property name="subtitle" translatable="yes">Use selection styling for line numbers if whole line is selected</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">show-line-selection-styling</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
