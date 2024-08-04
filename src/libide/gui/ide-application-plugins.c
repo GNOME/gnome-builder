@@ -381,7 +381,7 @@ _ide_application_load_plugins (IdeApplication *self)
    */
   peas_engine_add_search_path (engine,
                                PACKAGE_LIBDIR"/gnome-builder/plugins",
-                               PACKAGE_DATADIR"/gnome-builder/plugins");
+                               PACKAGE_DATADIR"/plugins");
 
   if (ide_is_flatpak ())
     {
