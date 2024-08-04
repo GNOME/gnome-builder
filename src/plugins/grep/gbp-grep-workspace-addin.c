@@ -66,6 +66,9 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->workspace = workspace;
+
+  /* Force panel to show up for project-wide search */
+  (void)gbp_grep_workspace_addin_get_panel (self);
 }
 
 static void
