@@ -1132,6 +1132,11 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
           g_ptr_array_add (children, node);
         }
     }
+  else if (gsk_render_node_get_node_type (root) == GSK_COLOR_NODE)
+    {
+      /* We got a single (background color) node, just ignore it */
+      return;
+    }
 
   if (children->len > 0)
     {
