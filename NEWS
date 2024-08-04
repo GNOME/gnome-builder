@@ -1,3 +1,27 @@
+# GNOME Builder 47.beta
+
+Changes since 47.beta
+
+ * Resiliency fixes in xml-pack plugin
+ * Bug fixes around use of AdwDialog
+ * You can now disable selection areas in the omni-gutter
+ * Much styling updates to more closely match libadwaita.
+ * Terminal styling updates to more closely match code editor.
+ * Allow pipeline environment to propagate to SDK-backed language servers
+ * Grep panel improvements
+ * Recursive directory monitors are now created asynchronously which
+   improves project loading time for extremely large projects on slow
+   storage/file-systems.
+ * A11y improvments
+ * A default clang-format file is installed to use a fallback
+ * Editorconfig plugin will no longer set the bit indicating if
+   right margin should be shown or not, allowing the gsetting to
+   work appropriately per-language.
+ * New API to query asynchronously for ignored files or directories
+   using futures from libdex.
+ * Meson project language extraction fixes
+ * Translation updates
+
 # GNOME Builder 47.alpha
 
 Changes since 46.2

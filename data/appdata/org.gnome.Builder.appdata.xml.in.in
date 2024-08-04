@@ -97,7 +97,7 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="46~rc" date="2024-03-03"/>
+    <release version="47~beta" date="2024-08-04"/>
   </releases>
 
   <content_rating type="oars-1.1" />
