@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_CLANG_FORMATTER (gbp_clang_formatter_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpClangFormatter, gbp_clang_formatter, GBP, CLANG_FORMATTER, GObject)
+G_DECLARE_FINAL_TYPE (GbpClangFormatter, gbp_clang_formatter, GBP, CLANG_FORMATTER, IdeObject)
 
 G_END_DECLS

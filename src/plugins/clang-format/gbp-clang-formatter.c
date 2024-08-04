@@ -38,7 +38,7 @@
 
 struct _GbpClangFormatter
 {
-  GObject parent_instance;
+  IdeObject parent_instance;
 };
 
 static gboolean
@@ -271,10 +271,13 @@ gbp_clang_format_format_async (IdeFormatter        *formatter,
     IDE_EXIT;
   }
 
-  // Locate closest .clang-format file (if NULL, the file was not found -> do not format the code)
-  config_dir = gbp_clang_format_get_config_file_dir (buffer, cancellable);
-  if (config_dir == NULL)
+  /* Locate closest .clang-format file (if NULL, the file was not found -> do
+   * not format the code).
+   */
+  if (!(config_dir = gbp_clang_format_get_config_file_dir (buffer, cancellable)))
     {
+      ide_object_warning (formatter,
+                          _("Cannot locate .clang-format, please add one to your project"));
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
@@ -327,7 +330,7 @@ ide_formatter_iface_init (IdeFormatterInterface *iface)
   iface->format_finish = gbp_clang_format_format_finish;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpClangFormatter, gbp_clang_formatter, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpClangFormatter, gbp_clang_formatter, IDE_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_FORMATTER, ide_formatter_iface_init))
 
 static void
