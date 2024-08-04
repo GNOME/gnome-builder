@@ -12,6 +12,9 @@
         <signal name="adopt-widget" handler="_ide_workspace_adopt_widget" swapped="true"/>
         <child internal-child="center">
           <object class="PanelDockChild">
+            <style>
+              <class name="center"/>
+            </style>
             <property name="child">
               <object class="GtkOverlay" id="overlay">
                 <child>

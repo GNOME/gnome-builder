@@ -202,7 +202,7 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
 
   g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
-#if 0
+#if 1
   {
     /* Don't restyle Adwaita as we already have it */
     const char *id = gtk_source_style_scheme_get_name (style_scheme);
@@ -291,11 +291,7 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   else
     define_color (str, "dialog_bg_color", &text_bg);
 
-  if (is_dark)
-    define_color_mixed (str, "view_bg_color", &text_bg, &black, .1);
-  else
-    define_color_mixed (str, "view_bg_color", &text_bg, &white, .3);
-
+  define_color (str, "view_bg_color", &text_bg);
   define_color (str, "view_fg_color", &text_fg);
 
   if (get_metadata_color (style_scheme, "accent_bg_color", &color) ||

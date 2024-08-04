@@ -7,6 +7,23 @@ window.workspace tabbar {
 window.workspace:backdrop tabbar {
   background: var(--headerbar-backdrop-color);
 }
+window.workspace:backdrop paneldockchild.center tabbar {
+  background: var(--headerbar-bg-color);
+}
+window.workspace paneldockchild.bottom,
+window.workspace paneldockchild.center {
+  --headerbar-bg-color: var(--view-bg-color);
+  --headerbar-fg-color: var(--view-fg-color);
+}
+paneldockchild.center tabbar {
+  background: var(--view-bg-color);
+}
+paneldockchild.center headerbar {
+  background: var(--view-bg-color);
+}
+paneldockchild.center windowhandle {
+  background: transparent;
+}
 
 stylevariantpreview widget.wallpaper {
   border-radius: 6px;
@@ -126,4 +143,9 @@ paneldockchild.end .frameheader {
 paneldockchild.start panelresizer > widget > separator,
 paneldockchild.end panelresizer > widget > separator {
   background-color: var(--sidebar-shade-color);
+}
+
+/* Make statuspage match the "view" sytle of the center column */
+window.workspace paneldockchild.center statuspage {
+ background: var(--headerbar-bg-color);
 }
