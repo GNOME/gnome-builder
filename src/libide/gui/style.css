@@ -149,3 +149,6 @@ paneldockchild.end panelresizer > widget > separator {
 window.workspace paneldockchild.center statuspage {
  background: var(--headerbar-bg-color);
 }
+window.workspace paneldockchild.bottom {
+  background: var(--view-bg-color);
+}
