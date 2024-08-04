@@ -887,19 +887,64 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->supports_language = gbp_meson_build_system_supports_language;
 }
 
-
-static char **
-split_language (gchar *raw_language_string)
+static char *
+next_token (const char **ptr)
 {
-  g_autofree gchar *copy = NULL;
-  GString *str = g_string_new (raw_language_string);
-  g_string_replace (str, "'", "", -1);
-  g_string_replace (str, " ", "", -1);
-  g_string_replace (str, "\n", "", -1);
-  if (str->len && str->str[str->len-1] == ',')
-    g_string_truncate (str, str->len-1);
-  copy = g_string_free (str, FALSE);
-  return g_strsplit (copy, ",", -1);
+  const char *str = *ptr;
+  const char *begin = NULL;
+  const char *end = NULL;
+  char *ret;
+
+  for (;;)
+    {
+      switch (*str)
+        {
+        case 0:
+          return NULL;
+
+        case ' ':
+        case '\n':
+        case '\t':
+        case ',':
+        case '[':
+          *ptr = ++str;
+          break;
+
+        case ']':
+          return NULL;
+
+        case '\'':
+          begin = str + 1;
+          if (!(end = strchr (begin, '\'')))
+            return NULL;
+          *ptr = end + 1;
+          return g_strndup (begin, end - begin);
+
+        default:
+          if (!g_unichar_isalnum (g_utf8_get_char (str)))
+            return NULL;
+
+          begin = str;
+          end = g_utf8_next_char (begin);
+
+          while (g_unichar_isalnum (g_utf8_get_char (end)))
+            end = g_utf8_next_char (end);
+
+          if (*end == ':')
+            return NULL;
+
+          ret = g_strndup (begin, end - begin);
+
+          if (*end == '\'')
+            end++;
+
+          *ptr = end;
+
+          return ret;
+        }
+    }
+
+  return NULL;
 }
 
 /**
@@ -912,45 +957,22 @@ split_language (gchar *raw_language_string)
 char **
 _gbp_meson_build_system_parse_languages (const gchar *raw_language_string)
 {
-  g_autofree gchar *language_string = NULL;
-  gchar *cur = (gchar *) raw_language_string;
-  gchar *cur2;
-  cur = g_strstr_len (cur, -1, ",");
-  if (cur == NULL) goto failure;
-  cur++;
-  cur2 = cur;
-  while (*cur2 != ':' || *cur2 == '\0')
-    {
-      if (*cur2 == '[')
-        {
-          cur2 = g_strstr_len (cur2, -1, "]");
-          if (cur2 == NULL) goto failure;
-          cur2++;
-          break;
-        }
-      cur2++;
-    }
-  if (*cur2 == ':') while(*cur2 != ',') cur2--;
-  if (cur2-cur <= 0) goto failure;
-  language_string = g_strndup (cur, cur2-cur);
+  GPtrArray *ar = g_ptr_array_new ();
+  const char *ptr = raw_language_string;
+  char *str;
 
-  if (strstr(language_string, "[") || strstr(language_string, "]"))
-    {
-      gchar *begin = NULL;
-      gchar *end = NULL;
-      g_autofree gchar *copy = NULL;
+  /* Skip first token, it's the project */
+  if (!(str = next_token (&ptr)))
+    return NULL;
+  g_free (str);
 
-      if ((begin = strstr(language_string, "[")) == NULL) goto failure;
-      if ((end = strstr(language_string, "]")) == NULL) goto failure;
-      copy = g_strndup (begin + 1, end-begin - 1);
+  /* Now collect languages */
+  while ((str = next_token (&ptr)))
+    g_ptr_array_add (ar, str);
 
-      return split_language (copy);
-    }
+  g_ptr_array_add (ar, NULL);
 
-  return split_language (language_string);
-
-failure:
-  return NULL;
+  return (char **)g_ptr_array_free (ar, ar->len <= 1);
 }
 
 static void
