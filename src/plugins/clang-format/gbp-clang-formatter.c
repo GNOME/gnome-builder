@@ -271,15 +271,14 @@ gbp_clang_format_format_async (IdeFormatter        *formatter,
     IDE_EXIT;
   }
 
-  /* Locate closest .clang-format file (if NULL, the file was not found -> do
-   * not format the code).
+  /* Locate closest .clang-format file. If we cannot find one try to
+   * format using our fallback formatter.
    */
   if (!(config_dir = gbp_clang_format_get_config_file_dir (buffer, cancellable)))
     {
       ide_object_warning (formatter,
-                          _("Cannot locate .clang-format, please add one to your project"));
-      ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
+                          _("Cannot locate .clang-format, please add one to your project. Using fallback GNU-style formatter."));
+      config_dir = g_build_filename (PACKAGE_DATADIR, "clang-format", NULL);
     }
 
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
