@@ -1088,6 +1088,7 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
   g_autoptr(GtkSnapshot) alternate = NULL;
   g_autoptr(GskRenderNode) root = NULL;
   g_autoptr(GPtrArray) children = NULL;
+  gboolean dropped_bg = FALSE;
 
   g_assert (GTK_IS_SNAPSHOT (snapshot));
 
@@ -1108,11 +1109,6 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
           GskRenderNode *node = gsk_container_node_get_child (root, i);
           GskRenderNodeType node_type = gsk_render_node_get_node_type (node);
 
-#if 0
-          /* NOTE: This should no longer be necessary because we disable
-           * clearing the background of IdeTerminal.
-           */
-
           /* Drop the color node because we get that for free from our
            * background recoloring. This avoids an extra large overdraw
            * as a bonus optimization while we fix clipping.
@@ -1122,7 +1118,6 @@ ide_terminal_rewrite_snapshot (GtkWidget   *widget,
               dropped_bg = TRUE;
               continue;
             }
-#endif
 
           /* If we get a clip node here, it's because we're in some
            * sort of window size that has partial line offset in the

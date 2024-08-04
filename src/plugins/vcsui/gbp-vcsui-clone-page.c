@@ -440,8 +440,6 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
   gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
   gtk_editable_set_text (GTK_EDITABLE (self->author_name_row), g_get_real_name ());
 
-  vte_terminal_set_clear_background (self->terminal, FALSE);
-
   pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
   vte_terminal_set_pty (self->terminal, pty);
 

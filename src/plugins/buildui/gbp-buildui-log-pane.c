@@ -370,8 +370,6 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
-
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
                            "notify::style-scheme",
                            G_CALLBACK (gbp_buildui_log_pane_notify_style_scheme_cb),

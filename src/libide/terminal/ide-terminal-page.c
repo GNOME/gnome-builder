@@ -570,8 +570,6 @@ ide_terminal_page_init (IdeTerminalPage *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  vte_terminal_set_clear_background (VTE_TERMINAL (self->terminal), FALSE);
-
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
   ide_page_set_menu_id (IDE_PAGE (self), "ide-terminal-page-document-menu");
@@ -583,6 +581,13 @@ ide_terminal_page_init (IdeTerminalPage *self)
   ide_terminal_page_actions_init (self);
 
   ide_widget_set_context_handler (self, ide_terminal_page_context_set);
+
+  /* This is needed so terminal pages get a color that match
+   * what the "view" area is of the center grid in Builder. All
+   * made more complicated because the colors come from restyling
+   * GSV themes rather than terminal things like in Ptyxis.
+   */
+  gtk_widget_add_css_class (GTK_WIDGET (self), "view");
 }
 
 /**
