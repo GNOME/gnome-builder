@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-03 22:24+0000\n"
-"PO-Revision-Date: 2024-08-04 11:41+0200\n"
+"POT-Creation-Date: 2024-08-04 20:56+0000\n"
+"PO-Revision-Date: 2024-08-05 07:54+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1068,7 +1068,7 @@ msgid "Language"
 msgstr "Jezik"
 
 #: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:114
+#: src/libide/gui/ide-primary-workspace.ui:117
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Preklopi spodnji pladenj (krmilka+F9)"
 
@@ -1707,17 +1707,17 @@ msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 msgid "Invalid configuration"
 msgstr "Neveljavna nastavitev"
 
-#: src/libide/gui/ide-primary-workspace.ui:46
+#: src/libide/gui/ide-primary-workspace.ui:49
 msgid "Toggle Left Panel (F9)"
 msgstr "Preklopi levi pladenj (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:81
+#: src/libide/gui/ide-primary-workspace.ui:84
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Preklopi desni pladenj"
 
-#: src/libide/gui/ide-primary-workspace.ui:89
-#: src/libide/gui/ide-primary-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:92
+#: src/libide/gui/ide-primary-workspace.ui:139
 msgid "Search (Ctrl+Enter)"
 msgstr "Poišči (krmilka+vnašalka)"
 
@@ -2334,11 +2334,11 @@ msgstr "Odstrani"
 msgid "_Save"
 msgstr "_Shrani"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:393
 msgid "Build Output"
 msgstr "Odvod izgradnje"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:394
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Izhod gradnje (dvigalka+krmilka+L)"
 
@@ -3223,6 +3223,14 @@ msgstr "Manjkajoči ali poškodovani podatki iz clang-format"
 msgid "Invalid cursor position provided from clang-format"
 msgstr "Neveljaven položaj kazalca, ki ga podaja clang-format"
 
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Ni mogoče najti .clang-format, dodajte ga v svoj projekt. Uporabljen bo "
+"nadomestni oblikovalnik v slogu GNU."
+
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
 msgstr "CMake"
@@ -3842,7 +3850,7 @@ msgstr "Nadzornik vodila D-Bus …"
 msgid "Dub Run"
 msgstr "Zagon Dub"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "Ni podane datoteke"
 
@@ -6296,7 +6304,7 @@ msgstr ""
 "Največje število vrstic, shranjenih v zgodovini pri omejevanju povratnega "
 "drsenja"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:148
 msgid "Unit Test Output"
 msgstr "Odvod preizkusa enote"
 
