@@ -136,13 +136,16 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
   xmlSchemaValidCtxt *xml_schema_valid_context;
   xmlRelaxNGValidCtxt *rng_valid_context;
   ValidState state;
+  int oldval;
   gboolean ret = FALSE;
 
   g_assert (IDE_IS_XML_VALIDATOR (self));
   g_assert (doc != NULL);
   g_assert ((diagnostics != NULL && *diagnostics == NULL) || diagnostics == NULL);
 
-  xmlLineNumbersDefault (1);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  oldval = xmlLineNumbersDefault (1);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   state.self = self;
   state.doc = doc;
@@ -200,6 +203,10 @@ end:
 
   g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
   self->diagnostics_array = g_ptr_array_new_with_free_func (g_object_unref);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  xmlLineNumbersDefault (oldval);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   return ret;
 }
