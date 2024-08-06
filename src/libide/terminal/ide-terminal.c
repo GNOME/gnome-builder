@@ -1464,4 +1464,3 @@ ide_terminal_set_palette (IdeTerminal        *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PALETTE]);
     }
 }
-

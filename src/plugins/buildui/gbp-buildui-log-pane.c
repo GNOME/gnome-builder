@@ -144,7 +144,10 @@ gbp_buildui_log_pane_window_title_changed (GbpBuilduiLogPane *self,
     {
       const gchar *title;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       title = vte_terminal_get_window_title (VTE_TERMINAL (terminal));
+      G_GNUC_END_IGNORE_DEPRECATIONS
+
       _ide_pipeline_set_message (self->pipeline, title);
     }
 }

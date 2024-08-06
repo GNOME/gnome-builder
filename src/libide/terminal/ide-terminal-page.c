@@ -43,6 +43,8 @@
 
 G_DEFINE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE_TYPE_PAGE)
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   PROP_0,
   PROP_CLOSE_ON_EXIT,
@@ -742,3 +744,4 @@ ide_terminal_page_new_completed (const char *title,
   return self;
 }
 
+G_GNUC_END_IGNORE_DEPRECATIONS
