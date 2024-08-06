@@ -119,17 +119,6 @@ struct _IdeBuffer
 
 typedef struct
 {
-  IdeBufferCommitFunc before_insert_text;
-  IdeBufferCommitFunc after_insert_text;
-  IdeBufferCommitFunc before_delete_range;
-  IdeBufferCommitFunc after_delete_range;
-  gpointer user_data;
-  GDestroyNotify user_data_destroy;
-  guint handler_id;
-} CommitHooks;
-
-typedef struct
-{
   IdeNotification *notif;
   GFile           *file;
   guint            highlight_syntax : 1;
@@ -300,15 +289,6 @@ lookup_symbol_data_free (LookUpSymbolData *data)
   g_clear_object (&data->location);
   g_clear_object (&data->symbol);
   g_slice_free (LookUpSymbolData, data);
-}
-
-static void
-clear_commit_func (gpointer data)
-{
-  CommitHooks *hooks = data;
-
-  if (hooks->user_data_destroy)
-    hooks->user_data_destroy (hooks->user_data);
 }
 
 IdeBuffer *
@@ -571,8 +551,6 @@ ide_buffer_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->file_settings);
 
   g_signal_group_set_target (self->file_settings_signals, NULL);
-
-  g_clear_pointer (&self->commit_funcs, g_array_unref);
 
   g_clear_object (&self->diagnostics);
   g_clear_object (&self->buffer_manager);
@@ -1162,9 +1140,6 @@ ide_buffer_init (IdeBuffer *self)
                                  G_CALLBACK (on_settings_changed_newline_type_cb),
                                  self,
                                  G_CONNECT_SWAPPED);
-
-  self->commit_funcs = g_array_new (FALSE, FALSE, sizeof (CommitHooks));
-  g_array_set_clear_func (self->commit_funcs, clear_commit_func);
 
   g_signal_connect (self,
                     "notify::language",
@@ -2162,8 +2137,6 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
                          GtkTextIter   *end)
 {
   IdeBuffer *self = (IdeBuffer *)buffer;
-  guint position;
-  guint length;
 
   IDE_ENTRY;
 
@@ -2172,42 +2145,7 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
   g_assert (begin != NULL);
   g_assert (end != NULL);
 
-#ifdef IDE_ENABLE_TRACE
-  {
-    gint begin_line, begin_offset;
-    gint end_line, end_offset;
-
-    begin_line = gtk_text_iter_get_line (begin);
-    begin_offset = gtk_text_iter_get_line_offset (begin);
-    end_line = gtk_text_iter_get_line (end);
-    end_offset = gtk_text_iter_get_line_offset (end);
-
-    IDE_TRACE_MSG ("delete-range (%d:%d, %d:%d)",
-                   begin_line, begin_offset,
-                   end_line, end_offset);
-  }
-#endif
-
-  position = gtk_text_iter_get_offset (begin);
-  length = gtk_text_iter_get_offset (end) - position;
-
-  for (guint i = 0; i < self->commit_funcs->len; i++)
-    {
-      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
-
-      if (hooks->before_delete_range != NULL)
-        hooks->before_delete_range (self, position, length, hooks->user_data);
-    }
-
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->delete_range (buffer, begin, end);
-
-  for (guint i = 0; i < self->commit_funcs->len; i++)
-    {
-      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
-
-      if (hooks->after_delete_range != NULL)
-        hooks->after_delete_range (self, position, length, hooks->user_data);
-    }
 
   IDE_EXIT;
 }
@@ -2220,8 +2158,6 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
 {
   IdeBuffer *self = (IdeBuffer *)buffer;
   gboolean recheck_language = FALSE;
-  guint position;
-  guint length;
 
   IDE_ENTRY;
 
@@ -2240,26 +2176,7 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
       ((text [0] == '\n') || ((len > 1) && (strchr (text, '\n') != NULL))))
     recheck_language = TRUE;
 
-  position = gtk_text_iter_get_offset (location);
-  length = g_utf8_strlen (text, len);
-
-  for (guint i = 0; i < self->commit_funcs->len; i++)
-    {
-      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
-
-      if (hooks->before_insert_text != NULL)
-        hooks->before_insert_text (self, position, length, hooks->user_data);
-    }
-
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->insert_text (buffer, location, text, len);
-
-  for (guint i = 0; i < self->commit_funcs->len; i++)
-    {
-      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
-
-      if (hooks->after_insert_text != NULL)
-        hooks->after_insert_text (self, position, length, hooks->user_data);
-    }
 
   if G_UNLIKELY (recheck_language)
     ide_buffer_guess_language (IDE_BUFFER (buffer));
@@ -4367,77 +4284,6 @@ _ide_buffer_is_file (IdeBuffer *self,
 
   return g_file_equal (nolink_file, ide_buffer_get_file (self)) ||
          g_file_equal (nolink_file, self->readlink_file);
-}
-
-/**
- * ide_buffer_add_commit_funcs:
- * @self: a #IdeBuffer
- * @before_insert_text: (nullable) (scope async): function for before inserting text
- * @after_insert_text: (nullable) (scope async): function for after inserting text
- * @before_delete_range: (nullable) (scope async): function for before deleting a range
- * @after_delete_range: (nullable) (scope async): function for after deleting a range
- * @user_data: closure data
- * @user_data_destroy: destroy notify for @user_data
- *
- * Adds function callbacks to handle important changes to text
- * internally within the GtkTextBuffer. You can use these instead
- * of signals like #GtkTextBuffer::insert-text or
- * #GtkTextBuffer::delete-range when you want to be sure you're
- * getting unprocessed changes right before they are committed to
- * underlying GTK data structures.
- *
- * However, this has the requirement that you do not change this
- * content in any way, only access the information that these events
- * occurred.
- *
- * Returns: a handler-id which can be used with
- *   ide_buffer_remove_commit_funcs().
- */
-guint
-ide_buffer_add_commit_funcs (IdeBuffer           *self,
-                             IdeBufferCommitFunc  before_insert_text,
-                             IdeBufferCommitFunc  after_insert_text,
-                             IdeBufferCommitFunc  before_delete_range,
-                             IdeBufferCommitFunc  after_delete_range,
-                             gpointer             user_data,
-                             GDestroyNotify       user_data_destroy)
-{
-  CommitHooks hooks;
-
-  g_return_val_if_fail (IDE_IS_BUFFER (self), 0);
-
-  hooks.before_insert_text = before_insert_text;
-  hooks.after_insert_text = after_insert_text;
-  hooks.after_delete_range = after_delete_range;
-  hooks.before_delete_range = before_delete_range;
-  hooks.user_data = user_data;
-  hooks.user_data_destroy = user_data_destroy;
-  hooks.handler_id = ++self->next_commit_handler;
-
-  g_array_append_val (self->commit_funcs, hooks);
-
-  return hooks.handler_id;
-}
-
-void
-ide_buffer_remove_commit_funcs (IdeBuffer *self,
-                                guint      commit_funcs_handler)
-{
-  g_return_if_fail (IDE_IS_BUFFER (self));
-  g_return_if_fail (commit_funcs_handler > 0);
-
-  for (guint i = 0; i < self->commit_funcs->len; i++)
-    {
-      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
-
-      if (hooks->handler_id == commit_funcs_handler)
-        {
-          g_array_remove_index (self->commit_funcs, i);
-          return;
-        }
-    }
-
-  g_warning ("Failed to locate commit handler %u", commit_funcs_handler);
 }
 
 const char *

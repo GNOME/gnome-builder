@@ -184,6 +184,23 @@ spellcheck_after_delete_range (IdeBuffer *buffer,
 }
 
 static void
+gbp_spell_buffer_addin_commit_notify (GtkTextBuffer            *buffer,
+                                      GtkTextBufferNotifyFlags  flags,
+                                      guint                     position,
+                                      guint                     length,
+                                      gpointer                  user_data)
+{
+  if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT)
+    spellcheck_before_insert_text (IDE_BUFFER (buffer), position, length, user_data);
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT)
+    spellcheck_after_insert_text (IDE_BUFFER (buffer), position, length, user_data);
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE)
+    spellcheck_before_delete_range (IDE_BUFFER (buffer), position, length, user_data);
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE)
+    spellcheck_after_delete_range (IDE_BUFFER (buffer), position, length, user_data);
+}
+
+static void
 gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                              IdeBuffer      *buffer)
 {
@@ -198,12 +215,13 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
   self->checker = editor_spell_checker_new (NULL, NULL);
   self->adapter = editor_text_buffer_spell_adapter_new (GTK_TEXT_BUFFER (buffer), self->checker);
   self->commit_funcs_handler =
-    ide_buffer_add_commit_funcs (buffer,
-                                 spellcheck_before_insert_text,
-                                 spellcheck_after_insert_text,
-                                 spellcheck_before_delete_range,
-                                 spellcheck_after_delete_range,
-                                 self, NULL);
+    gtk_text_buffer_add_commit_notify (GTK_TEXT_BUFFER (buffer),
+                                       (GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT |
+                                        GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT |
+                                        GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE |
+                                        GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE),
+                                       gbp_spell_buffer_addin_commit_notify,
+                                       self, NULL);
 
   g_signal_connect_object (self->checker,
                            "notify::language",
@@ -232,7 +250,7 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_buffer_remove_commit_funcs (buffer, self->commit_funcs_handler);
+  gtk_text_buffer_remove_commit_notify (GTK_TEXT_BUFFER (buffer), self->commit_funcs_handler);
   self->commit_funcs_handler = 0;
 
   g_signal_handlers_disconnect_by_func (self->checker,
