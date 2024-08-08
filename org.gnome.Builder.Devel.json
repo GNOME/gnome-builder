@@ -269,22 +269,6 @@
             ]
         },
         {
-            "name" : "gjs",
-            "buildsystem" : "meson",
-            "config-opts" : [
-                "-Dinstalled_tests=false",
-                "-Dskip_dbus_tests=true",
-                "-Dskip_gtk_tests=true"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gjs.git",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
             "name" : "libpeas",
             "buildsystem" : "meson",
             "config-opts" : [
