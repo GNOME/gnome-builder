@@ -1,7 +1,7 @@
 [Plugin]
 Authors=Christian Hergert
 Builtin=true
-Copyright=Copyright © 2022 Christian Hergert
+Copyright=Copyright © 2022-2024 Christian Hergert
 Description=Provides spellchecking for documents
 Embedded=_gbp_spellcheck_register_types
 Module=spellcheck

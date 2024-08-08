@@ -24,46 +24,23 @@
 
 #include <string.h>
 
+#include <libspelling.h>
+
 #include <libide-code.h>
 
 #include "gbp-spell-buffer-addin.h"
-
-#include "editor-spell-checker.h"
-#include "editor-text-buffer-spell-adapter.h"
 
 #define METADATA_SPELLING "metadata::gte-spelling"
 
 struct _GbpSpellBufferAddin
 {
-  GObject parent_instance;
-  IdeBuffer *buffer;
-  EditorSpellChecker *checker;
-  EditorTextBufferSpellAdapter *adapter;
-  GPropertyAction *enabled_action;
-  GPropertyAction *language_action;
-  guint commit_funcs_handler;
-  guint enabled : 1;
+  GObject                    parent_instance;
+  IdeBuffer                 *buffer;
+  SpellingTextBufferAdapter *adapter;
+  SpellingChecker           *checker;
 };
 
-enum {
-  PROP_0,
-  PROP_ENABLED,
-  N_PROPS
-};
-
-static GParamSpec *properties[N_PROPS];
 static GSettings *settings;
-
-static gboolean
-gbp_spell_buffer_addin_calculate_enabled (GbpSpellBufferAddin *self)
-{
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  return self->enabled &&
-         self->adapter != NULL &&
-         self->buffer != NULL &&
-         ide_buffer_get_state (self->buffer) == IDE_BUFFER_STATE_READY;
-}
 
 static void
 check_error (GObject      *object,
@@ -77,127 +54,31 @@ check_error (GObject      *object,
     g_warning ("Failed to persist metadata: %s", error->message);
 }
 
-static gboolean
-state_to_enabled (GBinding     *binding,
-                  const GValue *from_value,
-                  GValue       *to_value,
-                  gpointer      user_data)
-{
-  GbpSpellBufferAddin *self = user_data;
-
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  g_value_set_boolean (to_value, gbp_spell_buffer_addin_calculate_enabled (self));
-
-  return TRUE;
-}
-
 static void
 checker_notify_language_cb (GbpSpellBufferAddin *self,
                             GParamSpec          *pspec,
-                            EditorSpellChecker  *spell_checker)
+                            SpellingChecker     *spell_checker)
 {
   g_autoptr(GFileInfo) info = NULL;
   const char *language_id;
   GFile *file;
 
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-  g_assert (EDITOR_IS_SPELL_CHECKER (spell_checker));
+  g_assert (SPELLING_IS_CHECKER (spell_checker));
   g_assert (IDE_IS_BUFFER (self->buffer));
-
-  /* Invalidate the entire spellcheck region */
-  if (self->adapter != NULL)
-    editor_text_buffer_spell_adapter_invalidate_all (self->adapter);
 
   /* Only persist the metadata if we have a backing file */
   if (!(file = ide_buffer_get_file (self->buffer)) || !g_file_is_native (file))
     return;
 
   /* Ignore if there is nothing to set */
-  if (!(language_id = editor_spell_checker_get_language (spell_checker)))
+  if (!(language_id = spelling_checker_get_language (spell_checker)))
     return;
 
   info = g_file_info_new ();
   g_file_info_set_attribute_string (info, METADATA_SPELLING, language_id);
   g_file_set_attributes_async (file, info, G_FILE_QUERY_INFO_NONE,
                                G_PRIORITY_DEFAULT, NULL, check_error, NULL);
-}
-
-static void
-spellcheck_before_insert_text (IdeBuffer *buffer,
-                               guint      offset,
-                               guint      length,
-                               gpointer   user_data)
-{
-  GbpSpellBufferAddin *self = user_data;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  if (self->adapter)
-    editor_text_buffer_spell_adapter_before_insert_text (self->adapter, offset, length);
-}
-
-static void
-spellcheck_after_insert_text (IdeBuffer *buffer,
-                              guint      offset,
-                              guint      length,
-                              gpointer   user_data)
-{
-  GbpSpellBufferAddin *self = user_data;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  if (self->adapter)
-    editor_text_buffer_spell_adapter_after_insert_text (self->adapter, offset, length);
-}
-
-static void
-spellcheck_before_delete_range (IdeBuffer *buffer,
-                                guint      offset,
-                                guint      length,
-                                gpointer   user_data)
-{
-  GbpSpellBufferAddin *self = user_data;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  if (self->adapter)
-    editor_text_buffer_spell_adapter_before_delete_range (self->adapter, offset, length);
-}
-
-static void
-spellcheck_after_delete_range (IdeBuffer *buffer,
-                               guint      offset,
-                               guint      length,
-                               gpointer   user_data)
-{
-  GbpSpellBufferAddin *self = user_data;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  if (self->adapter)
-    editor_text_buffer_spell_adapter_after_delete_range (self->adapter, offset, length);
-}
-
-static void
-gbp_spell_buffer_addin_commit_notify (GtkTextBuffer            *buffer,
-                                      GtkTextBufferNotifyFlags  flags,
-                                      guint                     position,
-                                      guint                     length,
-                                      gpointer                  user_data)
-{
-  if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT)
-    spellcheck_before_insert_text (IDE_BUFFER (buffer), position, length, user_data);
-  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT)
-    spellcheck_after_insert_text (IDE_BUFFER (buffer), position, length, user_data);
-  else if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE)
-    spellcheck_before_delete_range (IDE_BUFFER (buffer), position, length, user_data);
-  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE)
-    spellcheck_after_delete_range (IDE_BUFFER (buffer), position, length, user_data);
 }
 
 static void
@@ -212,29 +93,19 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
   g_assert (IDE_IS_BUFFER (buffer));
 
   self->buffer = buffer;
-  self->checker = editor_spell_checker_new (NULL, NULL);
-  self->adapter = editor_text_buffer_spell_adapter_new (GTK_TEXT_BUFFER (buffer), self->checker);
-  self->commit_funcs_handler =
-    gtk_text_buffer_add_commit_notify (GTK_TEXT_BUFFER (buffer),
-                                       (GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT |
-                                        GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT |
-                                        GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE |
-                                        GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE),
-                                       gbp_spell_buffer_addin_commit_notify,
-                                       self, NULL);
+  self->checker = spelling_checker_new (NULL, NULL);
+  self->adapter = spelling_text_buffer_adapter_new (GTK_SOURCE_BUFFER (buffer),
+                                                    self->checker);
+
+  g_settings_bind (settings, "check-spelling",
+                   self->adapter, "enabled",
+                   G_SETTINGS_BIND_GET);
 
   g_signal_connect_object (self->checker,
                            "notify::language",
                            G_CALLBACK (checker_notify_language_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
-  self->enabled_action = g_property_action_new ("enabled", self, "enabled");
-  g_object_bind_property_full (buffer, "state", self->adapter, "enabled",
-                               G_BINDING_SYNC_CREATE,
-                               state_to_enabled, NULL, self, NULL);
-
-  self->language_action = g_property_action_new ("language", self->checker, "language");
 
   IDE_EXIT;
 }
@@ -250,21 +121,14 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  gtk_text_buffer_remove_commit_notify (GTK_TEXT_BUFFER (buffer), self->commit_funcs_handler);
-  self->commit_funcs_handler = 0;
-
   g_signal_handlers_disconnect_by_func (self->checker,
                                         G_CALLBACK (checker_notify_language_cb),
                                         self);
 
   g_clear_object (&self->checker);
   g_clear_object (&self->adapter);
-  g_clear_object (&self->enabled_action);
-  g_clear_object (&self->language_action);
 
   self->buffer = NULL;
-
-  self->enabled = FALSE;
 
   IDE_EXIT;
 }
@@ -280,85 +144,8 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSpellBufferAddin, gbp_spell_buffer_addin, G_TY
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void
-gbp_spell_buffer_addin_set_enabled (GbpSpellBufferAddin *self,
-                                    gboolean             enabled)
-{
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  enabled = !!enabled;
-
-  if (enabled != self->enabled)
-    {
-      self->enabled = enabled;
-      if (self->adapter != NULL)
-        editor_text_buffer_spell_adapter_set_enabled (self->adapter,
-                                                      gbp_spell_buffer_addin_calculate_enabled (self));
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
-    }
-}
-
-static gboolean
-gbp_spell_buffer_addin_get_enabled (GbpSpellBufferAddin *self)
-{
-  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  return self->enabled;
-}
-
-static void
-gbp_spell_buffer_addin_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
-{
-  GbpSpellBufferAddin *self = GBP_SPELL_BUFFER_ADDIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_ENABLED:
-      g_value_set_boolean (value, gbp_spell_buffer_addin_get_enabled (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_spell_buffer_addin_set_property (GObject      *object,
-                                     guint         prop_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
-{
-  GbpSpellBufferAddin *self = GBP_SPELL_BUFFER_ADDIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_ENABLED:
-      gbp_spell_buffer_addin_set_enabled (self, g_value_get_boolean (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_spell_buffer_addin_class_init (GbpSpellBufferAddinClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->get_property = gbp_spell_buffer_addin_get_property;
-  object_class->set_property = gbp_spell_buffer_addin_set_property;
-
-  properties [PROP_ENABLED] =
-    g_param_spec_boolean ("enabled",
-                          "Enabled",
-                          "If spellcheck is enabled for the buffer",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -370,82 +157,34 @@ gbp_spell_buffer_addin_init (GbpSpellBufferAddin *self)
       g_debug ("Spellcheck settings loaded with initial value of %s",
                g_settings_get_boolean (settings, "check-spelling") ? "true" : "false");
     }
+}
 
-  g_settings_bind (settings, "check-spelling",
-                   self, "enabled",
-                   G_SETTINGS_BIND_GET);
+GMenuModel *
+gbp_spell_buffer_addin_get_menu (GbpSpellBufferAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
+
+  if (self->adapter == NULL)
+    return NULL;
+
+  return spelling_text_buffer_adapter_get_menu_model (self->adapter);
 }
 
 void
-gbp_spell_buffer_addin_add_word (GbpSpellBufferAddin *self,
-                                 const char          *word)
+gbp_spell_buffer_addin_update_menu (GbpSpellBufferAddin *self)
 {
-  IDE_ENTRY;
-
   g_return_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self));
 
-  if (word == NULL || word[0] == 0)
-    IDE_EXIT;
+  if (self->adapter == NULL)
+    return;
 
-  editor_spell_checker_add_word (self->checker, word);
-  editor_text_buffer_spell_adapter_invalidate_all (self->adapter);
-
-  IDE_EXIT;
+  spelling_text_buffer_adapter_update_corrections (self->adapter);
 }
 
-void
-gbp_spell_buffer_addin_ignore_word (GbpSpellBufferAddin *self,
-                                    const char          *word)
-{
-  IDE_ENTRY;
-
-  g_return_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self));
-
-  if (word == NULL || word[0] == 0)
-    IDE_EXIT;
-
-  editor_spell_checker_ignore_word (self->checker, word);
-  editor_text_buffer_spell_adapter_invalidate_all (self->adapter);
-
-  IDE_EXIT;
-}
-
-gboolean
-gbp_spell_buffer_addin_check_spelling (GbpSpellBufferAddin *self,
-                                       const char          *word)
-{
-  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), FALSE);
-
-  if (self->checker != NULL && word != NULL)
-    return editor_spell_checker_check_word (self->checker, word, -1);
-
-  return TRUE;
-}
-
-char **
-gbp_spell_buffer_addin_list_corrections (GbpSpellBufferAddin *self,
-                                         const char          *word)
+GActionGroup *
+gbp_spell_buffer_addin_get_actions (GbpSpellBufferAddin *self)
 {
   g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
 
-  if (self->checker != NULL && word != NULL)
-    return editor_spell_checker_list_corrections (self->checker, word);
-
-  return NULL;
-}
-
-GAction *
-gbp_spell_buffer_addin_get_enabled_action (GbpSpellBufferAddin *self)
-{
-  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
-
-  return G_ACTION (self->enabled_action);
-}
-
-GAction *
-gbp_spell_buffer_addin_get_language_action (GbpSpellBufferAddin *self)
-{
-  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
-
-  return G_ACTION (self->language_action);
+  return G_ACTION_GROUP (self->adapter);
 }
