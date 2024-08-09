@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-07-18 20:29+0000\n"
-"PO-Revision-Date: 2024-07-19 16:47+0300\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2024-08-04 20:56+0000\n"
+"PO-Revision-Date: 2024-08-09 16:49+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
-"3);\n"
-"X-Generator: Poedit 3.4.2\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
+"2 : 3)\n"
+"X-Generator: Gtranslator 46.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -85,8 +85,8 @@ msgstr "שילוב עם Git"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
 msgid ""
-"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
-"and Waf"
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
 msgstr ""
 "משתלב עם Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize ו־Waf"
 
@@ -256,11 +256,11 @@ msgstr "Debugger Breakpoint at Warnings and Criticals"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() and g_critical "
-"function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
-"Debugger should automatically insert breakpoint at g_warning() and g_critical "
-"function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -331,11 +331,23 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "If enabled, the editor will show relative line numbers."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+msgid "Use line selection styling"
+msgstr "Use line selection styling"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+msgstr ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "מקש Backspace חכם"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -343,87 +355,87 @@ msgstr ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr "מקשי Home ו־End חכמים"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
 msgstr "Modifies the behavior of Home/End keys."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr "Show grid lines"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "If enabled, the editor will show grid lines in the document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr "Overview Map Policy"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr "When the overview map should be displayed."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "ציור רווחים"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr "The various types of space to draw in the editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "גלישת טקסט"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "The way to wrap a long line of text for a better visibility."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "שמירה אוטומטית מאופשרת"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Enable or disable autosave feature."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "שמירה אוטומטית לעתים קרובות"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Completion Row Count"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr "The number of completion rows to display to the user."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "גובה שורה"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "The line height to use for the selected font."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "השלמה אוטומטית הדודית"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -431,19 +443,19 @@ msgstr ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
 msgstr "Minimum characters for matching selection."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Specify the minimum number of characters for selection matching."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "Enable Snippets"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -451,11 +463,11 @@ msgstr ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "בחירת השלמה ראשונה"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "Automatically select the first auto-completion entry."
 
@@ -676,12 +688,13 @@ msgid "Sort Directories First"
 msgstr "סידור תיקיות לפני קבצים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid "If enabled, the project tree will sort directories before regular files."
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
 msgstr ""
 "If enabled, the project tree will sort directories before regular files."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
+#: src/plugins/editorui/tweaks.ui:387
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "בדיקת איות"
@@ -755,7 +768,7 @@ msgstr "שמירת הטיוטה נכשלה: %s"
 msgid "Untitled"
 msgstr "ללא כותרת"
 
-#: src/libide/core/ide-global.c:512 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
@@ -799,7 +812,7 @@ msgstr "העדפות"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -848,8 +861,10 @@ msgstr "דפים"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
 #: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145 src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157 src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:157
+#: src/libide/sourceview/gtk/menus.ui:163
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -904,7 +919,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
-"הקידוד ששימש לטעינת הקובץ זיהה שגיאות. אפשר לבחור קידוד אחר משורת המצב ולרענן."
+"הקידוד ששימש לטעינת הקובץ זיהה שגיאות. אפשר לבחור קידוד אחר משורת המצב "
+"ולרענן."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1046,7 +1062,7 @@ msgid "Language"
 msgstr "שפה"
 
 #: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:114
+#: src/libide/gui/ide-primary-workspace.ui:117
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "הצגת לוח תחתון (Ctrl+F9)"
 
@@ -1152,7 +1168,8 @@ msgstr "בנייה (%s)"
 msgid "Post-install (%s)"
 msgstr "אוחר־התקנה (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3113 src/libide/foundry/ide-pipeline.c:3152
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "יצירת מסוף דמה נכשלה. יכולות המסוף תוגבלנה."
 
@@ -1160,12 +1177,14 @@ msgstr "יצירת מסוף דמה נכשלה. יכולות המסוף תוגב�
 msgid "Cleaning…"
 msgstr "מנקה…"
 
-#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "נכשל"
 
-#: src/libide/foundry/ide-pipeline.c:3355 src/libide/foundry/ide-pipeline.c:3418
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "מוכן"
 
@@ -1203,7 +1222,8 @@ msgstr "בהגשה…"
 msgid "Exporting…"
 msgstr "בתהליך ייצוא…"
 
-#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "הצלחה"
@@ -1685,17 +1705,17 @@ msgstr "לא ניתן לטעון HTML. חסרה תמיכה ב־WebKit."
 msgid "Invalid configuration"
 msgstr "תצורה לא תקינה"
 
-#: src/libide/gui/ide-primary-workspace.ui:46
+#: src/libide/gui/ide-primary-workspace.ui:49
 msgid "Toggle Left Panel (F9)"
 msgstr "הצגת לוח ימני (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:81
+#: src/libide/gui/ide-primary-workspace.ui:84
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "הצגת לוח שמאלי"
 
-#: src/libide/gui/ide-primary-workspace.ui:89
-#: src/libide/gui/ide-primary-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:92
+#: src/libide/gui/ide-primary-workspace.ui:139
 msgid "Search (Ctrl+Enter)"
 msgstr "חיפוש (Ctrl+Enter)"
 
@@ -1785,13 +1805,13 @@ msgid "No LSP client connection is available"
 msgstr "אין התחברות זמינה ללקוח LSP"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "שרת השפה „%s” יצא"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "שרת השפה „%s” ייצר את התהליך %s"
@@ -1998,7 +2018,8 @@ msgstr "ש_כפול שורה"
 msgid "_Formatting"
 msgstr "_עיצוב"
 
-#: src/libide/sourceview/gtk/menus.ui:154 src/libide/sourceview/gtk/menus.ui:158
+#: src/libide/sourceview/gtk/menus.ui:154
+#: src/libide/sourceview/gtk/menus.ui:158
 #: src/libide/sourceview/gtk/menus.ui:164
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
@@ -2051,7 +2072,8 @@ msgstr "בחירת כל הטקסט במסוף לרבות מה שמעבר לגל�
 msgid "Select _None"
 msgstr "_ניקוי בחירה"
 
-#: src/libide/terminal/ide-terminal.c:539 src/libide/terminal/ide-terminal.c:572
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "הועתק ללוח הגזירים"
 
@@ -2211,7 +2233,7 @@ msgid "unversioned"
 msgstr "ללא גרסה"
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "כלום"
 
@@ -2307,11 +2329,11 @@ msgstr "הסרה"
 msgid "_Save"
 msgstr "_שמירה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:393
 msgid "Build Output"
 msgstr "פלט בנייה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:394
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "פלט בנייה (Shift+Ctrl+L)"
 
@@ -2438,7 +2460,8 @@ msgid "Available Build Targets"
 msgstr "מטרות בנייה זמינות"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-msgid "Some targets may not be available until the project has been configured."
+msgid ""
+"Some targets may not be available until the project has been configured."
 msgstr "חלק מהיעדים עלולים שלא להיות זמינים עד להגדרת המיזם."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
@@ -2856,7 +2879,8 @@ msgstr "להציג את מפקח GTK בזמן הרצת המיזם"
 msgid "Style"
 msgstr "סגנון Stylelint"
 
-#: src/plugins/buildui/gtk/preferences.ui:40 src/plugins/platformui/tweaks.ui:10
+#: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
 msgstr "ממשק"
 
@@ -2951,8 +2975,8 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"התקנת היישום לפני הרצה. זה נדרש במרבים המיזמים אלא אם פקודה הרצה מותאמת נמצאת "
-"בשימוש."
+"התקנת היישום לפני הרצה. זה נדרש במרבים המיזמים אלא אם פקודה הרצה מותאמת "
+"נמצאת בשימוש."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -3065,8 +3089,8 @@ msgstr "תחילית התקנה"
 
 #: src/plugins/buildui/tweaks.ui:408
 msgid ""
-"The project will be installed to this directory during the installation phase "
-"of the build pipeline."
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
 msgstr "המיזם יותקן לתיקייה זו במהלך שלב ההתקנה בצינור הבנייה."
 
 #: src/plugins/buildui/tweaks.ui:426
@@ -3199,6 +3223,14 @@ msgstr "מידע חסר או פגום מ־clang-format"
 msgid "Invalid cursor position provided from clang-format"
 msgstr "סופק מ־clang-format מיקום סמן לא תקף"
 
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"לא ניתן למצוא את הקובץ ‎.clang-format‏, נא להוסיף אחד למיזם שלך. עושה שימוש "
+"בסגנון GNU לסידור תבנית המסמך."
+
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
 msgstr "CMake"
@@ -3258,7 +3290,8 @@ msgstr "קוד המקור מסודר באינדקס"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr "החיפוש, הניתוח וההשלמה האוטומטית עשויים להיות מוגבלים עד להשלמת התהליך."
+msgstr ""
+"החיפוש, הניתוח וההשלמה האוטומטית עשויים להיות מוגבלים עד להשלמת התהליך."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3460,8 +3493,8 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים נוספים. עליו להכיל אותיות קטנות ללא "
-"רווחים, וכן לא יכול להתחיל במספר."
+"שם ייחודי המשמש עבור תיקיית המיזם ומשאבים נוספים. עליו להכיל אותיות קטנות "
+"ללא רווחים, וכן לא יכול להתחיל במספר."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID"
@@ -3554,7 +3587,8 @@ msgstr "הרצה עם מנפה שגיאות"
 msgid "Run the project with debugger"
 msgstr "הרצת המיזם עם מנפה שגיאות"
 
-#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#: src/plugins/debuggerui/gtk/menus.ui:81
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
@@ -3815,7 +3849,7 @@ msgstr "חוקר D-Bus…"
 msgid "Dub Run"
 msgstr "הרצת Dub"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "לא סופק קובץ."
 
@@ -3845,13 +3879,13 @@ msgstr "טקסט פשוט"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "רווחים"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "טאב"
 
@@ -3992,8 +4026,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
-"הגדרות המסופקות על ידי ‎.editorconfig ומצבי שורה בקוד מקבלים עדיפות על פני אלה "
-"למטה."
+"הגדרות המסופקות על ידי ‎.editorconfig ומצבי שורה בקוד מקבלים עדיפות על פני "
+"אלה למטה."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -4068,7 +4102,7 @@ msgid "The desired maximum line length"
 msgstr "אורך שורה מרבי רצוי"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "התנהגות"
 
@@ -4231,23 +4265,31 @@ msgstr "הצגת שינויי שורות"
 msgid "Highlight changed lines next to the line number"
 msgstr "הצגת הדגשה לצד מספר השורה של שורות שהשתנו"
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+msgid "Use Line Selection Styling"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "הדגשה"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "הדגשת השורה הנוכחית"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "הבלטת השורה הנוכחית באמצעות הדגשה"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "הדגשת סוגרים מתאימים"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4255,196 +4297,196 @@ msgstr ""
 "שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים "
 "ועוד"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "הדגשה תחבירית"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr "שימוש במידע על סמלים להדגשת שמות מתחם, פונקציות ומשתנים בתוך קוד המקור"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "ציור סימן המייצג רווחים רגילים"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "ציור סימן המייצג טאבים"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "שורות חדשות"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "ציור סימן בסוף כל שורה"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "רווחים קשיחים"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr "ציור סימן בתווי רווחים קשיחים"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Leading"
 msgstr "מובילים"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr "ציור סימן עבור רווחים מובילים בלבד"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "בתוך הטקסט"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr "ציור סימן בתוך שורת טקסט בלבד"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "נגררים"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr "ציור סימן עבור רווחים נגררים בלבד"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "בדיקת איות"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr "סימון קו מתחת לטעויות איות אפשריות בזמן ההקלדה"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "בחירות"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr "מספר תווים מזערי להדגשה"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr "אורך הבחירה המזערי להדגשת התאמות"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "קטעי קוד"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr "הרחבת קטעי קוד"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "שימוש ב„טאב” להרחבת הגדרות קטעי קוד בעורך הטקסט"
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
 msgstr "השלמת קוד"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:441
 msgid "Completion Proposals"
 msgstr "הצעות השלמה"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr "הצעת השלמות קוד"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr "הצעת השלמות באופן אוטומטי בזמן הקלדה"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr "בחירת הצעת ההשלמה הראשונה"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "בחירה אוטומטית של הצעת ההשלמה הראשונה בהצגה"
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr "מספר הצעות השלמה מרבי"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "המספר המרבי של שורות השלמה שיוצגו בבת אחת"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "מעברים"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור את היישור עם רוחב ההזחה שלך"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr "ניווט לתו הראשון שאינו רווח"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr "לפני גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr "אחרי גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr "במקום גבולות השורה"
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "מושבת"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "ניהול הפעלה"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "שמירה ושחזור"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "שמירה אוטומטית"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr "שמירת המסמך באופן קבוע עם הקלדה שלך"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "השהייה לשמירה אוטומטית"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "זמן השהייה בשניות להמתנה לפני שמירה אוטומטית של המסמך"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr "סידור הקוד ברגע השמירה"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
-"Reformat sources when saving to disk. Requires a registered formatter for the "
-"source language."
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
 msgstr "סידור הקוד מחדש בזמן השמירה לכונן. דורש רישום מעצב לקוד של השפה."
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr "שחזור מיקום הסמן"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr "קפיצה למיקום האחרון עם פתיחה מחודשת של קובץ"
 
@@ -4506,7 +4548,8 @@ msgid "Resolving SDK Extensions"
 msgstr "לפתור הרחבות ערכת פיתוח (SDK)"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
-msgid "Builder is locating the appropriate SDK extensions to build your project"
+msgid ""
+"Builder is locating the appropriate SDK extensions to build your project"
 msgstr "‏Builder מאתר את הרחבות ערכת פיתוח התכנה המתאימות לבניית את המיזם שלך"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:852
@@ -4633,7 +4676,8 @@ msgstr "הפעולה נכשלה. השגיאה המקורית הייתה „%s”
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
-"Builder failed to provide appropriate credentials when cloning the repository."
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
 msgstr "‏Builder נכשל במציאת אישורים מתאימים בעת שיבוט המאגר."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:575
@@ -4676,20 +4720,20 @@ msgstr "מאתחל תת מודל של git"
 msgid "Network is not available, skipping submodule update"
 msgstr "הרשת אינה זמינה, מדלק על עדכון תת המודל"
 
-#: src/plugins/git/gbp-git-vcs.c:230
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr "נדחף."
 
-#: src/plugins/git/gbp-git-vcs.c:268
+#: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "הסימוכין „%s” נדחף"
 
-#: src/plugins/git/gbp-git-vcs.c:570
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr "התיקייה אינה במאגר"
 
-#: src/plugins/git/gbp-git-vcs.c:598
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "קישורים למאגרי Git"
 
@@ -4934,7 +4978,6 @@ msgid "Scanning jhbuild for new documentation"
 msgstr "סורק את JHBuild למציאת תיעוד חדש"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#| msgid "GNOME Builder"
 msgid "GNOME Nightly"
 msgstr "GNOME Nightly"
 
@@ -6251,7 +6294,7 @@ msgstr "מספר מרבי של שרות לגלילה"
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr "המספר המרבי של שורות שיאוחסנו בהיסטוריה עם הגבלת גלילה"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:148
 msgid "Unit Test Output"
 msgstr "פלט יחידת בדיקה"
 
@@ -6450,8 +6493,8 @@ msgstr "ענפים"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
 msgid ""
-"Enter the URL of the source code repository for the project you would like to "
-"clone."
+"Enter the URL of the source code repository for the project you would like "
+"to clone."
 msgstr "יש להזין את כתובת מאגר קוד המקור עבור המיזם שברצונך לשבט."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
@@ -6547,7 +6590,7 @@ msgstr "Enable _JavaScript"
 msgid "Failed to parse XML document"
 msgstr "ניתוח מסמך XML נכשל"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
 msgstr "ארע כשל ביצירת עץ ה־XML."
@@ -6962,7 +7005,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הוספת נקודת עצירה בתחילת היישומון"
 
 #~ msgid ""
-#~ "Automatically stop execution at the start of the applications main function"
+#~ "Automatically stop execution at the start of the applications main "
+#~ "function"
 #~ msgstr "עצירה אוטומטית בהרצה של הפונקציה הראשית (main) של היישום"
 
 # לדעתי אין מדובר ב„שולחן עבודה” של המעטפת כאן
@@ -7023,8 +7067,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "בחירת תצורה זו כתצורה הפעילה."
 
 #~ msgid ""
-#~ "Duplicating the configuration allows making changes without modifying this "
-#~ "configuration."
+#~ "Duplicating the configuration allows making changes without modifying "
+#~ "this configuration."
 #~ msgstr "שכפול התצורה מאפשר ביצוע שינויים ללא שינוי הגדרות אלו."
 
 #~ msgid "_Remove"
@@ -7890,7 +7934,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "נא להמתין בזמן סריקת המיזם שלך"
 
 #~ msgid "The number of pixels to include above and below lines in the editor."
-#~ msgstr "The number of pixels to include above and below lines in the editor."
+#~ msgstr ""
+#~ "The number of pixels to include above and below lines in the editor."
 
 #~ msgid "Window position"
 #~ msgstr "Window position"
@@ -8218,9 +8263,10 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הוצאת קוד מהערה"
 
 #~ msgid ""
-#~ "When saving a file Builder will automatically update copyright information "
-#~ "for you"
-#~ msgstr "בעת שמירת קובץ, Builder יעדכן באופן אוטומטי את זכויות היוצרים בשבילך"
+#~ "When saving a file Builder will automatically update copyright "
+#~ "information for you"
+#~ msgstr ""
+#~ "בעת שמירת קובץ, Builder יעדכן באופן אוטומטי את זכויות היוצרים בשבילך"
 
 #~ msgid "update copyright save"
 #~ msgstr "עדכון זכויות יוצרים שמירה לשמור לעדכן"
@@ -8575,9 +8621,9 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "quick highlight words matching current selection minimum length"
 #~ msgstr ""
-#~ "quick highlight words matching current selection minimum length חיפוש מהיר "
-#~ "הדגשה מילה מילים נוכחי בחירה תואם מתאים מתאימה תואמת מינימום הכרחי אורך תו "
-#~ "תווים "
+#~ "quick highlight words matching current selection minimum length חיפוש "
+#~ "מהיר הדגשה מילה מילים נוכחי בחירה תואם מתאים מתאימה תואמת מינימום הכרחי "
+#~ "אורך תו תווים "
 
 #~ msgid "Rust Analyzer: Cargo command for diagnostics"
 #~ msgstr "מנתח Rust: פקודת Cargo לניתוח"
@@ -8714,8 +8760,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #, c-format
 #~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file as "
-#~ "an attachment on your bug report or support request."
+#~ "The support log file has been written to “%s”. Please provide this file "
+#~ "as an attachment on your bug report or support request."
 #~ msgstr ""
 #~ "קובץ יומן התמיכה נכתב אל „%s”. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
 #~ "בבקשת תמיכה."
@@ -9216,8 +9262,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "הצגת השלמות בעת הקלדה בהתבסס על מילים שנמצאו באיזה מסמך פתוח"
 
 #~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, functions, "
-#~ "and more"
+#~ "Create and manages a Ctags database for completing class names, "
+#~ "functions, and more"
 #~ msgstr "יצירה וניהול מסד נתוני Ctags עבור השלמת שמות מחלקה, פונקציות ועוד"
 
 #~ msgid "Suggest completions using Clang (Experimental)"
