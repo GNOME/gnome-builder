@@ -81,42 +81,78 @@ set_path_transform (const GValue *from_value,
 }
 
 static void
-on_chooser_response_cb (GtkFileChooserDialog *chooser,
-                        int                   response,
-                        IdeTweaksDirectory   *info)
+select_folder_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(IdeTweaksDirectory) info = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
   GtkWidget *entry;
 
-  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (chooser));
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TWEAKS_DIRECTORY (info));
 
-  entry = g_object_get_data (G_OBJECT (chooser), "ENTRY");
+  entry = g_object_get_data (G_OBJECT (dialog), "ENTRY");
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  g_assert (entry != NULL);
+  g_assert (GTK_IS_WIDGET (entry));
+
+  if (!(file = gtk_file_dialog_select_folder_finish (dialog, result, &error)))
+    return;
+
+  if (g_file_is_native (file))
     {
-      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
+      g_autofree char *path = g_file_get_path (file);
+      g_autofree char *collapsed = ide_path_collapse (path);
 
-      if (g_file_is_native (file))
-        {
-          g_autofree char *path = g_file_get_path (file);
-          g_autofree char *collapsed = ide_path_collapse (path);
-
-          gtk_editable_set_text (GTK_EDITABLE (entry), collapsed);
-        }
+      gtk_editable_set_text (GTK_EDITABLE (entry), collapsed);
     }
+}
 
-  gtk_window_destroy (GTK_WINDOW (chooser));
+static void
+open_cb (GObject      *object,
+         GAsyncResult *result,
+         gpointer      user_data)
+{
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(IdeTweaksDirectory) info = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
+  GtkWidget *entry;
+
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TWEAKS_DIRECTORY (info));
+
+  entry = g_object_get_data (G_OBJECT (dialog), "ENTRY");
+
+  g_assert (entry != NULL);
+  g_assert (GTK_IS_WIDGET (entry));
+
+  if (!(file = gtk_file_dialog_open_finish (dialog, result, &error)))
+    return;
+
+  if (g_file_is_native (file))
+    {
+      g_autofree char *path = g_file_get_path (file);
+      g_autofree char *collapsed = ide_path_collapse (path);
+
+      gtk_editable_set_text (GTK_EDITABLE (entry), collapsed);
+    }
 }
 
 static void
 on_button_clicked_cb (GtkButton          *button,
                       IdeTweaksDirectory *info)
 {
+  g_autoptr(GtkFileDialog) dialog = NULL;
   g_autoptr(GFile) folder = NULL;
   g_autofree char *path = NULL;
   g_autofree char *expanded = NULL;
   IdeTweaksBinding *binding;
-  GtkWidget *chooser;
   GtkWidget *row;
   GtkRoot *root;
 
@@ -134,24 +170,27 @@ on_button_clicked_cb (GtkButton          *button,
 
   root = gtk_widget_get_root (GTK_WIDGET (button));
   row = gtk_widget_get_ancestor (GTK_WIDGET (button), ADW_TYPE_ENTRY_ROW);
-  chooser = gtk_file_chooser_dialog_new (_("Projects Directory"),
-                                         GTK_WINDOW (root),
-                                         info->is_directory ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         _("Cancel"), GTK_RESPONSE_CANCEL,
-                                         _("Select"), GTK_RESPONSE_ACCEPT,
-                                         NULL);
-  g_object_set_data (G_OBJECT (chooser), "ENTRY", row);
 
+  dialog = gtk_file_dialog_new ();
+  /* FIXME? Shouldn't title come from a tweak property? */
+  gtk_file_dialog_set_title (dialog, _("Projects Directory"));
+  gtk_file_dialog_set_accept_label (dialog, _("Select"));
   if (folder != NULL)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), folder, NULL);
+    gtk_file_dialog_set_initial_file (dialog, folder);
+  g_object_set_data (G_OBJECT (dialog), "ENTRY", row);
 
-  g_signal_connect_object (chooser,
-                           "response",
-                           G_CALLBACK (on_chooser_response_cb),
-                           info,
-                           0);
-
-  gtk_window_present (GTK_WINDOW (chooser));
+  if (info->is_directory)
+    gtk_file_dialog_select_folder (dialog,
+                                   GTK_WINDOW (root),
+                                   NULL,
+                                   select_folder_cb,
+                                   g_object_ref (info));
+  else
+    gtk_file_dialog_open (dialog,
+                          GTK_WINDOW (root),
+                          NULL,
+                          open_cb,
+                          g_object_ref (info));
 }
 
 static GtkWidget *
