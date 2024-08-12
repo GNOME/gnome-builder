@@ -45,5 +45,12 @@
         <attribute name="verb-icon-name">builder-split-tab-symbolic</attribute>
       </item>
     </section>
+    <section id="terminal-save-section">
+      <item>
+        <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="action">page.terminal.save-as</attribute>
+        <attribute name="verb-icon-name">document-save-as-symbolic</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
