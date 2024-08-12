@@ -36,50 +36,44 @@ struct _GbpTestuiOutputPanel
 G_DEFINE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, IDE_TYPE_PANE)
 
 static void
-gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel *self,
-                                         int                   res,
-                                         GtkFileChooserNative *native)
+gbp_testui_output_panel_save_in_file_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(GbpTestuiOutputPanel) self = user_data;
+  g_autoptr(GFileOutputStream) stream = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = user_data;
+
   IDE_ENTRY;
 
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
 
-  if (res == GTK_RESPONSE_ACCEPT)
+  if (!(file = gtk_file_dialog_save_finish (dialog, result, &error)))
+    return;
+
+  stream = g_file_replace (file,
+                           NULL,
+                           FALSE,
+                           G_FILE_CREATE_REPLACE_DESTINATION,
+                           NULL,
+                           &error);
+
+  if (stream != NULL)
     {
-      g_autoptr(GFile) file = NULL;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-
-      if (file != NULL)
-        {
-          g_autoptr(GFileOutputStream) stream = NULL;
-          g_autoptr(GError) error = NULL;
-
-          stream = g_file_replace (file,
-                                   NULL,
-                                   FALSE,
-                                   G_FILE_CREATE_REPLACE_DESTINATION,
-                                   NULL,
-                                   &error);
-
-          if (stream != NULL)
-            {
-              vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
-                                                G_OUTPUT_STREAM (stream),
-                                                VTE_WRITE_DEFAULT,
-                                                NULL,
-                                                &error);
-              g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
-            }
-
-          if (error != NULL)
-            g_warning ("Failed to write contents: %s", error->message);
-        }
+      vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
+                                        G_OUTPUT_STREAM (stream),
+                                        VTE_WRITE_DEFAULT,
+                                        NULL,
+                                        &error);
+      g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
     }
 
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
-  g_object_unref (native);
+  if (error != NULL)
+    g_warning ("Failed to write contents: %s", error->message);
 
   IDE_EXIT;
 }
@@ -90,7 +84,7 @@ gbp_testui_output_panel_save_in_file (GtkWidget  *widget,
                                       GVariant   *param)
 {
   GbpTestuiOutputPanel *self = (GbpTestuiOutputPanel *)widget;
-  g_autoptr(GtkFileChooserNative) native = NULL;
+  g_autoptr(GtkFileDialog) dialog = NULL;
   GtkWidget *window;
 
   IDE_ENTRY;
@@ -98,19 +92,15 @@ gbp_testui_output_panel_save_in_file (GtkWidget  *widget,
   g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
-  native = gtk_file_chooser_native_new (_("Save File"),
-                                        GTK_WINDOW (window),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Save"),
-                                        _("_Cancel"));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Save File"));
+  gtk_file_dialog_set_accept_label (dialog, _("Save"));
 
-  g_signal_connect_object (native,
-                           "response",
-                           G_CALLBACK (gbp_testui_output_panel_save_in_file_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (window),
+                        NULL,
+                        gbp_testui_output_panel_save_in_file_cb,
+                        g_object_ref (self));
 
   IDE_EXIT;
 

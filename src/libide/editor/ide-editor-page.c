@@ -1063,16 +1063,22 @@ ide_editor_page_save_cb (GObject      *object,
 }
 
 static void
-ide_editor_page_save_response (GtkFileChooserNative *native,
-                               int                   response,
-                               IdeTask              *task)
+ide_editor_page_save_response (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeNotification) notif = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
   IdeEditorPage *self;
   IdeBuffer *buffer;
 
   IDE_ENTRY;
 
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
@@ -1081,24 +1087,20 @@ ide_editor_page_save_response (GtkFileChooserNative *native,
   g_assert (IDE_IS_EDITOR_PAGE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  if (!(file = gtk_file_dialog_save_finish (dialog, result, &error)))
     {
-      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-      g_autoptr(IdeNotification) notif = NULL;
-
-      ide_buffer_save_file_async (buffer,
-                                  file,
-                                  ide_task_get_cancellable (task),
-                                  &notif,
-                                  ide_editor_page_save_cb,
-                                  g_object_ref (task));
-
-      ide_page_set_progress (IDE_PAGE (self), notif);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
-  g_object_unref (native);
-  g_object_unref (task);
+  ide_buffer_save_file_async (buffer,
+                              file,
+                              ide_task_get_cancellable (task),
+                              &notif,
+                              ide_editor_page_save_cb,
+                              g_object_ref (task));
+
+  ide_page_set_progress (IDE_PAGE (self), notif);
 
   IDE_EXIT;
 }
@@ -1124,8 +1126,8 @@ ide_editor_page_save_async (IdeEditorPage       *self,
 
   if (ide_buffer_get_is_temporary (self->buffer))
     {
+      g_autoptr(GtkFileDialog) dialog = NULL;
       g_autoptr(GFile) workdir = NULL;
-      GtkFileChooserNative *dialog;
       IdeWorkspace *workspace;
       IdeContext *context;
 
@@ -1133,26 +1135,16 @@ ide_editor_page_save_async (IdeEditorPage       *self,
       context = ide_workspace_get_context (workspace);
       workdir = ide_context_ref_workdir (context);
 
-      dialog = gtk_file_chooser_native_new (_("Save File"),
-                                            GTK_WINDOW (workspace),
-                                            GTK_FILE_CHOOSER_ACTION_SAVE,
-                                            _("Save"), _("Cancel"));
+      dialog = gtk_file_dialog_new ();
+      gtk_file_dialog_set_accept_label (dialog, _("Save File"));
+      gtk_file_dialog_set_modal (dialog, TRUE);
+      gtk_file_dialog_set_initial_folder (dialog, workdir);
 
-      g_object_set (dialog,
-                    "do-overwrite-confirmation", TRUE,
-                    "modal", TRUE,
-                    "select-multiple", FALSE,
-                    "show-hidden", FALSE,
-                    NULL);
-
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), workdir, NULL);
-
-      g_signal_connect (dialog,
-                        "response",
-                        G_CALLBACK (ide_editor_page_save_response),
-                        g_object_ref (task));
-
-      gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+      gtk_file_dialog_save (dialog,
+                            GTK_WINDOW (workspace),
+                            NULL,
+                            ide_editor_page_save_response,
+                            g_object_ref (task));
 
       IDE_EXIT;
     }

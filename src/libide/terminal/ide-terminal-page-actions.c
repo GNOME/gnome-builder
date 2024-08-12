@@ -110,18 +110,21 @@ save_worker (IdeTask      *task,
 }
 
 static void
-ide_terminal_page_actions_save_async (IdeTerminalPage       *view,
-                                     VteTerminal          *terminal,
-                                     GFile                *file,
-                                     GAsyncReadyCallback   callback,
-                                     GCancellable         *cancellable,
-                                     gpointer              user_data)
+ide_terminal_page_actions_save_async (IdeTerminalPage     *view,
+                                      VteTerminal         *terminal,
+                                      GFile               *file,
+                                      GAsyncReadyCallback  callback,
+                                      GCancellable        *cancellable,
+                                      gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFileOutputStream) output_stream = NULL;
   g_autoptr(GError) error = NULL;
   SaveTask *savetask;
 
+  g_return_if_fail (IDE_IS_TERMINAL_PAGE (view));
+  g_return_if_fail (VTE_IS_TERMINAL (terminal));
+  g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (view, cancellable, callback, user_data);
@@ -148,26 +151,23 @@ save_as_cb (GObject      *object,
             GAsyncResult *result,
             gpointer      user_data)
 {
+  IdeTerminalPage *view = (IdeTerminalPage *)object;
   IdeTask *task = (IdeTask *)result;
-  IdeTerminalPage *view = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
   SaveTask *savetask;
-  GFile *file;
-  GError *error = NULL;
+
+  g_assert (IDE_IS_TERMINAL_PAGE (view));
+  g_assert (IDE_IS_TASK (task));
+  g_assert (user_data == NULL);
 
   savetask = ide_task_get_task_data (task);
   file = g_object_ref (savetask->file);
 
   if (!ide_terminal_page_actions_save_finish (view, result, &error))
-    {
-      g_object_unref (file);
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
+    g_warning ("%s", error->message);
   else
-    {
-      g_clear_object (&view->save_as_file);
-      view->save_as_file = file;
-    }
+    g_set_object (&view->save_as_file, file);
 }
 
 static GFile *
@@ -187,108 +187,76 @@ get_last_focused_terminal (IdeTerminalPage *view)
   return VTE_TERMINAL (view->terminal);
 }
 
-static gchar *
-gb_terminal_get_selected_text (IdeTerminalPage  *view,
-                               VteTerminal     **terminal_p)
+static char *
+get_all_text (IdeTerminalPage *page)
 {
-#if 0
-  VteTerminal *terminal;
-  gchar *buf = NULL;
+  VteTerminal *terminal = get_last_focused_terminal (page);
 
-  terminal = get_last_focused_terminal (view);
-  if (terminal_p != NULL)
-    *terminal_p = terminal;
-
-  if (vte_terminal_get_has_selection (terminal))
-    {
-      vte_terminal_copy_primary (terminal);
-      buf = gtk_clipboard_wait_for_text (gtk_clipboard_get (GDK_SELECTION_PRIMARY));
-    }
-
-  return buf;
-#else
-  return g_strdup ("");
-#endif
+  return vte_terminal_get_text_range_format (terminal,
+                                             VTE_FORMAT_TEXT,
+                                             0, 0,
+                                             vte_terminal_get_row_count (terminal),
+                                             vte_terminal_get_column_count (terminal),
+                                             NULL);
 }
 
 static void
-save_as_response (GtkWidget *widget,
-                  gint       response,
-                  gpointer   user_data)
+save_as_response (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
   g_autoptr(IdeTerminalPage) view = user_data;
+  g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
-  GtkFileChooser *chooser = (GtkFileChooser *)widget;
-  VteTerminal *terminal;
 
-  g_assert (GTK_IS_FILE_CHOOSER (chooser));
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TERMINAL_PAGE (view));
 
-  switch (response)
-    {
-    case GTK_RESPONSE_OK:
-      file = gtk_file_chooser_get_file (chooser);
-      terminal = get_last_focused_terminal (view);
-      ide_terminal_page_actions_save_async (view, terminal, file, save_as_cb, NULL, view);
-      break;
-
-    case GTK_RESPONSE_CANCEL:
-      g_free (view->selection_buffer);
-
-    default:
-      break;
-    }
-
-  gtk_window_destroy (GTK_WINDOW (chooser));
+  if (!(file = gtk_file_dialog_save_finish (dialog, result, &error)))
+    g_clear_pointer (&view->selection_buffer, g_free);
+  else
+    ide_terminal_page_actions_save_async (view,
+                                          get_last_focused_terminal (view),
+                                          file,
+                                          save_as_cb, NULL, NULL);
 }
 
 static void
 ide_terminal_page_actions_save_as (GSimpleAction *action,
-                                  GVariant      *param,
-                                  gpointer       user_data)
+                                   GVariant      *param,
+                                   gpointer       user_data)
 {
   IdeTerminalPage *view = user_data;
-  GtkWidget *suggested;
-  GtkWidget *toplevel;
-  GtkWidget *dialog;
+  g_autoptr(GtkFileDialog) dialog = NULL;
+  GtkRoot *root;
   GFile *file = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TERMINAL_PAGE (view));
 
   /* We can't get this later because the dialog makes the terminal
    * unfocused and thus resets the selection
    */
-  view->selection_buffer = gb_terminal_get_selected_text (view, NULL);
+  g_clear_pointer (&view->selection_buffer, g_free);
+  view->selection_buffer = get_all_text (view);
 
-  toplevel = GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (view)));
-  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-                         "action", GTK_FILE_CHOOSER_ACTION_SAVE,
-                         "do-overwrite-confirmation", TRUE,
-                         "local-only", FALSE,
-                         "modal", TRUE,
-                         "select-multiple", FALSE,
-                         "show-hidden", FALSE,
-                         "transient-for", toplevel,
-                         "title", _("Save Terminal Content As"),
-                         NULL);
+  root = gtk_widget_get_root (GTK_WIDGET (view));
 
-  file = get_last_focused_terminal_file (view);
-  if (file != NULL)
-    gtk_file_chooser_set_file (GTK_FILE_CHOOSER (dialog), file, NULL);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Save Terminal Content As"));
+  gtk_file_dialog_set_accept_label (dialog, _("Save"));
+  gtk_file_dialog_set_modal (dialog, TRUE);
 
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          _("Save"), GTK_RESPONSE_OK,
-                          NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  if ((file = get_last_focused_terminal_file (view)))
+    gtk_file_dialog_set_initial_file (dialog, file);
 
-  suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               "suggested-action");
-
-  g_signal_connect (dialog, "response", G_CALLBACK (save_as_response), g_object_ref (view));
-
-  ide_gtk_window_present (GTK_WINDOW (dialog));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (root),
+                        NULL,
+                        save_as_response,
+                        g_object_ref (view));
 }
 
 static void

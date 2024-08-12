@@ -264,44 +264,47 @@ gbp_buildui_log_pane_clear_activate (GSimpleAction *action,
 }
 
 static void
-gbp_builui_log_pane_save_response (GtkFileChooserNative *native,
-                                   int                   response,
-                                   GbpBuilduiLogPane    *self)
+gbp_buildui_log_pane_save_response (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(GbpBuilduiLogPane) self = user_data;
+  g_autoptr(GFileOutputStream) stream = NULL;
+  g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
 
   IDE_ENTRY;
 
-  if (response != GTK_RESPONSE_ACCEPT)
-    IDE_RETURN ();
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
 
-  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+  if (!(file = gtk_file_dialog_save_finish (dialog, result, &error)))
+    IDE_EXIT;
 
-  if (file != NULL)
+  if (!(stream = g_file_replace (file,
+                                 NULL,
+                                 FALSE,
+                                 G_FILE_CREATE_REPLACE_DESTINATION,
+                                 NULL,
+                                 &error)))
     {
-      g_autoptr(GFileOutputStream) stream = NULL;
-      g_autoptr(GError) error = NULL;
-
-      stream = g_file_replace (file,
-                               NULL,
-                               FALSE,
-                               G_FILE_CREATE_REPLACE_DESTINATION,
-                               NULL,
-                               &error);
-
-      if (stream != NULL)
-        {
-          vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
-                                            G_OUTPUT_STREAM (stream),
-                                            VTE_WRITE_DEFAULT,
-                                            NULL,
-                                            &error);
-          g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
-        }
-
-      if (error != NULL)
-        g_warning ("Failed to write contents: %s", error->message);
+      g_warning ("Failed to replace destination: %s", error->message);
+      IDE_EXIT;
     }
+
+  vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
+                                    G_OUTPUT_STREAM (stream),
+                                    VTE_WRITE_DEFAULT,
+                                    NULL,
+                                    &error);
+
+  g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
+
+  if (error != NULL)
+    g_warning ("Failed to write contents: %s", error->message);
 
   IDE_EXIT;
 }
@@ -312,7 +315,7 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
                                    gpointer       user_data)
 {
   GbpBuilduiLogPane *self = user_data;
-  g_autoptr(GtkFileChooserNative) native = NULL;
+  g_autoptr(GtkFileDialog) dialog = NULL;
   GtkWidget *window;
 
   IDE_ENTRY;
@@ -321,18 +324,16 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
   g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
-  native = gtk_file_chooser_native_new (_("Save File"),
-                                        GTK_WINDOW (window),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Save"),
-                                        _("_Cancel"));
 
-  g_signal_connect (native,
-                    "response",
-                    G_CALLBACK (gbp_builui_log_pane_save_response),
-                    self);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Save File"));
+  gtk_file_dialog_set_accept_label (dialog, _("Save"));
 
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (window),
+                        NULL,
+                        gbp_buildui_log_pane_save_response,
+                        g_object_ref (self));
 
   IDE_EXIT;
 }

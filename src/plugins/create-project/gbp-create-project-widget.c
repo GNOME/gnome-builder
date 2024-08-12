@@ -186,23 +186,25 @@ input_notify_cb (GbpCreateProjectWidget *self,
 }
 
 static void
-select_folder_response_cb (GbpCreateProjectWidget *self,
-                           int                     response_id,
-                           GtkFileChooserNative   *native)
+select_folder_response_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(GbpCreateProjectWidget) self = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autofree char *path = NULL;
+
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
 
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-      g_autofree char *path = ide_path_collapse (g_file_peek_path (file));
+  if (!(file = gtk_file_dialog_select_folder_finish (dialog, result, &error)))
+    return;
 
-      gtk_editable_set_text (GTK_EDITABLE (self->location_row), path);
-    }
-
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
-  g_object_unref (native);
+  path = ide_path_collapse (g_file_peek_path (file));
+  gtk_editable_set_text (GTK_EDITABLE (self->location_row), path);
 }
 
 static void
@@ -211,26 +213,22 @@ select_folder_action (GtkWidget  *widget,
                       GVariant   *param)
 {
   GbpCreateProjectWidget *self = (GbpCreateProjectWidget *)widget;
-  GtkFileChooserNative *native;
+  g_autoptr(GtkFileDialog) dialog = NULL;
   GtkRoot *root;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
   root = gtk_widget_get_root (widget);
-  native = gtk_file_chooser_native_new (_("Select Location"),
-                                        GTK_WINDOW (root),
-                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                        _("Select"),
-                                        _("Cancel"));
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (native),
-                                       ide_template_input_get_directory (self->input),
-                                       NULL);
-  g_signal_connect_object (native,
-                           "response",
-                           G_CALLBACK (select_folder_response_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Select Location"));
+  gtk_file_dialog_set_accept_label (dialog, _("Select"));
+  gtk_file_dialog_set_initial_folder (dialog, ide_template_input_get_directory (self->input));
+
+  gtk_file_dialog_select_folder (dialog,
+                                 GTK_WINDOW (root),
+                                 NULL,
+                                 select_folder_response_cb,
+                                 g_object_ref (self));
 }
 
 static void

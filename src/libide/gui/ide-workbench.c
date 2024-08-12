@@ -1517,30 +1517,33 @@ ide_workbench_action_reload_all (gpointer    instance,
 }
 
 static void
-ide_workbench_action_open_response_cb (IdeWorkbench         *self,
-                                       int                   response,
-                                       GtkFileChooserNative *chooser)
+ide_workbench_action_open_response_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
+  GtkFileDialog *dialog = (GtkFileDialog *)object;
+  g_autoptr(IdeWorkbench) self = user_data;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(GError) error = NULL;
+  guint n_items;
+
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (chooser));
 
-  if (response == GTK_RESPONSE_ACCEPT)
+  if (!(model = gtk_file_dialog_open_multiple_finish (dialog, result, &error)))
+    return;
+
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
     {
-      g_autoptr(GListModel) model = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (chooser));
-      guint n_items = g_list_model_get_n_items (model);
+      g_autoptr(GFile) file = g_list_model_get_item (model, i);
 
-      for (guint i = 0; i < n_items; i++)
-        {
-          g_autoptr(GFile) file = g_list_model_get_item (model, i);
+      g_assert (G_IS_FILE (file));
 
-          g_assert (G_IS_FILE (file));
-
-          ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL, NULL);
-        }
+      ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL, NULL);
     }
-
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
-  g_object_unref (chooser);
 }
 
 static void
@@ -1548,8 +1551,8 @@ ide_workbench_action_open (gpointer    instance,
                            const char *action_name,
                            GVariant   *param)
 {
+  g_autoptr(GtkFileDialog) dialog = NULL;
   IdeWorkbench *self = instance;
-  GtkFileChooserNative *chooser;
   IdeWorkspace *workspace;
 
   g_assert (IDE_IS_WORKBENCH (self));
@@ -1557,21 +1560,16 @@ ide_workbench_action_open (gpointer    instance,
 
   workspace = ide_workbench_get_current_workspace (self);
 
-  chooser = gtk_file_chooser_native_new (_("Open File…"),
-                                         GTK_WINDOW (workspace),
-                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         _("_Open"),
-                                         _("_Cancel"));
-  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), FALSE);
-  gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), TRUE);
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_title (dialog, _("Open File…"));
+  gtk_file_dialog_set_accept_label (dialog, _("Open"));
+  gtk_file_dialog_set_modal (dialog, FALSE);
 
-  g_signal_connect_object (chooser,
-                           "response",
-                           G_CALLBACK (ide_workbench_action_open_response_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+  gtk_file_dialog_open_multiple (dialog,
+                                 GTK_WINDOW (workspace),
+                                 NULL,
+                                 ide_workbench_action_open_response_cb,
+                                 g_object_ref (self));
 }
 
 static void
