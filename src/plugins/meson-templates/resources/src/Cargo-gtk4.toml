@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
-gtk = { version = "0.9", package = "gtk4" }
+gtk = { version = "0.9", package = "gtk4", features = ["gnome_47"] }
 
 {{if is_adwaita}}
 [dependencies.adw]
