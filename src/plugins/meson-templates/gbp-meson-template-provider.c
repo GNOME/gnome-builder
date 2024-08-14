@@ -54,6 +54,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "README.md",                                           "README.md" },
   { "data/hello.desktop.in",                               "data/{{appid}}.desktop.in" },
   { "data/hello.metainfo.xml.in",                          "data/{{appid}}.metainfo.xml.in" },
+  { "data/hello.service.in",                               "data/{{appid}}.service.in" },
   { "data/hello.gschema.xml",                              "data/{{appid}}.gschema.xml" },
   { "data/meson.build",                                    "data/meson.build" },
   { "data/icons/meson.build",                              "data/icons/meson.build" },

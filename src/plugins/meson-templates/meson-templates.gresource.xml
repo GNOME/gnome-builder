@@ -51,6 +51,7 @@
     <file compressed="true">resources/data/hello.gschema.xml</file>
     <file compressed="true">resources/data/hello.desktop.in</file>
     <file compressed="true">resources/data/hello.metainfo.xml.in</file>
+    <file compressed="true">resources/data/hello.service.in</file>
     <file compressed="true">resources/data/icons/meson.build</file>
     <file compressed="true">resources/data/icons/hicolor/scalable/apps/hello.svg</file>
     <file compressed="true">resources/data/icons/hicolor/symbolic/apps/hello-symbolic.svg</file>
