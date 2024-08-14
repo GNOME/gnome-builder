@@ -9,5 +9,6 @@ install_data([
   'xterm-light.xml', 'xterm-dark.xml',
   'fishtank.xml',
   'monokai-soda.xml',
+  'pixiefloss.xml',
   'spacedust.xml',
 ], install_dir: join_paths(get_option('datadir'), 'gnome-builder/styles'))
