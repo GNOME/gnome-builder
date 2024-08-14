@@ -6,8 +6,8 @@
 {{end}}
   <template class="{{PreFix}}Window" parent="{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow">
     <property name="title" translatable="yes">{{Title}}</property>
-    <property name="default-width">600</property>
-    <property name="default-height">300</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
 {{if is_adwaita}}
     <property name="content">
       <object class="AdwToolbarView">
