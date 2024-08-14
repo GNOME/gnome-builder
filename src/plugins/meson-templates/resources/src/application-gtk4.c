@@ -72,7 +72,7 @@ static void
 	window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
 {{if is_adwaita}}
-	adw_show_about_window (window,
+	adw_show_about_dialog (GTK_WIDGET (window),
 	                       "application-name", "{{name}}",
 	                       "application-icon", "{{appid}}",
 	                       "developer-name", "{{author}}",

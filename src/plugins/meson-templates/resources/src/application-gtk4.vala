@@ -28,8 +28,7 @@ namespace {{PreFix}} {
         private void on_about_action () {
 {{if is_adwaita}}
             string[] developers = { "{{author}}" };
-            var about = new Adw.AboutWindow () {
-                transient_for = this.active_window,
+            var about = new Adw.AboutDialog () {
                 application_name = "{{name}}",
                 application_icon = "{{appid}}",
                 developer_name = "{{author}}",
@@ -39,7 +38,7 @@ namespace {{PreFix}} {
                 copyright = "© {{year}} {{author}}",
             };
 
-            about.present ();
+            about.present (this.active_window);
 {{else}}
             string[] authors = { "{{author}}" };
             Gtk.show_about_dialog (this.active_window,
