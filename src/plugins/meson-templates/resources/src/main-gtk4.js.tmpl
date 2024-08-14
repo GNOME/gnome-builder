@@ -28,7 +28,6 @@ export const {{PreFix}}Application = GObject.registerClass(
             show_about_action.connect('activate', action => {
 {{if is_adwaita}}
                 let aboutParams = {
-                    transient_for: this.active_window,
                     application_name: '{{name}}',
                     application_icon: '{{appid}}',
                     developer_name: '{{author}}',
@@ -40,8 +39,8 @@ export const {{PreFix}}Application = GObject.registerClass(
                     translator_credits: _("translator-credits"),
                     copyright: '© {{year}} {{author}}'
                 };
-                const aboutWindow = new Adw.AboutWindow(aboutParams);
-                aboutWindow.present();
+                const aboutDialog = new Adw.AboutDialog(aboutParams);
+                aboutDialog.present(this.active_window);
 {{else}}
                 let aboutParams = {
                     transient_for: this.active_window,

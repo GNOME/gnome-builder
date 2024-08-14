@@ -5,11 +5,11 @@ edition = "2021"
 
 [dependencies]
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
-gtk = { version = "0.7", package = "gtk4" }
+gtk = { version = "0.9", package = "gtk4" }
 
 {{if is_adwaita}}
 [dependencies.adw]
 package = "libadwaita"
-version = "0.5"
-features = ["v1_4"]
+version = "0.7"
+features = ["v1_6"]
 {{end}}

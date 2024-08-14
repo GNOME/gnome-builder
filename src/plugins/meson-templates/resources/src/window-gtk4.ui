@@ -6,13 +6,13 @@
 {{end}}
   <template class="{{PreFix}}Window" parent="{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow">
     <property name="title" translatable="yes">{{Title}}</property>
-    <property name="default-width">600</property>
-    <property name="default-height">300</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
 {{if is_adwaita}}
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar" id="header_bar">
+          <object class="AdwHeaderBar">
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="primary">True</property>
@@ -35,7 +35,7 @@
     </property>
 {{else}}
     <property name="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
+      <object class="GtkHeaderBar">
         <child type="end">
           <object class="GtkMenuButton">
             <property name="primary">True</property>

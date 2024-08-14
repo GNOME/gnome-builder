@@ -1,10 +1,11 @@
 {{include "license.rs"}}
 
 use gettextrs::gettext;
-use gtk::prelude::*;
 {{if is_adwaita}}
+use adw::prelude::*;
 use adw::subclass::prelude::*;
 {{else}}
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 {{end}}
 use gtk::{gio, glib};
@@ -86,8 +87,7 @@ impl {{PreFix}}Application {
     fn show_about(&self) {
         let window = self.active_window().unwrap();
 {{if is_adwaita}}
-        let about = adw::AboutWindow::builder()
-            .transient_for(&window)
+        let about = adw::AboutDialog::builder()
             .application_name("{{name}}")
             .application_icon("{{appid}}")
             .developer_name("{{author}}")
@@ -97,6 +97,8 @@ impl {{PreFix}}Application {
             .translator_credits(&gettext("translator-credits"))
             .copyright("© {{year}} {{author}}")
             .build();
+
+        about.present(Some(&window));
 {{else}}
         let about = gtk::AboutDialog::builder()
             .transient_for(&window)
@@ -109,8 +111,8 @@ impl {{PreFix}}Application {
             .translator_credits(&gettext("translator-credits"))
             .copyright("© {{year}} {{author}}")
             .build();
-{{end}}
 
         about.present();
+{{end}}
     }
 }

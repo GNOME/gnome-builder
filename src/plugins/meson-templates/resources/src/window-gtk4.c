@@ -9,11 +9,6 @@ struct _{{PreFix}}Window
 	{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow  parent_instance;
 
 	/* Template widgets */
-{{if is_adwaita}}
-	AdwHeaderBar        *header_bar;
-{{else}}
-	GtkHeaderBar        *header_bar;
-{{end}}
 	GtkLabel            *label;
 };
 
@@ -25,7 +20,6 @@ static void
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	gtk_widget_class_set_template_from_resource (widget_class, "{{appid_path}}/{{ui_file}}");
-	gtk_widget_class_bind_template_child (widget_class, {{PreFix}}Window, header_bar);
 	gtk_widget_class_bind_template_child (widget_class, {{PreFix}}Window, label);
 }
 
