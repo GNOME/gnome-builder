@@ -12,7 +12,7 @@
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar" id="header_bar">
+          <object class="AdwHeaderBar">
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="primary">True</property>
@@ -35,7 +35,7 @@
     </property>
 {{else}}
     <property name="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
+      <object class="GtkHeaderBar">
         <child type="end">
           <object class="GtkMenuButton">
             <property name="primary">True</property>

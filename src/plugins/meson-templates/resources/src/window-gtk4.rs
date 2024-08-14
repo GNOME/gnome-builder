@@ -16,8 +16,6 @@ mod imp {
     pub struct {{PreFix}}Window {
         // Template widgets
         #[template_child]
-        pub header_bar: TemplateChild<{{if is_adwaita}}adw{{else}}gtk{{end}}::HeaderBar>,
-        #[template_child]
         pub label: TemplateChild<gtk::Label>,
     }
 
