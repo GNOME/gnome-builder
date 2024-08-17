@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-07-15 22:41+0000\n"
-"PO-Revision-Date: 2024-07-19 19:58+0530\n"
+"POT-Creation-Date: 2024-08-04 20:56+0000\n"
+"PO-Revision-Date: 2024-08-09 12:47+0530\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -319,99 +319,111 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "सक्षम होने पर, संपादक सापेक्ष पंक्ति संख्याएं दिखाएगा।"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+msgid "Use line selection styling"
+msgstr "लाइन चयन शैली का उपयोग करें"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+msgstr ""
+"सक्षम होने पर, संपादक चयनित संपूर्ण पंक्तियों के लिए पंक्ति संख्याओं हेतु चयनित शैली का उपयोग "
+"करेगा।"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "स्मार्ट Backspace"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr "आपको इंडेंटेशन आकार के अनुरूप बनाए रखने के लिए Backspace अतिरिक्त स्थान हटा देगा।"
 
 # Keyboard button
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr "स्मार्ट Home/End"
 
 # Keyboard Buttons
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
 msgstr "Home/End कुंजियों के व्यवहार को संशोधित करता है।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr "ग्रिड रेखाएं दिखाएं"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "सक्षम होने पर, संपादक दस्तावेज में ग्रिड रेखाएं दिखाएगा।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr "अवलोकन मानचित्र नीति"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr "अवलोकन मानचित्र कब प्रदर्शित किया जाना चाहिए।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "रिक्त स्थान बनाएं"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr "संपादक में बनाने के लिए विभिन्न प्रकार के रिक्त स्थान।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "पाठ लपेटें"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "बेहतर दृश्यता के लिए पाठ की एक लंबी पंक्ति को लपेटने का तरीका।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "स्वतः सहेजना सक्षम"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "स्वतः सहेजने की सुविधा सक्षम या अक्षम करें।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "स्वतः सहेजने की आवृत्ति"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "स्वतः सहेजने से पहले संशोधन के बाद सेकंड की संख्या।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "समापन पंक्ति गणना"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr "उपयोक्ता को प्रदर्शित की जाने वाली पूर्ण पंक्तियों की संख्या।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "पंक्ति की ऊंचाई"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "चयनित फॉन्ट के लिए उपयोग की जाने वाली पंक्ति की ऊंचाई।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "अंतर्क्रियात्मक समापन"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -419,29 +431,29 @@ msgstr ""
 "यदि सक्षम किया गया है, तो आपके टाइप करते ही बिल्डर स्वचालित रूप से पूर्णता प्रस्ताव "
 "प्रदर्शित करेगा।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
 msgstr "मिलान चयन के लिए न्यूनतम वर्ण।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "चयन मिलान के लिए वर्णों की न्यूनतम संख्या निर्दिष्ट करें।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "स्निपेट्स सक्षम करें"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr "स्निपेट सक्रियता के बाद टैब दबाकर संपादक से स्निपेट का विस्तार करने की अनुमति दें।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "पहला समापन चुनें"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "स्वचालित रूप से पहली स्वत: पूर्णता प्रविष्टि का चयन करें।"
 
@@ -662,7 +674,7 @@ msgid ""
 msgstr "सक्षम होने पर, परियोजना ट्री नियमित फाइलों से पहले निर्देशिकाओं को क्रमबद्ध करेगा।"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
+#: src/plugins/editorui/tweaks.ui:387
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "वर्तनी जांचें"
@@ -736,7 +748,7 @@ msgstr "मसौदा सहेजने में विफल: %s"
 msgid "Untitled"
 msgstr "शीर्षकहीन"
 
-#: src/libide/core/ide-global.c:512 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
@@ -779,7 +791,7 @@ msgstr "प्राथमिकताएं"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -1028,7 +1040,7 @@ msgid "Language"
 msgstr "भाषा"
 
 #: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:114
+#: src/libide/gui/ide-primary-workspace.ui:117
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "निचली फलक टॉगल करें (Ctrl+F9)"
 
@@ -1662,17 +1674,17 @@ msgstr "HTML लोड नहीं किया जा सकता। WebKit �
 msgid "Invalid configuration"
 msgstr "अमान्य विन्यास"
 
-#: src/libide/gui/ide-primary-workspace.ui:46
+#: src/libide/gui/ide-primary-workspace.ui:49
 msgid "Toggle Left Panel (F9)"
 msgstr "बायीं फलक टॉगल करें (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:81
+#: src/libide/gui/ide-primary-workspace.ui:84
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "दायीं फलक टॉगल करें"
 
-#: src/libide/gui/ide-primary-workspace.ui:89
-#: src/libide/gui/ide-primary-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:92
+#: src/libide/gui/ide-primary-workspace.ui:139
 msgid "Search (Ctrl+Enter)"
 msgstr "खोजें (Ctrl+Enter)"
 
@@ -1759,13 +1771,13 @@ msgid "No LSP client connection is available"
 msgstr "कोई LSP क्लाइंट संपर्क उपलब्ध नहीं है"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "भाषा सर्वर “%s” बाहर निकल गया"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "भाषा सर्वर “%s” प्रक्रिया %s के रूप में उत्पन्न हुआ"
@@ -2189,7 +2201,7 @@ msgid "unversioned"
 msgstr "असंस्करणित"
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "कोई नहीं"
 
@@ -2285,11 +2297,11 @@ msgstr "हटाएं"
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:393
 msgid "Build Output"
 msgstr "निर्माण आउटपुट"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:394
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "निर्माण आउटपुट (Shift+Ctrl+L)"
 
@@ -3172,6 +3184,14 @@ msgstr "clang-format से डेटा गुम या दूषित"
 msgid "Invalid cursor position provided from clang-format"
 msgstr "clang-format से प्रदान की गई कर्सर स्थिति अमान्य है"
 
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+".clang-format नहीं मिल पाया, कृपया इसे अपने प्रोजेक्ट में जोड़ें। फ़ॉलबैक GNU-शैली फ़ॉर्मेटर "
+"का उपयोग किया जा रहा है।"
+
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
 msgstr "CMake"
@@ -3785,7 +3805,7 @@ msgstr "D-Bus निरीक्षक…"
 msgid "Dub Run"
 msgstr "Dub Run"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "कोई फाइल उपलब्ध नहीं कराई गई।"
 
@@ -3815,13 +3835,13 @@ msgstr "सादे पाठ"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "रिक्त स्थान"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "टैब"
 
@@ -4032,7 +4052,7 @@ msgid "The desired maximum line length"
 msgstr "वांछित अधिकतम पंक्ति लंबाई"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "व्यवहार"
 
@@ -4192,34 +4212,42 @@ msgstr "पंक्ति परिवर्तन दिखाएं"
 msgid "Highlight changed lines next to the line number"
 msgstr "पंक्ति संख्या के आगे परिवर्तित पंक्तियों को चिन्हांकित करें"
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+msgid "Use Line Selection Styling"
+msgstr "लाइन चयन स्टाइलिंग का उपयोग करें"
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr "यदि पूरी पंक्ति चयनित है तो पंक्ति संख्याओं के लिए चयन शैली का उपयोग करें"
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "चिन्हांकन"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "वर्तमान पंक्ति चिन्हांकित करें"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "वर्तमान पंक्ति को चिन्हांकन के साथ अलग बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "मिलान वाले कोष्ठकों को चिन्हांकित करें"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 "मेल खाने वाले कोष्ठक और बहुत कुछ को चिन्हांकित करने के लिए कर्सर की स्थिति का उपयोग करें"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "वाक्यविन्यास चिन्हांकन"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4227,176 +4255,176 @@ msgstr ""
 "स्रोत कोड के भीतर नामस्थान, फंक्शन और चर को उजागर करने के लिए प्रतीक जानकारी का "
 "उपयोग करें"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "सामान्य रिक्त स्थानों को दर्शाने वाला निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "टैब को दर्शाने वाला निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "नई-पंक्तियां"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "पंक्तियों के अंत में निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "गैर-विभाजित रिक्त स्थान"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr "गैर-विभाजित रिक्त स्थान वर्णों पर निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Leading"
 msgstr "अग्रणी"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr "केवल पंक्तियों के आरंभ में रिक्त स्थान के लिए निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "पाठ के अंदर"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr "केवल पाठ की पंक्तियों के अंदर ही निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "अनुगामी"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr "केवल अनुगामी स्थानों के लिए निशान बनाएं"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "वर्तनी"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr "टाइप करते समय संभावित वर्तनी की गलतियों को रेखांकित करें"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "चयन"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr "चिन्हांकित करने के लिए न्यूनतम वर्ण"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr "मिलानों को चिन्हांकित करने से पहले न्यूनतम चयन लंबाई"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "स्निपेट्स"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr "स्निपेट्स विस्तृत करें"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "संपादक में विन्यस्त किए गए स्निपेट्स का विस्तार करने के लिए “टैब” का उपयोग करें"
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
 msgstr "कोड पूर्णता"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:441
 msgid "Completion Proposals"
 msgstr "पूर्णता प्रस्ताव"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr "कोड पूर्णता का सुझाव दें"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr "टाइप करते समय स्वचालित रूप से कोड पूर्णता का सुझाव दें"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr "पहला पूर्णता प्रस्ताव चुनें"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "प्रदर्शित होने पर स्वचालित रूप से पहला पूर्णता प्रस्ताव चुनें"
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr "अधिकतम पूर्णता प्रस्ताव"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "पूर्णता पंक्तियों की अधिकतम संख्या जो एक बार में प्रदर्शित की जाएगी"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "हलचल"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "Backspace आपको आपके इंडेंटेशन के साथ संरेखित रखने के लिए अतिरिक्त स्थान हटा देगा"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr "गैर-रिक्त वर्णों पर नेविगेट करें"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr "पंक्ति सीमाओं से पहले"
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr "पंक्ति सीमाओं के बाद"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr "पंक्ति सीमाओं के बजाय"
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "सत्र प्रबंधन"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "सहेजें एवं पुनर्स्थापित करें"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "स्वतः सहेजना"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr "टाइप करते समय दस्तावेज को नियमित रूप से सहेजें"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "स्वतः सहेजना में विलंब"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "दस्तावेज को स्वत: सहेजने से पहले प्रतीक्षा करने में सेकंडों की देरी"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr "सहेजने पर प्रारूपित करें"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4404,11 +4432,11 @@ msgstr ""
 "डिस्क पर सहेजते समय स्रोतों को पुन: प्रारूपित करें। स्रोत भाषा के लिए एक पंजीकृत प्रारूपक की "
 "आवश्यकता है।"
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr "कर्सर स्थिति पुनर्स्थापित करें"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr "किसी फाइल को दोबारा खोलते समय अंतिम स्थिति पर जाएं"
 
@@ -4644,20 +4672,20 @@ msgstr "Git उपमॉड्यूल प्रारंभ करें"
 msgid "Network is not available, skipping submodule update"
 msgstr "नेटवर्क उपलब्ध नहीं है, उपमॉड्यूल अद्यतन को छोड़ा जा रहा है"
 
-#: src/plugins/git/gbp-git-vcs.c:230
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr "धकेला गया।"
 
-#: src/plugins/git/gbp-git-vcs.c:268
+#: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "संदर्भ “%s” को धकेला जा रहा है"
 
-#: src/plugins/git/gbp-git-vcs.c:570
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr "निर्देशिका रिपॉजिटरी के भीतर नहीं है"
 
-#: src/plugins/git/gbp-git-vcs.c:598
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "Git"
 
@@ -6209,7 +6237,7 @@ msgstr "स्क्रॉलबैक में अधिकतम पंक्
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr "स्क्रॉलबैक को सीमित करते समय इतिहास में संग्रहीत पंक्तियों की अधिकतम संख्या"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:148
 msgid "Unit Test Output"
 msgstr "यूनिट परीक्षण आउटपुट"
 
@@ -6508,7 +6536,7 @@ msgstr "जावास्क्रिप्ट सक्षम करें (_J
 msgid "Failed to parse XML document"
 msgstr "XML दस्तावेज का विश्लेषण करने में विफल"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
 msgstr "XML ट्री बनाने में विफल।"
