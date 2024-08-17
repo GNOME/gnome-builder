@@ -45,6 +45,11 @@
     </ul>
   </description>
 
+  <branding>
+    <color type="primary" scheme_preference="light">#ffa348</color>
+    <color type="primary" scheme_preference="dark">#e66100</color>
+  </branding>
+
   <screenshots>
     <screenshot type="default">
       <caption>Quickly access your projects</caption>
@@ -95,6 +100,18 @@
 
   <update_contact>chergert@gnome.org</update_contact>
   <translation type="gettext">gnome-builder</translation>
+
+  <requires>
+    <display_length compare="ge">867</display_length>
+  </requires>
+  <recommends>
+    <internet>always</internet>
+    <control>keyboard</control>
+  </recommends>
+  <supports>
+    <control>pointing</control>
+    <control>touch</control>
+  </supports>
 
   <releases>
     <release version="47~beta" date="2024-08-04"/>
