@@ -244,5 +244,9 @@ void                  ide_config_set_args_for_phase        (IdeConfig           
 IDE_AVAILABLE_IN_44
 GFile                *ide_config_translate_file            (IdeConfig             *self,
                                                             GFile                 *file);
+IDE_AVAILABLE_IN_47
+void                  ide_config_replace_config_opt        (IdeConfig             *self,
+                                                            const char            *param,
+                                                            const char            *value);
 
 G_END_DECLS

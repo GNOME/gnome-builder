@@ -504,110 +504,6 @@ gbp_flatpak_runtime_prepare_to_build (IdeRuntime    *runtime,
   IDE_EXIT;
 }
 
-/* Try to avoid adding extra '' or "" when replacing
- * strings to be joined into a new config-opts.
- */
-static char *
-quote_arg (const char *in)
-{
-  g_autofree char *quoted = g_shell_quote (in);
-  gsize len = strlen (quoted);
-
-  if (len < 2)
-    return g_strdup (in);
-
-  for (const char *c = in; *c; c = g_utf8_next_char (c))
-    {
-      gunichar ch = g_utf8_get_char (c);
-
-      switch (ch)
-        {
-        case '\t':
-        case '\r':
-        case '\n':
-        case ' ':
-        case '\"':
-        case '\'':
-          return g_steal_pointer (&quoted);
-
-        default:
-          if (g_unichar_isspace (ch))
-            return g_steal_pointer (&quoted);
-          break;
-        }
-    }
-
-  return g_strdup (in);
-}
-
-static void
-setup_libdir (IdeConfig  *config,
-              const char *param,
-              const char *value)
-{
-  g_autoptr(GStrvBuilder) builder = NULL;
-  g_autoptr(GString) strv = NULL;
-  g_auto(GStrv) built = NULL;
-  g_auto(GStrv) args = NULL;
-  const char *config_opts;
-  gboolean found = FALSE;
-  gsize len;
-  int argc;
-
-  g_assert (GBP_IS_FLATPAK_MANIFEST (config));
-  g_assert (param != NULL);
-  g_assert (value != NULL);
-
-  if (!(config_opts = ide_config_get_config_opts (config)) ||
-      !g_shell_parse_argv (config_opts, &argc, &args, NULL))
-    return;
-
-  len = strlen (param);
-  builder = g_strv_builder_new ();
-
-  for (guint i = 0; args[i]; i++)
-    {
-      if (g_str_equal (args[i], param))
-        {
-          g_strv_builder_add (builder, param);
-          g_strv_builder_add (builder, value);
-          i++;
-          found = TRUE;
-        }
-      else if (g_str_has_prefix (args[i], param) && args[i][len] == '=')
-        {
-          g_autofree char *full = g_strdup_printf ("%s=%s", param, value);
-          g_strv_builder_add (builder, full);
-          found = TRUE;
-        }
-      else
-        {
-          g_strv_builder_add (builder, args[i]);
-        }
-    }
-
-  if (!found)
-    {
-      g_autofree char *full = g_strdup_printf ("%s=%s", param, value);
-      g_strv_builder_add (builder, full);
-    }
-
-  built = g_strv_builder_end (builder);
-  strv = g_string_new (NULL);
-
-  for (guint i = 0; built[i]; i++)
-    {
-      g_autofree char *quoted = quote_arg (built[i]);
-
-      if (i > 0)
-        g_string_append_c (strv, ' ');
-
-      g_string_append (strv, quoted);
-    }
-
-  ide_config_set_config_opts (config, strv->str);
-}
-
 static void
 gbp_flatpak_runtime_prepare_configuration (IdeRuntime *runtime,
                                            IdeConfig  *config)
@@ -627,12 +523,12 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime *runtime,
         build_system = "autotools";
 
       if (g_str_equal (build_system, "autotools"))
-        setup_libdir (config, "--libdir", "/app/lib");
+        ide_config_replace_config_opt (config, "--libdir", "/app/lib");
       else if (g_str_equal (build_system, "cmake") ||
                g_str_equal (build_system, "cmake-ninja"))
-        setup_libdir (config, "-DCMAKE_INSTALL_LIBDIR:PATH", "/app/lib");
+        ide_config_replace_config_opt (config, "-DCMAKE_INSTALL_LIBDIR:PATH", "/app/lib");
       else if (g_str_equal (build_system, "meson"))
-        setup_libdir (config, "--libdir", "lib");
+        ide_config_replace_config_opt (config, "--libdir", "lib");
     }
 }
 

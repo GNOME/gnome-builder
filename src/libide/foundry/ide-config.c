@@ -2008,3 +2008,107 @@ ide_config_translate_file (IdeConfig *self,
 
   return IDE_CONFIG_GET_CLASS (self)->translate_file (self, file);
 }
+
+/* Try to avoid adding extra '' or "" when replacing
+ * strings to be joined into a new config-opts.
+ */
+static char *
+quote_arg (const char *in)
+{
+  g_autofree char *quoted = g_shell_quote (in);
+  gsize len = strlen (quoted);
+
+  if (len < 2)
+    return g_strdup (in);
+
+  for (const char *c = in; *c; c = g_utf8_next_char (c))
+    {
+      gunichar ch = g_utf8_get_char (c);
+
+      switch (ch)
+        {
+        case '\t':
+        case '\r':
+        case '\n':
+        case ' ':
+        case '\"':
+        case '\'':
+          return g_steal_pointer (&quoted);
+
+        default:
+          if (g_unichar_isspace (ch))
+            return g_steal_pointer (&quoted);
+          break;
+        }
+    }
+
+  return g_strdup (in);
+}
+
+void
+ide_config_replace_config_opt (IdeConfig  *self,
+                               const char *param,
+                               const char *value)
+{
+  g_autoptr(GStrvBuilder) builder = NULL;
+  g_autoptr(GString) strv = NULL;
+  g_auto(GStrv) built = NULL;
+  g_auto(GStrv) args = NULL;
+  const char *config_opts;
+  gboolean found = FALSE;
+  gsize len;
+  int argc;
+
+  g_return_if_fail (IDE_IS_CONFIG (self));
+  g_return_if_fail (param != NULL);
+  g_return_if_fail (value != NULL);
+
+  if (!(config_opts = ide_config_get_config_opts (self)) ||
+      !g_shell_parse_argv (config_opts, &argc, &args, NULL))
+    return;
+
+  len = strlen (param);
+  builder = g_strv_builder_new ();
+
+  for (guint i = 0; args[i]; i++)
+    {
+      if (g_str_equal (args[i], param))
+        {
+          g_strv_builder_add (builder, param);
+          g_strv_builder_add (builder, value);
+          i++;
+          found = TRUE;
+        }
+      else if (g_str_has_prefix (args[i], param) && args[i][len] == '=')
+        {
+          g_autofree char *full = g_strdup_printf ("%s=%s", param, value);
+          g_strv_builder_add (builder, full);
+          found = TRUE;
+        }
+      else
+        {
+          g_strv_builder_add (builder, args[i]);
+        }
+    }
+
+  if (!found)
+    {
+      g_autofree char *full = g_strdup_printf ("%s=%s", param, value);
+      g_strv_builder_add (builder, full);
+    }
+
+  built = g_strv_builder_end (builder);
+  strv = g_string_new (NULL);
+
+  for (guint i = 0; built[i]; i++)
+    {
+      g_autofree char *quoted = quote_arg (built[i]);
+
+      if (i > 0)
+        g_string_append_c (strv, ' ');
+
+      g_string_append (strv, quoted);
+    }
+
+  ide_config_set_config_opts (self, strv->str);
+}
