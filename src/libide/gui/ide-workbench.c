@@ -114,6 +114,8 @@ typedef struct
 
 enum {
   PROP_0,
+  PROP_BUILD_SYSTEM,
+  PROP_CONFIG,
   PROP_CONTEXT,
   PROP_VCS,
   N_PROPS
@@ -191,6 +193,19 @@ ignore_error (GError *error)
 {
   return g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
          g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
+}
+
+static IdeConfig *
+ide_workbench_get_config (IdeWorkbench *self)
+{
+  IdeConfigManager *config_manager;
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+
+  if ((config_manager = ide_context_peek_child_typed (self->context, IDE_TYPE_CONFIG_MANAGER)))
+    return ide_config_manager_get_current (config_manager);
+
+  return NULL;
 }
 
 /**
@@ -456,8 +471,16 @@ ide_workbench_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BUILD_SYSTEM:
+      g_value_set_object (value, ide_workbench_get_build_system (self));
+      break;
+
     case PROP_CONTEXT:
       g_value_set_object (value, ide_workbench_get_context (self));
+      break;
+
+    case PROP_CONFIG:
+      g_value_set_object (value, ide_workbench_get_config (self));
       break;
 
     case PROP_VCS:
@@ -499,6 +522,16 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   object_class->dispose = ide_workbench_dispose;
   object_class->get_property = ide_workbench_get_property;
   object_class->set_property = ide_workbench_set_property;
+
+  properties[PROP_BUILD_SYSTEM] =
+    g_param_spec_object ("build-system", NULL, NULL,
+                         IDE_TYPE_BUILD_SYSTEM,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_CONFIG] =
+    g_param_spec_object ("config", NULL, NULL,
+                         IDE_TYPE_CONFIG,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   /**
    * IdeWorkbench:context:
@@ -1118,12 +1151,24 @@ ide_workbench_load_project_cb (GObject      *object,
 }
 
 static void
+ide_workbench_config_changed_cb (IdeWorkbench     *self,
+                                 GParamSpec       *pspec,
+                                 IdeConfigManager *config_manager)
+{
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (IDE_IS_CONFIG_MANAGER (config_manager));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CONFIG]);
+}
+
+static void
 ide_workbench_init_foundry_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
 {
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeConfigManager *config_manager;
   IdeWorkbench *self;
   GCancellable *cancellable;
   LoadProject *lp;
@@ -1144,13 +1189,18 @@ ide_workbench_init_foundry_cb (GObject      *object,
   g_assert (lp->addins != NULL);
   g_assert (IDE_IS_PROJECT_INFO (lp->project_info));
 
+  if ((config_manager = ide_context_peek_child_typed (self->context, IDE_TYPE_CONFIG_MANAGER)))
+    g_signal_connect_object (config_manager,
+                             "notify::current",
+                             G_CALLBACK (ide_workbench_config_changed_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+
   /* Now, we need to notify all of the workbench addins that we're
    * opening the project. Once they have all completed, we'll create the
    * new workspace window and attach it. That saves us the work of
    * rendering various frames of the during the intensive load process.
    */
-
-
   for (guint i = 0; i < lp->addins->len; i++)
     {
       IdeWorkbenchAddin *addin = g_ptr_array_index (lp->addins, i);
@@ -2610,6 +2660,8 @@ ide_workbench_set_build_system (IdeWorkbench   *self,
   /* Ask the build-manager to setup a new pipeline */
   if ((build_manager = ide_context_peek_child_typed (self->context, IDE_TYPE_BUILD_MANAGER)))
     ide_build_manager_invalidate (build_manager);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BUILD_SYSTEM]);
 }
 
 /**
