@@ -440,6 +440,10 @@ ide_config_get_property (GObject    *object,
       g_value_set_string (value, ide_config_get_prefix (self));
       break;
 
+    case PROP_PREFIX_SET:
+      g_value_set_boolean (value, ide_config_get_prefix_set (self));
+      break;
+
     case PROP_RUNTIME:
       g_value_set_object (value, ide_config_get_runtime (self));
       break;
