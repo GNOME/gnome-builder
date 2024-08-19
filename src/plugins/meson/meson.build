@@ -30,6 +30,8 @@ test_meson_sources = files([
   'gbp-meson-utils.c',
 ])
 
+config_h.set10('PLUGIN_MESON', true)
+
 test_meson = executable('test-meson', test_meson_sources,
         c_args: test_cflags,
   dependencies: [ libide_foundry_dep, libide_terminal_dep ],
