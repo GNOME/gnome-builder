@@ -22,6 +22,10 @@
 
 #include "config.h"
 
+#ifdef PLUGIN_MESON
+# include "meson/gbp-meson-build-system.h"
+#endif
+
 #include "gbp-jhbuild-runtime.h"
 
 struct _GbpJhbuildRuntime
@@ -170,6 +174,16 @@ gbp_jhbuild_runtime_prepare_configuration (IdeRuntime *runtime,
                 "prefix", self->install_prefix,
                 "prefix-set", FALSE,
                 NULL);
+
+#ifdef PLUGIN_MESON
+  {
+    IdeContext *context = ide_object_get_context (IDE_OBJECT (runtime));
+    IdeBuildSystem *build_system = ide_build_system_from_context (context);
+
+    if (GBP_IS_MESON_BUILD_SYSTEM (build_system))
+      ide_config_replace_config_opt (config, "--libdir", "lib");
+  }
+#endif
 }
 
 static void
