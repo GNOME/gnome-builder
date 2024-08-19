@@ -68,5 +68,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean          ide_config_manager_get_ready        (IdeConfigManager     *self);
 IDE_AVAILABLE_IN_ALL
 GMenuModel       *ide_config_manager_get_menu         (IdeConfigManager     *self);
+IDE_AVAILABLE_IN_47
+void              ide_config_manager_invalidate       (IdeConfigManager     *self);
 
 G_END_DECLS

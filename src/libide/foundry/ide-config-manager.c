@@ -34,6 +34,7 @@
 #include "ide-config-manager.h"
 #include "ide-config-private.h"
 #include "ide-config-provider.h"
+#include "ide-runtime.h"
 
 #define WRITEBACK_DELAY_SEC 3
 
@@ -1267,4 +1268,17 @@ ide_config_manager_get_menu (IdeConfigManager *self)
   g_return_val_if_fail (IDE_IS_CONFIG_MANAGER (self), NULL);
 
   return G_MENU_MODEL (self->menu);
+}
+
+void
+ide_config_manager_invalidate (IdeConfigManager *self)
+{
+  IdeRuntime *runtime;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_CONFIG_MANAGER (self));
+
+  if (self->current != NULL &&
+      (runtime = ide_config_get_runtime (self->current)))
+    ide_runtime_prepare_configuration (runtime, self->current);
 }

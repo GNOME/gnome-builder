@@ -2628,6 +2628,7 @@ ide_workbench_set_build_system (IdeWorkbench   *self,
                                 IdeBuildSystem *build_system)
 {
   g_autoptr(IdeBuildSystem) local_build_system = NULL;
+  IdeConfigManager *config_manager;
   IdeBuildManager *build_manager;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
@@ -2656,6 +2657,12 @@ ide_workbench_set_build_system (IdeWorkbench   *self,
   ide_object_foreach (IDE_OBJECT (self->context),
                       (GFunc)remove_non_matching_build_systems_cb,
                       build_system);
+
+  /* Ask the config manager to invalidate active configs which
+   * might rely on the active build system.
+   */
+  if ((config_manager = ide_context_peek_child_typed (self->context, IDE_TYPE_CONFIG_MANAGER)))
+    ide_config_manager_invalidate (config_manager);
 
   /* Ask the build-manager to setup a new pipeline */
   if ((build_manager = ide_context_peek_child_typed (self->context, IDE_TYPE_BUILD_MANAGER)))
