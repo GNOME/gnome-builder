@@ -2061,20 +2061,22 @@ ide_config_replace_config_opt (IdeConfig  *self,
   const char *config_opts;
   gboolean found = FALSE;
   gsize len;
-  int argc;
+  int argc = 0;
 
   g_return_if_fail (IDE_IS_CONFIG (self));
   g_return_if_fail (param != NULL);
   g_return_if_fail (value != NULL);
 
-  if (!(config_opts = ide_config_get_config_opts (self)) ||
-      !g_shell_parse_argv (config_opts, &argc, &args, NULL))
-    return;
+  if ((config_opts = ide_config_get_config_opts (self)) && !ide_str_empty0 (config_opts))
+    {
+      if (!g_shell_parse_argv (config_opts, &argc, &args, NULL))
+        return;
+    }
 
   len = strlen (param);
   builder = g_strv_builder_new ();
 
-  for (guint i = 0; args[i]; i++)
+  for (guint i = 0; i < argc; i++)
     {
       if (g_str_equal (args[i], param))
         {
