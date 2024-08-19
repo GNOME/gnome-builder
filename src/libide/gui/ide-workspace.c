@@ -115,6 +115,7 @@ enum {
   PROP_ID,
   PROP_SEARCH_POPOVER,
   PROP_TOOLBAR_STYLE,
+  PROP_WORKBENCH,
   N_PROPS
 };
 
@@ -675,6 +676,10 @@ ide_workspace_get_property (GObject    *object,
       g_value_set_enum (value, ide_workspace_get_toolbar_style (self));
       break;
 
+    case PROP_WORKBENCH:
+      g_value_set_object (value, ide_workspace_get_workbench (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -767,6 +772,11 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                        ADW_TYPE_TOOLBAR_STYLE,
                        ADW_TOOLBAR_RAISED,
                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_WORKBENCH] =
+    g_param_spec_object ("workbench", NULL, NULL,
+                         IDE_TYPE_WORKBENCH,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
