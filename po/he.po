@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-04 20:56+0000\n"
-"PO-Revision-Date: 2024-08-09 16:49+0300\n"
+"POT-Creation-Date: 2024-08-10 14:55+0000\n"
+"PO-Revision-Date: 2024-08-22 18:48+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
-"Language-Team: Hebrew\n"
+"Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -695,7 +695,6 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:387
-#: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "בדיקת איות"
 
@@ -730,7 +729,7 @@ msgstr "שיבוט מאגר"
 msgid "New Editor Workspace"
 msgstr "מרחב עריכה חדש"
 
-#: src/libide/code/ide-buffer.c:3838
+#: src/libide/code/ide-buffer.c:3755
 msgid "The current language lacks a symbol resolver."
 msgstr "לשפה הנוכחית חסר מאחזר סמלים."
 
@@ -780,7 +779,7 @@ msgstr "מיזמים"
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
 #: src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325
+#: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
@@ -963,7 +962,7 @@ msgid "Failed to format selection: %s"
 msgstr "נכשל בעיצוב הבחירה: %s"
 
 #: src/libide/editor/ide-editor-page.c:1136
-#: src/plugins/buildui/gbp-buildui-log-pane.c:321
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "שמירת קובץ"
@@ -2081,22 +2080,22 @@ msgstr "הועתק ללוח הגזירים"
 msgid "Save Terminal Content As"
 msgstr "שמירת תוכן המסוף בשם"
 
-#: src/libide/terminal/ide-terminal-page.c:118
+#: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr "ארע כשל בהרצת תת-תהליך. יתכן ועליך לבנות מחדש את המיזם."
 
-#: src/libide/terminal/ide-terminal-page.c:123
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
 msgstr "מסוף ללא כותרת"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
 msgstr "נסגר"
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "הרצת תת-תהליך נכשלה מהר מדי, לא תתבצע הרצה מחודשת."
 
@@ -2324,16 +2323,16 @@ msgstr "העתקה"
 msgid "Remove"
 msgstr "הסרה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/buildui/gbp-buildui-log-pane.c:327
 #: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Save"
 msgstr "_שמירה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:393
+#: src/plugins/buildui/gbp-buildui-log-pane.c:396
 msgid "Build Output"
 msgstr "פלט בנייה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:394
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "פלט בנייה (Shift+Ctrl+L)"
 
@@ -4267,11 +4266,11 @@ msgstr "הצגת הדגשה לצד מספר השורה של שורות שהשת�
 
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Use Line Selection Styling"
-msgstr ""
+msgstr "שימוש בעיצוב הבחירה גם עבור מספרי השורות"
 
 #: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
-msgstr ""
+msgstr "שימוש בעיצוב הבחירה עבור מספרי השורות כאשר נבחרת שורה שלמה"
 
 #: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
@@ -5921,22 +5920,6 @@ msgid ""
 msgstr ""
 "ערכת צירופי מקשים מספקת חוויית הקלדה דומה לסביבות פיתוח משולבות ועורכים אחרים"
 
-#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-msgid "Enchant 2"
-msgstr "Enchant 2"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:248
-msgid "Add to Dictionary"
-msgstr "הוספה למילון"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:249
-msgid "Ignore"
-msgstr "התעלמות"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "שפות"
-
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
 msgstr "swift run"
@@ -6598,6 +6581,18 @@ msgstr "ארע כשל ביצירת עץ ה־XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
+
+#~ msgid "Enchant 2"
+#~ msgstr "Enchant 2"
+
+#~ msgid "Add to Dictionary"
+#~ msgstr "הוספה למילון"
+
+#~ msgid "Ignore"
+#~ msgstr "התעלמות"
+
+#~ msgid "Languages"
+#~ msgstr "שפות"
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "סביבת פיתוח משולבת עבור GNOME"
