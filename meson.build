@@ -377,7 +377,6 @@ endif
 gnome = import('gnome')
 i18n = import('i18n')
 pkgconfig = import('pkgconfig')
-pymod = import('python')
 
 status += ['']
 

@@ -37,6 +37,3 @@ subdir('greeter')
 if get_option('webkit').enabled()
   subdir('webkit')
 endif
-
-py_installation = pymod.find_installation('python3')
-py_installation.install_sources('Ide.py', subdir: 'gi' / 'overrides')
