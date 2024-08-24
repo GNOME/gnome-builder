@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-07-11 07:40+0000\n"
-"PO-Revision-Date: 2024-07-11 21:13+0200\n"
+"POT-Creation-Date: 2024-08-24 12:49+0000\n"
+"PO-Revision-Date: 2024-08-24 22:44+0200\n"
 "Last-Translator: Brage <bragefuglseth@gnome.org>\n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -46,7 +46,7 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Builder er GNOME-fellesskapets kodeapp. Det kombinerer innebygd støtte for "
+"Builder er GNOME-prosjektets kodeapp. Den kombinerer innebygd støtte for "
 "GNOME-plattformen med alt du forventer fra et moderne utviklingsverktøy."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
@@ -63,7 +63,7 @@ msgstr "Her er noen grunner til at du vil elske Builder:"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
-msgstr "Fargelegging for mange programmeringsspråk"
+msgstr "Kodefargelegging for mange programmeringsspråk"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid "Side-by-side code editors"
@@ -134,31 +134,31 @@ msgstr "Oppsamling og visning av TODO-kommentarer fra hele kodebasen din"
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Rask søking i filer og kodeelementer"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
-msgid "Quickly access your projects"
-msgstr "Åpning av prosjekt"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
-msgid "Create new projects from a variety of templates"
-msgstr "Oppretting av nytt prosjekt"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
-msgid "Integration with Git to clone your projects"
-msgstr "Kloning med Git"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
-msgid "The source code editor"
-msgstr "Redigering av kode"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
-msgid "Fast global fuzzy search"
-msgstr "Søking i prosjekt"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
 msgid "Debug with the GNU debugger"
 msgstr "Feilsøking"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+msgid "Quickly access your projects"
+msgstr "Åpning av prosjekt"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+msgid "Create new projects from a variety of templates"
+msgstr "Oppretting av nytt prosjekt"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+msgid "Integration with Git to clone your projects"
+msgstr "Kloning med Git"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+msgid "The source code editor"
+msgstr "Redigering av kode"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+msgid "Fast global fuzzy search"
+msgstr "Søking i prosjekt"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
 msgstr "Minikart over kode"
 
@@ -327,11 +327,21 @@ msgstr ""
 "selv."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+msgid "Use line selection styling"
+msgstr "Marker linjenummer"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+msgstr "La linjenumrene til hele markerte linjer vises som markerte."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "Smart tilbaketast"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -339,107 +349,107 @@ msgstr ""
 "La tilbaketasten fjerne ekstra mellomrom i henhold til den gjeldende "
 "innrykksstørrelsen."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr "Smarte Home/End-taster"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
 msgstr "Endrer oppførselen til Home- og End-tastene."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr "Vis rutenett"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Tegn et rutenett bak koden for å gjøre innrykk og formatering klarere."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr "Vis minikart"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr "Hvilke situasjoner minikartet over koden skal vises i."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "Vis mellomrom"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr "De forskjellige typene mellomrom som skal tegnes."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Bryt tekst"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "Hvordan teksten skal brytes for bedre synlighet."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "Automatisk lagring"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Slå automatisk lagring av eller på."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "Frekvens for automatisk lagring"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "Antall sekunder fra en endring til en automatisk lagring."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Kodefullføringsrader"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr "Antall rader som skal vises i kodefullføringsvinduet."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Linjehøyde"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "Linjehøyden som skal brukes for den angitte skrifttypen."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "Interaktiv fullføring"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr "Vis kodefullføringsforslag automatisk ved skriving."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
 msgstr "Minste antall tegn for samsvarssøk."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Det minste antallet tegn som må markeres før et søk etter samsvarende tekst "
 "igangsettes."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "Kodesnutter"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -447,11 +457,11 @@ msgstr ""
 "La kodesnutter brukes ved å trykke på Tab-tasten etter at utløserordet har "
 "blitt skrevet."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "Velg første fullføringsforslag"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "Velg det første fullføringsforslaget automatisk."
 
@@ -671,8 +681,7 @@ msgid ""
 msgstr "Vis mapper før vanlige prosjektfiler."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
-#: src/plugins/spellcheck/editor-spell-menu.c:250
+#: src/plugins/editorui/tweaks.ui:387
 msgid "Check Spelling"
 msgstr "Stavekontroll"
 
@@ -707,7 +716,7 @@ msgstr "Klon kodelager"
 msgid "New Editor Workspace"
 msgstr "Nytt arbeidsområde"
 
-#: src/libide/code/ide-buffer.c:3838
+#: src/libide/code/ide-buffer.c:3755
 msgid "The current language lacks a symbol resolver."
 msgstr "Det gjeldende språket mangler feilsøker."
 
@@ -745,7 +754,7 @@ msgstr "Lagring av utkast mislyktes: %s"
 msgid "Untitled"
 msgstr "Uten navn"
 
-#: src/libide/core/ide-global.c:512 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
@@ -756,15 +765,12 @@ msgstr "Prosjekter"
 #: src/libide/greeter/ide-greeter-workspace.c:662
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_Avbryt"
 
@@ -773,7 +779,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Fant ingen passende feilsøker."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1560
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
 msgstr "Åpne fil…"
 
@@ -788,7 +794,7 @@ msgstr "Innstillinger"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -938,28 +944,11 @@ msgstr "Utskrift mislyktes: %s"
 msgid "Failed to format selection: %s"
 msgstr "Formatering av utvalg mislyktes: %s"
 
-#: src/libide/editor/ide-editor-page.c:1136
-#: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:101
+#: src/libide/editor/ide-editor-page.c:1139
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "Lagre fil"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
-msgid "Save"
-msgstr "Lagre"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-msgid "Cancel"
-msgstr "Avbryt"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
@@ -1007,37 +996,13 @@ msgstr "_Skill mellom store og små bokstaver"
 msgid "Match Whole Words"
 msgstr "Søk etter hele ord"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "Unix/Linux (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "Klassisk Mac OS (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "Windows (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "Automatisk"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "Tekstkoding:"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "Linjeslutt:"
-
-#: src/libide/editor/ide-editor-utils.c:270
+#: src/libide/editor/ide-editor-utils.c:140
 #: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "Språk"
 
 #: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:114
+#: src/libide/gui/ide-primary-workspace.ui:117
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Vis/skjul bunnpanel (Ctrl+F9)"
 
@@ -1051,17 +1016,17 @@ msgstr "Oppstart av byggeprosess mislyktes: %s"
 msgid "Failed to get device information: %s"
 msgstr "Uthenting av enhetsinformasjon mislyktes: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
+#: src/libide/foundry/ide-config-manager.c:539
 msgid "Active Configuration"
 msgstr "Aktiv byggeinstruks"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, c-format
 msgid "Configuration %s changed"
 msgstr "Byggeinstruks %s ble endret"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1070,7 +1035,7 @@ msgstr ""
 "Fant ikke byggeinstruksen «%s». Den kan være ugyldig eller feil formatert."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "Aktiv byggeinstruks satt til «%s»"
@@ -1347,7 +1312,7 @@ msgid "Directory"
 msgstr "Mappe"
 
 #: src/libide/greeter/ide-greeter-workspace.c:222
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1357,7 +1322,7 @@ msgid "Failed to load the project"
 msgstr "Innlasting av prosjekt mislyktes"
 
 #: src/libide/greeter/ide-greeter-workspace.c:335
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Lukk"
@@ -1386,7 +1351,6 @@ msgid "Select Project File"
 msgstr "Velg prosjektfil"
 
 #: src/libide/greeter/ide-greeter-workspace.c:663
-#: src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "_Åpne"
 
@@ -1433,23 +1397,6 @@ msgstr "Fant ikke egenskap %s i %s"
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Uthenting av va_list-verdi mislyktes: %s"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "Åpne"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Select"
-msgstr "Velg"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "Utforsk…"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
@@ -1677,17 +1624,17 @@ msgstr "Innlasting av HTML mislyktes grunnet manglende WebKit-støtte."
 msgid "Invalid configuration"
 msgstr "Ugyldig oppsett"
 
-#: src/libide/gui/ide-primary-workspace.ui:46
+#: src/libide/gui/ide-primary-workspace.ui:49
 msgid "Toggle Left Panel (F9)"
 msgstr "Vis/skjul venstre panel (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:81
+#: src/libide/gui/ide-primary-workspace.ui:84
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Vis/skjul høyre panel"
 
-#: src/libide/gui/ide-primary-workspace.ui:89
-#: src/libide/gui/ide-primary-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:92
+#: src/libide/gui/ide-primary-workspace.ui:139
 msgid "Search (Ctrl+Enter)"
 msgstr "Søk (Ctrl+Enter)"
 
@@ -1718,19 +1665,23 @@ msgstr "Start app"
 msgid "Other"
 msgstr "Annet"
 
-#: src/libide/gui/ide-workbench.c:1076
+#: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
 msgstr "Prosjekt lastet inn"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
 msgstr "Laster inn «%s»"
 
-#: src/libide/gui/ide-workspace.c:1688
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "Åpne"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
-msgstr "Det er dokumenter som ikke har blitt lagret"
+msgstr "Ulagrede filer"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1774,13 +1725,13 @@ msgid "No LSP client connection is available"
 msgstr "Det finnes ingen tilkoblede LSP-tjenere"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "Språktjener «%s» avsluttet"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "Språktjener «%s» startet som prosess %s"
@@ -2046,27 +1997,34 @@ msgstr "_Fjern markering"
 msgid "Copied to clipboard"
 msgstr "Tekst kopiert til utklippstavlen"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Lagre tekst som"
 
-#: src/libide/terminal/ide-terminal-page.c:118
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "Lagre"
+
+#: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Starting av prosess mislyktes. Det kan hende at appen må bygges på nytt."
 
-#: src/libide/terminal/ide-terminal-page.c:123
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
 msgstr "Terminal uten navn"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
 msgstr "Avsluttet"
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Starting av prosess mislyktes for tidlig, og vil ikke forsøkes på nytt."
@@ -2100,7 +2058,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:829
+#: src/libide/terminal/ide-terminal-palettes.h:882
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2182,9 +2140,17 @@ msgstr "<i>Laster inn</i>"
 msgid "Empty"
 msgstr "Tom"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
 msgstr "Prosjektmappe"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "Velg"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2204,7 +2170,7 @@ msgid "unversioned"
 msgstr "uten versjon"
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "Ingen"
 
@@ -2295,16 +2261,11 @@ msgstr "Kopier"
 msgid "Remove"
 msgstr "Fjern"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:104
-msgid "_Save"
-msgstr "_Lagre"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "Byggelogg"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Byggelogg (Shift+Ctrl+L)"
 
@@ -2322,7 +2283,7 @@ msgstr "Lagre byggelogg"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
-msgstr "Manglende"
+msgstr "Mangler"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
@@ -2462,7 +2423,6 @@ msgid "Make configuration active and reload build pipeline"
 msgstr "Gjør byggeinstruksen aktiv og last inn byggeprosessen på nytt"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "Slett"
 
@@ -2846,7 +2806,7 @@ msgstr "Stil"
 #: src/plugins/buildui/gtk/preferences.ui:40
 #: src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
-msgstr "Brukergrensesnitt"
+msgstr "Stil"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
 msgid "Editor Font"
@@ -3179,7 +3139,7 @@ msgstr "Kjøring av clang-format mislyktes: %s"
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
 #, c-format
 msgid "clang-format failed to format document: %s"
-msgstr "clang-format mislyktes i å formatere dokument: %s"
+msgstr "clang-format mislyktes i å formatere fil: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
@@ -3188,6 +3148,14 @@ msgstr "Data fra clang-format er mangelfulle eller skadede"
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
 msgstr "Markørposisjon fra clang-format er ugyldig"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Fant ikke «.clang-format». Prøver å bruke reserve-formateringsprogram i "
+"stedet."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3423,12 +3391,12 @@ msgstr "Formater funksjonsprototyper"
 msgid "Display the project creation guide"
 msgstr "Vis veiledning for oppretting av prosjekt"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "Velg plassering"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
 msgstr "Oppretting av prosjekt mislyktes"
 
@@ -3807,7 +3775,7 @@ msgstr "D-Bus-inspektør…"
 msgid "Dub Run"
 msgstr "Dub Run"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "Ingen fil angitt."
 
@@ -3837,13 +3805,13 @@ msgstr "Ren tekst"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "Mellomrom"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "Tabulator"
 
@@ -3929,7 +3897,7 @@ msgstr "Åpne i nytt panel"
 msgid "Open in New Workspace…"
 msgstr "Åpne i nytt arbeidsområde…"
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "Lagre _som"
 
@@ -4055,7 +4023,7 @@ msgid "The desired maximum line length"
 msgstr "Ideell maksimal linjelengde"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "Oppførsel"
 
@@ -4215,34 +4183,42 @@ msgstr "Vis linjeendringer"
 msgid "Highlight changed lines next to the line number"
 msgstr "Vis om en linje har blitt endret ved siden av linjenummeret"
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+msgid "Use Line Selection Styling"
+msgstr "Marker linjenummer"
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr "La linjenumrene til hele markerte linjer vises som markerte"
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "Visuell indikering"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "Indiker gjeldende linje"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "Gjør den gjeldende linjen ekstra synlig"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "Indiker samsvarende klammetegn"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 "Bruk markørens posisjon til å indikere samsvarende parenteser og sitatmerker"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "Semantisk fargelegging"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4250,178 +4226,178 @@ msgstr ""
 "Bruk informasjon om kodeelementer til å indikere navn, funksjoner og "
 "variabler i koden"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "Bruk et synlig tegn til å vise mellomrom"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "Bruk et synlig tegn til å vise tabulatortegn"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "Nye linjer"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "Bruk et synlig tegn på slutten av linjer"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "Ubrytelige mellomrom"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Bruk et synlig tegn til å vise ubrytelige mellomrom"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Leading"
 msgstr "Linjestart"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr "Vis kun synlige tegn for tomrom på begynnelsen av linjer"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "I tekst"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr "Vis kun synlige tegn for mellomrom på innsiden av linjer"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "Linjeslutt"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr "Vis kun synlige tegn for tomrom på slutten av linjer"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "Stavekontroll"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Vis potensielle stavefeil ved skriving"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "Markering"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr "Minste antall tegn før indikering"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr ""
 "Det minste antallet tegn som må være valgt før samsvarende tegn indikeres"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "Kodesnutter"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr "Bruk kodesnutter"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "La kodesnutter brukes ved å trykke på Tab-tasten"
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
 msgstr "Kodefullføring"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:441
 msgid "Completion Proposals"
 msgstr "Fullføringsforslag"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr "Foreslå kodefullføringer"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr "Foreslå kodefullføringer automatisk under skriving"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr "Velg første fullføringsforslag"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Velg det første fullføringsforslaget automatisk når det vises"
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr "Maksimalt antall fullføringsforslag"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Det maksimale antallet fullføringsforslag som vises på en gang"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "Forflytning"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Ved bruk av tilbaketasten, fjern ekstra mellomrom for å samsvare med innrykk"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr "Flytt til tegn som ikke er tomrom"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr "Før linjeavgrensinger"
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr "Etter linjeavgrensninger"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr "I stedet for linjeavgrensninger"
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Slått av"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "Økthåndtering"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "Lagre og gjenopprett"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "Automatisk lagring"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
-msgstr "Lagre dokumentet jevnlig under skriving"
+msgstr "Lagre filen jevnlig under skriving"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "Nedtelling til automatisk lagring"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "Antallet sekunder som ventes før automatisk lagring"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr "Formater ved lagring"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4429,11 +4405,11 @@ msgstr ""
 "Formater koden ved lagring. Dette forutsetter at programmeringsspråket har "
 "et installert formateringsprogram."
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr "Gjenopprett markørplassering"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr "Hopp til markørens siste plassering når en fil åpnes på nytt"
 
@@ -4479,14 +4455,12 @@ msgstr "Builder må installere den følgende programvaren for å bygge appen."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
 msgid "Name"
 msgstr "Navn"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 msgid "Architecture"
 msgstr "Arkitektur"
 
@@ -4674,20 +4648,20 @@ msgstr "Sett opp Git-undermoduler"
 msgid "Network is not available, skipping submodule update"
 msgstr "Nettverk utilgjengelig, hopper over oppdatering av undermoduler"
 
-#: src/plugins/git/gbp-git-vcs.c:230
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr "Sendt inn."
 
-#: src/plugins/git/gbp-git-vcs.c:268
+#: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Sender inn «%s»"
 
-#: src/plugins/git/gbp-git-vcs.c:570
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr "Mappen er ikke i kodelageret"
 
-#: src/plugins/git/gbp-git-vcs.c:598
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "Git"
 
@@ -4753,6 +4727,14 @@ msgstr "_Søk i %s"
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Erstatt i %s"
+
+#: src/plugins/grep/gbp-grep-panel.c:851
+msgid "Find in Project"
+msgstr "Søk i prosjekt"
+
+#: src/plugins/grep/gbp-grep-panel.c:852
+msgid "Replace in Project"
+msgstr "Erstatt i prosjekt"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -5055,134 +5037,75 @@ msgstr "Lagre utviklingsmiljø i hurtiglagring"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr "Intet angitt verktøy"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr "Et navn som brukes på systemmappen."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr "Arkitekturen til systemmappen."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "Legg til verktøy:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "Kompilering"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr "Forhåndsbehandling"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "Arkivering"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr "Sammenknyting"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr "Kutting"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr "Programinnpakning"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr "Pakkeoppsett"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "Hvilket som helst språk"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "Python"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "Vala"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr "Fortran"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-msgid "D"
-msgstr "D"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "Legg til verktøy"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr "Slett verktøypakke"
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr "Slett verktøy"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "Kompilering"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "Forhåndsbehandling"
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "Arkivering"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "Sammenknyting"
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "Kutting"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "Programinnpakning"
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "Pakkeoppsett"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "GNOME-app"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Et Meson-basert prosjekt tilpasset GNOME med GTK4 og libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
 msgstr "GTK 4-app"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr "Et Meson-basert prosjekt med GTK4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "Delt bibliotek"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
 msgstr "Et Meson-basert prosjekt tilpasset delte biblioteker"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr "Kommandolinjeverktøy"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr "Et Meson-basert prosjekt tilpasset kommandolinjeverktøy"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
 msgstr "Tomt Meson-prosjekt"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
 msgstr "Et Meson-prosjekt uten ekstra tilpasninger"
 
@@ -5662,7 +5585,7 @@ msgstr "Kommando uten navn"
 msgid "Set Shortcut"
 msgstr "Lag snarvei"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
 msgstr "Velg mappe"
 
@@ -5860,22 +5783,6 @@ msgid ""
 msgstr ""
 "Bruk tastatursnarveier som samsvarer med andre apper til koding og "
 "tekstredigering"
-
-#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-msgid "Enchant 2"
-msgstr "Enchant 2"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:248
-msgid "Add to Dictionary"
-msgstr "Legg til i ordliste"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:249
-msgid "Ignore"
-msgstr "Ignorer"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "Språk"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
@@ -6187,7 +6094,7 @@ msgstr "Tillat fet tekst"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
-msgstr "Tillater bruk av spesialtegn til å gjøre tekst fet"
+msgstr "Tillat bruk av spesialtegn til å gjøre tekst fet"
 
 #: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
@@ -6236,7 +6143,7 @@ msgstr ""
 "Det høyeste antallet linjer som kan lagres ved begrensning av "
 "linjehistorikken"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
 msgstr "Resultater fra enhetstesting"
 
@@ -6420,7 +6327,7 @@ msgstr "Se etter minnelekkasjer ved avslutning"
 msgid "Begin cloning project from URI"
 msgstr "Klon prosjekt fra adresse"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "Kloning av kodelager mislyktes."
 
@@ -6536,7 +6443,7 @@ msgstr "Slå på _JavaScript"
 msgid "Failed to parse XML document"
 msgstr "Lesing av XML-fil mislyktes"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
 msgstr "Oppretting av XML-tre mislyktes."
@@ -6544,6 +6451,84 @@ msgstr "Oppretting av XML-tre mislyktes."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Filen må være lagret lokalt for å kunne leses."
+
+#~ msgid "Cancel"
+#~ msgstr "Avbryt"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "Unix/Linux (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "Klassisk Mac OS (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "Windows (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "Automatisk"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "Tekstkoding:"
+
+#~ msgid "Line Ending:"
+#~ msgstr "Linjeslutt:"
+
+#~ msgid "Browse…"
+#~ msgstr "Utforsk…"
+
+#~ msgid "_Save"
+#~ msgstr "_Lagre"
+
+#~ msgid "No Provided Tool"
+#~ msgstr "Intet angitt verktøy"
+
+#~ msgid "A name to identify the sysroot."
+#~ msgstr "Et navn som brukes på systemmappen."
+
+#~ msgid "The system architecture of the sysroot."
+#~ msgstr "Arkitekturen til systemmappen."
+
+#~ msgid "Add Tool:"
+#~ msgstr "Legg til verktøy:"
+
+#~ msgid "Any language"
+#~ msgstr "Hvilket som helst språk"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Vala"
+#~ msgstr "Vala"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Add Tool"
+#~ msgstr "Legg til verktøy"
+
+#~ msgid "Delete Toolchain"
+#~ msgstr "Slett verktøypakke"
+
+#~ msgid "Enchant 2"
+#~ msgstr "Enchant 2"
+
+#~ msgid "Add to Dictionary"
+#~ msgstr "Legg til i ordliste"
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorer"
+
+#~ msgid "Languages"
+#~ msgstr "Språk"
 
 #~ msgid "Christian Hergert, et al."
 #~ msgstr "Christian Hergert mfl."
