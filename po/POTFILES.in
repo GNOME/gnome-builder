@@ -55,7 +55,6 @@ src/libide/greeter/ide-greeter-row.c
 src/libide/greeter/ide-greeter-workspace.c
 src/libide/greeter/ide-greeter-workspace.ui
 src/libide/gtk/ide-animation.c
-src/libide/gtk/ide-file-chooser-entry.c
 src/libide/gtk/ide-file-manager.c
 src/libide/gtk/ide-gtk.c
 src/libide/gtk/ide-install-button.ui
@@ -263,8 +262,6 @@ src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-introspection.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
 src/plugins/meson/gbp-meson-toolchain.c
-src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c
-src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui
 src/plugins/meson/gbp-meson-tool-row.ui
 src/plugins/meson/gbp-meson-utils.c
 src/plugins/meson-templates/gbp-meson-template-provider.c
