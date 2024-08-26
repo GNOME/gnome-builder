@@ -233,6 +233,9 @@ gbp_meson_introspection_load_test (GbpMesonIntrospection *self,
   get_string_member (test, "name", &name);
   get_string_member (test, "workdir", &workdir);
 
+  if (workdir == NULL)
+    workdir = g_strdup (ide_pipeline_get_builddir (self->pipeline));
+
   id = g_strdup_printf ("meson:%s", name);
 
   run_command = ide_run_command_new ();
