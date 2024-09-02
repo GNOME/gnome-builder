@@ -1,0 +1,6249 @@
+# Thai translation for gnome-builder.
+# Copyright (C) 2016 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Akom Chotiphantawanon <knight2000@gmail.com>, 2016, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder master\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
+"POT-Creation-Date: 2019-08-20 10:41+0000\n"
+"PO-Revision-Date: 2019-08-24 18:06+0700\n"
+"Last-Translator: knight2000 <knight2000@gmail.com>\n"
+"Language-Team: ไทย <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: data/style-schemes/builder.style-scheme.xml:22
+#: src/libide/gui/ide-preferences-builtin.c:143 src/main.c:224
+#: src/plugins/newcomers/gbp-newcomers-section.ui:47
+msgid "Builder"
+msgstr "Builder"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:8
+#: src/libide/gui/ide-application-actions.c:143
+msgid "An IDE for GNOME"
+msgstr "ชุดพัฒนาเบ็ดเสร็จสำหรับ GNOME"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:9
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert, et al."
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:12
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder เป็นชุดพัฒนาเบ็ดเสร็จสำหรับ GNOME. รวมการเชื่อมรวมรองรับสำหรับเทคโนโลยีของ "
+"GNOME เช่น GTK+, GLib และ API ของ GNOME พร้อมกับคุณลักษณะที่ซึ่งนักพัฒนาจะชื่นชม เช่น "
+"การเน้นไวยากรณ์และข้อความสั้น"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:18
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"คุณสามารถเชื่อใจที่พอจะทำนายได้ predictable รุ่นของ Builder with each รุ่นใหม่ของ GNOME "
+"ทุกๆ 6 เดือน"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:22
+msgid "Features:"
+msgstr "คุณลักษณะ:"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:24
+msgid "Built in syntax highlighting for many languages"
+msgstr "การเน้นไวยากรณ์ในตัวสำหรับหลายภาษา"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:25
+msgid "Side-by-side code editors"
+msgstr "เคียงข้างกับเครื่องมือแก้ไขโค้ด"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:26
+msgid "Multi-monitor support"
+msgstr "รองรับหลายจอภาพ"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:27
+#, fuzzy
+msgid "Code overview mini-map"
+msgstr "แสดงผังภาพรวม"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:28
+msgid "Integration with Git"
+msgstr "การเชื่อมรวมกับ Git"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr ""
+"การเชื่อมรวมกับ Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize และ "
+"Waf"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:30
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr "Clang ตาม การเติมเต็มคำอัตโนมัติ, การเน้นความหมาย และ วินิจฉัย"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:31
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr "Python ตามการเติมเต็มคำอัตโนมัติ, การเน้นความหมาย และ วินิจฉัย"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:32
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Vala ตามการเติมเต็มคำอัตโนมัติและวินิจฉัย"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:33
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "รองรับการร่นย่อหน้าอัตโนมัติสำหรับ C, Python, Vala และ XML"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:34
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "ดูตัวอย่างสด HTML, Markdown และ reStructuredText และ Sphinx"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr "ตัวเลือกเสริม รูปแบบการแก้ไข Vim, Emacs และ Sublime"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:36
+msgid "An integrated software profiler for native applications"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:37
+msgid "An integrated debugger for native applications"
+msgstr "โปรแกรมดีบั๊กเบ็ดเสร็จสำหรับโปรแกรม"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:38
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "รองรับสำหรับการประกอบสร้างด้วย jhbuild และ flatpak runtimes"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:39
+msgid "Support for viewing TODOs found within your code base"
+msgstr "รองรับการแสดง TODOs ที่พบในโค้ดหลักของคุณ"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:46
+msgid "Quickly access your projects"
+msgstr "เข้าถึงโครงการของคุณได้อย่างเร็ว"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:50
+msgid "Create new projects from a variety of templates"
+msgstr "สร้างโครงการใหม่จากความหลากหลายของแม่แบบ"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:54
+msgid "Integration with Git to clone your projects"
+msgstr "การเชื่อมรวมกับ Git เพื่อสำเนาโครงการของคุณ"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:58
+msgid "The source code editor"
+msgstr "เครื่องมือแก้ไขซอร์สโค้ด"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:62
+msgid "Fast global fuzzy search"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:66
+msgid "Debug with the GNU debugger"
+msgstr "ดีบั๊กด้วยโปรแกรมดีบั๊กของ GNU"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr "ประกอบสร้างคู่ขนาน"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr "จำนวนตัวทำงานที่ใช้ขณะประกอบสร้าง -1 for sensible default. 0 จำนวนของซีพียู"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "อนุญาตให้ใช้เครือข่ายเมื่อถูกวัดค่า"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"เปิดใช้การถ่ายโอนอัตโนมัติเมื่อประกอบสร้างเช่นการดาวน์โหลด SDK "
+"และสิ่งที่ต้องใช้เมื่อการเชื่อมต่อถูกวัดค่า"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Ctags based autocompletion"
+msgstr "การเติมเต็มคำของ Ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Use Ctags for autocompletion."
+msgstr "ใช้ Ctags สำหรับการเติมเต็มอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Enable semantic highlighting"
+msgstr "เปิดใช้การเน้นความหมาย"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr "ถ้าเปิดใช้ การเน้นเพิ่มเติมจะเตรียมไว้รองรับภาษาโดยขึ้นอยู่กับข้อมูลที่แตกออกจากซอร์สโค้ด"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Path to ctags executable"
+msgstr "พาธไปยังโปรแกรมของ ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "The path to the ctags executable on the system."
+msgstr "พาธไปยังโปรแกรมของ ctags ในระบบ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Restore last position"
+msgstr "คืนค่าตำแหน่งล่าสุด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:26
+msgid "Jump to the last position when reopening a file"
+msgstr "กระโดดไปยังตำแหน่งล่าสุดขณะกำลังเปิดแฟ้มซ้ำ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid "Show modified lines"
+msgstr "แสดงบรรทัดที่ถูกแก้ไข"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:31
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะแสดงการเพิ่มบรรทัดและการเปลี่ยนแปลงถัดจากซอร์สโค้ด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "Show diagnostics next to line number"
+msgstr "แสดงการวินิจฉัยถัดจากหมายเลขบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:36
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะแสดงการวินิจฉัยทางซ้ายเพื่อดูเลขบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+#: src/libide/editor/ide-editor-settings-dialog.ui:109
+msgid "Highlight current line"
+msgstr "เน้นบรรทัดปัจจุบัน"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:41
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะเน้นบรรทัดที่มีเคอร์เซอร์"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "Highlight matching brackets"
+msgstr "เน้นวงเล็บที่เข้าคู่"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:46
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะเน้นวงเล็บที่เข้าคู่"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid "Show line numbers"
+msgstr "แสดงเลขบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:51
+msgid "If enabled, the editor will show line numbers."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะแสดงเลขบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: src/libide/gui/ide-preferences-builtin.c:147
+msgid "Smart Backspace"
+msgstr "Backspace พิเศษ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:56
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr "Backspace จะลบช่องว่างเพิ่มเติมเพื่อให้คุณจัดให้ตรงแนวกับขนาดการร่น"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+#: src/libide/gui/ide-preferences-builtin.c:146
+msgid "Smart Home and End"
+msgstr "Home และ End พิเศษ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:61
+msgid "Whether or not Home moves to first non-space character."
+msgstr "จะเลื่อน Home ไปอักขระแรกที่ไม่ใช่ช่องว่าง"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+msgid "Show grid lines"
+msgstr "แสดงเส้นตาราง"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "ถ้าเปิดใช้ เครื่องมือแก้ไขจะแสดงเส้นตารางในเอกสาร"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: src/libide/gui/ide-preferences-builtin.c:174
+msgid "Show overview map"
+msgstr "แสดงผังภาพรวม"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr "ถ้าเปิดใช้ Builder จะแสดงผังภาพรวมของแฟ้มซอร์สถัดจากเครื่องมือแก้ไข"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid "Automatically Hide Overview Map"
+msgstr "ซ่อนผังภาพรวมโดยอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"ถ้าเปิดใช้ Builder จะซ่อนผังภาพรวมโดยอัตโนมัติเมื่อโฟกัสของเม้าส์ออกจากเครื่องมือแก้ไข "
+"หรือหมดเวลาแสดง"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+msgid "Draw Spaces"
+msgstr "แสดงช่องว่าง"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+msgid "The various types of space to draw in the editor."
+msgstr "ช่องว่างหลายชนิดจะแสดงในเครื่องมือแก้ไข"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/libide/gui/ide-preferences-builtin.c:162
+msgid "Overscroll"
+msgstr "เลื่อน"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "จำนวนบรรทัดจะเลื่อนเกินจุดสิ้นสุดของบัฟเฟอร์"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+msgid "Wrap Text"
+msgstr "ตัดบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+msgid ""
+"If enabled, Builder will automatically wrap text so all of the line text is "
+"visible."
+msgstr "ถ้าเปิดใช้ Builder จะตัดบรรทัดโดยอัตโนมัติ ดังนั้นจะเห็นข้อความของบรรทัดทั้งหมด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: src/libide/gui/ide-preferences-builtin.c:187
+msgid "Autosave Enabled"
+msgstr "เปิดใช้บันทึกอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+msgid "Enable or disable autosave feature."
+msgstr "เปิดหรือปิดใช้คุณลักษณะบันทึกอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: src/libide/gui/ide-preferences-builtin.c:188
+msgid "Autosave Frequency"
+msgstr "ความถี่ของการบันทึกอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+msgid "The number of seconds after modification before auto saving."
+msgstr "จำนวนวินาทีหลังจากการแก้ไขก่อนก่อนที่จะบันทึกอัตโนมัติ"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+msgid "Completion Row Count"
+msgstr "จำนวนเติมเต็มของแถว"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+msgid "The number of completion rows to display to the user."
+msgstr "จำนวนเติมเต็มของแถวที่จะแสดงกับผู้ใช้"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: src/libide/gui/ide-preferences-builtin.c:107
+#, fuzzy
+msgid "Line Spacing"
+msgstr "ระยะห่างบรรทัด"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#, fuzzy
+msgid "The number of pixels to include above and below lines in the editor."
+msgstr "จำนวนบรรทัดจะเลื่อนเกินจุดสิ้นสุดของบัฟเฟอร์ออกไป"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: src/libide/gui/ide-preferences-builtin.c:209
+#, fuzzy
+msgid "Interactive Completion"
+msgstr "แนะนำเติมเต็มข้อความสั้น"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#, fuzzy
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr "ถ้าเปิดใช้ Builder จะตัดบรรทัดโดยอัตโนมัติ ดังนั้นจะเห็นข้อความของบรรทัดทั้งหมด"
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
+msgid "Spaces Style"
+msgstr "รูปแบบของช่องว่าง"
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
+msgid "How to apply spaces when reformatting text."
+msgstr "วิธีใช้ช่องว่างเมื่อจัดข้อความใหม่"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+msgid "Enabled"
+msgstr "เปิดใช้"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "ถ้าชนิดในส่วนขยายเปิดใช้"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "ขนาดหน้าต่าง"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "ขนาดหน้าต่าง (กว้างและสูง)"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "ตำแหน่งหน้าต่าง"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "ตำแหน่งหน้าต่าง (x และ y)"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "หน้าต่างขยายแผ่"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "สถานะขยายแผ่ของหน้าต่าง"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "โหมดกลางคืน"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid "Prefer dark application chrome."
+msgstr "เสนอโปรแกรม chrome สีเข้ม"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+msgid "Follow system night light"
+msgstr "ทำตามระบบแสงกลางคืน"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid "Use GNOME night light setting to activate night-mode."
+msgstr "ใช้ค่าตั้งแสงกลางคืนของ GNOME เพื่อเปิดใช้โหมดกลางคืน"
+
+#. Translators: This is the default directory name for user’s
+#. projects. Do NOT change the ASCII double quotes ("") to your
+#. language’s convention, e.g. do not use “” or »«.
+#: data/gsettings/org.gnome.builder.gschema.xml:32
+msgid "\"Projects\""
+msgstr "\"Projects\""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:33
+#: src/libide/gui/ide-preferences-builtin.c:418
+msgid "Projects directory"
+msgstr "ไดเรกทอรีของโครงการ"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:34
+msgid "Directory for all Builder projects."
+msgstr "ไดเรกทอรีสำหรับโครงการของ Builder ทั้งหมด"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:38
+msgid "Restore Previous Files"
+msgstr "กู้คืนแฟ้มล่าสุด"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:39
+msgid "Restore previously opened files when loading a project."
+msgstr "กู้คืนแฟ้มที่เปิดล่าสุดขณะโหลดโครงการ"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:43
+msgid "Show Open Files"
+msgstr "แสดงแฟ้มที่เปิด"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:44
+msgid "Display the open files list in the project sidebar."
+msgstr "แสดงรายชื่อแฟ้มที่เปิดในแถบข้างของโครงการ"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr "ล้างแคชประกอบสร้างขณะเริ่มทำงาน"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr "ถ้าเปิดใช้ เครื่องมือประกอบสร้างจะล้างแคชประกอบสร้างในเวลาเริ่มทำงาน"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Plugin enabled"
+msgstr "เปิดใช้ปลั๊กอิน"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "ถ้าปลั๊กอินควรจะเปิดใช้"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+msgid "Show Icons"
+msgstr "แสดงไอคอน"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "ค่าตั้งนี้ไม่แนะนำให้ใช้แล้วและไม่ได้ใช้มานานแล้ว"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/gtk/menus.ui:69
+msgid "Show Ignored Files"
+msgstr "แสดงแฟ้มที่ไม่ได้ใช้"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr "ถ้าเปิดใช้ ลำดับชั้นโครงการจะแสดงแฟ้มที่ไม่ได้ใช้โดย VCS"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/gtk/menus.ui:74
+msgid "Sort Directories First"
+msgstr "เรียงลำดับไดเรกทอรีก่อน"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr "ถ้าเปิดใช้ ลำดับชั้นโครงการจะเรียงลำดับไดเรกทอรีก่อนแฟ้มปกติ"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:7
+msgid "Selected configuration for building"
+msgstr "ค่าตั้งที่เลือกสำหรับการประกอบสร้าง"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:8
+msgid ""
+"The configuration that has been selected and will be restored the next time "
+"the project loads."
+msgstr "ค่าตั้งที่ได้เลือกแล้ว จะกู้คืนครั้งถัดไปที่โหลดโครงการ"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "แสดงช่องด้านซ้าย"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr "ถ้าเปิดใช้ ช่องด้านซ้ายจะแสดง"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "ตำแหน่งช่องด้านซ้าย"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr "ความกว้างเป็นหน่วยพิกเซลของช่องด้านซ้าย"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "แสดงช่องด้านขวา"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr "ถ้าเปิดใช้ ช่องด้านขวาจะแสดง"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "ตำแหน่งช่องด้านขวา"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr "ความกว้างเป็นหน่วยพิกเซลของช่องด้านขวา"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "แสดงช่องด้านล่าง"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "ถ้าเปิดใช้ ช่องด้านล่างจะแสดง"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "ตำแหน่งช่องด้านล่าง"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr "ความกว้างเป็นหน่วยพิกเซลของช่องด้านล่าง"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "ซอฟต์แวร์ประกอบสร้างสำหรับ GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "ประกอบสร้าง;พัฒนา;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "เปิดโครงการ"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "เริ่มโครงการใหม่"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "สำเนาคลัง"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "พื้นที่ทำงานใหม่ของเครื่องมือแก้ไข"
+
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:13
+msgid "D-Bus Inspector"
+msgstr "เครื่องมือตรวจวิเคราะห์ของ D-Bus"
+
+#: data/style-schemes/builder-dark.style-scheme.xml:25
+msgid "Builder Dark"
+msgstr "Builder เข้ม"
+
+#: data/style-schemes/builder-dark.style-scheme.xml:28
+msgid "Dark color scheme for Builder using the Tango color palette"
+msgstr "ชุดสีเข้มสำหรับเครื่องมือประกอบสร้างซึ่งใช้สีจากจานสีของ Tango"
+
+#: data/style-schemes/builder.style-scheme.xml:24
+msgid "The default color scheme for Builder"
+msgstr "ชุดสีปริยายสำหรับเครื่องมือประกอบสร้าง"
+
+#: src/gstyle/data/palettes/basic.gstyle.xml:20
+#: src/plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "พื้นฐาน"
+
+#: src/gstyle/gstyle-color-panel.c:956
+msgid "Palette: "
+msgstr "จานสี: "
+
+#: src/gstyle/gstyle-color-panel.c:958
+msgid "Palette"
+msgstr "จานสี"
+
+#: src/gstyle/gstyle-color-plane.c:1612
+msgid "Color Plane"
+msgstr "ระนาบสี"
+
+#: src/gstyle/gstyle-color-widget-actions.c:68
+msgid "Color name"
+msgstr "ชื่อสี"
+
+#: src/gstyle/gstyle-color-widget-actions.c:70
+msgid "Enter a new name for the color"
+msgstr "ป้อนชื่อใหม่สำหรับสี"
+
+#: src/gstyle/gstyle-palette-widget.c:981
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "ไม่บันทึกจานสี %u"
+
+#: src/gstyle/gstyle-palette.c:494 src/gstyle/gstyle-palette.c:560
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "แจงบรรทัด %i ไม่สำเร็จ\n"
+
+#: src/gstyle/gstyle-palette.c:615
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: จานสีว่างเปล่า\n"
+
+#: src/gstyle/gstyle-palette.c:721
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s: แจงไม่สำเร็จ\n"
+
+#: src/gstyle/gstyle-palette.c:729
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "ไม่สามารถเปิด %s ได้\n"
+
+#: src/gstyle/gstyle-palette.c:767
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: ไม่รองรับรูปแบบแฟ้มนี้\n"
+
+#: src/gstyle/gstyle-palette.c:824
+#, c-format
+msgid "failed to parse\n"
+msgstr "แจงไม่สำเร็จ\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: src/gstyle/gstyle-palette.c:831
+msgid "Generated"
+msgstr "สร้างแล้ว"
+
+#: src/gstyle/gstyle-palette.c:935
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "ไม่สามารถบันทึก %s ได้\n"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "ธาตุสี"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "ความสด"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:86
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "ค่า"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr "Cielab l"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr "Cielab a"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr "Cielab b"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "แดง"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "เขียว"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "น้ำเงิน"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "องค์ประกอบสี"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:573
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "สีข้อความ"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:634
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
+msgid "HEX3"
+msgstr "HEX3"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:645
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
+msgid "HEX6"
+msgstr "HEX6"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:656
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
+msgid "RGB"
+msgstr "RGB"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:667
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
+msgid "RGBA"
+msgstr "RGBA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:678
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
+msgid "HSL"
+msgstr "HSL"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:689
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
+msgid "HSLA"
+msgstr "HSLA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "จานสี"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:946
+#: src/plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "ไม่เปิดจานสี"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "โหลดหรือสร้างจานสีโดยใช้ค่าปรับแต่ง"
+
+#: src/gstyle/ui/gstyle-color-widget.ui:13
+#: src/libide/sourceview/ide-source-view.c:4977
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+#: src/plugins/project-tree/gtk/menus.ui:53
+msgid "Rename"
+msgstr "เปลี่ยนชื่อ"
+
+#: src/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "ลบ"
+
+#: src/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:35
+msgid "_Rename"
+msgstr "เ_ปลี่ยนชื่อ"
+
+#. translators: %u is replaced with an incrementing number
+#: src/libide/code/ide-buffer-manager.c:391
+#, c-format
+msgid "unsaved file %u"
+msgstr "ไม่บันทึกแฟ้ม %u แล้ว"
+
+#: src/libide/code/ide-buffer.c:3405
+msgid "The current language lacks a symbol resolver."
+msgstr "ภาษาปัจจุบันขาดตัวแก้สัญลักษณ์"
+
+#: src/libide/code/ide-language-defaults.c:219
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s มี ASCII ที่ไม่ถูกต้อง"
+
+#: src/libide/code/ide-language-defaults.c:234
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "แจงจำนวนเต็มจาก “%s” ไม่สำเร็จ"
+
+#: src/libide/code/ide-language-defaults.c:309
+msgid "language defaults missing version in [global] group."
+msgstr "ภาษาโดยปริยายไม่มีรุ่นในกลุ่ม [global]"
+
+#: src/libide/code/ide-language-defaults.c:403
+msgid "Failed to initialize defaults."
+msgstr "เริ่มต้นค่าปริยายไม่สำเร็จ"
+
+#. translators: %s is replaced with the error message
+#: src/libide/code/ide-unsaved-files.c:254
+#, c-format
+msgid "Failed to save draft: %s"
+msgstr "บันทึกฉบับร่างไม่สำเร็จ: %s"
+
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:810
+msgid "Untitled"
+msgstr "ไม่มีชื่อ"
+
+#: src/libide/core/ide-transfer.c:548
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/editor/ide-editor-page-actions.c:339
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-clone-surface.ui:318
+#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/gui/ide-workbench.c:1419
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:283
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: src/libide/debugger/ide-debug-manager.c:1000
+#, c-format
+msgid "A suitable debugger was not found."
+msgstr "ไม่พบโปรแกรมดีบั๊กที่เหมาะสม"
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-page-actions.c:56
+#, c-format
+msgid "Failed to load file: %s"
+msgstr "โหลดแฟ้ม: %s ไม่สำเร็จ"
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-page-actions.c:121
+#, c-format
+msgid "Print failed: %s"
+msgstr "พิมพ์: %s ไม่สำเร็จ"
+
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: src/libide/editor/ide-editor-page-actions.c:192
+#: src/libide/editor/ide-editor-page-actions.c:300
+#, c-format
+msgid "Failed to save file: %s"
+msgstr "บันทึกแฟ้มไม่สำเร็จ: %s"
+
+#: src/libide/editor/ide-editor-page-actions.c:236
+#: src/plugins/buildui/gbp-buildui-log-pane.c:273
+#: src/plugins/testui/gbp-test-output-panel.c:65
+msgid "Save File"
+msgstr "บันทึกแฟ้ม"
+
+#: src/libide/editor/ide-editor-page-actions.c:239
+#: src/libide/terminal/ide-terminal-page-actions.c:277
+#: src/plugins/color-picker/gb-color-picker-prefs.c:236
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
+msgid "Save"
+msgstr "บันทึก"
+
+#: src/libide/editor/ide-editor-page-actions.c:335
+msgid "Save File As"
+msgstr "บันทึกแฟ้มเป็น"
+
+#: src/libide/editor/ide-editor-page-actions.c:338
+msgid "Save As"
+msgstr "บันทึกเป็น"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:33
+#: src/libide/editor/ide-editor-page-shortcuts.c:39
+#: src/libide/editor/ide-editor-page-shortcuts.c:45
+#: src/libide/editor/ide-editor-page-shortcuts.c:51
+#: src/libide/editor/ide-editor-page-shortcuts.c:57
+#: src/libide/editor/ide-editor-page-shortcuts.c:63
+#: src/libide/editor/ide-editor-page-shortcuts.c:69
+#: src/libide/editor/ide-editor-page-shortcuts.c:75
+#: src/libide/editor/ide-editor-page-shortcuts.c:81
+#: src/libide/editor/ide-editor-surface-shortcuts.c:35
+#: src/libide/editor/ide-editor-surface-shortcuts.c:41
+#: src/libide/editor/ide-editor-surface-shortcuts.c:47
+#: src/libide/editor/ide-editor-surface-shortcuts.c:53
+#: src/libide/editor/ide-editor-surface-shortcuts.c:59
+#: src/libide/gui/ide-frame-shortcuts.c:35
+#: src/libide/gui/ide-frame-shortcuts.c:42
+#: src/libide/gui/ide-frame-shortcuts.c:49
+#: src/libide/gui/ide-frame-shortcuts.c:56
+#: src/libide/gui/ide-frame-shortcuts.c:63
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:343
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:55
+msgctxt "shortcut window"
+msgid "Editor shortcuts"
+msgstr "ทางลัดเครื่องมือแก้ไข"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:34
+#: src/libide/editor/ide-editor-page-shortcuts.c:40
+#: src/libide/editor/ide-editor-page-shortcuts.c:46
+#: src/libide/editor/ide-editor-surface-shortcuts.c:36
+#: src/libide/editor/ide-editor-surface-shortcuts.c:42
+#: src/libide/editor/ide-editor-surface-shortcuts.c:60
+#: src/libide/gui/ide-frame-shortcuts.c:36
+#: src/libide/gui/ide-frame-shortcuts.c:43
+#: src/libide/gui/ide-frame-shortcuts.c:50
+#: src/libide/gui/ide-frame-shortcuts.c:57
+#: src/libide/gui/ide-frame-shortcuts.c:64
+#: src/libide/gui/ide-shortcuts-window.ui:89
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "แฟ้ม"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:35
+#: src/libide/gui/ide-shortcuts-window.ui:108
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "บันทึกเอกสาร"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Save the document with a new name"
+msgstr "บันทึกเอกสารด้วยชื่อใหม่"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:47
+#: src/libide/gui/ide-shortcuts-window.ui:122
+msgctxt "shortcut window"
+msgid "Print the document"
+msgstr "พิมพ์เอกสาร"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:52
+#: src/libide/editor/ide-editor-page-shortcuts.c:58
+#: src/libide/editor/ide-editor-page-shortcuts.c:59
+#: src/libide/editor/ide-editor-page-shortcuts.c:64
+#: src/libide/editor/ide-editor-page-shortcuts.c:70
+#: src/libide/editor/ide-editor-page-shortcuts.c:76
+#: src/libide/editor/ide-editor-page-shortcuts.c:82
+#: src/libide/gui/ide-shortcuts-window.ui:165
+#: src/libide/gui/ide-shortcuts-window.ui:184
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "หาและแทนที่"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:53
+#: src/libide/gui/ide-shortcuts-window.ui:177
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "หา"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:65
+msgctxt "shortcut window"
+msgid "Move to the next match"
+msgstr "เลื่อนไปยังผลลัพธ์ถัดไปที่ตรงกัน"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:71
+msgctxt "shortcut window"
+msgid "Move to the previous match"
+msgstr "เลื่อนไปยังผลลัพธ์ก่อนหน้าที่ตรงกัน"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:77
+msgctxt "shortcut window"
+msgid "Move to the next error"
+msgstr "เลื่อนไปยังข้อผิดพลาดถัดไป"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:83
+msgctxt "shortcut window"
+msgid "Move to the previous error"
+msgstr "เลื่อนไปยังข้อผิดพลาดก่อนหน้า"
+
+#: src/libide/editor/ide-editor-page.ui:43
+msgid "_Reload"
+msgstr "โหลด_ซ้ำ"
+
+#: src/libide/editor/ide-editor-page.ui:51
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/plugins/buildui/gbp-buildui-log-pane.c:277
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:152
+#: src/plugins/testui/gbp-test-output-panel.c:69
+msgid "_Cancel"
+msgstr "_ยกเลิก"
+
+#: src/libide/editor/ide-editor-page.ui:64
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+
+#: src/libide/editor/ide-editor-search-bar.c:179
+#: src/libide/editor/ide-editor-search-bar.ui:213
+msgid "Regular expressions"
+msgstr "นิพจน์เรกิวลาร์"
+
+#: src/libide/editor/ide-editor-search-bar.c:184
+#: src/libide/editor/ide-editor-search-bar.ui:227
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "ตัวพิมพ์ใหญ่-เล็กตรงกัน"
+
+#: src/libide/editor/ide-editor-search-bar.c:189
+#: src/libide/editor/ide-editor-search-bar.ui:240
+msgid "Match whole word only"
+msgstr "ค้นหาทั้งคำเท่านั้น"
+
+#: src/libide/editor/ide-editor-search-bar.c:351
+#, c-format
+msgid "%u of %u"
+msgstr "%u จาก %u"
+
+#: src/libide/editor/ide-editor-search-bar.ui:122
+#: src/plugins/grep/gbp-grep-panel.ui:67
+msgid "Replace"
+msgstr "แทนที่"
+
+#: src/libide/editor/ide-editor-search-bar.ui:134
+msgid "Replace All"
+msgstr "แทนที่ทั้งหมด"
+
+#: src/libide/editor/ide-editor-search-bar.ui:154
+msgid "Switch between Search and Search-and-Replace"
+msgstr "สลับระหว่างค้นหาและค้นหา-และ-แทนที่"
+
+#: src/libide/editor/ide-editor-search-bar.ui:174
+#: src/libide/terminal/ide-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr "แสดงหรือซ่อนตัวเลือกการค้นหาเช่น case sensitivity"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:6
+#: src/plugins/editor/gtk/menus.ui:155
+msgid "Document Properties"
+msgstr "คุณสมบัติเอกสาร"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:22
+msgid "Highlight Mode"
+msgstr "โหมดเน้น"
+
+#. Add our pages
+#: src/libide/editor/ide-editor-settings-dialog.ui:80
+#: src/libide/gui/ide-preferences-builtin.c:155
+#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:325
+#: src/libide/gui/ide-preferences-builtin.c:397
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
+msgid "General"
+msgstr "ทั่วไป"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:95
+msgid "Display line numbers"
+msgstr "แสดงเลขบรรทัด"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:102
+msgid "Display right margin"
+msgstr "แสดงกั้นหน้าขวา"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:116
+msgid "Automatic indentation"
+msgstr "ร่นย่อหน้าโดยอัตโนมัติ"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:123
+msgid "Smart backspace"
+msgstr "backspace พิเศษ"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:125
+msgid "Enabling smart backspace will treat multiple spaces as a tabs"
+msgstr ""
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:133
+msgid "Insert trailing newline"
+msgstr "แทรกท้ายบรรทัดใหม่"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:140
+msgid "Overwrite trailing braces and quotations"
+msgstr "เขียนทับท้ายวงเล็บและคำพูด"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:152
+#: src/libide/gui/ide-preferences-builtin.c:335
+msgid "Indentation"
+msgstr "การร่นย่อหน้า"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:179
+msgid "2"
+msgstr "2"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:189
+msgid "3"
+msgstr "3"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:199
+msgid "4"
+msgstr "4"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:209
+msgid "8"
+msgstr "8"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:236
+#: src/libide/gui/ide-preferences-builtin.c:178
+msgid "Spaces"
+msgstr "ช่องว่าง"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:247
+#: src/libide/gui/ide-preferences-builtin.c:179
+msgid "Tabs"
+msgstr "แท็บ"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:264
+msgid "Spaces per tab"
+msgstr "ช่องว่างต่อแท็บ"
+
+#. List of pages that are open
+#: src/libide/editor/ide-editor-sidebar.ui:31
+#: src/libide/gui/ide-frame-header.ui:21
+msgid "Open Pages"
+msgstr "เปิดหน้า"
+
+#: src/libide/editor/ide-editor-surface-actions.c:72
+msgid "Open File"
+msgstr "เปิดแฟ้ม"
+
+#: src/libide/editor/ide-editor-surface-actions.c:75
+#: src/libide/gui/ide-workbench.c:1418
+#: src/plugins/color-picker/gb-color-picker-prefs.c:209
+#: src/plugins/project-tree/gtk/menus.ui:22
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:282
+msgid "Open"
+msgstr "เปิด"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:37
+msgctxt "shortcut window"
+msgid "Create a new document"
+msgstr "สร้างเอกสารใหม่"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:43
+#: src/libide/gui/ide-shortcuts-window.ui:101
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "เปิดเอกสาร"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:48
+#: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/libide/gui/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "ช่อง"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:49
+msgctxt "shortcut window"
+msgid "Toggle navigation panel"
+msgstr "สลับช่องสำรวจ"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:55
+msgctxt "shortcut window"
+msgid "Toggle utilities panel"
+msgstr "สลับช่องเครื่องมือ"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:61
+msgctxt "shortcut window"
+msgid "Close all files"
+msgstr "ปิดแฟ้มทั้งหมด"
+
+#: src/libide/editor/ide-editor-surface.c:565
+#: src/libide/gui/ide-preferences-builtin.c:106
+#: src/libide/gui/ide-preferences-builtin.c:153
+#: src/plugins/editor/gtk/menus.ui:68 src/plugins/editor/gtk/menus.ui:82
+msgid "Editor"
+msgstr "เครื่องมือแก้ไข"
+
+#: src/libide/editor/ide-editor-surface.ui:14
+msgid "Restoring previous session"
+msgstr "กู้คืนวาระก่อนหน้า"
+
+#: src/libide/editor/ide-editor-surface.ui:15
+msgid "Your previous session will be ready in a moment."
+msgstr "กู้คืนวาระก่อนหน้าจะเรียบร้อยใน"
+
+#: src/libide/editor/ide-editor-workspace.ui:21
+#: src/libide/gui/ide-primary-workspace.ui:21
+msgid "Switch surface"
+msgstr ""
+
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
+#: src/libide/terminal/ide-terminal-workspace.ui:41
+msgid "Search your project"
+msgstr "ค้นหาโครงการของคุณ"
+
+#: src/libide/foundry/ide-build-manager.c:396
+#, c-format
+msgid "Failed to initialize build pipeline: %s"
+msgstr "ตั้งค่าเริ่มต้นประกอบสร้างของไปป์ไลน์: %s ไม่สำเร็จ"
+
+#: src/libide/foundry/ide-build-manager.c:526
+#, c-format
+msgid "Failed to get device information: %s"
+msgstr "อ่านข้อมูลอุปกรณ์: %s ไม่สำเร็จ"
+
+#. translators: %s is replaced with the external device name
+#: src/libide/foundry/ide-device-manager.c:162
+#, c-format
+msgid "Discovered device “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-device-manager.c:553
+msgid "Devices"
+msgstr "อุปกรณ์"
+
+#: src/libide/foundry/ide-device-manager.c:733
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr ""
+
+#: src/libide/foundry/ide-fallback-build-system.c:145
+#: src/libide/greeter/ide-greeter-row.c:260
+msgid "Fallback"
+msgstr ""
+
+#. translators: %s is replaced with the host name
+#: src/libide/foundry/ide-local-device.c:140
+#, c-format
+msgid "My Computer (%s)"
+msgstr "คอมพิวเตอร์ของฉัน (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/foundry/ide-local-device.c:150
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "คอมพิวเตอร์ของฉัน (%s) — %s"
+
+#: src/libide/foundry/ide-pipeline.c:800
+msgid "The build pipeline is in a failed state"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:810
+msgid "The build configuration has errors"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:3000
+msgid "Pseudo terminal creation failed. Terminal features will be limited."
+msgstr "การสร้างเทอร์มินัลเทียมไม่สำเร็จ คุณลักษณะของเทอร์มินัลจะถูกจำกัด"
+
+#: src/libide/foundry/ide-pipeline.c:3206
+msgid "Cleaning…"
+msgstr "กำลังล้าง…"
+
+#: src/libide/foundry/ide-pipeline.c:3210
+#: src/libide/foundry/ide-pipeline.c:3267
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
+msgid "Failed"
+msgstr "ไม่สำเร็จ"
+
+#: src/libide/foundry/ide-pipeline.c:3212
+#: src/libide/foundry/ide-pipeline.c:3275
+msgid "Ready"
+msgstr "พร้อมแล้ว"
+
+#: src/libide/foundry/ide-pipeline.c:3227
+msgid "Downloading…"
+msgstr "กำลังดาวน์โหลด…"
+
+#: src/libide/foundry/ide-pipeline.c:3231
+msgid "Building dependencies…"
+msgstr "กำลังประกอบสร้างสิ่งที่ต้องใช้…"
+
+#: src/libide/foundry/ide-pipeline.c:3235
+msgid "Bootstrapping…"
+msgstr "กำลังปลุกเครื่อง…"
+
+#: src/libide/foundry/ide-pipeline.c:3239
+msgid "Configuring…"
+msgstr "กำลังตั้งค่า…"
+
+#: src/libide/foundry/ide-pipeline.c:3243
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
+msgid "Building…"
+msgstr "กำลังประกอบสร้าง…"
+
+#: src/libide/foundry/ide-pipeline.c:3247
+msgid "Installing…"
+msgstr "กำลังติดตั้ง…"
+
+#: src/libide/foundry/ide-pipeline.c:3251
+msgid "Committing…"
+msgstr "Committing…"
+
+#: src/libide/foundry/ide-pipeline.c:3255
+msgid "Exporting…"
+msgstr "กำลังส่งออก…"
+
+#: src/libide/foundry/ide-pipeline.c:3259
+#: src/libide/foundry/ide-pipeline.c:3263
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
+msgid "Success"
+msgstr "สำเร็จ"
+
+#: src/libide/foundry/ide-pipeline.c:3271
+msgid "Preparing…"
+msgstr "กำลังเตรียม…"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+#, fuzzy
+msgid "Cannot build transfer while on metered connection"
+msgstr "ไม่สามารถทำการถ่ายโอนขณะวัดการเชื่อมต่อ"
+
+#: src/libide/foundry/ide-run-manager.c:383
+msgid "Cannot run target, another target is running"
+msgstr "ไม่สามารถเรียกทำงานเป้าหมายได้ อีกเป้าหมายกำลังทำงาน"
+
+#: src/libide/foundry/ide-run-manager.c:462
+msgid "Failed to locate runtime"
+msgstr ""
+
+#. translators: %s is replaced with the name of the users executable
+#: src/libide/foundry/ide-run-manager.c:516
+#, c-format
+msgid "Running %s…"
+msgstr "กำลังเรียกทำงาน %s…"
+
+#. translators: %s is replaced with the specific error reason
+#: src/libide/foundry/ide-run-manager.c:590
+#, c-format
+msgid "The build target failed to build: %s"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:853
+#: src/libide/gui/ide-application-shortcuts.c:45
+#: src/libide/gui/ide-application-shortcuts.c:56
+#: src/libide/gui/ide-application-shortcuts.c:67
+msgctxt "shortcut window"
+msgid "Workbench shortcuts"
+msgstr "ทางลัดของโต๊ะทำงาน"
+
+#: src/libide/foundry/ide-run-manager.c:854
+#: src/libide/gui/ide-shortcuts-window.ui:460
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "ประกอบสร้างแล้วเรียกทำงาน"
+
+#: src/libide/foundry/ide-run-manager.c:1013
+#: src/libide/foundry/ide-run-manager.c:1079
+msgid "Failed to locate a build target"
+msgstr "หาเป้าหมายประกอบสร้างไม่สำเร็จ"
+
+#: src/libide/foundry/ide-run-manager.c:1215 src/libide/gui/gtk/menus.ui:73
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Run"
+msgstr "เรียกทำงาน"
+
+#: src/libide/foundry/ide-runner.c:185
+msgid "Process quit unexpectedly"
+msgstr ""
+
+#: src/libide/foundry/ide-runtime-manager.c:138
+msgid "Host Operating System"
+msgstr ""
+
+#: src/libide/foundry/ide-runtime.c:498
+#: src/plugins/jhbuild/jhbuild_plugin.py:123
+#, fuzzy
+msgid "Host System"
+msgstr "ระบบประกอบสร้าง"
+
+#: src/libide/foundry/ide-toolchain-manager.c:329
+msgid "Default (Host operating system)"
+msgstr ""
+
+#. translators: %s is replaced with the path to the project
+#: src/libide/greeter/ide-clone-surface.c:251
+#, c-format
+msgid "The directory “%s” already exists. Please choose another directory."
+msgstr "ไดเรกทอรี “%s” มีอยู่ก่อนแล้ว กรุณาเลือกไดเรกทอรีอื่น"
+
+#. translators: %s is replaced with the path to the project
+#: src/libide/greeter/ide-clone-surface.c:259
+#, c-format
+msgid "Your project will be created at %s"
+msgstr "โครงการของคุณจะสร้างที่ %s"
+
+#: src/libide/greeter/ide-clone-surface.ui:48
+msgid "Repository URL"
+msgstr "URL คลัง"
+
+#: src/libide/greeter/ide-clone-surface.ui:63
+msgid ""
+"Enter the repository of the project you would like to clone. The URL should "
+"look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
+msgstr ""
+
+#: src/libide/greeter/ide-clone-surface.ui:84
+msgid "user@host:repository.git"
+msgstr ""
+
+#: src/libide/greeter/ide-clone-surface.ui:103
+msgid "Select branch and other options."
+msgstr "เลือกแขนงและตัวเลือกอื่น"
+
+#: src/libide/greeter/ide-clone-surface.ui:140
+msgid "Repository Kind"
+msgstr "ชนิดคลัง"
+
+#: src/libide/greeter/ide-clone-surface.ui:165
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
+msgid "Branch"
+msgstr "แขนง"
+
+#: src/libide/greeter/ide-clone-surface.ui:191
+msgid "Author Name"
+msgstr "ชื่อผู้เขียน"
+
+#: src/libide/greeter/ide-clone-surface.ui:216
+msgid "Author Email"
+msgstr "อีเมลผู้เขียน"
+
+#: src/libide/greeter/ide-clone-surface.ui:252
+msgid "Project Destination"
+msgstr "โครงการปลายทาง"
+
+#: src/libide/greeter/ide-clone-surface.ui:308
+msgid "Clone Project"
+msgstr "สำเนาโครงการ"
+
+#: src/libide/greeter/ide-greeter-buttons-section.c:62
+msgid "Select a Folder…"
+msgstr "เลือกโฟลเดอร์…"
+
+#: src/libide/greeter/ide-greeter-buttons-section.c:69
+msgid "Clone Repository…"
+msgstr "สำเนาคลัง…"
+
+#: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
+msgid "Directory"
+msgstr "ไดเรกทอรี"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:89
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
+msgid "Select Project Folder"
+msgstr "เลือกโฟลเดอร์โครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:94
+msgid "Select Project File"
+msgstr "เลือกแฟ้มโครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
+msgid "_Open"
+msgstr "_เปิด"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
+msgid "All Project Types"
+msgstr "ชนิดโครงการทั้งหมด"
+
+#: src/libide/greeter/ide-greeter-workspace.c:218
+#: src/libide/gui/ide-workbench.c:318 src/libide/gui/ide-workbench.c:843
+#, c-format
+msgid "Builder — %s"
+msgstr "Builder — %s"
+
+#: src/libide/greeter/ide-greeter-workspace.c:326
+msgid "Failed to load the project"
+msgstr "โหลดโครงการไม่สำเร็จ"
+
+#: src/libide/greeter/ide-greeter-workspace.c:519
+msgid ""
+"Removing project sources will delete them from your computer and cannot be "
+"undone."
+msgstr "การลบซอร์สโครงการจะลบทุกสิ่งจากคอมพิวเตอร์ของคุณและไม่สามารถเรียกคืนได้"
+
+#: src/libide/greeter/ide-greeter-workspace.c:523
+msgid "Delete Project Sources"
+msgstr "ลบซอร์สโครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:25
+msgid "Go back"
+msgstr "ย้อนกลับ"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
+msgid "Open a Project"
+msgstr "เปิดโครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:101
+msgid "Search all Builder projects…"
+msgstr "ค้นหาโครงการของ Builder ทั้งหมด…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:118
+msgid "No Projects Found"
+msgstr "ไม่พบโครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:154
+msgid "_Remove Projects"
+msgstr "_ลบโครงการ"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:166
+msgid "Remove Projects and Sources…"
+msgstr "ลบโครงการและซอร์ส…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "สำเนาคลัง"
+
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:78
+msgid "Switch Surface"
+msgstr ""
+
+#: src/libide/gui/gtk/menus.ui:16
+msgid "Close Project"
+msgstr "ปิดโครงการ"
+
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.ui:6
+#: src/plugins/editor/gtk/menus.ui:33 src/plugins/greeter/gtk/menus.ui:22
+msgid "Preferences"
+msgstr "ปรับแต่ง"
+
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:39
+#: src/plugins/greeter/gtk/menus.ui:28
+msgid "Keyboard Shortcuts"
+msgstr "ปุ่มลัด"
+
+#: src/libide/gui/gtk/menus.ui:36 src/plugins/editor/gtk/menus.ui:45
+#: src/plugins/greeter/gtk/menus.ui:34
+msgid "Help"
+msgstr "วิธีใช้"
+
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:51
+#: src/plugins/greeter/gtk/menus.ui:40
+msgid "About Builder"
+msgstr "เกี่ยวกับ Builder"
+
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:58
+msgid "_Quit"
+msgstr "_ออก"
+
+#: src/libide/gui/gtk/menus.ui:60 src/libide/gui/ide-frame-empty-state.ui:88
+#: src/libide/gui/ide-workbench.c:1415 src/plugins/editor/gtk/menus.ui:25
+#: src/plugins/editor/gtk/menus.ui:103
+msgid "Open File…"
+msgstr "เปิดแฟ้ม…"
+
+#: src/libide/gui/gtk/menus.ui:68
+msgid "Run Options"
+msgstr "ตัวเลือกเรียกทำงาน"
+
+#: src/libide/gui/ide-application-actions.c:78
+msgid "Builder — Preferences"
+msgstr "Builder — ปรับแต่ง"
+
+#: src/libide/gui/ide-application-actions.c:149
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: src/libide/gui/ide-application-actions.c:151
+msgid "translator-credits"
+msgstr "Akom Chotiphantawanon, 2016-2018"
+
+#: src/libide/gui/ide-application-actions.c:155
+msgid "Learn more about GNOME Builder"
+msgstr "ศึกษาเพิ่มเติมเกี่ยวกับ Builder ของ GNOME"
+
+#: src/libide/gui/ide-application-actions.c:158
+msgid "Funded By"
+msgstr "สนับสนุนโดย"
+
+#: src/libide/gui/ide-application-command-line.c:64
+msgid "Show the application preferences"
+msgstr "แสดงการปรับแต่งของโปรแกรม"
+
+#: src/libide/gui/ide-application-command-line.c:65
+msgid "Open project in new workbench"
+msgstr "เปิดโครงการในโต๊ะทำงานใหม่"
+
+#: src/libide/gui/ide-application-command-line.c:65
+msgid "FILE"
+msgstr "แฟ้ม"
+
+#: src/libide/gui/ide-application-command-line.c:66
+msgid "Print version information and exit"
+msgstr "พิมพ์ข้อมูลรุ่นแล้วออก"
+
+#. Verbose is handled in main(), but we need to add to --help here
+#: src/libide/gui/ide-application-command-line.c:68
+msgid "Increase log verbosity"
+msgstr ""
+
+#: src/libide/gui/ide-application-command-line.c:118
+#, c-format
+msgid "Failed to open project: %s"
+msgstr "เปิดโครงการ: %s ไม่สำเร็จ"
+
+#: src/libide/gui/ide-application-shortcuts.c:46
+#: src/libide/gui/ide-application-shortcuts.c:68
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "วิธีใช้"
+
+#: src/libide/gui/ide-application-shortcuts.c:47
+msgctxt "shortcut window"
+msgid "Show the help window"
+msgstr "แสดงหน้าต่างวิธีใช้"
+
+#: src/libide/gui/ide-application-shortcuts.c:57
+#: src/libide/gui/ide-shortcuts-window.ui:25
+#: src/libide/gui/ide-shortcuts-window.ui:531
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "ปรับแต่ง"
+
+#: src/libide/gui/ide-application-shortcuts.c:58
+msgctxt "shortcut window"
+msgid "Show the preferences window"
+msgstr "แสดงหน้าต่างปรับแต่ง"
+
+#: src/libide/gui/ide-application-shortcuts.c:69
+msgctxt "shortcut window"
+msgid "Show the shortcuts window"
+msgstr "แสดงทางลัดของหน้าต่าง"
+
+#: src/libide/gui/ide-application.c:136
+msgid ""
+"GNOME Builder requires a desktop session with D-Bus. Please set "
+"DBUS_SESSION_BUS_ADDRESS."
+msgstr "GNOME Builder ต้องใช้วาระเดสก์ท็อปกับ D-Bus กรุณากำหนด DBUS_SESSION_BUS_ADDRESS"
+
+#: src/libide/gui/ide-command-manager.c:491
+msgid "Command failed"
+msgstr "คำสั่งล้มเหลว"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+msgid "Failed to locate command “%s”"
+msgstr "หาคำสั่ง “%s” ไม่สำเร็จ"
+
+#: src/libide/gui/ide-environment-editor-row.ui:33
+msgid "Remove environment variable"
+msgstr "ลบตัวแปรสภาพแวดล้อม"
+
+#: src/libide/gui/ide-environment-editor.c:71
+msgid "New variable…"
+msgstr "ตัวแปรใหม่…"
+
+#: src/libide/gui/ide-frame-empty-state.ui:16
+msgid "Open a File or Terminal"
+msgstr "เปิดแฟ้มหรือเทอร์มินัล"
+
+#: src/libide/gui/ide-frame-empty-state.ui:30
+msgid "Use the page switcher above or use one of the following:"
+msgstr ""
+
+#: src/libide/gui/ide-frame-empty-state.ui:45
+msgid "Search"
+msgstr "ค้นหา"
+
+#: src/libide/gui/ide-frame-empty-state.ui:54
+msgid "Project sidebar"
+msgstr "แถบข้างของโครงการ"
+
+#: src/libide/gui/ide-frame-empty-state.ui:63
+msgid "File chooser"
+msgstr "เครื่องมือเลือกแฟ้ม"
+
+#: src/libide/gui/ide-frame-empty-state.ui:72
+msgid "New terminal"
+msgstr "เทอร์มินัลใหม่"
+
+#: src/libide/gui/ide-frame-empty-state.ui:95
+msgid "New Terminal"
+msgstr "เทอร์มินัลใหม่"
+
+#: src/libide/gui/ide-frame-shortcuts.c:37
+msgctxt "shortcut window"
+msgid "Move document to the right"
+msgstr "เลื่อนเอกสารไปทางขวา"
+
+#: src/libide/gui/ide-frame-shortcuts.c:44
+msgctxt "shortcut window"
+msgid "Move document to the left"
+msgstr "เลื่อนเอกสารไปทางซ้าย"
+
+#: src/libide/gui/ide-frame-shortcuts.c:51
+#: src/libide/gui/ide-shortcuts-window.ui:150
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "สลับไปยังเอกสารก่อนหน้า"
+
+#: src/libide/gui/ide-frame-shortcuts.c:58
+#: src/libide/gui/ide-shortcuts-window.ui:143
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "สลับไปยังเอกสารถัดไป"
+
+#: src/libide/gui/ide-frame-shortcuts.c:65
+#: src/libide/gui/ide-shortcuts-window.ui:129
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "ปิดเอกสาร"
+
+#: src/libide/gui/ide-frame.c:179 src/libide/gui/ide-frame.ui:8
+msgid "No Open Pages"
+msgstr "ไม่เปิดหน้า"
+
+#: src/libide/gui/ide-frame.ui:37
+msgid "Uh oh, something went wrong"
+msgstr ""
+
+#: src/libide/gui/ide-frame.ui:38
+msgid "There was a failure while trying to perform the operation."
+msgstr ""
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:34
+#: src/libide/gui/ide-header-bar-shortcuts.c:40
+msgctxt "shortcut window"
+msgid "Window shortcuts"
+msgstr "ปุ่มลัดหน้าต่าง"
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:35
+#: src/libide/gui/ide-header-bar-shortcuts.c:41
+#: src/libide/gui/ide-shortcuts-window.ui:14
+#: src/libide/gui/ide-shortcuts-window.ui:520
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:358
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:364
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:370
+msgctxt "shortcut window"
+msgid "General"
+msgstr "ทั่วไป"
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:36
+msgctxt "shortcut window"
+msgid "Show window menu"
+msgstr "แสดงเมนูหน้าต่าง"
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:42
+msgctxt "shortcut window"
+msgid "Toggle window to fullscreen"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:61
+#: src/libide/gui/ide-preferences-builtin.c:62
+msgid "Extensions"
+msgstr "ส่วนขยาย"
+
+#: src/libide/gui/ide-preferences-builtin.c:98
+msgid "Appearance"
+msgstr "รูปโฉม"
+
+#: src/libide/gui/ide-preferences-builtin.c:100
+msgid "Themes"
+msgstr "ชุดตกแต่ง"
+
+#: src/libide/gui/ide-preferences-builtin.c:101
+msgid "Dark Mode"
+msgstr "โหมดเข้ม"
+
+#: src/libide/gui/ide-preferences-builtin.c:101
+msgid "Whether Builder should use a dark theme"
+msgstr "Builder จะใช้ชุดตกแต่งเข้ม"
+
+#: src/libide/gui/ide-preferences-builtin.c:101
+msgid "dark theme"
+msgstr "ชุดตกแต่งเข้ม"
+
+#: src/libide/gui/ide-preferences-builtin.c:102
+msgid "Night Light"
+msgstr "แสงกลางคืน"
+
+#: src/libide/gui/ide-preferences-builtin.c:102
+msgid "Automatically enable dark mode at night"
+msgstr "เปิดใช้โหมดเข้มตอนกลางคืนโดยอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:102
+msgid "follow night light"
+msgstr "ตามแสงกลางคืน"
+
+#: src/libide/gui/ide-preferences-builtin.c:103
+msgid "Grid Pattern"
+msgstr "รูปแบบตาราง"
+
+#: src/libide/gui/ide-preferences-builtin.c:103
+msgid "Display a grid pattern underneath source code"
+msgstr "แสดงรูปแบบตารางภายใต้ซอร์สโค้ด"
+
+#: src/libide/gui/ide-preferences-builtin.c:105
+msgid "Font"
+msgstr "แบบอักษร"
+
+#: src/libide/gui/ide-preferences-builtin.c:106
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "แบบอักษร monospace ของเครื่องมือแก้ไข"
+
+#: src/libide/gui/ide-preferences-builtin.c:107
+msgid "Number of pixels above and below editor lines"
+msgstr "จำนวนพิกเซลด้านบนและด้านล่างบรรทัดเครื่องมือแก้ไข"
+
+#: src/libide/gui/ide-preferences-builtin.c:107
+msgctxt "Keywords"
+msgid "editor line spacing font monospace"
+msgstr ""
+
+#. XXX: This belongs in terminal addin
+#: src/libide/gui/ide-preferences-builtin.c:109
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:439
+#: src/plugins/terminal/gtk/menus.ui:31
+msgid "Terminal"
+msgstr "เทอร์มินัล"
+
+#: src/libide/gui/ide-preferences-builtin.c:109
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:110
+msgid "Bold text in terminals"
+msgstr "ข้อความหนาในเทอร์มินัล"
+
+#: src/libide/gui/ide-preferences-builtin.c:110
+msgid "If terminals are allowed to display bold text"
+msgstr "ถ้าเทอร์มินัลอนุญาตให้แสดงข้อความหนา"
+
+#: src/libide/gui/ide-preferences-builtin.c:110
+msgctxt "Keywords"
+msgid "terminal allow bold"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:115
+msgid "Color Scheme"
+msgstr "ชุดสี"
+
+#: src/libide/gui/ide-preferences-builtin.c:140
+msgid "Keyboard"
+msgstr "แป้นพิมพ์"
+
+#: src/libide/gui/ide-preferences-builtin.c:142
+msgid "Emulation"
+msgstr "การเลียนแบบ"
+
+#: src/libide/gui/ide-preferences-builtin.c:143
+msgid "Default keybinding mode which mimics gedit"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:145
+msgid "Movement"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:146
+msgid "Home moves to first non-whitespace character"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:147
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:156
+msgid "Display list of open files"
+msgstr "แสดงรายชื่อแฟ้มที่เปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:156
+msgid "Display the list of all open files in the project sidebar"
+msgstr "แสดงรายชื่อแฟ้มทั้งหมดที่เปิดในแถบข้างของโครงการ"
+
+#: src/libide/gui/ide-preferences-builtin.c:158
+msgid "Cursor"
+msgstr "เคอร์เซอร์"
+
+#: src/libide/gui/ide-preferences-builtin.c:159
+msgid "Restore cursor position"
+msgstr "คืนค่าตำแหน่งเคอร์เซอร์"
+
+#: src/libide/gui/ide-preferences-builtin.c:159
+msgid "Restore cursor position when a file is reopened"
+msgstr "คืนค่าตำแหน่งเคอร์เซอร์เมื่อเปิดแฟ้มซ้ำ"
+
+#: src/libide/gui/ide-preferences-builtin.c:160
+msgid "Enable text wrapping"
+msgstr "เปิดใช้การแบ่งบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:160
+msgid "Wrap text that is too wide to display"
+msgstr "ตัดข้อความที่กว้างเกินแสดง"
+
+#: src/libide/gui/ide-preferences-builtin.c:161
+msgid "Scroll Offset"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:161
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:162
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:164
+msgid "Line Information"
+msgstr "ข้อมูลบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:165
+msgid "Line numbers"
+msgstr "หมายเลขบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:165
+msgid "Show line number at beginning of each line"
+msgstr "แสดงเลขบรรทัดที่จุดเริ่มต้นของแต่ละบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Line changes"
+msgstr "เปลี่ยนบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Show if a line was added or modified next to line number"
+msgstr "แสดงถ้าเพิ่มบรรทัดหรือแก้ไขบรรทัดถัดไป"
+
+#: src/libide/gui/ide-preferences-builtin.c:167
+msgid "Line diagnostics"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:167
+msgid "Show an icon next to line numbers indicating type of diagnostic"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:169
+msgid "Highlight"
+msgstr "เน้น"
+
+#: src/libide/gui/ide-preferences-builtin.c:170
+msgid "Current line"
+msgstr "บรรทัดปัจจุบัน"
+
+#: src/libide/gui/ide-preferences-builtin.c:170
+msgid "Make current line stand out with highlights"
+msgstr "ทำบรรทัดปัจจุบันให้เห็นชัดด้วยการเน้น"
+
+#: src/libide/gui/ide-preferences-builtin.c:171
+msgid "Matching brackets"
+msgstr "วงเล็บที่เข้าคู่"
+
+#: src/libide/gui/ide-preferences-builtin.c:171
+msgid "Highlight matching brackets based on cursor position"
+msgstr "เน้นวงเล็บที่เข้าคู่จากตำแหน่งเคอร์เซอร์"
+
+#: src/libide/gui/ide-preferences-builtin.c:173
+msgid "Code Overview"
+msgstr "ภาพรวมของโค้ด"
+
+#: src/libide/gui/ide-preferences-builtin.c:174
+msgid "A zoomed out view to enhance navigating source code"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:175
+msgid "Automatically hide overview map"
+msgstr "ซ่อนผังภาพรวมโดยอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:175
+msgid "Automatically hide map when editor loses focus"
+msgstr "ซ่อนผังภาพรวมโดยอัตโนมัติเมื่อเครื่องมือแก้ไขเสียโฟกัส"
+
+#: src/libide/gui/ide-preferences-builtin.c:177
+msgid "Visible Whitespace Characters"
+msgstr "มองเห็นอักขระช่องว่าง"
+
+#: src/libide/gui/ide-preferences-builtin.c:180
+msgid "New line and carriage return"
+msgstr "บรรทัดใหม่และอักขระปัดแคร่"
+
+#: src/libide/gui/ide-preferences-builtin.c:181
+msgid "Non-breaking spaces"
+msgstr "ช่องว่างไม่ตัดบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:182
+msgid "Spaces inside of text"
+msgstr "ช่องว่างในข้อความ"
+
+#: src/libide/gui/ide-preferences-builtin.c:183
+msgid "Trailing Only"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:184
+msgid "Leading Only"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:186
+msgid "Autosave"
+msgstr "บันทึกอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:187
+msgid "Enable or disable autosave feature"
+msgstr "เปิดหรือปิดใช้คุณลักษณะบันทึกอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:188
+msgid "The number of seconds after modification before auto saving"
+msgstr "จำนวนวินาทีหลังจากการแก้ไขก่อนก่อนที่จะบันทึกอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:194
+msgid "Code Insight"
+msgstr "โค้ดเชิงลึก"
+
+#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/sourceview/gtk/menus.ui:50
+#: src/plugins/spellcheck/gtk/menus.ui:12
+msgid "Highlighting"
+msgstr "การเน้น"
+
+#: src/libide/gui/ide-preferences-builtin.c:197
+msgid "Semantic Highlighting"
+msgstr "เน้นความหมาย"
+
+#: src/libide/gui/ide-preferences-builtin.c:197
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr "ใช้โค้ดเชิงลึกในการเน้นข้อมูลเพิ่มเติมที่ค้นพบในแฟ้มซอร์ส"
+
+#: src/libide/gui/ide-preferences-builtin.c:199
+#: src/plugins/editor/gbp-editor-hover-provider.c:78
+msgid "Diagnostics"
+msgstr "วินิจฉัย"
+
+#: src/libide/gui/ide-preferences-builtin.c:205
+msgid "Completion"
+msgstr "เติมเต็ม"
+
+#: src/libide/gui/ide-preferences-builtin.c:208
+msgid "Completions Display Size"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:208
+msgid "Number of completions to display"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:209
+msgid "Display code suggestions interactively as you type"
+msgstr "แสดงการแนะนำโค้ดโต้ตอบขณะที่คุณพิมพ์"
+
+#: src/libide/gui/ide-preferences-builtin.c:211
+msgid "Completion Providers"
+msgstr "ผู้ให้บริการเติมเต็ม"
+
+#: src/libide/gui/ide-preferences-builtin.c:217
+msgid "Snippets"
+msgstr "ข้อความสั้น"
+
+#: src/libide/gui/ide-preferences-builtin.c:260
+msgid "Programming Languages"
+msgstr "ภาษาของการเขียนโปรแกรม"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: src/libide/gui/ide-preferences-builtin.c:271
+msgid "Search languages…"
+msgstr "ค้นหาภาษา…"
+
+#: src/libide/gui/ide-preferences-builtin.c:326
+msgid "Trim trailing whitespace"
+msgstr "ตัดอักขระช่องว่างท้ายบรรทัด"
+
+#: src/libide/gui/ide-preferences-builtin.c:326
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr "ขณะบันทึก อักขระช่องว่างท้ายบรรทัดจากบรรทัดที่แก้ไขจะถูกตัดออก"
+
+#: src/libide/gui/ide-preferences-builtin.c:327
+msgid "Overwrite Braces"
+msgstr "เขียนทับวงเล็บปีกกา"
+
+#: src/libide/gui/ide-preferences-builtin.c:327
+msgid "Overwrite closing braces"
+msgstr "เขียนทับวงเล็บปีกกาปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:328
+msgid "Insert Matching Brace"
+msgstr "แทรกวงเล็บปีกกาที่เข้าคู่กัน"
+
+#: src/libide/gui/ide-preferences-builtin.c:328
+msgid "Insert matching character for { [ ( or \""
+msgstr "แทรกอักขระที่เข้าคู่กันสำหรับ { [ ( หรือ \""
+
+#: src/libide/gui/ide-preferences-builtin.c:329
+msgid "Insert Trailing Newline"
+msgstr "แทรกท้ายบรรทัดใหม่"
+
+#: src/libide/gui/ide-preferences-builtin.c:329
+msgid "Ensure files end with a newline"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:331
+msgid "Margins"
+msgstr "กั้นหน้า"
+
+#: src/libide/gui/ide-preferences-builtin.c:332
+msgid "Show right margin"
+msgstr "แสดงกั้นหน้าขวา"
+
+#: src/libide/gui/ide-preferences-builtin.c:333
+msgid "Right margin position"
+msgstr "ตำแหน่งของกั้นหน้าขวา"
+
+#: src/libide/gui/ide-preferences-builtin.c:333
+msgid "Position in spaces for the right margin"
+msgstr "ตำแหน่งในช่องว่างสำหรับกั้นหน้าขวา"
+
+#: src/libide/gui/ide-preferences-builtin.c:336
+msgid "Tab width"
+msgstr "ความกว้างแท็บ"
+
+#: src/libide/gui/ide-preferences-builtin.c:336
+msgid "Width of a tab character in spaces"
+msgstr "ความกว้างของอักขระแท็บเป็นช่องว่าง"
+
+#: src/libide/gui/ide-preferences-builtin.c:337
+msgid "Insert spaces instead of tabs"
+msgstr "แทรกช่องว่างแทนแท็บ"
+
+#: src/libide/gui/ide-preferences-builtin.c:337
+msgid "Prefer spaces over use of tabs"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:338
+msgid "Automatically indent"
+msgstr "ร่นย่อหน้าโดยอัตโนมัติ"
+
+#: src/libide/gui/ide-preferences-builtin.c:338
+msgid "Indent source code as you type"
+msgstr "ร่นย่อหน้าซอร์สโค้ดขณะพิมพ์"
+
+#: src/libide/gui/ide-preferences-builtin.c:340
+msgid "Spacing"
+msgstr "ช่องว่าง"
+
+#: src/libide/gui/ide-preferences-builtin.c:341
+msgid "Space before opening parentheses"
+msgstr "ช่องว่างก่อนวงเล็บกลมเปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:342
+msgid "Space before opening brackets"
+msgstr "ช่องว่างก่อนวงเล็บเปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:343
+msgid "Space before opening braces"
+msgstr "ช่องว่างก่อนวงเล็บปีกกาเปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:344
+msgid "Space before opening angles"
+msgstr "ช่องว่างก่อนมุมเปิด"
+
+#: src/libide/gui/ide-preferences-builtin.c:345
+msgid "Prefer a space before colons"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:346
+msgid "Prefer a space before commas"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:347
+msgid "Prefer a space before semicolons"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:357
+#: src/libide/gui/ide-preferences-builtin.c:375
+msgid "Default"
+msgstr "ปริยาย"
+
+#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:380
+msgid "Number of CPU"
+msgstr "จำนวนของซีพียู"
+
+#: src/libide/gui/ide-preferences-builtin.c:395
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:488
+#: src/plugins/buildui/gtk/menus.ui:21
+msgid "Build"
+msgstr "ประกอบสร้าง"
+
+#: src/libide/gui/ide-preferences-builtin.c:398
+msgid "Build Workers"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:398
+msgid "Number of parallel build workers"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:406
+msgid "Clear build cache at startup"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:406
+msgid "Expired caches will be purged when Builder is started"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:408
+msgid "Network"
+msgstr "เครือข่าย"
+
+#: src/libide/gui/ide-preferences-builtin.c:409
+msgid "Allow downloads over metered connections"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:409
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:415
+#: src/libide/projects/ide-projects-global.c:105
+msgid "Projects"
+msgstr "โครงการ"
+
+#: src/libide/gui/ide-preferences-builtin.c:417
+msgid "Workspace"
+msgstr "พื้นที่ทำงาน"
+
+#: src/libide/gui/ide-preferences-builtin.c:418
+msgid "A place for all your projects"
+msgstr "สถานที่สำหรับโครงการของคุณทั้งหมด"
+
+#: src/libide/gui/ide-preferences-builtin.c:419
+msgid "Restore previously opened files"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:419
+msgid "Open previously opened files when loading a project"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:541
+#: src/plugins/create-project/gbp-create-project-surface.ui:222
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:426
+msgid "Version Control"
+msgstr "ควบคุมรุ่น"
+
+#. only the page goes here, plugins will fill in the details
+#: src/libide/gui/ide-preferences-builtin.c:554
+msgid "SDKs"
+msgstr "SDK"
+
+#: src/libide/gui/ide-primary-workspace-actions.c:132
+msgid "Updating Dependencies…"
+msgstr "กำลังปรับข้อมูลสิ่งที่ต้องใช้…"
+
+#: src/libide/gui/ide-primary-workspace-actions.c:133
+msgid "Builder is updating your projects configured dependencies."
+msgstr ""
+
+#: src/libide/gui/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+
+#: src/libide/gui/ide-run-button.ui:35
+msgid "Stop running"
+msgstr "หยุดการทำงาน"
+
+#: src/libide/gui/ide-run-button.ui:55
+msgid "Change run options"
+msgstr "เปลี่ยนตัวเลือกของการทำงาน"
+
+#: src/libide/gui/ide-search-button.c:43
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:357
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:363
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:369
+msgctxt "shortcut window"
+msgid "Workspace shortcuts"
+msgstr "ทางลัดของพื้นที่ทำงาน"
+
+#: src/libide/gui/ide-search-button.c:44
+#: src/libide/gui/ide-shortcuts-window.ui:588
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "ค้นหา"
+
+#: src/libide/gui/ide-search-button.c:45
+msgctxt "shortcut window"
+msgid "Focus to the global search entry"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "แก้ไขทางลัด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:18
+#: src/libide/gui/ide-shortcuts-window.ui:524
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "ค้นหาแบบรวม"
+
+#: src/libide/gui/ide-shortcuts-window.ui:32
+#: src/libide/gui/ide-shortcuts-window.ui:538
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "แถบคำสั่ง"
+
+#: src/libide/gui/ide-shortcuts-window.ui:39
+#: src/libide/gui/ide-shortcuts-window.ui:545
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:359
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "เทอร์มินัล"
+
+#: src/libide/gui/ide-shortcuts-window.ui:46
+#: src/libide/gui/ide-shortcuts-window.ui:552
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:53
+#: src/libide/gui/ide-shortcuts-window.ui:559
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "ปุ่มลัด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:60
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "โหมดสลับโฟกัส"
+
+#: src/libide/gui/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "สลับช่องด้านซ้าย"
+
+#: src/libide/gui/ide-shortcuts-window.ui:80
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "สลับช่องด้านล่าง"
+
+#: src/libide/gui/ide-shortcuts-window.ui:94
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "สร้างเอกสารใหม่"
+
+#: src/libide/gui/ide-shortcuts-window.ui:115
+msgctxt "shortcut window"
+msgid "Save all documents"
+msgstr "บันทึกเอกสารทั้งหมด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:136
+msgctxt "shortcut window"
+msgid "Close all documents"
+msgstr "ปิดเอกสารทั้งหมด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:157
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "แสดงรายชื่อเอกสารที่เปิด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
+msgid "Goto Line"
+msgstr "ไปยังบรรทัด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:191
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "หาถัดไปที่ตรงกัน"
+
+#: src/libide/gui/ide-shortcuts-window.ui:198
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "หาก่อนหน้าที่ตรงกัน"
+
+#: src/libide/gui/ide-shortcuts-window.ui:205
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "ล้างการเน้น"
+
+#: src/libide/gui/ide-shortcuts-window.ui:213
+#: src/libide/gui/ide-shortcuts-window.ui:568
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "คัดลอกและแปะ"
+
+#: src/libide/gui/ide-shortcuts-window.ui:218
+#: src/libide/gui/ide-shortcuts-window.ui:573
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "คัดลอกข้อความที่เลือกไปยังคลิปบอร์ด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:225
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "ตัดข้อความที่เลือกไปยังคลิปบอร์ด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:232
+#: src/libide/gui/ide-shortcuts-window.ui:580
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "แปะข้อความจากคลิปบอร์ด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:239
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "สำเนาบรรทัดปัจจุบันหรือที่เลือก"
+
+#: src/libide/gui/ide-shortcuts-window.ui:247
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "เรียกคืนและทำซ๋ำ"
+
+#: src/libide/gui/ide-shortcuts-window.ui:252
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "เรียกคืนคำสั่งก่อนหน้า"
+
+#: src/libide/gui/ide-shortcuts-window.ui:259
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "ทำซ้ำคำสั่งก่อนหน้า"
+
+#: src/libide/gui/ide-shortcuts-window.ui:267
+msgctxt "shortcut window"
+msgid "Zoom"
+msgstr "ซูม"
+
+#: src/libide/gui/ide-shortcuts-window.ui:272
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "ซูมเ_ข้า"
+
+#: src/libide/gui/ide-shortcuts-window.ui:279
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "ซูม_ออก"
+
+#: src/libide/gui/ide-shortcuts-window.ui:286
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "ล้างค่าซูม"
+
+#: src/libide/gui/ide-shortcuts-window.ui:294
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:344
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "แก้ไข"
+
+#: src/libide/gui/ide-shortcuts-window.ui:299
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "เพิ่มตัวเลขที่เคอร์เซอร์"
+
+#: src/libide/gui/ide-shortcuts-window.ui:306
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "ลดตัวเลขที่เคอร์เซอร์"
+
+#: src/libide/gui/ide-shortcuts-window.ui:313
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "เชื่อมต่อบรรทัดที่เลือก"
+
+#: src/libide/gui/ide-shortcuts-window.ui:320
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "แสดงหน้าต่างเติมเต็ม"
+
+#: src/libide/gui/ide-shortcuts-window.ui:327
+msgctxt "shortcut window"
+msgid "Toggle opacity of completion window"
+msgstr "สลับความทึบแสงของหน้าต่างเติมเต็ม"
+
+#: src/libide/gui/ide-shortcuts-window.ui:334
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "สลับเขียนทับ"
+
+#: src/libide/gui/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:348
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "ลบบรรทัด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:355
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "เปลี่ยนชื่อสัญลักษณ์"
+
+#: src/libide/gui/ide-shortcuts-window.ui:356
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:364
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "สำรวจ"
+
+#: src/libide/gui/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:383
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:390
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:397
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:404
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:411
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:418
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:425
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:432
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:440
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "การเลือก"
+
+#: src/libide/gui/ide-shortcuts-window.ui:445
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "เลือกทั้งหมด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:452
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "ไม่เลือกทั้งหมด"
+
+#: src/libide/gui/ide-shortcuts-window.ui:465
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "ประกอบสร้าง"
+
+#: src/libide/gui/ide-shortcuts-window.ui:472
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "เรียกทำงาน"
+
+#: src/libide/gui/ide-shortcuts-window.ui:479
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "โพรไฟล์"
+
+#: src/libide/gui/ide-shortcuts-window.ui:487
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:494
+msgctxt "shortcut window"
+msgid "Move page to the right"
+msgstr "เลื่อนหน้าไปทางขวา"
+
+#: src/libide/gui/ide-shortcuts-window.ui:495
+msgctxt "shortcut window"
+msgid "Three finger swipe right"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:504
+msgctxt "shortcut window"
+msgid "Move page to the left"
+msgstr "เลื่อนหน้าไปทางซ้าย"
+
+#: src/libide/gui/ide-shortcuts-window.ui:505
+msgctxt "shortcut window"
+msgid "Three finger swipe left"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:516
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "ทางลัดของเทอร์มินัล"
+
+#: src/libide/gui/ide-shortcuts-window.ui:593
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "หาข้อความในเทอร์มินัล"
+
+#: src/libide/io/ide-pkcon-transfer.c:56
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] ""
+
+#. translators: %s is replaced with the error message
+#: src/libide/lsp/ide-lsp-client.c:924
+#, c-format
+msgid "Failed to initialize language server: %s"
+msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#: src/libide/projects/ide-project.c:181
+msgid "Destination file must be within the project tree."
+msgstr "แฟ้มปลายทางต้องอยู่ในลำดับชั้นโครงการ"
+
+#: src/libide/projects/ide-project.c:418
+msgid "File must be within the project tree."
+msgstr "แฟ้มต้องอยู่ในลำดับชั้นโครงการ"
+
+#: src/libide/projects/xml-reader.c:329
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "ไม่สามารถแจง XML จากสตรีมได้"
+
+#: src/libide/sourceview/gtk/menus.ui:7
+msgid "_Go to Definition"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:12
+msgid "_Find references"
+msgstr "ปรับแต่งการ_หา"
+
+#: src/libide/sourceview/gtk/menus.ui:19
+msgid "_Undo"
+msgstr "เรี_ยกคืน"
+
+#: src/libide/sourceview/gtk/menus.ui:23
+msgid "_Redo"
+msgstr "_ทำซ้ำ"
+
+#: src/libide/sourceview/gtk/menus.ui:29
+msgid "C_ut"
+msgstr "_ตัด"
+
+#: src/libide/sourceview/gtk/menus.ui:34 src/libide/terminal/gtk/menus.ui:38
+msgid "_Copy"
+msgstr "_คัดลอก"
+
+#: src/libide/sourceview/gtk/menus.ui:38 src/libide/terminal/gtk/menus.ui:42
+msgid "_Paste"
+msgstr "_แปะ"
+
+#: src/libide/sourceview/gtk/menus.ui:42
+msgid "_Delete"
+msgstr "_ลบ"
+
+#: src/libide/sourceview/gtk/menus.ui:55 src/libide/terminal/gtk/menus.ui:48
+msgid "Selection"
+msgstr "การเลือก"
+
+#: src/libide/sourceview/gtk/menus.ui:57 src/libide/terminal/gtk/menus.ui:50
+msgid "Select _All"
+msgstr "เลือกทั้ง_หมด"
+
+#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:55
+msgid "Select _None"
+msgstr "เลือกไม่_มี"
+
+#: src/libide/sourceview/gtk/menus.ui:68
+msgid "All _Upper Case"
+msgstr "ตัวพิมพ์ใ_หญ่ทั้งหมด"
+
+#: src/libide/sourceview/gtk/menus.ui:73
+msgid "All _Lower Case"
+msgstr "ตัวพิมพ์เ_ล็กทั้งหมด"
+
+#: src/libide/sourceview/gtk/menus.ui:78
+msgid "_Invert Case"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:83
+msgid "_Title Case"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:90
+msgid "Join Lines"
+msgstr "เชื่อมบรรทัด"
+
+#: src/libide/sourceview/gtk/menus.ui:94
+msgid "Sort Lines"
+msgstr "เรียงลำดับบรรทัด"
+
+#: src/libide/sourceview/gtk/menus.ui:103
+msgid "Zoom"
+msgstr "ซูม"
+
+#: src/libide/sourceview/gtk/menus.ui:105
+msgid "Zoom _In"
+msgstr "ซูมเ_ข้า"
+
+#: src/libide/sourceview/gtk/menus.ui:110
+msgid "Zoom _Out"
+msgstr "ซูม_ออก"
+
+#: src/libide/sourceview/gtk/menus.ui:116
+msgid "Reset"
+msgstr "ล้างค่า"
+
+#: src/libide/sourceview/ide-source-view.c:4426
+#, c-format
+msgid "Insert “%s”"
+msgstr "แทรก “%s”"
+
+#: src/libide/sourceview/ide-source-view.c:4428
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "แทนที่ “%s” ด้วย “%s”"
+
+#: src/libide/sourceview/ide-source-view.c:4546
+msgid "Apply Fix-It"
+msgstr ""
+
+#: src/libide/sourceview/ide-source-view.c:4976
+msgid "Rename symbol"
+msgstr "เปลี่ยนชื่อ"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: src/libide/sourceview/ide-source-view.c:5211
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>บรรทัด %u, คอลัมน์ %u</small>"
+
+#: src/libide/sourceview/ide-source-view.c:5237
+msgid "No references were found"
+msgstr "ไม่พบการอ้างอิง"
+
+#: src/libide/terminal/gtk/menus.ui:8
+msgid "New Terminal Workspace…"
+msgstr "พื้นที่ทำงานเทอร์มินัลใหม่…"
+
+#: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
+#: src/plugins/editor/gtk/menus.ui:122 src/plugins/editor/gtk/menus.ui:176
+#: src/plugins/greeter/gtk/menus.ui:15 src/plugins/grep/gbp-grep-panel.ui:81
+msgid "Close"
+msgstr "ปิด"
+
+#: src/libide/terminal/gtk/menus.ui:25
+msgid "_Open Link"
+msgstr "เปิด_ลิงก์"
+
+#: src/libide/terminal/gtk/menus.ui:30
+msgid "_Copy Link Address"
+msgstr "สำเนาลิงก์_ที่อยู่"
+
+#: src/libide/terminal/ide-terminal-launcher.c:320
+#, c-format
+msgid "Failed to create shell within runtime “%s”"
+msgstr "สร้างเชลล์ในขณะทำงาน “%s” ไม่สำเร็จ"
+
+#: src/libide/terminal/ide-terminal-launcher.c:646
+msgid "Untitled Terminal"
+msgstr "ไม่มีชื่อเทอร์มินัล"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:268
+msgid "Save Terminal Content As"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-page.c:105
+#: src/libide/terminal/ide-terminal-page.c:150
+#: src/libide/terminal/ide-terminal-page.c:291
+msgid "Untitled terminal"
+msgstr ""
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:107
+msgid "Exited"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-page.c:114
+msgid "Subprocess launcher failed"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-page.c:137
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-popover.ui:12
+msgid "Search runtimes"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-search.ui:152
+msgid "Regex"
+msgstr "Regex"
+
+#: src/libide/terminal/ide-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "ค้นหาทั้งคำ"
+
+#: src/libide/terminal/ide-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "หมดแล้วเริ่มใหม่"
+
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
+msgid "(Empty)"
+msgstr "(ว่างเปล่า)"
+
+#: src/libide/tree/ide-tree-node.c:1563
+msgid "Loading…"
+msgstr "กำลังโหลด…"
+
+#: src/libide/vcs/ide-directory-vcs.c:57
+msgid "unversioned"
+msgstr ""
+
+#: src/main.c:137
+msgid "Run a new instance of Builder"
+msgstr ""
+
+#: src/plugins/autotools/ide-autotools-makecache-stage.c:198
+msgid "Building cache…"
+msgstr ""
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
+msgid "Bootstrapping build system"
+msgstr ""
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:225
+#: src/plugins/phpize/phpize_plugin.py:207
+msgid "Configuring project"
+msgstr ""
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/cargo/cargo_plugin.py:162
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:222
+#: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:254
+#: src/plugins/phpize/phpize_plugin.py:219
+msgid "Building project"
+msgstr ""
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+msgid "Caching build commands"
+msgstr ""
+
+#. translators: %s and %s are replaced with source file path and the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:157
+#, c-format
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgstr ""
+
+#. translators: %s is replaced with the source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:165
+#, c-format
+msgid "Beautifier plugin: error creating temporary config file for “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the .ini source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:209
+#, c-format
+msgid "Beautifier plugin: Can’t read .ini file: %s"
+msgstr ""
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:257
+#, c-format
+msgid ""
+"Beautifier plugin: neither command nor command-pattern keys found: entry "
+"“%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:267
+#, c-format
+msgid ""
+"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
+"disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the config path and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:291
+#, c-format
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:308
+#, c-format
+msgid ""
+"Beautifier plugin: command key out of possible values: entry “%s” disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:333
+#, c-format
+msgid ""
+"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
+"entry “%s” disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:365
+#, c-format
+msgid ""
+"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:407
+#, c-format
+msgid "Beautifier plugin: “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:508
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+#, c-format
+msgid "Beautifier plugin: %s"
+msgstr ""
+
+#. translators: %s is replaced with a path name
+#: src/plugins/beautifier/gb-beautifier-config.c:547
+#, c-format
+msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:88
+msgid "Beautifier Plugin: the view is not a GtkSourceView"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:95
+msgid "Beautifier Plugin: no default beautifier found"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:101
+msgid "Beautifier Plugin: the buffer is not writable"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:109
+msgid "Beautifier Plugin: Nothing selected"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:246
+#, c-format
+msgid "No beautifier available"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:345
+msgctxt "shortcut window"
+msgid "Beautify the code"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:346
+msgctxt "shortcut window"
+msgid "Trigger the default entry"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:375
+#, c-format
+msgid "Beautifier plugin: no valid entries, disabling: %s"
+msgstr ""
+
+#. translators: %s and %s are replaced with the temporary dir and the file path
+#: src/plugins/beautifier/gb-beautifier-helper.c:63
+#: src/plugins/beautifier/gb-beautifier-helper.c:88
+#: src/plugins/beautifier/gb-beautifier-helper.c:114
+#: src/plugins/beautifier/gb-beautifier-helper.c:135
+#, c-format
+msgid ""
+"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+"temporary directory: “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the command error message
+#: src/plugins/beautifier/gb-beautifier-process.c:264
+#, c-format
+msgid "Beautifier plugin: command error output: %s"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-process.c:274
+msgid "Beautifier plugin: the command output is empty"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-process.c:301
+msgid "Beautify plugin: the output is not a valid UTF-8 text"
+msgstr ""
+
+#: src/plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr ""
+
+#. translators: %s is replaced with the name of the configuration
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:637
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (สำเนา)"
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:115
+msgid "No build configuration"
+msgstr "ไม่มีค่าตั้งประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:116
+msgid "Select a build configuration from the sidebar to modify."
+msgstr "เลือกค่าตั้งประกอบสร้างจากแถบด้านข้างที่จะแก้ไข"
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:218
+msgid "Build Configurations"
+msgstr "ค่าตั้งประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
+msgid "All Runtimes"
+msgstr "Runtimes ทั้งหมด"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
+msgid "Make active"
+msgstr "เปิดใช้ Make"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
+msgid "Select this configuration as the active configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+msgid "Duplicate"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+msgid ""
+"Duplicating the configuration allows making changes without modifying this "
+"configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "Removes the configuration and cannot be undone."
+msgstr "ลบค่าตั้งและไม่สามารถเรียกคืน"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
+msgid "Environment"
+msgstr "สภาพแวดล้อม"
+
+#. Add groups to pages
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
+msgid "Overview"
+msgstr "ภาพรวม"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
+msgid "Build Environment"
+msgstr "สภาพแวดล้อมประกอบสร้าง"
+
+#. Add description info
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:454
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/ls/gbp-ls-page.ui:15
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
+msgid "Name"
+msgstr "ชื่อ"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:455
+msgid "Source Directory"
+msgstr "ไดเรกทอรีของซอร์ส"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+msgid "Build System"
+msgstr "ระบบประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:465
+msgid "Install Prefix"
+msgstr "ติดตั้งชื่อขึ้นต้น"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:474
+msgid "Configure Options"
+msgstr "ตัวเลือกสำหรับตั้งค่า"
+
+#. Setup runtime selection
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:479
+#, fuzzy
+msgid "Application Runtime"
+msgstr "โปรแกรมของ GNOME"
+
+#. Setup toolchain selection
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:483
+msgid "Build Toolchain"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:276
+#: src/plugins/editor/gtk/menus.ui:163 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/testui/gbp-test-output-panel.c:68
+msgid "_Save"
+msgstr "_บันทึก"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:371
+msgid "Build Output"
+msgstr "ประกอบสร้างเอาต์พุต"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:33
+msgid "Clear build log"
+msgstr "ล้างปูมประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:50
+msgid "Cancel build"
+msgstr "ยกเลิกการประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:67
+msgid "Save build log"
+msgstr "บันทึกปูมประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
+msgid "Missing"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:49
+msgid "Update project dependencies"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:75
+msgid "Configure build preferences"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:140
+msgid "Build Profile"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:167
+msgid "Runtime"
+msgstr "ทำงาน"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:195
+msgid "Device"
+msgstr "อุปกรณ์"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:237
+msgid "There is a problem with the current build configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:275
+msgid "Build status"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:308
+msgid "View build console contents"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:347
+msgid "Last build"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:376
+msgid "Build result"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:405
+#: src/plugins/buildui/gbp-buildui-pane.c:122
+#: src/plugins/buildui/gbp-buildui-pane.c:190
+#: src/plugins/buildui/gbp-buildui-pane.c:227
+#: src/plugins/buildui/gbp-buildui-pane.ui:161
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:435
+#: src/plugins/buildui/gbp-buildui-pane.c:113
+#: src/plugins/buildui/gbp-buildui-pane.c:189
+#: src/plugins/buildui/gbp-buildui-pane.c:226
+#: src/plugins/buildui/gbp-buildui-pane.ui:140
+msgid "Warnings"
+msgstr "คำเตือน"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:502
+#: src/plugins/buildui/gtk/menus.ui:27
+msgid "Rebuild"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:516
+msgid "Clean"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:530
+msgid "Export Bundle"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-pane.c:656
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:355
+msgid "Build Issues"
+msgstr "ปัญหาของการประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:17
+msgid "Build status:"
+msgstr "สถานะของการประกอบสร้าง:"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:34
+msgid "Time completed:"
+msgstr "เวลาที่เสร็จสมบูรณ์:"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:51
+#: src/plugins/buildui/gbp-buildui-pane.ui:66
+msgid "—"
+msgstr "—"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:82
+msgid "Build Details"
+msgstr "รายละเอียดการประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:96
+msgid "Build pipeline is empty"
+msgstr "ไปป์ไลน์ของการประกอบสร้างว่างเปล่า"
+
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
+msgid "Build Targets"
+msgstr "เป้าหมายของการประกอบสร้าง"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:364
+#: src/plugins/buildui/gtk/menus.ui:8
+msgid "Build Preferences"
+msgstr "ปรับแต่งของการประกอบสร้าง"
+
+#: src/plugins/buildui/gtk/menus.ui:38
+msgid "Run With…"
+msgstr "เรียกทำงานด้วย…"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:68
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:69
+msgid "Show errors and warnings provided by Clang"
+msgstr "แสดงข้อผิดพลาดและคำเตือนจาก Clang"
+
+#. translators: keywords used when searching for preferences
+#: src/plugins/clang/ide-clang-preferences-addin.c:71
+msgid "clang diagnostics warnings errors"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:81
+msgid "Suggest completions using Clang"
+msgstr "แนะนำการเติมเต็มโดยใช้ Clang"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:82
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "ใช้ Clang กับแนะนำการเติมเต็มสำหรับภาษา C และ C++"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:86
+msgid "Clang Options"
+msgstr "ตัวเลือกสำหรับ Clang"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:95
+msgid "Complete Parenthesis"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:96
+msgid "Include parenthesis when completing clang proposals"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:107
+msgid "Complete Parameters"
+msgstr "พารามิเตอร์สมบูรณ์"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:108
+msgid "Include parameters and types when completing clang proposals"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-symbol-node.c:55
+msgid "anonymous"
+msgstr ""
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
+msgid "Complete parentheses"
+msgstr ""
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
+msgid "If parentheses should be included when completing."
+msgstr ""
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
+msgid "Complete parameters"
+msgstr "พารามิเตอร์สมบูรณ์"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
+msgid ""
+"If parameters should be included when completing. Requires complete-"
+"parentheses."
+msgstr ""
+
+#: src/plugins/cmake/gbp-cmake-build-system.c:423
+msgid "CMake"
+msgstr "CMake"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:197
+msgid "Configure project"
+msgstr "ตั้งค่าโครงการ"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:241
+#: src/plugins/maven/maven_plugin.py:100
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/phpize/phpize_plugin.py:229
+msgid "Installing project"
+msgstr "กำลังติดตั้งโครงการ"
+
+#: src/plugins/cmake/gbp-cmake-toolchain.c:220
+#, c-format
+msgid "%s (CMake)"
+msgstr "%s (CMake)"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:53
+msgid "Create or update code-index for project file"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:54
+msgid "PROJECT_FILE"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:154
+#, c-format
+msgid "Failed to load flags for plan: %s"
+msgstr "โหลดแฟล็กสำหรับแผน: %s ไม่สำเร็จ"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:197
+#, c-format
+msgid "Failed to cull index plan: %s"
+msgstr "คัดเลือกดรรชนีแผน: %s ไม่สำเร็จ"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:232
+#, fuzzy, c-format
+msgid "Failed to populate index plan: %s"
+msgstr "หาคุณสมบัติ %s ใน %s ไม่สำเร็จ"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:267
+#, c-format
+msgid "Failed to load project: %s"
+msgstr "โหลดโครงการ: %s ไม่สำเร็จ"
+
+#. Now we can drop our paused state
+#: src/plugins/code-index/gbp-code-index-service.c:209
+#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:998
+msgid "Indexing Source Code"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-service.c:210
+msgid "Search, diagnostics, and autocompletion may be limited until complete."
+msgstr ""
+
+#. translators: "Declaration" is describing a function that is defined in a header
+#. *              file (.h) rather than a source file (.c).
+#.
+#: src/plugins/code-index/ide-code-index-index.c:343
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+msgid "Declaration"
+msgstr "ความสด"
+
+#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
+msgid "Colors"
+msgstr "สี"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Palette name"
+msgstr "ชื่อจานสี"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
+msgid "Enter a new name for the palette"
+msgstr "ป้อนชื่อใหม่สำหรับจานสี"
+
+#. translators: %s is replaced with the name of the color palette.
+#: src/plugins/color-picker/gb-color-picker-prefs.c:88
+#, c-format
+msgid "Save changes to palette “%s” before closing?"
+msgstr "บันทึกการเปลี่ยนแปลงไปยังจานสี “%s” ก่อนการปิดหรือไม่?"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
+msgid "Close without Saving"
+msgstr "ปิดโดยไม่บันทึก"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:98
+msgid "Save As…"
+msgstr "บันทึกเป็น…"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:206
+msgid "Load palette"
+msgstr "โหลดจานสี"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:233
+msgid "Save palette"
+msgstr "บันทึกจานสี"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:706
+msgid "All files"
+msgstr "ทุกแฟ้ม"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:710
+msgid "All supported palettes formats"
+msgstr "รูปแบบจานสีที่รองรับทั้งหมด"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:715
+msgid "GIMP palette"
+msgstr "จานสีของ GIMP"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:719
+msgid "GNOME Builder palette"
+msgstr "จานสีของ GNOME Builder"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "ระนาบสี"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSL"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "ความสด"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "แดง เขียว น้ำเงิน"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "หน่วย:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "เปอร์เซนต์"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "ตัวกรอง:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "ตัวเลือกสำหรับจานสี"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "โหมดมุมมองจานสี:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "รายการ"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr "สลับ"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "การจัดการจานสี"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "โหลด"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "จากเอกสารปัจจุบัน"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr "เลือกจานสีที่คุณต้องการดูในพาเนลหรือปิด"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "ไม่มีจานสีที่โหลด"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "ไม่มีจานสีที่เลือก"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "เลือกแฟ้มจานสี"
+
+#: src/plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr "ลองโหลดหรือสร้างจานสีโดยใช้เมนู"
+
+#: src/plugins/color-picker/gtk/menus.ui:7
+msgid "Highlight colors"
+msgstr "สีการเน้น"
+
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
+#, fuzzy
+msgctxt "shortcut window"
+msgid "Workspace Shortcuts"
+msgstr "ทางลัดของโต๊ะทำงาน"
+
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:38
+msgctxt "shortcut window"
+msgid "Show the workspace command bar"
+msgstr ""
+
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:372
+msgctxt "shortcut window"
+msgid "Comment the code"
+msgstr ""
+
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:378
+msgctxt "shortcut window"
+msgid "Uncomment the code"
+msgstr ""
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr ""
+
+#: src/plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-application-addin.c:48
+msgid "Display the project creation guide"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:219
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:222
+#: src/plugins/create-project/gbp-create-project-surface.ui:146
+msgid "Your project will be created within a new child directory."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:228
+msgid "Directory already exists with that name"
+msgstr ""
+
+#. translators: %s is replaced with a short-form file-system path to the project
+#: src/plugins/create-project/gbp-create-project-surface.c:246
+#, c-format
+msgid "Your project will be created within %s."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:268
+msgid "Application ID is not valid."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:612
+msgctxt "title"
+msgid "Start New Project"
+msgstr "เริ่มโครงการใหม่"
+
+#: src/plugins/create-project/gbp-create-project-surface.c:781
+msgid "A failure occurred while initializing version control"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:28
+msgid "Project Name"
+msgstr "ชื่อโครงการ"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:55
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:73
+#, fuzzy
+msgid "Application ID"
+msgstr "โปรแกรมของ GNOME"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:100
+msgid ""
+"The Application ID is a reverse domain-name identifier used to uniquely "
+"identify your application such as “org.gnome.Builder”."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:118
+msgid "Project Location"
+msgstr "ตำแหน่งโครงการ"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:135
+msgid "Select Project Directory"
+msgstr "เลือกไดเรกทอรีโครงการ"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:165
+msgid "Language"
+msgstr "ภาษา"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:188
+msgid "License"
+msgstr "สัญญาอนุญาต"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:203
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:204
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:205
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:206
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:207
+msgid "Apache 2.0"
+msgstr "Apache 2.0"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:208
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:209
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:210
+msgid "No license"
+msgstr "ไม่มีสัญญาอนุญาต"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:243
+msgid "Uses the Git version control system"
+msgstr "ใช้ระบบควบคุมรุ่นของ Git"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:328
+msgid "Create Project"
+msgstr "สร้างโครงการ"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:357
+msgid "Select a Template"
+msgstr "เลือกแม่แบบ"
+
+#: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
+msgid "Start _New Project…"
+msgstr "เริ่มโครงการใ_หม่"
+
+#: src/plugins/create-project/gtk/menus.ui:7
+#: src/plugins/create-project/gtk/menus.ui:18
+#: src/plugins/create-project/gtk/menus.ui:29
+msgid "_Start New Project…"
+msgstr "เ_ริ่มโครงการใหม่…"
+
+#: src/plugins/ctags/ide-ctags-preferences-addin.c:53
+msgid "Suggest completions using Ctags"
+msgstr "แนะนำการเติมเต็มโดยใช้ Ctags"
+
+#: src/plugins/ctags/ide-ctags-preferences-addin.c:54
+msgid "Use Ctags to suggest completions for a variety of languages"
+msgstr "ใช้ Clangs กับแนะนำการเติมเต็มสำหรับภาษาชนิดต่างๆ"
+
+#: src/plugins/ctags/ide-ctags-service.c:132
+msgid ""
+"Search, autocompletion, and symbol information may be limited until Ctags "
+"indexing is complete."
+msgstr ""
+
+#: src/plugins/ctags/ide-ctags-service.c:955
+#, fuzzy
+msgid "Indexing Source Code (Paused)"
+msgstr "ร่นย่อหน้าซอร์สโค้ดขณะพิมพ์"
+
+#: src/plugins/debuggerui/gtk/menus.ui:10
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:457
+msgid "Run with Debugger"
+msgstr "เรียกทำงานด้วยโปรแกรมดีบั๊ก"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "แฟ้ม"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "บรรทัด"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "ฟังก์ชัน"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "แอดเดรส"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "ชนิด"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr "ครั้ง"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "นิพจน์"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "ขัดจังหวะโปรแกรม"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr "เรียกทำงานโปรแกรมต่อไป"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:71
+msgid "Execute the current line, stepping into any function calls"
+msgstr "เรียกทำงานบรรทัดปัจจุบัน ก้าวเข้าการเรียกฟังก์ชันใดๆ"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:84
+msgid "Execute the current line, stepping over any function calls"
+msgstr "เรียกทำงานบรรทัดปัจจุบัน ก้าวข้ามการเรียกฟังก์ชันใดๆ"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr "ทำงานจนจบฟังก์ชัน"
+
+#: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "ถอดแยกภาษาแอสเซมบลี"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:190
+#, fuzzy
+msgid "Failed to start the debugger"
+msgstr "เริ่มต้นโปรแกรมดีบั๊กไม่สำเร็จ"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:340
+#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
+msgid "Debugger"
+msgstr "โปรแกรมดีบั๊ก"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:356
+msgid "Threads"
+msgstr "เธรด"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:382
+msgid "Breakpoints"
+msgstr "จุดพัก"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:390
+msgid "Libraries"
+msgstr "ไลบรารี"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:398
+msgid "Registers"
+msgstr "เรจิสเตอร์"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:406
+msgid "Log"
+msgstr "ปูม"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
+msgid "No break"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
+#, fuzzy
+msgid "Breakpoint"
+msgstr "จุดพัก"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
+msgid "Countpoint"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "ไลบรารี"
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "ช่วงแอดเดรส"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:314
+msgid "Locals"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:369
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:90
+msgid "Parameters"
+msgstr "พารามิเตอร์"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "ตัวแปร"
+
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "เรจิสเตอร์"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "กลุ่ม"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "เธรด"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
+#: src/plugins/editor/gtk/menus.ui:111
+msgid "Frame"
+msgstr "เฟรม"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "อาร์กิวเมนต์"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
+#: src/plugins/grep/gbp-grep-panel.c:482
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
+msgid "Location"
+msgstr "ตำแหน่ง"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "ไบนารี"
+
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:132
+msgid "Devhelp"
+msgstr ""
+
+#: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
+msgid "Select Documentation…"
+msgstr "เลือกเอกสาร…"
+
+#: src/plugins/devhelp/gbp-devhelp-page.c:208
+#: src/plugins/devhelp/gtk/menus.ui:5
+msgid "Documentation"
+msgstr "เอกสาร"
+
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:147
+msgid "Print…"
+msgstr "พิมพ์…"
+
+#: src/plugins/devhelp/gtk/menus.ui:21
+msgid "New Documentation Page"
+msgstr "หน้าเอกสารใหม่"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display D-Bus inspector"
+msgstr ""
+
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+msgid "D-Bus Inspector…"
+msgstr ""
+
+#. translators: %s is replaced with the address of the D-Bus bus
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:81
+msgid "Connected to “%s”"
+msgstr "เชื่อมต่อไปยัง “%s”"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+msgid "System"
+msgstr "ระบบ"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:255
+msgid "Session"
+msgstr "วาระ"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:257
+msgid "Other"
+msgstr "อื่นๆ"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.c:192
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:130
+msgid "Execute"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:12
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:314
+msgid "Object Path"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:38
+msgid "Interface"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:64
+msgid "Method"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:145
+msgid "Result"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:186
+#: src/plugins/glade/gtk/menus.ui:27
+msgid "Copy"
+msgstr "คัดลอก"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:198
+msgid "Elapsed Time"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
+msgid "Bus Address"
+msgstr "บัสแอดเดรส"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
+msgid "Owner"
+msgstr "เจ้าของ"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
+msgid "Process ID"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "Activatable"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+msgid "Yes"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "No"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#, c-format
+msgid "%s: %u"
+msgstr "%s: %u"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+msgid "PID"
+msgstr "PID"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:409
+msgid "read/write"
+msgstr "อ่าน/เขียน"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:411
+msgid "write-only"
+msgstr "เขียนอย่างเดียว"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:413
+msgid "read-only"
+msgstr "อ่านอย่างเดียว"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:528
+msgid "Interfaces"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-node.c:531
+msgid "Methods"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-node.c:537
+msgid "Properties"
+msgstr "คุณสมบัติ"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:553
+#: src/plugins/glade/gbp-glade-editor-addin.c:79
+msgid "Signals"
+msgstr ""
+
+#. translators: %s is replaced with the simple D-Bus type string
+#: src/plugins/dspy/libdspy/dspy-signature.c:79
+#, c-format
+msgid "Array of [%s]"
+msgstr "แอร์เรย์ของ [%s]"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:153
+msgid "Access Denied by Peer"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:155
+msgid "Authentication Failed"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:157
+msgid "Operation Timed Out"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:159
+msgid "Lost Connection to Bus"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:161
+msgid "D-Bus Connection Failed"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:460
+msgid "Connect"
+msgstr "เชื่อมต่อ"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:461
+msgid "Provide the address of the message bus"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:463
+#: src/plugins/dspy/libdspy/gtk/menus.ui:5
+msgid "Connect to Other Bus"
+msgstr "เชื่อมต่อไปยังบัสอื่น"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:45
+msgid "Search Bus Names"
+msgstr "ค้นหาชื่อบัส"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:59
+msgid "Bus Names"
+msgstr "ชื่อบัส"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:123
+msgid "Select a Bus Name"
+msgstr "เลือกชื่อบัส"
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:124
+msgid "Select a bus name to introspect the peer."
+msgstr ""
+
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+msgid "Select the files to save:"
+msgstr "เลือกแฟ้มเพื่อบันทึก"
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr ""
+
+#: src/plugins/editor/gbp-editor-application-addin.c:138
+msgid "Use minimal editor interface"
+msgstr ""
+
+#. translators: the user selected a number outside the value range for the document.
+#: src/plugins/editor/gbp-editor-frame-controls.c:182
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "ให้ตัวเลขระหว่าง 1 และ %u"
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:23
+msgid "Go to line number"
+msgstr "ไปยังเลขบรรทัด"
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:82
+msgid "Go to Line"
+msgstr "ไปยังบรรทัด"
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:83
+msgid "Go"
+msgstr "ไป"
+
+#: src/plugins/editor/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:17
+msgid "New Editor Workspace…"
+msgstr "เครื่องมือแก้ไขพื้นที่ทำงานใหม่…"
+
+#: src/plugins/editor/gtk/menus.ui:95
+msgid "New File"
+msgstr "แฟ้มใหม่"
+
+#: src/plugins/editor/gtk/menus.ui:113
+msgid "Move Left"
+msgstr "เลื่อนซ้าย"
+
+#: src/plugins/editor/gtk/menus.ui:117
+msgid "Move Right"
+msgstr "เลื่อนขวา"
+
+#: src/plugins/editor/gtk/menus.ui:128
+msgid "Document"
+msgstr "เอกสาร"
+
+#: src/plugins/editor/gtk/menus.ui:131 src/plugins/terminal/gtk/menus.ui:34
+msgid "Open in New Frame"
+msgstr "เปิดในเฟรมใหม่"
+
+#: src/plugins/editor/gtk/menus.ui:137
+msgid "Open in New Workspace"
+msgstr "เปิดในพื้นที่ทำงานใหม่"
+
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:39
+msgid "Split"
+msgstr "แบ่ง"
+
+#: src/plugins/editor/gtk/menus.ui:168
+msgid "Save _As"
+msgstr "บันทึกเป็_น"
+
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:157
+msgid "No file was provided."
+msgstr "ไม่มีแฟ้มที่เตรียมไว้"
+
+#: src/plugins/emacs/gbp-emacs-preferences-addin.c:52
+msgid "Emacs"
+msgstr "Emacs"
+
+#: src/plugins/emacs/gbp-emacs-preferences-addin.c:53
+msgid "Emulates the Emacs text editor"
+msgstr "เลียนแบบเครื่องมือแก้ไขข้อความ Emacs"
+
+#: src/plugins/eslint/eslint_plugin.py:153
+msgid "ESlint"
+msgstr "ESlint"
+
+#: src/plugins/eslint/eslint_plugin.py:154
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/eslint/eslint_plugin.py:156
+msgid "eslint javascript lint code execute execution"
+msgstr ""
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr ""
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:916
+#, fuzzy
+msgid "Clone a project using flatpak manifest"
+msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#: src/plugins/flatpak/gbp-flatpak-application-addin.c:917
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#. translators: %s is replaced with the name of the flatpak manifest
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
+#, c-format
+msgid "Cloning project %s"
+msgstr "กำลังสำเนาโครงการ %s"
+
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
+msgid "Downloading application sources…"
+msgstr "กำลังดาวน์โหลดซอร์สโปรแกรม…"
+
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:671
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
+msgid "Network is not available, skipping downloads"
+msgstr "เครือข่ายใช้ไม่ได้ กำลังข้ามการดาวน์โหลด"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:148
+msgid "Install Missing SDK?"
+msgstr "กำลังติดตั้ง SDK ที่ขาดหรือไม่?"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:153
+msgid "_Install"
+msgstr "_ติดตั้ง"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project."
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:155
+msgid "Creating flatpak workspace"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:336
+msgid "Preparing build directory"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:386
+msgid "Downloading dependencies"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:465
+msgid "Building dependencies"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:516
+msgid "Finalizing flatpak build"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+msgid "Exporting staging directory"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:646
+msgid "Creating flatpak bundle"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:94
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:93
+#: src/plugins/rustup/rustup_plugin.py:484
+#: src/plugins/rustup/rustup_plugin.py:488
+#: src/plugins/rustup/rustup_plugin.py:605
+msgid "Install"
+msgstr "ติดตั้ง"
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:100
+#: src/plugins/rustup/rustup_plugin.py:484
+#: src/plugins/rustup/rustup_plugin.py:488
+msgid "Update"
+msgstr "ปรับข้อมูล"
+
+#. translators: keywords are used to match search keywords in preferences
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:297
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:312
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] ""
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:401
+msgid "Flatpak Runtimes"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:794
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:796
+#, c-format
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:798
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:80
+#, c-format
+msgid "Updated %s"
+msgstr "ปรับข้อมูล %s แล้ว"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:83
+#, c-format
+msgid "Updating %s"
+msgstr "กำลังปรับข้อมูล %s"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:89
+#, c-format
+msgid "Installed %s"
+msgstr "ติดตั้ง %s แล้ว"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:92
+#, c-format
+msgid "Installing %s"
+msgstr "กำลังติดตั้ง %s"
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
+msgid "Failed to install runtime"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
+msgid "Runtime has been updated"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:122
+msgid "Runtime has been installed"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:87
+msgid "Missing system dependencies"
+msgstr "ขาดสิ่งที่ต้องใช้ของระบบ"
+
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:88
+msgid ""
+"The “flatpak-builder” program is necessary for building Flatpak-based "
+"applications. Builder can install it for you."
+msgstr ""
+
+#: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
+#, c-format
+msgid "GCC %s Cross-Compiler (System)"
+msgstr "GCC %s Cross-Compiler (System)"
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:101
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
+msgstr ""
+
+#: src/plugins/git/gbp-git-dependency-updater.c:100
+msgid "Updating Git Submodules"
+msgstr ""
+
+#: src/plugins/git/gbp-git-submodule-stage.c:136
+msgid "Network is not available, skipping submodule update"
+msgstr ""
+
+#: src/plugins/git/gbp-git-submodule-stage.c:208
+msgid "Initialize git submodules"
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, fuzzy, c-format
+msgid "Pushing ref “%s”"
+msgstr "แทรก “%s”"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#, c-format
+msgid "The protocol “%s” is not supported."
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:224
+msgid "Cloning repository"
+msgstr "กำลังสำเนาคลัง"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:240
+msgid "A valid Git URL is required"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:91
+#: src/plugins/glade/gbp-glade-frame-addin.c:300
+msgid "Select Widget…"
+msgstr "เลือกวิดเจ็ต…"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:393
+msgid "View Design"
+msgstr "มุมมองการออกแบบ"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:395
+msgid "Switch to UI designer"
+msgstr "สลับไปยังเครื่องมือออกแบบ UI"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:401
+msgid "View Source"
+msgstr "มุมมองซอร์ส"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:403
+msgid "Switch to source code editor"
+msgstr "สลับไปยังเครื่องมือแก้ไขซอร์สโค้ด"
+
+#. translators: %s is replaced with the specific error message
+#: src/plugins/glade/gbp-glade-page-actions.c:42
+msgid "Failed to save glade document: %s"
+msgstr "บันทึกเอกสาร glade ไม่สำเร็จ: %s"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:36
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:42
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:48
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:54
+msgctxt "shortcut window"
+msgid "Glade shortcuts"
+msgstr "ทางลัด Glade"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:37
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:43
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:49
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:55
+msgctxt "shortcut window"
+msgid "Designer"
+msgstr "เครื่องมือออกแบบ"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:38
+msgctxt "shortcut window"
+msgid "Save the interface design"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:44
+msgctxt "shortcut window"
+msgid "Preview the interface design"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:50
+msgctxt "shortcut window"
+msgid "Undo the last command"
+msgstr "เรียกคืนคำสั่งล่าสุด"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:56
+msgctxt "shortcut window"
+msgid "Redo the next command"
+msgstr "ทำซ้ำคำสั่งถัดไป"
+
+#: src/plugins/glade/gbp-glade-page.c:478
+msgid "Switch to selection mode"
+msgstr "สลับไปยังโหมดการเลือก"
+
+#: src/plugins/glade/gbp-glade-page.c:479
+msgid "Switch to drag-resize mode"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page.c:480
+msgid "Switch to margin editor"
+msgstr "สลับไปยังกั้นหน้าของเครื่องมือแก้ไข"
+#: src/plugins/glade/gbp-glade-page.c:481
+#, fuzzy
+msgid "Switch to alignment editor"
+msgstr "สลับไปยังเอกสารถัดไป"
+
+#: src/plugins/glade/gbp-glade-page.c:486
+msgid "Unnamed Glade project"
+msgstr "โครงการ Glade ที่ไม่มีชื่อ"
+
+#: src/plugins/glade/gbp-glade-properties.c:69
+msgid "Unnamed Glade Project"
+msgstr "โครงการ Glade ที่ไม่มีชื่อ"
+
+#: src/plugins/glade/gbp-glade-properties.ui:36
+msgid "Widget specific properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:46
+msgid "Container child properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:56
+msgid "Styling, alignment, and other common properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:66
+msgid "Accessibility properties"
+msgstr ""
+
+#: src/plugins/glade/gtk/menus.ui:5
+msgid "Glade"
+msgstr "Glade"
+
+#: src/plugins/glade/gtk/menus.ui:15
+msgid "Open _Preview"
+msgstr "เปิด_ตัวอย่าง"
+
+#: src/plugins/glade/gtk/menus.ui:22
+msgid "Cut"
+msgstr "ตัด"
+
+#: src/plugins/glade/gtk/menus.ui:32
+msgid "Paste"
+msgstr "แปะ"
+
+#: src/plugins/glade/gtk/menus.ui:37
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "ลบ"
+
+#: src/plugins/glade/gtk/menus.ui:44
+msgid "Undo"
+msgstr "เรียกคืน"
+
+#: src/plugins/glade/gtk/menus.ui:49
+msgid "Redo"
+msgstr "ทำซ้ำ"
+
+#: src/plugins/glade/gtk/menus.ui:61 src/plugins/glade/gtk/menus.ui:75
+msgid "UI Designer"
+msgstr "เครื่องมือออกแบบ UI"
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:369
+msgid "Code assistance requires a local file."
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:64
+msgid "Pylint"
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:67
+msgid "pylint python lint code execute execution"
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/ide-gca-service.c:183
+msgid "No language specified"
+msgstr "ไม่มีภาษาที่ระบุ"
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "เปิดใช้ Pylint"
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: src/plugins/gradle/gradle_plugin.py:85
+msgid "Gradle Wrapper"
+msgstr ""
+
+#: src/plugins/greeter/gbp-greeter-application-addin.c:136
+msgid "Display a new greeter window"
+msgstr ""
+
+#: src/plugins/greeter/gbp-greeter-application-addin.c:144
+msgid "Begin cloning project from URI"
+msgstr ""
+
+#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
+#: src/plugins/greeter/gtk/menus.ui:88
+msgid "_Clone Repository…"
+msgstr "_สำเนาคลัง…"
+
+#: src/plugins/greeter/gtk/menus.ui:47
+msgid "Quit"
+msgstr "ออก"
+
+#: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
+msgid "Open a _Project…"
+msgstr "เปิดโ_ครงการ…"
+
+#: src/plugins/grep/gbp-grep-panel.c:494
+msgid "Match"
+msgstr "ตรงกัน"
+
+#: src/plugins/grep/gbp-grep-panel.c:506
+msgid "Path"
+msgstr "พาธ"
+
+#: src/plugins/grep/gbp-grep-panel.ui:5
+#: src/plugins/grep/gbp-grep-popover.ui:12 src/plugins/grep/gtk/menus.ui:6
+msgid "Find in Files"
+msgstr "หาในแฟ้ม"
+
+#: src/plugins/grep/gbp-grep-panel.ui:51
+msgid "Replace With"
+msgstr "แทนที่ด้วย"
+
+#: src/plugins/grep/gbp-grep-popover.ui:28
+msgid "Search for…"
+msgstr "ค้นหา…"
+
+#: src/plugins/grep/gbp-grep-popover.ui:37
+msgid "Find"
+msgstr "หา"
+
+#: src/plugins/grep/gbp-grep-popover.ui:54
+msgid "Search _recursively through folders"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-popover.ui:61
+msgid "Match _case when searching"
+msgstr ""
+
+#: src/plugins/grep/gbp-grep-popover.ui:69
+msgid "Match _whole words"
+msgstr "ค้นหา_ทั้งคำ"
+
+#: src/plugins/grep/gbp-grep-popover.ui:76
+msgid "Allow regular _expressions"
+msgstr "อนุญาต_นิพจน์เรกิวลาร์"
+
+#: src/plugins/html-preview/gtk/menus.ui:7
+msgid "Open Preview"
+msgstr "เปิดตัวอย่าง"
+
+#: src/plugins/html-preview/html_preview.py:341
+msgid "Your computer is missing python3-docutils"
+msgstr "คอมพิวเตอร์ของคุณขาด python3-docutils"
+
+#: src/plugins/html-preview/html_preview.py:342
+#: src/plugins/html-preview/html_preview.py:352
+msgid ""
+"This package is necessary to provide previews of markup-based documents."
+msgstr ""
+
+#: src/plugins/html-preview/html_preview.py:345
+#: src/plugins/html-preview/html_preview.py:355
+msgid "Install Package"
+msgstr "ติดตั้งแพกเกจ"
+
+#: src/plugins/html-preview/html_preview.py:351
+msgid "Your computer is missing python3-sphinx"
+msgstr "คอมพิวเตอร์ของคุณขาด python3-sphinx"
+
+#: src/plugins/html-preview/html_preview.py:421
+msgid "(Preview)"
+msgstr "(ตัวอย่าง)"
+
+#: src/plugins/jedi/jedi_plugin.py:657
+msgid "Suggest completions from Python"
+msgstr "แนะนำการเติมเต็มจาก Python"
+
+#: src/plugins/jedi/jedi_plugin.py:658
+msgid "Use Jedi to provide completions for the Python language"
+msgstr ""
+
+#: src/plugins/ls/gbp-ls-page.c:316
+#, c-format
+msgid "Failed to load directory: %s"
+msgstr "โหลดไดเรกทอรี: %s ไม่สำเร็จ"
+
+#: src/plugins/ls/gbp-ls-page.c:388
+#, c-format
+msgid "%s — Directory"
+msgstr "%s — ไดเรกทอรี"
+
+#: src/plugins/ls/gbp-ls-page.ui:45
+msgid "Size"
+msgstr "ขนาด"
+
+#: src/plugins/ls/gbp-ls-page.ui:58
+msgid "Modified"
+msgstr "แก้ไข"
+
+#: src/plugins/ls/gtk/menus.ui:9
+msgid "Directory Browser"
+msgstr "เรียกดูไดเรกทอรี"
+
+#: src/plugins/ls/gtk/menus.ui:21
+msgid "Switch to Folder"
+msgstr "สลับไปยังโฟลเดอร์"
+
+#: src/plugins/ls/gtk/menus.ui:26 src/plugins/project-tree/gtk/menus.ui:39
+msgid "Open Containing Folder"
+msgstr "เปิดโฟลเดอร์ที่เก็บ"
+
+#: src/plugins/make/make_plugin.py:110
+msgid "Build project"
+msgstr ""
+
+#: src/plugins/make/make_plugin.py:124
+msgid "Install project"
+msgstr "ติดตั้งโครงการ"
+
+#: src/plugins/make/make_plugin.py:346
+msgid "Empty Makefile Project"
+msgstr "โครงการ Makefile เปล่า"
+
+#: src/plugins/make/make_plugin.py:348
+msgid "Create a new empty project using a simple Makefile"
+msgstr "สร้างโครงการเปล่าใหม่โดยใช้ Makefile อย่างง่าย"
+
+#: src/plugins/meson-templates/meson_templates.py:249
+msgid "GNOME Application"
+msgstr "โปรแกรมของ GNOME"
+
+#: src/plugins/meson-templates/meson_templates.py:251
+msgid "Create a new GNOME application"
+msgstr "สร้างโปรแกรมใหม่ของ GNOME"
+
+#: src/plugins/meson-templates/meson_templates.py:317
+msgid "Shared Library"
+msgstr "ไลบรารีใช้ร่วม"
+
+#: src/plugins/meson-templates/meson_templates.py:319
+msgid "Create a new project with a shared library"
+msgstr "สร้างโครงการใหม่ด้วยไลบรารีใช้ร่วม"
+
+#: src/plugins/meson-templates/meson_templates.py:336
+msgid "Empty Project"
+msgstr "โครงการว่าง"
+
+#: src/plugins/meson-templates/meson_templates.py:338
+msgid "Create a new empty project"
+msgstr "สร้างโครงการว่างใหม่"
+
+#: src/plugins/meson-templates/meson_templates.py:351
+msgid "Command Line Tool"
+msgstr "เครื่องมือบรรทัดคำสั่ง"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Create a new command line project"
+msgstr "สร้างโครงการบรรทัดคำสั่งใหม่"
+
+#: src/plugins/meson/gbp-meson-build-system.c:468
+#: src/plugins/meson/gbp-meson-config-view-addin.c:57
+msgid "Meson"
+msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-config-view-addin.c:58
+msgid "Meson Options"
+msgstr "ตัวเลือกสำหรับ Meson"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:165
+#, fuzzy
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr "ไม่พบโปรแกรมดีบั๊กที่เหมาะสม"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:185
+#, fuzzy
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr "ไม่พบโปรแกรมดีบั๊กที่เหมาะสม"
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "เครื่องมือลบ"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:106
+msgid "Add toolchain"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:113
+msgid "Define a new custom toolchain targeting a specific platform"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:203
+msgid "Toolchain"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:410
+msgid "No Provided Tool"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
+msgid "A name to identify the sysroot."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
+msgid "The system architecture of the sysroot."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
+msgid "Add Tool:"
+msgstr "เพิ่มเครื่องมือ:"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "คอมไพเลอร์"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+msgid "Any language"
+msgstr "ภาษาใดๆ"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+msgid "C"
+msgstr "C"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+msgid "C++"
+msgstr "C++"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+msgid "Python"
+msgstr "ไพธอน"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:194
+msgid "Fortran"
+msgstr "ฟอร์แทรน"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
+msgid "D"
+msgstr "D"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
+msgid "Add Tool"
+msgstr "เพิ่มเครื่องมือ"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
+#, fuzzy
+msgid "Delete Toolchain"
+msgstr "ลบบรรทัด"
+
+#: src/plugins/meson/gbp-meson-toolchain.c:61
+msgid "%s (Meson)"
+msgstr "%s (Meson)"
+
+#: src/plugins/messages/gbp-messages-panel.ui:5
+msgid "Messages"
+msgstr "ข้อความ"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:18
+#, fuzzy
+msgid "Suggested GNOME Projects"
+msgstr "โครงการ GNOME ที่แนะนำ"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:37
+msgid "Boxes"
+msgstr "กล่อง"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:38
+msgid "A simple GNOME 3 application to access remote or virtual systems"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:48
+msgid "An IDE for writing GNOME-based software"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Calendar"
+msgstr "ปฏิทิน"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "Calendar application for GNOME"
+msgstr "โปรแกรมปฏิทินสำหรับ GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Games"
+msgstr "เกม"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+msgid "Simple game launcher for GNOME"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Maps"
+msgstr "แผนที่"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "A simple GNOME 3 maps application"
+msgstr "โปรแกรมแผนที่อย่างง่ายของ GNOME 3"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:90
+msgid "Music"
+msgstr "ดนตรี"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:91
+msgid "Music player and management application"
+msgstr "โปรแกรมเล่นดนตรีและการจัดการ"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+msgid "Nautilus"
+msgstr "Nautilus"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:101
+msgid "Default file manager for GNOME"
+msgstr "เครื่องมือจัดการแฟ้มโดยปริยายสำหรับ GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+msgid "Photos"
+msgstr "ภาพถ่าย"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:111
+msgid "Access, organize and share your photos on GNOME"
+msgstr "เข้าถึง, จัดการและแบ่งปันภาพถ่ายของคุณใน GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+msgid "Polari"
+msgstr "Polari"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:121
+msgid "An IRC Client for GNOME"
+msgstr "โปรแกรม IRC สำหรับ GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:131
+msgid "Sound Recorder"
+msgstr "เครื่องบันทึกเสียง"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:132
+msgid "A simple and modern sound recorder"
+msgstr "เครื่องบันทึกเสียงอย่างง่ายและทันสมัย"
+
+#: src/plugins/notification/ide-notification-addin.c:102
+msgid "Build successful"
+msgstr "ประกอบสร้างเรียบร้อยแล้ว"
+
+#: src/plugins/notification/ide-notification-addin.c:103
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr "โครงการ “%s” ประกอบสร้างเสร็จสมบูรณ์"
+
+#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:193
+msgid "Build failed"
+msgstr "ประกอบสร้างไม่สำเร็จ"
+
+#: src/plugins/notification/ide-notification-addin.c:108
+#, c-format
+msgid "Project “%s” failed to build"
+msgstr "ประกอบสร้างโครงการ “%s” ไม่สำเร็จ"
+
+#: src/plugins/notification/ide-notification-addin.c:184
+#, fuzzy
+msgid "Build succeeded"
+msgstr "ประกอบสร้างเรียบร้อยแล้ว"
+
+#: src/plugins/notification/ide-notification-addin.c:186
+#, fuzzy
+msgid "Build configured"
+msgstr "ประกอบสร้างไม่สำเร็จ"
+
+#: src/plugins/notification/ide-notification-addin.c:188
+#, fuzzy
+msgid "Build bootstrapped"
+msgstr "ระบบประกอบสร้าง"
+
+#: src/plugins/npm/npm_plugin.py:96
+msgid "Downloading npm dependencies"
+msgstr ""
+
+#: src/plugins/phpize/phpize_plugin.py:191
+msgid "Bootstrapping project"
+msgstr ""
+
+#: src/plugins/podman/gbp-podman-runtime.c:126
+msgid "Podman"
+msgstr "Podman"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:134
+msgid "Containers/Podman"
+msgstr ""
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:124
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
+msgid "A folder with that name already exists."
+msgstr "มีโฟลเดอร์ชื่อดังกล่าวอยู่ก่อนแล้ว"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
+msgid "A file with that name already exists."
+msgstr "มีแฟ้มชื่อดังกล่าวอยู่ก่อนแล้ว"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:351
+#: src/plugins/project-tree/gbp-new-file-popover.ui:13
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:13
+msgid "File Name"
+msgstr "ชื่อแฟ้ม"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:353
+msgid "Folder Name"
+msgstr "ชื่อโฟลเดอร์"
+
+#: src/plugins/project-tree/gbp-new-file-popover.ui:35
+msgid "_Create"
+msgstr "_สร้าง"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+msgid "Files"
+msgstr "แฟ้ม"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
+#, c-format
+msgid "Copying 1 file"
+msgstr "คัดลอก 1 แฟ้ม"
+
+#. translators: first %s is replaced with completed number of files, second %s with total number of files
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
+#, c-format
+msgid "Copying %s of %s files"
+msgstr ""
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
+msgid "Failed to copy files"
+msgstr "คัดลอกแฟ้มไม่สำเร็จ"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
+msgid "Files copied"
+msgstr "คัดลอกแฟ้มแล้ว"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
+#, c-format
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "คัดลอกแฟ้ม %s แล้ว"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+msgid "Copying files…"
+msgstr "กำลังคัดลอกแฟ้ม…"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
+msgid "Files will be copied in a moment"
+msgstr ""
+
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:65
+msgid "Project Tree"
+msgstr "ลำดับชั้นของโครงการ"
+
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
+#, c-format
+msgid "Rename %s"
+msgstr "เปลี่ยนชื่อ %s"
+
+#: src/plugins/project-tree/gtk/menus.ui:8
+msgid "New File…"
+msgstr "แฟ้มใหม่…"
+
+#: src/plugins/project-tree/gtk/menus.ui:14
+msgid "New Folder…"
+msgstr "โฟลเดอร์ใหม่…"
+
+#: src/plugins/project-tree/gtk/menus.ui:26
+msgid "Open With…"
+msgstr "เปิดด้วย…"
+
+#: src/plugins/project-tree/gtk/menus.ui:30
+msgid "Source Code Editor"
+msgstr "เครื่องมือแก้ไขซอร์สโค้ด"
+
+#: src/plugins/project-tree/gtk/menus.ui:45
+msgid "Open in Terminal"
+msgstr "เปิดในเทอร์มินัล"
+
+#: src/plugins/project-tree/gtk/menus.ui:59
+msgid "Move to Trash"
+msgstr "ทิ้งลงถังขยะ"
+
+#: src/plugins/project-tree/gtk/menus.ui:65
+msgid "Display Options"
+msgstr "แสดงตัวเลือก"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+msgid "Aarch64 Emulation"
+msgstr "การเลียนแบบ Aarch64"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+msgid "Arm Emulation"
+msgstr "การเลียนแบบ Arm"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:158
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "คอมพิวเตอร์ของฉัน (%s) %s"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:50
+msgid "Words matching selection"
+msgstr "คำที่ตรงกับการเลือก"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr "เน้นทุกคำที่ตรงกับการเลือกปัจจุบัน"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:53
+msgid "quick highlight words matching current selection"
+msgstr "เน้นทุกคำที่ตรงกับการเลือกปัจจุบันอย่างเร็ว"
+
+#. translators: %s is replaced with the path of the file to be deleted and \n for a new line
+#: src/plugins/recent/gbp-recent-section.c:350
+#: src/plugins/recent/gbp-recent-section.c:357
+#, c-format
+msgid "Removing %s\n"
+msgstr "กำลังลบ %s\n"
+
+#: src/plugins/recent/gbp-recent-section.c:470
+msgid "Removing Files…"
+msgstr "ลบแฟ้ม…"
+
+#: src/plugins/recent/gbp-recent-section.c:472
+msgid "_Close"
+msgstr "ปิ_ด"
+
+#: src/plugins/recent/gbp-recent-section.ui:28
+msgid "Recent Projects"
+msgstr "โครงการล่าสุด"
+
+#: src/plugins/retab/gtk/menus.ui:9
+msgid "Reformat tabs"
+msgstr "จัดรูปแบบแท็บใหม่"
+
+#: src/plugins/rustup/rustup_plugin.py:80
+msgid "Rustup not installed"
+msgstr "ยังไม่ได้ติดตั้ง Rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:270
+msgid "Installing rustup"
+msgstr "กำลังติดตั้ง rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:272
+msgid "Updating rustup"
+msgstr "กำลังปรับรุ่น rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:274
+msgid "Installing rust "
+msgstr "กำลังติดตั้ง rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:276
+msgid "Checking system"
+msgstr "การตรวจสอบระบบ"
+
+#: src/plugins/rustup/rustup_plugin.py:341
+msgid "Downloading rustup-init"
+msgstr "การดาวน์โหลด rustup-init"
+
+#: src/plugins/rustup/rustup_plugin.py:346
+msgid "Syncing channel updates"
+msgstr "กำลังปรับข้อมูลของช่องข้อมูลให้ตรงกัน"
+
+#: src/plugins/rustup/rustup_plugin.py:352
+msgid "Downloading "
+msgstr "กำลังดาวน์โหลด"
+
+#: src/plugins/rustup/rustup_plugin.py:359
+msgid "Installing "
+msgstr "กำลังติดตั้ง "
+
+#: src/plugins/rustup/rustup_plugin.py:365
+msgid "Checking for rustup updates"
+msgstr "กำลังตรวจสอบการปรับรุ่นของ rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:370
+msgid "Downloading rustup update"
+msgstr "กำลังดาวน์โหลดการปรับรุ่นของ rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:408
+msgid "Error installing "
+msgstr "ข้อผิดพลาดของการติดตั้ง "
+
+#: src/plugins/rustup/rustup_plugin.py:410
+msgid "Error"
+msgstr "ข้อผิดพลาด"
+
+#: src/plugins/rustup/rustup_plugin.py:415
+msgid "Cancelled"
+msgstr "ยกเลิก"
+
+#: src/plugins/rustup/rustup_plugin.py:423
+msgid "Finished"
+msgstr "เสร็จแล้ว"
+
+#: src/plugins/rustup/rustup_plugin.py:439
+msgid "Rustup"
+msgstr "Rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:440
+msgid "Rustup Toolchains"
+msgstr ""
+
+#: src/plugins/rustup/rustup_plugin.py:496
+msgid "Updating"
+msgstr "กำลังปรับรุ่น"
+
+#: src/plugins/rustup/rustup_plugin.py:496
+msgid "Installing"
+msgstr "กำลังติดตั้ง"
+
+#. set default toolchain button
+#: src/plugins/rustup/rustup_plugin.py:589
+msgid "Make default"
+msgstr "Make โดยปริยาย"
+
+#: src/plugins/rustup/rustup_plugin.py:589
+msgid "Makes the selected toolchain the default rust installation"
+msgstr ""
+
+#: src/plugins/rustup/rustup_plugin.py:604
+msgid "Install Rust Channel"
+msgstr ""
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: src/plugins/rustup/rustup_plugin.py:609
+msgid "Enter name of rust channel"
+msgstr "ป้อนชื่อใหม่สำหรับสี"
+
+#: src/plugins/rustup/rustup_plugin.py:610
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+
+#: src/plugins/rustup/rustup_plugin.py:635
+msgid "Install Rustup to manage toolchains here!"
+msgstr ""
+
+#: src/plugins/rustup/rustup_plugin.py:642
+msgid "No toolchain installed. Click"
+msgstr ""
+
+#: src/plugins/rustup/rustup_plugin.py:643
+msgid "to add a new toolchain!"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+msgid "Shell command"
+msgstr "คำสั่งเชลล์"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:569
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:648
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+msgid "Change Shortcut"
+msgstr "เปลี่ยนปุ่มลัด"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+msgid "Title"
+msgstr "ชื่อ"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+msgid "Shell Command"
+msgstr "คำสั่งเชลล์"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+msgid "Command Locality"
+msgstr "ย่านที่อยู่คำสั่ง"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+msgid "In Build Environment"
+msgstr "ในสภาพแวดล้อมประกอบสร้าง"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+msgid "In Runtime Environment"
+msgstr "ในสภาพแวดล้อมขณะทำงาน"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+msgid "Close on Exit"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+msgid "Keyboard Shortcut"
+msgstr "ปุ่มลัด"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+msgid "Change"
+msgstr "เปลี่ยน"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+msgid "Delete Command"
+msgstr "คำสั่งลบ"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:92
+msgid "Run in host environment"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:102
+msgid "Run in build environment"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:109
+msgid "Run in runtime environment"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+msgid "New command"
+msgstr "คำสั่งใหม่"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+msgid "External Commands"
+msgstr "คำสั่งภายนอก"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+msgid "Command"
+msgstr "คำสั่ง"
+
+#: src/plugins/snippets/ide-snippet-completion-item.c:114
+#, c-format
+msgid "Failed to parse snippet “%s”"
+msgstr "แจงข้อความสั้น “%s” ไม่สำเร็จ"
+
+#: src/plugins/snippets/ide-snippet-preferences-addin.c:53
+msgid "Suggest Completions from Snippets"
+msgstr "แนะนำการเติมเต็มจากข้อความสั้น"
+
+#: src/plugins/snippets/ide-snippet-preferences-addin.c:54
+msgid "Use registered snippets to suggest completion proposals"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-editor-addin.c:53
+msgid "Spelling"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:104
+msgctxt "shortcut window"
+msgid "Show the spellchecker panel"
+msgstr ""
+
+#. We might find ourselves in a race here and the buffer
+#. * addins are already in destruction. Therefore, silently
+#. * fail any further setup.
+#.
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:141
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:248
+msgid "Failed to initialize spellchecking, disabling"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:235
+msgid "No language selected"
+msgstr "ไม่มีภาษาที่เลือก"
+
+#: src/plugins/spellcheck/gbp-spell-navigator.c:482
+msgid "No language set. Check your dictionary installation."
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:121
+msgid "No suggestions"
+msgstr "ไม่มีการแนะนำ"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:214
+msgid "Completed spell checking"
+msgstr "ตรวจสอบการสะกดสมบูรณ์แล้ว"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:257
+msgid "The word is not in the dictionary"
+msgstr "คำนั้นไม่ได้อยู่ในพจนานุกรม"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:428
+msgid "This word is already in the personal dictionary"
+msgstr "คำนี้อยู่ในพจนานุกรมส่วนตัวแล้ว"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:431
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "คำนี้อยู่ในพจนานุกรม %s แล้ว"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:17
+msgid "Misspelled"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:86
+msgid "_Ignore"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:95
+msgid "Ignore _All"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:114
+msgid "Change _to"
+msgstr "เปลี่ยนเป็_น"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:147
+msgid "Cha_nge"
+msgstr "เ_ปลี่ยน"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:156
+msgid "Change A_ll"
+msgstr "เปลี่ยน_ทั้งหมด"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:175
+msgid "_Suggestions"
+msgstr "การแ_นะนำ"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:212
+msgid "Add Word"
+msgstr "เพิ่มคำ"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:238
+msgid "A_dd"
+msgstr "เ_พิ่ม"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:254
+msgid "Dictionary"
+msgstr "พจนานุกรม"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:304
+msgid "_Language"
+msgstr "_ภาษา"
+
+#: src/plugins/spellcheck/gtk/menus.ui:6
+msgid "Check _Spelling"
+msgstr "ตรวจสอบการ_สะกด"
+
+#: src/plugins/spellcheck/gtk/menus.ui:14
+msgid "Underline misspelled words"
+msgstr ""
+
+#: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
+msgid "Sublime Text"
+msgstr ""
+
+#: src/plugins/sublime/gbp-sublime-preferences-addin.c:53
+msgid "Emulates the Sublime Text editor"
+msgstr "เลียนแบบเครื่องมือแก้ไขข้อความ Sublime"
+
+#: src/plugins/support/gtk/menus.ui:7
+msgid "Generate Support Log"
+msgstr ""
+
+#: src/plugins/support/ide-support-application-addin.c:84
+#, c-format
+msgid ""
+"The support log file has been written to “%s”. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
+msgctxt "shortcut window"
+msgid "Symbols"
+msgstr "สัญลักษณ์"
+
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
+msgctxt "shortcut window"
+msgid "Search symbols within document"
+msgstr "ค้นหาสัญลักษณ์ในเอกสาร"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
+msgid "Unnamed Symbol"
+msgstr "สัญลักษณ์ไม่มีชื่อ"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:156
+msgid "Symbol"
+msgstr "สัญลักษณ์"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:314
+msgid "Select Symbol…"
+msgstr "เลือกสัญลักษณ์…"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
+msgid "Document Outline"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-surface.c:56
+#: src/plugins/sysprof/gtk/menus.ui:19
+msgid "Profiler"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:279
+msgid "Open Sysprof Capture…"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:288
+msgid "Sysprof Capture (*.syscap)"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:294
+msgid "All Files"
+msgstr "ทุกแฟ้ม"
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:417
+#: src/plugins/sysprof/gtk/menus.ui:32 src/plugins/sysprof/gtk/menus.ui:42
+msgid "Run with Profiler"
+msgstr ""
+
+#: src/plugins/sysprof/gtk/menus.ui:8
+msgctxt "menu label"
+msgid "Open Sysprof Capture…"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
+msgid "Add sysroot"
+msgstr "เพิ่ม sysroot"
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
+msgid "Define a new sysroot target to build against a different target"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
+msgid "Sysroots"
+msgstr "Sysroots"
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
+msgid "An absolute file-system path to the sysroot."
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
+msgid "Package Config Path"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
+msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
+#, c-format
+msgid "%s (Sysroot SDK)"
+msgstr "%s (Sysroot SDK)"
+
+#: src/plugins/terminal/gbp-terminal-application-addin.c:96
+msgid "Use terminal interface"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:289
+msgid "Application Output"
+msgstr "เอาต์พุทโปรแกรม"
+
+#. translators: %s is replaced with the current local time of day
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:319
+#, c-format
+msgid "Application started at %s\r\n"
+msgstr "โปรแกรมเริ่มต้นที่ %s\r\n"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:340
+msgid "Application exited\r\n"
+msgstr "ออกจากโปรแกรมแล้ว\r\n"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:371
+msgctxt "shortcut window"
+msgid "Terminal in Runtime"
+msgstr "เทอร์มินัลใน Runtime"
+
+#: src/plugins/terminal/gtk/menus.ui:9
+msgid "New _Terminal"
+msgstr "เ_ทอร์มินัลใหม่"
+
+#: src/plugins/terminal/gtk/menus.ui:16
+msgid "New _Build Terminal"
+msgstr "_ประกอบสร้างเทอร์มินัลใหม่"
+
+#: src/plugins/terminal/gtk/menus.ui:23
+msgid "New _Runtime Terminal"
+msgstr "เทอร์มินัลใหม่ขณะ_ทำงาน"
+
+#: src/plugins/testui/gbp-test-output-panel.c:135
+msgid "Unit Test Output"
+msgstr ""
+
+#: src/plugins/testui/gbp-test-output-panel.ui:34
+msgid "Clear test output"
+msgstr ""
+
+#: src/plugins/testui/gbp-test-output-panel.ui:51
+msgid "Cancel tests"
+msgstr "ยกเลิกการทดสอบ"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:68
+msgid "Save test output"
+msgstr "บันทึกผลการทดสอบ"
+
+#: src/plugins/testui/gbp-test-tree-addin.c:197
+msgid "Unit Tests"
+msgstr ""
+
+#. translators: %s is replaced with the name of the unit test
+#: src/plugins/testui/gbp-test-tree-addin.c:408
+#, c-format
+msgid "Running test “%s”…"
+msgstr "กำลังเรียกทดสอบ “%s”…"
+
+#: src/plugins/todo/gbp-todo-panel.c:301
+msgid "Loading TODOs…"
+msgstr "กำลังโหลด TODOs…"
+
+#: src/plugins/todo/gbp-todo-panel.c:302
+msgid "Please wait while we scan your project"
+msgstr "กรุณารอขณะที่เราสแกนโครงการของคุณ"
+
+#: src/plugins/todo/gbp-todo-workspace-addin.c:157
+msgid "TODO/FIXMEs"
+msgstr ""
+
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
+msgid "Vagrant"
+msgstr ""
+
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr ""
+
+#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
+#: src/plugins/valgrind/valgrind_plugin.py:54
+msgid "Run with Valgrind"
+msgstr ""
+
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:466
+msgid "Branches"
+msgstr "แขนง"
+
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:476
+msgid "Tags"
+msgstr "แท็ก"
+
+#: src/plugins/vcsui/gtk/menus.ui:7
+msgid "Switch to branch"
+msgstr "สลับไปยังแขนง"
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "Push to origin"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:105
+#, c-format
+msgid "Number required"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:115
+#, c-format
+msgid "%s is invalid for %s"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:173
+#, c-format
+msgid "Cannot find language “%s”"
+msgstr "ไม่พบภาษา “%s”"
+
+#: src/plugins/vim/gb-vim.c:330
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:341
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:398
+#, c-format
+msgid "Unknown option: %s"
+msgstr "ตัวเลือกที่ไม่ทราบ: %s"
+
+#: src/plugins/vim/gb-vim.c:441
+#, c-format
+msgid "Cannot find colorscheme “%s”"
+msgstr "ไม่พบชุดสี “%s”"
+
+#: src/plugins/vim/gb-vim.c:477 src/plugins/vim/gb-vim.c:600
+#, c-format
+msgid "Failed to locate working directory"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:766
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1203
+#, c-format
+msgid "Invalid search and replace request"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1213
+msgid "Change the pages colorscheme"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1217
+msgid "Build the project"
+msgstr "ประกอบสร้างโครงการ"
+
+#: src/plugins/vim/gb-vim.c:1218
+msgid "Clear search highlighting"
+msgstr "ล้างการเน้นค้นหา"
+
+#: src/plugins/vim/gb-vim.c:1219
+msgid "Open a file by path"
+msgstr "เปิดแฟ้มด้วยพาธ"
+
+#: src/plugins/vim/gb-vim.c:1220
+msgid "Close the page"
+msgstr "ปิดหน้านี้"
+
+#: src/plugins/vim/gb-vim.c:1221
+msgid "Set various buffer options"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1222
+msgid "Sort the selected lines"
+msgstr "เรียงลำดับบรรทัดที่เลือก"
+
+#: src/plugins/vim/gb-vim.c:1223
+msgid "Create a split page below the current page"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1224
+msgid "Toggle syntax highlighting"
+msgstr "สลับการเน้นไวยากรณ์"
+
+#: src/plugins/vim/gb-vim.c:1228
+msgid "Save and close the current page"
+msgstr "บันทึกแล้วปิดหน้าปัจจุบัน"
+
+#: src/plugins/vim/gb-vim.c:1229
+msgid "Save the current page"
+msgstr "บันทึกหน้าปัจจุบัน"
+
+#: src/plugins/vim/gb-vim.c:1313
+#, c-format
+msgid "Not a command: %s"
+msgstr ""
+
+#: src/plugins/vim/gbp-vim-preferences-addin.c:52
+msgid "Vim"
+msgstr "Vim"
+
+#: src/plugins/vim/gbp-vim-preferences-addin.c:53
+msgid "Emulates the Vim text editor"
+msgstr "เลียนแบบเครื่องมือแก้ไขข้อความ Vim"
+
+#: src/plugins/waf/waf_plugin.py:125
+msgid "Building project…"
+msgstr "กำลังประกอบสร้างโครงการ…"
+
+#: src/plugins/waf/waf_plugin.py:135
+msgid "Installing project…"
+msgstr "กำลังติดตั้งโครงการ…"
+
+#: src/plugins/xml-pack/ide-xml-parser.c:583
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:520
+msgid "Failed to create the XML tree."
+msgstr ""
+
+#: src/plugins/xml-pack/ide-xml-service.c:91
+msgid "File must be saved locally to parse."
+msgstr ""
+
+#~ msgid "Allow snippets to be inserted into the document."
+#~ msgstr "อนุญาตให้ใช้ข้อความสั้นแทรกในเอกสาร"
+
+#~ msgid "Clang based autocompletion (Experimental)"
+#~ msgstr "การเติมเต็มคำของ Clang (การทดลอง)"
+
+#~ msgid "Use Clang for autocompletion in the C and C++ languages."
+#~ msgstr "ใช้ Clang สำหรับการเติมเต็มอัตโนมัติในภาษา C และ C++"
+
+#~ msgid "Enable auto-completion of words in document"
+#~ msgstr "เปิดใช้การเติมเต็มอัตโนมัติของคำในเอกสาร"
+
+#~ msgid ""
+#~ "If enabled, words within the current document will be available for auto-"
+#~ "completion."
+#~ msgstr "ถ้าเปิดใช้ คำในเอกสารปัจจุบันจะสามารถใช้ได้สำหรับการเติมเต็มอัตโนมัติ"
+
+#~ msgid "If enabled, the project tree will display icons next to each item."
+#~ msgstr "ถ้าเปิดใช้ ลำดับชั้นโครงการจะแสดงไอคอนถัดไปในแต่ละรายการ"
+
+#~ msgid "org.gnome.Builder"
+#~ msgstr "org.gnome.Builder"
+
+#~ msgid "List available subcommands"
+#~ msgstr "รายชื่อคำสั่งย่อยที่ใช้ได้"
+
+#~ msgid "Run Builder in standalone mode"
+#~ msgstr "เรียก Builder ในโหมดมาตรฐาน"
+
+#~ msgid "Increase verbosity, may be specified multiple times"
+#~ msgstr "เพิ่มความฟุ่มเฟือย อาจจะระบุหลายครั้ง"
+
+#~ msgid "Enter GApplication Service mode"
+#~ msgstr "เข้าสู่โหมดบริการ GApplication"
+
+#~ msgid "Opens the project specified by PATH"
+#~ msgstr "เปิดโครงการตามที่ระบุโดย PATH"
+
+#~ msgid "PATH"
+#~ msgstr "PATH"
+
+#~ msgid "Clones the project specified by MANIFEST"
+#~ msgstr "สำเนาโครงการตามที่ระบุโดย MANIFEST"
+
+#~ msgid "COMMAND"
+#~ msgstr "COMMAND"
+
+#~ msgid "No commands available"
+#~ msgstr "ไม่มีคำสั่งที่ใช้ได้"
+
+#~ msgid "Please provide a command"
+#~ msgstr "กรุณาเตรียมคำสั่ง"
+
+#~ msgid "No such tool"
+#~ msgstr "ไม่มีเครื่องมือดังกล่าว"
+
+#~ msgid "Please provide a worker plugin"
+#~ msgstr "กรุณาเตรียมปลั๊กอินตัวทำงาน"
+
+#~ msgid "Please provide a D-Bus address"
+#~ msgstr "กรุณาเตรียมแอดเดรส D-Bus"
+
+#~ msgid "No such worker"
+#~ msgstr "ไม่มีตัวทำงานดังกล่าว"
+
+#~ msgid "Failed to establish a monitor for background changes: %s"
+#~ msgstr "สร้างเฝ้าสังเกตสำหรับการเปลี่ยนแปลงพื้นหลัง: %s ไม่สำเร็จ"
+
+#~ msgid "File too large to be opened."
+#~ msgstr "แฟ้มใหญ่เกินไปที่จะเปิดได้"
+
+#~ msgid "unsaved document %u"
+#~ msgstr "เอกสารที่ไม่ได้บันทึก%u"
+
+#~ msgid "Duplicate the configuration"
+#~ msgstr "ทำสำเนาค่าตั้ง"
+
+#~ msgid "Delete the configuration"
+#~ msgstr "ลบค่าตั้ง"
+
+#~ msgid "The prefix to use when installing the project"
+#~ msgstr "ชื่อขึ้นต้นที่ใช้ขณะติดตั้งโครงการ"
+
+#~ msgid "Options to use when bootstrapping the project"
+#~ msgstr "ตัวเลือกที่ใช้ขณะกำลังปลุกเครื่องของโครงการ"
+
+#~ msgid "_Wrap Around"
+#~ msgstr "ห_มดแล้วเริ่มใหม่"
+
+#~ msgid "Display"
+#~ msgstr "แสดง"
+
+#~ msgid "Tabs and Indentation"
+#~ msgstr "แท็บและการร่นย่อหน้า"
+
+#~ msgid "Auto indent new lines"
+#~ msgstr "ร่นย่อหน้าบรรทัดใหม่อัตโนมัติ"
+
+#~ msgid "Language Syntax"
+#~ msgstr "ไวยากรณ์ของภาษา"
+
+#~ msgid "Toggle navigation panel"
+#~ msgstr "สลับช่องสำรวจ"
+
+#~ msgid "Toggle utilities panel"
+#~ msgstr "สลับช่องเครื่องมือ"
+
+#~ msgid ""
+#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+#~ msgstr "ทำไมไม่ <a href=\"action://app.new-project\">สร้างโครงการใหม่</a>?"
+
+#~ msgid "_Remove"
+#~ msgstr "_ลบ"
+
+#~ msgid "Click an item to select"
+#~ msgstr "คลิกรายการที่เลือก"
+
+#~ msgid "Open…"
+#~ msgstr "เปิด…"
+
+#~ msgid "Select projects for removal"
+#~ msgstr "เลือกโครงการสำหรับการลบ"
+
+#~ msgid "Return to project selection"
+#~ msgstr "กลับไปยังการเลือกโครงการ"
+
+#~ msgid "_Open Project"
+#~ msgstr "_เปิดโครงการ"
+
+#~ msgid "_Preferences"
+#~ msgstr "_ปรับแต่ง"
+
+#~ msgid "Keyboard _Shortcuts"
+#~ msgstr "ปุ่ม_ลัด"
+
+#~ msgid "_Help"
+#~ msgstr "_วิธีใช้"
+
+#~ msgid "_About"
+#~ msgstr "เ_กี่ยวกับ"
+
+#~ msgid "Save _All"
+#~ msgstr "บันทึก_ทั้งหมด"
+
+#~ msgid "You must call %s() before using libide."
+#~ msgstr "คุณต้อง call %s() ก่อนใช้ libide"
+
+#~ msgid "New file"
+#~ msgstr "แฟ้มใหม่"
+
+#~ msgid "New documentation"
+#~ msgstr "เอกสารใหม่"
+
+#~ msgid "Suggest words found in open files"
+#~ msgstr "แนะนำคำที่พบในแฟ้มที่เปิดอยู่"
+
+#~ msgid ""
+#~ "Suggests completions as you type based on words found in any open document"
+#~ msgstr "แนะนำการเติมเต็มขณะคุณพิมพ์จากคำที่พบในเอกสารใดที่เปิดอยู่"
+
+#~ msgid "Minimum word size"
+#~ msgstr "ขนาดของคำที่น้อยที่สุด"
+
+#~ msgid "Minimum word size for word completion"
+#~ msgstr "ขนาดของคำที่น้อยที่สุดสำหรับการเติมเต็มคำ"
+
+#~ msgid ""
+#~ "Create and manages a Ctags database for completing class names, "
+#~ "functions, and more"
+#~ msgstr "สร้างและจัดการฐานข้อมูลของ Ctags สำหรับการเติมเต็มชื่อคลาส, ฟังก์ชัน และอื่นๆ"
+
+#~ msgid "Suggest completions using Clang (Experimental)"
+#~ msgstr "แนะนำการเติมเต็มโดยใช้ Clang (ทดลอง)"
+
+#~ msgid "Code snippets"
+#~ msgstr "โค้ดสั้น"
+
+#~ msgid "Use code fragments to increase typing efficiency"
+#~ msgstr "ใช้บางส่วนของโค้ดเพื่อเพิ่มประสิทธิภาพการพิมพ์"
+
+#~ msgid "Failed to load file: %s: %s"
+#~ msgstr "โหลดแฟ้ม: %s: %s ไม่สำเร็จ"
+
+#~ msgid "Click to toggle breakpoint"
+#~ msgstr "คลิกเพื่อสลับจุดพัก"
+
+#~ msgid "Builder Word Completion"
+#~ msgstr "การเติมเต็มคำของ Builder"
+
+#~ msgid "Create"
+#~ msgstr "สร้าง"
+
+#~| msgid "Failed to retrieve va_list value: %s"
+#~ msgid "Failed to establish git file monitor: %s"
+#~ msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#~ msgid "Cannot load a non-native file in terminal"
+#~ msgstr "ไม่สามารถโหลดแฟ้มที่ไม่เป็นธรรมชาติในเทอร์มินัล"
+
+#~| msgid "Failed to retrieve va_list value: %s"
+#~ msgid "Failed to rename file: %s"
+#~ msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#~| msgid "Failed to retrieve va_list value: %s"
+#~ msgid "Failed to trash file: %s"
+#~ msgstr "อ่านค่า va_list: %s ไม่สำเร็จ"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Project tree"
+#~ msgstr "ลำดับชั้นของโครงการ"
+
+#~| msgid "Rename"
+#~ msgctxt "shortcut window"
+#~ msgid "Rename a file"
+#~ msgstr "เปลี่ยนชื่อ"
+
+#~ msgctxt "shortcut window"
+#~ msgid "Move a file to the trash"
+#~ msgstr "ย้ายแฟ้มไปถังขยะ"
+
+#~ msgid "Re_veal in Project Tree"
+#~ msgstr "แ_สดงในลำดับชั้นโครงการ"
+
+#~ msgid "_New"
+#~ msgstr "ใ_หม่"
+
+#~ msgid "_Empty File"
+#~ msgstr "แฟ้มเ_ปล่า"
+
+#~ msgid "_Build"
+#~ msgstr "_ประกอบสร้าง"
+
+#~ msgid "_Rebuild"
+#~ msgstr "ประกอบสร้าง_ซ้ำ"
+
+#~ msgid "_Collapse All Nodes"
+#~ msgstr "ยุ_บโหนดทั้งหมด"
+
+#~ msgid "_Refresh"
+#~ msgstr "เ_รียกใหม่"
+
+#~ msgid "Updated"
+#~ msgstr "ปรับข้อมูลแล้ว"
+
+#~ msgid "CPU"
+#~ msgstr "ซีพียู"
+
+#~ msgid "Open Profile"
+#~ msgstr "เปิดโพร์ไฟล์"
+
+#~ msgid "Cannot locate property %s in class %s"
+#~ msgstr "ไม่พบคุณสมบัติ %s ในคลาส %s"
+
+#~ msgid "Failed to find property %s in %s or parent %s"
+#~ msgstr "หาคุณสมบัติ %s ใน %s หรือแม่ %s ไม่สำเร็จ"
+
+#~ msgid "Just now"
+#~ msgstr "เดี๋ยวนี้"
+
+#~ msgid "An hour ago"
+#~ msgstr "ชั่วโมงก่อน"
+
+#~ msgid "Yesterday"
+#~ msgstr "เมื่อวานนี้"
+
+#~ msgid "About a year ago"
+#~ msgstr "ประมาณปีก่อน"
+
+#~ msgid "About %u year ago"
+#~ msgid_plural "About %u years ago"
+#~ msgstr[0] "ประมาณ %u ปีก่อน"
+
+#~ msgid "Select"
+#~ msgstr "เลือก"
+
+#~ msgid "Browse…"
+#~ msgstr "เรียกดู…"
