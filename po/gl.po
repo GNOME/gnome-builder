@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2024-08-24 12:49+0000\n"
-"PO-Revision-Date: 2024-09-02 23:37+0200\n"
+"PO-Revision-Date: 2024-09-02 23:44+0200\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -43,9 +43,8 @@ msgstr "Crear aplicacións para GNOME"
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
 #: src/libide/gui/ide-application-actions.c:168
-#| msgid "Christian Hergert, et al."
 msgid "Christian Hergert"
-msgstr "Christian Hergert"
+msgstr "Christian Hergert, e outros."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
@@ -344,7 +343,7 @@ msgstr "Se está activo, o editor mostrará os números de liña relativos."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 msgid "Use line selection styling"
-msgstr ""
+msgstr "Usar o estilo de selección de liña"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
@@ -670,13 +669,15 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
-msgstr ""
+msgstr "Raíz da caché"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:57
 msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 msgstr ""
+"Un directorio para usar a raíz para os datos de caché do proxecto como as "
+"contrucións e cartafoles de staging de flatpak"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -1502,7 +1503,7 @@ msgstr "Escriba para buscar"
 
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
-msgstr ""
+msgstr "Prefixe a súa consulta con un dos seguintes para filtrar os resultados"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -2641,7 +2642,7 @@ msgstr "Seguir o estilo do sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
-msgstr ""
+msgstr "Seguir o estilo do sistema ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
@@ -2661,7 +2662,7 @@ msgstr "Forzar o tema escuro ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
-msgstr ""
+msgstr "Cor de acento"
 
 #: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
 msgid "System"
@@ -2681,7 +2682,7 @@ msgstr "Usar a cor de acento azul ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
-msgstr ""
+msgstr "Verde azulado"
 
 #: src/plugins/buildui/gtk/menus.ui:203
 msgid "Use teal accent color when running the project"
@@ -2721,7 +2722,7 @@ msgstr "Usar a cor de acento vermello ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
-msgstr ""
+msgstr "Rosa"
 
 #: src/plugins/buildui/gtk/menus.ui:238
 msgid "Use pink accent color when running the project"
@@ -2729,7 +2730,7 @@ msgstr "Usar a cor de acento rosa ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
-msgstr ""
+msgstr "Púrpura"
 
 #: src/plugins/buildui/gtk/menus.ui:245
 msgid "Use purple accent color when running the project"
@@ -2753,7 +2754,7 @@ msgstr "Contraste alto"
 
 #: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
-msgstr ""
+msgstr "Usar o tema de contraste alto ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
@@ -2814,7 +2815,7 @@ msgstr "GL legado"
 
 #: src/plugins/buildui/gtk/menus.ui:312
 msgid "Use the legacy GL renderer when running the project"
-msgstr ""
+msgstr "Usar o renderizador GL legado ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
@@ -2822,7 +2823,7 @@ msgstr "Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:319
 msgid "Use the Cairo software renderer when running the project"
-msgstr ""
+msgstr "Usar o renderizador de software Cairo ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:328
 msgid "Request verbose logging when running the project"
@@ -2834,7 +2835,7 @@ msgstr "Mostrar Inspector"
 
 #: src/plugins/buildui/gtk/menus.ui:335
 msgid "Request the GTK inspector be shown when running the project"
-msgstr ""
+msgstr "Solicitar que se mostre o inspector de GTK ao executar o proxecto"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -2990,13 +2991,16 @@ msgstr "Almacenamento"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "Ficheiros de artefactos e de caché"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"Directorio usado para almacenar os artefactos de construción e os ficheiros "
+"de caché desde a pipeline de construción. Require reiniciar o Construtor "
+"para que tome efecto."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -3189,17 +3193,19 @@ msgstr "Produciuse un fallo ao formatar o documento con clang-format: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "Faltan os datos de clang-format ou están corrompidos"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "Posición do cursor non válida fornecida por clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
+"Non é posíbel atopar .clang-format, por favor engada un ao seu proxecto. "
+"USando o formatador de estilo de GNU de respaldo."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -4240,7 +4246,7 @@ msgstr "Realzar as liñas cambiadas ao carón do número de liña"
 
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Use Line Selection Styling"
-msgstr ""
+msgstr "Usar a liña de estilo de selección"
 
 #: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
@@ -4937,7 +4943,7 @@ msgstr "Buscar manuais…"
 
 #: src/plugins/manuals/gtk/menus.ui:8
 msgid "Search documentation for installed SDKs"
-msgstr "Buscar documentación para os SKDs instalados"
+msgstr "Buscar documentación para os SDKs instalados"
 
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
@@ -4954,7 +4960,7 @@ msgstr "Importando %s…"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:116
 msgid "Importing JHBuild Documentation"
-msgstr "Importando documentación de JHBuild"
+msgstr "Importar documentación de JHBuild"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:117
 msgid "Scanning jhbuild for new documentation"
@@ -4970,7 +4976,7 @@ msgstr "Importando documentación do sistema"
 
 #: src/plugins/manuals/manuals-system-importer.c:78
 msgid "Scanning system for new documentation"
-msgstr "Analizando o sistema por atopar nova documentación"
+msgstr "Analizando o sistema para atopar nova documentación"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
