@@ -1,6 +1,19 @@
-# GNOME Builder 47.beta
+# GNOME Builder 47.rc
 
 Changes since 47.beta
+
+ * Project template updates for recent platform changes
+ * Terminal styling and menuing improvements
+ * Builder now uses libspelling for spellcheck
+ * Various dialogs now use GtkFileDialog
+ * Jhbuild-based configurations will now automatically set
+   `--libdir=lib` for meson projects
+ * Misc deprecation warnings have been fixed
+ * Translation updates
+
+# GNOME Builder 47.beta
+
+Changes since 47.alpha
 
  * Resiliency fixes in xml-pack plugin
  * Bug fixes around use of AdwDialog
