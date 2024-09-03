@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-24 12:49+0000\n"
-"PO-Revision-Date: 2024-09-02 11:47+0200\n"
+"POT-Creation-Date: 2024-09-02 09:51+0000\n"
+"PO-Revision-Date: 2024-09-03 11:20+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -2640,136 +2640,108 @@ msgid "Follow System Style"
 msgstr "Seguir el estilo del sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:166
-#, fuzzy
-#| msgid "Options to use when bootstrapping the project"
 msgid "Follow the system style when running the project"
-msgstr "Opciones que usar al inicializar el proyecto"
+msgstr "Forzar estilo del sistema al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
 msgstr "Forzar modo claro"
 
 #: src/plugins/buildui/gtk/menus.ui:173
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force light theme when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Forzar tema claro al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr "Forzar modo oscuro"
 
 #: src/plugins/buildui/gtk/menus.ui:180
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force dark theme when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Forzar tema oscuro al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
-msgstr ""
+msgstr "Color de resaltado"
 
 #: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
 msgid "System"
 msgstr "Sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:189
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use system accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar color de resaltado del sistema al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
 msgstr "Azul"
 
 #: src/plugins/buildui/gtk/menus.ui:196
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use blue accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar azul como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
-msgstr ""
+msgstr "Verde azulado"
 
 #: src/plugins/buildui/gtk/menus.ui:203
-#, fuzzy
-#| msgid "The default license when creating new projects"
 msgid "Use teal accent color when running the project"
-msgstr "La licencia predeterminada que usar al crear proyectos nuevos"
+msgstr "Usar verde azulado como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
 msgstr "Verde"
 
 #: src/plugins/buildui/gtk/menus.ui:210
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use green accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar verde como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
 msgstr "Amarillo"
 
 #: src/plugins/buildui/gtk/menus.ui:217
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use yellow accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar amarillo como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
 msgstr "Naranja"
 
 #: src/plugins/buildui/gtk/menus.ui:224
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use orange accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar naranja como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
 msgstr "Rojo"
 
 #: src/plugins/buildui/gtk/menus.ui:231
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use red accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar rojo como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
 msgstr "Rosa"
 
 #: src/plugins/buildui/gtk/menus.ui:238
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use pink accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar rosa como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
 msgstr "Morado"
 
 #: src/plugins/buildui/gtk/menus.ui:245
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use purple accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar morado como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:248
-#, fuzzy
-#| msgid "Template"
 msgid "Slate"
-msgstr "Plantilla"
+msgstr "Color pizarra"
 
 #: src/plugins/buildui/gtk/menus.ui:252
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use slate accent color when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar verde azulado como color de resaltado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
@@ -2780,10 +2752,8 @@ msgid "High Contrast"
 msgstr "Contraste alto"
 
 #: src/plugins/buildui/gtk/menus.ui:262
-#, fuzzy
-#| msgid "Options to use when bootstrapping the project"
 msgid "Use high contrast theme when running the project"
-msgstr "Opciones que usar al inicializar el proyecto"
+msgstr "Usar tema de contraste alto al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
@@ -2794,20 +2764,16 @@ msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
 #: src/plugins/buildui/gtk/menus.ui:271
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force left-to-right text when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Forzar texto de izquierda a derecha al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
 #: src/plugins/buildui/gtk/menus.ui:278
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force right-to-left text when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Forzar texto de derecha a izquierda al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:283
 msgid "GPU"
@@ -3031,7 +2997,7 @@ msgstr "Almacenamiento"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "Artefactos y archivos en caché"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
@@ -4981,7 +4947,7 @@ msgstr "Buscar manuales…"
 
 #: src/plugins/manuals/gtk/menus.ui:8
 msgid "Search documentation for installed SDKs"
-msgstr ""
+msgstr "Buscar documentación para SDK instalados"
 
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
@@ -4998,11 +4964,11 @@ msgstr "Importando %s…"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:116
 msgid "Importing JHBuild Documentation"
-msgstr ""
+msgstr "Importando documentación de JHBuild"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:117
 msgid "Scanning jhbuild for new documentation"
-msgstr ""
+msgstr "Analizando JHBuild en busca de documentación nueva"
 
 #: src/plugins/manuals/manuals-sdk.c:282
 msgid "GNOME Nightly"
@@ -5010,11 +4976,11 @@ msgstr "GNOME Nightly"
 
 #: src/plugins/manuals/manuals-system-importer.c:77
 msgid "Importing System Documentation"
-msgstr ""
+msgstr "Importando documentación del sistema"
 
 #: src/plugins/manuals/manuals-system-importer.c:78
 msgid "Scanning system for new documentation"
-msgstr ""
+msgstr "Analizando sistema en busca de documentación nueva"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
@@ -5126,7 +5092,7 @@ msgstr "Moverse y seleccionar el resultado de búsqueda anterior"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "Cargar introspección de Meson"
 
