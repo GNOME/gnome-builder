@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-30 10:35+0000\n"
-"PO-Revision-Date: 2024-08-31 12:15+0300\n"
+"POT-Creation-Date: 2024-09-02 06:56+0000\n"
+"PO-Revision-Date: 2024-09-04 11:18+0300\n"
 "Last-Translator: Davide Ferracin <davide.ferracin@protonmail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -356,8 +356,8 @@ msgid ""
 "If enabled, the editor will use selected style for line numbers for whole "
 "lines selected."
 msgstr ""
-"Se abilitata, l'editor userà per le righe intere selezionate "
-"lo stile scelto per i numeri di riga."
+"Se abilitata, l'editor userà per le righe intere selezionate lo stile scelto "
+"per i numeri di riga."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/plugins/editorui/tweaks.ui:495
@@ -2683,11 +2683,11 @@ msgstr "Esegue il progetto con il colore d'accento di sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
-msgstr "Blu"
+msgstr "Azzurro"
 
 #: src/plugins/buildui/gtk/menus.ui:196
 msgid "Use blue accent color when running the project"
-msgstr "Esegue il progetto con il colore d'accento blu"
+msgstr "Esegue il progetto con il colore d'accento azzurro"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
