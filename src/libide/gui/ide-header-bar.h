@@ -63,5 +63,7 @@ const char *ide_header_bar_get_menu_id (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_header_bar_set_menu_id (IdeHeaderBar *self,
                                         const char   *menu_id);
+IDE_AVAILABLE_IN_47
+void        ide_header_bar_setup_menu  (GtkPopoverMenu *popover);
 
 G_END_DECLS

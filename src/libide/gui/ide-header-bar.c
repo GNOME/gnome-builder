@@ -42,6 +42,7 @@ enum {
   PROP_0,
   PROP_MENU_ID,
   PROP_SHOW_END_TITLE_BUTTONS,
+  PROP_SHOW_MENU,
   N_PROPS
 };
 
@@ -85,6 +86,10 @@ ide_header_bar_get_property (GObject    *object,
       g_value_set_boolean (value, adw_header_bar_get_show_end_title_buttons (priv->header_bar));
       break;
 
+    case PROP_SHOW_MENU:
+      g_value_set_boolean (value, gtk_widget_get_visible (GTK_WIDGET (priv->menu_button)));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -107,6 +112,10 @@ ide_header_bar_set_property (GObject      *object,
 
     case PROP_SHOW_END_TITLE_BUTTONS:
       adw_header_bar_set_show_end_title_buttons (priv->header_bar, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_MENU:
+      gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), g_value_get_boolean (value));
       break;
 
     default:
@@ -133,6 +142,12 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
 
   properties [PROP_SHOW_END_TITLE_BUTTONS] =
     g_param_spec_boolean ("show-end-title-buttons", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SHOW_MENU] =
+    g_param_spec_boolean ("show-menu", NULL, NULL,
                           TRUE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
@@ -207,6 +222,24 @@ menu_has_custom (GMenuModel *model,
   return FALSE;
 }
 
+void
+ide_header_bar_setup_menu (GtkPopoverMenu *popover)
+{
+  GMenuModel *model;
+
+  g_return_if_fail (GTK_IS_POPOVER_MENU (popover));
+
+  if (!(model = gtk_popover_menu_get_menu_model (popover)))
+    return;
+
+  if (menu_has_custom (model, "theme_selector"))
+    gtk_popover_menu_add_child (popover,
+                                g_object_new (PANEL_TYPE_THEME_SELECTOR,
+                                              "action-name", "app.style-variant",
+                                              NULL),
+                                "theme_selector");
+}
+
 /**
  * ide_header_bar_set_menu_id:
  * @self: a #IdeHeaderBar
@@ -235,12 +268,7 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
       gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), !ide_str_empty0 (menu_id));
 
       popover = gtk_menu_button_get_popover (priv->menu_button);
-      if (menu_has_custom (G_MENU_MODEL (menu), "theme_selector"))
-        gtk_popover_menu_add_child (GTK_POPOVER_MENU (popover),
-                                    g_object_new (PANEL_TYPE_THEME_SELECTOR,
-                                                  "action-name", "app.style-variant",
-                                                  NULL),
-                                    "theme_selector");
+      ide_header_bar_setup_menu (GTK_POPOVER_MENU (popover));
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }

@@ -26,15 +26,22 @@
             <property name="top-edge">
               <object class="IdeHeaderBar" id="header_bar">
                 <property name="menu-id">ide-primary-workspace-menu</property>
+                <binding name="show-menu">
+                  <closure function="invert_boolean" type="gboolean">
+                    <lookup name="reveal-start">dock</lookup>
+                  </closure>
+                </binding>
                 <binding name="show-end-title-buttons">
                   <closure function="invert_boolean" type="gboolean">
                     <lookup name="reveal-end">dock</lookup>
                   </closure>
                 </binding>
-                <child type="left">
-                  <object class="GtkMenuButton" id="add_button">
-                    <property name="icon-name">list-add-symbolic</property>
-                    <property name="always-show-arrow">true</property>
+                <child type="right">
+                  <object class="GtkButton" id="search_button_in_content">
+                    <property name="action-name">context.workbench.global-search</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                    <property name="margin-start">6</property>
+                    <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
                     <binding name="visible">
                       <closure function="invert_boolean" type="gboolean">
                         <lookup name="reveal-start">dock</lookup>
@@ -47,6 +54,12 @@
                     <property name="dock">dock</property>
                     <property name="area">start</property>
                     <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
+                  </object>
+                </child>
+                <child type="left">
+                  <object class="GtkMenuButton" id="add_button">
+                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="always-show-arrow">true</property>
                   </object>
                 </child>
                 <child type="title">
@@ -84,19 +97,6 @@
                     <property name="tooltip-text" translatable="yes">Toggle Right Panel</property>
                   </object>
                 </child>
-                <child type="right">
-                  <object class="GtkButton" id="search_button">
-                    <property name="action-name">context.workbench.global-search</property>
-                    <property name="icon-name">edit-find-symbolic</property>
-                    <property name="margin-start">6</property>
-                    <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
-                    <binding name="visible">
-                      <closure function="invert_boolean" type="gboolean">
-                        <lookup name="reveal-start">dock</lookup>
-                      </closure>
-                    </binding>
-                  </object>
-                </child>
               </object>
             </property>
           </object>
@@ -127,16 +127,15 @@
               <object class="AdwHeaderBar">
                 <property name="show-end-title-buttons">false</property>
                 <child type="start">
-                  <object class="GtkMenuButton" id="sidebar_add_button">
-                    <property name="icon-name">list-add-symbolic</property>
-                    <property name="always-show-arrow">true</property>
-                  </object>
-                </child>
-                <child type="end">
                   <object class="GtkButton">
                     <property name="action-name">context.workbench.global-search</property>
                     <property name="icon-name">edit-find-symbolic</property>
                     <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkMenuButton" id="sidebar_menu_button">
+                    <property name="icon-name">open-menu-symbolic</property>
                   </object>
                 </child>
                 <child type="title">
