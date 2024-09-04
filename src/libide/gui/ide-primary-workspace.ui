@@ -40,7 +40,6 @@
                   <object class="GtkButton" id="search_button_in_content">
                     <property name="action-name">context.workbench.global-search</property>
                     <property name="icon-name">edit-find-symbolic</property>
-                    <property name="margin-start">6</property>
                     <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>
                     <binding name="visible">
                       <closure function="invert_boolean" type="gboolean">
