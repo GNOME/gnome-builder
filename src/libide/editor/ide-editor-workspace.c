@@ -43,6 +43,7 @@ struct _IdeEditorWorkspace
   IdeHeaderBar       *header_bar;
   AdwWindowTitle     *project_title;
   GtkMenuButton      *add_button;
+  GtkMenuButton      *sidebar_menu_button;
   PanelStatusbar     *statusbar;
   IdeWorkspaceDock    dock;
 };
@@ -325,6 +326,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, project_title);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, sidebar_menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, statusbar);
   gtk_widget_class_bind_template_callback (widget_class, _ide_workspace_adopt_widget);
   gtk_widget_class_bind_template_callback (widget_class, invert_boolean);
@@ -343,12 +345,19 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
 static void
 ide_editor_workspace_init (IdeEditorWorkspace *self)
 {
+  GtkPopover *popover;
   GMenu *menu;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
   gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
+
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-workspace-menu");
+  gtk_menu_button_set_menu_model (self->sidebar_menu_button, G_MENU_MODEL (menu));
+
+  popover = gtk_menu_button_get_popover (self->sidebar_menu_button);
+  ide_header_bar_setup_menu (GTK_POPOVER_MENU (popover));
 }
 
 /**
