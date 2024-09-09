@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-05-17 17:13+0000\n"
-"PO-Revision-Date: 2024-05-17 19:32+0200\n"
+"POT-Creation-Date: 2024-09-09 11:26+0000\n"
+"PO-Revision-Date: 2024-09-09 16:18+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:40
-#: src/libide/editor/ide-editor-workspace.ui:63
+#: src/libide/editor/ide-editor-workspace.ui:45
+#: src/libide/editor/ide-editor-workspace.ui:87
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -32,14 +32,12 @@ msgid "Builder"
 msgstr "Builder"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
-#, fuzzy
-#| msgid "A calendar application for GNOME"
-msgid "Create Applications for GNOME"
-msgstr "Kalendářová aplikace pro GNOME"
+msgid "Create applications for GNOME"
+msgstr "Vytvářejte aplikace pro GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#| msgid "Christian Hergert, et al."
+#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -142,31 +140,31 @@ msgstr "Podpora zobrazení úkolů (TODO) nalezených v rámci zdrojových kód�
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Rychlé vyhledávání s odhady napříč soubory a symboly"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
-msgid "Quickly access your projects"
-msgstr "Rychlý přístup k vašim projektům"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
-msgid "Create new projects from a variety of templates"
-msgstr "Vytváření nových projektů z různorodých šablon"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
-msgid "Integration with Git to clone your projects"
-msgstr "Integrace se systémem Git pro rychlé klonování projektů"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
-msgid "The source code editor"
-msgstr "Editor zdrojového kódu"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
-msgid "Fast global fuzzy search"
-msgstr "Rychlé globální hledání s odhady"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
 msgid "Debug with the GNU debugger"
 msgstr "Ladění pomocí ladicího programu GNU"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+msgid "Quickly access your projects"
+msgstr "Rychlý přístup k vašim projektům"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+msgid "Create new projects from a variety of templates"
+msgstr "Vytváření nových projektů z různorodých šablon"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+msgid "Integration with Git to clone your projects"
+msgstr "Integrace se systémem Git pro rychlé klonování projektů"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+msgid "The source code editor"
+msgstr "Editor zdrojového kódu"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+msgid "Fast global fuzzy search"
+msgstr "Rychlé globální hledání s odhady"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
 msgstr "Použití minimapy, aby byl přehled o větší části souboru"
 
@@ -338,11 +336,23 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Když je zapnuto, bude editor zobrazovat relativní čísla řádků."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+msgid "Use line selection styling"
+msgstr "Použít styl výběru řádku"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+msgstr ""
+"Když je zapnuto, editor použije vybraný styl pro čísla řádků pro celé "
+"vybrané řádky."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "Chytrý Backspace"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
@@ -350,92 +360,92 @@ msgstr ""
 "Backspace bude odstraňovat nadbytečné mezery, aby zůstalo zachováno "
 "zarovnání podle velikosti odsazení."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr "Chytrý Home/End"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
 msgstr "Mění chování kláves Home a End."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr "Zobrazovat mřížku"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr ""
 "Když je zapnuto, bude editor v dokumentu na pozadí řádků zobrazovat mřížku."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr "Pravidla přehledové mapy"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr "Kdy by měla být zobrazena přehledová mapa."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "Vykreslovat bílé znaky"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr ""
 "Různé typy bílých znaků, které se mají v editoru viditelně vykreslovat."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Zalamovat text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 "Způsob, jakým se mají zalamovat dlouhé řádky textu pro lepší viditelnost."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "Automatické ukládání povoleno"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Zapne nebo vypne funkci automatického ukládání."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "Četnost automatického ukládání"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Počet sekund od provedení nějaké změny, než dojde k automatickému uložení."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Počet řádků v dokončování"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr ""
 "Počet řádků, které je možné nabídnou uživateli ve funkci dokončování slov."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Výška řádku"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "Výška řádku, jaká se má používat pro vybraný font."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "Interaktivní dokončování"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -443,30 +453,30 @@ msgstr ""
 "Když je zapnuto, bude Builder automaticky zobrazovat návrhy na dokončení "
 "toho, co zrovna píšete."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
 msgstr "Minimální počet znaků pro výběr shody"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Určuje minimální počet znaků, od kterého se začnou vybírat shody."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "Povolit úryvky"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
 "Povolit rozbalování úryvků z editoru pomocí klávesy tab po spuštění úryvků."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "Vybrat první položku dokončování"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "Automaticky vybrat první položku v automatickém dokončování."
 
@@ -638,7 +648,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Jaké se má používat prostředí při běhu jednotkových testů."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:252 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Podrobné záznamy"
 
@@ -646,16 +656,6 @@ msgstr "Podrobné záznamy"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr "Zda se má při spouštění cílové aplikace používat G_MESSAGES_DEBUG=all."
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:56
-msgid "Cache Root"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.project.gschema.xml:57
-msgid ""
-"A directory to use as the root for cache data of the project like builds and "
-"flatpak staging directories"
-msgstr ""
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -690,8 +690,7 @@ msgstr ""
 "Když je zapnuto, budou se v projektovém stromě řadit složky před soubory."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
-#: src/plugins/spellcheck/editor-spell-menu.c:250
+#: src/plugins/editorui/tweaks.ui:387
 msgid "Check Spelling"
 msgstr "Zkontrolovat pravopis"
 
@@ -726,7 +725,7 @@ msgstr "Klonovat repozitář"
 msgid "New Editor Workspace"
 msgstr "Nová pracovní plocha editoru"
 
-#: src/libide/code/ide-buffer.c:3838
+#: src/libide/code/ide-buffer.c:3755
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -764,26 +763,23 @@ msgstr "Selhalo uložení konceptu: %s"
 msgid "Untitled"
 msgstr "Bez názvu"
 
-#: src/libide/core/ide-global.c:512 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
 msgstr "Projekty"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:528
-#: src/libide/greeter/ide-greeter-workspace.c:666
+#: src/libide/greeter/ide-greeter-workspace.c:524
+#: src/libide/greeter/ide-greeter-workspace.c:662
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -792,7 +788,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Nezdařilo se najít vhodný ladicí program."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1560
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
@@ -807,7 +803,7 @@ msgstr "Předvolby"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -957,28 +953,11 @@ msgstr "Selhal tisk: %s"
 msgid "Failed to format selection: %s"
 msgstr "Selhalo naformátování výběru: %s"
 
-#: src/libide/editor/ide-editor-page.c:1136
-#: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:101
+#: src/libide/editor/ide-editor-page.c:1139
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "Uložení souboru"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
-msgid "Save"
-msgstr "Uložit"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-msgid "Cancel"
-msgstr "Zrušit"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
@@ -1026,37 +1005,20 @@ msgstr "Roz_lišovat velikost písmen"
 msgid "Match Whole Words"
 msgstr "Shoda jen celých slov"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "Unix/Linux (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "Klasický Mac OS (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "Windows (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "Automaticky zjistit"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "Kódování znaků:"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "Zakončení řádků:"
-
-#: src/libide/editor/ide-editor-utils.c:270
+#: src/libide/editor/ide-editor-utils.c:140
 #: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "Jazyk"
 
-#: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:114
+#: src/libide/editor/ide-editor-workspace.ui:52
+#: src/libide/editor/ide-editor-workspace.ui:82
+#: src/libide/gui/ide-primary-workspace.ui:43
+#: src/libide/gui/ide-primary-workspace.ui:132
+msgid "Search (Ctrl+Enter)"
+msgstr "Hledat (Ctrl+Enter)"
+
+#: src/libide/editor/ide-editor-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:116
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Přepnout spodní panel (Ctrl+F9)"
 
@@ -1070,17 +1032,17 @@ msgstr "Selhala inicializace sestavovací sekvence: %s"
 msgid "Failed to get device information: %s"
 msgstr "Selhalo získání informací o zařízení: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
+#: src/libide/foundry/ide-config-manager.c:539
 msgid "Active Configuration"
 msgstr "Aktivní konfigurace"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, c-format
 msgid "Configuration %s changed"
 msgstr "Konfigurace %s byla změněna"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1090,7 +1052,7 @@ msgstr ""
 "nesprávná"
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "Aktivní konfigurace nastavena na „%s“"
@@ -1229,12 +1191,12 @@ msgid "Preparing…"
 msgstr "Připravuje se…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3772
+#: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
 msgstr "Odstraňuje se %s"
 
-#: src/libide/foundry/ide-pipeline.c:3831
+#: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
 msgstr "Odstraňují se složky pro sestavení…"
 
@@ -1253,50 +1215,50 @@ msgid "Unit Test"
 msgstr "Jednotkový test"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:187
+#: src/libide/foundry/ide-run-manager.c:190
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Uživatel požádal o spuštění nástroje „%s“"
 
-#: src/libide/foundry/ide-run-manager.c:567
+#: src/libide/foundry/ide-run-manager.c:592
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: src/libide/foundry/ide-run-manager.c:846
+#: src/libide/foundry/ide-run-manager.c:890
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplikace skončila s chybou: %s"
 
-#: src/libide/foundry/ide-run-manager.c:849
+#: src/libide/foundry/ide-run-manager.c:893
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Aplikace skončila"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1083
 #, c-format
 msgid "Running %s…"
 msgstr "Běží %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1105
+#: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
 msgstr "Nasazuje se do zařízení…"
 
-#: src/libide/foundry/ide-run-manager.c:1334
+#: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
 msgstr "Uživatel zažádal o spuštění aplikace"
 
-#: src/libide/foundry/ide-run-manager.c:1366
+#: src/libide/foundry/ide-run-manager.c:1411
 msgid "User requested application to restart"
 msgstr "Uživatel zažádal o restart aplikace"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1396
+#: src/libide/foundry/ide-run-manager.c:1441
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Uživatel požádal o spuštění aplikace pomocí nástroje „%s“"
 
-#: src/libide/foundry/ide-run-manager.c:1416
+#: src/libide/foundry/ide-run-manager.c:1461
 msgid "User requested application to stop"
 msgstr "Uživatel zažádal o zastavení aplikace"
 
@@ -1339,8 +1301,8 @@ msgid "_Clone Repository…"
 msgstr "_Klonovat repozitář…"
 
 #: src/libide/greeter/gtk/menus.ui:22
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:426
 #: src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Zavřít"
@@ -1366,49 +1328,48 @@ msgid "Directory"
 msgstr "Složka"
 
 #: src/libide/greeter/ide-greeter-workspace.c:222
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:334
+#: src/libide/greeter/ide-greeter-workspace.c:333
 msgid "Failed to load the project"
 msgstr "Selhalo načtení projektu"
 
-#: src/libide/greeter/ide-greeter-workspace.c:336
-#: src/plugins/create-project/gbp-create-project-widget.c:262
+#: src/libide/greeter/ide-greeter-workspace.c:335
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:521
 msgid "Delete Project Sources?"
 msgstr "Smazat zdrojové kódy projektu?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:526
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 "Smazání zdrojových kódů projektu z vašeho počítače není možné vrátit zpět."
 
-#: src/libide/greeter/ide-greeter-workspace.c:529
+#: src/libide/greeter/ide-greeter-workspace.c:525
 msgid "_Delete Project Sources"
 msgstr "Smazat z_drojové kódy projektu"
 
-#: src/libide/greeter/ide-greeter-workspace.c:623
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:619
+#: src/libide/greeter/ide-greeter-workspace.c:658
 msgid "Select Project Folder"
 msgstr "Výběr projektové složky"
 
-#: src/libide/greeter/ide-greeter-workspace.c:628
+#: src/libide/greeter/ide-greeter-workspace.c:624
 msgid "Select Project File"
 msgstr "Výběr projektového souboru"
 
-#: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1563
+#: src/libide/greeter/ide-greeter-workspace.c:663
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:674
 msgid "All Project Types"
 msgstr "Všechny typy projektů"
 
@@ -1452,23 +1413,6 @@ msgstr "Selhalo vyhledání vlastnosti %s v %s"
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Selhalo získání hodnoty z va_list: %s"
 
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "Otevřít"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Select"
-msgstr "Vybrat"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "Procházet…"
-
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
 msgstr "Cesta k souboru neexistuje"
@@ -1511,7 +1455,7 @@ msgstr[1] "zhruba před %u roky"
 msgstr[2] "zhruba před %u roky"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "Na_instalovat"
 
@@ -1532,14 +1476,13 @@ msgid "Search for anything"
 msgstr "hledat cokoliv"
 
 #: src/libide/gui/ide-search-popover.ui:74
-#, fuzzy
-#| msgid "Search"
 msgid "Type to Search"
-msgstr "Hledat"
+msgstr "vyhledávejte psaním"
 
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
+"Chcete-li filtrovat výsledky, uveďte před dotaz jeden z následujících výrazů"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -1549,16 +1492,12 @@ msgid "Files"
 msgstr "Soubory"
 
 #: src/libide/gui/ide-search-popover.ui:110
-#, fuzzy
-#| msgid "_Symbols"
 msgid "Symbols"
-msgstr "_Symboly"
+msgstr "Symboly"
 
 #: src/libide/gui/ide-search-popover.ui:131
-#, fuzzy
-#| msgid "Document Navigation"
 msgid "Documentation"
-msgstr "Pohyb mezi dokumenty"
+msgstr "Dokumentace"
 
 #: src/libide/gui/ide-search-popover.ui:152
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
@@ -1622,10 +1561,6 @@ msgstr "Terminál"
 #: src/libide/gui/gtk/menus.ui:84
 msgid "New Terminals"
 msgstr "Nový terminál"
-
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr "Christian Hergert a spol."
 
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
@@ -1703,19 +1638,14 @@ msgstr "Nezdařilo se načíst HTML. Schází podpora knihovny WebKit."
 msgid "Invalid configuration"
 msgstr "Neplatná konfigurace"
 
-#: src/libide/gui/ide-primary-workspace.ui:46
+#: src/libide/gui/ide-primary-workspace.ui:55
 msgid "Toggle Left Panel (F9)"
 msgstr "Přepnout levý panel (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:81
+#: src/libide/gui/ide-primary-workspace.ui:96
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Přepnout pravý panel"
-
-#: src/libide/gui/ide-primary-workspace.ui:89
-#: src/libide/gui/ide-primary-workspace.ui:136
-msgid "Search (Ctrl+Enter)"
-msgstr "Hledat (Ctrl+Enter)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1744,17 +1674,21 @@ msgstr "Spustit projekt"
 msgid "Other"
 msgstr "Ostatní"
 
-#: src/libide/gui/ide-workbench.c:1076
+#: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
 msgstr "Projektu byl načten"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
 msgstr "Načítá se projekt „%s“"
 
-#: src/libide/gui/ide-workspace.c:1689
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "Otevřít"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
 msgstr "Existují neuložené dokumenty"
 
@@ -1781,6 +1715,8 @@ msgstr[1] "Instalují se %u balíčky"
 msgstr[2] "Instaluje se %u balíčků"
 
 #: src/libide/lsp/ide-lsp-client.c:169
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
+#, c-format
 msgid "The operation has been cancelled"
 msgstr "Operace byla zrušena"
 
@@ -1799,13 +1735,13 @@ msgid "No LSP client connection is available"
 msgstr "Není k dispozici žádné připojení klienta LSP"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "Jazykový server „%s“ byl ukončen"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "Jazykový server „%s“ byl spuštěň jako proces %s"
@@ -2067,33 +2003,40 @@ msgstr ""
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: src/libide/terminal/ide-terminal.c:538
-#: src/libide/terminal/ide-terminal.c:571
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "Zkopírováno do schránky"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
 
-#: src/libide/terminal/ide-terminal-page.c:118
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "Uložit"
+
+#: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Selhalo spuštění podřízeného procesu. Možná budete muset svůj projekt znovu "
 "sestavit."
 
-#: src/libide/terminal/ide-terminal-page.c:123
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
 msgstr "Nepojmenovaný terminál"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
 msgstr "Ukončeno"
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Spouštěč podřízeného procesu selhal příliš rychle, nebude spuštěn znovu."
@@ -2127,7 +2070,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:829
+#: src/libide/terminal/ide-terminal-palettes.h:882
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2209,9 +2152,17 @@ msgstr "<i>Načátá se</i>"
 msgid "Empty"
 msgstr "prázdné"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
 msgstr "Složka s projekty"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "Vybrat"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2231,7 +2182,7 @@ msgid "unversioned"
 msgstr "neverzováno"
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "žádný"
 
@@ -2322,16 +2273,11 @@ msgstr "Zkopírovat"
 msgid "Remove"
 msgstr "Odstranit"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:104
-msgid "_Save"
-msgstr "_Uložit"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "Výpis ze sestavení"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Výpis ze sestavení (Shift+Ctrl+L)"
 
@@ -2352,7 +2298,7 @@ msgid "Missing"
 msgstr "Schází"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
 msgid "Branch"
 msgstr "Větev"
 
@@ -2489,7 +2435,6 @@ msgid "Make configuration active and reload build pipeline"
 msgstr "Nastavit konfiguraci jako aktivní a znovu načíst sestavovací sekvenci"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "Smazat"
 
@@ -2670,132 +2615,200 @@ msgstr "Řídit se stylem systému"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
-msgstr ""
+msgstr "Při běhu projektu dodržovat systémový styl"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
 msgstr "Vynutit světlý"
 
 #: src/plugins/buildui/gtk/menus.ui:173
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force light theme when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Při běhu projektu vynutit světlý motiv"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr "Vynutit tmavý"
 
 #: src/plugins/buildui/gtk/menus.ui:180
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Force dark theme when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Při běhu projektu vynutit tmavý motiv"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:183
+msgid "Accent Color"
+msgstr "Barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "Systém"
+
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Use system accent color when running the project"
+msgstr "Při běhu projektu použít barevný odstín systému"
+
+#: src/plugins/buildui/gtk/menus.ui:192
+msgid "Blue"
+msgstr "modrá"
+
+#: src/plugins/buildui/gtk/menus.ui:196
+msgid "Use blue accent color when running the project"
+msgstr "Při běhu projektu použít modrý barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:199
+msgid "Teal"
+msgstr "modrozelená"
+
+#: src/plugins/buildui/gtk/menus.ui:203
+msgid "Use teal accent color when running the project"
+msgstr "Při běhu projektu použít modrozelený barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:206
+msgid "Green"
+msgstr "zelená"
+
+#: src/plugins/buildui/gtk/menus.ui:210
+msgid "Use green accent color when running the project"
+msgstr "Při běhu projektu použít zelený barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:213
+msgid "Yellow"
+msgstr "žlutá"
+
+#: src/plugins/buildui/gtk/menus.ui:217
+msgid "Use yellow accent color when running the project"
+msgstr "Při běhu projektu použít žlutý barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:220
+msgid "Orange"
+msgstr "oranžová"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Use orange accent color when running the project"
+msgstr "Při běhu projektu použít oranžový barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:227
+msgid "Red"
+msgstr "červená"
+
+#: src/plugins/buildui/gtk/menus.ui:231
+msgid "Use red accent color when running the project"
+msgstr "Při běhu projektu použít červený barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:234
+msgid "Pink"
+msgstr "růžová"
+
+#: src/plugins/buildui/gtk/menus.ui:238
+msgid "Use pink accent color when running the project"
+msgstr "Při běhu projektu použít růžový barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:241
+msgid "Purple"
+msgstr "fialová"
+
+#: src/plugins/buildui/gtk/menus.ui:245
+msgid "Use purple accent color when running the project"
+msgstr "Při běhu projektu použít fialový barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:248
+msgid "Slate"
+msgstr "břidlicová"
+
+#: src/plugins/buildui/gtk/menus.ui:252
+msgid "Use slate accent color when running the project"
+msgstr "Při běhu projektu použít břidlicový barevný odstín"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
 msgstr "Zpřístupnění"
 
-#: src/plugins/buildui/gtk/menus.ui:186
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "High Contrast"
 msgstr "Vysoký kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
-msgstr ""
+msgstr "Při běhu projektu použít motiv s vysokým kontrastem"
 
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
 msgstr "Směr textu"
 
-#: src/plugins/buildui/gtk/menus.ui:194
+#: src/plugins/buildui/gtk/menus.ui:267
 msgid "Left-to-Right"
 msgstr "Zleva doprava"
 
-#: src/plugins/buildui/gtk/menus.ui:198
-#, fuzzy
-#| msgid "Stop running the project"
+#: src/plugins/buildui/gtk/menus.ui:271
 msgid "Force left-to-right text when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Při běhu projektu vynutit text zleva doprava"
 
-#: src/plugins/buildui/gtk/menus.ui:201
+#: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
 msgstr "Zprava doleva"
 
-#: src/plugins/buildui/gtk/menus.ui:205
-#, fuzzy
-#| msgid "Stop running the project"
+#: src/plugins/buildui/gtk/menus.ui:278
 msgid "Force right-to-left text when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Při běhu projektu vynutit text zprava doleva"
 
-#: src/plugins/buildui/gtk/menus.ui:210
+#: src/plugins/buildui/gtk/menus.ui:283
 msgid "GPU"
-msgstr ""
+msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:212
+#: src/plugins/buildui/gtk/menus.ui:285
 msgid "GTK Renderer"
-msgstr ""
+msgstr "Vykreslování GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:214 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Výchozí"
 
-#: src/plugins/buildui/gtk/menus.ui:218
-#, fuzzy
-#| msgid "The default license when creating new projects"
+#: src/plugins/buildui/gtk/menus.ui:291
 msgid "Use the default GTK renderer when running the project"
-msgstr "Výchozí licence pro nově vytvářené projekty"
+msgstr "Při běhu projektu použít výchozí vykreslování GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:294
 msgid "Vulkan"
-msgstr ""
+msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:225
-#, fuzzy
-#| msgid "The default license when creating new projects"
+#: src/plugins/buildui/gtk/menus.ui:298
 msgid "Use the Vulkan renderer when running the project"
-msgstr "Výchozí licence pro nově vytvářené projekty"
+msgstr "Při běhu projektu použít vykreslování Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:228
+#: src/plugins/buildui/gtk/menus.ui:301
 msgid "GL"
-msgstr ""
+msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:232
-#, fuzzy
-#| msgid "Stop running the project"
+#: src/plugins/buildui/gtk/menus.ui:305
 msgid "Use the GL renderer when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Při běhu projektu použít vykreslování GL"
 
-#: src/plugins/buildui/gtk/menus.ui:235
+#: src/plugins/buildui/gtk/menus.ui:308
 msgid "Legacy GL"
-msgstr ""
+msgstr "Starší verze GL"
 
-#: src/plugins/buildui/gtk/menus.ui:239
+#: src/plugins/buildui/gtk/menus.ui:312
 msgid "Use the legacy GL renderer when running the project"
-msgstr ""
+msgstr "Při běhu projektu použít starší vykreslování GL"
 
-#: src/plugins/buildui/gtk/menus.ui:242
+#: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
-msgstr ""
+msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:246
+#: src/plugins/buildui/gtk/menus.ui:319
 msgid "Use the Cairo software renderer when running the project"
-msgstr ""
+msgstr "Při běhu projektu použít softwarové vykreslování Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:255
-#, fuzzy
-#| msgid "Stop running the project"
+#: src/plugins/buildui/gtk/menus.ui:328
 msgid "Request verbose logging when running the project"
-msgstr "Zastavit běžící projekt"
+msgstr "Vyžádat si podrobné záznamy při běhu projektu"
 
-#: src/plugins/buildui/gtk/menus.ui:259
+#: src/plugins/buildui/gtk/menus.ui:332
 msgid "Show Inspector"
 msgstr "Zobrazit inspektora"
 
-#: src/plugins/buildui/gtk/menus.ui:262
+#: src/plugins/buildui/gtk/menus.ui:335
 msgid "Request the GTK inspector be shown when running the project"
-msgstr ""
+msgstr "Požádat, aby se při běhu projektu zobrazil inspektor GTK"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -2942,20 +2955,21 @@ msgid "Build & Tooling"
 msgstr "Sestavování a nástroje"
 
 #: src/plugins/buildui/tweaks.ui:185
-#, fuzzy
-#| msgid "Storage I/O"
 msgid "Storage"
-msgstr "V/V úložiště"
+msgstr "Úložiště"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "Vygenerovaná data a soubory v mezipaměti"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"Adresář používaný pro ukládání vygenerovaných dat sestavení a souborů "
+"uložených v mezipaměti ze sestavovací sekvence. Aby se projevil, vyžaduje "
+"restartování Builderu."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -2968,7 +2982,7 @@ msgstr "Mazat prošlé"
 #: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
-"Při spuštění Builderu smazat vygenerovaná data, kterým vyprešela platnost."
+"Při spuštění Builderu smazat vygenerovaná data, kterým vypršela platnost."
 
 #: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
@@ -3136,16 +3150,14 @@ msgstr ""
 "Při dokončování podle návrhů Clangu vkládat parametry a informace o typu."
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, fuzzy, c-format
-#| msgid "Failed to get device information: %s"
+#, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr "Selhalo získání informací o zařízení: %s"
+msgstr ""
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, fuzzy, c-format
-#| msgid "Failed to format while saving document: %s"
+#, c-format
 msgid "clang-format failed to format document: %s"
-msgstr "Selhalo naformátování při ukládání dokumentu: %s"
+msgstr ""
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
@@ -3154,6 +3166,14 @@ msgstr ""
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
 msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Nelze najít .clang-format, přidejte jej prosím do svého projektu. Používá se "
+"záložní formátovací nástroj ve stylu GNU."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3256,12 +3276,12 @@ msgstr "Činnosti s kódem"
 msgid "_Apply"
 msgstr "_Použít"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
 msgid "Loading…"
 msgstr "Načítá se…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
 msgid "No code actions available"
 msgstr "Nejsou k dispozici žádné činnosti s kódem"
 
@@ -3269,15 +3289,15 @@ msgstr "Nejsou k dispozici žádné činnosti s kódem"
 msgid "Code Action Failure"
 msgstr "Činnost s kódem selhala"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
 msgid "Symbol Not Selected"
 msgstr "Není vybrán symbol"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
 msgstr "Musí být vybrán symbol, který se má přejmenovat"
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
 msgstr "Hledání odkazů"
@@ -3305,12 +3325,12 @@ msgstr "Přejmenování symbolu"
 msgid "_Rename"
 msgstr "_Přejmenovat"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
-msgid "Current Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
+msgid "Current Symbol Name"
 msgstr "Současný název symbolu"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
-msgid "New Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:24
+msgid "New Symbol Name"
 msgstr "Nový název symbolu"
 
 #: src/plugins/codeui/gtk/menus.ui:7
@@ -3391,12 +3411,12 @@ msgstr "Přeformátovat prototypy funkcí"
 msgid "Display the project creation guide"
 msgstr "Zobrazit průvodce vytvořením projektu"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "Výběr umístění"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:260
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
 msgstr "Selhalo vytvoření projektu"
 
@@ -3423,10 +3443,8 @@ msgstr ""
 "by začínat číslicí."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
-#, fuzzy
-#| msgid "Application ID…"
 msgid "Application ID"
-msgstr "ID aplikace…"
+msgstr "ID aplikace"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
@@ -3776,7 +3794,7 @@ msgstr "Inspektor D-Bus…"
 msgid "Dub Run"
 msgstr "dub run"
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "Nebyl poskytnut žádný soubor."
 
@@ -3806,13 +3824,13 @@ msgstr "Prostý text"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "Mezery"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "Tabulátory"
 
@@ -3898,7 +3916,7 @@ msgstr "Otevřít v novém rámu"
 msgid "Open in New Workspace…"
 msgstr "Otevřít v nové pracovní ploše…"
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
@@ -4025,7 +4043,7 @@ msgid "The desired maximum line length"
 msgstr "Požadovaná maximální délka řádku"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "Chování"
 
@@ -4186,23 +4204,31 @@ msgstr "Zobrazovat změny řádků"
 msgid "Highlight changed lines next to the line number"
 msgstr "Zvýraznit změněné řádky vedle čísla řádku"
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+msgid "Use Line Selection Styling"
+msgstr "Použít styl výběru řádku"
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr "Pokud je vybrán celý řádek, použít styl výběru pro čísla řádků"
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "Zvýrazňovat"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "Zvýrazňovat aktuální řádek"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "Aktuální řádek odlišit pomocí zvýraznění"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "Zvýrazňovat související závorky"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4210,11 +4236,11 @@ msgstr ""
 "Používat pozici kurzoru ke zvýraznění souvisejících závorek (kulatých, "
 "hranatých, složených) a dalších věcí"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "Zvýrazňovat sémantiku"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4222,180 +4248,180 @@ msgstr ""
 "Používat informace o symbolech ke zvýrazňování jmenných prostorů, funkcí a "
 "proměnných ve zdrojovém kódu"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "Vykreslovat značky představující normální mezery"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "Vykreslovat značky představující tabulátory"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "Odřádkování"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "Vykreslovat značky představující konce řádků"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "Nezalomitelné mezery"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Vykreslovat značky představující nezalomitelné mezery"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Leading"
 msgstr "Úvodní"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr "Vykreslovat značky jen pro úvodní mezery"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "Uvnitř textu"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr "Vykreslovat značky jen uvnitř řádků s textem"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "Koncové"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr "Vykreslovat značky jen pro koncové mezery"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "Pravopis"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Podtrhávat během psaní možné pravopisné chyby"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "Výběry"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr "Minimální počet znaků pro zvýrazňování"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr "Minimální délka výběru než se začne zvýrazňovat shoda"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "Úryvky"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr "Rozbalovat úryvky"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "Používat „Tab“ v editoru k rozbalování nastavených úryvků"
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
 msgstr "Dokončování kódu"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:441
 msgid "Completion Proposals"
 msgstr "Návrhy pro dokončování"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr "Navrhovat dokončení kódu"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr "Během psaní automaticky navrhovat dokončení kódu"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr "Vybírat první z návrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Po zobrazení automaticky vybrat první z navrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr "Maximum navrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
 "Maximální počet řádků s návrhy pro dokončení, které je možné zobrazit naráz"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "Pohyb"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backspace bude odstraňovat nadbytečnou mezeru, aby zůstalo zachováno "
 "zarovnání podle vašeho odsazení."
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr "Přesun na první nebílý znak"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr "Před hranicí řádku"
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr "Za hranicí řádku"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr "Místo hranice řádku"
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Zakázáno"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "Správa sezení"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "Ukládání a obnovování"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "Automatické ukládání"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr "Během psaní dokument pravidelně ukládat"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "Četnost automatického ukládání"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Doba v sekundách, po kterou se čeká, než se provede automatické uložení"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr "Přeformátovat při ukládání"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4403,11 +4429,11 @@ msgstr ""
 "Při ukládání na disk přeformátovat zdrojový kód. Předpokladem je "
 "zaregistrovaný formátovací nástroj pro daný jazyk."
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr "Obnovovat umístění kurzoru"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr "Při opětovném otevření souboru skočit na poslední pozici"
 
@@ -4428,7 +4454,7 @@ msgid "Installation complete"
 msgstr "Instalace je dokončena"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:460
-#: src/plugins/git/gbp-git-client.c:398
+#: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "Klient byl uzavřen"
 
@@ -4441,11 +4467,11 @@ msgstr "Selhalo odstranění manifestu flatpaku: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Síť není dostupná, přeskakuje se stahování"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
 msgstr "Nainstalovat nebo aktualizovat SDK?"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
@@ -4453,16 +4479,14 @@ msgstr ""
 "Aby bylo možné váš projekt sestavit, potřebuje Builder nainstalovat "
 "následující sadu pro vývoj softwaru."
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
 msgid "Name"
 msgstr "Název"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 msgid "Architecture"
 msgstr "Architektura"
 
@@ -4577,10 +4601,6 @@ msgstr "GNOME Builder"
 msgid "User"
 msgstr "Uživatel"
 
-#: src/plugins/flatpak/tweaks.ui:34
-msgid "System"
-msgstr "Systém"
-
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4602,11 +4622,6 @@ msgstr "Nebyl nastaven žádný obsah pro hledání rozdílů"
 msgid "The operation failed. The original error was \"%s\""
 msgstr "Operace selhala. Původní chybové hlášení je „%s“"
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
-#, c-format
-msgid "The operation has been canceled"
-msgstr "Operace byla zrušena"
-
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
@@ -4614,12 +4629,12 @@ msgid ""
 "repository."
 msgstr "Builder nebyl schopen předat pověření během klonování repozitáře."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Nezdařilo se nastavit příznaky AMEND a GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Nelze podepsat zařazení do gitu bez GPG_KEY_ID"
@@ -4629,12 +4644,12 @@ msgstr "Nelze podepsat zařazení do gitu bez GPG_KEY_ID"
 msgid "Cannot monitor files outside the working directory"
 msgstr "Nelze sledovat soubory mimo pracovní složku"
 
-#: src/plugins/git/gbp-git-client.c:171
+#: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
 msgstr "Integrace Gitu byla spuštěna jako proces %s"
 
-#: src/plugins/git/gbp-git-client.c:195
+#: src/plugins/git/gbp-git-client.c:208
 msgid "Git integration has exited"
 msgstr "Integrace Gitu byla ukončena"
 
@@ -4654,20 +4669,20 @@ msgstr "Inicializace „git submodules“"
 msgid "Network is not available, skipping submodule update"
 msgstr "Síť není dostupná, přeskakuje se aktualizace submodulu"
 
-#: src/plugins/git/gbp-git-vcs.c:228
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr "Posláno."
 
-#: src/plugins/git/gbp-git-vcs.c:266
+#: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr "Posílá se větev „%s“"
 
-#: src/plugins/git/gbp-git-vcs.c:532
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr "Složka není součástí repozitáře"
 
-#: src/plugins/git/gbp-git-vcs.c:560
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "Git"
 
@@ -4733,6 +4748,14 @@ msgstr "_Hledat v %s"
 #, c-format
 msgid "_Replace in %s"
 msgstr "Nah_radit v %s"
+
+#: src/plugins/grep/gbp-grep-panel.c:851
+msgid "Find in Project"
+msgstr "Hledat v projektu"
+
+#: src/plugins/grep/gbp-grep-panel.c:852
+msgid "Replace in Project"
+msgstr "Nahradit v projektu"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -4854,67 +4877,59 @@ msgstr "Vytvořit nový prázdný projekt používající jednoduchý Makefile"
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
 #: src/plugins/manuals/manuals-navigatable.c:391
 msgid "Manuals"
-msgstr ""
+msgstr "Manuály"
 
 #: src/plugins/manuals/gbp-manuals-panel.ui:174
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:116
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#: src/plugins/todo/gbp-todo-panel.ui:102
+#: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter…"
 msgstr "Filtr…"
 
 #: src/plugins/manuals/gbp-manuals-search-result.c:215
-#, fuzzy
-#| msgid "Document Navigation"
 msgid "Open Documentation"
-msgstr "Pohyb mezi dokumenty"
+msgstr "Otevřít dokumentaci"
 
 #: src/plugins/manuals/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Search…"
 msgid "Search Manuals…"
-msgstr "Hledat…"
+msgstr "Prohledat manuály…"
 
 #: src/plugins/manuals/gtk/menus.ui:8
 msgid "Search documentation for installed SDKs"
-msgstr ""
+msgstr "Prohledat dokumentaci k nainstalovaným SDK"
 
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
 #: src/plugins/manuals/manuals-keyword.c:526
-#, fuzzy, c-format
-#| msgid "_Find in %s"
+#, c-format
 msgid "View in %s"
-msgstr "_Hledat v %s"
+msgstr "Zobrazit v %s"
 
 #. Note to the user we're importing this book
 #: src/plugins/manuals/manuals-devhelp-importer.c:697
-#, fuzzy, c-format
-#| msgid "Exporting…"
+#, c-format
 msgid "Importing %s…"
-msgstr "Exportuje se…"
+msgstr "Importuje se %s…"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:116
 msgid "Importing JHBuild Documentation"
-msgstr ""
+msgstr "Import dokumentace JHBuild"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:117
 msgid "Scanning jhbuild for new documentation"
-msgstr ""
+msgstr "Skenování jhbuild pro novou dokumentaci"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#, fuzzy
-#| msgid "GNOME Builder"
 msgid "GNOME Nightly"
-msgstr "GNOME Builder"
+msgstr "Noční sestavení GNOME"
 
 #: src/plugins/manuals/manuals-system-importer.c:77
 msgid "Importing System Documentation"
-msgstr ""
+msgstr "Import systémové dokumentace"
 
 #: src/plugins/manuals/manuals-system-importer.c:78
 msgid "Scanning system for new documentation"
-msgstr ""
+msgstr "Skenování systému pro novou dokumentaci"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
@@ -5026,7 +5041,7 @@ msgstr "Přejít na a vybrat předchozí výsledek hledání"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "Načtení introspekce Meson"
 
@@ -5043,134 +5058,75 @@ msgstr "Vývojové prostředí mezipaměti"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr "Není poskytován žádný nástroj"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr "Název pro rozlišení systémového kořene."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr "Systémová architektura systémového kořenu."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "Přidat nástroj:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "Kompilátor"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr "Preprocesor"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "Archivátor"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr "Linker"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr "Striper"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr "Nadstavbu programu"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr "Konfigurátor balíčků"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "Libovolný jazyk"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "Python"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "Vala"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr "Fortran"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-msgid "D"
-msgstr "D"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "Přidat nástroj"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr "Odebrat sadu nástrojů"
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr "Odebrat nástroj"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "Kompilátor"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "Preprocesor"
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "Archivátor"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "Linker"
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "Striper"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "Nadstavbu programu"
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "Konfigurátor balíčků"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "Aplikace GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Projekt pro GNOME založený na GTK 4 a libadwaita používající Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
 msgstr "Aplikace GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr "Projekt založený na GTK 4 používající Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
 msgstr "Projekt sdílené knihovny používající Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr "Nástroj příkazové řádky"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr "Projekt programu pro příkazovou řádku používající Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
 msgstr "Prázdný projekt používající Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
 msgstr "Kostra prázeného projektu používajícího Meson"
 
@@ -5653,7 +5609,7 @@ msgstr "Nepojmenovaný příkaz"
 msgid "Set Shortcut"
 msgstr "Nastavení klávesové zkratky"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
 msgstr "Výběr pracovní složky"
 
@@ -5855,22 +5811,6 @@ msgid ""
 msgstr ""
 "Motiv klávesových zkratek poskytuje stejnou práci s klávesnicí jak jste "
 "zvyklí v jiném IDE nebo editoru."
-
-#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-msgid "Enchant 2"
-msgstr "Enchant 2"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:248
-msgid "Add to Dictionary"
-msgstr "Přidat do slovníku"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:249
-msgid "Ignore"
-msgstr "Ignorovat"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "Jazyky"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
@@ -6234,7 +6174,7 @@ msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "Maximální počet řádků uchovávaných v historii, když je posun zpět omezen"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
 msgstr "Výstup jednotkových testů"
 
@@ -6257,7 +6197,6 @@ msgid "Running all unit tests at %s"
 msgstr "Spouští se všechny jednotkové testy v %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr "Jednotkové testy dokončeny během %lf sekund"
 
@@ -6418,7 +6357,7 @@ msgstr "Při ukončení hledat úniky paměti"
 msgid "Begin cloning project from URI"
 msgstr "Začít klonovat projekt z URI"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "Došlo k selhání během klonování repozitáře."
 
@@ -6508,44 +6447,34 @@ msgid "Focus the current page's location"
 msgstr "Zaměřit adresu aktuální stránky"
 
 #: src/plugins/web-browser/gtk/menus.ui:43
-#, fuzzy
-#| msgid "Web Browsing"
 msgid "_Web Browser"
-msgstr "Procházení webů"
+msgstr "_Webový prohlížeč"
 
 #: src/plugins/web-browser/gtk/menus.ui:54
-#, fuzzy
-#| msgid "Stop Building"
 msgid "Stop Loading"
-msgstr "Zastavit sestavování"
+msgstr "Zastavit načítání"
 
 #: src/plugins/web-browser/gtk/menus.ui:60
-#, fuzzy
-#| msgid "Reload Page"
 msgid "Reload"
-msgstr "Znovu načíst stránku"
+msgstr "Znovu načíst"
 
 #: src/plugins/web-browser/gtk/menus.ui:69
-#, fuzzy
-#| msgid "_Find in Project"
 msgid "_Find in Page"
-msgstr "_Hledat v projektu"
+msgstr "_Najít na stránce"
 
 #: src/plugins/web-browser/gtk/menus.ui:77
 msgid "Print"
 msgstr "Tisk"
 
 #: src/plugins/web-browser/gtk/menus.ui:85
-#, fuzzy
-#| msgid "JavaScript"
 msgid "Enable _JavaScript"
-msgstr "JavaScript"
+msgstr "Povolit _JavaScript"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
 msgstr "Selhalo zpracování dokumentu XML"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
@@ -6553,6 +6482,91 @@ msgstr "Selhalo vytvoření stromu XML"
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
+
+#~ msgid "Cancel"
+#~ msgstr "Zrušit"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "Unix/Linux (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "Klasický Mac OS (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "Windows (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "Automaticky zjistit"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "Kódování znaků:"
+
+#~ msgid "Line Ending:"
+#~ msgstr "Zakončení řádků:"
+
+#~ msgid "Browse…"
+#~ msgstr "Procházet…"
+
+#~ msgid "Christian Hergert, et al."
+#~ msgstr "Christian Hergert a spol."
+
+#~ msgid "_Save"
+#~ msgstr "_Uložit"
+
+#, c-format
+#~ msgid "The operation has been canceled"
+#~ msgstr "Operace byla zrušena"
+
+#~ msgid "No Provided Tool"
+#~ msgstr "Není poskytován žádný nástroj"
+
+#~ msgid "A name to identify the sysroot."
+#~ msgstr "Název pro rozlišení systémového kořene."
+
+#~ msgid "The system architecture of the sysroot."
+#~ msgstr "Systémová architektura systémového kořenu."
+
+#~ msgid "Add Tool:"
+#~ msgstr "Přidat nástroj:"
+
+#~ msgid "Any language"
+#~ msgstr "Libovolný jazyk"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Vala"
+#~ msgstr "Vala"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Add Tool"
+#~ msgstr "Přidat nástroj"
+
+#~ msgid "Delete Toolchain"
+#~ msgstr "Odebrat sadu nástrojů"
+
+#~ msgid "Enchant 2"
+#~ msgstr "Enchant 2"
+
+#~ msgid "Add to Dictionary"
+#~ msgstr "Přidat do slovníku"
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorovat"
+
+#~ msgid "Languages"
+#~ msgstr "Jazyky"
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "IDE pro GNOME"
