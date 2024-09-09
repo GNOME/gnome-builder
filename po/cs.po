@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-09-09 11:26+0000\n"
-"PO-Revision-Date: 2024-09-09 16:18+0200\n"
+"POT-Creation-Date: 2024-09-09 14:22+0000\n"
+"PO-Revision-Date: 2024-09-09 16:46+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -656,6 +656,18 @@ msgstr "Podrobné záznamy"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr "Zda se má při spouštění cílové aplikace používat G_MESSAGES_DEBUG=all."
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:56
+msgid "Cache Root"
+msgstr "Kořenový adresář mezipaměti"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:57
+msgid ""
+"A directory to use as the root for cache data of the project like builds and "
+"flatpak staging directories"
+msgstr ""
+"Adresář, který se má použít jako kořenový pro data mezipaměti projektu, jako "
+"jsou sestavení a výsledné složky flatpak"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
