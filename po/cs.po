@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-05-17 17:12+0000\n"
-"PO-Revision-Date: 2024-05-17 19:36+0200\n"
+"POT-Creation-Date: 2024-08-04 18:13+0000\n"
+"PO-Revision-Date: 2024-09-09 16:08+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
@@ -37,7 +37,6 @@ msgstr "IDE pro GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#| msgid "Christian Hergert, et al."
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -1777,13 +1776,13 @@ msgid "No LSP client connection is available"
 msgstr "Není k dispozici žádné připojení klienta LSP"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "Jazykový server „%s“ byl ukončen"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "Jazykový server „%s“ byl spuštěň jako proces %s"
@@ -2045,8 +2044,8 @@ msgstr ""
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: src/libide/terminal/ide-terminal.c:538
-#: src/libide/terminal/ide-terminal.c:571
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "Zkopírováno do schránky"
 
@@ -2870,7 +2869,7 @@ msgstr "Mazat prošlé"
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
-"Při spuštění Builderu smazat vygenerovaná data, kterým vyprešela platnost."
+"Při spuštění Builderu smazat vygenerovaná data, kterým vypršela platnost."
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
@@ -6095,7 +6094,6 @@ msgid "Running all unit tests at %s"
 msgstr "Spouští se všechny jednotkové testy v %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr "Jednotkové testy dokončeny během %lf sekund"
 
