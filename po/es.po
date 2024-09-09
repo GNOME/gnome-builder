@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-09-02 09:51+0000\n"
-"PO-Revision-Date: 2024-09-03 11:20+0200\n"
+"POT-Creation-Date: 2024-09-03 09:22+0000\n"
+"PO-Revision-Date: 2024-09-09 12:40+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -342,15 +342,15 @@ msgstr "Si se activa, el editor mostrará los números de línea relativos."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 msgid "Use line selection styling"
-msgstr ""
+msgstr "Usar estilo de selección de línea"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
-#, fuzzy
-#| msgid "If enabled, the editor will show relative line numbers."
 msgid ""
 "If enabled, the editor will use selected style for line numbers for whole "
 "lines selected."
-msgstr "Si se activa, el editor mostrará los números de línea relativos."
+msgstr ""
+"Si se activa, el editor usará el estilo seleccionado para los números de "
+"línea en todas las líneas seleccionadas."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/plugins/editorui/tweaks.ui:495
@@ -670,13 +670,15 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
-msgstr ""
+msgstr "Caché raíz"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:57
 msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 msgstr ""
+"Una carpeta que usar como raíz para los datos de caché del proyecto, como "
+"compilaciones y carpetas de preparación de flatpak"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -1501,6 +1503,8 @@ msgstr "Escribir para buscar"
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
+"Anteponga a su consulta uno de los siguientes elementos para filtrar los "
+"resultados"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -2789,30 +2793,24 @@ msgid "Default"
 msgstr "Predeterminado"
 
 #: src/plugins/buildui/gtk/menus.ui:291
-#, fuzzy
-#| msgid "The default license when creating new projects"
 msgid "Use the default GTK renderer when running the project"
-msgstr "La licencia predeterminada que usar al crear proyectos nuevos"
+msgstr "Usar el renderizador GTK predeterminado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:294
 msgid "Vulkan"
 msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:298
-#, fuzzy
-#| msgid "The default license when creating new projects"
 msgid "Use the Vulkan renderer when running the project"
-msgstr "La licencia predeterminada que usar al crear proyectos nuevos"
+msgstr "Usar el renderizador Vulkan al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:301
 msgid "GL"
 msgstr "GL"
 
 #: src/plugins/buildui/gtk/menus.ui:305
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use the GL renderer when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Usar el renderizador GL al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:308
 msgid "Legacy GL"
@@ -2820,7 +2818,7 @@ msgstr "GL heredado"
 
 #: src/plugins/buildui/gtk/menus.ui:312
 msgid "Use the legacy GL renderer when running the project"
-msgstr ""
+msgstr "Usar el renderizador GL heredado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
@@ -2828,13 +2826,11 @@ msgstr "Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:319
 msgid "Use the Cairo software renderer when running the project"
-msgstr ""
+msgstr "Usar el renderizador software Cairo al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:328
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Request verbose logging when running the project"
-msgstr "Detener la ejecución del proyecto"
+msgstr "Solicitar registro detallado al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:332
 msgid "Show Inspector"
@@ -2842,7 +2838,7 @@ msgstr "Mostrar el inspector"
 
 #: src/plugins/buildui/gtk/menus.ui:335
 msgid "Request the GTK inspector be shown when running the project"
-msgstr ""
+msgstr "Solicitar que se muestre el inspector GTK al ejecutar el proyecto"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -3004,6 +3000,9 @@ msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"Carpeta utilizada para almacenar artefactos de compilación y archivos en "
+"caché del flujo de trabajo de compilación. Requiere reiniciar Builder para "
+"que surta efecto."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -3186,30 +3185,30 @@ msgstr ""
 "Clang"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, fuzzy, c-format
-#| msgid "Failed to get device information: %s"
+#, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr "Falló al obtener la información del dispositivo: %s"
+msgstr "Falló al ejecutar clang-format: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, fuzzy, c-format
-#| msgid "Failed to format while saving document: %s"
+#, c-format
 msgid "clang-format failed to format document: %s"
-msgstr "Falló al formatear cuando se guardaba el documento : %s"
+msgstr "clang-format falló al formatear el documento: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "Datos faltantes o corruptos de clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "Posición de cursor no válida proporcionada por clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
+"No se puede encontrar .clang-format, agregue uno a su proyecto. Usando "
+"formateador estilo GNU como alternativa."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -4250,11 +4249,13 @@ msgstr "Resaltar líneas modificadas junto al número de línea"
 
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Use Line Selection Styling"
-msgstr ""
+msgstr "Usar el estilo de selección de línea"
 
 #: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr ""
+"Usar el estilo de selección para los números de línea si se selecciona toda "
+"la línea"
 
 #: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
