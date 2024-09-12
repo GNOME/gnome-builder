@@ -127,9 +127,8 @@ ide_tree_expander_update_icon (IdeTreeExpander *self)
 }
 
 static void
-ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
-                                      GParamSpec      *pspec,
-                                      GtkTreeListRow  *list_row)
+ide_tree_expander_update_expanded_state (IdeTreeExpander *self,
+                                         GtkTreeListRow  *list_row)
 {
   gboolean expanded;
 
@@ -138,10 +137,24 @@ ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
 
   ide_tree_expander_update_icon (self);
 
-  expanded = gtk_tree_list_row_get_expanded (list_row);
-  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
-                               GTK_ACCESSIBLE_STATE_EXPANDED, expanded,
-                               -1);
+  if (gtk_tree_list_row_is_expandable (list_row))
+    {
+      expanded = gtk_tree_list_row_get_expanded (list_row);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_STATE_EXPANDED, expanded,
+                                  -1);
+    }
+}
+
+static void
+ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
+                                      GParamSpec      *pspec,
+                                      GtkTreeListRow  *list_row)
+{
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (GTK_IS_TREE_LIST_ROW (list_row));
+
+  ide_tree_expander_update_expanded_state (self, list_row);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED]);
 }
@@ -744,6 +757,8 @@ ide_tree_expander_clear_list_row (IdeTreeExpander *self)
       gtk_widget_unparent (child);
       child = prev;
     }
+
+    gtk_accessible_reset_state (GTK_ACCESSIBLE (self), GTK_ACCESSIBLE_STATE_EXPANDED);
 }
 
 void
@@ -770,7 +785,7 @@ ide_tree_expander_set_list_row (IdeTreeExpander *self,
                                  self,
                                  G_CONNECT_SWAPPED);
       ide_tree_expander_update_depth (self);
-      ide_tree_expander_update_icon (self);
+      ide_tree_expander_update_expanded_state (self, list_row);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LIST_ROW]);

@@ -991,7 +991,7 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
 static void
 ide_tree_list_item_unbind_cb (IdeTree                  *self,
                               GtkListItem              *item,
-                              GtkSignalListItemFactory *factory)
+                                GtkSignalListItemFactory *factory)
 {
   g_autoptr(IdeTreeNode) node = NULL;
   IdeTreeExpander *expander;
