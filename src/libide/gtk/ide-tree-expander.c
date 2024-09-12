@@ -435,6 +435,10 @@ ide_tree_expander_class_init (IdeTreeExpanderClass *klass)
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
 
   gtk_widget_class_install_action (widget_class, "listitem.toggle-expand", NULL, ide_tree_expander_toggle_expand);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_space, GDK_CONTROL_MASK, "listitem.toggle-expand", NULL);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TREE_ITEM);
 }
 
 static void
@@ -475,6 +479,8 @@ ide_tree_expander_init (IdeTreeExpander *self)
                            self,
                            G_CONNECT_SWAPPED);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 }
 
 GtkWidget *
