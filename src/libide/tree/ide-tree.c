@@ -939,6 +939,8 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
   g_assert (GTK_IS_LIST_ITEM (item));
   g_assert (GTK_IS_SIGNAL_LIST_ITEM_FACTORY (factory));
 
+  gtk_list_item_set_focusable (item, FALSE);
+
   row = GTK_TREE_LIST_ROW (gtk_list_item_get_item (item));
   expander = IDE_TREE_EXPANDER (gtk_list_item_get_child (item));
   node = gtk_tree_list_row_get_item (row);
@@ -989,7 +991,7 @@ ide_tree_list_item_bind_cb (IdeTree                  *self,
 static void
 ide_tree_list_item_unbind_cb (IdeTree                  *self,
                               GtkListItem              *item,
-                              GtkSignalListItemFactory *factory)
+                                GtkSignalListItemFactory *factory)
 {
   g_autoptr(IdeTreeNode) node = NULL;
   IdeTreeExpander *expander;
