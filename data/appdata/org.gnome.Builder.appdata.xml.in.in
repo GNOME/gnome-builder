@@ -114,7 +114,7 @@
   </supports>
 
   <releases>
-    <release version="47~beta" date="2024-08-04"/>
+    <release version="47.0" date="2024-09-13"/>
   </releases>
 
   <content_rating type="oars-1.1" />
