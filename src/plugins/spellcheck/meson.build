@@ -13,7 +13,7 @@ plugin_spellcheck_resources = gnome.compile_resources(
 )
 
 plugins_deps += [
-  dependency('libspelling-1'),
+  dependency('libspelling-1', version: '>= 0.3'),
 ]
 
 plugins_sources += plugin_spellcheck_resources
