@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-10 14:55+0000\n"
-"PO-Revision-Date: 2024-08-22 18:48+0300\n"
+"POT-Creation-Date: 2024-09-15 18:04+0000\n"
+"PO-Revision-Date: 2024-09-17 14:36+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -23,8 +23,8 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:40
-#: src/libide/editor/ide-editor-workspace.ui:63
+#: src/libide/editor/ide-editor-workspace.ui:45
+#: src/libide/editor/ide-editor-workspace.ui:87
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -134,31 +134,31 @@ msgstr "תמיכה בהצגת רשימת משימות (TODO) הנמצאות בב
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "חיפוש מקיף מהיר בכל הקבצים והסמלים"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
-msgid "Quickly access your projects"
-msgstr "גישה מהיר למיזמים שלך"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
-msgid "Create new projects from a variety of templates"
-msgstr "יצירת מיזם חדש ממנעד של תבניות"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
-msgid "Integration with Git to clone your projects"
-msgstr "שילוב עם Git לשיבוט המיזם שלך"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
-msgid "The source code editor"
-msgstr "עורך קוד המקור"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
-msgid "Fast global fuzzy search"
-msgstr "חיפוש מקיף מהיר"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
 msgid "Debug with the GNU debugger"
 msgstr "ניפוי שגיאות באמצעות מנפה השגיאות של גנו (gdb)"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+msgid "Quickly access your projects"
+msgstr "גישה מהיר למיזמים שלך"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+msgid "Create new projects from a variety of templates"
+msgstr "יצירת מיזם חדש ממנעד של תבניות"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+msgid "Integration with Git to clone your projects"
+msgstr "שילוב עם Git לשיבוט המיזם שלך"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+msgid "The source code editor"
+msgstr "עורך קוד המקור"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+msgid "Fast global fuzzy search"
+msgstr "חיפוש מקיף מהיר"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
 msgstr "שימוש במפת סקירה כדי לראות עוד מהקובץ"
 
@@ -778,15 +778,12 @@ msgstr "מיזמים"
 #: src/libide/greeter/ide-greeter-workspace.c:662
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_ביטול"
 
@@ -795,7 +792,7 @@ msgid "A suitable debugger could not be found."
 msgstr "לא נמצא מנפה שגיאות מתאים."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1560
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
 msgstr "פתיחת קובץ…"
 
@@ -961,28 +958,11 @@ msgstr "ארע כשל בהדפסה: %s"
 msgid "Failed to format selection: %s"
 msgstr "נכשל בעיצוב הבחירה: %s"
 
-#: src/libide/editor/ide-editor-page.c:1136
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:101
+#: src/libide/editor/ide-editor-page.c:1139
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "שמירת קובץ"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
-msgid "Save"
-msgstr "שמירה"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-msgid "Cancel"
-msgstr "ביטול"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
@@ -1031,37 +1011,20 @@ msgstr "תלוי _רישיות"
 msgid "Match Whole Words"
 msgstr "התאמה למילים שלמות"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "יוניקס/לינוקס (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "‏Mac OS קלאסי (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "חלונות (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "זיהוי אוטומטי"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "קידוד תווים:"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "סיום שורה:"
-
-#: src/libide/editor/ide-editor-utils.c:270
+#: src/libide/editor/ide-editor-utils.c:140
 #: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "שפה"
 
-#: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:117
+#: src/libide/editor/ide-editor-workspace.ui:52
+#: src/libide/editor/ide-editor-workspace.ui:82
+#: src/libide/gui/ide-primary-workspace.ui:43
+#: src/libide/gui/ide-primary-workspace.ui:132
+msgid "Search (Ctrl+Enter)"
+msgstr "חיפוש (Ctrl+Enter)"
+
+#: src/libide/editor/ide-editor-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:116
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "הצגת לוח תחתון (Ctrl+F9)"
 
@@ -1075,17 +1038,17 @@ msgstr "ארע כשל באתחול צינורית הבנייה: %s"
 msgid "Failed to get device information: %s"
 msgstr "ארע כשל בקבלת מידע על ההתקן: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
+#: src/libide/foundry/ide-config-manager.c:539
 msgid "Active Configuration"
 msgstr "תצורה פעילה"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, c-format
 msgid "Configuration %s changed"
 msgstr "התצורה %s שונתה"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1094,7 +1057,7 @@ msgstr ""
 "איתור תצורת הבנייה „%s” נכשל. יתכן והוא אינו תקין או כתוב בצורה לא טובה."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "תצורה פעילה נקבעה ל־„%s”"
@@ -1371,7 +1334,7 @@ msgid "Directory"
 msgstr "תיקייה"
 
 #: src/libide/greeter/ide-greeter-workspace.c:222
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "‏Builder - ‏‎%s"
@@ -1381,7 +1344,7 @@ msgid "Failed to load the project"
 msgstr "טעינת המיזם נכשלה"
 
 #: src/libide/greeter/ide-greeter-workspace.c:335
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_סגירה"
@@ -1408,7 +1371,6 @@ msgid "Select Project File"
 msgstr "בחירת קובץ מיזם"
 
 #: src/libide/greeter/ide-greeter-workspace.c:663
-#: src/libide/gui/ide-workbench.c:1563
 msgid "_Open"
 msgstr "_פתיחה"
 
@@ -1455,23 +1417,6 @@ msgstr "מציאת התכונה %s ב־%s נכשלה"
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "נכשל בהחזרת ערך va_list: %s"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "פתיחה"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Select"
-msgstr "בחירה"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "עיון…"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
@@ -1704,19 +1649,14 @@ msgstr "לא ניתן לטעון HTML. חסרה תמיכה ב־WebKit."
 msgid "Invalid configuration"
 msgstr "תצורה לא תקינה"
 
-#: src/libide/gui/ide-primary-workspace.ui:49
+#: src/libide/gui/ide-primary-workspace.ui:55
 msgid "Toggle Left Panel (F9)"
 msgstr "הצגת לוח ימני (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:84
+#: src/libide/gui/ide-primary-workspace.ui:96
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "הצגת לוח שמאלי"
-
-#: src/libide/gui/ide-primary-workspace.ui:92
-#: src/libide/gui/ide-primary-workspace.ui:139
-msgid "Search (Ctrl+Enter)"
-msgstr "חיפוש (Ctrl+Enter)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1745,18 +1685,22 @@ msgstr "הרצת מיזם"
 msgid "Other"
 msgstr "אחר"
 
-#: src/libide/gui/ide-workbench.c:1076
+#: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
 msgstr "מיזם נטען"
 
 # כריית מיזמים
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
 msgstr "המיזם „%s” בטעינה"
 
-#: src/libide/gui/ide-workspace.c:1688
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "פתיחה"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
 msgstr "ישנם מסמכים שלא נשמרו"
 
@@ -2076,9 +2020,16 @@ msgstr "_ניקוי בחירה"
 msgid "Copied to clipboard"
 msgstr "הועתק ללוח הגזירים"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "שמירת תוכן המסוף בשם"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "שמירה"
 
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
@@ -2128,7 +2079,7 @@ msgid "Linux"
 msgstr "לינוקס"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:829
+#: src/libide/terminal/ide-terminal-palettes.h:882
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2210,9 +2161,17 @@ msgstr "<i>בטעינה</i>"
 msgid "Empty"
 msgstr "ריק"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
 msgstr "תיקיית המיזמים"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "בחירה"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2323,16 +2282,11 @@ msgstr "העתקה"
 msgid "Remove"
 msgstr "הסרה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
-#: src/plugins/testui/gbp-testui-output-panel.c:104
-msgid "_Save"
-msgstr "_שמירה"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "פלט בנייה"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:397
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "פלט בנייה (Shift+Ctrl+L)"
 
@@ -2493,7 +2447,6 @@ msgid "Make configuration active and reload build pipeline"
 msgstr "הפיכת התצורה לפעילה וטעינה מחדש של צינורית הבנייה"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "מחיקה"
 
@@ -3465,18 +3418,18 @@ msgstr "סידור הצהרות פונקציות מחדש"
 msgid "Display the project creation guide"
 msgstr "הצגת מדריך ליצירת מיזם"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "בחירת מיקום"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
 msgstr "יצירת המיזם נכשלה"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:5
 msgid "Create New Project"
-msgstr "יצירת  מיזם חדש"
+msgstr "יצירת מיזם חדש"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:17
 msgid "Project Name"
@@ -3971,7 +3924,7 @@ msgstr "פתיחה במסגרת חדשה"
 msgid "Open in New Workspace…"
 msgstr "פתיחה במרחב עבודה חדש…"
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "שמירה _בשם"
 
@@ -4531,14 +4484,12 @@ msgstr "על Builder להתקין את ערכת פיתוח תכנה הבאה ע�
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
 msgid "Name"
 msgstr "שם"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 msgid "Architecture"
 msgstr "ארכיטקטורה"
 
@@ -5098,7 +5049,7 @@ msgstr "מעבר ובחירת תוצאת החיפוש הקודמת"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "טעינת חקירה של Meson"
 
@@ -5116,134 +5067,75 @@ msgstr "שמירת סביבת הפיתוח במטמון"
 msgid "%s (Meson)"
 msgstr "‏%s ‏‎(Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr "לא סופק כלי"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr "שם מזהה ל־sysroot."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr "מערכת האריקטקטורה של ה־sysroot."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "הוספת כלי:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "מהדר"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr "קדם עיבוד"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "ארכיון"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr "מקשר"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr "הפשטה"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr "מעטפת שניתן להפעיל"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr "הגדרות חבילה"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "כל שפה"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "Python"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "Vala"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr "Fortran"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-msgid "D"
-msgstr "מזהה"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "הוספת כלי"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr "מחיקת כלים"
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr "מחיקת כלי"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "מהדר"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "קדם עיבוד"
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "ארכיון"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "מקשר"
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "הפשטה"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "מעטפת שניתן להפעיל"
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "הגדרות חבילה"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "יישום GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "מיזם מבוסס Meson עבור GNOME בשימוש GTK 4 ו־libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
 msgstr "יישום GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr "מיזם מבוסס Meson בשימוש GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "ספרייה משותפת"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
 msgstr "מיזם מבוסס Meson עבור ספרייה משותפת"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr "כלי שורת פקודה"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr "מיזם מבוסס Meson עבור תכנית שורת־פקודה"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
 msgstr "מיזם Meson ריק"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
 msgstr "שלד ריק של מיזם Meson"
 
@@ -5722,7 +5614,7 @@ msgstr "פקודה ללא כותרת"
 msgid "Set Shortcut"
 msgstr "הגדרת צירופי מקשים"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
 msgstr "בחירת תיקיית עבודה"
 
@@ -6277,7 +6169,7 @@ msgstr "מספר מרבי של שרות לגלילה"
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr "המספר המרבי של שורות שיאוחסנו בהיסטוריה עם הגבלת גלילה"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:148
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
 msgstr "פלט יחידת בדיקה"
 
@@ -6458,7 +6350,7 @@ msgstr "חיפוש דליפות זיכרון ביציאה"
 msgid "Begin cloning project from URI"
 msgstr "מתחיל שיבוט מיזם מהכתובת"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "אירע כשל בעת שיבוט המאגר."
 
@@ -6581,6 +6473,72 @@ msgstr "ארע כשל ביצירת עץ ה־XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
+
+#~ msgid "Cancel"
+#~ msgstr "ביטול"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "יוניקס/לינוקס (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "‏Mac OS קלאסי (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "חלונות (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "זיהוי אוטומטי"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "קידוד תווים:"
+
+#~ msgid "Line Ending:"
+#~ msgstr "סיום שורה:"
+
+#~ msgid "Browse…"
+#~ msgstr "עיון…"
+
+#~ msgid "_Save"
+#~ msgstr "_שמירה"
+
+#~ msgid "No Provided Tool"
+#~ msgstr "לא סופק כלי"
+
+#~ msgid "A name to identify the sysroot."
+#~ msgstr "שם מזהה ל־sysroot."
+
+#~ msgid "The system architecture of the sysroot."
+#~ msgstr "מערכת האריקטקטורה של ה־sysroot."
+
+#~ msgid "Add Tool:"
+#~ msgstr "הוספת כלי:"
+
+#~ msgid "Any language"
+#~ msgstr "כל שפה"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Vala"
+#~ msgstr "Vala"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "D"
+#~ msgstr "מזהה"
+
+#~ msgid "Add Tool"
+#~ msgstr "הוספת כלי"
+
+#~ msgid "Delete Toolchain"
+#~ msgstr "מחיקת כלים"
 
 #~ msgid "Enchant 2"
 #~ msgstr "Enchant 2"
