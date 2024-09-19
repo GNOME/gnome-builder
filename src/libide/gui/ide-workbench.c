@@ -973,7 +973,7 @@ ide_workbench_focus_workspace (IdeWorkbench *self,
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (IDE_IS_WORKSPACE (workspace));
 
-  ide_gtk_window_present (GTK_WINDOW (workspace));
+  gtk_window_present (GTK_WINDOW (workspace));
 }
 
 static void
