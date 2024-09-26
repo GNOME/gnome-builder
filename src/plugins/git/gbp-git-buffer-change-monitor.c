@@ -216,11 +216,11 @@ recalculate:
 }
 
 static void
-buffer_insert_text_after_cb (GbpGitBufferChangeMonitor *self,
-                             GtkTextIter               *location,
-                             gchar                     *text,
-                             gint                       len,
-                             IdeBuffer                 *buffer)
+buffer_insert_text_cb (GbpGitBufferChangeMonitor *self,
+                       const GtkTextIter         *location,
+                       const char                *text,
+                       int                        len,
+                       IdeBuffer                 *buffer)
 {
   guint line;
 
@@ -375,9 +375,9 @@ gbp_git_buffer_change_monitor_init (GbpGitBufferChangeMonitor *self)
   self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
   g_signal_group_connect_object (self->buffer_signals,
                                  "insert-text",
-                                 G_CALLBACK (buffer_insert_text_after_cb),
+                                 G_CALLBACK (buffer_insert_text_cb),
                                  self,
-                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+                                 G_CONNECT_SWAPPED);
   g_signal_group_connect_object (self->buffer_signals,
                                  "delete-range",
                                  G_CALLBACK (buffer_delete_range_cb),
