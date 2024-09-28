@@ -30,8 +30,11 @@
 struct _GbpGitWorkspaceAddin
 {
   GObject             parent_instance;
+
   IdeWorkspace       *workspace;
   GbpGitCommitDialog *commit_dialog;
+
+  GtkMenuButton      *button;
 };
 
 static void begin_commit_action (GbpGitWorkspaceAddin *self,
@@ -46,11 +49,27 @@ gbp_git_workspace_addin_load (IdeWorkspaceAddin *addin,
                               IdeWorkspace      *workspace)
 {
   GbpGitWorkspaceAddin *self = GBP_GIT_WORKSPACE_ADDIN (addin);
+  IdeHeaderBar *header_bar;
+  GMenu *menu;
 
   g_assert (GBP_IS_GIT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) || IDE_IS_EDITOR_WORKSPACE (workspace));
 
   self->workspace = workspace;
+
+  header_bar = ide_workspace_get_header_bar (workspace);
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gbp-git-menu");
+
+  self->button = g_object_new (GTK_TYPE_MENU_BUTTON,
+                               "always-show-arrow", TRUE,
+                               "icon-name", "builder-vcs-git-symbolic",
+                               "menu-model", menu,
+                               NULL);
+
+  ide_header_bar_add (header_bar,
+                      IDE_HEADER_BAR_POSITION_LEFT_OF_CENTER,
+                      0,
+                      GTK_WIDGET (self->button));
 }
 
 static void
@@ -58,11 +77,15 @@ gbp_git_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                 IdeWorkspace      *workspace)
 {
   GbpGitWorkspaceAddin *self = GBP_GIT_WORKSPACE_ADDIN (addin);
+  IdeHeaderBar *header_bar;
 
   g_assert (GBP_IS_GIT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) || IDE_IS_EDITOR_WORKSPACE (workspace));
 
   g_clear_weak_pointer (&self->commit_dialog);
+
+  header_bar = ide_workspace_get_header_bar (workspace);
+  ide_header_bar_remove (header_bar, GTK_WIDGET (self->button));
 
   self->workspace = NULL;
 }

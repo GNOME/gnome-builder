@@ -3,6 +3,7 @@
   <gresource prefix="/plugins/git">
     <file>git.plugin</file>
     <file>gtk/keybindings.json</file>
+    <file>gtk/menus.ui</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">gbp-git-commit-dialog.ui</file>
     <file preprocess="xml-stripblanks">gbp-git-file-row.ui</file>
