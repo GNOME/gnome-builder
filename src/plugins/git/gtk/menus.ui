@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="gbp-git-menu">
+    <item>
+      <attribute name="label" translatable="yes">New Commit</attribute>
+      <attribute name="action">workspace.git.begin-commit</attribute>
+    </item>
+  </menu>
+</interface>
