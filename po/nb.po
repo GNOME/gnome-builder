@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-09-15 18:04+0000\n"
-"PO-Revision-Date: 2024-10-01 09:02+0200\n"
+"POT-Creation-Date: 2024-10-04 15:06+0000\n"
+"PO-Revision-Date: 2024-10-04 17:44+0200\n"
 "Last-Translator: Brage <bragefuglseth@gnome.org>\n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -1473,7 +1473,7 @@ msgstr "Skriv for å søke"
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
-"Sett en av de følgende prefiksene foran søket for å filtrere resultater"
+"Sett et av de følgende prefiksene foran søket for å filtrere resultater"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
