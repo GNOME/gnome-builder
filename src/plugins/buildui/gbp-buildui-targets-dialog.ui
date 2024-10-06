@@ -17,8 +17,8 @@
                 <property name="title" translatable="yes">Available Build Targets</property>
                 <property name="description" translatable="yes">Some targets may not be available until the project has been configured.</property>
                 <property name="header-suffix">
-                  <object class="GtkSpinner">
-                    <property name="spinning" bind-source="GbpBuilduiTargetsDialog" bind-property="busy" bind-flags="sync-create"/>
+                  <object class="AdwSpinner">
+                    <property name="visible" bind-source="GbpBuilduiTargetsDialog" bind-property="busy" bind-flags="sync-create"/>
                   </object>
                 </property>
                 <child>
