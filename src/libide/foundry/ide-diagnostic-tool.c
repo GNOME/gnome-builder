@@ -418,6 +418,7 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
 
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
+      g_assert (error != NULL);
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
@@ -491,6 +492,8 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   if (!IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->prepare_run_context (self, run_context, file, contents, lang_id, &error) ||
       !(launcher = ide_run_context_end (run_context, &error)))
     {
+      g_assert (error != NULL);
+
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
@@ -499,6 +502,8 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
+      g_assert (error != NULL);
+
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
