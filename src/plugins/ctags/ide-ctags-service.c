@@ -485,6 +485,8 @@ ide_ctags_service_miner (GTask        *task,
 
   self->miner_active = FALSE;
 
+  g_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 }
 
