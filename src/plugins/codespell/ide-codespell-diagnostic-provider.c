@@ -48,7 +48,13 @@ ide_codespell_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
   g_assert (file != NULL || contents != NULL);
 
   if (!g_settings_get_boolean (self->settings, "check-spelling"))
-    IDE_RETURN (FALSE);
+    {
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Spellcheck disabled");
+      IDE_RETURN (FALSE);
+    }
 
   if (IDE_DIAGNOSTIC_TOOL_CLASS (ide_codespell_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
     {
