@@ -1321,6 +1321,9 @@ ide_lsp_client_real_supports_language (IdeLspClient *self,
   g_assert (IDE_IS_LSP_CLIENT (self));
   g_assert (language_id != NULL);
 
+  if (g_str_equal (language_id, "python3"))
+    language_id = "python";
+
   for (guint i = 0; i < priv->languages->len; i++)
     {
       const gchar *id = g_ptr_array_index (priv->languages, i);
