@@ -115,10 +115,18 @@ ide_formatter_format_async (IdeFormatter        *self,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
 {
+  g_autofree char *title = NULL;
+
   g_return_if_fail (IDE_IS_FORMATTER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (IDE_IS_FORMATTER_OPTIONS (options));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  title = ide_buffer_dup_title (buffer);
+
+  g_debug ("Formatting document \"%s\" using %s",
+           title,
+           G_OBJECT_TYPE_NAME (self));
 
   IDE_FORMATTER_GET_IFACE (self)->format_async (self, buffer, options, cancellable, callback, user_data);
 }
