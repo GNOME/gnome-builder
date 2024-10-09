@@ -2961,6 +2961,8 @@ ide_buffer_format_selection_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_FORMATTER (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -2969,6 +2971,8 @@ ide_buffer_format_selection_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static void
@@ -2980,6 +2984,8 @@ ide_buffer_format_selection_range_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_FORMATTER (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -2988,6 +2994,8 @@ ide_buffer_format_selection_range_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 /**
