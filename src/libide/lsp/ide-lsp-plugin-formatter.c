@@ -61,8 +61,8 @@ ide_lsp_plugin_formatter_iface_init (IdeFormatterInterface *iface)
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 GObject *
 ide_lsp_plugin_create_formatter (guint             n_parameters,
-                                       GParameter       *parameters,
-                                       IdeLspPluginInfo *info)
+                                 GParameter       *parameters,
+                                 IdeLspPluginInfo *info)
 {
   ide_lsp_plugin_remove_plugin_info_param (&n_parameters, parameters);
 
