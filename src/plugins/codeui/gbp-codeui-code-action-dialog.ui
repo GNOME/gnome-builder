@@ -26,8 +26,7 @@
                     <property name="activatable">false</property>
                     <property name="selectable">false</property>
                     <child type="suffix">
-                      <object class="GtkSpinner">
-                        <property name="spinning">true</property>
+                      <object class="AdwSpinner">
                         <property name="valign">center</property>
                       </object>
                     </child>

@@ -64,8 +64,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinner">
-                                        <property name="spinning" bind-source="request" bind-property="branch-model-busy"/>
+                                      <object class="AdwSpinner">
                                         <property name="visible" bind-source="request" bind-property="branch-model-busy"/>
                                       </object>
                                     </child>

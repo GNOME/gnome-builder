@@ -45,7 +45,7 @@ struct _GbpGrepPanel
 
   GtkStack          *stack;
   GtkScrolledWindow *scrolled_window;
-  GtkSpinner        *spinner;
+  AdwSpinner        *spinner;
 
   GtkButton         *replace_button;
   GtkEditable       *replace_entry;
@@ -320,7 +320,6 @@ gbp_grep_panel_replace_edited_cb (GObject      *object,
   if (!ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
     ide_object_warning (IDE_OBJECT (bufmgr), "Failed to apply edits: %s", error->message);
 
-  gtk_spinner_stop (self->spinner);
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->scrolled_window));
 }
 
@@ -353,7 +352,6 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
-  gtk_spinner_start (self->spinner);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
   bufmgr = ide_buffer_manager_from_context (context);
@@ -445,7 +443,6 @@ gbp_grep_panel_scan_cb (GObject      *object,
 
   g_clear_object (&self->cancellable);
 
-  gtk_spinner_stop (self->spinner);
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->scrolled_window));
 
   /* The model defaults to selecting all items, so if the "Select all" header check box was
@@ -498,7 +495,6 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
   gbp_grep_model_set_recursive (model, gtk_check_button_get_active (GTK_CHECK_BUTTON (self->recursive_button)));
 
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
-  gtk_spinner_start (self->spinner);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
 

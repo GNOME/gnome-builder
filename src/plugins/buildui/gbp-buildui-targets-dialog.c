@@ -35,7 +35,6 @@ struct _GbpBuilduiTargetsDialog
   AdwWindow           parent_instance;
   AdwPreferencesPage *page;
   GtkListBox         *list_box;
-  GtkSpinner         *spinner;
   guint               busy : 1;
 };
 
@@ -256,7 +255,6 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-targets-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, page);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, list_box);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, spinner);
 }
 
 static void
