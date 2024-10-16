@@ -1,16 +1,16 @@
 # Indonesian translation for gnome-builder.
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Andika Triwidada <andika@gmail.com>, 2015.
+# Andika Triwidada <andika@gmail.com>, 2012, 2014-2016, 2018, 2024.
 # Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2024.
 # Sucipto <sucipto@pm.me>, 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-builder gnome-3-28\n"
+"Project-Id-Version: gnome-builder gnome-builder-46\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-02-14 08:23+0000\n"
-"PO-Revision-Date: 2024-02-21 19:56+0700\n"
+"POT-Creation-Date: 2024-09-15 18:04+0000\n"
+"PO-Revision-Date: 2024-10-16 21:32+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -36,9 +36,9 @@ msgstr "IDE untuk GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr "Christian Hergert, et al."
+#| msgid "Christian Hergert, et al."
+msgid "Christian Hergert"
+msgstr "Christian Hergert"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
@@ -628,7 +628,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Lingkungan apa yang digunakan saat menjalankan pengujian unit"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:251 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:241 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Log Verbose"
 
@@ -761,7 +761,7 @@ msgstr "Tanpa Judul"
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 #: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
@@ -835,11 +835,11 @@ msgstr "Halaman"
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
-#: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
+#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:108
+#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:149
+#: src/libide/sourceview/gtk/menus.ui:153
+#: src/libide/sourceview/gtk/menus.ui:159
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -858,7 +858,7 @@ msgid "Documents"
 msgstr "Dokumen"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:112
+#: src/libide/sourceview/gtk/menus.ui:109
 msgid "Selection"
 msgstr "Pilihan"
 
@@ -926,31 +926,31 @@ msgid "_Discard…"
 msgstr "_Buang…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:514
+#: src/libide/editor/ide-editor-page.c:515
 #, c-format
 msgid "Print failed: %s"
 msgstr "Gagal mencetak: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:590
+#: src/libide/editor/ide-editor-page.c:591
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Gagal memformat pilihan: %s"
 
-#: src/libide/editor/ide-editor-page.c:1132
+#: src/libide/editor/ide-editor-page.c:1136
 #: src/plugins/buildui/gbp-buildui-log-pane.c:321
 #: src/plugins/testui/gbp-testui-output-panel.c:101
 msgid "Save File"
 msgstr "Simpan Berkas"
 
-#: src/libide/editor/ide-editor-page.c:1135
+#: src/libide/editor/ide-editor-page.c:1139
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
 msgid "Save"
 msgstr "Simpan"
 
-#: src/libide/editor/ide-editor-page.c:1135
+#: src/libide/editor/ide-editor-page.c:1139
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1031,7 +1031,7 @@ msgid "Line Ending:"
 msgstr "Akhir Baris:"
 
 #: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "Bahasa"
 
@@ -1592,10 +1592,14 @@ msgstr "Terminal"
 msgid "New Terminals"
 msgstr "Terminal Baru"
 
+#: src/libide/gui/ide-application-actions.c:168
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert, et al."
+
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr ""
-"Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
+"Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018, 2024.\n"
 "Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2024.\n"
 "Sucipto <sucipto@pm.me>, 2020."
 
@@ -1727,7 +1731,7 @@ msgstr "Memuat proyek \"%s\""
 msgid "There are unsaved documents"
 msgstr "Ada dokumen yang belum disimpan"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1766,19 +1770,19 @@ msgid "No LSP client connection is available"
 msgstr "Tidak ada koneksi klien LSP yang tersedia"
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr "Peladen bahasa \"%s\" keluar"
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr "Peladen bahasa “%s” muncul sebagai proses %s"
 
 #: src/libide/plugins/ide-plugin.c:336
-#: src/plugins/create-project/gbp-create-project-widget.ui:114
+#: src/plugins/create-project/gbp-create-project-widget.ui:117
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Kendali Versi"
@@ -1795,7 +1799,7 @@ msgstr "Peladen Bahasa"
 msgid "Devices & Simulators"
 msgstr "Perangkat & Simulator"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:156
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnostik"
@@ -1919,7 +1923,7 @@ msgstr "_Pilihan"
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:142
 msgid "Formatting"
 msgstr "Pemformatan"
 
@@ -1931,71 +1935,71 @@ msgstr "Sem_ua Huruf Besar"
 msgid "Convert the text selection to upper case"
 msgstr "Konversi pilihan teks menjadi huruf besar"
 
-#: src/libide/sourceview/gtk/menus.ui:90
+#: src/libide/sourceview/gtk/menus.ui:89
 msgid "All _Lower Case"
 msgstr "Semua Huruf Keci_l"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:90
 msgid "Convert the text selection to lower case"
 msgstr "Konversi pilihan teks menjadi huruf kecil"
 
-#: src/libide/sourceview/gtk/menus.ui:97
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "Bal_ikkan Besar Kecil Huruf"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:96
 msgid "Invert case of the text selection"
 msgstr "Balikkan kasus pemilihan teks"
 
-#: src/libide/sourceview/gtk/menus.ui:104
+#: src/libide/sourceview/gtk/menus.ui:101
 msgid "_Title Case"
 msgstr "Kapi_talisasi Judul"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "Convert the text selection to title case"
 msgstr "Konversi pilihan teks menjadi kapitalisasi huruf judul"
 
-#: src/libide/sourceview/gtk/menus.ui:114
+#: src/libide/sourceview/gtk/menus.ui:111
 msgid "Select _Line"
 msgstr "_Pilih Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Delete Line"
 msgstr "_Hapus Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:121
 msgid "_Join Lines"
 msgstr "_Gabung Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:129
+#: src/libide/sourceview/gtk/menus.ui:126
 msgid "S_ort Lines"
 msgstr "_Urutkan Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "D_uplicate Line"
 msgstr "D_uplikat Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:139
 msgid "_Formatting"
 msgstr "Pem_formatan"
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:150
+#: src/libide/sourceview/gtk/menus.ui:154
+#: src/libide/sourceview/gtk/menus.ui:160
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Navigasi Kode"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1663
+#: src/libide/sourceview/ide-source-view.c:1720
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Brs %u, Kol %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1665
+#: src/libide/sourceview/ide-source-view.c:1722
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
@@ -2033,8 +2037,8 @@ msgstr "Memilih semua teks dari terminal termasuk gulir balik"
 msgid "Select _None"
 msgstr "Pilih Tak Satupu_n"
 
-#: src/libide/terminal/ide-terminal.c:538
-#: src/libide/terminal/ide-terminal.c:571
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "Disalin ke papan klip"
 
@@ -2204,7 +2208,7 @@ msgstr "Nihil"
 msgid "Blank page"
 msgstr "Halaman kosong"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
 msgid "Settings"
 msgstr "Pengaturan"
 
@@ -2499,9 +2503,8 @@ msgstr "Konfigurasikan pengaturan yang terkait dengan proyek"
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
 #: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr "Code Foundry"
 
@@ -2527,7 +2530,6 @@ msgid "Change default build target"
 msgstr "Ubah target bangun bawaan"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Membangun"
 
@@ -2592,125 +2594,117 @@ msgid "Export project"
 msgstr "Ekspor proyek"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-msgid "Stop Build"
-msgstr "Berhenti Membangun"
-
-#: src/plugins/buildui/gtk/menus.ui:100
-msgid "Stop building project"
-msgstr "Berhenti membangun proyek"
-
-#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Show Bui_ld Output"
 msgstr "Tampi_lkan Keluaran Bangun"
 
-#: src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr "Panel tampilan yang berisi log bangun"
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "Berjalan"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
 msgstr "Pilih Jalankan Perintah…"
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Jalankan"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
 msgstr "Jalankan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:144
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr "Mulai Ulang Program"
 
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
 msgstr "Mulai ulang program yang sedang berjalan"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr "Hentikan Program"
 
-#: src/plugins/buildui/gtk/menus.ui:156
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
 msgstr "Berhenti menjalankan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr "Pengawakutuan"
 
-#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Pengujian Unit"
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Ikuti Gaya Sistem"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:168
 msgid "Force Light"
 msgstr "Paksa Terang"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Force Dark"
 msgstr "Paksa Gelap"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Accessibility"
 msgstr "Aksesibilitas"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "High Contrast"
 msgstr "Kontras Tinggi"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:188
 msgid "Text Direction"
 msgstr "Arah Teks"
 
-#: src/plugins/buildui/gtk/menus.ui:200
+#: src/plugins/buildui/gtk/menus.ui:190
 msgid "Left-to-Right"
 msgstr "Kiri ke Kanan"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:196
 msgid "Right-to-Left"
 msgstr "Kanan ke Kiri"
 
-#: src/plugins/buildui/gtk/menus.ui:214
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "GPU"
 msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:216
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "GTK Renderer"
 msgstr "Perender GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:218 src/plugins/buildui/tweaks.ui:256
+#: src/plugins/buildui/gtk/menus.ui:208 src/plugins/buildui/tweaks.ui:256
 #: src/plugins/buildui/tweaks.ui:443
 msgid "Default"
 msgstr "Baku"
 
-#: src/plugins/buildui/gtk/menus.ui:224
+#: src/plugins/buildui/gtk/menus.ui:214
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:230
+#: src/plugins/buildui/gtk/menus.ui:220
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:236
+#: src/plugins/buildui/gtk/menus.ui:226
 msgid "Legacy GL"
 msgstr "Legacy GL"
 
-#: src/plugins/buildui/gtk/menus.ui:242
+#: src/plugins/buildui/gtk/menus.ui:232
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:257
+#: src/plugins/buildui/gtk/menus.ui:247
 msgid "Show Inspector"
 msgstr "Tampilkan Pemeriksa"
 
@@ -3117,7 +3111,7 @@ msgstr "Salin sebagai Gambar"
 msgid "Copy selected text as an image"
 msgstr "Salin teks yang dipilih sebagai gambar"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Kemungkinan salah ketik dalam \"%s\". Apakah maksud Anda \"%s\"?"
@@ -3285,11 +3279,11 @@ msgstr "Buat Proyek Baru"
 msgid "Project Name"
 msgstr "Nama Proyek"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
 msgstr "Subdirektori dengan nama ini sudah ada"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:30
+#: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
@@ -3298,11 +3292,11 @@ msgstr ""
 "Nama unik yang digunakan untuk folder proyek dan sumber daya lainnya. Nama "
 "harus dalam huruf kecil tanpa spasi dan tidak boleh dimulai dengan angka."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:46
+#: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
 msgstr "ID Aplikasi…"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:52
+#: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
@@ -3311,7 +3305,7 @@ msgstr ""
 "aplikasi, seperti \"org.gnome.Builder\". Ini mungkin tidak mengandung tanda "
 "hubung."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:68
+#: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
 #: src/plugins/grep/gbp-grep-panel.c:751
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
@@ -3319,20 +3313,20 @@ msgstr ""
 msgid "Location"
 msgstr "Lokasi"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:84
+#: src/plugins/create-project/gbp-create-project-widget.ui:87
 msgid "The project will be created in a new subdirectory."
 msgstr "Proyek ini akan dibuat dalam subdirektori baru."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Lisensi"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:120
+#: src/plugins/create-project/gbp-create-project-widget.ui:123
 msgid "Template"
 msgstr "Templat"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:179
+#: src/plugins/create-project/gbp-create-project-widget.ui:182
 msgid "Create Project"
 msgstr "Buat Proyek"
 
@@ -4316,11 +4310,11 @@ msgstr "Berkas"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Berkas Serupa (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:916
 msgid "Installation failed"
 msgstr "Pemasangan gagal"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:926
 msgid "Installation complete"
 msgstr "Pemasangan selesai"
 
@@ -4363,49 +4357,49 @@ msgstr "Nama"
 msgid "Architecture"
 msgstr "Arsitektur"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:113
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:114
 msgid "Resolving SDK Extensions"
 msgstr "Mengatasi Ekstensi SDK"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:115
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder menemukan ekstensi SDK yang sesuai untuk membangun proyek Anda"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
 msgid "Creating flatpak workspace"
 msgstr "Membuat ruang kerja flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Menghapus direktori staging flatpak yang basi: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
 msgid "Preparing build directory"
 msgstr "Menyiapkan direktori bangun"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
 msgid "Downloading dependencies"
 msgstr "Mengunduh dependensi"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
 msgid "Building dependencies"
 msgstr "Membangun dependensi"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
 msgid "Finalizing flatpak build"
 msgstr "Menyelesaikan bangun flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
 msgid "Exporting staging directory"
 msgstr "Mengekspor direktori staging"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
 msgid "Creating flatpak bundle"
 msgstr "Membuat bundel flatpak"
 
@@ -4413,11 +4407,11 @@ msgstr "Membuat bundel flatpak"
 msgid "Flatpak Application"
 msgstr "Aplikasi Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
 msgid "Installing Necessary SDKs"
 msgstr "Memasang SDK yang Diperlukan"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4514,12 +4508,12 @@ msgstr ""
 "Builder gagal untuk memberikan kredensial yang tepat ketika mengkloning "
 "repositori."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Tidak dapat mengatur tanda AMEND dan GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Tidak dapat menandatangani komit tanpa GPG_KEY_ID"
@@ -5123,26 +5117,18 @@ msgid "Default file manager for GNOME"
 msgstr "Manajer berkas bawaan untuk GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
-msgid "Photos"
-msgstr "Foto"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "Access, organize and share your photos on GNOME"
-msgstr "Akses, atur, dan bagikan foto Anda di GNOME"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "An IRC Client for GNOME"
 msgstr "Klien IRC untuk GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
 msgstr "Perekam Suara"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
 msgstr "Perekam suara modern untuk GNOME"
 
@@ -5210,12 +5196,12 @@ msgid "Drop Down"
 msgstr "Drop Down"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:672
+#: src/plugins/podman/gbp-podman-runtime.c:675
 msgid "Containers/Toolbox"
 msgstr "Kontainer/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:678
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Podman"
 msgstr "Kontainer/Podman"
 
@@ -6109,7 +6095,6 @@ msgid "Running all unit tests at %s"
 msgstr "Jalankan semua pengujian unit di %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr "Pengujian unit selesai dalam %lf detik"
 
@@ -6372,3211 +6357,3 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
-
-#~ msgid "Go back"
-#~ msgstr "Kembali"
-
-#~ msgid "All Preferences"
-#~ msgstr "Semua Preferensi"
-
-#~ msgid "Primary Menu"
-#~ msgstr "Menu Utama"
-
-#~ msgid "Unnamed Symbol"
-#~ msgstr "Simbol tanpa nama"
-
-#~ msgid "Filter Symbols…"
-#~ msgstr "Simbol Filter…"
-
-#~ msgctxt "menu label"
-#~ msgid "Open _Sysprof Capture…"
-#~ msgstr "Buka Tangkapan _Sysprof…"
-
-#~ msgid "Open Sysprof Capture…"
-#~ msgstr "Buka Tangkapan Sysprof…"
-
-#~ msgid "All Files"
-#~ msgstr "Semua Berkas"
-
-#~ msgid "Show or hide search options such as case sensitivity"
-#~ msgstr ""
-#~ "Tampilkan atau sembunyikan opsi pencarian seperti misalnya peka huruf "
-#~ "besar kecil"
-
-#~ msgid "Regex"
-#~ msgstr "Regex"
-
-#~ msgid "Case sensitive"
-#~ msgstr "Peka huruf besar kecil"
-
-#~ msgid "Match whole word"
-#~ msgstr "Cocokkan seluruh kata"
-
-#~ msgid "An absolute file-system path to the sysroot."
-#~ msgstr "Path sistem berkas absolut ke sysroot."
-
-#~ msgid "Package Config Path"
-#~ msgstr "Path Konfigurasi Paket"
-
-#~ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-#~ msgstr ""
-#~ "Path opsional yang dipisahkan koma untuk menentukan PKG_CONFIG_PATH."
-
-#, c-format
-#~ msgid "%s (Sysroot SDK)"
-#~ msgstr "%s (Sysroot SDK)"
-
-#~ msgid "Find and Replace"
-#~ msgstr "Cari dan Ganti"
-
-#~ msgid "R_ecursive"
-#~ msgstr "R_ekursif"
-
-#~ msgid "Match _Case"
-#~ msgstr "_Cocokkan huruf besar/kecil"
-
-#~ msgid "Match _Words"
-#~ msgstr "Coco_kkan Kata"
-
-#~ msgid "Regular E_xpressions"
-#~ msgstr "_Ekspresi Reguler"
-
-#~ msgid "Debugger Breakpoint at g_warning()"
-#~ msgstr "Breakpoint Pengawakutu di g_warning()"
-
-#~ msgid "Restore Previous Files"
-#~ msgstr "Pulihkan Berkas Sebelumnya"
-
-#~ msgid "Save _As…"
-#~ msgstr "Simpan Seb_agai…"
-
-#~ msgid "Buffer Restored"
-#~ msgstr "Penyangga Dipulihkan"
-
-#~ msgid "Unsaved buffer has been restored."
-#~ msgstr "Penyangga yang belum disimpan telah dipulihkan."
-
-#~ msgid "_Save…"
-#~ msgstr "_Simpan…"
-
-#~ msgid "Draft Changes Restored"
-#~ msgstr "Perubahan Draf Dipulihkan"
-
-#~ msgid "Unsaved changes to the buffer have been restored."
-#~ msgstr "Perubahan yang belum disimpan pada penyangga telah dipulihkan."
-
-#~ msgid "Ctrl+Enter"
-#~ msgstr "Ctrl+Enter"
-
-#~ msgid "F9"
-#~ msgstr "F9"
-
-#~ msgid "Ctrl+O"
-#~ msgstr "Ctrl+O"
-
-#~ msgid "Ctrl+Shift+T"
-#~ msgstr "Ctrl+Shift+T"
-
-#~ msgid "C_ut"
-#~ msgstr "_Potong"
-
-#~ msgid "Redo"
-#~ msgstr "Jadi Lagi"
-
-#~ msgid ""
-#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-#~ msgstr ""
-#~ "Pengaya pemercantik: galat menyalin berkas konfigurasi gresource untuk "
-#~ "“%s”: %s"
-
-#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
-#~ msgstr ""
-#~ "Pengaya pemercantik: galat membuat berkas konfigurasi sementara untuk "
-#~ "\"%s\""
-
-#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
-#~ msgstr "Pengaya pemercantik: Tidak dapat membaca berkas .ini: %s"
-
-#~ msgid ""
-#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
-#~ "“%s” disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: tidak ada perintah atau tombol pola-perintah yang "
-#~ "ditemukan: entri \"%s\" dinonaktifkan"
-
-#~ msgid ""
-#~ "Beautifier plugin: both command and command-pattern keys found: entry "
-#~ "“%s” disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: keduanya, perintah dan tombol pola-perintah "
-#~ "ditemukan: entri \"%s\" dinonaktifkan"
-
-#~ msgid ""
-#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: path konfigurasi \"%s\" tidak ada, entri \"%s\" "
-#~ "dinonaktifkan"
-
-#~ msgid ""
-#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: tombol perintah dari nilai yang mungkin: entri "
-#~ "\"%s\" dinonaktifkan"
-
-#~ msgid ""
-#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
-#~ "set: entry “%s” disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: @c@ dalam tombol pola-perintah \"%s\" tapi tidak ada "
-#~ "set berkas konfigurasi: entri \"%s\" dinonaktifkan"
-
-#~ msgid ""
-#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
-#~ "disabled"
-#~ msgstr ""
-#~ "Pengaya pemercantik: tidak dapat membuat berkas sementara untuk \"%s\": "
-#~ "entri \"%s\" dinonaktifkan"
-
-#~ msgid "Beautifier plugin: “%s”"
-#~ msgstr "Pengaya pemercantik: \"%s\""
-
-#~ msgid "Beautifier plugin: %s"
-#~ msgstr "Pengaya pemercantik: %s"
-
-#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-#~ msgstr ""
-#~ "Pengaya pemercantik: tidak dapat membaca berkas sumber daya berikut: "
-#~ "\"%s\""
-
-#~ msgid "beautifier program missing, you must install it: "
-#~ msgstr "program pemercantik hilang, Anda harus memasangnya: "
-
-#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
-#~ msgstr "Pengaya pemercantik: tampilan bukan GtkSourceView"
-
-#~ msgid "Beautifier Plugin: no default beautifier found"
-#~ msgstr "Pengaya Pemercantik: tidak ditemukan pemercantik bawaan"
-
-#~ msgid "Beautifier Plugin: the buffer is not writable"
-#~ msgstr "Pengaya Pemercantik: buffer tidak dapat ditulis"
-
-#~ msgid "Beautifier Plugin: Nothing selected"
-#~ msgstr "Pengaya Pemercantik: Tidak ada yang dipilih"
-
-#~ msgid "No beautifier available for “%s”"
-#~ msgstr "Tidak ada pemercantik yang tersedia untuk \"%s\""
-
-#~ msgid "No beautifier available"
-#~ msgstr "Tidak ada pemercantik yang tersedia"
-
-#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
-#~ msgstr "Pengaya pemercantik: tidak ada entri yang valid, menonaktifkan: %s"
-
-#~ msgid ""
-#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-#~ "temporary directory: “%s”"
-#~ msgstr ""
-#~ "Pengaya pemercantik: upaya yang diblokir untuk menghapus berkas di luar "
-#~ "direktori sementara \"%s\": \"%s\""
-
-#~ msgid ""
-#~ "Beautifier plugin: command error output:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Pengaya pemercantik: keluaran perintah galat\n"
-#~ "%s"
-
-#~ msgid "Beautifier plugin: the command output is empty"
-#~ msgstr "Pengaya pemercantik: perintah keluaran kosong"
-
-#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
-#~ msgstr "Pengaya beautify: keluaran bukan teks UTF-8 yang valid"
-
-#~ msgid "_Beautify"
-#~ msgstr "_Beautify"
-
-#~ msgid "Stop Building Project"
-#~ msgstr "Berhenti Membangun Proyek"
-
-#~ msgid "R_ebuild"
-#~ msgstr "B_angun Ulang"
-
-#~ msgid "_Run"
-#~ msgstr "_Jalankan"
-
-#~ msgid "R_un With…"
-#~ msgstr "_Jalankan Dengan…"
-
-#~ msgid "Tools"
-#~ msgstr "Perkakas"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "16"
-#~ msgstr "16"
-
-#~ msgid "32"
-#~ msgstr "32"
-
-#~ msgid "64"
-#~ msgstr "64"
-
-#~ msgid "128"
-#~ msgstr "128"
-
-#~ msgid "256"
-#~ msgstr "256"
-
-#~ msgid "512"
-#~ msgstr "512"
-
-#~ msgid "Colors"
-#~ msgstr "Warna"
-
-#~ msgid "Save changes to palette “%s” before closing?"
-#~ msgstr "Simpan perubahan pada palet \"%s\" sebelum ditutup?"
-
-#~ msgid "Close without Saving"
-#~ msgstr "Tutup tanpa Menyimpan"
-
-#~ msgid "Save As…"
-#~ msgstr "Simpan Sebagai…"
-
-#~ msgid "Load palette"
-#~ msgstr "Muat palet"
-
-#~ msgid "Save palette"
-#~ msgstr "Simpan palet"
-
-#~ msgid "All files"
-#~ msgstr "Semua berkas"
-
-#~ msgid "All supported palettes formats"
-#~ msgstr "Semua format palet yang didukung"
-
-#~ msgid "GIMP palette"
-#~ msgstr "Palet GIMP"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "Palet GNOME Builder"
-
-#~ msgid "Palette name"
-#~ msgstr "Nama palet"
-
-#~ msgid "Enter a new name for the palette"
-#~ msgstr "Masukkan nama baru untuk palet"
-
-#~ msgid "HSV visibility"
-#~ msgstr "Visibilitas HSV"
-
-#~ msgid "If the HSV components are visible."
-#~ msgstr "Jika komponen HSV terlihat."
-
-#~ msgid "LAB visibility"
-#~ msgstr "Visibilitas LAB"
-
-#~ msgid "If the LAB components are visible."
-#~ msgstr "Jika komponen LAB terlihat."
-
-#~ msgid "RGB visibility"
-#~ msgstr "Visibilitas RGB"
-
-#~ msgid "If the RGB components are visible."
-#~ msgstr "Jika komponen RGB terlihat."
-
-#~ msgid "RGB unit"
-#~ msgstr "Unit RGB"
-
-#~ msgid "The unit used by RGB component and strings."
-#~ msgstr "Satuan yang dipakai oleh string dan komponen RGB."
-
-#~ msgid "Selected palette ID"
-#~ msgstr "ID palet yang dipilih"
-
-#~ msgid "The selected palette ID among the loaded ones."
-#~ msgstr "Palet ID yang dipilih diantara yang dimuat."
-
-#~ msgid "Color strings visibility"
-#~ msgstr "Visibilitas string warna"
-
-#~ msgid "The visible color strings."
-#~ msgstr "String warna terlihat."
-
-#~ msgid "Color filter"
-#~ msgstr "Tapis warna"
-
-#~ msgid "The filter used on the color scales and color plane."
-#~ msgstr "Tapis yang dipakai pada skala warna dan bidang warna."
-
-#~ msgid "Palette: "
-#~ msgstr "Palet: "
-
-#~ msgid "Palette"
-#~ msgstr "Palet"
-
-#~ msgid "Color Plane"
-#~ msgstr "Bidang Warna"
-
-#~ msgid "Color name"
-#~ msgstr "Nama warna"
-
-#~ msgid "Enter a new name for the color"
-#~ msgstr "Masukkan nama baru untuk warna"
-
-#~ msgid "failed to parse line %i\n"
-#~ msgstr "gagal mengurai baris %i\n"
-
-#~ msgid "%s: palette is empty\n"
-#~ msgstr "%s: palet kosong\n"
-
-#~ msgid "%s: failed to parse\n"
-#~ msgstr "%s: gagal mengurai\n"
-
-#~ msgid "Unable to open %s\n"
-#~ msgstr "Tak bisa membuka %s\n"
-
-#~ msgid "%s: This file format is not supported\n"
-#~ msgstr "%s: Format berkas ini tidak didukung\n"
-
-#~ msgid "failed to parse\n"
-#~ msgstr "gagal mengurai\n"
-
-#~ msgid "Generated"
-#~ msgstr "Dibuat"
-
-#~ msgid "Unable to save %s\n"
-#~ msgstr "Tidak dapat menyimpan %s\n"
-
-#~ msgid "Unsaved palette %u"
-#~ msgstr "Palet %u belum disimpan"
-
-#~ msgid "Color Components"
-#~ msgstr "Komponen Warna"
-
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "L*"
-#~ msgstr "L*"
-
-#~ msgid "a*"
-#~ msgstr "a*"
-
-#~ msgid "b*"
-#~ msgstr "b*"
-
-#~ msgid "R"
-#~ msgstr "R"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "Color strings"
-#~ msgstr "String warn"
-
-#~ msgid "HEX3"
-#~ msgstr "HEX3"
-
-#~ msgid "HEX6"
-#~ msgstr "HEX6"
-
-#~ msgid "RGB"
-#~ msgstr "RGB"
-
-#~ msgid "RGBA"
-#~ msgstr "RGBA"
-
-#~ msgid "HSL"
-#~ msgstr "HSL"
-
-#~ msgid "HSLA"
-#~ msgstr "HSLA"
-
-#~ msgid "Palettes"
-#~ msgstr "Palet"
-
-#~ msgid "No open palettes"
-#~ msgstr "Tidak ada palet yang terbuka"
-
-#~ msgid "Load or generate a palette using the preferences"
-#~ msgstr "Muat atau buat palet memakai preferensi"
-
-#~ msgid "Rename"
-#~ msgstr "Ubah nama"
-
-#~ msgid "Color components"
-#~ msgstr "Komponen warna"
-
-#~ msgid "Visibility:"
-#~ msgstr "Visibilitas:"
-
-#~ msgid ""
-#~ "Select the color spaces for which you want to see sliders in the panel."
-#~ msgstr "Pilih ruang warna yang ingin Anda lihat slider di panel."
-
-#~ msgid "HSV"
-#~ msgstr "HSV"
-
-#~ msgid "Hue Saturation Value"
-#~ msgstr "Hue Saturation Value"
-
-#~ msgid "L*a*b*"
-#~ msgstr "L*a*b*"
-
-#~ msgid "CIE L*a*b* 1976"
-#~ msgstr "CIE L*a*b* 1976"
-
-#~ msgid "Red Green Blue"
-#~ msgstr "Red Green Blue"
-
-#~ msgid "Units:"
-#~ msgstr "Unit:"
-
-#~ msgid ""
-#~ "Select the type of unit you want to use for RGB components and strings in "
-#~ "the panel."
-#~ msgstr ""
-#~ "Pilih tipe unit yang ingin Anda pakai bagi string dan komponen RGB dalam "
-#~ "panel."
-
-#~ msgid "Percent"
-#~ msgstr "Persen"
-
-#~ msgid "Select a filter that act on the colors or “None”."
-#~ msgstr "Pilih penyaring yang bekerja pada warna atau \"None\"."
-
-#~ msgid "Achromatopsia (monochromacy)"
-#~ msgstr "Akromatopsia (monokromasi)"
-
-#~ msgid "Achromatomaly (blue cone monochromacy)"
-#~ msgstr "Akromatomali (monokromasi corong biru)"
-
-#~ msgid "Deuteranopia (green-blind)"
-#~ msgstr "Deuteranopia (buta hijau)"
-
-#~ msgid "Deuteranomaly (green-weak)"
-#~ msgstr "Deuteranomali (lemah hijau)"
-
-#~ msgid "Protanopia (red-blind)"
-#~ msgstr "Protanopia (buta merah)"
-
-#~ msgid "Protanomaly (red-weak)"
-#~ msgstr "Protanomali (lemah merah)"
-
-#~ msgid "Tritanopia (blue-blind)"
-#~ msgstr "Tritanopia (buta biru)"
-
-#~ msgid "Tritanomaly (blue-weak)"
-#~ msgstr "Tritanomali (lemah biru)"
-
-#~ msgid "Websafe"
-#~ msgstr "Websafe"
-
-#~ msgid "Select the color strings you want to see in the panel."
-#~ msgstr "Pilih string warna yang ingin Anda lihat dalam panel."
-
-#~ msgid "Palettes options"
-#~ msgstr "Opsi palet"
-
-#~ msgid "Palette view mode:"
-#~ msgstr "Mode tampilan palet:"
-
-#~ msgid "List"
-#~ msgstr "Daftar"
-
-#~ msgid "Swatches"
-#~ msgstr "Swatch"
-
-#~ msgid "Palette management"
-#~ msgstr "Manajemen palet"
-
-#~ msgid "Load"
-#~ msgstr "Muat"
-
-#~ msgid "From current document"
-#~ msgstr "Dari dokumen kini"
-
-#~ msgid "Select the palette you want to see in the panel or close one."
-#~ msgstr "Pilih palet yang ingin Anda lihat dalam panel atau tutup satu."
-
-#~ msgid "No loaded palettes"
-#~ msgstr "Tidak ada palet yang dimuat"
-
-#~ msgid "No selected palettes"
-#~ msgstr "Tidak ada palet yang dipilih"
-
-#~ msgid "Select a palette file"
-#~ msgstr "Pilih berkas palet"
-
-#~ msgid "Try loading or generating a palette using the menu"
-#~ msgstr "Coba untuk memuat atau menghasilkan palet menggunakan menu"
-
-#~ msgid "Highlight _colors"
-#~ msgstr "_Warna sorot"
-
-#~ msgid "Run with _Debugger"
-#~ msgstr "Jalankan dengan Penga_wakutu"
-
-#~ msgid "Text"
-#~ msgstr "Teks"
-
-#~ msgid "Syntax Highlighting"
-#~ msgstr "Penyorotan Sintaks"
-
-#~ msgid "Indexing PHP code"
-#~ msgstr "Mengindeks kode PHP"
-
-#~ msgid "Rust Analyzer"
-#~ msgstr "Rust Analyzer"
-
-#~ msgid "Cargo"
-#~ msgstr "Cargo"
-
-#~ msgid "Cargo Command"
-#~ msgstr "Perintah Cargo"
-
-#~ msgid "The default cargo command to run with rust-analyzer"
-#~ msgstr "Perintah cargo bawaan untuk dijalankan dengan rust-analyzer"
-
-#~ msgid "Features"
-#~ msgstr "Fitur"
-
-#~ msgid "Proc Macros"
-#~ msgstr "Proc Macros"
-
-#~ msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-#~ msgstr "Aktifkan fitur Proc Macros eksperimental dari rust-analyzer"
-
-#~ msgid "Reformat sources when saving to disk"
-#~ msgstr "Memformat ulang sumber saat menyimpan ke diska"
-
-#~ msgid "follow"
-#~ msgstr "ikuti"
-
-#~ msgid "Editor"
-#~ msgstr "Penyunting"
-
-#~ msgid "Grid Pattern"
-#~ msgstr "Pola Kisi"
-
-#~ msgctxt "Keywords"
-#~ msgid "editor font monospace"
-#~ msgstr "fonta penyunting lebar seragam"
-
-#~ msgid "Line Spacing"
-#~ msgstr "Spasi Baris"
-
-#~ msgid "Number of pixels above and below editor lines"
-#~ msgstr "Cacah piksel di atas dan di bawah garis penyunting"
-
-#~ msgctxt "Keywords"
-#~ msgid "editor line spacing font monospace"
-#~ msgstr "penyunting spasi baris fonta monospace"
-
-#~ msgid "Color Scheme"
-#~ msgstr "Skema Warna"
-
-#~ msgid "Keyboard"
-#~ msgstr "Papan Ketik"
-
-#~ msgid "Emulation"
-#~ msgstr "Emulasi"
-
-#~ msgid "Default keybinding mode which mimics gedit"
-#~ msgstr "Mode pengikatan tombol baku yang menirukan gedit"
-
-#~ msgid "Movement"
-#~ msgstr "Pergerakan"
-
-#~ msgid "Smart Home and End"
-#~ msgstr "Home dan End Cerdas"
-
-#~ msgid "Home moves to first non-whitespace character"
-#~ msgstr "Home bergerak ke karakter bukan spasi pertama"
-
-#~ msgid "Display list of open files"
-#~ msgstr "Tampilkan daftar berkas yang terbuka"
-
-#~ msgid "Display the list of all open files in the project sidebar"
-#~ msgstr ""
-#~ "Tampilkan daftar semua berkas yang terbuka pada bilah samping proyek"
-
-#~ msgid "Reformat code on save"
-#~ msgstr "Format ulang kode saat disimpan"
-
-#~ msgid "Cursor"
-#~ msgstr "Kursor"
-
-#~ msgid "Restore cursor position"
-#~ msgstr "Memulihkan posisi kursor"
-
-#~ msgid "Restore cursor position when a file is reopened"
-#~ msgstr "Pulihkan posisi kursor ketika sebuah berkas dibuka ulang"
-
-#~ msgid "Scroll Offset"
-#~ msgstr "Ofset Gulir"
-
-#~ msgid "Minimum number of lines to keep above and below the cursor"
-#~ msgstr "Cacah baris minimal yang dipertahankan di atas dan di bawah kursor"
-
-#~ msgid "Text Wrapping"
-#~ msgstr "Pelipatan Teks"
-
-#~ msgid "In Between Words"
-#~ msgstr "Di Antara Kata-Kata"
-
-#~ msgid "Line Information"
-#~ msgstr "Informasi Baris"
-
-#~ msgid "Line numbers"
-#~ msgstr "Nomor baris"
-
-#~ msgid "Show line number at beginning of each line"
-#~ msgstr "Tampilkan nomor baris di awal setiap baris"
-
-#~ msgid "Relative line numbers"
-#~ msgstr "Nomor baris relatif"
-
-#~ msgid "Show line numbers relative to the cursor line"
-#~ msgstr "Tampilkan nomor baris relatif di awal setiap baris"
-
-#~ msgid "Show if a line was added or modified next to line number"
-#~ msgstr ""
-#~ "Tampilkan apakah suatu baris ditambahkan atau diubah di sebelah nomor "
-#~ "baris"
-
-#~ msgid "Line diagnostics"
-#~ msgstr "Diagnostik baris"
-
-#~ msgid "Show an icon next to line numbers indicating type of diagnostic"
-#~ msgstr ""
-#~ "Tampilkan ikon di samping nomor baris yang menunjukkan jenis diagnostik"
-
-#~ msgid "Highlight"
-#~ msgstr "Penyorotan"
-
-#~ msgid "Make current line stand out with highlights"
-#~ msgstr "Membuat baris saat ini menonjol dengan penyorotan"
-
-#~ msgid "Matching brackets"
-#~ msgstr "Kurung pasangan"
-
-#~ msgid "Highlight matching brackets based on cursor position"
-#~ msgstr "Sorot tanda kurung pasangan berbasis pada posisi kursor"
-
-#~ msgid "Visible Whitespace Characters"
-#~ msgstr "Karakter Bukan Spasi Terlihat"
-
-#~ msgid "New line and carriage return"
-#~ msgstr "Baris baru dan carriage return"
-
-#~ msgid "Spaces inside of text"
-#~ msgstr "Spasi di dalam teks"
-
-#~ msgid "Autosave"
-#~ msgstr "Simpan otomatis"
-
-#~ msgid "Enable or disable autosave feature"
-#~ msgstr "Aaktifkan atau nonaktifkan fitur simpan otomatis"
-
-#~ msgid "The number of seconds after modification before auto saving"
-#~ msgstr "Cacah detik setelah modifikasi sebelum menyimpan otomatis"
-
-#~ msgid "Code Insight"
-#~ msgstr "Code Insight"
-
-#~ msgid ""
-#~ "Use code insight to highlight additional information discovered in source "
-#~ "file"
-#~ msgstr ""
-#~ "Gunakan kode insight untuk menyorot informasi tambahan yang ditemukan "
-#~ "pada berkas sumber"
-
-#~ msgid "Completion"
-#~ msgstr "Pelengkapan"
-
-#~ msgid "Completions Display Size"
-#~ msgstr "Ukuran Tampilan Penyelesaian"
-
-#~ msgid "Number of completions to display"
-#~ msgstr "Jumlah penyelesaian untuk ditampilkan"
-
-#~ msgid "Display code suggestions interactively as you type"
-#~ msgstr "Tampilkan saran kode secara interaktif saat Anda mengetik"
-
-#~ msgid "Completion Providers"
-#~ msgstr "Penyedia Pelengkapan"
-
-#~ msgid "Search languages…"
-#~ msgstr "Cari bahasa…"
-
-#~ msgid "Trim trailing whitespace"
-#~ msgstr "Pangkas trailing bukan spasi"
-
-#~ msgid ""
-#~ "Upon saving, trailing whitespace from modified lines will be trimmed."
-#~ msgstr ""
-#~ "Setelah menyimpan, trailing bukan spasi dari baris yang diubah akan "
-#~ "dipangkas."
-
-#~ msgid "Overwrite closing braces"
-#~ msgstr "Timpa tanda kurung penutup"
-
-#~ msgid "Insert matching character for { [ ( or \""
-#~ msgstr "Sisipkan karakter yang sesuai untuk { [ ( atau \""
-
-#~ msgid "Margins"
-#~ msgstr "Margin"
-
-#~ msgid "Show right margin"
-#~ msgstr "Tampilkan marjin kanan"
-
-#~ msgid "Right margin position"
-#~ msgstr "Posisi marjin kanan"
-
-#~ msgid "Position in spaces for the right margin"
-#~ msgstr "Posisi di ruang untuk margin kanan"
-
-#~ msgid "Tab width"
-#~ msgstr "Lebar tab"
-
-#~ msgid "Width of a tab character in spaces"
-#~ msgstr "Lebar dari sebuah karakter tab dalam spasi"
-
-#~ msgid "Insert spaces instead of tabs"
-#~ msgstr "Gunakan spasi, jangan tab"
-
-#~ msgid "Prefer spaces over use of tabs"
-#~ msgstr "Lebih suka spasi daripada tab"
-
-#~ msgid "Automatically indent"
-#~ msgstr "Indentasi otomatis"
-
-#~ msgid "Indent source code as you type"
-#~ msgstr "Indentasikan kode sumber sembari Anda mengetik"
-
-#~ msgid "Spacing"
-#~ msgstr "Spasi"
-
-#~ msgid "Prefer a space before colons"
-#~ msgstr "Lebih suka spasi sebelum tanda titik dua"
-
-#~ msgid "Build"
-#~ msgstr "Bangun"
-
-#~ msgid "Build Workers"
-#~ msgstr "Pekerja Bangun"
-
-#~ msgid "Number of parallel build workers"
-#~ msgstr "Banyaknya pekerja bangun paralel"
-
-#~ msgid "Clear build log pane on rebuild"
-#~ msgstr "Hapus panel log bangun saat membangun kembali"
-
-#~ msgid "Clear build cache at startup"
-#~ msgstr "Hapus tembolok bangun saat awal mula"
-
-#~ msgid "Expired caches will be purged when Builder is started"
-#~ msgstr "Tembolok yang kedaluwarsa akan dihapus saat Builder dimulai"
-
-#~ msgid "Network"
-#~ msgstr "Jaringan"
-
-#~ msgid "Allow downloads over metered connections"
-#~ msgstr "Izinkan mengunduh melalui koneksi berkuota"
-
-#~ msgid ""
-#~ "Allow the use of metered network connections when automatically "
-#~ "downloading dependencies"
-#~ msgstr ""
-#~ "Izinkan penggunaan koneksi jaringan berkuota ketika secara otomatis "
-#~ "mengunduh dependensi"
-
-#~ msgid "Insert Breakpoint at Start of Application"
-#~ msgstr "Sisipkan Breakpoint di Awal Aplikasi"
-
-#~ msgid ""
-#~ "Automatically stop execution at the start of the applications main "
-#~ "function"
-#~ msgstr "Secara otomatis menghentikan eksekusi di awal fungsi utama aplikasi"
-
-#~ msgid "Workspace"
-#~ msgstr "Area kerja"
-
-#~ msgid "A place for all your projects"
-#~ msgstr "Suatu tempat untuk semua proyek Anda"
-
-#~ msgid "Restore previously opened files"
-#~ msgstr "Pulihkan berkas yang sebelumnya terbuka"
-
-#~ msgid "Shortcuts"
-#~ msgstr "Pintasan"
-
-#~ msgid "Insight"
-#~ msgstr "Wawasan"
-
-#~ msgid "Navigate with Tab Bar"
-#~ msgstr "Navigasikan dengan Bilah Tab"
-
-#~ msgid "Upon rebuilding the project the build log will be cleared"
-#~ msgstr "Setelah membangun kembali proyek, log bangun akan dihapus"
-
-#~ msgid "Allow Downloads over Metered Connections"
-#~ msgstr "Izinkan Mengunduh melalui Koneksi Berkuota"
-
-#~ msgid "Keyboard shortcuts similar to GNOME Text Editor"
-#~ msgstr "Pintasan papan tik mirip dengan Penyunting Teks GNOME"
-
-#~ msgid "Custom Font"
-#~ msgstr "Fonta Ubahan"
-
-#~ msgid "Visual"
-#~ msgstr "Visual"
-
-#~ msgid "External"
-#~ msgstr "Eksternal"
-
-#~ msgid "All Runtimes"
-#~ msgstr "Semua Runtime"
-
-#~ msgid "Select this configuration as the active configuration."
-#~ msgstr "Pilih konfigurasi ini sebagai konfigurasi aktif."
-
-#~ msgid ""
-#~ "Duplicating the configuration allows making changes without modifying "
-#~ "this configuration."
-#~ msgstr ""
-#~ "Duplikat konfigurasi memungkinkan membuat perubahan tanpa mengubah "
-#~ "konfigurasi ini."
-
-#~ msgid "_Remove"
-#~ msgstr "_Hapus"
-
-#~ msgid "Removes the configuration and cannot be undone."
-#~ msgstr "Menghapus konfigurasi dan tidak dapat diurungkan."
-
-#~ msgid "Runtime Environment"
-#~ msgstr "Lingkungan Runtime"
-
-#~ msgid "Install Prefix"
-#~ msgstr "Pasang Prefiks"
-
-#~ msgid "Run Options"
-#~ msgstr "Jalankan Opsi"
-
-#~ msgid "Application Runtime"
-#~ msgstr "Runtime Aplikasi"
-
-#~ msgid "No Version Control"
-#~ msgstr "Tidak Ada Kendali Versi"
-
-#~ msgid "Project"
-#~ msgstr "Proyek"
-
-#~ msgid "_Create Custom Command"
-#~ msgstr "Buat Perintah Ubahan"
-
-#~ msgid "Build & Run"
-#~ msgstr "Bangun dan Jalankan"
-
-#~ msgid ""
-#~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
-#~ "sources"
-#~ msgstr ""
-#~ "Clang akan dikueri untuk diagnostik dalam sumber C, C++, dan Objective-C"
-
-#~ msgid "Use Clang for Completions"
-#~ msgstr "Gunakan Clang untuk Penyelesaian"
-
-#~ msgid ""
-#~ "Clang will be queried for completions within C, C++, and Objective-C "
-#~ "sources"
-#~ msgstr ""
-#~ "Clang akan dikueri untuk penyelesaian dalam sumber C, C++, dan Objective-C"
-
-#~ msgid "Complete Parenthesis"
-#~ msgstr "Tanda Kurung Lengkap"
-
-#~ msgid "Include parenthesis when completing clang proposals"
-#~ msgstr "Sertakan tanda kurung ketika menyelesaikan proposal clang"
-
-#~ msgid "Include parameters and types when completing clang proposals"
-#~ msgstr "Sertakan parameter dan tipe ketika menyelesaikan proposal clang"
-
-#~ msgid "Automatically update copyright headers when saving a file"
-#~ msgstr "Memperbarui tajuk hak cipta secara otomatis saat menyimpan berkas"
-
-#~ msgid "Show Overview Map"
-#~ msgstr "Tampilkan Peta Ringkasan"
-
-#~ msgid "Use an overview map instead of a scrollbar"
-#~ msgstr "Gunakan peta gambaran umum alih-alih bilah gulir"
-
-#~ msgid "Display line numbers next to each line of source code"
-#~ msgstr "Tampilkan nomor baris di samping setiap baris kode sumber"
-
-#~ msgid "Adjust line-height of the configured font"
-#~ msgstr "Sesuaikan tinggi garis dari fonta yang dikonfigurasi"
-
-#~ msgid "Suggest Completions While Typing"
-#~ msgstr "Sarankan Penyelesaian Saat Mengetik"
-
-#~ msgid "Automatically suggest completions while typing within the file"
-#~ msgstr ""
-#~ "Secara otomatis menyarankan penyelesaian saat mengetik di dalam berkas"
-
-#~ msgid "Automatically select the first completion when displayed"
-#~ msgstr "Secara otomatis memilih penyelesaian pertama saat ditampilkan"
-
-#~ msgid "Trim Trailing Whitespace"
-#~ msgstr "Pangkas Trailing Whitespace"
-
-#~ msgid "Insert matching character for [[(\"'"
-#~ msgstr "Sisipkan karakter yang sesuai untuk [[(\"'"
-
-#~ msgid "Prefer spaces over tabs"
-#~ msgstr "Lebih suka spasi daripada tab"
-
-#~ msgid "Automatically Indent"
-#~ msgstr "Indentasi Otomatis"
-
-#~ msgid "Format source code as you type"
-#~ msgstr "Memformat kode sumber saat Anda mengetik"
-
-#~ msgid "lang-function-symbolic"
-#~ msgstr "lang-function-symbolic"
-
-#~ msgid "Author"
-#~ msgstr "Penulis"
-
-#~ msgid "The Git configuration options above effect current project only."
-#~ msgstr "Opsi konfigurasi Git di atas hanya berlaku untuk proyek saat ini."
-
-#~ msgid "The Git configuration options above effect global defaults."
-#~ msgstr "Opsi konfigurasi Git di atas mempengaruhi bawaan global."
-
-#~ msgid "Full Name"
-#~ msgstr "Nama Lengkap"
-
-#~ msgid "Email Address"
-#~ msgstr "Alamat Surel"
-
-#~ msgid "Meson Options"
-#~ msgstr "Opsi Meson"
-
-#~ msgid "Add toolchain"
-#~ msgstr "Tambah toolchain"
-
-#~ msgid "Define a new custom toolchain targeting a specific platform"
-#~ msgstr "Tentukan toolchain ubahan baru yang menargetkan platform tertentu"
-
-#~ msgid "info-symbolic"
-#~ msgstr "info-symbolic"
-
-#~ msgid "builder-build-configure-symbolic"
-#~ msgstr "builder-build-configure-symbolic"
-
-#~ msgid "Highlight Words Matching Selection"
-#~ msgstr "Sorot Pilihan Pencocokan Kata"
-
-#~ msgid "Highlight all occurrences of words matching the current selection"
-#~ msgstr "Sorot semua peristiwa dari kata yang cocok pilihan saat ini"
-
-#~ msgid "Minimum Length for Highlight"
-#~ msgstr "Panjang Minimum untuk Sorotan"
-
-#~ msgid "Highlight words matching at least this number of characters"
-#~ msgstr "Sorot kata yang cocok dengan setidaknya jumlah karakter ini"
-
-#~ msgid "Cargo Check"
-#~ msgstr "Cek Kargo"
-
-#~ msgid "Run “cargo check” as the default cargo command"
-#~ msgstr "Jalankan \"cargo check\" sebagai perintah bawaan cargo"
-
-#~ msgid "Cargo Clippy"
-#~ msgstr "Clippy Kargo"
-
-#~ msgid "Run “cargo clippy” as the default cargo command"
-#~ msgstr "Jalankan \"cargo clippy\" sebagai perintah bawaan cargo"
-
-#~ msgid "Project Commands"
-#~ msgstr "Perintah Proyek"
-
-#~ msgid "Shared Commands"
-#~ msgstr "Perintah Bersama"
-
-#~ msgid "These commands may be run from this project only."
-#~ msgstr "Perintah ini hanya dapat dijalankan dari proyek ini."
-
-#~ msgid "These commands may be shared across any project in Builder."
-#~ msgstr "Perintah ini dapat dibagikan di seluruh proyek apa pun di Builder."
-
-#~ msgid "Automatically check spelling as you type"
-#~ msgstr "Memeriksa ejaan secara otomatis saat Anda mengetik"
-
-#~ msgid "Add sysroot"
-#~ msgstr "Tambah sysroot"
-
-#~ msgid "Define a new sysroot target to build against a different target"
-#~ msgstr "Tentukan target sysroot baru untuk membangun target yang berbeda"
-
-#~ msgid "Sysroots"
-#~ msgstr "Sysroot"
-
-#~ msgid "Scrollback"
-#~ msgstr "Gulir balik"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal font monospace"
-#~ msgstr "fonta terminal lebar seragam"
-
-#~ msgid "Bold text in terminals"
-#~ msgstr "Tebalkan teks dalam terminal"
-
-#~ msgid "If terminals are allowed to display bold text"
-#~ msgstr "Jika terminal diizinkan untuk menampilkan teks tebal"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal allow bold"
-#~ msgstr "perbolehkan teks tebal dalam terminal"
-
-#~ msgid "Show hyperlinks"
-#~ msgstr "Tampilkan pranala"
-
-#~ msgid ""
-#~ "When enabled hyperlinks (OSC 8 escape sequences) are recognized and "
-#~ "displayed"
-#~ msgstr ""
-#~ "Ketika diaktifkan, pranala (urutan escape OSC 8) dikenali dan ditampilkan"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal show hyperlinks links urls"
-#~ msgstr "terminal menampilkan pranala tautan url"
-
-#~ msgid "Scroll on output"
-#~ msgstr "Gulir pada keluaran"
-
-#~ msgid ""
-#~ "When enabled the terminal will scroll to the bottom when new output is "
-#~ "displayed"
-#~ msgstr ""
-#~ "Ketika diaktifkan, terminal akan menggulir ke bawah ketika keluaran baru "
-#~ "ditampilkan"
-
-#~ msgctxt "Keywords"
-#~ msgid "scroll on output"
-#~ msgstr "gulir pada keluaran"
-
-#~ msgid "Scroll on keystroke"
-#~ msgstr "Gulir saat tombol ditekan"
-
-#~ msgid "When enabled the terminal will scroll to the bottom when typing"
-#~ msgstr "Ketika diaktifkan, terminal akan menggulir ke bawah saat mengetik"
-
-#~ msgctxt "Keywords"
-#~ msgid "scroll on keystroke"
-#~ msgstr "gulir saat tombol ditekan"
-
-#~ msgid ""
-#~ "When enabled terminal scrollback will be limited to the number of lines "
-#~ "specified below"
-#~ msgstr ""
-#~ "Ketika diaktifkan, gulir balik terminal akan dibatasi pada jumlah baris "
-#~ "yang ditentukan di bawah ini"
-
-#~ msgctxt "Keywords"
-#~ msgid "scrollback limit"
-#~ msgstr "batasi gulir balik"
-
-#~ msgid "Scrollback Lines"
-#~ msgstr "Baris Gulir Balik"
-
-#~ msgid "The number of lines to keep available for scrolling"
-#~ msgstr "Cacah baris yang akan tetap tersedia untuk menggulir"
-
-#~ msgctxt "Keywords"
-#~ msgid "scrollback lines"
-#~ msgstr "baris gulir balik"
-
-#~ msgid "Open a new terminal"
-#~ msgstr "Buka terminal baru"
-
-#~ msgid "Emulate keyboard shortcuts from Vim"
-#~ msgstr "Meniru pintasan papan tik dari Vim"
-
-#~ msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
-#~ msgstr ""
-#~ "Setelah menyimpan, trailing whitepsace dari baris yang diubah akan "
-#~ "dipangkas"
-
-#~ msgid "Whether or not Home moves to first non-space character."
-#~ msgstr "Apakah tombol Home memindah ke karakter bukan spasi pertama."
-
-#~ msgid "Moves to first non-whitespace character before line edges"
-#~ msgstr "Bergerak ke karakter bukan spasi pertama sebelum tepi garis"
-
-#~ msgid "Search Preferences"
-#~ msgstr "Preferensi Pencarian"
-
-#~ msgid "Allow Downloads when Metered"
-#~ msgstr "Izinkan Unduhan ketika memakai kuota"
-
-#~ msgid "Display the open files list in the project sidebar."
-#~ msgstr "Tampilkan daftar berkas yang terbuka di bilah samping proyek."
-
-#~ msgid "Select First Proposal"
-#~ msgstr "Pilih Proposal Pertama"
-
-#~ msgid "Use the tabbar within the page grid."
-#~ msgstr "Gunakan bilah tab di dalam kisi halaman."
-
-#~ msgid "Automatically Hide Overview Map"
-#~ msgstr "Otomatis Sembunyikan Peta Ikhtisar"
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
-#~ msgstr ""
-#~ "Bila difungsikan, Builder akan secara otomatis menyembunyikan peta "
-#~ "ringkasan ketika fokus tetikus meninggalkan penyunting, atau tenggang "
-#~ "waktu terlampaui."
-
-#~ msgid "Overscroll"
-#~ msgstr "Gulir Lebih"
-
-#~ msgid "The number of lines to scroll beyond the end of the buffer."
-#~ msgstr "Banyaknya baris yang digulir melampaui akhir buffer."
-
-#~ msgid "The number of pixels to include above and below lines in the editor."
-#~ msgstr ""
-#~ "Cacah piksel untuk disertakan di atas dan di bawah garis dalam penyunting."
-
-#~ msgid "Window position"
-#~ msgstr "Posisi jendela"
-
-#~ msgid "Window position (x and y)."
-#~ msgstr "Posisi jendela (x dan y)."
-
-#~ msgid "Show Left Panel"
-#~ msgstr "Tampilkan Panel Kiri"
-
-#~ msgid "If enabled, the left panel will be displayed."
-#~ msgstr "Bila difungsikan, panel kiri akan ditampilkan."
-
-#~ msgid "Left Panel Position"
-#~ msgstr "Posisi Panel Kiri"
-
-#~ msgid "The width in pixel units of the left panel."
-#~ msgstr "Lebar panel kiri dalam piksel."
-
-#~ msgid "Right Panel Position"
-#~ msgstr "Posisi Panel Kanan"
-
-#~ msgid "The width in pixel units of the right panel."
-#~ msgstr "Lebar panel kanan dalam piksel."
-
-#~ msgid "Show Bottom Panel"
-#~ msgstr "Tampilkan Panel Bawah"
-
-#~ msgid "If enabled, the bottom panel will be displayed."
-#~ msgstr "Bila difungsikan, panel bawah akan ditampilkan."
-
-#~ msgid "Bottom Panel Position"
-#~ msgstr "Posisi Panel Bawah"
-
-#~ msgid "The height in pixel units of the bottom panel."
-#~ msgstr "Tinggi panel bawah dalam piksel."
-
-#~ msgid "Hue"
-#~ msgstr "Hue"
-
-#~ msgid "Saturation"
-#~ msgstr "Saturasi"
-
-#~ msgid "Cielab l"
-#~ msgstr "Cielab l"
-
-#~ msgid "Cielab a"
-#~ msgstr "Cielab a"
-
-#~ msgid "Cielab b"
-#~ msgstr "Cielab b"
-
-#~ msgid "Red"
-#~ msgstr "Merah"
-
-#~ msgid "Green"
-#~ msgstr "Hijau"
-
-#~ msgid "Blue"
-#~ msgstr "Biru"
-
-#~ msgid "Failed to load file: %s"
-#~ msgstr "Gagal memuat berkas: %s"
-
-#~ msgid "Failed to save file: %s"
-#~ msgstr "Gagal menyimpan berkas: %s"
-
-#~ msgid "Save a Copy"
-#~ msgstr "Simpan Salinan"
-
-#~ msgid "Editor shortcuts"
-#~ msgstr "Pintasan penyunting"
-
-#~ msgid "Save the document"
-#~ msgstr "Simpan dokumen"
-
-#~ msgid "Save the document with a new name"
-#~ msgstr "Simpan dokumen dengan nama baru"
-
-#~ msgid "Print the document"
-#~ msgstr "Cetak dokumen"
-
-#~ msgid "Find and replace"
-#~ msgstr "Cari dan ganti"
-
-#~ msgid "Move to the next error"
-#~ msgstr "Ke kesalahan selanjutnya"
-
-#~ msgid "Move to the previous error"
-#~ msgstr "Ke kesalahan sebelumnya"
-
-#~ msgid "_Reload"
-#~ msgstr "_Muat Ulang"
-
-#~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
-#~ msgstr ""
-#~ "Builder telah menemukan bahwa berkas ini telah dimodifikasi secara "
-#~ "eksternal. Apakah Anda ingin memuat ulang berkas?"
-
-#~ msgid "Regular expressions"
-#~ msgstr "Ekspresi reguler"
-
-#~ msgid "Match whole word only"
-#~ msgstr "Cocok seluruh kata"
-
-#~ msgid "Switch between Search and Search-and-Replace"
-#~ msgstr "Beralih antara Cari dan Cari-dan-Ganti"
-
-#~ msgid "Regular _expressions"
-#~ msgstr "_Ekspresi reguler"
-
-#~ msgid "_Match whole word only"
-#~ msgstr "Coco_k seluruh kata"
-
-#~ msgid "Document Properties"
-#~ msgstr "Properti Dokumen"
-
-#~ msgid "Highlight Mode"
-#~ msgstr "Mode Penyorotan"
-
-#~ msgid "Display line numbers"
-#~ msgstr "Tampilkan nomor baris"
-
-#~ msgid "Display relative line numbers"
-#~ msgstr "Tampilkan nomor baris relatif"
-
-#~ msgid "Display right margin"
-#~ msgstr "Tampilkan marjin kanan"
-
-#~ msgid "Automatic indentation"
-#~ msgstr "Indentasi otomatis"
-
-#~ msgid "Smart backspace"
-#~ msgstr "Backspace cerdas"
-
-#~ msgid "Enabling smart backspace will treat multiple spaces as a tabs"
-#~ msgstr ""
-#~ "Aktifkan backspace cerdas akan memperlakukan beberapa spasi sebagai tab"
-
-#~ msgid "Insert trailing newline"
-#~ msgstr "Sisipkan baris baru di ekor"
-
-#~ msgid "Overwrite trailing braces and quotations"
-#~ msgstr "Timpa kurung kurawal dan kutipan"
-
-#~ msgid "Create a new document"
-#~ msgstr "Buat dokumen baru"
-
-#~ msgid "Open a document"
-#~ msgstr "Buka suatu dokumen"
-
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Jungkitkan panel navigasi"
-
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Jungkitkan panel utilitas"
-
-#~ msgid "Close all files"
-#~ msgstr "Tutup semua berkas"
-
-#~ msgid "Your previous session will be ready in a moment."
-#~ msgstr "Sesi Anda sebelumnya akan siap sebentar lagi."
-
-#~ msgid "Switch surface"
-#~ msgstr "Ganti permukaan"
-
-#~ msgid "Failed to locate runtime"
-#~ msgstr "Gagal menemukan runtime"
-
-#~ msgid "The build target failed to build: %s"
-#~ msgstr "Target bangun gagal dibangun: %s"
-
-#~ msgid "Workbench shortcuts"
-#~ msgstr "Pintasan meja kerja"
-
-#~ msgid "Process quit unexpectedly"
-#~ msgstr "Proses keluar tak disangka"
-
-#~ msgid "The directory “%s” already exists. Please choose another directory."
-#~ msgstr "Direktori \"%s\" sudah ada. Silakan pilih direktori lain."
-
-#~ msgid "Your project will be created at %s"
-#~ msgstr "Proyek Anda akan dibuat di %s"
-
-#~ msgid ""
-#~ "Enter the repository of the project you would like to clone. The URL "
-#~ "should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
-#~ msgstr ""
-#~ "Masukkan repositori proyek yang ingin Anda klon. URL harus terlihat mirip "
-#~ "dengan \"https://gitlab.gnome.org/GNOME/gnome-builder.git\"."
-
-#~ msgid "user@host:repository.git"
-#~ msgstr "pengguna@host:repositori.git"
-
-#~ msgid "Select branch and other options."
-#~ msgstr "Pilih cabang dan opsi lainnya."
-
-#~ msgid "Repository Kind"
-#~ msgstr "Jenis Repositori"
-
-#~ msgid "Clone _Project"
-#~ msgstr "Klon _Proyek"
-
-#~ msgctxt "title"
-#~ msgid "Clone Repository"
-#~ msgstr "Klon Repositori"
-
-#~ msgid "Switch Surface"
-#~ msgstr "Ganti Permukaan"
-
-#~ msgid "Learn more about GNOME Builder"
-#~ msgstr "Pelajari lebih banyak tentang GNOME Builder"
-
-#~ msgid "Show the help window"
-#~ msgstr "Tampilkan jendela bantuan"
-
-#~ msgid "Show the preferences window"
-#~ msgstr "Tampilkan jendela preferensi"
-
-#~ msgid "Show the shortcuts window"
-#~ msgstr "Tampilkan jendela pintasan"
-
-#~ msgid ""
-#~ "GNOME Builder requires a session with D-Bus which was not found. Please "
-#~ "set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
-#~ msgstr ""
-#~ "GNOME Builder membutuhkan sesi dengan D-Bus yang tidak ditemukan. Harap "
-#~ "set DBUS_SESSION_BUS_ADDRESS. Beberapa fitur mungkin tidak tersedia."
-
-#~ msgid "Command failed"
-#~ msgstr "Perintah gagal"
-
-#~ msgid "Failed to locate command “%s”"
-#~ msgstr "Gagal menemukan perintah \"%s\""
-
-#~ msgid "File chooser"
-#~ msgstr "Pemilih berkas"
-
-#~ msgid "New terminal"
-#~ msgstr "Terminal baru"
-
-#~ msgid "Move document to the right"
-#~ msgstr "Pindahkan dokumen ke kanan"
-
-#~ msgid "Move document to the left"
-#~ msgstr "Pindahkan dokumen ke kiri"
-
-#~ msgid "Switch to the previous document"
-#~ msgstr "Beralih ke dokumen sebelumnya"
-
-#~ msgid "Switch to the next document"
-#~ msgstr "Beralih ke dokumen selanjutnya"
-
-#~ msgid "Close the document"
-#~ msgstr "Tutup dokumen"
-
-#~ msgid "No Open Pages"
-#~ msgstr "Tidak Ada Halaman yang Terbuka"
-
-#~ msgid "Uh oh, something went wrong"
-#~ msgstr "Oh, ada yang tidak beres"
-
-#~ msgid "There was a failure while trying to perform the operation."
-#~ msgstr "Terjadi kegagalan saat mencoba melakukan operasi."
-
-#~ msgid "Window shortcuts"
-#~ msgstr "Pintasan jendela"
-
-#~ msgid "Show window menu"
-#~ msgstr "Tampilkan menu jendela"
-
-#~ msgid "Toggle window to fullscreen"
-#~ msgstr "Jungkitkan jendela ke layar penuh"
-
-#~ msgid "Extensions"
-#~ msgstr "Ekstensi"
-
-#~ msgid "Allow the editor to scroll past the end of the buffer"
-#~ msgstr "Mengijinkan penyunting menggulir melewati akhir buffer"
-
-#~ msgid "A zoomed out view to enhance navigating source code"
-#~ msgstr "Suatu tilikan diperkecil untuk meningkatkan navigasi kode sumber"
-
-#~ msgid "The project cannot be run while the build pipeline is being set up"
-#~ msgstr "Proyek tidak dapat dijalankan ketika pipa bangun sedang disiapkan"
-
-#~ msgid "Change run options"
-#~ msgstr "Ubah opsi jalankan"
-
-#~ msgid "Workspace shortcuts"
-#~ msgstr "Pintasan ruang kerja"
-
-#~ msgctxt "shortcut window"
-#~ msgid "General"
-#~ msgstr "Umum"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show help"
-#~ msgstr "Tampilkan bantuan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Preferences"
-#~ msgstr "Preferensi"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Command Bar"
-#~ msgstr "Bilah Perintah"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal"
-#~ msgstr "Terminal"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal in Build Runtime"
-#~ msgstr "Terminal pada Runtime Bangun"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Pintasan Papan Tik"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "Jungkitkan Mode Fokus"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Panels"
-#~ msgstr "Panel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show Find in Project panel"
-#~ msgstr "Tampilkan Temukan di panel Proyek"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Files"
-#~ msgstr "Berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Buat dokumen baru"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Open a document"
-#~ msgstr "Buka suatu dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save the document"
-#~ msgstr "Simpan dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save a copy of the document"
-#~ msgstr "Simpan salinan dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all documents"
-#~ msgstr "Simpan semua dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Print the document"
-#~ msgstr "Cetak dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Close the document"
-#~ msgstr "Tutup dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Close all documents"
-#~ msgstr "Tutup semua dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the next document"
-#~ msgstr "Beralih ke dokumen selanjutnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the previous document"
-#~ msgstr "Beralih ke dokumen sebelumnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show list of open documents"
-#~ msgstr "Tampilkan daftar dokumen yang terbuka"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show document outline or symbol tree"
-#~ msgstr "Tampilkan kerangka dokumen atau pohon simbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find and replace"
-#~ msgstr "Cari dan ganti"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Goto Line"
-#~ msgstr "Ke Baris"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find"
-#~ msgstr "Cari"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the next match"
-#~ msgstr "Cari cocok selanjutnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the previous match"
-#~ msgstr "Cari cocok sebelumnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Clear highlight"
-#~ msgstr "Bersihkan sorotan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Paste text from clipboard"
-#~ msgstr "Tempel teks dari papan klip"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Duplicate current line or selection"
-#~ msgstr "Duplikatkan baris saat ini atau pilihan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo previous command"
-#~ msgstr "Batalkan perintah sebelumnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Redo previous command"
-#~ msgstr "Jadikan lagi perintah sebelumnya"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Editing"
-#~ msgstr "Penyuntingan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Increment number at cursor"
-#~ msgstr "Naikkan angka pada kursor"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Decrement number at cursor"
-#~ msgstr "Turunkan angka pada kursor"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Join selected lines"
-#~ msgstr "Gabungkan baris yang dipilih"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Sort selected lines"
-#~ msgstr "Urutkan baris yang dipilih"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show completion window"
-#~ msgstr "Tampilkan jendela pelengkapan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle opacity of completion window"
-#~ msgstr "Jungkitkan kelegapan dari jendela pelengkapan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle overwrite"
-#~ msgstr "Jungkitkan penimpaan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Reindent line"
-#~ msgstr "Indentasi ulang baris"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename symbol"
-#~ msgstr "Ubah nama simbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Requires semantic language support"
-#~ msgstr "Memerlukan dukungan bahasa semantik"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Comment code"
-#~ msgstr "Komentar kode"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Uncomment code"
-#~ msgstr "Hilangkan komentar kode"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Beautify selected code"
-#~ msgstr "Percantik kode yang dipilih"
-
-#~ msgctxt "shortcut window"
-#~ msgid "(LSP only) Format selected code or whole document"
-#~ msgstr "(Khusus LSP) Format kode yang dipilih atau seluruh dokumen"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next error in file"
-#~ msgstr "Ke kesalahan selanjutnya dalam berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous error in file"
-#~ msgstr "Ke kesalahan sebelumnya dalam berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Jump to definition of symbol"
-#~ msgstr "Lompat ke definisi simbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find references"
-#~ msgstr "Temukan referensi"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport up within the file"
-#~ msgstr "Naikkan viewport di dalam berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport down within the file"
-#~ msgstr "Turunkan viewport di dalam berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to end of file"
-#~ msgstr "Pindahkan viewport ke akhir berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to beginning of file"
-#~ msgstr "Pindahkan viewport ke awal berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to matching bracket"
-#~ msgstr "Ke tanda kurung pasangan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Select all"
-#~ msgstr "Pilih semua"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Unselect all"
-#~ msgstr "Pilih tak satupun"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build and Run"
-#~ msgstr "Bangun dan Jalankan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build"
-#~ msgstr "Bangun"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rebuild"
-#~ msgstr "Bangun Ulang"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Run"
-#~ msgstr "Jalankan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Profile"
-#~ msgstr "Profil"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal Shortcuts"
-#~ msgstr "Pintasan Terminal"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Search"
-#~ msgstr "Cari"
-
-#~ msgid "_Undo"
-#~ msgstr "Tak _Jadi"
-
-#~ msgid "_Redo"
-#~ msgstr "_Jadi Lagi"
-
-#~ msgid "_Delete"
-#~ msgstr "_Hapus"
-
-#~ msgid "_Highlighting"
-#~ msgstr "_Penyorotan"
-
-#~ msgid "_Zoom"
-#~ msgstr "_Zum"
-
-#~ msgid "Zoom _In"
-#~ msgstr "Per_besar"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "Per_kecil"
-
-#~ msgid "Insert “%s”"
-#~ msgstr "Sisip \"%s\""
-
-#~ msgid "Replace “%s” with “%s”"
-#~ msgstr "Gantikan “%s” dengan \"%s\""
-
-#~ msgid "Apply Fix-It"
-#~ msgstr "Terapkan Fix-It"
-
-#~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
-#~ msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
-
-#~ msgid "Requested runtime is not installed"
-#~ msgstr "Runtime yang diminta tidak dipasang"
-
-#~ msgid "Failed to create shell within runtime “%s”"
-#~ msgstr "Gagal membuat shell dalam runtime: \"%s\""
-
-#~ msgid "Beautify the code"
-#~ msgstr "Percantik kode"
-
-#~ msgid "Trigger the default entry"
-#~ msgstr "Memicu entri bawaan"
-
-#~ msgid "Select a build configuration from the sidebar to modify."
-#~ msgstr "Pilih konfigurasi bangun dari bilah sisi untuk dimodifikasi."
-
-#~ msgid "Configure build preferences"
-#~ msgstr "Tata preferensi bangun"
-
-#~ msgid "View build console contents"
-#~ msgstr "Tilik isi konsole bangun"
-
-#~ msgid "True"
-#~ msgstr "True"
-
-#~ msgid "Build pipeline is empty"
-#~ msgstr "Pipa bangun kosong"
-
-#~ msgid "Build Preferences"
-#~ msgstr "Preferensi Bangun"
-
-#~ msgid "Show errors and warnings provided by Clang"
-#~ msgstr "Tampilkan kesalahan dan peringatan yang disediakan oleh Clang"
-
-#~ msgid "clang diagnostics warnings errors"
-#~ msgstr "kesalahan peringatan diagnostik clang"
-
-#~ msgid "Use Clang to suggest completions for C and C++ languages"
-#~ msgstr "Gunakan Clang untuk pelengkapan dalam bahasa C dan C++"
-
-#~ msgid "Clang Options"
-#~ msgstr "Opsi Clang"
-
-#~ msgid "Workspace Shortcuts"
-#~ msgstr "Pintasan Ruang Kerja"
-
-#~ msgid "Command Bar"
-#~ msgstr "Bilah Perintah"
-
-#~ msgid "Show the workspace command bar"
-#~ msgstr "Tampilkan bilah perintah ruang kerja"
-
-#~ msgid "Comment the code"
-#~ msgstr "Komentar kode"
-
-#~ msgid "Uncomment the code"
-#~ msgstr "Hilangkan komentar kode"
-
-#~ msgid ""
-#~ "When saving a file Builder will automatically update copyright "
-#~ "information for you"
-#~ msgstr ""
-#~ "Ketika menyimpan berkas Builder akan secara otomatis memperbarui "
-#~ "informasi hak cipta untuk Anda"
-
-#~ msgid "update copyright save"
-#~ msgstr "perbarui menyimpan hak cipta"
-
-#~ msgid ""
-#~ "Characters were used which might cause technical issues as a project name"
-#~ msgstr ""
-#~ "Karakter yang digunakan mungkin menyebabkan masalah teknis seperti nama "
-#~ "proyek"
-
-#~ msgid "Directory already exists with that name"
-#~ msgstr "Direktori sudah ada dengan nama tersebut"
-
-#~ msgid "Your project will be created within %s."
-#~ msgstr "Proyek Anda akan dibuat dalam %s."
-
-#~ msgid "Application ID is not valid."
-#~ msgstr "ID Aplikasi tidak valid."
-
-#~ msgctxt "title"
-#~ msgid "Start New Project"
-#~ msgstr "Mulai Proyek Baru"
-
-#~ msgid "GPLv3+"
-#~ msgstr "GPLv3+"
-
-#~ msgid "LGPLv3+"
-#~ msgstr "LGPLv3+"
-
-#~ msgid "AGPLv3+"
-#~ msgstr "AGPLv3+"
-
-#~ msgid "MIT/X11"
-#~ msgstr "MIT/X11"
-
-#~ msgid "Apache 2.0"
-#~ msgstr "Apache 2.0"
-
-#~ msgid "GPLv2+"
-#~ msgstr "GPLv2+"
-
-#~ msgid "LGPLv2.1+"
-#~ msgstr "LGPLv2.1+"
-
-#~ msgid "Uses the Git version control system"
-#~ msgstr "Menggunakan sistem kontrol versi Git"
-
-#~ msgid "Suggest completions using Ctags"
-#~ msgstr "Sarankan pelengkapan memakai Ctags"
-
-#~ msgid "Use Ctags to suggest completions for a variety of languages"
-#~ msgstr "Gunakan Ctags untuk menyarankan pelengkapan dalam berbagai bahasa"
-
-#~ msgid "Failed to start the debugger"
-#~ msgstr "Gagal memulai pengawakutu"
-
-#~ msgid "Devhelp"
-#~ msgstr "Devhelp"
-
-#~ msgid "_Select Documentation…"
-#~ msgstr "_Pilih Dokumentasi…"
-
-#~ msgid "Reveal search bar with Ctrl+F"
-#~ msgstr "Ungkap bilah pencarian dengan Ctrl+F"
-
-#~ msgid "Close search bar (Escape key)"
-#~ msgstr "Tutup bilah pencarian (Tombol escape)"
-
-#~ msgid "Object Path"
-#~ msgstr "Path Objek"
-
-#~ msgid "Method"
-#~ msgstr "Metode"
-
-#~ msgid "Result"
-#~ msgstr "Hasil"
-
-#~ msgid "Elapsed Time"
-#~ msgstr "Waktu Berlalu"
-
-#~ msgid "Bus Address"
-#~ msgstr "Alamat Bus"
-
-#~ msgid "Owner"
-#~ msgstr "Pemilik"
-
-#~ msgid "Process ID"
-#~ msgstr "ID Proses"
-
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "Activatable"
-#~ msgstr "Dapat diaktifkan"
-
-#~ msgid "Yes"
-#~ msgstr "Ya"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#~ msgid "%s: %u"
-#~ msgstr "%s: %u"
-
-#~ msgid "PID"
-#~ msgstr "PID"
-
-#~ msgid "read/write"
-#~ msgstr "baca/tulis"
-
-#~ msgid "write-only"
-#~ msgstr "hanya-tulis"
-
-#~ msgid "read-only"
-#~ msgstr "hanya-baca"
-
-#~ msgid "Interfaces"
-#~ msgstr "Antarmuka"
-
-#~ msgid "Methods"
-#~ msgstr "Metode"
-
-#~ msgid "Properties"
-#~ msgstr "Properti"
-
-#~ msgid "Array of [%s]"
-#~ msgstr "Larik dari [%s]"
-
-#~ msgid "Access Denied by Peer"
-#~ msgstr "Akses Ditolak oleh Peer"
-
-#~ msgid "Authentication Failed"
-#~ msgstr "Autentikasi gagal"
-
-#~ msgid "Operation Timed Out"
-#~ msgstr "Waktu Operasi Habis"
-
-#~ msgid "Connect"
-#~ msgstr "Sambung"
-
-#~ msgid "Provide the address of the message bus"
-#~ msgstr "Berikan alamat bus pesan"
-
-#~ msgid "Connect to Other Bus"
-#~ msgstr "Sambung ke Bus Lain"
-
-#~ msgid "Search Bus Names"
-#~ msgstr "Cari Nama Bus"
-
-#~ msgid "Bus Names"
-#~ msgstr "Nama Bus"
-
-#~ msgid "Select a Bus Name"
-#~ msgstr "Pilih Nama Bus"
-
-#~ msgid "Select a bus name to introspect the peer."
-#~ msgstr "Pilih nama bus untuk mengintrospeksi peer."
-
-#~ msgid "There is a file with unsaved changes. Save changes before closing?"
-#~ msgid_plural ""
-#~ "There are files with unsaved changes. Save changes before closing?"
-#~ msgstr[0] ""
-#~ "Ada berkas dengan perubahan yang belum disimpan. Simpan perubahan sebelum "
-#~ "ditutup?"
-
-#~ msgid "Select the files to save:"
-#~ msgstr "Pilih berkas yang akan disimpan:"
-
-#~ msgid ""
-#~ "If you close without saving, all your changes will be permanently lost."
-#~ msgstr ""
-#~ "Jika Anda menutup tanpa menyimpan, semua perubahan Anda akan hilang "
-#~ "secara permanen."
-
-#~ msgid "Provide a number between 1 and %u"
-#~ msgstr "Sediakan angka antara 0 dan %u"
-
-#~ msgid "Go to line number"
-#~ msgstr "Ke baris"
-
-#~ msgid "Move Page Left"
-#~ msgstr "Pindahkan Halaman ke Kiri"
-
-#~ msgid "Move Page Right"
-#~ msgstr "Pindahkan Halaman ke Kanan"
-
-#~ msgid "Emacs"
-#~ msgstr "Emacs"
-
-#~ msgid "Emulates the Emacs text editor"
-#~ msgstr "Mengemulasi penyunting teks Emacs"
-
-#~ msgid "ESlint"
-#~ msgstr "ESlint"
-
-#~ msgid "Enable the use of ESLint, which may execute code in your project"
-#~ msgstr ""
-#~ "Memungkinkan penggunaan ESLint, yang dapat mengeksekusi kode dalam proyek "
-#~ "Anda"
-
-#~ msgid "eslint javascript lint code execute execution"
-#~ msgstr "eslint javascript kode lint mengeksekusi eksekusi"
-
-#~ msgid ""
-#~ "Enable the use of eslint to find additional diagnostics in JavaScript "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Memungkinkan penggunaan eslint untuk menemukan diagnostik tambahan dalam "
-#~ "berkas JavaScript. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
-#~ "Anda."
-
-#~ msgid "Downloading application sources…"
-#~ msgstr "Mengunduh sumber aplikasi…"
-
-#~ msgid "%s <b>%s</b>"
-#~ msgstr "%s <b>%s</b>"
-
-#~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-#~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-
-#~ msgid "_Select Widget…"
-#~ msgstr "_Pilih Widget…"
-
-#~ msgid "_View Design"
-#~ msgstr "_Lihat Desain"
-
-#~ msgid "Glade shortcuts"
-#~ msgstr "Pintasan Glade"
-
-#~ msgid "Designer"
-#~ msgstr "Perancang"
-
-#~ msgid "Save the interface design"
-#~ msgstr "Simpan desain antarmuka"
-
-#~ msgid "Preview the interface design"
-#~ msgstr "Pratinjau desain antarmuka"
-
-#~ msgid "Undo the last command"
-#~ msgstr "Batalkan perintah sebelumnya"
-
-#~ msgid "Redo the next command"
-#~ msgstr "Jadikan lagi perintah sebelumnya"
-
-#~ msgid "Switch to drag-resize mode"
-#~ msgstr "Beralih ke mode seret-ubah ukuran"
-
-#~ msgid "Switch to alignment editor"
-#~ msgstr "Beralih ke penyunting perataan"
-
-#~ msgid "Unnamed Glade project"
-#~ msgstr "Proyek Glade tanpa nama"
-
-#~ msgid "Unnamed Glade Project"
-#~ msgstr "Proyek Glade Tanpa Nama"
-
-#~ msgid "Widget specific properties"
-#~ msgstr "Properti spesifik widget"
-
-#~ msgid "Container child properties"
-#~ msgstr "Properti anak kontainer"
-
-#~ msgid "Styling, alignment, and other common properties"
-#~ msgstr "Gaya, perataan, dan properti umum lainnya"
-
-#~ msgid "Glade"
-#~ msgstr "Glade"
-
-#~ msgid "Open _Preview"
-#~ msgstr "Buka _Pratinjau"
-
-#~ msgid "Cut"
-#~ msgstr "Potong"
-
-#~ msgid "Paste"
-#~ msgstr "Tempel"
-
-#~ msgid "UI Designer"
-#~ msgstr "Perancang UI"
-
-#~ msgid "_UI Designer"
-#~ msgstr "Perancang _UI"
-
-#~ msgid "Code assistance requires a local file."
-#~ msgstr "Bantuan kode memerlukan suatu berkas lokal."
-
-#~ msgid "Pylint"
-#~ msgstr "Pylint"
-
-#~ msgid "Enable the use of pylint, which may execute code in your project"
-#~ msgstr ""
-#~ "Memungkinkan penggunaan pylint, yang dapat mengeksekusi kode dalam proyek "
-#~ "Anda"
-
-#~ msgid "pylint python lint code execute execution"
-#~ msgstr "pylint python kode lint mengeksekusi eksekusi"
-
-#~ msgid "No language specified"
-#~ msgstr "Tidak ada bahasa yang dinyatakan"
-
-#~ msgid "Enable Pylint"
-#~ msgstr "Fungsikan Pylint"
-
-#~ msgid ""
-#~ "Enable the use of pylint to find additional diagnostics in Python "
-#~ "programs. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Memungkinkan penggunaan pylint untuk menemukan diagnostik tambahan dalam "
-#~ "program Python. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
-#~ "Anda."
-
-#~ msgid "Gradle Wrapper"
-#~ msgstr "Gradle Wrapper"
-
-#~ msgid "Quit"
-#~ msgstr "Keluar"
-
-#~ msgid "Show Find in Project panel"
-#~ msgstr "Tampilkan Temukan di panel Proyek"
-
-#~ msgid "Your computer is missing python3-docutils"
-#~ msgstr "Komputer Anda kekurangan python3-docutils"
-
-#~ msgid ""
-#~ "This package is necessary to provide previews of markup-based documents."
-#~ msgstr ""
-#~ "Paket ini diperlukan untuk memberikan pratinjau dokumen berbasis markup."
-
-#~ msgid "Install Package"
-#~ msgstr "Pasang Paket"
-
-#~ msgid "Your computer is missing python3-sphinx"
-#~ msgstr "Komputer Anda kekurangan python3-sphinx"
-
-#~ msgid "%s — Directory"
-#~ msgstr "%s — Direktori"
-
-#~ msgid "_Browse Folder"
-#~ msgstr "Jelajahi Fol_der"
-
-#~ msgid "GTK Application (Legacy)"
-#~ msgstr "Aplikasi GTK (Warisan)"
-
-#~ msgid "Create a GTK application with GTK 3"
-#~ msgstr "Buat suatu aplikasi GTK dengan GTK 3"
-
-#~ msgid "Create a GTK application"
-#~ msgstr "Buat suatu aplikasi GTK"
-
-#~ msgid "Create a GNOME application"
-#~ msgstr "Buat suatu aplikasi GNOME"
-
-#~ msgid "Create a new empty project"
-#~ msgstr "Buat proyek kosong baru"
-
-#~ msgid "Create a new command line project"
-#~ msgstr "Buat proyek baris perintah baru"
-
-#~ msgid "Reveal File in Project _Tree"
-#~ msgstr "Ungkap Berkas dalam _Pohon Proyek"
-
-#~ msgid "quick highlight words matching current selection"
-#~ msgstr "kata sorot cepat yang cocok dengan pilihan saat ini"
-
-#~ msgid "quick highlight words matching current selection minimum length"
-#~ msgstr "kata sorot cepat yang cocok dengan panjang minimum pilihan saat ini"
-
-#~ msgid "Rust Analyzer: Cargo command for diagnostics"
-#~ msgstr "Rust Analyzer: Perintah cargo untuk diagnostik"
-
-#~ msgid ""
-#~ "clippy adds additional lints to catch common mistakes but is in general "
-#~ "slower"
-#~ msgstr ""
-#~ "clippy menambahkan serat tambahan untuk menangkap kesalahan umum tetapi "
-#~ "secara umum lebih lambat"
-
-#~ msgid "Shell command"
-#~ msgstr "Perintah shell"
-
-#~ msgid ""
-#~ "Cannot spawn terminal in runtime environment because build pipeline is "
-#~ "not initialized"
-#~ msgstr ""
-#~ "Tidak dapat menelurkan terminaldi lingkungan runtime karena pipa bangun "
-#~ "tidak diinisialisasi"
-
-#~ msgid "Cannot spawn process because build pipeline is not yet available"
-#~ msgstr "Tidak dapat menelurkan proses karena pipa bangun belum tersedia"
-
-#~ msgid "Title"
-#~ msgstr "Judul"
-
-#~ msgid ""
-#~ "The command will be executed using a shell like “/bin/sh -c\". You may "
-#~ "use variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
-#~ "automatically set for the command."
-#~ msgstr ""
-#~ "Perintah akan dieksekusi menggunakan shell seperti “/bin/sh -c\". Anda "
-#~ "dapat menggunakan ekspansi variabel seperti “$SHELL”. Baik \"$SRCDIR\" "
-#~ "dan \"$BUILDDIR\" secara otomatis ditetapkan untuk perintah."
-
-#~ msgid "On Host"
-#~ msgstr "Di Host"
-
-#~ msgid "In Build Environment"
-#~ msgstr "Dalam Lingkungan Bangun"
-
-#~ msgid "In Runtime Environment"
-#~ msgstr "Dalam Lingkungan Runtime"
-
-#~ msgid ""
-#~ "If the directory is not an absolute-path, it will be relative to the "
-#~ "source or build directory depending on the command locality."
-#~ msgstr ""
-#~ "Jika direktori bukan path absolut, itu akan relatif ke sumber atau "
-#~ "direktori bangun tergantung pada perintah lokalitas."
-
-#~ msgid "Close on Exit"
-#~ msgstr "Tutup saat Keluar"
-
-#~ msgid "If enabled, the terminal page will close after the command executes."
-#~ msgstr ""
-#~ "Jika diaktifkan, halaman terminal akan ditutup setelah perintah "
-#~ "dijalankan."
-
-#~ msgid "Change"
-#~ msgstr "Ubah"
-
-#~ msgid "Run in host environment"
-#~ msgstr "Jalankan di lingkungan host"
-
-#~ msgid "Run in build environment"
-#~ msgstr "Jalankan di lingkungan bangun"
-
-#~ msgid "New command"
-#~ msgstr "Perintah baru"
-
-#~ msgid "Click + to add an external command"
-#~ msgstr "Klik + untuk menambahkan perintah eksternal"
-
-#~ msgid "Failed to parse snippet “%s”"
-#~ msgstr "Gagal mengurai potongan \"%s\""
-
-#~ msgid "Suggest Completions from Snippets"
-#~ msgstr "Sarankan pelengkapan dari Potongan"
-
-#~ msgid "Show the spellchecker panel"
-#~ msgstr "Tampilkan panel pemeriksa ejaan"
-
-#~ msgid "Failed to initialize spellchecking, disabling"
-#~ msgstr "Gagal menginisialisasi pemeriksa ejaan, menonaktifan"
-
-#~ msgid "No language selected"
-#~ msgstr "Tidak ada bahasa yang dipilih"
-
-#~ msgid "No language set. Check your dictionary installation."
-#~ msgstr "Tidak ada bahasa yang diatur. Periksa pemasangan kamus Anda."
-
-#~ msgid "No suggestions"
-#~ msgstr "Tidak ada saran"
-
-#~ msgid "Completed spell checking"
-#~ msgstr "Pemeriksaan ejaan selesai"
-
-#~ msgid "This word is already in the personal dictionary"
-#~ msgstr "Kata ini sudah ada dalam kamus pribadi"
-
-#~ msgid "This word is already in the %s dictionary"
-#~ msgstr "Kata ini sudah ada dalam kamus %s"
-
-#~ msgid "Misspelled"
-#~ msgstr "Salah eja"
-
-#~ msgid "Ignore _All"
-#~ msgstr "_Abaikan Semua"
-
-#~ msgid "Change _to"
-#~ msgstr "Ubah _ke"
-
-#~ msgid "Cha_nge"
-#~ msgstr "Uba_h"
-
-#~ msgid "Change A_ll"
-#~ msgstr "Ubah _Semua"
-
-#~ msgid "_Suggestions"
-#~ msgstr "_Saran"
-
-#~ msgid "Add Word"
-#~ msgstr "Tambah Kata"
-
-#~ msgid "A_dd"
-#~ msgstr "T_ambah"
-
-#~ msgid "_Language"
-#~ msgstr "_Bahasa"
-
-#~ msgid "_Underline misspelled words"
-#~ msgstr "Garis bawahi kata salah _eja"
-
-#~ msgid "Enable Stylelint"
-#~ msgstr "Fungsikan Stylelint"
-
-#~ msgid ""
-#~ "Enable the use of stylelint to find additional diagnostics in stylesheet "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Memungkinkan penggunaan stylelint untuk menemukan diagnostik tambahan "
-#~ "dalam berkas stylesheet. Hal ini dapat mengakibatkan eksekusi kode dalam "
-#~ "proyek Anda."
-
-#~ msgid "Stylelint"
-#~ msgstr "Stylelint"
-
-#~ msgid "Enable the use of Stylelint, which may execute code in your project"
-#~ msgstr ""
-#~ "Memungkinkan penggunaan Stylelint, yang dapat mengeksekusi kode dalam "
-#~ "proyek Anda"
-
-#~ msgid "stylelint stylesheet lint code execute execution"
-#~ msgstr "stylelint stylesheet kode lint mengeksekusi eksekusi"
-
-#~ msgid "Emulates the Sublime Text editor"
-#~ msgstr "Mengemulasi penyunting Sublime Text"
-
-#~ msgid "Generate Support Log"
-#~ msgstr "Buat Log Dukungan"
-
-#~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file "
-#~ "as an attachment on your bug report or support request."
-#~ msgstr ""
-#~ "Berkas log dukungan telah ditulis ke \"%s\". Harap berikan berkas ini "
-#~ "sebagai lampiran pada laporan kutu atau permintaan dukungan Anda."
-
-#~ msgid "Search symbols within document"
-#~ msgstr "Cari simbol dalam dokumen"
-
-#~ msgid "Symbol"
-#~ msgstr "Simbol"
-
-#~ msgid "Document Outline"
-#~ msgstr "Garis Besar Dokumentasi"
-
-#~ msgid "_Document Outline"
-#~ msgstr "Garis Besar _Dokumentasi"
-
-#~ msgid "Use terminal interface"
-#~ msgstr "Gunakan antarmuka terminal"
-
-#~ msgid "Terminal in Build Runtime"
-#~ msgstr "Terminal pada Runtime Bangun"
-
-#~ msgid "Terminal in Runtime"
-#~ msgstr "Terminal pada Runtime"
-
-#~ msgid "Running test “%s”…"
-#~ msgstr "Menjalankan tes \"%s\"…"
-
-#~ msgid "Please wait while we scan your project"
-#~ msgstr "Harap tunggu sementara kami memindai proyek Anda"
-
-#~ msgid "Vagrant"
-#~ msgstr "Vagrant"
-
-#~ msgid "Number required"
-#~ msgstr "Perlu angka"
-
-#~ msgid "%s is invalid for %s"
-#~ msgstr "%s tak valid bagi %s"
-
-#~ msgid "Cannot find language “%s”"
-#~ msgstr "Tidak dapat menemukan bahasa “%s”"
-
-#~ msgid "This command requires a GtkSourceView to be focused"
-#~ msgstr "Perintah ini memerlukan GtkSourceView yang difokuskan"
-
-#~ msgid "This command requires a view to be focused"
-#~ msgstr "Perintah ini memerlukan pandangan yang difokuskan"
-
-#~ msgid "Unknown option: %s"
-#~ msgstr "Opsi tak dikenal: %s"
-
-#~ msgid "Cannot find colorscheme “%s”"
-#~ msgstr "Tak bisa temukan skema warna \"%s\""
-
-#~ msgid "Failed to locate working directory"
-#~ msgstr "Gagal menemukan direktori kerja"
-
-#~ msgid "Invalid :syntax subcommand: %s"
-#~ msgstr "Sub perintah :syntax tidak valid: %s"
-
-#~ msgid "Invalid search and replace request"
-#~ msgstr "Permintaan cari dan ganti yang tak valid"
-
-#~ msgid "Change the pages colorscheme"
-#~ msgstr "Ubah skema warna halaman"
-
-#~ msgid "Clear search highlighting"
-#~ msgstr "Hapus penyorotan pencarian"
-
-#~ msgid "Open a file by path"
-#~ msgstr "Buka berkas berdasarkan path"
-
-#~ msgid "Close the page"
-#~ msgstr "Tutup halaman"
-
-#~ msgid "Set various buffer options"
-#~ msgstr "Atur berbagai opsi buffer"
-
-#~ msgid "Sort the selected lines"
-#~ msgstr "Urutkan baris yang dipilih"
-
-#~ msgid "Toggle syntax highlighting"
-#~ msgstr "Jungkitkan penyorotan sintaks"
-
-#~ msgid "Save and close the current page"
-#~ msgstr "Simpan dan tutup halaman saat ini"
-
-#~ msgid "Not a command: %s"
-#~ msgstr "Bukan perintah: %s"
-
-#~ msgid "Emulates the Vim text editor"
-#~ msgstr "Mengemulasi penyunting teks Vim"
-
-#~ msgid "Building project…"
-#~ msgstr "Membangun proyek…"
-
-#~ msgid "Installing project…"
-#~ msgstr "Memasang proyek…"
-
-#~ msgid "Create a GNOME application with GTK 4"
-#~ msgstr "Buat suatu aplikasi GNOME dengan GTK 4"
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
-#~ msgstr ""
-#~ "Jika diaktifkan, Builder akan secara otomatis melipat teks sehingga semua "
-#~ "teks baris terlihat."
-
-#~ msgid "Adwaita Dark"
-#~ msgstr "Adwaita Gelap"
-
-#~ msgid "The default color scheme for TextEditor"
-#~ msgstr "Skema warna bawaan untuk Penyunting Teks"
-
-#~ msgid "Builder Dark"
-#~ msgstr "Builder Gelap"
-
-#~ msgid "Dark color scheme for Builder using the Tango color palette"
-#~ msgstr "Skema warna gelap untuk Builder menggunakan palet warna Tango"
-
-#~ msgid "Basic"
-#~ msgstr "Dasar"
-
-#~ msgid "Wrap text that is too wide to display"
-#~ msgstr "Lipat teks yang terlalu lebar untuk ditampilkan"
-
-#~ msgid "Night Mode"
-#~ msgstr "Mode Malam"
-
-#~ msgid "Prefer dark application chrome."
-#~ msgstr "Lebih suka kroma aplikasi gelap."
-
-#~ msgid "Follow system night light"
-#~ msgstr "Ikuti cahaya malam sistem"
-
-#~ msgid "Use GNOME night light setting to activate night-mode."
-#~ msgstr ""
-#~ "Gunakan pengaturan cahaya malam GNOME untuk mengaktifkan mode malam."
-
-#~ msgid "Themes"
-#~ msgstr "Tema"
-
-#~ msgid "Whether Builder should use a dark theme"
-#~ msgstr "Apakah Builder mesti memakai tema gelap"
-
-#~ msgid "dark theme"
-#~ msgstr "tema gelap"
-
-#~ msgid "follow night light"
-#~ msgstr "ikuti cahaya malam"
-
-#~ msgid "Games"
-#~ msgstr "Permainan"
-
-#~ msgid "Simple game launcher for GNOME"
-#~ msgstr "Peluncur permainan sederhana untuk GNOME"
-
-#~ msgid "Adwaita"
-#~ msgstr "Adwaita"
-
-#~ msgid "Replace With"
-#~ msgstr "Timpa Dengan"
-
-#~ msgid "Suggest completions from Python"
-#~ msgstr "Sarankan pelengkapan dari Python"
-
-#~ msgid "Use Jedi to provide completions for the Python language"
-#~ msgstr "Gunakan Jedi untuk pelengkapan dalam bahasa Python"
-
-#~ msgid "Save File As"
-#~ msgstr "Simpan Berkas Sebagai"
-
-#~ msgid "Save As"
-#~ msgstr "Simpan Sebagai"
-
-#~ msgid "Subprocess launcher failed"
-#~ msgstr "Peluncur subproses gagal"
-
-#~ msgctxt "menu label"
-#~ msgid "Open Sysprof Capture…"
-#~ msgstr "Buka Tangkapan Sysprof…"
-
-# mesti dites
-#~ msgid "true"
-#~ msgstr "true"
-
-#~ msgid "Clone a project using flatpak manifest"
-#~ msgstr "Mengkloning proyek menggunakan manifes flatpak"
-
-#~ msgid "MANIFEST"
-#~ msgstr "MANIFEST"
-
-#~ msgid "Install"
-#~ msgstr "Instalasi"
-
-#~ msgid "flatpak %s %s %s"
-#~ msgstr "flatpak %s %s %s"
-
-#~ msgid "Show %u more runtime"
-#~ msgid_plural "show %u more runtimes"
-#~ msgstr[0] "Tampilkan %u lebih banyak runtime"
-#~ msgstr[1] "tampilkan %u lebih banyak runtime"
-
-#~ msgid "Flatpak Runtimes"
-#~ msgstr "Flatpak Runtimes"
-
-#~ msgid "Updated %s"
-#~ msgstr "Diperbarui %s"
-
-#~ msgid "Updating %s"
-#~ msgstr "Memperbarui %s"
-
-#~ msgid "Installing %s"
-#~ msgstr "Memasang %s"
-
-#~ msgid "Failed to install runtime"
-#~ msgstr "Gagal menginstal runtime"
-
-#~ msgid "Runtime has been updated"
-#~ msgstr "Runtime telah dimutakhirkan"
-
-#~ msgid "Runtime has been installed"
-#~ msgstr "Runtime telah dipasang"
-
-#~ msgid "Missing system dependencies"
-#~ msgstr "Dependensi sistem tidak ada"
-
-#~ msgid ""
-#~ "The “flatpak-builder” program is necessary for building Flatpak-based "
-#~ "applications. Builder can install it for you."
-#~ msgstr ""
-#~ "Program \"flatpak-builder\" diperlukan untuk membangun aplikasi berbasis "
-#~ "Flatpak. Builder dapat memasangnya untuk Anda."
-
-#~ msgid "Podman"
-#~ msgstr "Podman"
-
-#~ msgid "Rust Analyzer is missing from your computer"
-#~ msgstr "Rust Analyzer hilang dari komputer Anda"
-
-#~ msgid ""
-#~ "Support for diagnostics and auto-completion may be limited until it is "
-#~ "installed."
-#~ msgstr ""
-#~ "Dukungan untuk diagnostik dan pelengkapan otomatis mungkin terbatas "
-#~ "hingga selesai."
-
-#~ msgid "Installation of Rust Analyzer finished"
-#~ msgstr "Pemasangan Rust Analyzer selesai"
-
-#~ msgid "Installing Rust Analyzer..."
-#~ msgstr "Memasang Rust Analyzer..."
-
-#~ msgid "Cannot download Rust Analyzer: %s"
-#~ msgstr "Tidak dapat mengunduh Rust Analyzer: %s"
-
-#~ msgid "Your computer is missing the Rust Analyzer Language Server"
-#~ msgstr "Komputer Anda kehilangan Rust Analyzer Language Server"
-
-#~ msgid ""
-#~ "The Language Server is necessary to provide IDE features like completion "
-#~ "or diagnostic"
-#~ msgstr ""
-#~ "Language Server diperlukan untuk menyediakan fitur IDE seperti "
-#~ "penyelesaian atau diagnostik"
-
-#~ msgid "Installing rustup"
-#~ msgstr "Memasang rustup"
-
-#~ msgid "Updating rustup"
-#~ msgstr "Memutakhirkan rustup"
-
-#~ msgid "Checking system"
-#~ msgstr "Memeriksa sistem"
-
-#~ msgid "Downloading rustup-init"
-#~ msgstr "Mengunduh rustup-init"
-
-#~ msgid "Syncing channel updates"
-#~ msgstr "Sinkronisasi kanal pemutakhiran"
-
-#~ msgid "Checking for rustup updates"
-#~ msgstr "Memeriksa pemutakhiran rustup"
-
-#~ msgid "Downloading rustup update"
-#~ msgstr "Mengunduh pemutakhiran rustup"
-
-#~ msgid "Error installing "
-#~ msgstr "Kesalahan pemasangan "
-
-#~ msgid "Error"
-#~ msgstr "Kesalahan"
-
-#~ msgid "Cancelled"
-#~ msgstr "Batal"
-
-#~ msgid "Finished"
-#~ msgstr "Selesai"
-
-#~ msgid "Rustup"
-#~ msgstr "Rustup"
-
-#~ msgid "Rustup Toolchains"
-#~ msgstr "Rustup Toolchains"
-
-#~ msgid "Updating"
-#~ msgstr "Memutakhirkan"
-
-#~ msgid "Make default"
-#~ msgstr "Jadikan baku"
-
-#~ msgid "Makes the selected toolchain the default rust installation"
-#~ msgstr "Membuat toolchain yang dipilih sebagai instalasi rust bawaan"
-
-#~ msgid "Install Rust Channel"
-#~ msgstr "Instalasi Rust Channel"
-
-#~ msgid "Enter name of rust channel"
-#~ msgstr "Masukkan nama untuk rust channel"
-
-#~ msgid ""
-#~ "Standard release channel toolchain names have the following form:\n"
-#~ "                        <channel>[-<date>][-<host>]\n"
-#~ "\n"
-#~ "                        <channel>    = stable|beta|nightly|<version>\n"
-#~ "                        <date>          = YYYY-MM-DD\n"
-#~ "                        <host>          = <target-triple>"
-#~ msgstr ""
-#~ "Rilis standar kanal nama toolchain memiliki bentuk berikut:\n"
-#~ "                        <kanal>[-<tanggal>][-<host>]\n"
-#~ "\n"
-#~ "                        <kanal>    = stabil|beta|nightly|<versi>\n"
-#~ "                        <tanggal> = YYYY-MM-DD\n"
-#~ "                        <host>      = <target-triple>"
-
-#~ msgid "Install Rustup to manage toolchains here!"
-#~ msgstr "Instal Rustup untuk mengelola toolchain disini!"
-
-#~ msgid "No toolchain installed. Click"
-#~ msgstr "Tidak ada toolchain yang terpasang. Klik"
-
-#~ msgid "to add a new toolchain!"
-#~ msgstr "untuk menambahkan toolchain baru!"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Touchpad gestures"
-#~ msgstr "Gestur touchpad"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the right"
-#~ msgstr "Pindahkan halaman ke kanan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe right"
-#~ msgstr "Usap tiga jari ke kanan"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the left"
-#~ msgstr "Pindahkan halaman ke kiri"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe left"
-#~ msgstr "Usap tiga jari ke kiri"
-
-#~ msgid "Directory Browser"
-#~ msgstr "Peramban Direktori"
-
-#~ msgid "Log"
-#~ msgstr "Log"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Jungkitkan panel navigasi"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Jungkitkan panel utilitas"
-
-#~ msgid "Clone Repository…"
-#~ msgstr "Klon Repositori…"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Help"
-#~ msgstr "Bantuan"
-
-#~ msgid "vala diagnostics warnings errors"
-#~ msgstr "vala diagnostik peringatan kesalahan"
-
-#~ msgid "New Terminal Workspace…"
-#~ msgstr "Area Kerja Terminal Baru…"
-
-#~ msgid "Todo"
-#~ msgstr "Todo"
-
-#~ msgid "Task manager for GNOME"
-#~ msgstr "Manajer tugas untuk GNOME"
-
-#~ msgid "Failure"
-#~ msgstr "Kegagalan"
-
-#~ msgid ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-#~ msgstr ""
-#~ "Pilih <a href=\"action://run-manager.run-with-handler::"
-#~ "profiler\">Jalankan dengan profiler</a> dari menu jalankan untuk memulai"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Tekan Ctrl+. untuk mencari"
-
-#~ msgid "Open file"
-#~ msgstr "Buka berkas"
-
-#~ msgid "New file"
-#~ msgstr "Berkas baru"
-
-#~ msgid "New documentation"
-#~ msgstr "Dokumentasi baru"
-
-#~ msgid ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-#~ msgstr ""
-#~ "Ada kegagalan saat menghitung perubahan garis dari git. Galat sebenarnya "
-#~ "adalah: %s"
-
-#~ msgid "File is not under control of git working directory."
-#~ msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
-
-#~ msgid "The requested file does not exist within the git index."
-#~ msgstr "Berkas yang diminta tak ada di dalam indeks git."
-
-#~ msgid "Abstract"
-#~ msgstr "Abstrak"
-
-#~ msgid "Compact"
-#~ msgstr "Ringkas"
-
-#~ msgid "Immutable"
-#~ msgstr "Tetap"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "New Window"
-#~ msgstr "Jendela Baru"
-
-#~ msgid "Copied 1 file"
-#~ msgstr "1 berkas telah disalin"
-
-#~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr ""
-#~ "Bila difungsikan, pohon proyek akan menampilkan ikon di sebelah setiap "
-#~ "butir."
-
-#~ msgid "List available subcommands"
-#~ msgstr "Daftar sub perintah yang tersedia"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Menjalankan Builder dalam mode mandiri"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Tingkatkan kerincian, boleh dinyatakan berkali-kali"
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Masuk mode Layanan GApplication"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Buka proyek yang dinyatakan oleh PATH"
-
-#~ msgid "PATH"
-#~ msgstr "PATH"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Klon proyek yang ditentukan oleh MANIFEST"
-
-#~ msgid "COMMAND"
-#~ msgstr "PERINTAH"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Harap sediakan sebuah perintah"
-
-#~ msgid "No such tool"
-#~ msgstr "Tidak ada perkakas itu"
-
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Harap sediakan suatu pengaya pekerja"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Harap sediakan alamat D-Bus"
-
-#~ msgid "No such worker"
-#~ msgstr "Tidak ada pekerja sedemikian"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr "Gagal menyiapkan pemantau untuk perubahan di belakang: %s"
-
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Buffer gagal: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "Berkas terlalu besar untuk dibuka."
-
-#~ msgid "Options to use when bootstrapping the project"
-#~ msgstr "Opsi yang dipakai ketika mem-bootstrap proyek"
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Melipat"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Tab dan Indentasi"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Mengapa tidak <a href=\"action://app.new-project\">membuat sebuah proyek "
-#~ "baru</a>?"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Klik pada butir untuk memilih"
-
-#~ msgid "Open…"
-#~ msgstr "Buka…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Pilih proyek yang akan dihapus"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Preferensi"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Pintasan Papan Ti_k"
-
-#~ msgid "_Help"
-#~ msgstr "Ba_ntuan"
-
-#~ msgid "_About"
-#~ msgstr "Tent_ang"
-
-#~ msgid "Save _All"
-#~ msgstr "Simpan Semu_a"
-
-#~ msgid "Close _All"
-#~ msgstr "Tutup Semu_a"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "Anda mesti memanggil %s() sebelum memakai libide."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "Suatu permintaan bongkar masih tertunda"
-
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "Konteks sudah terbongkar, tidak bisa mengembalikan."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "Tidak ada implementasi titik ekstensi \"%s\"."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "Gagal menemukan pengaya %s."
-
-#~ msgid "No such extension point."
-#~ msgstr "Tidak ada titik ekstensi seperti itu."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "Tidak ada implementasi titik ekstensi."
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "Pengujian akan dimuat setelah membangun."
-
-#~ msgid "Clear _All"
-#~ msgstr "Bersihkan Semu_a"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "%-encode dalam URI tidak valid"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Karakter bukan UTF-8 dalam URI"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "IP literal “%s” dalam URI tidak valid"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "Enkode IP literal “%s” dalam URI tidak valid"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Nama host non-ASCII \"%s\" dalam URI tidak valid"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "Nama host non-ASCII \"%s\" dilarang dalam URI ini"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "Tidak dapat menguraikan port \"%s\" dalam URI"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "Port \"%s\" dalam URI di luar jangkauan"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "URI basis tidak absolut"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "URI tidak absolut, dan tidak ada dasar URI yang disediakan"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "URI \"%s\" tidak memiliki komponen host"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Bangun"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr "Proyek tidak dapat dibangun ketika pipa bangun sedang disiapkan"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Stastistik Builder"
-
-#~ msgid "Transfers"
-#~ msgstr "Transfer"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Memicu bangun"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Simpan semua berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspektif"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Pustaka Bersama (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Buat suatu proyek autotools baru dengan pustaka bersama"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Proyek Kosong (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Buat proyek autotools kosong baru"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "Aplikasi GNOME (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Buat suatu aplikasi GNOME baru yang siap-flatpak"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "Perintah tak ditemukan: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Gunakan entri di bawah untuk menjalankan suatu perintah"
-
-#~ msgid "New…"
-#~ msgstr "Baru…"
-
-#~ msgid "Create"
-#~ msgstr "Buat"
-
-#~ msgid "List available templates"
-#~ msgstr "Daftar templat yang tersedia"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Templat proyek untuk menghasilkan"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "Bahasa target (bila didukung)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr "Kontrol versi untuk menggunakan atau \"none\" untuk menonaktifkan"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-project [OPTION...] PROJECT_NAME"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr "Nama berkas mesti ASCII dan tak boleh mengandung : atau ="
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Silakan tentukan nama proyek.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Silakan tentukan templat proyek dengan --template =\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Klon Aplikasi"
-
-#~ msgid "Clone"
-#~ msgstr "Klon"
-
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr ""
-#~ "Tidak bisa menyediakan diff, tidak ada berkas pendukung yang disediakan."
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Cabang Remote ke Klon"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr ""
-#~ "Gunakan Git untuk membuat salinan lokal dari remotely hosted project."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Masukkan URL repositori kode sumber proyek Anda"
-
-#~ msgid "Clone…"
-#~ msgstr "Klon…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr "Gagal menyiapkan pemantau berkas git: %s"
-
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "Tidak dapat memuat berkas non-native di terminal"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Pohon proyek"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Ubah nama berkas"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Pindahkan berkas ke tong sampah"
-
-#~ msgid "_New"
-#~ msgstr "_Baru"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Lipat Semua Simpul"
-
-#~ msgid "_Refresh"
-#~ msgstr "Sega_rkan"
-
-#~ msgid "Updated"
-#~ msgstr "Dimutakhirkan"
-
-#~ msgid "Canonical"
-#~ msgstr "Canonical"
-
-#~ msgid "System Monitor"
-#~ msgstr "Monitor Sistem"
-
-#~ msgid "Open Profile"
-#~ msgstr "Buka Profil"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Buffer dimuat tapi tidak di pengelola buffer."
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Klik untuk menjungkitkan breakpoint"
-
-#~ msgid "_Show more"
-#~ msgstr "Tampilkan _lebih banyak"
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Ijinkan snippet disisipkan ke dalam dokumen."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Pelengkapan otomatis berbasis Clang (Percobaan)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Pakai Clang untuk pelengkapan otomatis dalam bahasa C dan C++."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Fungsikan pelengkapan otomatis kata dalam dokumen"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "Bila difungsikan, kata di dalam dokumen saat ini akan tersedia untuk "
-#~ "pelengkapan otomatis."
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Pelengkapan Kata Builder"
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr "Sarankan kata yang ditemukan dalam berkas yang terbuka"
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Sarankan pelengkapan saat Anda mengetik berdasarkan kata yang ditemukan "
-#~ "dalam setiap dokumen yang terbuka"
-
-#~ msgid "Minimum word size"
-#~ msgstr "Ukuran kata minimum"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Ukuran kata minimum untuk penyelesaian kata"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Buat dan kelola basis data Ctags untuk melengkapi nama kelas, fungsi, dan "
-#~ "lainnya"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Sarankan pelengkapan memakai Clang (Percobaan)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Snippet kode"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr "Gunakan fragmen kode untuk meningkatkan efisiensi pengetikan"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Gagal memuat berkas: %s: %s"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Kegagalan yang tak dikenal"
-
-#~ msgid "Clang crashed"
-#~ msgstr "Clang crash"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Argumen tidak valid"
-
-#~ msgid "AST read error"
-#~ msgstr "Galat baca AST"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "clang_codeCompleteAt() hanya bekerja pada berkas lokal"
