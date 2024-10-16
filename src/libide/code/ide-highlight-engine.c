@@ -711,6 +711,9 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
                                       IdeBuffer          *buffer,
                                       GSignalGroup       *group)
 {
+  GtkTextIter begin;
+  GtkTextIter end;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
@@ -727,6 +730,15 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
                                         GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE),
                                        ide_highlight_engine_commit_notify,
                                        self, NULL);
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
+
+  if (gtk_text_iter_compare (&begin, &end) != 0)
+    {
+      guint length = gtk_text_iter_get_offset (&end);
+
+      _cjh_text_region_insert (self->region, 0, length, RUN_UNCHECKED);
+    }
 
   ide_highlight_engine__notify_style_scheme_cb (self, NULL, buffer);
   ide_highlight_engine__notify_language_cb (self, NULL, buffer);
