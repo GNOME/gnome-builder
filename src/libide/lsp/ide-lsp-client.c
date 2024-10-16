@@ -55,6 +55,13 @@ typedef struct
 
 typedef struct
 {
+  GWeakRef buffer_wr;
+  GWeakRef client_wr;
+  guint    commit_notify;
+} NotifyBridge;
+
+typedef struct
+{
   GSignalGroup   *buffer_manager_signals;
   GSignalGroup   *project_signals;
   JsonrpcClient  *rpc_client;
@@ -125,6 +132,267 @@ static void ide_lsp_client_call_cb (GObject      *object,
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+notify_bridge_commit_notify (GtkTextBuffer            *buffer,
+                             GtkTextBufferNotifyFlags  flags,
+                             guint                     position,
+                             guint                     length,
+                             gpointer                  user_data)
+{
+  IdeLspClientPrivate *priv;
+  NotifyBridge *bridge = user_data;
+  g_autoptr(IdeLspClient) client = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (bridge != NULL);
+
+  IDE_TRACE_MSG ("Flags = 0x%x", flags);
+
+  if (!(client = g_weak_ref_get (&bridge->buffer_wr)))
+    IDE_EXIT;
+
+  priv = ide_lsp_client_get_instance_private (client);
+
+  if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT)
+    {
+      g_assert_not_reached ();
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT)
+    {
+      if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
+        {
+          g_autoptr(GVariant) params = NULL;
+          g_autofree gchar *uri = NULL;
+          g_autofree gchar *copy = NULL;
+          GtkTextIter begin;
+          GtkTextIter end;
+          gint64 version;
+          guint line;
+          guint column;
+
+          gtk_text_buffer_get_iter_at_offset (buffer, &begin, position);
+          gtk_text_buffer_get_iter_at_offset (buffer, &end, position + length);
+
+          uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
+          copy = gtk_text_iter_get_slice (&begin, &end);
+
+          version = (gint64)ide_buffer_get_change_count (IDE_BUFFER (buffer));
+
+          line = gtk_text_iter_get_line (&begin);
+          column = gtk_text_iter_get_line_offset (&begin);
+
+          params = JSONRPC_MESSAGE_NEW (
+            "textDocument", "{",
+              "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+              "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+            "}",
+            "contentChanges", "[",
+              "{",
+                "range", "{",
+                  "start", "{",
+                    "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+                    "character", JSONRPC_MESSAGE_PUT_INT64 (column),
+                  "}",
+                  "end", "{",
+                    "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+                    "character", JSONRPC_MESSAGE_PUT_INT64 (column),
+                  "}",
+                "}",
+                "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (0),
+                "text", JSONRPC_MESSAGE_PUT_STRING (copy),
+              "}",
+            "]");
+
+          ide_lsp_client_send_notification_async (client,
+                                                  "textDocument/didChange",
+                                                  params,
+                                                  NULL, NULL, NULL);
+        }
+      else if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+        {
+          g_autoptr(GBytes) content = NULL;
+          g_autoptr(GVariant) params = NULL;
+          g_autofree gchar *uri = NULL;
+          const char *text;
+          gint64 version;
+
+          uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
+          version = (gint64)ide_buffer_get_change_count (IDE_BUFFER (buffer));
+
+          content = ide_buffer_dup_content (IDE_BUFFER (buffer));
+          text = (const char *)g_bytes_get_data (content, NULL);
+
+          params = JSONRPC_MESSAGE_NEW (
+            "textDocument", "{",
+              "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+              "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+            "}",
+            "contentChanges", "[",
+              "{",
+                "text", JSONRPC_MESSAGE_PUT_STRING (text),
+              "}",
+            "]");
+
+          ide_lsp_client_send_notification_async (client,
+                                                  "textDocument/didChange",
+                                                  params,
+                                                  NULL, NULL, NULL);
+        }
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE)
+    {
+      if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
+        {
+          g_autoptr(GVariant) params = NULL;
+          g_autofree gchar *uri = NULL;
+          GtkTextIter copy_begin;
+          GtkTextIter copy_end;
+          struct {
+            int line;
+            int column;
+          } begin, end;
+          gint64 version;
+
+          uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
+
+          /* We get called before this change is registered */
+          version = (gint)ide_buffer_get_change_count (IDE_BUFFER (buffer)) + 1;
+
+          gtk_text_buffer_get_iter_at_offset (buffer, &copy_begin, position);
+          gtk_text_buffer_get_iter_at_offset (buffer, &copy_end, position + length);
+
+          begin.line = gtk_text_iter_get_line (&copy_begin);
+          begin.column = gtk_text_iter_get_line_offset (&copy_begin);
+
+          end.line = gtk_text_iter_get_line (&copy_end);
+          end.column = gtk_text_iter_get_line_offset (&copy_end);
+
+          params = JSONRPC_MESSAGE_NEW (
+            "textDocument", "{",
+              "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+              "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+            "}",
+            "contentChanges", "[",
+              "{",
+                "range", "{",
+                  "start", "{",
+                    "line", JSONRPC_MESSAGE_PUT_INT64 (begin.line),
+                    "character", JSONRPC_MESSAGE_PUT_INT64 (begin.column),
+                  "}",
+                  "end", "{",
+                    "line", JSONRPC_MESSAGE_PUT_INT64 (end.line),
+                    "character", JSONRPC_MESSAGE_PUT_INT64 (end.column),
+                  "}",
+                "}",
+                "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
+                "text", JSONRPC_MESSAGE_PUT_STRING (""),
+              "}",
+            "]");
+
+          ide_lsp_client_send_notification_async (client,
+                                                  "textDocument/didChange",
+                                                  params,
+                                                  NULL, NULL, NULL);
+        }
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE)
+    {
+      g_autofree char *uri = NULL;
+      g_autoptr(GBytes) content = NULL;
+      g_autoptr(GVariant) params = NULL;
+      const char *text;
+      gint64 version;
+
+      uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
+      version = (gint)ide_buffer_get_change_count (IDE_BUFFER (buffer));
+
+      content = ide_buffer_dup_content (IDE_BUFFER (buffer));
+      text = (const gchar *)g_bytes_get_data (content, NULL);
+
+      params = JSONRPC_MESSAGE_NEW (
+        "textDocument", "{",
+          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+        "}",
+        "contentChanges", "[",
+          "{",
+            "text", JSONRPC_MESSAGE_PUT_STRING (text),
+          "}",
+        "]");
+
+      ide_lsp_client_send_notification_async (client,
+                                              "textDocument/didChange",
+                                              params,
+                                              NULL, NULL, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+notify_bridge_client_released (gpointer  data,
+                               GObject  *where_object_was)
+{
+  NotifyBridge *bridge = data;
+  g_autoptr(GtkTextBuffer) buffer = NULL;
+
+  if ((buffer = g_weak_ref_get (&bridge->buffer_wr)))
+    {
+      guint notify = bridge->commit_notify;
+
+      bridge->commit_notify = 0;
+
+      if (notify)
+        {
+          /* This can invalidate/free @bridge */
+          gtk_text_buffer_remove_commit_notify (buffer, notify);
+        }
+    }
+}
+
+static void
+notify_bridge_destroy (gpointer data)
+{
+  NotifyBridge *bridge = data;
+
+  /* Ignore registration, this can only be called when it becomes invalid
+   * from disposal of the buffer or notify_bridge_client_released().
+   */
+  bridge->commit_notify = 0;
+
+  g_weak_ref_clear (&bridge->buffer_wr);
+  g_weak_ref_clear (&bridge->client_wr);
+
+  g_free (bridge);
+}
+
+static void
+notify_bridge (IdeLspClient *self,
+               IdeBuffer    *buffer)
+{
+  NotifyBridge *bridge;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  bridge = g_new0 (NotifyBridge, 1);
+  g_weak_ref_init (&bridge->client_wr, self);
+  g_weak_ref_init (&bridge->buffer_wr, buffer);
+  bridge->commit_notify = gtk_text_buffer_add_commit_notify (GTK_TEXT_BUFFER (buffer),
+                                                             (GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT |
+                                                              GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE |
+                                                              GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE),
+                                                             notify_bridge_commit_notify,
+                                                             bridge, notify_bridge_destroy);
+  g_object_weak_ref (G_OBJECT (self),
+                     notify_bridge_client_released,
+                     bridge);
+}
 
 static AsyncCall *
 async_call_new (JsonrpcClient *client,
@@ -282,254 +550,6 @@ ide_lsp_client_buffer_saved (IdeLspClient     *self,
   IDE_EXIT;
 }
 
-/*
- * TODO: This should all be delayed and buffered so we coalesce multiple
- *       events into a single dispatch.
- */
-
-static void
-ide_lsp_client_buffer_insert_text (IdeLspClient *self,
-                                   GtkTextIter  *location,
-                                   const gchar  *new_text,
-                                   gint          len,
-                                   IdeBuffer    *buffer)
-{
-  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LSP_CLIENT (self));
-  g_assert (location != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
-    {
-      g_autoptr(GVariant) params = NULL;
-      g_autofree gchar *uri = NULL;
-      g_autofree gchar *copy = NULL;
-      gint64 version;
-      guint line;
-      guint column;
-
-      uri = ide_buffer_dup_uri (buffer);
-      copy = g_strndup (new_text, len);
-
-      /* We get called before this change is registered */
-      version = (gint64)ide_buffer_get_change_count (buffer) + 1;
-
-      line = gtk_text_iter_get_line (location);
-      column = gtk_text_iter_get_line_offset (location);
-
-      params = JSONRPC_MESSAGE_NEW (
-        "textDocument", "{",
-          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-        "}",
-        "contentChanges", "[",
-          "{",
-            "range", "{",
-              "start", "{",
-                "line", JSONRPC_MESSAGE_PUT_INT64 (line),
-                "character", JSONRPC_MESSAGE_PUT_INT64 (column),
-              "}",
-              "end", "{",
-                "line", JSONRPC_MESSAGE_PUT_INT64 (line),
-                "character", JSONRPC_MESSAGE_PUT_INT64 (column),
-              "}",
-            "}",
-            "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (0),
-            "text", JSONRPC_MESSAGE_PUT_STRING (copy),
-          "}",
-        "]");
-
-      ide_lsp_client_send_notification_async (self,
-                                              "textDocument/didChange",
-                                              params,
-                                              NULL, NULL, NULL);
-    }
-
-  IDE_EXIT;
-}
-
-static void
-ide_lsp_client_buffer_after_insert_text (IdeLspClient *self,
-                                         GtkTextIter  *location,
-                                         const gchar  *new_text,
-                                         gint          len,
-                                         IdeBuffer    *buffer)
-{
-  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
-  g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
-  gint64 version;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LSP_CLIENT (self));
-  g_assert (location != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  uri = ide_buffer_dup_uri (buffer);
-  version = (gint64)ide_buffer_get_change_count (buffer);
-
-  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
-    {
-      g_autoptr(GBytes) content = NULL;
-      const char *text;
-
-      content = ide_buffer_dup_content (buffer);
-      text = (const char *)g_bytes_get_data (content, NULL);
-
-      params = JSONRPC_MESSAGE_NEW (
-        "textDocument", "{",
-          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-        "}",
-        "contentChanges", "[",
-          "{",
-            "text", JSONRPC_MESSAGE_PUT_STRING (text),
-          "}",
-        "]");
-
-      ide_lsp_client_send_notification_async (self,
-                                              "textDocument/didChange",
-                                              params,
-                                              NULL, NULL, NULL);
-    }
-
-  IDE_EXIT;
-}
-
-static void
-ide_lsp_client_buffer_delete_range (IdeLspClient *self,
-                                    GtkTextIter  *begin_iter,
-                                    GtkTextIter  *end_iter,
-                                    IdeBuffer    *buffer)
-{
-  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LSP_CLIENT (self));
-  g_assert (begin_iter != NULL);
-  g_assert (end_iter != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_INCREMENTAL)
-    {
-      g_autoptr(GVariant) params = NULL;
-      g_autofree gchar *uri = NULL;
-      GtkTextIter copy_begin;
-      GtkTextIter copy_end;
-      struct {
-        int line;
-        int column;
-      } begin, end;
-      gint64 version;
-      int length;
-
-      uri = ide_buffer_dup_uri (buffer);
-
-      /* We get called before this change is registered */
-      version = (gint)ide_buffer_get_change_count (buffer) + 1;
-
-      copy_begin = *begin_iter;
-      copy_end = *end_iter;
-
-      gtk_text_iter_order (&copy_begin, &copy_end);
-
-      begin.line = gtk_text_iter_get_line (&copy_begin);
-      begin.column = gtk_text_iter_get_line_offset (&copy_begin);
-
-      end.line = gtk_text_iter_get_line (&copy_end);
-      end.column = gtk_text_iter_get_line_offset (&copy_end);
-
-      length = gtk_text_iter_get_offset (&copy_end) - gtk_text_iter_get_offset (&copy_begin);
-
-      params = JSONRPC_MESSAGE_NEW (
-        "textDocument", "{",
-          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-        "}",
-        "contentChanges", "[",
-          "{",
-            "range", "{",
-              "start", "{",
-                "line", JSONRPC_MESSAGE_PUT_INT64 (begin.line),
-                "character", JSONRPC_MESSAGE_PUT_INT64 (begin.column),
-              "}",
-              "end", "{",
-                "line", JSONRPC_MESSAGE_PUT_INT64 (end.line),
-                "character", JSONRPC_MESSAGE_PUT_INT64 (end.column),
-              "}",
-            "}",
-            "rangeLength", JSONRPC_MESSAGE_PUT_INT64 (length),
-            "text", JSONRPC_MESSAGE_PUT_STRING (""),
-          "}",
-        "]");
-
-      ide_lsp_client_send_notification_async (self,
-                                              "textDocument/didChange",
-                                              params,
-                                              NULL, NULL, NULL);
-    }
-
-  IDE_EXIT;
-}
-
-static void
-ide_lsp_client_buffer_after_delete_range (IdeLspClient *self,
-                                          GtkTextIter  *begin_iter,
-                                          GtkTextIter  *end_iter,
-                                          IdeBuffer    *buffer)
-{
-  IdeLspClientPrivate *priv = ide_lsp_client_get_instance_private (self);
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_LSP_CLIENT (self));
-  g_assert (begin_iter != NULL);
-  g_assert (end_iter != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
-    {
-      g_autofree char *uri = NULL;
-      g_autoptr(GBytes) content = NULL;
-      g_autoptr(GVariant) params = NULL;
-      const char *text;
-      gint64 version;
-
-      uri = ide_buffer_dup_uri (buffer);
-      version = (gint)ide_buffer_get_change_count (buffer);
-
-      content = ide_buffer_dup_content (buffer);
-      text = (const gchar *)g_bytes_get_data (content, NULL);
-
-      params = JSONRPC_MESSAGE_NEW (
-        "textDocument", "{",
-          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-        "}",
-        "contentChanges", "[",
-          "{",
-            "text", JSONRPC_MESSAGE_PUT_STRING (text),
-          "}",
-        "]");
-
-      ide_lsp_client_send_notification_async (self,
-                                              "textDocument/didChange",
-                                              params,
-                                              NULL, NULL, NULL);
-    }
-
- IDE_EXIT;
-}
-
 static void
 ide_lsp_client_buffer_loaded (IdeLspClient     *self,
                               IdeBuffer        *buffer,
@@ -554,29 +574,7 @@ ide_lsp_client_buffer_loaded (IdeLspClient     *self,
   if (!ide_lsp_client_supports_buffer (self, buffer))
     IDE_EXIT;
 
-  g_signal_connect_object (buffer,
-                           "insert-text",
-                           G_CALLBACK (ide_lsp_client_buffer_insert_text),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (buffer,
-                           "insert-text",
-                           G_CALLBACK (ide_lsp_client_buffer_after_insert_text),
-                           self,
-                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (buffer,
-                           "delete-range",
-                           G_CALLBACK (ide_lsp_client_buffer_delete_range),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (buffer,
-                           "delete-range",
-                           G_CALLBACK (ide_lsp_client_buffer_after_delete_range),
-                           self,
-                           G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+  notify_bridge (self, buffer);
 
   uri = ide_buffer_dup_uri (buffer);
   version = (gint64)ide_buffer_get_change_count (buffer);
