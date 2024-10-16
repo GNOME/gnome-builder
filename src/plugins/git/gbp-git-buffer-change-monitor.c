@@ -35,9 +35,10 @@ struct _GbpGitBufferChangeMonitor
 {
   IdeBufferChangeMonitor  parent;
   IpcGitChangeMonitor    *proxy;
-  GSignalGroup           *buffer_signals;
   GSignalGroup           *vcs_signals;
   LineCache              *cache;
+  GWeakRef                buffer_wr;
+  guint                   commit_notify;
   guint                   last_change_count;
   guint                   queued_source;
   guint                   delete_range_requires_recalculation : 1;
@@ -89,14 +90,105 @@ gbp_git_buffer_change_monitor_queue_update (GbpGitBufferChangeMonitor *self,
 }
 
 static void
+gbp_git_buffer_change_monitor_commit_notify (GtkTextBuffer            *buffer,
+                                             GtkTextBufferNotifyFlags  flags,
+                                             guint                     position,
+                                             guint                     length,
+                                             gpointer                  user_data)
+{
+  GbpGitBufferChangeMonitor *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (flags != 0);
+  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+
+  if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT)
+    {
+      /* Do nothing */
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT)
+    {
+      GtkTextIter begin;
+      GtkTextIter end;
+      guint begin_line;
+      guint end_line;
+
+      /*
+       * We need to recalculate the diff when text is inserted if:
+       *
+       * 1) A newline is included in the text.
+       * 2) The line currently has flags of NONE.
+       *
+       * Technically we need to do it on every change to be more correct, but that
+       * wastes a lot of power. So instead, we'll be a bit lazy about it here and
+       * pick up the other changes on a much more conservative timeout
+       */
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &begin, position);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, position + length);
+
+      begin_line = gtk_text_iter_get_line (&begin);
+      end_line = gtk_text_iter_get_line (&end);
+
+      if (begin_line != end_line ||
+          self->cache == NULL ||
+          !line_cache_get_mark (self->cache, begin_line))
+        gbp_git_buffer_change_monitor_queue_update (self, FAST);
+      else
+        gbp_git_buffer_change_monitor_queue_update (self, SLOW);
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE)
+    {
+      GtkTextIter begin;
+      GtkTextIter end;
+      guint begin_line;
+      guint end_line;
+
+      /*
+       * We need to recalculate the diff when text is deleted if:
+       *
+       * 1) The range includes a newline.
+       * 2) The current line change is set to NONE.
+       *
+       * Technically we need to do it on every change to be more correct, but that
+       * wastes a lot of power. So instead, we'll be a bit lazy about it here and
+       * pick up the other changes on a much more conservative timeout, generated
+       * by gbp_git_buffer_change_monitor__buffer_changed_cb().
+       */
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &begin, position);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, position + length);
+
+      begin_line = gtk_text_iter_get_line (&begin);
+      end_line = gtk_text_iter_get_line (&end);
+
+      if (begin_line != end_line ||
+          self->cache == NULL ||
+          !line_cache_get_mark (self->cache, begin_line))
+        self->delete_range_requires_recalculation = TRUE;
+    }
+  else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE)
+    {
+      if (self->delete_range_requires_recalculation)
+        {
+          self->delete_range_requires_recalculation = FALSE;
+          gbp_git_buffer_change_monitor_queue_update (self, FAST);
+        }
+    }
+}
+
+static void
 gbp_git_buffer_change_monitor_destroy (IdeObject *object)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)object;
+  g_autoptr(IdeBuffer) buffer = NULL;
 
-  if (self->buffer_signals)
+  if ((buffer = g_weak_ref_get (&self->buffer_wr)))
     {
-      g_signal_group_set_target (self->buffer_signals, NULL);
-      g_clear_object (&self->buffer_signals);
+      gtk_text_buffer_remove_commit_notify (GTK_TEXT_BUFFER (buffer),
+                                            self->commit_notify);
+      self->commit_notify = 0;
+      g_weak_ref_set (&self->buffer_wr, NULL);
     }
 
   if (self->vcs_signals)
@@ -133,7 +225,16 @@ gbp_git_buffer_change_monitor_load (IdeBufferChangeMonitor *monitor,
   vcs = ide_vcs_from_context (context);
 
   g_signal_group_set_target (self->vcs_signals, vcs);
-  g_signal_group_set_target (self->buffer_signals, buffer);
+
+  g_weak_ref_set (&self->buffer_wr, buffer);
+
+  self->commit_notify = gtk_text_buffer_add_commit_notify (GTK_TEXT_BUFFER (buffer),
+                                                           (GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT |
+                                                            GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT |
+                                                            GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE |
+                                                            GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE),
+                                                           gbp_git_buffer_change_monitor_commit_notify,
+                                                           self, NULL);
 
   gbp_git_buffer_change_monitor_queue_update (self, FAST);
 }
@@ -151,111 +252,6 @@ gbp_git_buffer_change_monitor_reload (IdeBufferChangeMonitor *monitor)
   gbp_git_buffer_change_monitor_queue_update (self, FAST);
 
   IDE_EXIT;
-}
-
-static void
-buffer_delete_range_after_cb (GbpGitBufferChangeMonitor *self,
-                              GtkTextIter               *begin,
-                              GtkTextIter               *end,
-                              IdeBuffer                 *buffer)
-{
-  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (self->delete_range_requires_recalculation)
-    {
-      self->delete_range_requires_recalculation = FALSE;
-      gbp_git_buffer_change_monitor_queue_update (self, FAST);
-    }
-}
-
-static void
-buffer_delete_range_cb (GbpGitBufferChangeMonitor *self,
-                        GtkTextIter               *begin,
-                        GtkTextIter               *end,
-                        IdeBuffer                 *buffer)
-{
-  guint begin_line;
-
-  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  begin_line = gtk_text_iter_get_line (begin);
-
-  /*
-   * We need to recalculate the diff when text is deleted if:
-   *
-   * 1) The range includes a newline.
-   * 2) The current line change is set to NONE.
-   *
-   * Technically we need to do it on every change to be more correct, but that
-   * wastes a lot of power. So instead, we'll be a bit lazy about it here and
-   * pick up the other changes on a much more conservative timeout, generated
-   * by gbp_git_buffer_change_monitor__buffer_changed_cb().
-   */
-
-  if (begin_line != gtk_text_iter_get_line (end))
-    IDE_GOTO (recalculate);
-
-  if (self->cache == NULL || !line_cache_get_mark (self->cache, begin_line))
-    IDE_GOTO (recalculate);
-
-  return;
-
-recalculate:
-  /*
-   * We need to wait for the delete to occur, so mark it as necessary and let
-   * gbp_git_buffer_change_monitor__buffer_delete_range_after_cb perform the
-   * operation.
-   */
-  self->delete_range_requires_recalculation = TRUE;
-}
-
-static void
-buffer_insert_text_cb (GbpGitBufferChangeMonitor *self,
-                       const GtkTextIter         *location,
-                       const char                *text,
-                       int                        len,
-                       IdeBuffer                 *buffer)
-{
-  guint line;
-
-  g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (location != NULL);
-  g_assert (text != NULL);
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  /*
-   * We need to recalculate the diff when text is inserted if:
-   *
-   * 1) A newline is included in the text.
-   * 2) The line currently has flags of NONE.
-   *
-   * Technically we need to do it on every change to be more correct, but that
-   * wastes a lot of power. So instead, we'll be a bit lazy about it here and
-   * pick up the other changes on a much more conservative timeout
-   */
-
-  line = gtk_text_iter_get_line (location);
-
-  if (self->cache == NULL ||
-      NULL != memmem (text, len, "\n", 1) ||
-      !line_cache_get_mark (self->cache, line))
-    gbp_git_buffer_change_monitor_queue_update (self, FAST);
-}
-
-static void
-buffer_changed_after_cb (GbpGitBufferChangeMonitor *self,
-                         IdeBuffer                 *buffer)
-{
-  g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  gbp_git_buffer_change_monitor_queue_update (self, SLOW);
 }
 
 static void
@@ -372,28 +368,6 @@ gbp_git_buffer_change_monitor_class_init (GbpGitBufferChangeMonitorClass *klass)
 static void
 gbp_git_buffer_change_monitor_init (GbpGitBufferChangeMonitor *self)
 {
-  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
-  g_signal_group_connect_object (self->buffer_signals,
-                                 "insert-text",
-                                 G_CALLBACK (buffer_insert_text_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED);
-  g_signal_group_connect_object (self->buffer_signals,
-                                 "delete-range",
-                                 G_CALLBACK (buffer_delete_range_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED);
-  g_signal_group_connect_object (self->buffer_signals,
-                                 "delete-range",
-                                 G_CALLBACK (buffer_delete_range_after_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  g_signal_group_connect_object (self->buffer_signals,
-                                 "changed",
-                                 G_CALLBACK (buffer_changed_after_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
   self->vcs_signals = g_signal_group_new (IDE_TYPE_VCS);
   g_signal_group_connect_object (self->vcs_signals,
                                  "changed",
