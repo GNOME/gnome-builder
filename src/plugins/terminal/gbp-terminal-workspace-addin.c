@@ -190,8 +190,9 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
   tmp = g_date_time_format (now, "%X");
 
   /* translators: %s is replaced with the current local time of day */
-  formatted = g_strdup_printf (_("Application started at %s\r\n"), tmp);
+  formatted = g_strdup_printf (_("Application started at %s"), tmp);
   ide_terminal_page_feed (self->app_page, formatted);
+  ide_terminal_page_feed (self->app_page, "\r\n");
 
   panel_widget_raise (PANEL_WIDGET (self->app_pane));
 
