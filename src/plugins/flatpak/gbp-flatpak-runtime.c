@@ -531,7 +531,7 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime *runtime,
         {
           /* Only override if not manually set by project */
           if (!_ide_config_has_config_opt (config, "-DCMAKE_INSTALL_LIBDIR:PATH"))
-            ide_config_replace_config_opt (config, "-DCMAKE_INSTALL_LIBDIR:PATH", "/app/lib");
+            ide_config_replace_config_opt (config, "-DCMAKE_INSTALL_LIBDIR:PATH", "lib");
         }
       else if (g_str_equal (build_system, "meson"))
         ide_config_replace_config_opt (config, "--libdir", "lib");
