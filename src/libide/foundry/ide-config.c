@@ -2049,6 +2049,35 @@ quote_arg (const char *in)
   return g_strdup (in);
 }
 
+gboolean
+_ide_config_has_config_opt (IdeConfig  *self,
+                            const char *param)
+{
+  const char *config_opts;
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), FALSE);
+  g_return_val_if_fail (param != NULL, FALSE);
+
+  if ((config_opts = ide_config_get_config_opts (self)) && !ide_str_empty0 (config_opts))
+    {
+      g_auto(GStrv) args = NULL;
+      int argc;
+
+      if (!g_shell_parse_argv (config_opts, &argc, &args, NULL))
+        return FALSE;
+
+      for (int i = 0; i < argc; i++)
+        {
+          if (g_str_equal (param, args[i]) ||
+              (g_str_has_prefix (args[i], param) &&
+               args[i][strlen(param)] == '='))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 void
 ide_config_replace_config_opt (IdeConfig  *self,
                                const char *param,

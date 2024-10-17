@@ -24,6 +24,8 @@
 
 G_BEGIN_DECLS
 
-void _ide_config_attach (IdeConfig *self);
+void     _ide_config_attach         (IdeConfig  *self);
+gboolean _ide_config_has_config_opt (IdeConfig  *self,
+                                     const char *param);
 
 G_END_DECLS
