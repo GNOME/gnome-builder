@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "ide-config.h"
+#include "ide-foundry-types.h"
 
 G_BEGIN_DECLS
 
