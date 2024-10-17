@@ -264,7 +264,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/vte.git",
-                    "branch" : "master"
+                    "branch" : "vte-0-78"
                 }
             ]
         },
