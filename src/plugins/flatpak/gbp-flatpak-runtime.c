@@ -31,6 +31,8 @@
 #include <libide-threading.h>
 #include <libide-vcs.h>
 
+#include "ide-config-private.h"
+
 #include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
