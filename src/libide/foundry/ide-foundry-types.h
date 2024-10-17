@@ -20,10 +20,6 @@
 
 #pragma once
 
-#if !defined (IDE_FOUNDRY_INSIDE) && !defined (IDE_FOUNDRY_COMPILATION)
-# error "Only <libide-foundry.h> can be included directly."
-#endif
-
 #include <glib.h>
 
 G_BEGIN_DECLS
