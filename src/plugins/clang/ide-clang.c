@@ -234,9 +234,18 @@ ide_clang_cook_flags (const gchar         *path,
     {
       for (guint i = 0; flags[i]; i++)
         {
+          const char *lookup = flags[i];
+
           is_cplusplus |= is_cplusplus_param (flags[i]);
 
-          if (g_hash_table_contains (unsupported_by_clang, flags[i]))
+          if (g_str_has_prefix (flags[i], "-Werror="))
+            lookup = flags[i] + strlen ("-Werror=");
+          else if (g_str_has_prefix (flags[i], "-W"))
+            lookup = flags[i] + strlen ("-W");
+          else
+            lookup = NULL;
+
+          if (lookup && g_hash_table_contains (unsupported_by_clang, lookup))
             continue;
 
           g_ptr_array_add (cooked, g_strdup (flags[i]));
@@ -538,9 +547,11 @@ ide_clang_class_init (IdeClangClass *klass)
   object_class->finalize = ide_clang_finalize;
 
   unsupported_by_clang = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_add (unsupported_by_clang, (char *)"-Wstrict-null-sentinel");
-  g_hash_table_add (unsupported_by_clang, (char *)"-Wlogical-op");
-  g_hash_table_add (unsupported_by_clang, (char *)"-Wno-dangling-pointer");
+  g_hash_table_add (unsupported_by_clang, (char *)"strict-null-sentinel");
+  g_hash_table_add (unsupported_by_clang, (char *)"logical-op");
+  g_hash_table_add (unsupported_by_clang, (char *)"no-dangling-pointer");
+  g_hash_table_add (unsupported_by_clang, (char *)"maybe-uninitialized");
+  g_hash_table_add (unsupported_by_clang, (char *)"no-stringop-overflow");
 
   auto_suffixes = g_hash_table_new (g_str_hash, g_str_equal);
   g_hash_table_add (auto_suffixes, (char *)"_auto");
