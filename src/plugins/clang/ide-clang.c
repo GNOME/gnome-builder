@@ -240,6 +240,8 @@ ide_clang_cook_flags (const gchar         *path,
 
           if (g_str_has_prefix (flags[i], "-Werror="))
             lookup = flags[i] + strlen ("-Werror=");
+          else if (g_str_has_prefix (flags[i], "-Wno-error="))
+            lookup = flags[i] + strlen ("-Wno-error=");
           else if (g_str_has_prefix (flags[i], "-W"))
             lookup = flags[i] + strlen ("-W");
           else
