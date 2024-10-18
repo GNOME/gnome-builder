@@ -65,6 +65,7 @@ struct _IdeGreeterWorkspace
   AdwStatusPage            *empty_state;
 
   guint                     selection_mode : 1;
+  guint                     busy : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeGreeterWorkspace, ide_greeter_workspace, IDE_TYPE_WORKSPACE)
@@ -1038,6 +1039,8 @@ ide_greeter_workspace_begin (IdeGreeterWorkspace *self)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
 
+  self->busy = TRUE;
+
   gtk_widget_set_sensitive (GTK_WIDGET (self->sections), FALSE);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.page", FALSE);
@@ -1054,6 +1057,8 @@ void
 ide_greeter_workspace_end (IdeGreeterWorkspace *self)
 {
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+
+  self->busy = FALSE;
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.page", TRUE);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.open", TRUE);
@@ -1186,4 +1191,12 @@ ide_greeter_workspace_find_page (IdeGreeterWorkspace *self,
   g_return_val_if_fail (tag != NULL, NULL);
 
   return adw_navigation_view_find_page (self->navigation_view, tag);
+}
+
+gboolean
+ide_greeter_workspace_is_busy (IdeGreeterWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), FALSE);
+
+  return self->busy;
 }

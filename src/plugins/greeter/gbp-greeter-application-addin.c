@@ -44,7 +44,8 @@ find_existing_greeter_workspace_cb (IdeWorkspace *workspace,
   if (*greeter != NULL)
     return;
 
-  if (IDE_IS_GREETER_WORKSPACE (workspace))
+  if (IDE_IS_GREETER_WORKSPACE (workspace) &&
+      !ide_greeter_workspace_is_busy (IDE_GREETER_WORKSPACE (workspace)))
     *greeter = IDE_GREETER_WORKSPACE (workspace);
 }
 

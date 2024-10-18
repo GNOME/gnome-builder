@@ -77,6 +77,7 @@ AdwNavigationPage   *ide_greeter_workspace_find_page          (IdeGreeterWorkspa
 IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_push_page_by_tag   (IdeGreeterWorkspace *self,
                                                                const char          *tag);
-
+G_GNUC_INTERNAL
+gboolean             ide_greeter_workspace_is_busy            (IdeGreeterWorkspace *self);
 
 G_END_DECLS
