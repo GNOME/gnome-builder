@@ -1,3 +1,16 @@
+# GNOME Builder 47.2
+
+ * Fix private flatpak installation directory when using FLATPAK_CONFIG_DIR.
+   This ensures previously "missing" runtimes are found.
+ * Allow showing new greeter when a greeter is busy cloning/etc.
+ * Fix GError usage in codespell plugin when disabled
+ * Fix python3 as language identifier with pylsp
+ * Fix cmake with use from Flatpak
+ * Support SourceKit for Swift 6
+ * Use GtkTextBuffer commit_notify for plugins which require accurate
+   notification of buffer changes such as git, highlighting, and IdeLspClient.
+ * Translation updates
+
 # GNOME Builder 47.1
 
 Changes since 47.0
