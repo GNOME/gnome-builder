@@ -1,8 +1,8 @@
 # GNOME Builder 47.1
-#
+
 Changes since 47.0
 
- * libpselling fixes
+ * libspelling fixes
  * Safety fixes in git change monitoring
  * Use gtk_window_present() to better handle strict-mode window ordering
  * Translation updates
