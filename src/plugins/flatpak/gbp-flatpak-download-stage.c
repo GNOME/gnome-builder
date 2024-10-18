@@ -111,9 +111,6 @@ gbp_flatpak_download_stage_query (IdePipelineStage *stage,
           ide_run_command_setenv (run_command, "XDG_RUNTIME_DIR", g_get_user_runtime_dir ());
         }
 
-      /* Give access to private flatpak installation */
-      ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
-
       runtime = ide_pipeline_get_runtime (pipeline);
       arch = ide_runtime_get_arch (runtime);
       arch_param = g_strdup_printf ("--arch=%s", arch);
@@ -155,6 +152,8 @@ create_run_context_cb (IdePipelineStageCommand *stage,
 {
   IdeContext *context = ide_object_get_context (IDE_OBJECT (stage));
   IdeRunContext *run_context = ide_run_context_new ();
+
+  gbp_flatpak_set_config_dir (run_context);
 
   ide_run_command_prepare_to_run (command, run_context, context);
 

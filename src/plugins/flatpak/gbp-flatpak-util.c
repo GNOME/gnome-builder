@@ -167,19 +167,13 @@ gbp_flatpak_get_default_arch (void)
   return default_arch;
 }
 
-const char *
-gbp_flatpak_get_config_dir (void)
+void
+gbp_flatpak_set_config_dir (IdeRunContext *run_context)
 {
-  static char *config_dir;
+  g_autofree char *path = ide_dup_default_cache_dir ();
+  g_autofree char *flatpak_etc = g_build_filename (path, "flatpak", "etc", NULL);
 
-  if (!config_dir)
-    config_dir = g_build_filename (g_get_user_data_dir (),
-                                   "gnome-builder",
-                                   "flatpak",
-                                   "etc",
-                                   NULL);
-
-  return config_dir;
+  ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", flatpak_etc);
 }
 
 static char *
