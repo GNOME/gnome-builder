@@ -202,7 +202,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   app_id = ide_config_get_app_id (config);
 
   /* Make sure our worker has access to our Builder-specific Flatpak repository */
-  ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
+  gbp_flatpak_set_config_dir (run_context);
 
   /* We need access to a few things for "flatpak build" to work and give us
    * access to the display/etc.
@@ -393,7 +393,7 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   config = ide_pipeline_get_config (pipeline);
 
   /* Make sure our worker has access to our Builder-specific Flatpak repository */
-  ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
+  gbp_flatpak_set_config_dir (run_context);
 
   /* We might need access to ccache configs inside the build environ.
    * Usually, this is set by flatpak-builder, but since we are running

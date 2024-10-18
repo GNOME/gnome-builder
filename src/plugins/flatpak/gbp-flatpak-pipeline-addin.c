@@ -157,20 +157,6 @@ always_run_query_handler (IdePipelineStage *stage,
   ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
-static IdeRunCommand *
-create_run_command (void)
-{
-  IdeRunCommand *run_command;
-  const char *config_dir;
-
-  config_dir = gbp_flatpak_get_config_dir ();
-  run_command = ide_run_command_new ();
-
-  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", config_dir);
-
-  return run_command;
-}
-
 static gboolean
 register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
                        IdePipeline              *pipeline,
@@ -340,6 +326,8 @@ create_run_context_cb (IdePipelineStageCommand *stage,
   if (flags & FLAGS_RUN_ON_HOST)
     ide_run_context_push_host (run_context);
 
+  gbp_flatpak_set_config_dir (run_context);
+
   ide_run_command_prepare_to_run (run_command, run_context, context);
 
   return run_context;
@@ -360,7 +348,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   IdeConfig *config;
   IdeRuntime *runtime;
   const char *app_id;
-  const char *config_dir;
   const char *platform;
   const char *branch;
   guint stage_id;
@@ -369,7 +356,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  run_command = create_run_command ();
+  run_command = ide_run_command_new ();
 
   config = ide_pipeline_get_config (pipeline);
   runtime = ide_pipeline_get_runtime (pipeline);
@@ -389,7 +376,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
   branch = gbp_flatpak_runtime_get_branch (GBP_FLATPAK_RUNTIME (runtime));
-  config_dir = gbp_flatpak_get_config_dir ();
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     sdk_extensions = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (config));
@@ -415,8 +401,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   if (sdk == NULL)
     sdk = g_strdup (platform);
-
-  ide_run_command_setenv (run_command, "FLATPAK_CONFIG_DIR", config_dir);
 
   ide_run_command_append_argv (run_command, "flatpak");
   ide_run_command_append_argv (run_command, "build-init");
@@ -545,7 +529,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   src_dir = ide_pipeline_get_srcdir (pipeline);
 
-  run_command = create_run_command ();
+  run_command = ide_run_command_new ();
   ide_run_command_set_cwd (run_command, src_dir);
 
   if (ide_is_flatpak ())
@@ -621,7 +605,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
 
-  run_command = create_run_command ();
+  run_command = ide_run_command_new ();
 
   ide_run_command_append_argv (run_command, "flatpak");
   ide_run_command_append_argv (run_command, "build-finish");
@@ -677,7 +661,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   repo_dir = gbp_flatpak_get_repo_dir (context);
   arch = get_arch_option (pipeline);
 
-  run_command = create_run_command ();
+  run_command = ide_run_command_new ();
 
   ide_run_command_append_argv (run_command, "flatpak");
   ide_run_command_append_argv (run_command, "build-export");
@@ -760,7 +744,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
 
   arch = get_arch_option (pipeline);
 
-  run_command = create_run_command ();
+  run_command = ide_run_command_new ();
 
   ide_run_command_append_argv (run_command, "flatpak");
   ide_run_command_append_argv (run_command, "build-bundle");
