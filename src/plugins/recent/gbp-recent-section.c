@@ -596,8 +596,7 @@ gbp_recent_section_constructed (GObject *object)
 {
   GbpRecentSection *self = (GbpRecentSection *)object;
   IdeRecentProjects *projects;
-  GtkListBoxRow *row;
-  GtkImage *image;
+  GtkWidget *row;
 
   G_OBJECT_CLASS (gbp_recent_section_parent_class)->constructed (object);
 
@@ -609,18 +608,10 @@ gbp_recent_section_constructed (GObject *object)
                            G_LIST_MODEL (self->truncate),
                            create_widget_func, self, NULL);
 
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "visible", TRUE,
+  row = g_object_new (ADW_TYPE_BUTTON_ROW,
+                      "title", _("Show More"),
+                      "start-icon-name", "view-more-symbolic",
                       NULL);
-  image = g_object_new (GTK_TYPE_IMAGE,
-                        "margin-top", 12,
-                        "margin-bottom", 12,
-                        "margin-start", 8,
-                        "margin-end", 8,
-                        "icon-name", "view-more-symbolic",
-                        "visible", TRUE,
-                        NULL);
-  gtk_list_box_row_set_child (row, GTK_WIDGET (image));
   gtk_list_box_append (self->listbox, GTK_WIDGET (row));
 
   g_object_bind_property (self->truncate, "can-expand", row, "visible",
