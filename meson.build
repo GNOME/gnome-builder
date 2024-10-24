@@ -37,7 +37,7 @@ pkgdatadir = join_paths(get_option('datadir'), 'gnome-builder')
 # Check dependencies
 glib_req_version = '2.75'
 gtk_req_version = '4.15.5'
-gtksourceview_req_version = '5.8'
+gtksourceview_req_version = '5.15'
 libadwaita_req_version = '1.6.alpha'
 libdex_req_version = '0.7'
 gobject_introspection_req_version = '1.74'
