@@ -2,6 +2,11 @@
 <!-- This file was generated from https://github.com/Gogh-Co/Gogh/tree/master/themes/ -->
 <style-scheme id="clone-of-ubuntu" name="Clone of Ubuntu" version="1.0">
 
+  <metadata>
+    <property name="accent_bg_color">#ed5b00</property>
+    <property name="accent_fg_color">#eeeeec</property>
+  </metadata>
+
   <color name="Foreground" value="#ffffff"/>
   <color name="Background" value="#300a24"/>
   <color name="Cursor" value="#ffffff"/>
