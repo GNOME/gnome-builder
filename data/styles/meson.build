@@ -11,4 +11,5 @@ install_data([
   'monokai-soda.xml',
   'pixiefloss.xml',
   'spacedust.xml',
+  'ubuntu.xml',
 ], install_dir: join_paths(get_option('datadir'), 'gnome-builder/styles'))
