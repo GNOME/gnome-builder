@@ -2,7 +2,6 @@ subdir('appdata')
 subdir('fonts')
 subdir('gsettings')
 subdir('icons')
-subdir('styles')
 
 # Desktop launcher and description file.
 desktop_file_config = configuration_data()

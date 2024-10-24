@@ -24,4 +24,26 @@
     <file preprocess="xml-stripblanks">ide-search-popover.ui</file>
     <file preprocess="xml-stripblanks">ide-style-variant-preview.ui</file>
   </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/">
+    <file preprocess="xml-stripblanks">styles/arctic-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/builder-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/builder.xml</file>
+    <file preprocess="xml-stripblanks">styles/catppuccin-latte.xml</file>
+    <file preprocess="xml-stripblanks">styles/catppuccin-mocha.xml</file>
+    <file preprocess="xml-stripblanks">styles/fishtank.xml</file>
+    <file preprocess="xml-stripblanks">styles/horizon-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/horizon-light.xml</file>
+    <file preprocess="xml-stripblanks">styles/monokai-soda.xml</file>
+    <file preprocess="xml-stripblanks">styles/peninsula-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/peninsula.xml</file>
+    <file preprocess="xml-stripblanks">styles/pixiefloss.xml</file>
+    <file preprocess="xml-stripblanks">styles/spacedust.xml</file>
+    <file preprocess="xml-stripblanks">styles/tokyo-night-light.xml</file>
+    <file preprocess="xml-stripblanks">styles/tokyo-night.xml</file>
+    <file preprocess="xml-stripblanks">styles/ubuntu.xml</file>
+    <file preprocess="xml-stripblanks">styles/vscode-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/vscode-light.xml</file>
+    <file preprocess="xml-stripblanks">styles/xterm-dark.xml</file>
+    <file preprocess="xml-stripblanks">styles/xterm-light.xml</file>
+  </gresource>
 </gresources>
