@@ -1,5 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
+data/org.gnome.Builder.desktop.in.in
 data/appdata/org.gnome.Builder.appdata.xml.in.in
 data/gsettings/org.gnome.builder.build.gschema.xml
 data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
@@ -13,12 +14,26 @@ data/gsettings/org.gnome.builder.project.gschema.xml
 data/gsettings/org.gnome.builder.project-tree.gschema.xml
 data/gsettings/org.gnome.builder.spelling.gschema.xml
 data/gsettings/org.gnome.builder.terminal.gschema.xml
-data/org.gnome.Builder.desktop.in.in
-data/styles/arctic-dark.xml
-data/styles/builder-dark.xml
-data/styles/builder.xml
-data/styles/peninsula-dark.xml
-data/styles/peninsula.xml
+src/libide/gui/styles/arctic-dark.xml
+src/libide/gui/styles/builder-dark.xml
+src/libide/gui/styles/builder.xml
+src/libide/gui/styles/catppuccin-latte.xml
+src/libide/gui/styles/catppuccin-mocha.xml
+src/libide/gui/styles/fishtank.xml
+src/libide/gui/styles/horizon-dark.xml
+src/libide/gui/styles/horizon-light.xml
+src/libide/gui/styles/monokai-soda.xml
+src/libide/gui/styles/peninsula-dark.xml
+src/libide/gui/styles/peninsula.xml
+src/libide/gui/styles/pixiefloss.xml
+src/libide/gui/styles/spacedust.xml
+src/libide/gui/styles/tokyo-night-light.xml
+src/libide/gui/styles/tokyo-night.xml
+src/libide/gui/styles/ubuntu.xml
+src/libide/gui/styles/vscode-dark.xml
+src/libide/gui/styles/vscode-light.xml
+src/libide/gui/styles/xterm-dark.xml
+src/libide/gui/styles/xterm-light.xml
 src/libide/code/ide-buffer.c
 src/libide/code/ide-buffer-manager.c
 src/libide/code/ide-language-defaults.c
