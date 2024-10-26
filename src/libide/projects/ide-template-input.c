@@ -91,6 +91,7 @@ static const struct {
 } licenses[] = {
   { "AGPL-3.0-or-later", "agpl_3_short", "agpl_3_full" },
   { "Apache-2.0", "apache_2_short", "apache_2_full" },
+  { "EUPL-1.2", "eupl_1_2_short", "eupl_1_2_full" },
   { "GPL-2.0-or-later", "gpl_2_short", "gpl_2_full" },
   { "GPL-3.0-or-later", "gpl_3_short", "gpl_3_full" },
   { "LGPL-2.1-or-later", "lgpl_2_1_short", "lgpl_2_1_full" },
