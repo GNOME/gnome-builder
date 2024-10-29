@@ -51,6 +51,16 @@
               </object>
             </child>
             <child>
+              <object class="AdwSpinner" id="spinner">
+                <property name="visible">false</property>
+                <property name="valign">center</property>
+                <property name="width-request">24</property>
+                <property name="height-request">24</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+              </object>
+            </child>
+            <child>
               <object class="GtkButton">
                 <property name="icon-name">window-close-symbolic</property>
                 <property name="tooltip-text">Close Search</property>

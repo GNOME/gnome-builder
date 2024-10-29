@@ -39,6 +39,7 @@ struct _IdeSearchPopover
   IdeSearchEngine    *search_engine;
   GSettings          *settings;
 
+  AdwSpinner         *spinner;
   GtkText            *text;
   GtkListView        *list_view;
   AdwBin             *preview_bin;
@@ -48,6 +49,8 @@ struct _IdeSearchPopover
   IdeSearchCategory   last_category;
 
   guint               queued_search;
+
+  guint               sequence;
 
   guint               activate_after_search : 1;
   guint               disposed : 1;
@@ -65,6 +68,21 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, ADW_TYPE_DIALOG)
 
 static GParamSpec *properties [N_PROPS];
+
+typedef struct
+{
+  IdeSearchPopover *self;
+  guint sequence;
+} SearchState;
+
+static void
+search_state_free (SearchState *state)
+{
+  g_clear_object (&state->self);
+  g_free (state);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (SearchState, search_state_free);
 
 static void
 ide_search_popover_cancel (IdeSearchPopover *self)
@@ -173,21 +191,34 @@ ide_search_popover_search_cb (GObject      *object,
                               gpointer      user_data)
 {
   IdeSearchEngine *search_engine = (IdeSearchEngine *)object;
-  g_autoptr(IdeSearchPopover) self = user_data;
+  g_autoptr(SearchState) state = user_data;
   g_autoptr(IdeSearchResults) results = NULL;
   g_autoptr(GError) error = NULL;
+  IdeSearchPopover *self;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_SEARCH_POPOVER (state->self));
+
+  self = state->self;
 
   results = ide_search_engine_search_finish (search_engine, result, &error);
 
   if (error != NULL)
     g_debug ("Search failed: %s", error->message);
+
+  if (self->sequence != state->sequence)
+    {
+      g_debug ("Search (%u) no longer valid (current %u), ignoring",
+               state->sequence, self->sequence);
+      return;
+    }
+
+  gtk_widget_set_visible (GTK_WIDGET (self->spinner), FALSE);
 
   gtk_single_selection_set_model (self->selection, G_LIST_MODEL (results));
 
@@ -204,6 +235,7 @@ ide_search_popover_search_source_func (gpointer data)
   g_autofree char *query_stripped = NULL;
   IdeSearchCategory category;
   IdeSearchPopover *self = data;
+  SearchState *state;
   const char *query;
 
   IDE_ENTRY;
@@ -277,13 +309,19 @@ ide_search_popover_search_source_func (gpointer data)
 
   self->last_category = category;
 
+  state = g_new0 (SearchState, 1);
+  state->self = g_object_ref (self);
+  state->sequence = ++self->sequence;
+
+  gtk_widget_set_visible (GTK_WIDGET (self->spinner), TRUE);
+
   ide_search_engine_search_async (self->search_engine,
                                   category,
                                   query,
                                   0,
                                   self->cancellable,
                                   ide_search_popover_search_cb,
-                                  g_object_ref (self));
+                                  state);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 
@@ -608,6 +646,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, preview_bin);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, spinner);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, text);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
