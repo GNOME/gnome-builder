@@ -6,7 +6,7 @@
     1. Make sure that Flatpak is installed (see https://flatpak.org/setup )
     2. Copy and run the following command in a Terminal:
 
-    flatpak install --user --from https://nightly.gnome.org/repo/appstream/org.gnome.Builder.flatpakref
+    flatpak install --user --from https://nightly.gnome.org/repo/appstream/org.gnome.Builder.Devel.flatpakref
 
     3) The Nightly version can now be launched from Activities, or with this command: flatpak run org.gnome.Builder.Devel
 -->
