@@ -20,6 +20,7 @@
 { "id" : "org.gnome.builder.workspace.last-page", "trigger" : "<Control>0", "action" : "workspace.focus-last-page", "phase" : "bubble" },
 
 /* Workspace Actions */
+{ "id" : "org.gnome.builder.help", "trigger" : "F1", "action" : "app.help" },
 { "id" : "org.gnome.builder.preferences", "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
 { "id" : "org.gnome.builder.project.configure", "trigger" : "<Alt>comma", "action" : "context.workbench.configure", "phase" : "capture" },
 { "id" : "org.gnome.builder.quit", "trigger" : "<Control>q", "action" : "app.quit", "phase" : "bubble" },
