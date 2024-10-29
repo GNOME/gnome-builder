@@ -195,27 +195,47 @@ ide_show_tweaks (IdeContext *context,
   IdeApplication *app = IDE_APPLICATION_DEFAULT;
   g_autoptr(IdeTweaks) tweaks = NULL;
   IdeTweaksWindow *window;
-  const GList *windows;
+  IdeWorkbench *workbench;
   GtkWindow *toplevel = NULL;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_APPLICATION (app));
   g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
-  /* Locate a toplevel for a transient-for property, or a previous
-   * tweaks window to display.
-   */
-  windows = gtk_application_get_windows (GTK_APPLICATION (app));
-  for (; windows; windows = windows->next)
+  if ((workbench = ide_application_get_active_workbench (app)))
     {
-      GtkWindow *win = windows->data;
+      GList *windows = gtk_window_group_list_windows (GTK_WINDOW_GROUP (workbench));
+      gboolean found = FALSE;
 
-      if (IDE_IS_TWEAKS_WINDOW (win) &&
-          try_reuse_window (IDE_TWEAKS_WINDOW (win), context, page))
+      for (const GList *iter = windows; !found && iter; iter = iter->next)
+        {
+          GtkWindow *win = iter->data;
+
+          if (IDE_IS_TWEAKS_WINDOW (win) &&
+              try_reuse_window (IDE_TWEAKS_WINDOW (win), context, page))
+            found = TRUE;
+          else if (IDE_IS_PRIMARY_WORKSPACE (win))
+            toplevel = win;
+        }
+
+      if (!found && windows != NULL)
+        {
+          for (const GList *iter = windows; iter; iter = iter->next)
+            {
+              GtkWindow *win = iter->data;
+
+              if (IDE_IS_WORKSPACE (win))
+                {
+                  toplevel = win;
+                  break;
+                }
+            }
+        }
+
+      g_list_free (windows);
+
+      if (found)
         return;
-
-      if (toplevel && IDE_IS_PRIMARY_WORKSPACE (win))
-        toplevel = win;
     }
 
   tweaks = ide_tweaks_new_for_context (context);
@@ -239,17 +259,13 @@ ide_show_tweaks (IdeContext *context,
   /* Prepare window and setup :application */
   window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
                          "tweaks", tweaks,
+                         "transient-for", toplevel,
                          NULL);
 
-  if (app->workbenches->len > 0)
-    {
-      IdeWorkbench *workbench = g_ptr_array_index (app->workbenches, 0);
-      gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (window));
-    }
+  if (workbench != NULL)
+    gtk_window_group_add_window (GTK_WINDOW_GROUP (workbench), GTK_WINDOW (window));
   else
-    {
-      gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
-    }
+    gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
 
   /* Switch pages before we display if necessary */
   if (page != NULL)
