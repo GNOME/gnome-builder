@@ -1164,3 +1164,36 @@ ide_application_control_is_pressed (IdeApplication *self)
 
   return !!(modifiers & GDK_CONTROL_MASK);
 }
+
+/**
+ * ide_application_get_active_workbench:
+ * @self: a #IdeApplication
+ *
+ * Gets the active workbench, if any.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
+ */
+IdeWorkbench *
+ide_application_get_active_workbench (IdeApplication *self)
+{
+  GtkWindow *window;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  if (!(window = gtk_application_get_active_window (GTK_APPLICATION (self))))
+    return NULL;
+
+  do
+    {
+      IdeWorkbench *workbench;
+
+      if (IDE_IS_WORKSPACE (window))
+        return ide_workspace_get_workbench (IDE_WORKSPACE (window));
+
+      if ((workbench = ide_workbench_from_widget (GTK_WIDGET (window))))
+        return workbench;
+    }
+  while ((window = gtk_window_get_transient_for (window)));
+
+  return NULL;
+}

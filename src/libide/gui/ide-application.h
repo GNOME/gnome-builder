@@ -114,5 +114,7 @@ gboolean       ide_application_install_schemes_finish    (IdeApplication        
                                                           GError                  **error);
 IDE_AVAILABLE_IN_47
 gboolean       ide_application_control_is_pressed        (IdeApplication           *self);
+IDE_AVAILABLE_IN_48
+IdeWorkbench  *ide_application_get_active_workbench      (IdeApplication           *self);
 
 G_END_DECLS
