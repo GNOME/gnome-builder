@@ -66,6 +66,13 @@
         <attribute name="accel">&lt;control&gt;plus</attribute>
       </item>
     </section>
+    <section id="ide-source-view-popup-menu-emoji-section">
+      <item>
+        <attribute name="label" translatable="yes">Insert Emoji</attribute>
+        <attribute name="action">misc.insert-emoji</attribute>
+        <attribute name="accel">&lt;control&gt;semicolon</attribute>
+      </item>
+    </section>
     <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
         <attribute name="label" translatable="yes">_Selection</attribute>
