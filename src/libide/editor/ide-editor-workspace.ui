@@ -23,6 +23,11 @@
                     <lookup name="reveal-start">dock</lookup>
                   </closure>
                 </binding>
+                <binding name="show-start-title-buttons">
+                  <closure function="invert_boolean" type="gboolean">
+                    <lookup name="reveal-start">dock</lookup>
+                  </closure>
+                </binding>
                 <binding name="show-end-title-buttons">
                   <closure function="invert_boolean" type="gboolean">
                     <lookup name="reveal-end">dock</lookup>
