@@ -49,7 +49,7 @@ pkg.generate(
 
 gnome = import('gnome')
 {{name_}}_gir = gnome.generate_gir({{name_}}_lib,
-              sources: {{name_}}_sources,
+              sources: [{{name_}}_sources, {{name_}}_headers],
                header: '{{name}}.h',
       export_packages: '{{name}}-' + api_version,
             nsversion: api_version,
