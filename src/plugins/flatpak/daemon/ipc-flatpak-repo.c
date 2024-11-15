@@ -36,6 +36,7 @@ allow runtime/org.freedesktop.*\n\
 allow runtime/org.gnome.*\n\
 allow runtime/io.elementary.*\n\
 allow runtime/org.kde.*\n\
+allow app/*.BaseApp\n\
 ";
 
 static const char *remotes[] = { "flathub", "flathub-beta", "gnome-nightly" };
