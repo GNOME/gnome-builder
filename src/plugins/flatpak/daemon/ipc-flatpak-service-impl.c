@@ -255,6 +255,28 @@ is_installed (IpcFlatpakServiceImpl *self,
         return TRUE;
     }
 
+  if (flatpak_ref_get_kind (ref) == FLATPAK_REF_KIND_APP)
+    {
+      g_autoptr(GPtrArray) remotes = NULL;
+      g_autoptr(GError) error = NULL;
+
+      for (guint i = 0; i < self->installs_ordered->len; i++)
+        {
+          g_autoptr(FlatpakInstalledRef) installed_ref = NULL;
+          const Install *install = g_ptr_array_index (self->installs_ordered, i);
+
+          installed_ref = flatpak_installation_get_installed_ref (install->installation,
+                                                                  FLATPAK_REF_KIND_APP,
+                                                                  lookup_name,
+                                                                  lookup_arch,
+                                                                  lookup_branch,
+                                                                  NULL,
+                                                                  NULL);
+          if (installed_ref)
+            return TRUE;
+        }
+    }
+
   return FALSE;
 }
 
@@ -686,12 +708,14 @@ ipc_flatpak_service_impl_runtime_is_known (IpcFlatpakService     *service,
   g_assert (name != NULL);
 
   /* Homogenize names into runtime/name/arch/branch */
-  if (g_str_has_prefix (name, "runtime/"))
-    name += strlen ("runtime/");
-  full_name = g_strdup_printf ("runtime/%s", name);
+  if (!g_str_has_prefix (name, "runtime/") && !g_str_has_prefix (name, "app/"))
+    {
+      full_name = g_strdup_printf ("runtime/%s", name);
+      name = full_name;
+    }
 
   /* Parse the ref, so we can try to locate it */
-  if (!(ref = flatpak_ref_parse (full_name, &error)))
+  if (!(ref = flatpak_ref_parse (name, &error)))
     return complete_wrapped_error (g_steal_pointer (&invocation), error);
 
   ref_name = flatpak_ref_get_name (ref);
@@ -951,18 +975,6 @@ install_worker (GTask        *task,
   /* GDBusMethodInvocation completes on the main thread */
 }
 
-static gboolean
-refs_equal (FlatpakRef *a,
-            FlatpakRef *b)
-{
-  return (str_equal0 (flatpak_ref_get_name (a),
-                      flatpak_ref_get_name (b)) &&
-          str_equal0 (flatpak_ref_get_arch (a),
-                      flatpak_ref_get_arch (b)) &&
-          str_equal0 (flatpak_ref_get_branch (a),
-                      flatpak_ref_get_branch (b)));
-}
-
 enum {
   MODE_PRIVATE = 0,
   MODE_USER = 1,
@@ -979,10 +991,17 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
   g_autoptr(GPtrArray) suffix = NULL;
   g_autoptr(GSettings) settings = NULL;
   g_autofree char *preferred = NULL;
+  const char *ref_name;
+  const char *ref_arch;
+  const char *ref_branch;
   int mode = 0;
 
   g_assert (IPC_IS_FLATPAK_SERVICE_IMPL (self));
   g_assert (FLATPAK_IS_REF (ref));
+
+  ref_name = flatpak_ref_get_name (ref);
+  ref_arch = flatpak_ref_get_arch (ref);
+  ref_branch = flatpak_ref_get_branch (ref);
 
 #if FLATPAK_CHECK_VERSION(1, 11, 2)
   /* If this is not the default architecture, we need to force that we've
@@ -1043,7 +1062,9 @@ find_remote_for_ref (IpcFlatpakServiceImpl  *self,
             {
               FlatpakRef *remote_ref = g_ptr_array_index (refs, k);
 
-              if (refs_equal (ref, remote_ref))
+              if (str_equal0 (ref_name, flatpak_ref_get_name (remote_ref)) &&
+                  str_equal0 (ref_arch, flatpak_ref_get_arch (remote_ref)) &&
+                  str_equal0 (ref_branch, flatpak_ref_get_branch (remote_ref)))
                 {
                   if (installation != NULL)
                     *installation = g_object_ref (install->installation);
