@@ -558,7 +558,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
       if (base != NULL && base_version != NULL)
         g_ptr_array_add (state->to_install,
-                         g_strdup_printf ("runtime/%s/%s/%s",
+                         g_strdup_printf ("app/%s/%s/%s",
                                           base,
                                           arch,
                                           base_version));
