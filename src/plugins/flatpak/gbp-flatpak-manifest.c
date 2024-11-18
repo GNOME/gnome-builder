@@ -264,11 +264,6 @@ validate_properties (GbpFlatpakManifest  *self,
   branch = "master";
   if (self->runtime_version != NULL)
     branch = self->runtime_version;
-  if (self->base != NULL && self->base_version != NULL)
-    {
-      name = self->base;
-      branch = self->base_version;
-    }
 
   runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", name, arch, branch);
   ide_config_set_runtime_id (IDE_CONFIG (self), runtime_id);
