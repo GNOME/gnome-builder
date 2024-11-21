@@ -329,8 +329,7 @@
         {
             "name" : "liburing",
             "buildsystem" : "autotools",
-            "config-opts" : [
-            ],
+            "config-opts" : [],
             "sources" : [
                 {
                     "type" : "git",
@@ -680,9 +679,9 @@
                 "-Dnetwork_tests=false",
                 "-Dplugin_deviced=true"
             ],
-            "run-tests": true,
+            "run-tests" : true,
             "build-options" : {
-                "test-args": [
+                "test-args" : [
                     "--device=dri",
                     "--share=ipc",
                     "--socket=fallback-x11",
