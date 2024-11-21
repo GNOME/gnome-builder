@@ -5,7 +5,7 @@
    viewBox="0 0 800 800.00003"
    version="1.1"
    id="svg8"
-   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    sodipodi:docname="org.gnome.Builder.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -107,6 +107,22 @@
        only_selected="false"
        hide_knots="false"
        nodesatellites_param="F,0,0,1,0,0.89263027,0,1 @ F,0,0,1,0,2.7447164,0,1 @ F,0,0,1,0,0.99673349,0,1 @ F,0,0,1,0,0.91386553,0,1" />
+    <linearGradient
+       id="paint0_linear_87_8231"
+       x1="15.0103"
+       y1="2"
+       x2="15.0103"
+       y2="27.001301"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.49668854,0,0,0.49668854,156.56581,-244.03817)">
+      <stop
+         stop-color="#F88A36"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#FD2020"
+         id="stop2" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -115,16 +131,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="168"
-     inkscape:cy="351"
+     inkscape:zoom="8"
+     inkscape:cx="292.875"
+     inkscape:cy="637.9375"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      units="px"
      showborder="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -137,7 +153,13 @@
      inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid843" />
+       id="grid843"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -2770,6 +2792,24 @@
          d="m 81,323 v 3 h 6.03125 v -3 z m 7,0 v 3 h 6 v -3 z m 6,3.99219 -2,0.008 v 3 h 2 z M 81,327 v 3.00781 L 83,330 v -3 z m 3,0 v 3 h 7 l 0.03125,-3 z m -3,4 v 3 h 6 v -3 z"
          transform="translate(0,322.51965)"
          sodipodi:nodetypes="cccccccccccccccccccccccccccccc" />
+    </g>
+    <g
+       id="g13"
+       inkscape:label="text-swift"
+       transform="translate(124,864)">
+      <title
+         id="title1">text-swift</title>
+      <rect
+         y="-244"
+         x="156"
+         height="16"
+         width="16"
+         id="rect1"
+         style="color:#bebebe;display:inline;overflow:visible;visibility:visible;opacity:0.514644;fill:none;stroke:none;stroke-width:3;marker:none;enable-background:accumulate" />
+      <path
+         id="path1"
+         style="fill:#2e3436;fill-opacity:1;stroke-width:25.0001"
+         d="M 165.61719 -243.04492 C 166.9847 -241.17787 167.61136 -238.92137 167.06445 -236.9375 C 167.01384 -236.75075 166.95337 -236.57192 166.88477 -236.39844 C 166.81981 -236.4422 166.73943 -236.49003 166.63477 -236.54883 L 159.94531 -242.01172 L 160.00977 -241.03125 C 160.00977 -241.03125 161.76239 -239.03689 162.89844 -237.84375 C 161.88292 -238.42751 157.92188 -241.0918 157.92188 -241.0918 L 158.01562 -240.01367 C 158.01563 -240.01367 163.28266 -235.53402 164.99609 -234.13477 C 163.34828 -233.11861 161.00608 -233.04372 158.66406 -234.13672 C 158.07805 -234.40887 157.53131 -234.72042 157.0625 -235.10938 C 158.03919 -233.55361 159.56222 -232.19191 161.39844 -231.41406 C 163.66627 -230.44619 168 -232 168 -232 L 169 -232 L 171 -230 L 171 -232 C 171 -232 171.11339 -232.54682 169.81055 -234.32617 C 169.83435 -234.4045 169.85665 -234.48551 169.87695 -234.56641 C 170.65853 -237.56179 168.78149 -241.13887 165.61719 -243.04492 z " />
     </g>
   </g>
 </svg>
