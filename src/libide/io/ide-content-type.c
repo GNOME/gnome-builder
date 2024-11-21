@@ -62,6 +62,7 @@ static const struct {
   const char *content_type;
 } suffix_content_type_overrides[] = {
   { ".md", "text-markdown-symbolic" },
+  { ".swift", "text-swift-symbolic" },
 };
 
 #if defined (G_HAS_CONSTRUCTORS)
