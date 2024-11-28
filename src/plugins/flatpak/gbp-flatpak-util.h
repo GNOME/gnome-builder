@@ -21,6 +21,7 @@
 #pragma once
 
 #include <libide-foundry.h>
+#include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
@@ -35,5 +36,8 @@ gboolean    gbp_flatpak_split_id         (const gchar       *str,
                                           gchar            **id,
                                           gchar            **arch,
                                           gchar            **branch);
+JsonNode *  gbp_flatpak_yaml_to_json     (const gchar       *contents,
+                                          gsize              len,
+                                          GError           **error);
 
 G_END_DECLS
