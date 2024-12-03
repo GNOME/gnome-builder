@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/vhdl-language-server">
+    <file>vhdl-language-server.plugin</file>
+    <file>settings.json</file>
+  </gresource>
+</gresources>

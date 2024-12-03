@@ -154,6 +154,7 @@ subdir('vala-indenter')
 subdir('vala-language-server')
 subdir('valgrind')
 subdir('vcsui')
+subdir('vhdl-language-server')
 subdir('vim')
 subdir('waf')
 subdir('web-browser')
@@ -257,6 +258,7 @@ status += [
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vala_language_server')),
+  'vhdl-language-server .......... (VHDL) : @0@'.format(get_option('plugin_vhdl_language_server')),
   'zls ........................ (Ziglang) : @0@'.format(get_option('plugin_zls')),
   '',
   ' ** Denotes plugins not recommended for distribution',

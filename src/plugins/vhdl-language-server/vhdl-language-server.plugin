@@ -1,0 +1,17 @@
+[Plugin]
+Copyright=Copyright © 2024 Nokse
+Description=Vhdl code intelligence provided by vhdl-ls
+Embedded=ide_lsp_plugin_register_types
+Module=vhdl-language-server
+Name=Vhdl Language Server
+Website=https://github.com/VHDL-LS/rust_hdl
+X-Category=lsps
+X-Completion-Provider-Languages=vhdl
+X-Symbol-Resolver-Languages=vhdl
+X-Diagnostic-Provider-Languages=vhdl
+X-Highlighter-Languages=vhdl
+X-Hover-Provider-Languages=vhdl
+X-Rename-Provider-Languages=vhdl
+X-LSP-Command=vhdl_ls
+X-LSP-Languages=vhdl
+X-LSP-Settings=settings.json
