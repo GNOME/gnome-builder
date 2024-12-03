@@ -299,7 +299,7 @@ change_process (DexFuture *completed,
   g_assert (G_IS_FILE (state->file));
   g_assert (!state->other_file || G_IS_FILE (state->other_file));
 
-  if (!dex_await_boolean (dex_ref (completed), NULL))
+  if (dex_await_boolean (dex_ref (completed), NULL))
     return NULL;
 
   self = state->self;
