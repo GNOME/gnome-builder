@@ -152,7 +152,7 @@ notify_bridge_commit_notify (GtkTextBuffer            *buffer,
 
   IDE_TRACE_MSG ("Flags = 0x%x", flags);
 
-  if (!(client = g_weak_ref_get (&bridge->buffer_wr)))
+  if (!(client = g_weak_ref_get (&bridge->client_wr)))
     IDE_EXIT;
 
   priv = ide_lsp_client_get_instance_private (client);
@@ -180,7 +180,7 @@ notify_bridge_commit_notify (GtkTextBuffer            *buffer,
           uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
           copy = gtk_text_iter_get_slice (&begin, &end);
 
-          version = (gint64)ide_buffer_get_change_count (IDE_BUFFER (buffer));
+          version = (gint64)ide_buffer_get_change_count (IDE_BUFFER (buffer)) + 1;
 
           line = gtk_text_iter_get_line (&begin);
           column = gtk_text_iter_get_line_offset (&begin);
