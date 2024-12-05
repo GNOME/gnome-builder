@@ -152,7 +152,7 @@ notify_bridge_commit_notify (GtkTextBuffer            *buffer,
 
   IDE_TRACE_MSG ("Flags = 0x%x", flags);
 
-  if (!(client = g_weak_ref_get (&bridge->buffer_wr)))
+  if (!(client = g_weak_ref_get (&bridge->client_wr)))
     IDE_EXIT;
 
   priv = ide_lsp_client_get_instance_private (client);
