@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-24 12:49+0000\n"
-"PO-Revision-Date: 2024-08-26 12:58+0330\n"
+"POT-Creation-Date: 2024-11-25 08:52+0000\n"
+"PO-Revision-Date: 2024-12-15 08:37+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -16,20 +16,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 
+#: data/org.gnome.Builder.desktop.in.in:3
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
-#: data/org.gnome.Builder.desktop.in.in:3 src/libide/editor/ide-editor-workspace.ui:40
-#: src/libide/editor/ide-editor-workspace.ui:63
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "سازنده"
 
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "ساخت نرم‌افزار برای گنوم"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Builder;Develop;ساخت;توسعه;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "گشودن پروژه"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "آغاز پروژهٔ جدید"
+
+#: data/org.gnome.Builder.desktop.in.in:28 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "شبیه‌سازی مخزن"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "فضای کاری ویرایشگر جدید"
+
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
-msgstr "ساخته برنامه‌هایی برای گنوم"
+msgstr "ساخت برنامه‌هایی برای گنوم"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
@@ -610,11 +637,11 @@ msgstr "محیطی که میخواهید در آن آزمون‌های واحد 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
-msgstr "دخدادنگاری پرگفتار"
+msgstr "گزارش گرفتن پرگو"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid "If G_MESSAGES_DEBUG=all should be used when running the target application"
-msgstr "استفاده یا عدم استفاده از G_MESSAGES_DEBUG=all هنگام اجرای برنامه"
+msgstr "این که هنگام اجرای برنامهٔ هدف باید از G_MESSAGES_DEBUG=all استفاده شود یا نه"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
@@ -625,7 +652,7 @@ msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 msgstr ""
-"شاخه‌ای برای استفاده به عنوان ریشه برای داده‌ّای انبارهٔ پروژه چون شاخه‌های صحنه‌بری "
+"شاخه‌ای برای استفاده به عنوان ریشه برای داده‌های انبارهٔ پروژه چون شاخه‌های صحنه‌بری "
 "فلت‌پک و ساخت‌ها"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
@@ -666,33 +693,7 @@ msgstr "بررسی املا"
 msgid "Automatically check spelling within documents"
 msgstr "بررسی خودکار املای واژگان در پرونده‌ها"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "ساختن برنامه برای گنوم"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "ساخت;توسعه;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "گشودن پروژه"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "آغاز پروژه‌ای جدید"
-
-#: data/org.gnome.Builder.desktop.in.in:28 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
-msgid "Clone Repository"
-msgstr "شبیه‌سازی محزن"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "فضای کاری ویرایشگر جدید"
-
-#: src/libide/code/ide-buffer.c:3755
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "زبان کنونی رمزگشای نمادی کم دارد."
 
@@ -736,8 +737,8 @@ msgstr "بی‌عنوان"
 msgid "Projects"
 msgstr "پروژه‌ها"
 
-#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:524
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
@@ -814,10 +815,10 @@ msgstr "صفحه‌ها"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145 src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157 src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164 src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111 src/plugins/menu-search/gtk/menus.ui:121
 #: src/plugins/symbol-tree/gtk/menus.ui:5
@@ -833,8 +834,8 @@ msgstr "جست‌وجو و جایگزینی"
 msgid "Documents"
 msgstr "سندها"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "گزینش"
 
@@ -969,8 +970,15 @@ msgstr "تطبیق واژگان کامل"
 msgid "Language"
 msgstr "زبان"
 
-#: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:117
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
+msgid "Search (Ctrl+Enter)"
+msgstr "جست‌وجو (مهار+ورود)"
+
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "تغییر وضعیت تابلوی پایین (مهار+F9)"
 
@@ -1176,7 +1184,7 @@ msgid "Application exited with error: %s"
 msgstr "برنامه با خطای %s خارج شد"
 
 #: src/libide/foundry/ide-run-manager.c:893
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "برنامه خارج شد"
 
@@ -1234,7 +1242,7 @@ msgstr "در حال خارج کردن فرایند %s به اجبار"
 #: src/libide/foundry/ide-run-tool.c:84
 #, c-format
 msgid "Sending signal %d to subprocess %s"
-msgstr "در حال فرستادن سیگنال %Id به فرایند %s"
+msgstr "فرستادن علامت %Id به فرایند %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1272,48 +1280,48 @@ msgstr "گزینش _پوشه…"
 msgid "Directory"
 msgstr "شاخه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:222 src/libide/gui/ide-workbench.c:363
+#: src/libide/greeter/ide-greeter-workspace.c:223 src/libide/gui/ide-workbench.c:363
 #: src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "سازنده — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:333
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "شکست در بار کردن پروژه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:335
+#: src/libide/greeter/ide-greeter-workspace.c:336
 #: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "بستن"
 
-#: src/libide/greeter/ide-greeter-workspace.c:521
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
 msgstr "حذف منابع پروژه؟"
 
-#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr "حذف کردن کد منبع پروژه قابل بازگشت نیست."
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
 msgstr "حذف منابع پروژه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:619
-#: src/libide/greeter/ide-greeter-workspace.c:658
+#: src/libide/greeter/ide-greeter-workspace.c:620
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr "گزینش پوشه پروژه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:624
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr "گزینش پرونده پروژه"
 
-#: src/libide/greeter/ide-greeter-workspace.c:663
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "گشودن"
 
-#: src/libide/greeter/ide-greeter-workspace.c:674
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr "تمام انواع پروژه"
 
@@ -1418,30 +1426,30 @@ msgstr "جست‌وجو"
 msgid "Search for anything"
 msgstr "جست‌وجو برای هرچیزی"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "نوشتن برای جست‌وجو"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr "پیشوندی یکی از موارد زیر به پرس‌وجویتان برای پالایش نتیجه‌ها"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "نمادها"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "مستندات"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "کنش‌ها"
@@ -1495,7 +1503,7 @@ msgstr "مرور وب"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "پایانه"
@@ -1580,18 +1588,13 @@ msgstr "نمی‌توان HTML را باv کرد. پشتیبانی وب‌کیت
 msgid "Invalid configuration"
 msgstr "پیکربندی نامعتبر"
 
-#: src/libide/gui/ide-primary-workspace.ui:49
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "تغییر وضعیت تابلوی راست (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:84 src/plugins/menu-search/gtk/menus.ui:37
+#: src/libide/gui/ide-primary-workspace.ui:101 src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "تغییر وضعیت تابلوی چپ"
-
-#: src/libide/gui/ide-primary-workspace.ui:92
-#: src/libide/gui/ide-primary-workspace.ui:139
-msgid "Search (Ctrl+Enter)"
-msgstr "جست‌وجو (مهار+ورود)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1657,19 +1660,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "نصب کردن %Iu بسته"
 msgstr[1] "نصب کردن بسته %Iu"
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "عملیات لغو شده‌است"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1733
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "شکست در آغاز کارساز زبان: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr "بدون اتصال به کارساز زبان"
 
@@ -1707,7 +1710,7 @@ msgstr "کارساز‌های زبان"
 msgid "Devices & Simulators"
 msgstr "افزاره‌ها و شبیه‌ساز‌ها"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "عیب‌یابی"
@@ -1823,76 +1826,80 @@ msgid "Zoom In (Ctrl++)"
 msgstr "بزرگ‌نمایی (مهار++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "درج شکلک"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "_گزینش"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "گزینش _همه"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "قالب بندی"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "تمام حروف _بزرگ"
 
-#: src/libide/sourceview/gtk/menus.ui:85
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr "تبدیل متن گزیده به حروف بزرگ"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "تمام حروف _کوچک"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr "تبدیل متن گزیده به حروف کوچک"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr "_تغییر حالت حروف"
 
-#: src/libide/sourceview/gtk/menus.ui:99
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr "تغییر حروف کوچک به بزرگ و بزرگ به کوچک در متن گزیده"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "حالت _عنوان"
 
-#: src/libide/sourceview/gtk/menus.ui:106
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr "تبدیل متن گزیه به حالت عنوان"
 
-#: src/libide/sourceview/gtk/menus.ui:115
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "گزینش _خط"
 
-#: src/libide/sourceview/gtk/menus.ui:120
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "_حذف خط"
 
-#: src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "_وصل کردن خط‌ها"
 
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "_مرتب کردن خط‌ها"
 
-#: src/libide/sourceview/gtk/menus.ui:136
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "_دوتا کردن خط"
 
-#: src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "_قالب بندی"
 
-#: src/libide/sourceview/gtk/menus.ui:154 src/libide/sourceview/gtk/menus.ui:158
-#: src/libide/sourceview/gtk/menus.ui:164 src/plugins/menu-search/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "ناوبری کد"
@@ -1909,7 +1916,7 @@ msgstr "خط %Iu، ستون %Iu"
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
-msgstr "خط %Iu، ستون %Iu (گزینش:‌%Iu)"
+msgstr "خط %Iu، ستون %Iu (گزیده:‌%Iu)"
 
 #: src/libide/terminal/gtk/menus.ui:6 src/libide/terminal/ide-terminal.ui:113
 msgid "_Open Link"
@@ -2006,7 +2013,7 @@ msgid "Linux"
 msgstr "لینوکس"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:882
+#: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
 msgstr "اکس‌ترم"
 
@@ -2041,6 +2048,10 @@ msgstr "وی‌اس کد"
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
 msgstr "سودای مونوکای"
+
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr "شبیه‌سازی اوبونتو"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2078,7 +2089,7 @@ msgstr "بازنشانی و پاک‌سازی"
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
-msgstr "فرایند با سیگنال %Id متوقف شد"
+msgstr "فرایند با علامت %Id متوقف شد"
 
 #: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
@@ -2264,7 +2275,7 @@ msgstr "آخرین ساخت"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
 msgid "Build result"
-msgstr "نتیجه ساخت"
+msgstr "نتیجهٔ ساخت"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
 msgid "Errors"
@@ -2309,20 +2320,20 @@ msgstr "هشدارها (%Iu)"
 msgid "Errors (%u)"
 msgstr "خطا‌ها (%Iu)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "هم‌رسانده"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr "ایستا"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 msgid "Executable"
-msgstr "قابل اجرا"
+msgstr "پروندهٔ اجرایی"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "شکست در سیاهه کردن هدف‌های ساخت: %s"
@@ -2491,7 +2502,7 @@ msgstr "صدور پروژه"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
-msgstr "نمایش نتیجه ساخت"
+msgstr "نمایش خروجی _ساخت"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
@@ -2544,7 +2555,7 @@ msgstr "تنظیمات"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
-msgstr "دنبال کردن سبک سامانه"
+msgstr "پیروی از سبک سامانه"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
@@ -2552,7 +2563,7 @@ msgstr "پیوری از سبک سامانه هنگام اجرای پروژه"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
-msgstr "اجباری کردن حالت روشن"
+msgstr "اجبار به روشن"
 
 #: src/plugins/buildui/gtk/menus.ui:173
 msgid "Force light theme when running the project"
@@ -2560,7 +2571,7 @@ msgstr "اجبار زمینهٔ روشن هنگام اجرای پروژه"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
-msgstr "اجباری کردن حالت تیره"
+msgstr "اجبار به تیره"
 
 #: src/plugins/buildui/gtk/menus.ui:180
 msgid "Force dark theme when running the project"
@@ -2847,12 +2858,12 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
-msgstr "سیگنال ایست"
+msgstr "علامت ایست"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
 "Send the signal to the target application when requesting the application stop."
-msgstr "برای لغو اجرای برنامه هدف، سیگنال ایست بفرستید."
+msgstr "فرستادن علامت به برنامهٔ هدف هنگام درخواست توقّف برنامه."
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
@@ -2980,7 +2991,7 @@ msgstr "مکان"
 
 #: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
-msgstr "مکانی که پروژه‌تان ساخته می‌شود"
+msgstr "جایی که پروژه‌تان ساخته می‌شود"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
@@ -3142,7 +3153,7 @@ msgstr "بار کردن پروژه شکست خورد:‌%s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "در حال نمایه‌گذاری کد منبع"
 
@@ -3170,7 +3181,7 @@ msgstr "رونوشت به عنوان تصویر"
 msgid "Copy selected text as an image"
 msgstr "رونوشت کردن متن گزیده به عنوان تصویر"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "احتمال غلط املایی در %s. آیا منظورتان %s بود؟"
@@ -3193,11 +3204,11 @@ msgstr "اِعمال"
 msgid "Loading…"
 msgstr "در حال بار…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
 msgstr "هیچ عمل کدی موجود نیست"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr "خطا در عمل کد"
 
@@ -3364,9 +3375,9 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:747
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "مکان"
 
@@ -3409,7 +3420,7 @@ msgstr ""
 "جست‌وجو، کامل‌سازی خودکار، و اطلاعات نماد‌ها ممکن است تا وقتی که نمایه‌گذاری Ctagها "
 "کامل نشده محدود باشند."
 
-#: src/plugins/ctags/ide-ctags-service.c:980
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr "نمایه کردن کد مبدأ (مکث شده)"
 
@@ -4335,11 +4346,11 @@ msgstr "گشودن پرونده یا پوشه"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "پرونده‌های مشابه (مهار+تبدیل+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "نصب شکست خورد"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "نصب موفق بود"
 
@@ -4369,7 +4380,7 @@ msgstr "سازنده نیاز دارد کیت‌های توسعهٔ نرم‌ا�
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80 src/plugins/git/tweaks.ui:16
 #: src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "نام"
 
@@ -4385,40 +4396,40 @@ msgstr "رفع کردن افزونه‌های SDK"
 msgid "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "سازنده در حال یافتن افزونه‌های SDK مناسب برای ساخت پروژه‌تان است"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "فلت‌پک"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "در حال ساخت فضای کار فلت‌پک"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "در حال حذف پوشه قدیمی داربستی فلت‌پک: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:443
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr "در حال آماده سازی پوشه ساخت"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:503
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr "در حال بارگیری وابستگی‌ها"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:579
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "در حال ساخت وابستگی‌ها"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:639
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr "در حال به پایان رساندن ساخت فلت‌پک"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:689
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr "در حال صدور پوشه داربستی"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:779
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr "در حال برپا کردن بسته فلت‌پک"
 
@@ -4519,7 +4530,7 @@ msgstr "نمی‌توان پرچم‌های AMEND و GPG_KEY_ID را گذاشت"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "نمی‌توان ثبت را بدون GPG_KEY_ID امضا زد"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "نمی‌توان پرونده‌های بیرون شاخهٔ کاری را نظارت کرد"
@@ -4588,7 +4599,7 @@ msgstr "نیازمند نشانی گیت معتبر"
 msgid "Authorship"
 msgstr "تألیف"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "رایانامه"
 
@@ -4605,35 +4616,35 @@ msgstr "در حال راه اندازی پروژه"
 msgid "Gradle Run"
 msgstr "Gradle Run"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr "نمایش صفحه خوش‌آمد گویی نو"
 
-#: src/plugins/grep/gbp-grep-panel.c:763
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
 msgstr "تطبیق"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "مسیر"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "جست‌وجو در %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "جایگزینی در %s"
 
-#: src/plugins/grep/gbp-grep-panel.c:851
+#: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
 msgstr "یافتن در پروژه"
 
-#: src/plugins/grep/gbp-grep-panel.c:852
+#: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
 msgstr "جایگزینی در پروژه"
 
@@ -4919,7 +4930,7 @@ msgstr "رفتن و گزینش نتیجهٔ جست‌وجوی پیشین"
 msgid "Meson"
 msgstr "مزون"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "بار کردن بررسی مزون"
 
@@ -5436,6 +5447,10 @@ msgstr "در حال حذف %s\n"
 msgid "Removing Files…"
 msgstr "در حال حذف پرونده‌ها…"
 
+#: src/plugins/recent/gbp-recent-section.c:612
+msgid "Show More"
+msgstr "نمایش بیش‌تر"
+
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
 msgstr "پروژه‌های اخیر"
@@ -5939,16 +5954,16 @@ msgstr "ارائه متغیّر محیطی TRACE_FG به برنامه‌ها ب�
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
-msgid "Application started at %s\r\n"
-msgstr "برنامه در %s آغاز شد\r\n"
+msgid "Application started at %s"
+msgstr "برنامه در %s آغاز شد"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr "خروجی برنامه"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
-msgstr "عملیات انجام شد"
+msgstr "فرایند کامل شد"
 
 #: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
@@ -6232,24 +6247,24 @@ msgstr "گزینش شاخه‌ای جایگزین"
 msgid "Branches"
 msgstr "شاخه‌ها"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like to clone."
 msgstr "نشانی وب مخزن کد منبع پروژه‌ای را که می‌خواهید شبیه‌سازی کنید را وارد کنید."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "این مخزن در زیرشاخه‌ای جدید شبیه‌سازی خواهد شد."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "جزئیات مؤلف"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
 msgstr "می توانید اطلاعات تألیف را وارد کنید تا جای اطلاعات پیش‌گزیده قرار بگیرند."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "وضعیت"
 
