@@ -6,6 +6,10 @@ include:
       dist-job-name: "flatpak@x86_64"
       tarball-artifact-path: "${TARBALL_ARTIFACT_PATH}"
 
+variables:
+  FLATPAK_MODULE: "gnome-builder"
+  TARBALL_ARTIFACT_PATH: ".flatpak-builder/build/${FLATPAK_MODULE}/_flatpak_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
+
 .flatpak_vars:
   variables:
     GIT_SUBMODULE_STRATEGY: normal
@@ -14,10 +18,8 @@ include:
     MANIFEST_PATH: "org.gnome.Builder.Devel.json"
     RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
     # Replace with your application name, as written in the manifest
-    FLATPAK_MODULE: "gnome-builder"
     APP_ID: "org.gnome.Builder.Devel"
     BUNDLE: "gnome-builder-git.flatpak"
-    TARBALL_ARTIFACT_PATH: ".flatpak-builder/build/${FLATPAK_MODULE}/_flatpak_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 
 flatpak@x86_64:
