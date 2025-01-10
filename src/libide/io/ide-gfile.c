@@ -91,6 +91,9 @@ ide_path_is_ignored (const gchar *path)
 
   name = g_path_get_basename (path);
   len = strlen (name);
+  if (!g_utf8_validate(name, len, NULL))
+    return TRUE;
+
   reversed = g_utf8_strreverse (name, len);
 
   /* Ignore empty files for whatever reason */
@@ -141,6 +144,9 @@ ide_g_file_is_ignored (GFile *file)
 
   name = g_file_get_basename (file);
   len = strlen (name);
+  if (!g_utf8_validate(name, len, NULL))
+    return TRUE;
+
   reversed = g_utf8_strreverse (name, len);
 
   /* Ignore empty files for whatever reason */
