@@ -27,7 +27,7 @@ export const {{PreFix}}Application = GObject.registerClass(
             const show_about_action = new Gio.SimpleAction({name: 'about'});
             show_about_action.connect('activate', action => {
 {{if is_adwaita}}
-                let aboutParams = {
+                const aboutParams = {
                     application_name: '{{name}}',
                     application_icon: '{{appid}}',
                     developer_name: '{{author}}',
@@ -42,7 +42,7 @@ export const {{PreFix}}Application = GObject.registerClass(
                 const aboutDialog = new Adw.AboutDialog(aboutParams);
                 aboutDialog.present(this.active_window);
 {{else}}
-                let aboutParams = {
+                const aboutParams = {
                     transient_for: this.active_window,
                     modal: true,
                     program_name: '{{name}}',
