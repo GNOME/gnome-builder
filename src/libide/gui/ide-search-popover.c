@@ -530,13 +530,13 @@ ide_search_popover_category_changed_cb (IdeSearchPopover *self)
 }
 
 static void
-ide_search_popover_show (GtkWidget *widget)
+ide_search_popover_map (GtkWidget *widget)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)widget;
 
   g_assert (IDE_IS_SEARCH_POPOVER (self));
 
-  GTK_WIDGET_CLASS (ide_search_popover_parent_class)->show (widget);
+  GTK_WIDGET_CLASS (ide_search_popover_parent_class)->map (widget);
 
   gtk_widget_grab_focus (GTK_WIDGET (self->text));
   gtk_editable_select_region (GTK_EDITABLE (self->text), 0, -1);
@@ -624,7 +624,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   object_class->set_property = ide_search_popover_set_property;
 
   widget_class->grab_focus = ide_search_popover_grab_focus;
-  widget_class->show = ide_search_popover_show;
+  widget_class->map = ide_search_popover_map;
 
   properties [PROP_SHOW_PREVIEW] =
     g_param_spec_boolean ("show-preview", NULL, NULL,
