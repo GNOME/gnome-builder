@@ -4,7 +4,8 @@ public class {{PreFix}}.Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.App
     public Application () {
         Object (
             application_id: "{{appid}}",
-            flags: ApplicationFlags.DEFAULT_FLAGS
+            flags: ApplicationFlags.DEFAULT_FLAGS,
+            resource_base_path: "{{appid_path}}"
         );
     }
 

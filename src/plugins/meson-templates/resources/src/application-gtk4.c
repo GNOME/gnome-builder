@@ -26,6 +26,7 @@ G_DEFINE_FINAL_TYPE ({{PreFix}}Application, {{prefix_}}_application, {{if is_adw
 	return g_object_new ({{PREFIX}}_TYPE_APPLICATION,
 	                     "application-id", application_id,
 	                     "flags", flags,
+	                     "resource-base-path", "{{appid_path}}",
 	                     NULL);
 }
 
