@@ -15,7 +15,11 @@ pkg.initFormat();
 export const {{PreFix}}Application = GObject.registerClass(
     class {{PreFix}}Application extends {{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application {
         constructor() {
-            super({application_id: '{{appid}}', flags: Gio.ApplicationFlags.DEFAULT_FLAGS});
+            super({
+                application_id: '{{appid}}',
+                flags: Gio.ApplicationFlags.DEFAULT_FLAGS,
+                resource_base_path: '{{appid_path}}'
+            });
 
             const quit_action = new Gio.SimpleAction({name: 'quit'});
                 quit_action.connect('activate', action => {

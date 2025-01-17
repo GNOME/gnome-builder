@@ -71,6 +71,7 @@ impl {{PreFix}}Application {
         glib::Object::builder()
             .property("application-id", application_id)
             .property("flags", flags)
+            .property("resource-base-path", "{{appid_path}}")
             .build()
     }
 
