@@ -201,7 +201,7 @@ ide_notification_addin_pipeline_finished (IdeNotificationAddin *self,
     {
       if (!failed)
         {
-          ide_notification_set_icon_name (self->notif, "emblem-ok-symbolic");
+          ide_notification_set_icon_name (self->notif, "builder-check-symbolic");
 
           if (self->requested_phase & IDE_PIPELINE_PHASE_BUILD)
             ide_notification_set_title (self->notif, _("Build succeeded"));
