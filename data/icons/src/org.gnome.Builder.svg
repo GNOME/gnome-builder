@@ -131,11 +131,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="292.875"
-     inkscape:cy="637.9375"
+     inkscape:zoom="11.313708"
+     inkscape:cx="151.98376"
+     inkscape:cy="344.80294"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      showborder="false"
@@ -1910,6 +1910,30 @@
            sodipodi:nodetypes="sssssssssssssssssss"
            id="path419" />
       </g>
+    </g>
+    <g
+       inkscape:label="object select selection mode check approve done good active emblem-default"
+       id="g27958"
+       transform="rotate(90,-54.191469,425.1934)"
+       style="fill:#222222">
+      <title
+         id="title27952">builder-check</title>
+      <rect
+         y="195.00317"
+         x="163.1358"
+         height="16"
+         width="16"
+         id="rect27954"
+         style="fill:none;fill-opacity:1" />
+      <path
+         id="path27923"
+         style="fill:#222222;fill-opacity:1;stroke-width:1.00157;stroke-linejoin:round;-inkscape-stroke:none;stop-color:#000000"
+         d="m 168.99655,199.8405 c 0.0439,-0.64277 0.82433,-0.93468 1.27929,-0.47851 l 3.64081,3.64081 c 0.29412,0.2931 0.29412,0.7694 0,1.0625 l -2.11049,2.17678 c -0.70833,0.70817 -1.77083,-0.35433 -1.0625,-1.0625 l 1.57924,-1.64553 -3.10956,-3.10956 c -0.15351,-0.15403 -0.23261,-0.36711 -0.21679,-0.58399 z"
+         sodipodi:nodetypes="ccccccccc" />
+      <path
+         style="color:#000000;fill:#222222;fill-opacity:1;stroke-linejoin:round;-inkscape-stroke:none"
+         d="m 163.13477,203.00583 c 0,4.40452 3.59388,7.9961 8,7.9961 4.40611,0 8,-3.59158 8,-7.9961 0,-4.40451 -3.59389,-7.99609 -8,-7.99609 -4.40612,0 -8,3.59158 -8,7.99609 z m 2,0 c 0,-3.32301 2.67413,-5.99609 6,-5.99609 3.32586,0 6,2.67308 6,5.99609 0,3.32302 -2.67414,5.9961 -6,5.9961 -3.32587,0 -6,-2.67308 -6,-5.9961 z"
+         id="path28039" />
     </g>
     <g
        transform="translate(380,642.51965)"
