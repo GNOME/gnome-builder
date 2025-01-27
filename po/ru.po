@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-10-24 16:46+0000\n"
-"PO-Revision-Date: 2024-10-25 22:34+1000\n"
-"Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
+"POT-Creation-Date: 2025-01-20 00:23+0000\n"
+"PO-Revision-Date: 2025-01-23 13:44+0300\n"
+"Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -20,17 +20,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.5\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:45
-#: src/libide/editor/ide-editor-workspace.ui:87
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Сборка ПО для GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Открыть проект"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Новый проект"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Клонировать репозиторий"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Создать рабочую область редактора"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
@@ -721,33 +748,6 @@ msgstr "Проверять правописание"
 msgid "Automatically check spelling within documents"
 msgstr "Автоматически проверять правописание в документах"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Сборка ПО для GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Build;Develop;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Открыть проект"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Новый проект"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
-msgid "Clone Repository"
-msgstr "Клонировать репозиторий"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "Создать рабочую область редактора"
-
 #: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "В текущем языке отсутствует распознаватель символов."
@@ -873,12 +873,12 @@ msgstr "Страницы"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -896,8 +896,8 @@ msgstr "Поиск и замена"
 msgid "Documents"
 msgstr "Документы"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "Выбор"
 
@@ -1033,15 +1033,15 @@ msgstr "Полные слова"
 msgid "Language"
 msgstr "Язык"
 
-#: src/libide/editor/ide-editor-workspace.ui:52
-#: src/libide/editor/ide-editor-workspace.ui:82
-#: src/libide/gui/ide-primary-workspace.ui:43
-#: src/libide/gui/ide-primary-workspace.ui:132
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
 msgid "Search (Ctrl+Enter)"
 msgstr "Поиск (Ctrl+Enter)"
 
-#: src/libide/editor/ide-editor-workspace.ui:136
-#: src/libide/gui/ide-primary-workspace.ui:116
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Вкл/выкл нижнюю панель (Ctrl+F9)"
 
@@ -1176,7 +1176,7 @@ msgstr "Загрузка…"
 
 #: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
-msgstr "Идёт построение зависимостей…"
+msgstr "Построение зависимостей…"
 
 #: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
@@ -1218,11 +1218,11 @@ msgstr "Подготовка…"
 #: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
-msgstr "Идёт удаление %s"
+msgstr "Удаление %s"
 
 #: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
-msgstr "Идёт удаление каталогов сборки…"
+msgstr "Удаление каталогов сборки…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
@@ -1266,7 +1266,7 @@ msgstr "Выполняется %s…"
 
 #: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
-msgstr "Идёт развёртывание на устройство…"
+msgstr "Развёртывание на устройство…"
 
 #: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
@@ -1499,32 +1499,32 @@ msgstr "Поиск"
 msgid "Search for anything"
 msgstr "Любой поиск"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "Введите текст для поиска"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
 "Чтобы отфильтровать результаты, добавьте в свой запрос один из следующих "
 "префиксов"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Файлы"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "Символы"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "Документация"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Действия"
@@ -1664,11 +1664,11 @@ msgstr "Невозможно загрузить HTML. Отсутствует п�
 msgid "Invalid configuration"
 msgstr "Недопустимая конфигурация"
 
-#: src/libide/gui/ide-primary-workspace.ui:55
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "Вкл/выкл левую панель (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:96
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Вкл/выкл правую панель"
@@ -1790,7 +1790,7 @@ msgstr "Языковые серверы"
 msgid "Devices & Simulators"
 msgstr "Устройства/эмуляторы"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Диагностика"
@@ -1906,77 +1906,81 @@ msgid "Zoom In (Ctrl++)"
 msgstr "Увеличить масштаб (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "Вставить эмодзи"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "_Выделение"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Выделить _всё"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "Форматирование"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "Всё в _верхний регистр"
 
-#: src/libide/sourceview/gtk/menus.ui:85
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr "Преобразовать выделенный текст в верхний регистр"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "Всё в _нижний регистр"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr "Преобразовать выделенный текст в нижний регистр"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr "Ин_вертировать регистр"
 
-#: src/libide/sourceview/gtk/menus.ui:99
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr "Инвертировать регистр выделенного текста"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "_Регистр заголовков"
 
-#: src/libide/sourceview/gtk/menus.ui:106
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr "Преобразовать выделенный текст в регистр заголовков"
 
-#: src/libide/sourceview/gtk/menus.ui:115
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "Выделить _строку"
 
-#: src/libide/sourceview/gtk/menus.ui:120
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "_Удалить строку"
 
-#: src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "_Объединить строки"
 
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "С_ортировать строки"
 
-#: src/libide/sourceview/gtk/menus.ui:136
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "Про_дублировать строку"
 
-#: src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "_Форматирование"
 
-#: src/libide/sourceview/gtk/menus.ui:154
-#: src/libide/sourceview/gtk/menus.ui:158
-#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2175,7 +2179,7 @@ msgstr "Процесс завершён сигналом %d"
 
 #: src/libide/tree/ide-tree-empty.c:257
 msgid "<i>Loading</i>"
-msgstr "<i>Идёт загрузка</i>"
+msgstr "<i>Загрузка</i>"
 
 #: src/libide/tree/ide-tree-empty.c:259
 msgid "Empty"
@@ -2229,7 +2233,7 @@ msgstr "Создаётся кэш…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
-msgstr "Идёт первичная загрузка системы сборки"
+msgstr "Первичная загрузка системы сборки"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
@@ -2246,7 +2250,7 @@ msgstr "Создаётся конфигурация проекта"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr "Идёт сборка проекта"
+msgstr "Сборка проекта"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
@@ -2524,7 +2528,7 @@ msgstr "Сменить цель сборки по умолчанию"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
 msgid "Building"
-msgstr "Идёт сборка"
+msgstr "Сборка"
 
 #: src/plugins/buildui/gtk/menus.ui:36
 msgid "_Build"
@@ -3224,7 +3228,7 @@ msgstr "Настроить проект"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
-msgstr "Идёт установка проекта"
+msgstr "Установка проекта"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:218
 #, c-format
@@ -3264,7 +3268,7 @@ msgstr "Не удалось загрузить проект: %s"
 #: src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
-msgstr "Идёт индексирование исходного кода"
+msgstr "Индексирование исходного кода"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
@@ -3313,7 +3317,7 @@ msgstr "_Применить"
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
 msgid "Loading…"
-msgstr "Идёт загрузка…"
+msgstr "Загрузка…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
@@ -3536,7 +3540,7 @@ msgstr ""
 
 #: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
-msgstr "Идёт индексация исходного кода (приостановлено)"
+msgstr "Индексирование исходного кода (приостановлено)"
 
 #: src/plugins/ctags/tweaks.ui:14
 msgid "CTags"
@@ -4488,11 +4492,11 @@ msgstr "Открыть файл или папку"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Похожие файлы (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "Сбой установки"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "Установка завершена"
 
@@ -4542,13 +4546,13 @@ msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder определяет местоположение расширений SDK для сборки проекта"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
-msgstr "Создаётся рабочая область flatpak"
+msgstr "Создание рабочей области flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
@@ -4561,23 +4565,23 @@ msgstr "Подготовка каталога сборки"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
-msgstr "Идёт загрузка зависимостей…"
+msgstr "Загрузка зависимостей"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
-msgstr "Идёт построение зависимостей"
+msgstr "Построение зависимостей"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
-msgstr "Идёт завершение сборки flatpak"
+msgstr "Завершение сборки flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
-msgstr "Идёт экспорт промежуточного каталога"
+msgstr "Экспорт промежуточного каталога"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
-msgstr "Идёт создание пакета flatpak"
+msgstr "Создание пакета flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
 msgid "Flatpak Application"
@@ -4585,7 +4589,7 @@ msgstr "Приложение flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
 msgid "Installing Necessary SDKs"
-msgstr "Идёт установка необходимых SDK"
+msgstr "Установка необходимых SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
@@ -4602,7 +4606,7 @@ msgstr "Не удалось обновить пакеты SDK: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
 msgid "Updating Necessary SDKs"
-msgstr "Идёт обновление необходимых SDK"
+msgstr "Обновление необходимых SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
 msgid ""
@@ -5330,7 +5334,7 @@ msgstr "Начальная загрузка сборки выполнена"
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
-msgstr "Идёт загрузка зависимостей npm…"
+msgstr "Загрузка зависимостей npm"
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
 msgid "_External Program…"
@@ -5426,7 +5430,7 @@ msgstr[2] "Скопировано %s файлов"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
-msgstr "Идёт копирование файлов…"
+msgstr "Копирование файлов…"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
@@ -5602,7 +5606,7 @@ msgstr "Удаляется %s\n"
 
 #: src/plugins/recent/gbp-recent-section.c:424
 msgid "Removing Files…"
-msgstr "Идёт удаление файлов…"
+msgstr "Удаление файлов…"
 
 #: src/plugins/recent/gbp-recent-section.c:612
 msgid "Show More"
@@ -6275,7 +6279,7 @@ msgstr "Загрузка TODO…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
-msgstr "Идёт обновление зависимостей…"
+msgstr "Обновление зависимостей…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
