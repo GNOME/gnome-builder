@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-24 12:49+0000\n"
-"PO-Revision-Date: 2024-09-19 18:09+0200\n"
+"POT-Creation-Date: 2025-01-12 17:18+0000\n"
+"PO-Revision-Date: 2025-01-21 22:15+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -28,8 +28,8 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:40
-#: src/libide/editor/ide-editor-workspace.ui:63
+#: src/libide/editor/ide-editor-workspace.ui:45
+#: src/libide/editor/ide-editor-workspace.ui:87
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -676,13 +676,15 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
-msgstr ""
+msgstr "Arrel del cau"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:57
 msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 msgstr ""
+"Un directori que s'usa com a arrel per a fer de cau de les dades del "
+"projecte com ara compilació o directoris d'estadis del «flatpak»"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -799,8 +801,8 @@ msgid "Projects"
 msgstr "Projectes"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:524
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
@@ -1039,8 +1041,15 @@ msgstr "Coincidència de tota la paraula"
 msgid "Language"
 msgstr "Llenguatge"
 
-#: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:117
+#: src/libide/editor/ide-editor-workspace.ui:52
+#: src/libide/editor/ide-editor-workspace.ui:82
+#: src/libide/gui/ide-primary-workspace.ui:43
+#: src/libide/gui/ide-primary-workspace.ui:132
+msgid "Search (Ctrl+Enter)"
+msgstr "Cerca (Ctrl+Enter)"
+
+#: src/libide/editor/ide-editor-workspace.ui:136
+#: src/libide/gui/ide-primary-workspace.ui:116
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Commuta quadre inferior (Ctrl+F9)"
 
@@ -1353,49 +1362,49 @@ msgstr "_Selecciona una carpeta…"
 msgid "Directory"
 msgstr "Directori"
 
-#: src/libide/greeter/ide-greeter-workspace.c:222
+#: src/libide/greeter/ide-greeter-workspace.c:223
 #: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Constructor — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:333
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "Ha fallat carregar el projecte"
 
-#: src/libide/greeter/ide-greeter-workspace.c:335
+#: src/libide/greeter/ide-greeter-workspace.c:336
 #: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Tanca"
 
-#: src/libide/greeter/ide-greeter-workspace.c:521
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
 msgstr "Vols suprimir fonts del projecte?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 "No es pot desfer la supressió del codi font del projecte de l'ordinador."
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
 msgstr "_Suprimeix fonts del projecte"
 
-#: src/libide/greeter/ide-greeter-workspace.c:619
-#: src/libide/greeter/ide-greeter-workspace.c:658
+#: src/libide/greeter/ide-greeter-workspace.c:620
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr "Selecciona la carpeta del projecte"
 
-#: src/libide/greeter/ide-greeter-workspace.c:624
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr "Selecciona el fitxer del projecte"
 
-#: src/libide/greeter/ide-greeter-workspace.c:663
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "_Obre"
 
-#: src/libide/greeter/ide-greeter-workspace.c:674
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr "Tots els tipus de projectes"
 
@@ -1507,7 +1516,7 @@ msgstr "Escriu per a cercar"
 
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
-msgstr ""
+msgstr "Prefixa la consulta amb un dels següents per a filtrar els resultats"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -1667,19 +1676,14 @@ msgstr "No es pot carregar l'HTML. Manca el suport de WebKit."
 msgid "Invalid configuration"
 msgstr "La configuració no és vàlida"
 
-#: src/libide/gui/ide-primary-workspace.ui:49
+#: src/libide/gui/ide-primary-workspace.ui:55
 msgid "Toggle Left Panel (F9)"
 msgstr "Commuta quadre esquerre (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:84
+#: src/libide/gui/ide-primary-workspace.ui:96
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Commuta quadre dret"
-
-#: src/libide/gui/ide-primary-workspace.ui:92
-#: src/libide/gui/ide-primary-workspace.ui:139
-msgid "Search (Ctrl+Enter)"
-msgstr "Cerca (Ctrl+Enter)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1747,19 +1751,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "S'està instal·lant el paquet %u"
 msgstr[1] "S'estan instal·lant els paquets %u"
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "L'operació ha estat cancel·lada"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1733
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Ha fallat iniciar el servidor de llenguatge: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr "No hi ha connexió amb el servidor d'idiomes"
 
@@ -2083,7 +2087,7 @@ msgstr "GNOME"
 
 #: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
-msgstr ""
+msgstr "Solarized"
 
 #: src/libide/terminal/ide-terminal-palettes.h:152
 msgid "Tango"
@@ -2115,10 +2119,9 @@ msgid "Fishtank"
 msgstr "Fishtank"
 
 #: src/libide/terminal/ide-terminal-palettes.h:511
-#, fuzzy
 #| msgid "Spaces"
 msgid "Spacedust"
-msgstr "Espais"
+msgstr "Spacedust"
 
 #: src/libide/terminal/ide-terminal-palettes.h:564
 msgid "Catppuccin"
@@ -2126,11 +2129,11 @@ msgstr "Catppuccin"
 
 #: src/libide/terminal/ide-terminal-palettes.h:617
 msgid "Horizon"
-msgstr ""
+msgstr "Horizon"
 
 #: src/libide/terminal/ide-terminal-palettes.h:670
 msgid "Tokyo Night"
-msgstr ""
+msgstr "Tokyo Night"
 
 #: src/libide/terminal/ide-terminal-palettes.h:723
 msgid "VS Code"
@@ -2673,109 +2676,87 @@ msgstr "Força el tema fosc quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
-msgstr ""
+msgstr "Color de contrast"
 
 #: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
 msgid "System"
 msgstr "Sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:189
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use system accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast del sistema quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
 msgstr "Blau"
 
 #: src/plugins/buildui/gtk/menus.ui:196
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use blue accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast blau quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
-msgstr ""
+msgstr "Verd blavós"
 
 #: src/plugins/buildui/gtk/menus.ui:203
-#, fuzzy
-#| msgid "The default license when creating new projects"
 msgid "Use teal accent color when running the project"
-msgstr "La llicència per defecte en crear projectes"
+msgstr "Usa el color de contrast verd blavós quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
 msgstr "Verd"
 
 #: src/plugins/buildui/gtk/menus.ui:210
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use green accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast verd quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
 msgstr "Groc"
 
 #: src/plugins/buildui/gtk/menus.ui:217
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use yellow accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast groc quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
 msgstr "Taronja"
 
 #: src/plugins/buildui/gtk/menus.ui:224
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use orange accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast taronja quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
 msgstr "Vermell"
 
 #: src/plugins/buildui/gtk/menus.ui:231
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use red accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast vermell quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
 msgstr "Rosa"
 
 #: src/plugins/buildui/gtk/menus.ui:238
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use pink accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast rosa quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
 msgstr "Porpra"
 
 #: src/plugins/buildui/gtk/menus.ui:245
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use purple accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast porpra quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:248
-#, fuzzy
-#| msgid "Template"
 msgid "Slate"
-msgstr "Plantilla"
+msgstr "Pissarra"
 
 #: src/plugins/buildui/gtk/menus.ui:252
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "Use slate accent color when running the project"
-msgstr "Atura l'execució del projecte"
+msgstr "Usa el color de contrast pissarra quan s'executi el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
@@ -3024,13 +3005,15 @@ msgstr "Emmagatzematge"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "Fitxers encauats i artefactes"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"Directori usat per a desar artefactes de compilació i fitxers encauats del "
+"procés de compilació. Cal reiniciar el Constructor perquè faci efecte."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -3211,29 +3194,30 @@ msgid "Include parameters and type information when completing clang proposals"
 msgstr "Inclou paràmetres i tipus en completar propostes de Clang"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr "Ha fallat en obtenir la informació del dispositiu: %s"
+msgstr "Ha fallat a l'executar el «clang-format»: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, fuzzy, c-format
-#| msgid "Failed to format while saving document: %s"
+#, c-format
 msgid "clang-format failed to format document: %s"
-msgstr "No s'ha pogut formatar en desar el document: %s"
+msgstr "El «clang-format» ha fallat al formatar el document: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "Falten dades o estan corrompudes del «clang-format»"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "El «clang-format» ha proporcionat una posició no vàlida del cursor"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
+"No es pot trobar el «.clang-format». Afegiu-ne un al projecte. S'està usant "
+"un formatador de tipus GNU substitutiu."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3288,7 +3272,7 @@ msgstr "Ha fallat carregar el projecte: %s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "S'està indexant el codi font"
 
@@ -3318,7 +3302,7 @@ msgstr "Copia com a imatge"
 msgid "Copy selected text as an image"
 msgstr "Copia el text seleccionat com a imatge"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Possible error tipogràfic a «%s». Volies dir «%s»?"
@@ -3563,7 +3547,7 @@ msgstr ""
 "La cerca, la compleció automàtica i la informació dels símbols poden ser "
 "limitades fins que finalitzi la indexació Ctags."
 
-#: src/plugins/ctags/ide-ctags-service.c:980
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr "S'està indexant el codi font (en pausa)"
 
@@ -4519,11 +4503,11 @@ msgstr "Obre un fitxer o carpeta"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Fitxers similars (Ctrl+Maj+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "Ha fallat la instal·lació"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "S'ha completat la instal·lació"
 
@@ -4575,40 +4559,40 @@ msgstr ""
 "El Constructor necessita instal·lar els següents paquets de desenvolupament "
 "de programari per a construir el vostre projecte"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Creació d'espais de treball flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "S'està esborrant el directori de treball obsolet del Flatpak: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:443
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr "Preparació del directori de construcció"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:503
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr "Descarrega de les dependències"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:579
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "Construcció de les dependències"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:639
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr "Finalització de la construcció de flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:689
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr "Exportació del directori"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:779
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr "S'està creant l'embolcall flatpak"
 
@@ -4718,7 +4702,7 @@ msgstr "No es poden establir els indicadors AMEND i GPG_SIGN"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "No es pot signar la comissió sense GPG_KEY_ID"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "No es poden monitorar fitxers externs al directori de treball"
@@ -4805,7 +4789,7 @@ msgstr "Arrencant el projecte"
 msgid "Gradle Run"
 msgstr "Execució de Gradle"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr "Mostra una finestra d'inici nova"
 
@@ -4997,13 +4981,12 @@ msgstr "Importa la documentació de JHBuild"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:117
 msgid "Scanning jhbuild for new documentation"
-msgstr ""
+msgstr "El «jhbuild» està escanejant a la recerca de documentació nova"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#, fuzzy
 #| msgid "GNOME Builder"
 msgid "GNOME Nightly"
-msgstr "Constructor GNOME"
+msgstr "GNOME Nightly"
 
 #: src/plugins/manuals/manuals-system-importer.c:77
 msgid "Importing System Documentation"
@@ -5123,7 +5106,7 @@ msgstr "Mou-te i selecciona el resultat de la cerca anterior"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "Carrega la introspecció de Meson"
 
