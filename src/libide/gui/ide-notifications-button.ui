@@ -29,6 +29,9 @@
                         <signal name="row-activated" handler="ide_notifications_button_row_activated" swapped="true" object="IdeNotificationsButton"/>
                         <property name="selection-mode">none</property>
                         <property name="visible">true</property>
+                        <style>
+                          <class name="notifications-list"/>
+                        </style>
                       </object>
                     </child>
                   </object>
