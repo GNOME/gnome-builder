@@ -8,3 +8,4 @@ Embedded=_gbp_clang_format_register_types
 Module=clang-format
 Name=ClangFormat
 X-Category=editing
+X-Formatter-Languages=c;cpp;chdr;cpphdr;objc
