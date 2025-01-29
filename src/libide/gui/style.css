@@ -152,3 +152,8 @@ window.workspace paneldockchild.center statuspage {
 window.workspace paneldockchild.bottom {
   background: var(--view-bg-color);
 }
+
+/* Style class for the listbox in the notifications popover */
+.notifications-list {
+  background-color: var(--popover-bg-color);
+}
