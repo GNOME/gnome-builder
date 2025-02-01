@@ -315,13 +315,17 @@ ide_vcs_monitor_maybe_reload_locked (IdeVcsMonitor *self)
       g_clear_object (&self->monitor);
     }
 
-  if (G_IS_FILE (self->root) && IDE_IS_VCS (self->vcs))
+  if (G_IS_FILE (self->root))
     {
       self->monitor = ide_recursive_file_monitor_new (self->root);
-      ide_recursive_file_monitor_set_ignore_func (self->monitor,
-                                                  ide_vcs_monitor_ignore_func,
-                                                  self, NULL);
+
+      if (self->vcs != NULL)
+        ide_recursive_file_monitor_set_ignore_func (self->monitor,
+                                                    ide_vcs_monitor_ignore_func,
+                                                    self, NULL);
+
       g_signal_group_set_target (self->monitor_signals, self->monitor);
+
       ide_recursive_file_monitor_start_async (self->monitor,
                                               NULL,
                                               ide_vcs_monitor_start_cb,
