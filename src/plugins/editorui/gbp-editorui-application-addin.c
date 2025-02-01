@@ -84,25 +84,32 @@ find_workbench_for_dir (IdeApplication *app,
 static GFile *
 get_common_ancestor (GPtrArray *files)
 {
-  GFile *ancestor;
+  g_autoptr(GFile) ancestor = NULL;
 
   if (files->len == 0)
     return NULL;
 
-  ancestor = g_file_get_parent (g_ptr_array_index (files, 0));
-
-  for (guint i = 1; i < files->len; i++)
+  for (guint i = 0; i < files->len; i++)
     {
+      g_autoptr(GFile) parent = NULL;
       GFile *file = g_ptr_array_index (files, i);
 
-      while (!g_file_has_prefix (file, ancestor))
+      if (g_file_query_file_type (file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        parent = g_object_ref (file);
+      else
+        parent = g_file_get_parent (file);
+
+      if (ancestor == NULL)
         {
-          GFile *old = ancestor;
-          ancestor = g_file_get_parent (old);
-          if (g_file_equal (ancestor, old))
-            break;
-          g_object_unref (old);
+          g_set_object (&ancestor, parent);
+          continue;
         }
+
+      if (g_file_equal (ancestor, parent))
+        continue;
+
+      if (g_file_has_prefix (ancestor, parent))
+        g_set_object (&ancestor, parent);
     }
 
   return g_steal_pointer (&ancestor);
