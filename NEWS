@@ -1,84 +1,13 @@
-# GNOME Builder 47.1
-#
-Changes since 47.0
+# GNOME Builder 48.beta
 
- * libpselling fixes
- * Safety fixes in git change monitoring
- * Use gtk_window_present() to better handle strict-mode window ordering
- * Translation updates
-
-# GNOME Builder 47.0
-
-Changes since 47.rc
-
- * Fix up styling of headerbar to match GNOME suggested layout
- * Make project tree more accessible
- * Updated screenshots
- * Translation updates
-
-# GNOME Builder 47.rc
-
-Changes since 47.beta
-
- * Project template updates for recent platform changes
- * Terminal styling and menuing improvements
- * Builder now uses libspelling for spellcheck
- * Various dialogs now use GtkFileDialog
- * Jhbuild-based configurations will now automatically set
-   `--libdir=lib` for meson projects
- * Misc deprecation warnings have been fixed
- * Translation updates
-
-# GNOME Builder 47.beta
-
-Changes since 47.alpha
-
- * Resiliency fixes in xml-pack plugin
- * Bug fixes around use of AdwDialog
- * You can now disable selection areas in the omni-gutter
- * Much styling updates to more closely match libadwaita.
- * Terminal styling updates to more closely match code editor.
- * Allow pipeline environment to propagate to SDK-backed language servers
- * Grep panel improvements
- * Recursive directory monitors are now created asynchronously which
-   improves project loading time for extremely large projects on slow
-   storage/file-systems.
- * A11y improvments
- * A default clang-format file is installed to use a fallback
- * Editorconfig plugin will no longer set the bit indicating if
-   right margin should be shown or not, allowing the gsetting to
-   work appropriately per-language.
- * New API to query asynchronously for ignored files or directories
-   using futures from libdex.
- * Meson project language extraction fixes
- * Translation updates
-
-# GNOME Builder 47.alpha
-
-Changes since 46.2
-
- * Meson project template updates
- * Moved to new libadwaita CSS machinery and many styling updates
- * You can now select an alternative accent color in run menu
- * A new manuals plugin which can index documentation from your host
-   system and installed SDKs.
- * Builder now tries to use ~/Projects/.gnome-builder for various internal
-   uses and caching. This should help many situations where having .local,
-   .var, .cache, or similar are on different partitions thatn the project
-   source code.
- * Quality of life updates to IdeWebkitPage.
- * More session state tracking updates.
- * Styling fixes in the omni-gutter.
- * New global search styling.
- * Improved menu searching.
- * Robustness fixes for the diganostics manager.
- * Ctags robustness fixes.
- * An issue with clang-format was squashed.
- * Many GtkSourceView integration fixes.
- * Password support for IdeTweaks.
- * IdeRunContext can now jump to a host from a container which may be
-   necessary if you first must transition to toolbox, then back out.
- * macOS build fixes.
- * Various git plugin correctness fixes.
- * Move various dialogs to AdwDialog.
- * Translation updates
+ * Style improvements to match libadwaita
+ * Improve various file handling and UTF-8
+ * Updated meson-based application templates
+ * Support for VHDL language server
+ * Various LSP bugfixes
+ * Ensure focus lands on global search entry when used
+ * Various flatpak integration improvements
+ * Clang integration improvements
+ * Better integration with Elementary
+ * Some improved support for BaesApps in Flatpak
+ * Updated translations
