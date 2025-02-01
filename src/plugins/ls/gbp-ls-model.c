@@ -399,6 +399,7 @@ gbp_ls_model_worker (IdeTask      *task,
                                           G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
                                           G_FILE_ATTRIBUTE_STANDARD_SIZE","
                                           G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE","
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED","
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC",",
                                           G_FILE_QUERY_INFO_NONE,
