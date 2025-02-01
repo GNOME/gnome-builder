@@ -78,14 +78,19 @@ ide_directory_vcs_is_ignored (IdeVcs  *vcs,
                               GFile   *file,
                               GError **error)
 {
-  g_autofree gchar *reversed = NULL;
+  g_autofree char *reversed = NULL;
 
   g_assert (IDE_IS_VCS (vcs));
   g_assert (G_IS_FILE (file));
 
-  reversed = g_strreverse (g_file_get_basename (file));
+  reversed = g_file_get_basename (file);
+
+  /* Ignore .dot directories by default. The UI can choose to show them. */
+  if (reversed[0] == '.')
+    return TRUE;
 
   /* check suffixes, in reverse */
+  reversed = g_strreverse (reversed);
   if ((reversed [0] == '~') ||
       (strncmp (reversed, "al.", 3) == 0) ||        /* .la */
       (strncmp (reversed, "ol.", 3) == 0) ||        /* .lo */
