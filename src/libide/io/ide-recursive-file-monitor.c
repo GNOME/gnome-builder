@@ -28,6 +28,7 @@
 #include "ide-recursive-file-monitor.h"
 
 #define MONITOR_FLAGS 0
+#define MAX_DEPTH 5
 
 /**
  * SECTION:ide-recursive-file-monitor
@@ -103,7 +104,8 @@ ide_recursive_file_monitor_unwatch (IdeRecursiveFileMonitor *self,
 static void
 ide_recursive_file_monitor_collect_recursive (GPtrArray    *dirs,
                                               GFile        *parent,
-                                              GCancellable *cancellable)
+                                              GCancellable *cancellable,
+                                              guint         depth)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GError) error = NULL;
@@ -111,6 +113,9 @@ ide_recursive_file_monitor_collect_recursive (GPtrArray    *dirs,
   g_assert (dirs != NULL);
   g_assert (G_IS_FILE (parent));
   g_assert (G_IS_CANCELLABLE (cancellable));
+
+  if (depth > MAX_DEPTH)
+    return;
 
   enumerator = g_file_enumerate_children (parent,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
@@ -146,7 +151,7 @@ ide_recursive_file_monitor_collect_recursive (GPtrArray    *dirs,
                */
 
               g_ptr_array_add (dirs, g_object_ref (child));
-              ide_recursive_file_monitor_collect_recursive (dirs, child, cancellable);
+              ide_recursive_file_monitor_collect_recursive (dirs, child, cancellable, depth + 1);
             }
         }
 
@@ -212,7 +217,7 @@ ide_recursive_file_monitor_collect_worker (GTask        *task,
 
   dirs = g_ptr_array_new_with_free_func (g_object_unref);
   g_ptr_array_add (dirs, g_object_ref (resolved));
-  ide_recursive_file_monitor_collect_recursive (dirs, resolved, cancellable);
+  ide_recursive_file_monitor_collect_recursive (dirs, resolved, cancellable, 0);
 
   g_task_return_pointer (task,
                          g_steal_pointer (&dirs),
@@ -321,7 +326,10 @@ change_process (DexFuture *completed,
           dirs = g_ptr_array_new_with_free_func (g_object_unref);
           g_ptr_array_add (dirs, g_object_ref (file));
 
-          ide_recursive_file_monitor_collect_recursive (dirs, file, self->cancellable);
+          /* Collect, but just this level, no deeper until we have a better
+           * recursive file monitor design.
+           */
+          ide_recursive_file_monitor_collect_recursive (dirs, file, self->cancellable, MAX_DEPTH);
 
           for (guint i = 0; i < dirs->len; i++)
             {
