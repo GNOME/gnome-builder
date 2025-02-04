@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-01-12 17:18+0000\n"
-"PO-Revision-Date: 2025-02-03 18:05+0100\n"
+"PO-Revision-Date: 2025-02-04 23:34+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1073,64 +1073,63 @@ msgstr "Zariadenie nastavené na %s"
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
+"Nedá sa nasadiť na zariadenie, zreťazený postup zostavovania nie je "
+"inicializovaný"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
 msgid "Fallback"
-msgstr ""
+msgstr "Záložný systém"
 
 #. translators: %s is replaced with the host name
 #: src/libide/foundry/ide-local-device.c:140
 #, c-format
 msgid "My Computer (%s)"
-msgstr ""
+msgstr "Môj počítač (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
-msgstr ""
+msgstr "Môj počítač (%s) — %s"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
-msgstr ""
+msgstr "Zreťazený postup zostavovania je v stave zlyhania"
 
 #: src/libide/foundry/ide-pipeline.c:849
-#, fuzzy
-#| msgid "The name of the build configuration"
 msgid "The build configuration has errors"
-msgstr "Názov konfigurácie zostavovania"
+msgstr "Konfigurácia zostavovania má chyby"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "Zreťazený postup začal čistiť strom zostavovania"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "Zreťazený postup spustený"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "Zreťazený postup dokončený"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
-#, fuzzy, c-format
-#| msgid "Build"
+#, c-format
 msgid "Build (%s)"
-msgstr "Zostavenie"
+msgstr "Zostavenie (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1148
-#, fuzzy, c-format
-#| msgid "Terminal (%s)"
+#, c-format
 msgid "Post-install (%s)"
-msgstr "Terminál (%s)"
+msgstr "Po inštalácii (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3113
 #: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
+"Vytváranie pseudo terminálu zlyhalo. Funkcionalita terminálu bude obmedzená."
 
 #: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
@@ -1174,10 +1173,8 @@ msgid "Installing…"
 msgstr "Inštalovanie…"
 
 #: src/libide/foundry/ide-pipeline.c:3394
-#, fuzzy
-#| msgid "Configuring…"
 msgid "Committing…"
-msgstr "Nastavovanie…"
+msgstr "Začleňovanie…"
 
 #: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
@@ -1197,128 +1194,111 @@ msgstr "Pripravovanie…"
 #: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
-msgstr ""
+msgstr "Odstraňovanie %s"
 
 #: src/libide/foundry/ide-pipeline.c:3833
-#, fuzzy
-#| msgid "Root Build Directory"
 msgid "Removing build directories…"
-msgstr "Koreňový adresár zostavenia"
+msgstr "Odstraňovanie adresárov zostavenia…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
-#, fuzzy
-#| msgid "Cannot execute transfer while on metered connection"
 msgid "Cannot build transfer while on metered connection"
-msgstr "Nedá sa spustiť prenos cez merané pripojenie"
+msgstr "Nedá sa zostaviť prenos cez merané pripojenie"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
-#, fuzzy
-#| msgid "Untitled terminal"
 msgid "Untitled command"
-msgstr "Nepomenovaný terminál"
+msgstr "Príkaz bez názvu"
 
 #: src/libide/foundry/ide-run-command.c:237
-#, fuzzy
-#| msgid "Units:"
 msgid "Unit Test"
-msgstr "Jednotky:"
+msgstr "Test jednotky"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
 #: src/libide/foundry/ide-run-manager.c:190
 #, c-format
 msgid "User requested run tool “%s”"
-msgstr ""
+msgstr "Používateľ požiadal o spustenie nástroja „%s“"
 
 #: src/libide/foundry/ide-run-manager.c:592
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "Nedá sa spustiť cieľ, je spustený iný cieľ"
 
 #: src/libide/foundry/ide-run-manager.c:890
 #, c-format
 msgid "Application exited with error: %s"
-msgstr ""
+msgstr "Aplikácia skončila s chybou: %s"
 
 #: src/libide/foundry/ide-run-manager.c:893
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "Application exited"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Aplikácia sa ukončila"
 
 #. translators: %s is replaced with the name of the users run command
 #: src/libide/foundry/ide-run-manager.c:1083
-#, fuzzy, c-format
-#| msgid "Require Autogen"
+#, c-format
 msgid "Running %s…"
-msgstr "Vyžadovať automatické generovanie"
+msgstr "Vykonáva sa %s…"
 
 #: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
-msgstr ""
+msgstr "Nasadzovanie na zariadenie…"
 
 #: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
-msgstr ""
+msgstr "Používateľ požiadal o spustenie aplikácie"
 
 #: src/libide/foundry/ide-run-manager.c:1411
 msgid "User requested application to restart"
-msgstr ""
+msgstr "Používateľ požiadal o reštart aplikácie"
 
 #. translators: %s is replaced with the name of the tool
 #: src/libide/foundry/ide-run-manager.c:1441
 #, c-format
 msgid "User requested application to run with tool “%s”"
-msgstr ""
+msgstr "Používateľ požiadal o spustenie aplikácie pomocou nástroja „%s“"
 
 #: src/libide/foundry/ide-run-manager.c:1461
 msgid "User requested application to stop"
-msgstr ""
+msgstr "Používateľ požiadal o zastavenie aplikácie"
 
 #: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-#, fuzzy
-#| msgid "Build System"
 msgid "Host System"
-msgstr "Systém zostavenia"
+msgstr "Hosťujúci systém"
 
 #: src/libide/foundry/ide-runtime-provider.c:157
-#, fuzzy, c-format
-#| msgid "Failed to locate runtime “%s”"
+#, c-format
 msgid "Discovered runtime “%s”"
-msgstr "Zlyhalo  lokalizovanie prostredia pre beh „%s“"
+msgstr "Obravené prostredia pre beh „%s“"
 
 #: src/libide/foundry/ide-runtime-provider.c:180
-#, fuzzy, c-format
-#| msgid "Failed to locate runtime “%s”"
+#, c-format
 msgid "Removing runtime “%s”"
-msgstr "Zlyhalo  lokalizovanie prostredia pre beh „%s“"
+msgstr "Odstraňuje sa prostredia pre beh „%s“"
 
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
 msgid "Forcing subprocess %s to exit"
-msgstr ""
+msgstr "Vynucovanie ukončenia podprocesu %s"
 
 #: src/libide/foundry/ide-run-tool.c:84
 #, c-format
 msgid "Sending signal %d to subprocess %s"
-msgstr ""
+msgstr "Zasielanie signálu %d do procesu %s"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
-msgstr ""
+msgstr "Predvolené  (Hosťujúci operačný systém)"
 
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
-#, fuzzy
-#| msgid "Clone Repository"
 msgid "_Clone Repository…"
-msgstr "Klonovanie repozitára"
+msgstr "_Klonovať repozitár…"
 
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
@@ -1328,26 +1308,20 @@ msgid "Close"
 msgstr "Zavrieť"
 
 #: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
-#, fuzzy
-#| msgid "Open Project"
 msgid "Open a _Project…"
-msgstr "Otvorenie projektu"
+msgstr "Otvoriť _projekt…"
 
 #: src/libide/greeter/gtk/menus.ui:61
-#, fuzzy
-#| msgid "Create from existing project"
 msgid "Open a new or existing project"
-msgstr "Vytvoriť projekt z jestvujúceho projektu"
+msgstr "Otvorí nový alebo existujúci projekt"
 
 #: src/libide/greeter/gtk/menus.ui:69
-#, fuzzy
-#| msgid "From existing project on this computer"
 msgid "Create a new project by cloning a repository"
-msgstr "Z existujúceho projektu v tomto počítači"
+msgstr "Vytvorí nový projekt naklonovaním repozitára"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "Výber _priečinka…"
+msgstr "Vybrať _priečinok…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
@@ -1355,10 +1329,9 @@ msgstr "Adresár"
 
 #: src/libide/greeter/ide-greeter-workspace.c:223
 #: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
-#, fuzzy, c-format
-#| msgid "Builder"
+#, c-format
 msgid "Builder — %s"
-msgstr "Stavbár"
+msgstr "Stavbár — %s"
 
 #: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
@@ -1371,33 +1344,25 @@ msgid "_Close"
 msgstr "_Zavrieť"
 
 #: src/libide/greeter/ide-greeter-workspace.c:522
-#, fuzzy
-#| msgid "Select Project"
 msgid "Delete Project Sources?"
-msgstr "Výber projektu"
+msgstr "Odstrániť zdrojové kódy projektu?"
 
 #: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
-msgstr ""
+msgstr "Odstránenie zdrojového kódu projektu z vášho počítača je nevratné."
 
 #: src/libide/greeter/ide-greeter-workspace.c:526
-#, fuzzy
-#| msgid "Select Project"
 msgid "_Delete Project Sources"
-msgstr "Výber projektu"
+msgstr "O_dstrániť zdrojové kódy"
 
 #: src/libide/greeter/ide-greeter-workspace.c:620
 #: src/libide/greeter/ide-greeter-workspace.c:659
-#, fuzzy
-#| msgid "Select Project"
 msgid "Select Project Folder"
-msgstr "Výber projektu"
+msgstr "Výber priečinka projektu"
 
 #: src/libide/greeter/ide-greeter-workspace.c:625
-#, fuzzy
-#| msgid "Select Project"
 msgid "Select Project File"
-msgstr "Výber projektu"
+msgstr "Výber súboru projektu"
 
 #: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
@@ -1407,40 +1372,35 @@ msgstr "_Otvoriť"
 msgid "All Project Types"
 msgstr "Všetky typy projektov"
 
+# PM: je to navigationView title
 #: src/libide/greeter/ide-greeter-workspace.ui:11
-#, fuzzy
-#| msgid "Open Project"
 msgctxt "title"
 msgid "Open a Project"
-msgstr "Otvorenie projektu"
+msgstr "Otvoriť projekt"
 
+# tooltip
 #: src/libide/greeter/ide-greeter-workspace.ui:37
-#, fuzzy
-#| msgid "Selection Mode"
 msgid "Toggle selection mode"
-msgstr "Režim výberu"
+msgstr "prepína režim výberu"
 
+# placholder pre SerchEntry
 #: src/libide/greeter/ide-greeter-workspace.ui:58
-#, fuzzy
-#| msgid "Directory for all Builder projects."
 msgid "Search all Builder projects…"
-msgstr "Adresár projektov aplikácie Stavbár."
+msgstr "Hľadať vo všetkých projektoch Stavbára…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:80
-#, fuzzy
-#| msgid "No projects found"
 msgid "No Projects Found"
 msgstr "Nenašli sa žiadne projekty"
 
+# button
 #: src/libide/greeter/ide-greeter-workspace.ui:113
-#, fuzzy
-#| msgid "Recent Projects"
 msgid "_Remove Projects"
-msgstr "Nedávne projekty"
+msgstr "Odob_rať projekty"
 
+# button
 #: src/libide/greeter/ide-greeter-workspace.ui:124
 msgid "Remove Projects and Sources…"
-msgstr ""
+msgstr "Odobrať projekty a zdroje…"
 
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
@@ -1471,8 +1431,7 @@ msgid "ILCreateFromPath() failed"
 msgstr "Funkcia ILCreateFromPath() zlyhala"
 
 #: src/libide/gtk/ide-file-manager.c:164
-#, fuzzy, c-format
-#| msgid "Cannot convert '%s' into a valid NSURL."
+#, c-format
 msgid "Cannot convert “%s” into a valid NSURL."
 msgstr "Nedá sa skonvertovať „%s“ do platnej NSURL."
 
@@ -1503,10 +1462,8 @@ msgstr[2] "Pred %u rokmi"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
-#, fuzzy
-#| msgid "Install failed"
 msgid "_Install"
-msgstr "Inštalácia zlyhala"
+msgstr "_Inštalovať"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
 #: src/libide/gtk/ide-search-entry.c:184
@@ -1940,15 +1897,15 @@ msgstr "Schránka"
 
 #: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut (Ctrl+X)"
-msgstr ""
+msgstr "Vy_strihnúť (Ctrl+X)"
 
 #: src/libide/sourceview/gtk/menus.ui:16
 msgid "_Copy (Ctrl+C)"
-msgstr ""
+msgstr "_Kopírovať (Ctrl+C)"
 
 #: src/libide/sourceview/gtk/menus.ui:22
 msgid "_Paste (Ctrl+V)"
-msgstr ""
+msgstr "_Vložiť (Ctrl+V)"
 
 #: src/libide/sourceview/gtk/menus.ui:29
 msgid "Undo"
