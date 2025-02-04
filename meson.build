@@ -96,7 +96,7 @@ if version_split[1][0] in ['a', 'b', 'r']
   MINOR_VERSION = 0
   status += [
     'You are building a development version of GNOME Builder. There may be more',
-    'bugs in this version than you are comfortable with. Addtionally, there',
+    'bugs in this version than you are comfortable with. Additionally, there',
     'is a chance it will eat all of your work and leave you sad and alone.',
     '', ''
   ]
