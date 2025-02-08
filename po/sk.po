@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-01-12 17:18+0000\n"
-"PO-Revision-Date: 2025-02-04 23:34+0100\n"
+"POT-Creation-Date: 2025-02-04 22:36+0000\n"
+"PO-Revision-Date: 2025-02-08 10:54+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1477,19 +1477,20 @@ msgstr "%u z %u"
 msgid "Search"
 msgstr "Vyhľadať"
 
+# placeholder text
 #: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
-msgstr ""
+msgstr "Vyhľadajte čokoľvek"
 
+# AdwStatusPage title
 #: src/libide/gui/ide-search-popover.ui:74
-#, fuzzy
-#| msgid "Search"
 msgid "Type to Search"
-msgstr "Vyhľadať"
+msgstr "Vyhľadávanie písaním"
 
+# AdwStatusPage description
 #: src/libide/gui/ide-search-popover.ui:75
 msgid "Prefix your query with one of the following to filter results"
-msgstr ""
+msgstr "Začnite dopyt jedným z nasledujúcich prefixov na filtrovanie výsledkov"
 
 #: src/libide/gui/ide-search-popover.ui:89
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -1504,7 +1505,7 @@ msgstr "Symboly"
 
 #: src/libide/gui/ide-search-popover.ui:131
 msgid "Documentation"
-msgstr "Dokumentácia"
+msgstr "Dokumentáciu"
 
 #: src/libide/gui/ide-search-popover.ui:152
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
@@ -1515,54 +1516,52 @@ msgstr "Akcie"
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
-msgstr ""
+msgstr "Zmeňte zadaním novej klávesovej skratky <b>%s</b>."
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:31
 msgid "_Set"
-msgstr ""
+msgstr "Na_staviť"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:72
 msgid "Press Escape to cancel or Backspace to disable."
-msgstr ""
+msgstr "Stlačením Escape zrušíte, stlačením Backspace zakážete."
 
 #: src/libide/gui/gtk/menus.ui:17
-#, fuzzy
-#| msgid "Clone Project"
 msgid "Close Project"
-msgstr "Klonovať projekt"
+msgstr "Zatvoriť projekt"
 
 #: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "Všeobecné"
 
+# menu desc
 #: src/libide/gui/gtk/menus.ui:30
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "Change application preferences"
-msgstr "Nastavenia zostavenia"
+msgstr "Zmení predvoľby aplikácie"
 
+# menu desc
 #: src/libide/gui/gtk/menus.ui:38
 msgid "Find keyboard shortcuts"
-msgstr "Hľadať klávesové skratky"
+msgstr "Zobrazí klávesové skratky"
 
+# menu desc
 #: src/libide/gui/gtk/menus.ui:46
 msgid "Get help with using Builder"
-msgstr ""
+msgstr "Získa pomocníka na používanie Stavbára"
 
+# menu desc
 #: src/libide/gui/gtk/menus.ui:54
-#, fuzzy
-#| msgid "The project information to render."
 msgid "Show information about Builder"
-msgstr "Informácie o projekte na vykreslenie."
+msgstr "Zobrazí informácie o Stavbárovi"
 
 #: src/libide/gui/gtk/menus.ui:63
 msgid "Quit without saving changes"
-msgstr ""
+msgstr "Skončí bez uloženia zmien"
 
 #: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
-msgstr ""
+msgstr "Prehliadanie webu"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
@@ -1572,10 +1571,8 @@ msgid "Terminal"
 msgstr "Terminál"
 
 #: src/libide/gui/gtk/menus.ui:84
-#, fuzzy
-#| msgid "New Terminal"
 msgid "New Terminals"
-msgstr "Nový terminál"
+msgstr "Nové terminály"
 
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
@@ -1589,48 +1586,46 @@ msgstr "Financovali"
 
 # cmd desc
 #: src/libide/gui/ide-application-command-line.c:62
-#, fuzzy
-#| msgid "Show the application’s version"
 msgid "Show the application preferences"
-msgstr "Zobrazí verziu aplikácie"
+msgstr "Zobrazí predvoľby aplikácie"
 
+# cmd desc
 #: src/libide/gui/ide-application-command-line.c:63
-#, fuzzy
-#| msgid "The target workbench."
 msgid "Open project in new workbench"
-msgstr "Cieľový pracovný priestor."
+msgstr "Otvorí projekt v novom pracovnom priestore."
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
-msgstr ""
+msgstr "SÚBOR"
 
+# cmd desc
 #. The following are handled in main(), but needed here so that --help
 #. * will display them to the user (which is handled later on).
 #.
 #: src/libide/gui/ide-application-command-line.c:68
 msgid "Print version information and exit"
-msgstr ""
+msgstr "Zobrazí informáciu o verzii a skončí"
 
+# cmd desc
 #: src/libide/gui/ide-application-command-line.c:69
-#, fuzzy
-#| msgid "Increase verbosity, may be specified multiple times"
 msgid "Increase log verbosity (may be repeated)"
-msgstr "Zvýši rozsah výpisov, môže byť zadaný viacnásobne"
+msgstr "Zvýši podrobnosť záznamov (môže byť zadaný opakovane)"
 
 #: src/libide/gui/ide-application-command-line.c:119
-#, fuzzy, c-format
-#| msgid "Failed to open directory: %s"
+#, c-format
 msgid "Failed to open project: %s"
-msgstr "Zlyhalo otvorenie adresára: %s"
+msgstr "Zlyhalo otvorenie projektu: %s"
 
 #: src/libide/gui/ide-environment-editor.c:73
 msgid "New variable…"
 msgstr "Nová premenná…"
 
+# btn tooltip
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
-msgstr ""
+msgstr "Odoberie premennú prostredia"
 
+# page title
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
 msgstr "Otvorenie súboru alebo terminálu"
@@ -1653,13 +1648,14 @@ msgstr "Otvorenie súboru"
 msgid "New Terminal"
 msgstr "Nový terminál"
 
+# menu button tooltip
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
-msgstr ""
+msgstr "Otvorí ponuku aplikácie (F10)"
 
 #: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
-msgstr ""
+msgstr "Nepodarilo sa načítať HTML. Chýbajúca podpora WebKit."
 
 #: src/libide/gui/ide-primary-workspace.c:87
 #, fuzzy
