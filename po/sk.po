@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-04 22:36+0000\n"
-"PO-Revision-Date: 2025-02-09 16:55+0100\n"
+"PO-Revision-Date: 2025-02-11 21:01+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -2399,112 +2399,98 @@ msgstr "Upozornení (%u)"
 msgid "Errors (%u)"
 msgstr "Chýb (%u)"
 
+# knižnice
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
-#, fuzzy
-#| msgid "Shared Library"
 msgid "Shared"
-msgstr "Zdieľaná knižnica"
+msgstr "Zdieľané"
 
+# knižnice
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
-#, fuzzy
-#| msgid "Status:"
 msgid "Static"
-msgstr "Stav:"
+msgstr "Statické"
 
+# súbory
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
-msgstr ""
+msgstr "Apustiteľné"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Zlyhalo načítanie súboru: %s"
+msgstr "Zlyhal výpis zoznamu cieľov zostavovania: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
-#, fuzzy
-#| msgid "Select a Project"
 msgid "Select Build Target"
-msgstr "Výber projektu"
+msgstr "Výber cieľa zostavovania"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
-msgstr ""
+msgstr "Dostupné ciele zostavovania"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
+"Niektoré ciele nemusia byť dostupné, pokým nie je projekt nakonfigurovaný."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatically Discover"
-msgstr "Automatické odsadenie"
+msgstr "Automatické preskúmanie"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Táto voľba umožní Stavbárovi vybrať najvhodnejšieho kandidáta."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr ""
+msgstr "Kontajner použitý na zostavenie a spustenie vašej aplikácie"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplikovať"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#, fuzzy
-#| msgid "Duplicate the configuration"
 msgid "Duplicate into new configuration"
-msgstr "Duplikuje konfiguráciu"
+msgstr "Duplikuje do novej konfigurácie"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make Active"
-msgstr ""
+msgstr "Urobiť aktívnou"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:219
-#, fuzzy
-#| msgid "The configuration to use from .buildconfig"
 msgid "Make configuration active and reload build pipeline"
-msgstr "Konfigurácia, ktorá sa má použiť z .buildconfig"
+msgstr ""
+"Urobí konfiguráciu aktívnou a opätovne načítala zreťazený postup zostavovania"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#, fuzzy
-#| msgid "_Delete"
 msgid "Delete"
-msgstr "O_dstrániť"
+msgstr "Odstrániť"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:233
-#, fuzzy
-#| msgid "Delete the configuration"
 msgid "Delete configuration"
 msgstr "Odstráni konfiguráciu"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
-msgstr ""
+msgstr "Zastaviť zostavovanie projektu (Shift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr ""
+msgstr "Zostaviť projekt (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
-msgstr ""
+msgstr "Zobraziť diagnostiku zostavovania (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Clone Project"
 msgid "Configure Project…"
-msgstr "Klonovať projekt"
+msgstr "Konfigurovať projekt…"
 
 #: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
-msgstr ""
+msgstr "Konfiguruje nastavenia súvisiace s projektom"
 
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
@@ -2512,447 +2498,352 @@ msgstr ""
 #: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
 #: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
-msgstr ""
+msgstr "Zlievareň kódu"
 
 #: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Configuration"
-msgstr "Konfigurovať voľby"
+msgstr "Konfigurácia"
 
 #: src/plugins/buildui/gtk/menus.ui:16
-#, fuzzy
-#| msgid "Delete the configuration"
 msgid "Reload Configuration"
-msgstr "Odstráni konfiguráciu"
+msgstr "Obnoviť konfiguráciu"
 
 #: src/plugins/buildui/gtk/menus.ui:18
-#, fuzzy
-#| msgid "Delete the configuration"
 msgid "Reload project configuration"
-msgstr "Odstráni konfiguráciu"
+msgstr "Opätovne načíta konfiguráciu projektu"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
-msgstr ""
+msgstr "Vybrať cieľ zostavovania…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
-msgstr ""
+msgstr "Zmení predvolený cieľ zostavovania"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#, fuzzy
-#| msgid "Building…"
 msgid "Building"
-msgstr "Zostavovanie…"
+msgstr "Zostavovanie"
 
 #: src/plugins/buildui/gtk/menus.ui:36
 msgid "_Build"
 msgstr "_Zostaviť"
 
 #: src/plugins/buildui/gtk/menus.ui:37
-#, fuzzy
-#| msgid "Build project (Ctrl+F7)"
 msgid "Build the project"
-msgstr "Zostaví projekt (Ctrl+F7)"
+msgstr "Zostaví projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
 msgstr "_Znovu zostaviť"
 
 #: src/plugins/buildui/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Build project (Ctrl+F7)"
 msgid "Rebuild the project"
-msgstr "Zostaví projekt (Ctrl+F7)"
+msgstr "Opätovne zostaví projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:51
-#, fuzzy
-#| msgid "Clean"
 msgid "_Clean"
-msgstr "Vyčistiť"
+msgstr "_Vyčistiť"
 
 #: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
 msgstr "Vyčistí projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:58
-#, fuzzy
-#| msgid "Building…"
 msgid "Stop Building"
-msgstr "Zostavovanie…"
+msgstr "Zastaviť zostavovanie"
 
 #: src/plugins/buildui/gtk/menus.ui:59
-#, fuzzy
-#| msgid "Close the current document"
 msgid "Cancel the current build operation"
-msgstr "Zavrie aktuálny dokument"
+msgstr "Zruší prebiehajúcu operáciu zostavovania"
 
 #: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
-msgstr ""
+msgstr "Inštalácia a nasadenie"
 
+# menu desc
 #: src/plugins/buildui/gtk/menus.ui:72
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Install the project"
-msgstr "Vyčistí projekt"
+msgstr "Inštaluje projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "Nasadiť na zariadenie…"
 
 #: src/plugins/buildui/gtk/menus.ui:79
-#, fuzzy
-#| msgid "If the project is currently building."
 msgid "Deploy project to current device"
-msgstr "Či sa projekt aktuálne zostavuje."
+msgstr "Nasadí projekt na aktuálne zariadenie"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
 #: src/plugins/buildui/gtk/menus.ui:88
-#, fuzzy
-#| msgid "Exporting…"
 msgid "_Export"
-msgstr "Exportovanie…"
+msgstr "_Exportovať"
 
 #: src/plugins/buildui/gtk/menus.ui:90
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Export project"
-msgstr "Prázdny projekt"
+msgstr "Exportuje projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-#, fuzzy
-#| msgid "Build Output"
 msgid "Show Bui_ld Output"
-msgstr "Výstup zostavenia"
+msgstr "_Zobraziť výstup zostavovania"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Zobrazí panel obsahujúci záznamy zostavovania"
 
+# skupina menu
 #: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
-#, fuzzy
-#| msgid "Running Time:"
 msgid "Running"
-msgstr "Dĺžka behu:"
+msgstr "Spúšťanie"
 
 #: src/plugins/buildui/gtk/menus.ui:112
-#, fuzzy
-#| msgid "Documentation"
 msgid "Select Run Command…"
-msgstr "Dokumentácia"
+msgstr "Vybrať spúšťací príkaz…"
 
 #: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Spustiť"
 
 #: src/plugins/buildui/gtk/menus.ui:128
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Run the project"
-msgstr "Vyčistí projekt"
+msgstr "Spustí projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
-msgstr ""
+msgstr "Reštartovať program"
 
 #: src/plugins/buildui/gtk/menus.ui:137
-#, fuzzy
-#| msgid "Continue running the program"
 msgid "Restart the running program"
-msgstr "Pokračuje v behu programu"
+msgstr "Reštartuje bežiaci program"
 
 #: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
-msgstr ""
+msgstr "Zastaviť program"
 
 #: src/plugins/buildui/gtk/menus.ui:146
-#, fuzzy
-#| msgid "Continue running the program"
 msgid "Stop running the project"
-msgstr "Pokračuje v behu programu"
+msgstr "Zastaví bežiaci projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:151
-#, fuzzy
-#| msgid "Debugger"
 msgid "Debugging"
-msgstr "Odlaďovač"
+msgstr "Ladenie"
 
 #: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
-#, fuzzy
-#| msgid "Units:"
 msgid "Unit Tests"
-msgstr "Jednotky:"
+msgstr "Testy jednotiek"
 
 #: src/plugins/buildui/gtk/menus.ui:158 src/plugins/web-browser/gtk/menus.ui:83
 msgid "Settings"
 msgstr "Nastavenia"
 
 #: src/plugins/buildui/gtk/menus.ui:162
-#, fuzzy
-#| msgid "System Type"
 msgid "Follow System Style"
-msgstr "Typ systému"
+msgstr "Nasledovať štýl systému"
 
 #: src/plugins/buildui/gtk/menus.ui:166
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Follow the system style when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu nasleduje štýl systému"
 
+# v podmenu vzhľad
 #: src/plugins/buildui/gtk/menus.ui:169
-#, fuzzy
-#| msgid "Move Right"
 msgid "Force Light"
-msgstr "Presunúť doprava"
+msgstr "Vynútiť svetlý"
 
 #: src/plugins/buildui/gtk/menus.ui:173
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Force light theme when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu vynúti svetlú tému"
 
+# v podmenu vzhľad
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
-msgstr ""
+msgstr "Vynútiť tmavý"
 
 #: src/plugins/buildui/gtk/menus.ui:180
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Force dark theme when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu vynúti tmavú tému"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
-msgstr ""
+msgstr "Farba zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
-#, fuzzy
-#| msgid "System Type"
 msgid "System"
-msgstr "Typ systému"
+msgstr "Systémová"
 
 #: src/plugins/buildui/gtk/menus.ui:189
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use system accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije systémovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
 msgstr "Modrá"
 
 #: src/plugins/buildui/gtk/menus.ui:196
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use blue accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije modrú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
-msgstr ""
+msgstr "Tyrkysová"
 
 #: src/plugins/buildui/gtk/menus.ui:203
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use teal accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije tyrkysovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
 msgstr "Zelená"
 
 #: src/plugins/buildui/gtk/menus.ui:210
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use green accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije zelenú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
-msgstr ""
+msgstr "Žltá"
 
 #: src/plugins/buildui/gtk/menus.ui:217
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use yellow accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije žltú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
-msgstr ""
+msgstr "Oranžová"
 
 #: src/plugins/buildui/gtk/menus.ui:224
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use orange accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije oranžovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
 msgstr "Červená"
 
 #: src/plugins/buildui/gtk/menus.ui:231
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use red accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije červenú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
-msgstr ""
+msgstr "Ružová"
 
 #: src/plugins/buildui/gtk/menus.ui:238
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use pink accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije ružovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
-msgstr ""
+msgstr "Purpurová"
 
 #: src/plugins/buildui/gtk/menus.ui:245
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use purple accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije purpurovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:248
 msgid "Slate"
-msgstr ""
+msgstr "Bridlicová"
 
 #: src/plugins/buildui/gtk/menus.ui:252
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use slate accent color when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije bridlicovú farbu zvýraznenia"
 
 #: src/plugins/buildui/gtk/menus.ui:257
-#, fuzzy
-#| msgid "LAB visibility"
 msgid "Accessibility"
-msgstr "Viditeľnosť LAB"
+msgstr "Prístupnosť"
 
 #: src/plugins/buildui/gtk/menus.ui:259
 msgid "High Contrast"
-msgstr ""
+msgstr "Vysoký kontrast"
 
 #: src/plugins/buildui/gtk/menus.ui:262
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use high contrast theme when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije tému s vysokým kontrastom"
 
 #: src/plugins/buildui/gtk/menus.ui:265
-#, fuzzy
-#| msgid "Is Directory"
 msgid "Text Direction"
-msgstr "Je adresárom"
+msgstr "Smer textu"
 
 #: src/plugins/buildui/gtk/menus.ui:267
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Zľava doprava"
 
 #: src/plugins/buildui/gtk/menus.ui:271
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Force left-to-right text when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu vynúti aby bol smer textu zľava doprava"
 
 #: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Sprava doľava"
 
 #: src/plugins/buildui/gtk/menus.ui:278
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Force right-to-left text when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu vynúti aby bol smer textu sprava doľava"
 
+# sekcia v menu
 #: src/plugins/buildui/gtk/menus.ui:283
-#, fuzzy
-#| msgid "CPU"
 msgid "GPU"
-msgstr "Procesor"
+msgstr "Spracovanie grafiky"
 
 #: src/plugins/buildui/gtk/menus.ui:285
 msgid "GTK Renderer"
-msgstr ""
+msgstr "Vykresľovač GTK"
 
 #: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
-msgstr ""
+msgstr "Oredvolený"
 
 #: src/plugins/buildui/gtk/menus.ui:291
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use the default GTK renderer when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije predvolený vykresľovač GTK"
 
 #: src/plugins/buildui/gtk/menus.ui:294
 msgid "Vulkan"
-msgstr ""
+msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:298
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use the Vulkan renderer when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije vykresľovač Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:301
-#, fuzzy
-#| msgid "G"
 msgid "GL"
-msgstr "G"
+msgstr "GL"
 
 #: src/plugins/buildui/gtk/menus.ui:305
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use the GL renderer when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije vykresľovač GL"
 
 #: src/plugins/buildui/gtk/menus.ui:308
 msgid "Legacy GL"
-msgstr ""
+msgstr "Pôvodný GL"
 
 #: src/plugins/buildui/gtk/menus.ui:312
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Use the legacy GL renderer when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu použije pôvodný vykresľovač GL"
 
 #: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
-msgstr ""
+msgstr "Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:319
 msgid "Use the Cairo software renderer when running the project"
-msgstr ""
+msgstr "Pri spustení projektu použije softvérový vykresľovač Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:328
-#, fuzzy
-#| msgid "The prefix to use when installing the project"
 msgid "Request verbose logging when running the project"
-msgstr "Predpona, ktorá sa použije pri inštalovaní projektu"
+msgstr "Pri spustení projektu vyžaduje podrobné zaznamenávanie"
 
 #: src/plugins/buildui/gtk/menus.ui:332
-#, fuzzy
-#| msgid "Show Icons"
 msgid "Show Inspector"
-msgstr "Zobraziť ikony"
+msgstr "Zobraziť inšpektora"
 
 #: src/plugins/buildui/gtk/menus.ui:335
 msgid "Request the GTK inspector be shown when running the project"
-msgstr ""
+msgstr "Pri spustení projektu vyžaduje zobrazenie inšpektora GTK"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -2961,236 +2852,211 @@ msgstr "Štýl"
 
 #: src/plugins/buildui/gtk/preferences.ui:40
 #: src/plugins/platformui/tweaks.ui:10
-#, fuzzy
-#| msgid "Interface Type"
 msgid "Interface"
-msgstr "Typ rozhrania"
+msgstr "Rozhranie"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
-#, fuzzy
-#| msgid "Editor"
 msgid "Editor Font"
-msgstr "Editor"
+msgstr "Písmo editora"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#, fuzzy
-#| msgid "The source code editor"
 msgid "The font used in the source code editor"
-msgstr "Editor zdrojového kódu"
+msgstr "Písmo, ktoré sa použije v editore zdrojového kódu"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
-#, fuzzy
-#| msgid "Terminal"
 msgid "Terminal Font"
-msgstr "Terminál"
+msgstr "Písmo terminálu"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#, fuzzy
-#| msgid "The document for the VTE terminal view."
 msgid "The font used in the terminal"
-msgstr "Dokument pre zobrazenie terminálu VTE."
+msgstr "Písmo, ktoré sa použije v terminále"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
-msgstr "Mriežka"
+msgstr "Zobraziť vzor mriežky"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
-msgstr "Zobrazí mriežku pod zdrojovým kódom"
+msgstr "Zobrazí vzor mriežky pod zdrojovým kódom"
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
-msgstr ""
+msgstr "Nikdy"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "Mapa s náhľadom sa nikdy nezobrazí"
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
-msgstr ""
+msgstr "Vždy"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "Mapa s náhľadom sa zobrazí vždy"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto"
-msgstr "Automatické úkladanie"
+msgstr "Automaticky"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
+msgstr "Mapa s náhľadom sa zobrazí automaticky podľa vstupu používateľa"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "Navigovať kartami"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Prepína dokumenty pomocou rozhrania s kartami"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "Navigovať oknom"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr ""
+msgstr "Prepína dokumenty pomocou bublinového okna"
 
 #: src/plugins/buildui/tweaks.ui:12
 #: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
 #: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
-#, fuzzy
-#| msgid "Commands:"
 msgid "Commands"
-msgstr "Príkazy:"
+msgstr "Príkazy"
 
 #: src/plugins/buildui/tweaks.ui:16
-#, fuzzy
-#| msgid "Commands:"
 msgid "Run Command"
-msgstr "Príkazy:"
+msgstr "Spúšťací príkaz"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr ""
+msgstr "Tento príkaz sa použije na spustenie projektu"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr ""
+msgstr "Spustenie a zastavenie"
 
 #: src/plugins/buildui/tweaks.ui:58
-#, fuzzy
-#| msgid "Install failed"
 msgid "Install Before Running"
-msgstr "Inštalácia zlyhala"
+msgstr "Inštalovať pred spustením"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
+"Nainštaluje aplikáciu pred spustením. Toto je nevyhnutné pre väčšinu "
+"projektov, pokiaľ nie sú použité vlastné spúšťacie príkazy."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
-msgstr ""
+msgstr "Signál zastavenia"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
-msgstr ""
+msgstr "Pošle signál cieľovej aplikácii pri požiadavke na jej zastavenie."
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
-msgstr ""
+msgstr "Zaznamenávanie"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
+"Spustí s premennou prostredia <tt>G_MESSAGES_DEBUG=all</tt> kvôli hľadaniu "
+"problémov"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
-msgstr ""
+msgstr "Spustí testy jednotiek v rámci zostavovacieho prostredia."
 
 #: src/plugins/buildui/tweaks.ui:163
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "As Application"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Ako aplikáciu"
 
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
+"Spustí jednotku s prístupom k displeju a ostatným funkcionalitám prostredia "
+"pre beh."
 
 #: src/plugins/buildui/tweaks.ui:176
-#, fuzzy
-#| msgid "Building…"
 msgid "Build & Tooling"
-msgstr "Zostavovanie…"
+msgstr "Zostavovanie a nástrojovanie"
 
 #: src/plugins/buildui/tweaks.ui:185
 msgid "Storage"
-msgstr ""
+msgstr "Úložisko"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "Artefakty a súbory v medzipamäti"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"Adresár používaný na ukladanie zostavených artefaktov a súborov medzipamäte "
+"zo zreťazeného postupu zostavovania. Aby sa zmeny prejavili je potrebný "
+"reštart Stavbára."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
-#, fuzzy
-#| msgid "Directory"
 msgid "History"
-msgstr "Adresár"
+msgstr "História"
 
 #: src/plugins/buildui/tweaks.ui:206
 msgid "Clear Expired Artifacts"
-msgstr ""
+msgstr "Vyčistiť zastarané artefakty"
 
 #: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr ""
+msgstr "Artefakty, ktoré expirovalí budú odstránené, pri spustení Stavbára"
 
 #: src/plugins/buildui/tweaks.ui:218
-#, fuzzy
-#| msgid "Clear build log"
 msgid "Clear Build Logs"
-msgstr "Vymaže záznam o zostavovaní"
+msgstr "Vyčistiť záznamy zostavovania"
 
 #: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
-msgstr ""
+msgstr "Vyčistí záznamy zostavovania, keď začne nové zostavovanie"
 
 #: src/plugins/buildui/tweaks.ui:230
-#, fuzzy
-#| msgid "Save build log"
 msgid "Show Build Logs"
-msgstr "Uložiť záznam o zostavovaní"
+msgstr "Zobraziť záznamy zostavovania"
 
 #: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
-msgstr ""
+msgstr "Zobrazí záznamy zostavovania, keď začne nové zostavovanie"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
-msgstr ""
+msgstr "Záznamy do konzoly"
 
 #: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
-msgstr ""
+msgstr "Presmeruje chybové záznamy jazykového servera do stderr"
 
 #: src/plugins/buildui/tweaks.ui:261
-#, fuzzy
-#| msgid "Build Workers"
 msgid "Workers"
-msgstr "Pracovníci výstavby"
+msgstr "Pracovníci"
 
 #: src/plugins/buildui/tweaks.ui:265
-#, fuzzy
-#| msgid "Number of workers to use when building"
 msgid "Number of workers to use when performing builds"
 msgstr "Počet pracovníkov, ktorí sa použijú pri zostavovaní"
 
 #: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
-msgstr ""
+msgstr "1 na CPU"
 
 #: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
-msgstr ""
+msgstr "Nástrojovanie"
 
 #: src/plugins/buildui/tweaks.ui:407
 msgid "Installation Prefix"
@@ -3201,6 +3067,8 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
+"Projekt bude inštalovaný do tohto adresára počas inštalačnej fázy "
+"zreťazeného postupu zostavovania."
 
 #: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
@@ -3211,33 +3079,29 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"Tieto voľby sú používané zostavovacím systémom na konfigurovanie projektu "
+"počas konfiguračnej fázy zreťazeného postupu zostavovania"
 
 #: src/plugins/buildui/tweaks.ui:446
-#, fuzzy
-#| msgid "Environment"
 msgid "Build Environment"
-msgstr "Prostredie"
+msgstr "Prostredie zostavovania"
 
 #: src/plugins/buildui/tweaks.ui:449
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
-#, fuzzy
-#| msgid "Locals"
 msgid "Locality"
-msgstr "Lokálky"
+msgstr "Lokalita"
 
 #: src/plugins/buildui/tweaks.ui:450
-#, fuzzy
-#| msgid "The project file."
 msgid "Where your project builds"
-msgstr "Súbor s projektom."
+msgstr "Kam sa váš projekt zostaví"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
-msgstr ""
+msgstr "Vnútri stromu zdrojov"
 
 #: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
-msgstr ""
+msgstr "Zvonka stromu zdrojov"
 
 #: src/plugins/buildui/tweaks.ui:494
 msgid ""
