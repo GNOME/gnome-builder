@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-04 22:36+0000\n"
-"PO-Revision-Date: 2025-02-11 21:01+0100\n"
+"PO-Revision-Date: 2025-02-13 15:47+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1592,7 +1592,7 @@ msgstr "Zobrazí predvoľby aplikácie"
 # cmd desc
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "Open project in new workbench"
-msgstr "Otvorí projekt v novom pracovnom priestore."
+msgstr "Otvorí projekt v novom pracovnom priestore"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
@@ -3108,61 +3108,59 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"Vývojové sady používané na zostavenie vašej aplikácie sa automaticky zistia "
+"z prostredia pre beh."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
-#, fuzzy
-#| msgid "Building dependencies…"
 msgid "Fetch dependencies"
-msgstr "Zostavovanie závislostí…"
+msgstr "Získať závislosti"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
-#, fuzzy
-#| msgid "Build project (Ctrl+F7)"
 msgid "Build project"
-msgstr "Zostaví projekt (Ctrl+F7)"
+msgstr "Zostaviť projekt"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
-msgstr ""
+msgstr "Spustiť cez Cargo"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "Integračný server Clang sa ukončil"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "Integračný server Clang sa spustil ako proces %s"
 
+# symbol node
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
 msgstr "anonymný"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Doplniť zátvorky"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "Či sa majú pri dopĺňaní zahrnúť zátvorky."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete parameters"
-msgstr "Parametre"
+msgstr "Doplniť parametre"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"Či sa majú pri dopĺňaní zahrnúť parametre. Vyžaduje dopĺňanie zátvoriek."
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
@@ -3170,135 +3168,121 @@ msgstr "Clang"
 
 #: src/plugins/clang/tweaks.ui:17
 msgid "Complete Parentheses"
-msgstr ""
+msgstr "Doplniť zátvorky"
 
 #: src/plugins/clang/tweaks.ui:18
 msgid "Include parentheses when completing clang proposals"
-msgstr ""
+msgstr "Zahrnie zátvorky pri dopĺňaní návrhov Clang"
 
 #: src/plugins/clang/tweaks.ui:29
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete Parameters"
-msgstr "Parametre"
+msgstr "Doplniť parametre"
 
 #: src/plugins/clang/tweaks.ui:30
 msgid "Include parameters and type information when completing clang proposals"
-msgstr ""
+msgstr "Zahrnie parametre a typ informácie pr dopĺňaní návrhov Clang"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, fuzzy, c-format
-#| msgid "Failed to open directory: %s"
+#, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr "Zlyhalo otvorenie adresára: %s"
+msgstr "Zlyhalo vykonanie clang-format: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
 #, c-format
 msgid "clang-format failed to format document: %s"
-msgstr ""
+msgstr "clang-format zlyhal pri formátovaní dokumentu: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "Chýbajúce alebo poškodené údaje z clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "Neplatná pozícia kurzora poskytnutá z clang-formát"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
+"Nepodarilo sa nájsť .clang-format, prosím pridajte ho do vášho projektu. "
+"Núdzovo sa použije formátovač GNU-style."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
-msgstr ""
+msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:276
-#, fuzzy
-#| msgid "Clone Project"
 msgid "Configure project"
-msgstr "Klonovať projekt"
+msgstr "Konfigurácia projektu"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
 #: src/plugins/make/gbp-make-pipeline-addin.c:155
 #: src/plugins/maven/gbp-maven-pipeline-addin.c:103
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:142
-#, fuzzy
-#| msgid "Install failed"
 msgid "Installing project"
-msgstr "Inštalácia zlyhala"
+msgstr "Inštalácia projektu"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:218
 #, c-format
 msgid "%s (CMake)"
-msgstr ""
+msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
-#, fuzzy
-#| msgid "The file information for the project file."
 msgid "Create or update code-index for project file"
-msgstr "Súbor s informáciami pre súbor projektu."
+msgstr "Vytvorí alebo aktualizuje code-index pre súbor projektu"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
 msgid "PROJECT_FILE"
-msgstr ""
+msgstr "SÚBOR_PROJEKTU"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:152
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to load flags for plan: %s"
-msgstr "Zlyhalo načítanie súboru: %s"
+msgstr "Zlyhalo načítanie príznakov pre plán: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to cull index plan: %s"
-msgstr "Zlyhalo načítanie súboru: %s"
+msgstr "Zlyhalo prečistenie plánu indexov: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to populate index plan: %s"
-msgstr "Zlyhalo načítanie súboru: %s"
+msgstr "Zlyhalo naplnenie plánu indexov: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
-#, fuzzy, c-format
-#| msgid "Failed to load the project"
+#, c-format
 msgid "Failed to load project: %s"
-msgstr "Zlyhalo načítanie projektu"
+msgstr "Zlyhalo načítanie projektu: %s"
 
+# notification title
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
-msgstr ""
+msgstr "Indexovanie zdrojového kódu"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
-#, fuzzy
-#| msgid "exuberant ctags tags autocompletion auto complete"
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr "nadmerné naviazané ctags automatické dopĺňanie automaticky doplniť"
+msgstr ""
+"Vyhľadávanie, diagnostika a automatické dopĺňanie môže by do skončenia "
+"obmedzené."
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:340
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
-#, fuzzy
-#| msgid "Description"
 msgid "Declaration"
-msgstr "Popis"
+msgstr "Deklarácia"
 
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
-#, fuzzy
-#| msgid "Projects"
 msgid "Project Symbols"
-msgstr "Projekty"
+msgstr "Symboly projektu"
 
 #: src/plugins/codeshot/gtk/menus.ui:6
 msgid "Copy as Image"
@@ -3311,81 +3295,68 @@ msgstr "Kopírovať vybraný text ako obrázok"
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
-msgstr ""
+msgstr "Možný preklep v „%s“. Mysleli ste „%s“?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
-#, fuzzy, c-format
-#| msgid "Failed to create translation unit: %s"
+#, c-format
 msgid "Failed to format while saving document: %s"
-msgstr "Zlyhalo vytvorenie jednotky prekladu: %s"
+msgstr "Zlyhalo formátovanie počas ukladania dokumentu: %s"
 
+# dialog title
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
-#, fuzzy
-#| msgid "Completion"
 msgid "Code Actions"
-msgstr "Dopĺňanie"
+msgstr "Akcie v kóde"
 
+# button
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
-msgstr ""
+msgstr "_Použiť"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
-#, fuzzy
-#| msgid "Downloading…"
 msgid "Loading…"
-msgstr "Preberanie…"
+msgstr "Načítavanie…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
-#, fuzzy
-#| msgid "No commands available"
 msgid "No code actions available"
-msgstr "Nie sú dostupné žiadne príkazy"
+msgstr "Žiaden dostupné akcie v kóde"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
-#, fuzzy
-#| msgid "Action Name"
 msgid "Code Action Failure"
-msgstr "Názov akcie"
+msgstr "Zlyhanie akcie v kóde"
 
+# dialog title
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
-#, fuzzy
-#| msgid "Symbol Tree"
 msgid "Symbol Not Selected"
-msgstr "Strom symbolov"
+msgstr "Neoznačený symbol"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
-msgstr ""
+msgstr "Symbol na premenovanie musí byť označený"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "Find References"
-msgstr "Nastavenia zostavenia"
+msgstr "Nájsť odkazy"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
-#, fuzzy
-#| msgid "No projects found"
 msgid "No references found"
-msgstr "Nenašli sa žiadne projekty"
+msgstr "Žiadne odkazy sa nenašli"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
+"Nástroje programovacieho jazyka nemusia podporovať vyhľadávanie odkazov"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
-#, fuzzy, c-format
-#| msgid "Failed to save file: %s"
+#, c-format
 msgid "Failed to rename symbol: %s"
-msgstr "Zlyhalo uloženie súboru: %s"
+msgstr "Zlyhalo premenovanie symbolu: %s"
 
+# dialog title
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
-#, fuzzy
-#| msgid "Rename %s"
 msgid "Rename Symbol"
-msgstr "Premenovať %s"
+msgstr "Premenovanie symbolu"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
@@ -3394,135 +3365,111 @@ msgid "_Rename"
 msgstr "_Premenovať"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
-#, fuzzy
-#| msgid "Current line"
 msgid "Current Symbol Name"
-msgstr "Aktuálny riadok"
+msgstr "Aktuálny názov symbolu"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:24
-#, fuzzy
-#| msgid "Symbol Tree"
 msgid "New Symbol Name"
-msgstr "Strom symbolov"
+msgstr "Nový názov symbolu"
 
 #: src/plugins/codeui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Rename %s"
 msgid "R_ename Symbol…"
-msgstr "Premenovať %s"
+msgstr "Pr_emenovať symbol…"
 
 #: src/plugins/codeui/gtk/menus.ui:12
 msgid "Code Actions…"
-msgstr ""
+msgstr "Akcie v kóde…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
-msgstr ""
+msgstr "Zobrazí zoznam možných akcií v kóde od aktuálnej pozície kurzora"
 
 #: src/plugins/codeui/gtk/menus.ui:20
-#, fuzzy
-#| msgid "Description"
 msgid "_Go to Declaration"
-msgstr "Popis"
+msgstr "_Prejsť na deklaráciu"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
-msgstr ""
+msgstr "Skočí do súboru a miesto kde je položka deklarovaná"
 
 #: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
 msgstr "_Prejsť na definíciu"
 
 #: src/plugins/codeui/gtk/menus.ui:28
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
 msgid "Jump to file and location where item is defined"
-msgstr "Skočí na poslednú pozíciu pri opätovnom otvorení súboru"
+msgstr "Skočí do súboru a miesto kde je položka definovaná"
 
 #: src/plugins/codeui/gtk/menus.ui:33
-#, fuzzy
-#| msgid "Build Preferences"
 msgid "_Find References"
-msgstr "Nastavenia zostavenia"
+msgstr "_Nájsť odkazy"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Color Components"
 msgid "Code Comments"
-msgstr "Zložky farieb"
+msgstr "Komentáre kódu"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-#, fuzzy
-#| msgid "Clean the project"
 msgid "_Comment Code"
-msgstr "Vyčistí projekt"
+msgstr "_Komentovať kód"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr ""
+msgstr "Pridá komentáre okolo označeného zdrojového kódu"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Unco_mment Code"
-msgstr "Vyčistí projekt"
+msgstr "Odko_mentovať kód"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
+msgstr "Odstráni komentáre z označeného zdrojového kódu"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "Aktualizovať autorské práva pred uložením"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "Aktualizuje autorské práva pre používateľa pred uložením na disk."
 
 #: src/plugins/copyright/tweaks.ui:16
 msgid "Update Copyright"
-msgstr ""
+msgstr "Aktualizovať autorské práva"
 
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
-msgstr ""
+msgstr "Aktualizuje hlavičku o autorských právach pri ukladaní dokumentu"
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
-msgstr ""
+msgstr "Preformátovať prototypy funkcií"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
-msgstr ""
+msgstr "Zobrazí sprievodcu vytvorením projektu"
 
+# dialog title
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-#, fuzzy
-#| msgid "Project Location"
 msgid "Select Location"
-msgstr "Umiestnenie projektu"
+msgstr "Výber umiestnenia"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:257
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Failed to Create Project"
-msgstr "Zlyhalo načítanie projektu"
+msgstr "Zlyhalo vytvorenie projektu"
 
+# widget title
 #: src/plugins/create-project/gbp-create-project-widget.ui:5
-#, fuzzy
-#| msgid "Create a new project"
 msgid "Create New Project"
-msgstr "Vytvoriť nový projekt"
+msgstr "Vytvorenie nového projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:17
 msgid "Project Name"
 msgstr "Názov projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
-#, fuzzy
-#| msgid "A folder with that name already exists."
 msgid "A subdirectory with this name already exists"
-msgstr "Priečinok s takým názvom už existuje."
+msgstr "Podadresár s týmto názvom už existuje"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
@@ -3530,18 +3477,21 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
+"Jedinečný názov, ktorý sa použije ako priečinok projektu a ostatných "
+"zdrojov. Názov by mal obsahovať malé písmená bez medzier a nemal by začínať "
+"číslom."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "Application ID"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Identifikátor aplikácie"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
+"Reverzný identifikátor názvu domény používaný na identifikovanie aplikácie "
+"ako napr. „org.gnome.Builder“. Nesmie obsahovať pomlčky."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3553,44 +3503,36 @@ msgstr "Umiestnenie"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:87
 msgid "The project will be created in a new subdirectory."
-msgstr ""
+msgstr "Projekt sa vytvorí v novom podadresáre."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
-msgstr ""
+msgstr "Licencia"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:123
-#, fuzzy
-#| msgid "Select a Template"
 msgid "Template"
-msgstr "Vybrať šablónu"
+msgstr "Šablóna"
 
+# button
 #: src/plugins/create-project/gbp-create-project-widget.ui:182
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Create Project"
-msgstr "Vyčistí projekt"
+msgstr "Vytvoriť projekt"
 
+# button
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
-#, fuzzy
-#| msgid "Create a new project"
 msgid "Create _New Project…"
-msgstr "Vytvoriť nový projekt"
+msgstr "Vytvoriť _nový projekt…"
 
 #: src/plugins/create-project/gtk/menus.ui:9
 #: src/plugins/create-project/gtk/menus.ui:21
 #: src/plugins/create-project/gtk/menus.ui:34
-#, fuzzy
-#| msgid "Create a new project"
 msgid "Create New Project…"
-msgstr "Vytvoriť nový projekt"
+msgstr "Vytvoriť nový projekt…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
-#, fuzzy
-#| msgid "Create new projects from a variety of templates"
 msgid "Create a new project from template"
-msgstr "Vytváranie nových projektov z rôznych dostupných šablón"
+msgstr "Vytvorí nový projekt zo šablóny"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 #, fuzzy
