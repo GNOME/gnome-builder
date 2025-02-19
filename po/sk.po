@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-04 22:36+0000\n"
-"PO-Revision-Date: 2025-02-13 15:47+0100\n"
+"PO-Revision-Date: 2025-02-19 13:45+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -3535,56 +3535,44 @@ msgid "Create a new project from template"
 msgstr "Vytvorí nový projekt zo šablóny"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
-#, fuzzy
-#| msgid "exuberant ctags tags autocompletion auto complete"
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
-msgstr "nadmerné naviazané ctags automatické dopĺňanie automaticky doplniť"
+msgstr ""
+"Vyhľadávanie, automatické dopĺňanie a informácie o symboloch môže byť "
+"obmedzené pokým sa indexovanie Ctags neskončí."
 
 #: src/plugins/ctags/ide-ctags-service.c:982
-#, fuzzy
-#| msgid "Indent source code as you type"
 msgid "Indexing Source Code (Paused)"
-msgstr "Odsadzuje zdrojový kód počas písania"
+msgstr "Indexovanie zdrojového kódu (Pozastavené)"
 
 #: src/plugins/ctags/tweaks.ui:14
 msgid "CTags"
 msgstr "CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
-#, fuzzy
-#| msgid "Suggest Snippet Completion"
 msgid "Suggest Completions"
-msgstr "Navrhnúť doplnenie úryvku"
+msgstr "Navrhovať doplnenia"
 
 #: src/plugins/ctags/tweaks.ui:18
-#, fuzzy
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use CTags to suggest code completion proposals"
-msgstr "Použije  prekladač Clang na dopĺňanie v jazykoch C a C++."
+msgstr "Použije CTags na navrhovanie doplnenia kódu"
 
 #: src/plugins/ctags/tweaks.ui:34
-#, fuzzy
-#| msgid "CTags"
 msgid "CTags Path"
-msgstr "CTags"
+msgstr "Cesta k CTags"
 
 #: src/plugins/ctags/tweaks.ui:35
-#, fuzzy
-#| msgid "Path to ctags executable"
 msgid "The path to the ctags executable"
-msgstr "Cesta k spustiteľnému ctags"
+msgstr "Cesta k spustiteľnému súboru ctags"
 
 #: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
 msgstr "Spustiť s odlaďovačom"
 
 #: src/plugins/debuggerui/gtk/menus.ui:14
-#, fuzzy
-#| msgid "Run with Debugger"
 msgid "Run the project with debugger"
-msgstr "Spustiť s odlaďovačom"
+msgstr "Spustí projekt spolu s odlaďovačom"
 
 #: src/plugins/debuggerui/gtk/menus.ui:20
 #: src/plugins/debuggerui/gtk/menus.ui:81
@@ -3594,46 +3582,40 @@ msgid "Debugger"
 msgstr "Odlaďovač"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
-#, fuzzy
-#| msgid "Breakpoints"
 msgid "Toggle Breakpoint"
-msgstr "Zarážky"
+msgstr "Prepnúť zarážku"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
-#, fuzzy
-#| msgid "Highlight current line"
 msgid "Toggle breakpoint at current line"
-msgstr "Zvýrazniť aktuálny riadok"
+msgstr "Prepne zarážku na aktuálnom riadoku"
 
 #: src/plugins/debuggerui/gtk/menus.ui:34
-#, fuzzy
-#| msgid "Co_ntinue"
 msgid "Continue"
-msgstr "Pok_račovať"
+msgstr "Pokračovať"
 
 #: src/plugins/debuggerui/gtk/menus.ui:37
 msgid "Continue debugging to next breakpoint"
-msgstr ""
+msgstr "Pokračuje v ladení k ďalšej zarážke"
 
 #: src/plugins/debuggerui/gtk/menus.ui:43
 msgid "Pause"
-msgstr ""
+msgstr "Pozastaviť"
 
 #: src/plugins/debuggerui/gtk/menus.ui:46
 msgid "Pause debugger until continued"
-msgstr ""
+msgstr "Pozastaví odlaďovať pokým sa nepokračuje"
 
 #: src/plugins/debuggerui/gtk/menus.ui:52
 msgid "Step Over"
-msgstr ""
+msgstr "Krok cez"
 
 #: src/plugins/debuggerui/gtk/menus.ui:55
 msgid "Execute the current line, stepping over any function calls"
-msgstr "Vykoná aktuálny riadok, preskočí volanie funcie"
+msgstr "Vykoná aktuálny riadok, pričom preskočí volania funkcií"
 
 #: src/plugins/debuggerui/gtk/menus.ui:61
 msgid "Step Into"
-msgstr ""
+msgstr "Krok dnu"
 
 #: src/plugins/debuggerui/gtk/menus.ui:64
 msgid "Execute the current line, stepping into any function calls"
@@ -3641,7 +3623,7 @@ msgstr "Vykoná aktuálny riadok, vstúpi do volaných funkcií"
 
 #: src/plugins/debuggerui/gtk/menus.ui:70
 msgid "Step Out"
-msgstr ""
+msgstr "Krok von"
 
 #: src/plugins/debuggerui/gtk/menus.ui:73
 msgid "Run until the end of the function"
@@ -3655,24 +3637,20 @@ msgstr "Zarážky"
 
 #: src/plugins/debuggerui/gtk/menus.ui:85
 msgid "Automatically Break at Program Start"
-msgstr ""
+msgstr "Automaticky prerušiť na začiatku programu"
 
 #: src/plugins/debuggerui/gtk/menus.ui:90
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatically Break at Warnings"
-msgstr "Automatické odsadenie"
+msgstr "Automaticky prerušiť pri upozorneniach"
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatically Break at Criticals"
-msgstr "Automatické odsadenie"
+msgstr "Automaticky prerušiť pri kritických chybách"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
 msgid "ID"
-msgstr "ID"
+msgstr "Identifikátor"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
 msgid "File"
@@ -3704,35 +3682,26 @@ msgstr "Zásahy"
 msgid "Expression"
 msgstr "Výraz"
 
+# button tooltip
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
-#, fuzzy
-#| msgid "Interrupt the program"
 msgid "Pause the program (F6)"
-msgstr "Preruší program"
+msgstr "Pozastaví program (F6)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
-#, fuzzy
-#| msgid "Continue running the program"
 msgid "Continue running the program (F5)"
-msgstr "Pokračuje v behu programu"
+msgstr "Pokračuje v behu programu (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
-#, fuzzy
-#| msgid "Execute the current line, stepping into any function calls"
 msgid "Execute the current line, stepping into any function calls (F8)"
-msgstr "Vykoná aktuálny riadok, vstúpi do volaných funkcií"
+msgstr "Vykoná aktuálny riadok, vstúpi do volaných funkcií (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
-#, fuzzy
-#| msgid "Execute the current line, stepping over any function calls"
 msgid "Execute the current line, stepping over any function calls (F7)"
-msgstr "Vykoná aktuálny riadok, preskočí volanie funcie"
+msgstr "Vykoná aktuálny riadok, preskočí volanie funkcií (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
-#, fuzzy
-#| msgid "Run until the end of the function"
 msgid "Run until the end of the function (Shift+F8)"
-msgstr "Spustí po koniec funkcie"
+msgstr "Spustí po koniec funkcie (Shift+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -3740,17 +3709,15 @@ msgstr "Rozobranie"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "Bez prerušenia"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
-#, fuzzy
-#| msgid "Breakpoints"
 msgid "Breakpoint"
-msgstr "Zarážky"
+msgstr "Zarážka"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "Bod počítania"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -3815,95 +3782,92 @@ msgstr "Registre"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:268
 msgid "Console"
-msgstr ""
+msgstr "Konzola"
 
 #: src/plugins/debuggerui/tweaks.ui:19
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "Zastaviť po spustení programu"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr ""
+msgstr "Automaticky vloží zarážku na začiatok aplikácie"
 
 #: src/plugins/debuggerui/tweaks.ui:31
-#, fuzzy
-#| msgid "Warnings"
 msgid "Stop at Warnings"
-msgstr "Upozornenia"
+msgstr "Zastaviť pri upozorneniach"
 
 #: src/plugins/debuggerui/tweaks.ui:32
 msgid "Automatically insert a breakpoint on warning logs"
-msgstr ""
+msgstr "Automaticky vloží zarážku pri upozorňujúcich záznamoch"
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
-msgstr ""
+msgstr "Zastaviť pri kritických chybách"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr ""
+msgstr "Automaticky vloží zarážku pri chybových záznamoch"
 
+# popis cli voľby
 #: src/plugins/deviced/gnome-builder-deviced.c:48
-#, fuzzy
-#| msgid "The device identifier."
 msgid "The device address"
-msgstr "Identifikátor zariadenia."
+msgstr "Adresa zariadenia"
 
+# popis cli voľby
 #: src/plugins/deviced/gnome-builder-deviced.c:49
-#, fuzzy
-#| msgid "The device identifier."
 msgid "The device port number"
-msgstr "Identifikátor zariadenia."
+msgstr "Číslo portu zariadenia"
 
+# popis cli voľby
 #: src/plugins/deviced/gnome-builder-deviced.c:50
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "The application to run"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Aplikácia, ktorá sa má spustiť"
 
+# popis cli voľby
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "Pseudo terminál na obojsmerné sprostredkovanie zariadenia"
 
+# popis cli voľby
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "Počet sekúnd čakania na zjavenie partnerského zariadenia"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:15
 msgid "D-Bus Inspector…"
-msgstr ""
+msgstr "Inšpektor D-Bus…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
-msgstr ""
+msgstr "Spustiť cez Dub"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "Nebol poskytnutý žiadny súbor."
 
+# popis voľby
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
 msgid "Use minimal editor interface"
-msgstr ""
+msgstr "Použije minimálne rozhranie editora"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:62
 #, c-format
 msgid "Switch to %s style"
-msgstr ""
+msgstr "Prepnúť na štýl %s"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
 msgid "Switch application and editor theme"
-msgstr ""
+msgstr "Prepne tému aplikácie a editora"
 
+# button tooltip
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr ""
+msgstr "Vráti predvoľby jazyka na predvolené hodnoty aplikácie"
 
 #. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
-#, fuzzy
-#| msgid "Wrap Text"
 msgid "Plain Text"
-msgstr "Zalomiť text"
+msgstr "Prostý text"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
@@ -3933,16 +3897,12 @@ msgid "Indentation"
 msgstr "Odsadzovanie"
 
 #: src/plugins/editorui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Insert Matching Brace"
 msgid "Indent Using Spaces"
-msgstr "Vkladanie zodpovedajúcich zátvoriek"
+msgstr "Odsadiť medzerami"
 
 #: src/plugins/editorui/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Spaces"
 msgid "Spaces per Tab"
-msgstr "Medzery"
+msgstr "Medzier na Tab"
 
 #: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
@@ -3958,7 +3918,7 @@ msgstr "4"
 
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
@@ -3966,68 +3926,56 @@ msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation Size"
-msgstr "Odsadzovanie"
+msgstr "Veľkosť odsadenia"
 
 #: src/plugins/editorui/gtk/menus.ui:44
-#, fuzzy
-#| msgid "Tab width"
 msgid "Same as Tab Width"
-msgstr "Šírka tabulátora"
+msgstr "Zhodná so šírkou tabulátora"
 
 #: src/plugins/editorui/gtk/menus.ui:81
-#, fuzzy
-#| msgid "Encoding"
 msgid "Line Ending"
-msgstr "Kódovanie"
+msgstr "Ukončenie riadov"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
-msgstr ""
+msgstr "Windows (CR/LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
-msgstr ""
+msgstr "Mac (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
-msgstr ""
+msgstr "Nový priestor editora…"
 
 #: src/plugins/editorui/gtk/menus.ui:124
-#, fuzzy
-#| msgid "New File"
 msgid "New _File"
-msgstr "Nový súbor"
+msgstr "Nový _súbor"
 
 #: src/plugins/editorui/gtk/menus.ui:133
-#, fuzzy
-#| msgid "Open File…"
 msgid "_Open File…"
-msgstr "Otvoriť súbor…"
+msgstr "_Otvoriť súbor…"
 
 #: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "Otvoriť v novom ráme"
 
 #: src/plugins/editorui/gtk/menus.ui:147
-#, fuzzy
-#| msgid "Open in New Frame"
 msgid "Open in New Workspace…"
-msgstr "Otvoriť v novom ráme"
+msgstr "Otvoriť v novom priestore…"
 
 #: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
-msgstr "U_ložiť ako"
+msgstr "Uložiť _ako"
 
 #: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find…"
-msgstr "Nájdenie…"
+msgstr "Nájsť…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
 msgid "Find/Replace…"
-msgstr "Nájdenie a nahradenie…"
+msgstr "Nájsť a nahradiť…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
@@ -4038,38 +3986,24 @@ msgid "Format Document"
 msgstr "Formátovať dokument"
 
 #: src/plugins/editorui/gtk/menus.ui:200
-#, fuzzy
-#| msgid "Format Strings"
 msgid "Format Selection"
-msgstr "Formátovať reťazce"
+msgstr "Formátovať výber"
 
 #: src/plugins/editorui/gtk/menus.ui:208
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous match"
 msgid "Move to Previous Diagnostic"
-msgstr "Presun na predchádzajúcu zhodu"
+msgstr "Presun na predchádzajúcu diagnostiku"
 
 #: src/plugins/editorui/gtk/menus.ui:209
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to previous edit location"
 msgid "Move the insertion cursor to the previous diagnostic location"
-msgstr "Presun na predchádzajúce miesto úpravy"
+msgstr "Presunie vkladací kurzor na predchádzajúce miesto diagnostiky"
 
 #: src/plugins/editorui/gtk/menus.ui:216
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the next match"
 msgid "Move to Next Diagnostic"
-msgstr "Presun na nasledujúcu zhodu"
+msgstr "Presun na nasledujúcu diagnostiku"
 
 #: src/plugins/editorui/gtk/menus.ui:217
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to next edit location"
 msgid "Move the insertion cursor to the next diagnostic location"
-msgstr "Presun na nasledujúce miesto úpravy"
+msgstr "Presunie vkladací kurzor na nasledujúce miesto diagnostiky"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -4080,330 +4014,255 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
+"Nastavenia poskytnuté .editorconfig a konfiguračnými komentármi modelines "
+"majú prednosť pre nižšie uvedenými."
 
 #: src/plugins/editorui/tweaks-language.ui:41
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation & Formatting"
-msgstr "Odsadzovanie"
+msgstr "Odsadzovanie a formátovanie"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr ""
+msgstr "Znak Tab"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
-msgstr ""
+msgstr "Znak. ktorý sa vloží po stlačení tabulátora"
 
 #: src/plugins/editorui/tweaks-language.ui:59
-#, fuzzy
-#| msgid "Tabs"
 msgid "Tab"
-msgstr "Tabulátory"
+msgstr "Tab"
 
 #: src/plugins/editorui/tweaks-language.ui:73
-#, fuzzy
-#| msgid "Insert trailing newline"
 msgid "Insert Trailing Newline"
-msgstr "Vložiť uzatvárajúci nový riadok"
+msgstr "Vložiť ukončujúci nový riadok"
 
 #: src/plugins/editorui/tweaks-language.ui:74
 msgid "Ensure files end with a newline"
-msgstr ""
+msgstr "Zabezpečí, aby súbory končili prázdnym novým riadkom"
 
 #: src/plugins/editorui/tweaks-language.ui:90
-#, fuzzy
-#| msgid "Trim trailing whitespace"
 msgid "Trim Trailing Space"
 msgstr "Orezanie koncových medzier"
 
 #: src/plugins/editorui/tweaks-language.ui:91
-#, fuzzy
-#| msgid ""
-#| "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr "Oreže medzery na konci riadka pri uložení dokumentu"
+msgstr "Pri ukladaní sa odstránia nadbytočné medzery z upravených riadkov"
 
 #: src/plugins/editorui/tweaks-language.ui:111
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Auto Indent"
 msgstr "Automatické odsadenie"
 
 #: src/plugins/editorui/tweaks-language.ui:112
-#, fuzzy
-#| msgid "Indent source code as you type"
 msgid "Automatically indent source code as you type"
-msgstr "Odsadzuje zdrojový kód počas písania"
+msgstr "Automaticky odsadí zdrojový kód počas písania"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
-msgstr ""
+msgstr "Šírka tabulátora"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr ""
+msgstr "Počet odsadzujúcich znakov pre tabulátor"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
-msgstr ""
+msgstr "Počet znakov odsadenia, alebo -1 pre použitie šírky tabulátora"
 
 #: src/plugins/editorui/tweaks-language.ui:164
-#, fuzzy
-#| msgid "Margins"
 msgid "Margin"
-msgstr "Okraje"
+msgstr "Okraj"
 
 #: src/plugins/editorui/tweaks-language.ui:167
-#, fuzzy
-#| msgid "Show right margin"
 msgid "Show Right Margin"
 msgstr "Zobraziť pravý okraj"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
+msgstr "Zobrazí okraj v editore označujúci maximálnu požadovanú dĺžku riadka"
 
 #: src/plugins/editorui/tweaks-language.ui:184
-#, fuzzy
-#| msgid "Right margin position"
 msgid "Right Margin Position"
-msgstr "Pozícia pravého akraja"
+msgstr "Pozícia pravého okraja"
 
 #: src/plugins/editorui/tweaks-language.ui:185
 msgid "The desired maximum line length"
-msgstr ""
+msgstr "Požadovaná maximálna dĺžka riadka"
 
 #: src/plugins/editorui/tweaks-language.ui:203
 #: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
-msgstr ""
+msgstr "Správanie"
 
 #: src/plugins/editorui/tweaks-language.ui:206
 msgid "Overwrite Braces"
-msgstr "Prepísanie zátvoriek"
+msgstr "Prepísať zátvorky"
 
 #: src/plugins/editorui/tweaks-language.ui:207
-#, fuzzy
-#| msgid "Insert matching brace, bracket, quotation, and parenthesis."
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr ""
-"Vložiť zhodujúcu zloženú zátvorku, hranatú zátvorku, citáciu a zátvorku."
+"Prepíše uzatváracie zložené zátvorky, hranaté zátvorky, okrúhle zátvorky a "
+"úvodzovky"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
-msgstr "Vkladanie zodpovedajúcich zátvoriek"
+msgstr "Vložiť zodpovedajúcu zátvorku"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#, fuzzy
-#| msgid "Insert matching brace, bracket, quotation, and parenthesis."
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
-"Vložiť zhodujúcu zloženú zátvorku, hranatú zátvorku, citáciu a zátvorku."
+"Doplní zodpovedajúce zložené zátvorky, hranaté zátvorky, okrúhle zátvorky a "
+"úvodzovky"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
-msgstr ""
+msgstr "Medzera pred úvodnými okrúhlymi zátvorkami"
 
 #: src/plugins/editorui/tweaks-language.ui:262
-#, fuzzy
-#| msgid "Matching brackets"
 msgid "Space before opening brackets"
-msgstr "Zodpovedajúce zátvorky"
+msgstr "Medzera pred úvodnými hranatými zátvorkami"
 
 #: src/plugins/editorui/tweaks-language.ui:269
 msgid "Space before opening braces"
-msgstr ""
+msgstr "Medzera pred úvodnými zloženými zátvorkami"
 
 #: src/plugins/editorui/tweaks-language.ui:276
 msgid "Space before opening angles"
-msgstr ""
+msgstr "Medzera pred úvodnými špicatými zátvorkami"
 
 #: src/plugins/editorui/tweaks-language.ui:283
-#, fuzzy
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before colon"
-msgstr "Uprednostní medzery pred použitím tabulátorov"
+msgstr "Uprednostniť medzeru pred dvojbodkou"
 
 #: src/plugins/editorui/tweaks-language.ui:290
-#, fuzzy
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before commas"
-msgstr "Uprednostní medzery pred použitím tabulátorov"
+msgstr "Uprednostniť medzeru pred čiarkami"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#, fuzzy
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before semicolons"
-msgstr "Uprednostní medzery pred použitím tabulátorov"
+msgstr "Uprednostniť medzeru pred bodkočiarkami"
 
 #: src/plugins/editorui/tweaks.ui:10
-#, fuzzy
-#| msgid "Colors"
 msgid "Color"
-msgstr "Farby"
+msgstr "Farba"
 
 #: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
 msgid "Fonts & Styling"
-msgstr ""
+msgstr "Písmo a štýl"
 
 #: src/plugins/editorui/tweaks.ui:36
-#, fuzzy
-#| msgid "%s (Preview)"
 msgid "Preview"
-msgstr "%s (Ukážka)"
+msgstr "Ukážka"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
 msgid "Font"
 msgstr "Písmo"
 
 #: src/plugins/editorui/tweaks.ui:49
-#, fuzzy
-#| msgid "The source code editor"
 msgid "The font used within the source code editor"
-msgstr "Editor zdrojového kódu"
+msgstr "Písmo použité v editore zdrojového kódu"
 
 #: src/plugins/editorui/tweaks.ui:61
-#, fuzzy
-#| msgid "Auto indent new lines"
 msgid "Adjust spacing between lines"
-msgstr "Automaticky odsadiť nové riadky"
+msgstr "Upraviť riadkovanie"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "Ako sa má zalomiť text, keď je širší ako rám"
 
 #: src/plugins/editorui/tweaks.ui:93
-#, fuzzy
-#| msgid "Spaces"
 msgid "At Spaces"
-msgstr "Medzery"
+msgstr "Na medzerách"
 
 #: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
-msgstr ""
+msgstr "Kdekoľvek"
 
 #: src/plugins/editorui/tweaks.ui:111
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Background Pattern"
-msgstr "Mriežka"
+msgstr "Vzor pozadia"
 
 #: src/plugins/editorui/tweaks.ui:112
-#, fuzzy
-#| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
-msgstr "Zobrazí mriežku pod zdrojovým kódom"
+msgstr "Zobrazí vzor ako pozadie pod zdrojovým kódom"
 
 #: src/plugins/editorui/tweaks.ui:121
-#, fuzzy
-#| msgid "Pattern"
 msgid "No Pattern"
-msgstr "Vzor"
+msgstr "Bez vzoru"
 
 #: src/plugins/editorui/tweaks.ui:127
-#, fuzzy
-#| msgid "Join Lines"
 msgid "Grid Lines"
-msgstr "Spojiť riadky"
+msgstr "Čiary mriežky"
 
 #: src/plugins/editorui/tweaks.ui:137
-#, fuzzy
-#| msgid "Scroll Offset"
 msgid "Scrollbars"
-msgstr "Posun rolovania"
+msgstr "Posuvníky"
 
 #: src/plugins/editorui/tweaks.ui:140
-#, fuzzy
-#| msgid "Code Overview"
 msgid "Source Code Overview"
-msgstr "Prehľad kódu"
+msgstr "Prehľad zdrojového kódu"
 
 #: src/plugins/editorui/tweaks.ui:141
-#, fuzzy
-#| msgid ""
-#| "If enabled, Builder will display an overview map of the source file next "
-#| "to the editor."
 msgid "Display an overview of source code next to the editor"
-msgstr ""
-"Ak je povolené, program zobrazí mapu s prehľadom zdrojového kódu vedľa "
-"editora."
+msgstr "Zobrazí zmenšený prehľad zdrojového kódu vedľa editora"
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "Uprednostniť posuvníky"
 
+# prehľad
 #: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
-msgstr ""
+msgstr "Vždy zapnutý"
 
+# automatické rozhodnutie či posuvníky alebo prehľad
 #: src/plugins/editorui/tweaks.ui:162
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatic"
-msgstr "Automatické odsadenie"
+msgstr "Automaticky"
 
 #: src/plugins/editorui/tweaks.ui:172
-#, fuzzy
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Čísla riadkov"
 
 #: src/plugins/editorui/tweaks.ui:175
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Line Numbers"
 msgstr "Zobraziť čísla riadkov"
 
 #: src/plugins/editorui/tweaks.ui:176
-#, fuzzy
-#| msgid "Display the line numbers next to each line of the document."
 msgid "Display line numbers next to each line of code"
-msgstr "Zobrazí čísla riadkov v každom riadku dokumentu."
+msgstr "Zobrazí čísla riadkov vedľa každého riadku kódu"
 
 #: src/plugins/editorui/tweaks.ui:187
-#, fuzzy
-#| msgid "Display Line Numbers"
 msgid "Use Relative Line Numbers"
-msgstr "Zobraziť čísla riadkov"
+msgstr "Použiť relatívne čísla riadkov"
 
 #: src/plugins/editorui/tweaks.ui:188
-#, fuzzy
-#| msgid "Show line number at beginning of each line"
 msgid "Show line numbers relative to the current line"
-msgstr "Zobrazí číslo riadka na začiatku každého riadka"
+msgstr "Zobrazí čísla riadkov relatívne voči aktuálnemu riadku"
 
 #: src/plugins/editorui/tweaks.ui:199
-#, fuzzy
-#| msgid "No Diagnostics"
 msgid "Show Diagnostics"
-msgstr "Bez diagnostiky"
+msgstr "Zobraziť diagnostiky"
 
 #: src/plugins/editorui/tweaks.ui:200
-#, fuzzy
-#| msgid "Show diagnostics next to line number"
 msgid "Display diagnostics next to the line number"
-msgstr "Zobraziť diagnostiku vedľa čísel riadku"
+msgstr "Zobrazí diagnostiky vedľa čísel riadku"
 
 #: src/plugins/editorui/tweaks.ui:211
-#, fuzzy
-#| msgid "Line changes"
 msgid "Show Line Changes"
-msgstr "Zmeny v riadku"
+msgstr "Zobraziť zmeny v riadku"
 
 #: src/plugins/editorui/tweaks.ui:212
-#, fuzzy
-#| msgid "Show diagnostics next to line number"
 msgid "Highlight changed lines next to the line number"
-msgstr "Zobraziť diagnostiku vedľa čísel riadku"
+msgstr "Zvýrazní zmenené riadky vedľa čísel riadku"
 
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Use Line Selection Styling"
-msgstr ""
+msgstr "Použiť štýl pre označené riadky"
 
 #: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
-msgstr ""
+msgstr "Použije štýl výberu pre čísla riadkov, ak je celý riadok označený"
 
 #: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
@@ -4414,14 +4273,10 @@ msgid "Highlight Current Line"
 msgstr "Zvýrazniť aktuálny riadok"
 
 #: src/plugins/editorui/tweaks.ui:241
-#, fuzzy
-#| msgid "Make current line stand out with highlights"
 msgid "Make the current line stand out with highlights"
 msgstr "Odlíši aktuálny riadok zvýraznením"
 
 #: src/plugins/editorui/tweaks.ui:252
-#, fuzzy
-#| msgid "Highlight matching brackets"
 msgid "Highlight Matching Brackets"
 msgstr "Zvýrazniť zodpovedajúce zátvorky"
 
@@ -4429,7 +4284,7 @@ msgstr "Zvýrazniť zodpovedajúce zátvorky"
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
-msgstr ""
+msgstr "Zvýrazňuje zodpovedajúce zátvorky a iné veci podľa polohy kurzora"
 
 #: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
@@ -4440,22 +4295,24 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"Použije informačné symboly na zvýraznenie názvových priestorov, funkcií a "
+"premenných v zdrojovom kóde"
 
 #: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
-msgstr ""
+msgstr "Nakreslí značky reprezentujúce bežné medzery"
 
 #: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "Nakreslí značky reprezentujúce tabulátory"
 
 #: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
-msgstr ""
+msgstr "Nové riadky"
 
 #: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "Nakreslí značky reprezentujúce konce riadkov"
 
 #: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
@@ -4463,118 +4320,99 @@ msgstr "Nezalomiteľné medzery"
 
 #: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
-msgstr ""
+msgstr "Nakreslí značky na znakoch nezalomiteľných medzier"
 
 #: src/plugins/editorui/tweaks.ui:337
-#, fuzzy
-#| msgid "Leading Only"
 msgid "Leading"
-msgstr "Iba úvodné"
+msgstr "Úvodné"
 
 #: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
-msgstr ""
+msgstr "Nakreslí značky iba pre úvodné medzery"
 
 #: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
-msgstr ""
+msgstr "Vnútri textu"
 
 #: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "Kreslí značky iba vo vnútri textu"
 
 #: src/plugins/editorui/tweaks.ui:363
-#, fuzzy
-#| msgid "Trailing Only"
 msgid "Trailing"
-msgstr "Iba koncové"
+msgstr "Koncové"
 
 #: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
-msgstr ""
+msgstr "Kreslí značky iba pre koncové medzery"
 
 #: src/plugins/editorui/tweaks.ui:384
-#, fuzzy
-#| msgid "Spellchecking"
 msgid "Spelling"
-msgstr "Kontrola preklepov"
+msgstr "Preklepy"
 
 #: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "Podčiarkuje možné preklepy počas písania"
 
 #: src/plugins/editorui/tweaks.ui:401
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Selections"
 msgid "Selections"
 msgstr "Výbery"
 
 #: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
-msgstr ""
+msgstr "Minimum znakov na zvýraznenie"
 
 #: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
-msgstr ""
+msgstr "Minimálna dĺžka označenia pred zvýraznením zhôd"
 
 #: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "Úryvky"
 
 #: src/plugins/editorui/tweaks.ui:421
-#, fuzzy
-#| msgid "Snippets"
 msgid "Expand Snippets"
-msgstr "Úryvky"
+msgstr "Rozbaliť úryvky"
 
 #: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "Použije „Tab“ na rozbalenie nakonfigurovaných úryvkov v editore"
 
 #: src/plugins/editorui/tweaks.ui:437
-#, fuzzy
-#| msgid "Completion"
 msgid "Code Completion"
-msgstr "Dopĺňanie"
+msgstr "Dopĺňanie kódu"
 
 #: src/plugins/editorui/tweaks.ui:441
-#, fuzzy
-#| msgid "Completion"
 msgid "Completion Proposals"
-msgstr "Dopĺňanie"
+msgstr "Navrhovanie doplnení"
 
 #: src/plugins/editorui/tweaks.ui:444
-#, fuzzy
-#| msgid "Suggest Snippet Completion"
 msgid "Suggest Code Completions"
-msgstr "Navrhnúť doplnenie úryvku"
+msgstr "Navrhnúť doplnenia kódu"
 
 #: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "Automaticky navrhuje doplnenia kódu počas písania "
 
 #: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
-msgstr ""
+msgstr "Vybrať prvý návrh doplenenia"
 
 #: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
-msgstr ""
+msgstr "Automaticky pri zobrazení vyberie prvý návrh doplnenia"
 
 #: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
-msgstr ""
+msgstr "Maximum návrhov doplnenia"
 
 #: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
-msgstr ""
+msgstr "Maximálny počet riadkov doplnenia, ktoré sa naraz zobrazia"
 
 #: src/plugins/editorui/tweaks.ui:492
-#, fuzzy
-#| msgid "Movement"
 msgid "Movements"
-msgstr "Pohyb"
+msgstr "Presuny"
 
 #: src/plugins/editorui/tweaks.ui:496
 msgid ""
@@ -4584,117 +4422,95 @@ msgstr ""
 "vášho odsadenia"
 
 #: src/plugins/editorui/tweaks.ui:508
-#, fuzzy
-#| msgid "Home moves to first non-whitespace character"
 msgid "Navigate to non-space characters"
-msgstr ""
-"Kláves Home presunie kurzor na prvý znak, ktorý nie je reprezentovaný "
-"medzerou"
+msgstr "Presunie na nemedzerové znaky"
 
 #: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
-msgstr ""
+msgstr "Pred hranice riadka"
 
 #: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
-msgstr ""
+msgstr "Za hranice riadka"
 
 #: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
-msgstr ""
+msgstr "Miesto hraníc riadka"
 
+# inteligentné Home/End
 #: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
-#, fuzzy
-#| msgid "Enabled"
 msgid "Disabled"
-msgstr "Povolené"
+msgstr "Zakázané"
 
 #: src/plugins/editorui/tweaks.ui:547
-#, fuzzy
-#| msgid "Palette management"
 msgid "Session Management"
-msgstr "Správa paliet"
+msgstr "Správa relácií"
 
 #: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
-msgstr ""
+msgstr "Uloženie a obnovenie"
 
 #: src/plugins/editorui/tweaks.ui:554
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto-Save"
-msgstr "Automatické úkladanie"
+msgstr "Automaticky ukladať"
 
 #: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
-msgstr ""
+msgstr "Pravidelne ukladá dokument počas písania"
 
 #: src/plugins/editorui/tweaks.ui:566
-#, fuzzy
-#| msgid "Auto Save Timeout"
 msgid "Auto-Save Delay"
 msgstr "Časový interval automatického ukladania"
 
 #: src/plugins/editorui/tweaks.ui:567
-#, fuzzy
-#| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr "Počet sekúnd úpravy pred automatickým uložením"
+msgstr "Počet sekúnd, ktoré sa bude čakať pred automatickým uložením"
 
 #: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
-msgstr ""
+msgstr "Formátovať pri uložení"
 
 #: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
+"Preformátuje zdrojový kód pri ukladaní na disk. Vyžaduje registrovaný "
+"formátovač pre použitý jazyk."
 
 #: src/plugins/editorui/tweaks.ui:598
-#, fuzzy
-#| msgid "Restore cursor position"
 msgid "Restore Cursor Position"
-msgstr "Obnovenie pozície kurzora"
+msgstr "Obnoviť pozíciu kurzora"
 
 #: src/plugins/editorui/tweaks.ui:599
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
 msgid "Jump to the last position when re-opening a file"
 msgstr "Skočí na poslednú pozíciu pri opätovnom otvorení súboru"
 
 #: src/plugins/file-search/gbp-file-search-index.c:397
-#, fuzzy
-#| msgid "Open a File or Terminal"
 msgid "Open file or folder"
-msgstr "Otvorenie súboru alebo terminálu"
+msgstr "Otvorenie súboru alebo priečinka"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
-msgstr ""
+msgstr "Podobné súbory (Ctrl+Shift+O)"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
-#, fuzzy
-#| msgid "Installation Prefix"
 msgid "Installation failed"
-msgstr "Inštalačná predpona"
+msgstr "Inštalácia zlyhala"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
-#, fuzzy
-#| msgid "Installation Prefix"
 msgid "Installation complete"
-msgstr "Inštalačná predpona"
+msgstr "Inštalácia dokončená"
 
 #: src/plugins/flatpak/gbp-flatpak-client.c:460
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
-msgstr ""
+msgstr "Klient bol zatvorený"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
-#, fuzzy, c-format
-#| msgid "Failed to create translation unit: %s"
+#, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Zlyhalo vytvorenie jednotky prekladu: %s"
+msgstr "Zlyhalo odobratie manifestu flatpaku: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
