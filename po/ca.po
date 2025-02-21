@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-01-12 17:18+0000\n"
-"PO-Revision-Date: 2025-01-21 22:15+0100\n"
+"PO-Revision-Date: 2025-02-20 22:15+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -1610,7 +1610,7 @@ msgstr "Finançat per"
 
 #: src/libide/gui/ide-application-command-line.c:62
 msgid "Show the application preferences"
-msgstr "Mostra la versió de l'aplicació"
+msgstr "Mostra les preferències de l'aplicació"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "Open project in new workbench"
@@ -1714,7 +1714,7 @@ msgstr "Altres"
 
 #: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
-msgstr "Carregant el projecte \"%\""
+msgstr "S'ha carregat el projecte"
 
 #. translators: %s is replaced with the project name
 #: src/libide/gui/ide-workbench.c:1296
@@ -1898,7 +1898,7 @@ msgstr "Desfés (Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:39
 msgid "Redo (Shift+Ctrl+Z)"
-msgstr "Refer (Maj+Ctrl+Espai)"
+msgstr "Refés (Maj+Ctrl+Espai)"
 
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom"
@@ -2431,7 +2431,7 @@ msgstr "No s'han pogut enumerar els objectius de construcció: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr "Selecciona objectius de construcció"
+msgstr "Selecciona objectiu de construcció"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
@@ -2455,9 +2455,7 @@ msgstr "Aquesta selecció permet al Constructor triar el millor candidat."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr ""
-"L'entorn d'execució és l'entorn que s'utilitza per a executar la seva "
-"aplicació"
+msgstr "El contenidor utilitzat per a construir i executar la vostra aplicació"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2526,7 +2524,7 @@ msgstr "Torneu a carregar la configuració del projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
-msgstr "Selecciona objectius de construcció…"
+msgstr "Selecciona objectiu de construcció…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
@@ -2598,7 +2596,7 @@ msgstr "Projecte d'exportació"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
-msgstr "Mostra la sortida Build_ld"
+msgstr "_Mostra la sortida de la construcció"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
@@ -2864,7 +2862,7 @@ msgstr "Interfície"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
 msgid "Editor Font"
-msgstr "Editor"
+msgstr "Tipus de lletra de l'editor"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
@@ -2925,7 +2923,7 @@ msgstr "Navegar amb diàleg contextual"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr "Canviar documents mitjançant un diàleg contextual"
+msgstr "Canvia documents mitjançant un diàleg contextual"
 
 #: src/plugins/buildui/tweaks.ui:12
 #: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
@@ -3005,15 +3003,15 @@ msgstr "Emmagatzematge"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr "Fitxers encauats i artefactes"
+msgstr "Artefactes i fitxers en memòria cau"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
-"Directori usat per a desar artefactes de compilació i fitxers encauats del "
-"procés de compilació. Cal reiniciar el Constructor perquè faci efecte."
+"Directori usat per a desar artefactes de compilació i fitxers en memòria cau del "
+"procés de construcció. Cal reiniciar el Constructor perquè tingui efecte."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -3047,7 +3045,7 @@ msgstr "Mostra el registre de compilació quan comenci una nova construcció"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
-msgstr "Inicieu sessió a la consola"
+msgstr "Registra a la consola"
 
 #: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
@@ -3108,11 +3106,11 @@ msgstr "On es construeix el teu projecte"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
-msgstr "S'està indexant el codi font"
+msgstr "Dins de l'arbre font"
 
 #: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
-msgstr "Dins de l'arbre de fonts"
+msgstr "Fora de l'arbre de font"
 
 #: src/plugins/buildui/tweaks.ui:494
 msgid ""
@@ -3126,7 +3124,7 @@ msgstr ""
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
-msgstr "Obtenir dependències"
+msgstr "Obtén dependències"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
@@ -3592,7 +3590,7 @@ msgstr "Commuta el punt d'interrupció"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
 msgid "Toggle breakpoint at current line"
-msgstr "Punt de ruptura del depurador a «Main»"
+msgstr "Commuta el punt de ruptura a la línia actual"
 
 #: src/plugins/debuggerui/gtk/menus.ui:34
 msgid "Continue"
@@ -3948,7 +3946,7 @@ msgstr "Windows (CR+LF)"
 
 #: src/plugins/editorui/gtk/menus.ui:95
 msgid "Mac Classic (CR)"
-msgstr "Mac OS Classic (CR)"
+msgstr "Mac Classic (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -5689,7 +5687,7 @@ msgstr "_Crea"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
 msgid "Edit Command"
-msgstr "Ordre"
+msgstr "Edita l'ordre"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:22
 msgid "S_ave"
@@ -6286,7 +6284,7 @@ msgstr "Executa totes les proves unitàries"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr "Sol·licitar que totes les proves unitàries s'estiguin executant"
+msgstr "Sol·licita que totes les proves unitàries s'estiguin executant"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
