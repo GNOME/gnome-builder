@@ -1,14 +1,14 @@
 # Georgian translation for gnome-builder.
 # Copyright (C) 2023, gnome-builder authors
 # This file is distributed under the same license as the gnome-builder package.
-# Ekaterine Papava <papava.e@gtu.ge>, 2023-2024.
+# Ekaterine Papava <papava.e@gtu.ge>, 2023-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-08-10 14:55+0000\n"
-"PO-Revision-Date: 2024-08-23 11:39+0200\n"
+"POT-Creation-Date: 2025-02-12 20:13+0000\n"
+"PO-Revision-Date: 2025-02-23 07:04+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -16,17 +16,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:40
-#: src/libide/editor/ide-editor-workspace.ui:63
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "აგების პროგრამა GNOME-სთვის"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "პროექტის გახსნა"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "ახალი პროექტი"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "რეპოზიტორიის დაკლონვა"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "ახალი რედაქტორის სამუშაო სივრცე"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
@@ -34,8 +61,6 @@ msgstr "აპლიკაციის შექმნა GNOME-სთვის"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
-#| msgid "Christian Hergert, et al."
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -143,31 +168,31 @@ msgstr ""
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "სწრაფი არაზუსტი ტექსტის ძებნა ფაილებში და სიმბოლოებში"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
-msgid "Quickly access your projects"
-msgstr "სწრაფი წვდომა თქვენს პროექტებთან"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
-msgid "Create new projects from a variety of templates"
-msgstr "შექმენით ახალი პროექტები სხვადასხვა ნიმუშებიდან"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
-msgid "Integration with Git to clone your projects"
-msgstr "ინტეგრაცია Git-თან თქვენი პროექტების დასაკლონად"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
-msgid "The source code editor"
-msgstr "საწყისი კოდის რედაქტორი"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
-msgid "Fast global fuzzy search"
-msgstr "სწრაფი გლობალური ბუნდოვანი ძებნა"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
 msgid "Debug with the GNU debugger"
 msgstr "GNU debugger-ით გამართვა"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+msgid "Quickly access your projects"
+msgstr "სწრაფი წვდომა თქვენს პროექტებთან"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+msgid "Create new projects from a variety of templates"
+msgstr "შექმენით ახალი პროექტები სხვადასხვა ნიმუშებიდან"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+msgid "Integration with Git to clone your projects"
+msgstr "ინტეგრაცია Git-თან თქვენი პროექტების დასაკლონად"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+msgid "The source code editor"
+msgstr "საწყისი კოდის რედაქტორი"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+msgid "Fast global fuzzy search"
+msgstr "სწრაფი გლობალური ბუნდოვანი ძებნა"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
 msgstr "ფაილის მეტი ნაწილის სანახავად მინირუკის გამოყენება შეგიძლიათ"
 
@@ -706,34 +731,7 @@ msgstr "მართლწერის შემოწმება"
 msgid "Automatically check spelling within documents"
 msgstr "დოკუმენტებში მართლწერის ავტომატური შემოწმება"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "აგების პროგრამა GNOME-სთვის"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Build;Develop;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "პროექტის გახსნა"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "ახალი პროექტი"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
-msgid "Clone Repository"
-msgstr "რეპოზიტორიის დაკლონვა"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "ახალი რედაქტორის სამუშაო სივრცე"
-
-#: src/libide/code/ide-buffer.c:3755
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "მიმდინარე ენას სიმბოლოს ამომხსნელი აკლია."
 
@@ -778,19 +776,16 @@ msgid "Projects"
 msgstr "პროექტები"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:524
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:105
 msgid "_Cancel"
 msgstr "_გაუქმება"
 
@@ -799,7 +794,7 @@ msgid "A suitable debugger could not be found."
 msgstr "შესაბამისი გამმართველი ვერ ვიპოვე."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1560
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
 msgstr "ფაილის გახსნა…"
 
@@ -861,12 +856,12 @@ msgstr "გვერდები"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -884,8 +879,8 @@ msgstr "ძებნა და ჩანაცვლება"
 msgid "Documents"
 msgstr "დოკუმენტები"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "მონიშნული"
 
@@ -964,28 +959,11 @@ msgstr "ბეჭდვის შეცდომა: %s"
 msgid "Failed to format selection: %s"
 msgstr "მონიშნულის ფორმატის შეცდომა: %s"
 
-#: src/libide/editor/ide-editor-page.c:1136
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:101
+#: src/libide/editor/ide-editor-page.c:1139
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "ფაილის შენახვა"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
-msgid "Save"
-msgstr "შენახვა"
-
-#: src/libide/editor/ide-editor-page.c:1139
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-msgid "Cancel"
-msgstr "გაუქმენა"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
@@ -1033,37 +1011,20 @@ msgstr "_რეგისტრზე-დამოკიდებული"
 msgid "Match Whole Words"
 msgstr "სიტყვების სრული დამთხვევა"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "Unix/Linux (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "Mac OS Classic (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "Windows (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "ავტომატურად აღმოჩენილი"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "სიმბოლოების კოდირება:"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "ხაზის დაბოლოება:"
-
-#: src/libide/editor/ide-editor-utils.c:270
+#: src/libide/editor/ide-editor-utils.c:140
 #: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "ენა"
 
-#: src/libide/editor/ide-editor-workspace.ui:107
-#: src/libide/gui/ide-primary-workspace.ui:117
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
+msgid "Search (Ctrl+Enter)"
+msgstr "ძებნა (Ctrl+Enter)"
+
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "ქვედა პანელის გადართვა (Ctrl+F9)"
 
@@ -1077,17 +1038,17 @@ msgstr "აგების ფაიფლაინის ინიციალ�
 msgid "Failed to get device information: %s"
 msgstr "მოწყობილობის ინფორმაციის მიღება ჩავარდა: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
+#: src/libide/foundry/ide-config-manager.c:539
 msgid "Active Configuration"
 msgstr "აქტიური კონფიგურაცია"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, c-format
 msgid "Configuration %s changed"
 msgstr "კონფიგურაცია %s შეიცვალა"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1097,7 +1058,7 @@ msgstr ""
 "ფორმატი აქვს."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr "აქტიური კონფიგურაცია დაყენებულია მნიშვნელობაზე \"%s\""
@@ -1276,7 +1237,7 @@ msgid "Application exited with error: %s"
 msgstr "აპლიკაცია დასრულდა შეცდომით: %s"
 
 #: src/libide/foundry/ide-run-manager.c:893
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "აპლიკაცია დასრულდა"
 
@@ -1373,49 +1334,48 @@ msgstr "აირჩიეთ _საქაღალდე…"
 msgid "Directory"
 msgstr "საქაღალდე"
 
-#: src/libide/greeter/ide-greeter-workspace.c:222
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/greeter/ide-greeter-workspace.c:223
+#: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:333
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "პროექტის ჩატვირთვის შეცდომა"
 
-#: src/libide/greeter/ide-greeter-workspace.c:335
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/libide/greeter/ide-greeter-workspace.c:336
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_დახურვა"
 
-#: src/libide/greeter/ide-greeter-workspace.c:521
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
 msgstr "წავშალო პროექტის კოდი?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr "თქვენი კომპიუტერიდან პროექტის კოდის წაშლა შეუქცევადი ქმედებაა."
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
 msgstr "პროექტის კოდის _წაშლა"
 
-#: src/libide/greeter/ide-greeter-workspace.c:619
-#: src/libide/greeter/ide-greeter-workspace.c:658
+#: src/libide/greeter/ide-greeter-workspace.c:620
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr "აირციეთ პროექტის საქაღალდე"
 
-#: src/libide/greeter/ide-greeter-workspace.c:624
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr "აირჩიეთ პროექტის ფაილი"
 
-#: src/libide/greeter/ide-greeter-workspace.c:663
-#: src/libide/gui/ide-workbench.c:1563
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "_გახსნა"
 
-#: src/libide/greeter/ide-greeter-workspace.c:674
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr "პროექტის ყველა ტიპი"
 
@@ -1458,23 +1418,6 @@ msgstr "%2$s-ში თვისების (%1$s) აღმოჩენა შ
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "შეცდომა va_list-ის მნიშვნელობის მიღებისას: %s"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "გახსნა"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Select"
-msgstr "აირჩიეთ"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "არჩევა…"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
@@ -1536,30 +1479,30 @@ msgstr "ძებნა"
 msgid "Search for anything"
 msgstr "მოძებნეთ, რაც გნებავთ"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "მოსაძებნად აკრიფეთ"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr "თქვენი მოთხოვნის პრეფიქსად მიწერა ერთ-ერთი ფილტრის შედეგისთვის"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "ფაილები"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "სიმბოლოები"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "დოკუმენტაცია"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "ქმედებები"
@@ -1613,7 +1556,7 @@ msgstr "ვების ბრაუზინგი"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "ტერმინალი"
@@ -1698,19 +1641,14 @@ msgstr "HTML-ის ჩატვირთვის შეცდომა. WebKit
 msgid "Invalid configuration"
 msgstr "არასწორი კონფიგურაცია"
 
-#: src/libide/gui/ide-primary-workspace.ui:49
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "მარცხენა პანელის გადართვა (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:84
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "მარჯვენა პანელის გადართვა"
-
-#: src/libide/gui/ide-primary-workspace.ui:92
-#: src/libide/gui/ide-primary-workspace.ui:139
-msgid "Search (Ctrl+Enter)"
-msgstr "ძებნა (Ctrl+Enter)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1739,17 +1677,21 @@ msgstr "პროექტის გაშვება"
 msgid "Other"
 msgstr "სხვა"
 
-#: src/libide/gui/ide-workbench.c:1076
+#: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
 msgstr "პროექტი ჩატვირთულია"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
 msgstr "იტვირთება პროექტი \"%s\""
 
-#: src/libide/gui/ide-workspace.c:1688
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "გახსნა"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
 msgstr "არსებობს არ-შენახული დოკუმენტები"
 
@@ -1773,19 +1715,19 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u პაკეტის დაყენება"
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "ოპერაცია გაუქმდა"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1733
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "ენის სერვერის ინიციალიზაცია ჩავარდა: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr "ენის სერვერთან მიერთება არ არსებობს"
 
@@ -1823,7 +1765,7 @@ msgstr "ენის სერვერები"
 msgid "Devices & Simulators"
 msgstr "მოწყობილობები და სიმულატორები"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "დიაგნოსტიკა"
@@ -1939,77 +1881,81 @@ msgid "Zoom In (Ctrl++)"
 msgstr "გადიდება (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "ემოჯის ჩასმა"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "მონიშნული"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "მონიშნე _ყველა"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "ფორმატირება"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "_მაღალ რეგისტრში გადაყვანა"
 
-#: src/libide/sourceview/gtk/menus.ui:85
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr "მონიშნული ტექსტის მაღალ რეგისტრში გადაყვანა"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "პატარა ასოებში გადაყვანა"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr "მონიშნული ტექსტის დაბალ რეგისტრში გადაყვანა"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr "სიმბოლოების ზომის ინვერსია"
 
-#: src/libide/sourceview/gtk/menus.ui:99
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr "მონიშნული ტექსტის რეგისტრის ინვერსია"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "სათაურის ზომა"
 
-#: src/libide/sourceview/gtk/menus.ui:106
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr "მონიშნული ტექსტის ტიტულში გადაყვანა"
 
-#: src/libide/sourceview/gtk/menus.ui:115
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "მონიშნეთ _ხაზი"
 
-#: src/libide/sourceview/gtk/menus.ui:120
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "ხაზის _წაშლა"
 
-#: src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "ხაზების შეერთება"
 
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "ხაზების დალაგება"
 
-#: src/libide/sourceview/gtk/menus.ui:136
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "ხაზის _დუბლირება"
 
-#: src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "ფორმატირება"
 
-#: src/libide/sourceview/gtk/menus.ui:154
-#: src/libide/sourceview/gtk/menus.ui:158
-#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2066,9 +2012,16 @@ msgstr "მონიშვნის _მოხსნა"
 msgid "Copied to clipboard"
 msgstr "დაკოპირდა გაცვლის ბაფერში"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "ტერმინალის შემცველობის შენახვა, როგორც"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "შენახვა"
 
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
@@ -2120,7 +2073,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:829
+#: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2155,6 +2108,10 @@ msgstr "VS Code"
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
 msgstr "Monokai Soda"
+
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr "Ubuntu-ის კლონი"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2202,9 +2159,17 @@ msgstr "<i>ჩატვირთვა</i>"
 msgid "Empty"
 msgstr "ცარიელი"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
 msgstr "პროექტების საქაღალდე"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "აირჩიეთ"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2317,16 +2282,11 @@ msgstr "კოპირება"
 msgid "Remove"
 msgstr "წაშლა"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:327
-#: src/plugins/testui/gbp-testui-output-panel.c:104
-msgid "_Save"
-msgstr "შ_ეინახე"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "აგების გამონატანი"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:397
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "აგების გამონატანი (Shift+Ctrl+L)"
 
@@ -2423,20 +2383,20 @@ msgstr "გაფრთხილებები (%u)"
 msgid "Errors (%u)"
 msgstr "შეცდომები (%u)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "გაზიარებული"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr "სტატიკური"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 msgid "Executable"
 msgstr "გასაშვები"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "სამიზნეების აგება ჩავარდა: %s"
@@ -2487,7 +2447,6 @@ msgid "Make configuration active and reload build pipeline"
 msgstr "კონფიგურაციის გააქტიურება და აგების კონვეიერის თავიდან ჩატვირთვა"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "წაშლა"
 
@@ -3279,7 +3238,7 @@ msgstr "პროექტის ჩატვირთვა ჩავარდ�
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "საწყისი კოდის ინდექსი"
 
@@ -3307,7 +3266,7 @@ msgstr "გამოსახულების სახით კოპირ�
 msgid "Copy selected text as an image"
 msgstr "მონიშნული ტექსტის გამოსახულების სახით კოპირება"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "შეიძლება შეგეშალათ \"%s\". გულისხმობდით \"%s\"-ს?"
@@ -3330,11 +3289,11 @@ msgstr "_მორგება"
 msgid "Loading…"
 msgstr "იტვირთება…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
 msgstr "კოდის ქმედებები ხელმისაწვდომი არაა"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr "კოდის ქმედების შეცდომა"
 
@@ -3460,12 +3419,12 @@ msgstr "ფუნქციის პროტოტიპების გად�
 msgid "Display the project creation guide"
 msgstr "პროექტის შექმნის სახელმძღვანელოს ჩვენება"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "მდებარეობის არჩევა"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
 msgstr "პროექტის შექმნის შეცდომა"
 
@@ -3505,9 +3464,9 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:747
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "მდებარეობა"
 
@@ -3550,7 +3509,7 @@ msgstr ""
 "ძებნა, ავტოდასრულება და სიმბოლოების ინფორმაცია შეზღუდულია, სანამ Ctags "
 "დაინდექსება დასრულდება."
 
-#: src/plugins/ctags/ide-ctags-service.c:980
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr "საწყისი კოდის დაინდექსება (შეჩერებულია)"
 
@@ -3848,7 +3807,7 @@ msgstr "Dub Run"
 msgid "No file was provided."
 msgstr "ფაილები მითითებული არაა."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "მინიმალური რედაქტორის ინტერფეისის გამოყენება"
 
@@ -3966,7 +3925,7 @@ msgstr "ახალი ჩარჩოში გახსნა"
 msgid "Open in New Workspace…"
 msgstr "ახალ სამუშაო მაგიდაზე გახსნა…"
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "შენახვა როგორც"
 
@@ -4498,11 +4457,11 @@ msgstr "ფაილის ან საქაღალდის გახსნ
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "მსგავსი ფაილები (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "დაყენების შეცდომა"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "დაყენება დასრულებულია"
 
@@ -4534,14 +4493,12 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "სახელი"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 msgid "Architecture"
 msgstr "არქიტექტურა"
 
@@ -4554,40 +4511,40 @@ msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder ეძებს შესაბამის SDK-ის გაფართოებებს, რომ თქვენი პროექტი ააგოს"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Flatpak-ის სამუშაო გარემოს შექმნა"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "წაიშლება flatpak-ის შუალედური, მოძველებული საქაღალდე: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:443
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr "აგების საქაღალდის მომზადება"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:503
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr "დამოკიდებულებების გადმოწერა"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:579
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "დამოკიდებულებების აგება"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:639
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr "Flatpak-ის აგების დასრულება"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:689
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr "მიმდინარეობს შუალედური საქაღალდის გატანა"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:779
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr "Flatpak-ის პაკეტის შექმნა"
 
@@ -4697,7 +4654,7 @@ msgstr "ვერ დავაყენე AMEND და GPG_SIGN ალმებ
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "გადაცემის ხელმოწერა შეუძლებელია GPG_KEY_ID-ის გარეშე"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "სამუშაო საქაღალდის გარეთ ფაილების თვალყურის დევნება შეუძლებელია"
@@ -4766,7 +4723,7 @@ msgstr "სწორი git URL აუცილებელია"
 msgid "Authorship"
 msgstr "ავტორობა"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "ელ-ფოსტა"
 
@@ -4783,35 +4740,35 @@ msgstr "პროექტის საწყისი მომზადებ�
 msgid "Gradle Run"
 msgstr "Gradle Run"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr "ახალი მიგებების ფანჯრის ჩვენება"
 
-#: src/plugins/grep/gbp-grep-panel.c:763
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
 msgstr "დამთხვევა"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "კონტური"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "%s-ში მოძებნა"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "%s-ში ჩანაცვლება"
 
-#: src/plugins/grep/gbp-grep-panel.c:851
+#: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
 msgstr "პროექტში მოძებნა"
 
-#: src/plugins/grep/gbp-grep-panel.c:852
+#: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
 msgstr "პროექტში ჩანაცვლება"
 
@@ -4978,7 +4935,6 @@ msgid "Scanning jhbuild for new documentation"
 msgstr "მიმდინარეობს jhbuild-ის ძებნა ახალი დოკუმენტაციისთვის"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#| msgid "GNOME Builder"
 msgid "GNOME Nightly"
 msgstr "GNOME Nightly"
 
@@ -5100,7 +5056,7 @@ msgstr "ძებნის წინა შედეგზე გადასვ
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr "Meson-ის ინტროსპექციის ჩატვირთვა"
 
@@ -5117,134 +5073,75 @@ msgstr "პროგრამირების გარემოს კეშ�
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr "მოწოდებული ხელსაწყოს გარეშე"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr "Sysroot-ის სახელი."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr "Sysroot სისტემის არქიტექტურა."
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "ხელსაწყოს დამატება:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "კომპილატორი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr "პრეპროცესორი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "არქივატორი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr "მიმბმელი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr "სტრიპი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr "გაშვებადი გადამყვანი"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr "პაკეტის მორგება"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "ნებისმიერი ენა"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "Python"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "Vala"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr "Fortran"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-msgid "D"
-msgstr "D"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "ხელსაწყოს დამატება"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr "ხელსაწყოების ნაკრების წაშლა"
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr "ხელსაწყოს წაშლა"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "კომპილატორი"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "პრეპროცესორი"
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "არქივატორი"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "მიმბმელი"
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "სტრიპი"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "გაშვებადი გადამყვანი"
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "პაკეტის მორგება"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "GNOME-ის აპლიკაცია"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Meson-ზე დაფუძნებული GTK 4 და libadwaita პროექტი"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
 msgstr "GTK 4 აპლიკაცია"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr "Meson-ზე დაფუძნებული GTK 4 პროექტი"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "გაზიარებული ბიბლიოთეკა"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
 msgstr "Meson-ზე დაფუძნებული პროექტი გაზიარებული ბიბლიოთეკისთვის"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr "ბრძანების სტრიქონის ხელსაწყო"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr "Meson-ზე დაფუძნებული პროექტი ბრძანების სტრიქონის პროგრამისთვის"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
 msgstr "ცარიელი Meson-ის პროექტი"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
 msgstr "ცარიელი Meson-ის პროექტის ჩონჩხი"
 
@@ -5675,6 +5572,10 @@ msgstr "%s-ის წაშლა\n"
 msgid "Removing Files…"
 msgstr "ფაილების წაშლა…"
 
+#: src/plugins/recent/gbp-recent-section.c:612
+msgid "Show More"
+msgstr "მეტის ჩვენება"
+
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
 msgstr "ახლახანს გახსნილი პროექტები"
@@ -5723,7 +5624,7 @@ msgstr "უსახელო ბრძანება"
 msgid "Set Shortcut"
 msgstr "მალსახმობის დაყენება"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
 msgstr "აირჩიეთ სამუშაო საქაღალდე"
 
@@ -6188,14 +6089,14 @@ msgstr ""
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
-msgid "Application started at %s\r\n"
-msgstr "აპლიკაციის გაშვების დრო: %s\n"
+msgid "Application started at %s"
+msgstr "აპლიკაციის გაშვების დრო: %s"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr "აპლიკაციის გამონატანი"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
 msgstr "პროცესი დასრულდა"
 
@@ -6287,7 +6188,7 @@ msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "ისტორიაში დამახსოვრებული მაქსიმალური ხაზების რაოდენობა აჩოჩების შეზღუდვისას"
 
-#: src/plugins/testui/gbp-testui-output-panel.c:148
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
 msgstr "მოდულური ტექსტების გამოტანილი ინფორმაცია"
 
@@ -6470,7 +6371,7 @@ msgstr "მეხსიერების გაჟონვების ძე�
 msgid "Begin cloning project from URI"
 msgstr "პროექტის დაკლონვის დაწყება მითითებული URI-დან"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr "რეპოზიტორიის კლონირებისას აღმოჩენილია ჩავარდნა."
 
@@ -6486,28 +6387,28 @@ msgstr "აირჩიეთ სხვა ბრენჩი"
 msgid "Branches"
 msgstr "ბრენჩი"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "შეიყვანეთ დასაკლონი პროექტის პროგრამული პროექტის შემცველი რეპოზიტორიის URL."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "რეპოზიტორია ახალ ქვესაქაღალდეში დაიკლონება."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "ავტორის დეტალები"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 "შეგიძლიათ მიუთითოთ ავტორობის ინფორმაცია ნაგულისხმევი მნიშვნელობების "
 "გადასაფარად."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "მდგომარეობა"
 
@@ -6596,6 +6497,72 @@ msgstr "XML ხის შექმნა ჩავარდა."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "დასამუშავებლად ფაილი ლოკალურად უნდა შეინახოთ."
+
+#~ msgid "Cancel"
+#~ msgstr "გაუქმენა"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "Unix/Linux (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "Mac OS Classic (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "Windows (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "ავტომატურად აღმოჩენილი"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "სიმბოლოების კოდირება:"
+
+#~ msgid "Line Ending:"
+#~ msgstr "ხაზის დაბოლოება:"
+
+#~ msgid "Browse…"
+#~ msgstr "არჩევა…"
+
+#~ msgid "_Save"
+#~ msgstr "შ_ეინახე"
+
+#~ msgid "No Provided Tool"
+#~ msgstr "მოწოდებული ხელსაწყოს გარეშე"
+
+#~ msgid "A name to identify the sysroot."
+#~ msgstr "Sysroot-ის სახელი."
+
+#~ msgid "The system architecture of the sysroot."
+#~ msgstr "Sysroot სისტემის არქიტექტურა."
+
+#~ msgid "Add Tool:"
+#~ msgstr "ხელსაწყოს დამატება:"
+
+#~ msgid "Any language"
+#~ msgstr "ნებისმიერი ენა"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Vala"
+#~ msgstr "Vala"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Add Tool"
+#~ msgstr "ხელსაწყოს დამატება"
+
+#~ msgid "Delete Toolchain"
+#~ msgstr "ხელსაწყოების ნაკრების წაშლა"
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "პროგრამისტის სამუშაო გარემო GNOME-სთვის"
@@ -7004,10 +6971,6 @@ msgstr "დასამუშავებლად ფაილი ლოკა�
 #~ msgctxt "shortcut window"
 #~ msgid "General"
 #~ msgstr "ზოგადი"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show help"
-#~ msgstr "დახმარების ჩვენება"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Preferences"
