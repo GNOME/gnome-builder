@@ -1,14 +1,15 @@
 # Bulgarian translation of gnome-builder po-file.
-# Copyright (C) 2024 twlvnn kraftwerk
+# Copyright (C) 2024 twlvnn kraftwerk <kraft_werk@tutanota.com>.
+# Copyright (C) 2025 Alexander Shopov <ash@kambanaria.org>.
 # This file is distributed under the same license as the gnome-builder package.
 # twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024.
-#
+# Alexander Shopov <ash@kambanaria.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-09-15 18:04+0000\n"
-"PO-Revision-Date: 2024-09-15 20:51+0200\n"
+"POT-Creation-Date: 2025-02-12 20:13+0000\n"
+"PO-Revision-Date: 2025-02-23 10:05+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -18,15 +19,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Gtranslator 46.1\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:45
-#: src/libide/editor/ide-editor-workspace.ui:87
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Разработчик"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Създавайте софтуер за GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr ""
+"създаване;разработван;изграждане;компилиране;препроцесор;свързване;иде;ide;"
+"build;develop;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Отваряне на проект"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Създаване на нов проект"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Клониране на хранилище"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Ново работно пространство на редактора"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
@@ -34,7 +64,6 @@ msgstr "Създаване на програми за GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -715,36 +744,7 @@ msgstr "Проверка на правописа"
 msgid "Automatically check spelling within documents"
 msgstr "Автоматична проверка на правописа в документите"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Създавайте софтуер за GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr ""
-"създаване;разработван;изграждане;компилиране;препроцесор;свързване;иде;ide;"
-"build;develop;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Отваряне на проект"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Създаване на нов проект"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
-msgid "Clone Repository"
-msgstr "Клониране на хранилище"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "Ново работно пространство на редактора"
-
-#: src/libide/code/ide-buffer.c:3755
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "Липсва програма за анализ на символите в текущия език."
 
@@ -789,8 +789,8 @@ msgid "Projects"
 msgstr "Проекти"
 
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:524
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
@@ -869,12 +869,12 @@ msgstr "Страници"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -892,8 +892,8 @@ msgstr "Търсене и замяна"
 msgid "Documents"
 msgstr "Документи"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "Избор"
 
@@ -1029,15 +1029,15 @@ msgstr "Съвпадане на цели думи"
 msgid "Language"
 msgstr "Език"
 
-#: src/libide/editor/ide-editor-workspace.ui:52
-#: src/libide/editor/ide-editor-workspace.ui:82
-#: src/libide/gui/ide-primary-workspace.ui:43
-#: src/libide/gui/ide-primary-workspace.ui:132
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
 msgid "Search (Ctrl+Enter)"
 msgstr "Търсене (Ctrl+Enter)"
 
-#: src/libide/editor/ide-editor-workspace.ui:136
-#: src/libide/gui/ide-primary-workspace.ui:116
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Превключване на долния панел (Ctrl+F9)"
 
@@ -1252,7 +1252,7 @@ msgid "Application exited with error: %s"
 msgstr "Програмата завърши работа с грешка: %s"
 
 #: src/libide/foundry/ide-run-manager.c:893
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Програмата завърши работа"
 
@@ -1349,48 +1349,48 @@ msgstr "Избиране на _папка…"
 msgid "Directory"
 msgstr "Папка"
 
-#: src/libide/greeter/ide-greeter-workspace.c:222
+#: src/libide/greeter/ide-greeter-workspace.c:223
 #: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "„Разработчик“ — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:333
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "Проектът не може да се зареди"
 
-#: src/libide/greeter/ide-greeter-workspace.c:335
+#: src/libide/greeter/ide-greeter-workspace.c:336
 #: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Затваряне"
 
-#: src/libide/greeter/ide-greeter-workspace.c:521
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
 msgstr "Изтриване на източниците на проекта?"
 
-#: src/libide/greeter/ide-greeter-workspace.c:522
+#: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr "Изтриването на изходния код на проекта от компютъра ви е необратимо."
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
 msgstr "_Изтриване на изходния код на проекта"
 
-#: src/libide/greeter/ide-greeter-workspace.c:619
-#: src/libide/greeter/ide-greeter-workspace.c:658
+#: src/libide/greeter/ide-greeter-workspace.c:620
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr "Избиране на папка на проекта"
 
-#: src/libide/greeter/ide-greeter-workspace.c:624
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr "Избиране на файл на проекта"
 
-#: src/libide/greeter/ide-greeter-workspace.c:663
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "_Отваряне"
 
-#: src/libide/greeter/ide-greeter-workspace.c:674
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr "Всички видове проекти"
 
@@ -1495,31 +1495,31 @@ msgstr "Търсене"
 msgid "Search for anything"
 msgstr "Търсете каквото и да е"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "Въведете фраза за търсене"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
 "Започнете заявката с някой от следните варианти, за да филтрирате резултатите"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Файлове"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "Символи"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "Документация"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Действия"
@@ -1573,7 +1573,7 @@ msgstr "Сърфиране в Интернет"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Терминал"
@@ -1670,11 +1670,11 @@ msgstr "HTML не може да се зареди. Липсва поддръжк
 msgid "Invalid configuration"
 msgstr "Неправилни настройки"
 
-#: src/libide/gui/ide-primary-workspace.ui:55
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "Превключване на левия панел (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:96
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Превключване на десния панел"
@@ -1745,19 +1745,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Инсталиране на %u пакет"
 msgstr[1] "Инсталиране на %u пакета"
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "Операцията е отменена"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1733
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Сървърът за езика не може да се стартира: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr "Няма връзка със сървъра за езика"
 
@@ -1795,7 +1795,7 @@ msgstr "Сървъри за езици"
 msgid "Devices & Simulators"
 msgstr "Устройства и симулатори"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Диагностика"
@@ -1911,77 +1911,81 @@ msgid "Zoom In (Ctrl++)"
 msgstr "Увеличаване (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "Вмъкване на емоджи"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "_Избор"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "Форматиране"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "Да са _главни"
 
-#: src/libide/sourceview/gtk/menus.ui:85
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr "Преобразуване на избрания текст в главни букви"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "Да са _малки"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr "Преобразуване на избрания текст в малки букви"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr "_Обръщане на регистъра"
 
-#: src/libide/sourceview/gtk/menus.ui:99
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr "Обръщане на регистъра на избрания текст"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "_Заглавни начални букви"
 
-#: src/libide/sourceview/gtk/menus.ui:106
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr "Преобразуване на избрания текст в заглавни начални букви"
 
-#: src/libide/sourceview/gtk/menus.ui:115
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "Избиране на _реда"
 
-#: src/libide/sourceview/gtk/menus.ui:120
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "_Изтриване на реда"
 
-#: src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "_Свързване на редовете"
 
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "Под_реждане на редовете"
 
-#: src/libide/sourceview/gtk/menus.ui:136
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "Д_ублиране на реда"
 
-#: src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "_Форматиране"
 
-#: src/libide/sourceview/gtk/menus.ui:154
-#: src/libide/sourceview/gtk/menus.ui:158
-#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2101,7 +2105,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:882
+#: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2136,6 +2140,10 @@ msgstr "VS Code"
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
 msgstr "Monokai Soda"
+
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr "Clone на Ubuntu"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2405,20 +2413,20 @@ msgstr "Предупреждения (%u)"
 msgid "Errors (%u)"
 msgstr "Грешки (%u)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "Споделен"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr "Статичен"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 msgid "Executable"
 msgstr "Изпълним файл"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "Целите за изграждане не може да се изброят: %s"
@@ -3268,7 +3276,7 @@ msgstr "Проектът не може да се зареди: %s"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "Индексиране на изходния код"
 
@@ -3298,7 +3306,7 @@ msgstr "Копиране като изображение"
 msgid "Copy selected text as an image"
 msgstr "Копиране на избрания текст като изображение"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Възможна правописна грешка в „%s“. Да нямате в предвид „%s“?"
@@ -3321,11 +3329,11 @@ msgstr "_Прилагане"
 msgid "Loading…"
 msgstr "Зареждане…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
 msgstr "Няма налични действия по кода"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr "Неуспешно действие по кода"
 
@@ -3500,9 +3508,9 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:747
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "Местоположение"
 
@@ -3545,7 +3553,7 @@ msgstr ""
 "Търсенето, автоматичното дописване и информацията за символите може да бъдат "
 "ограничени до завършването на индексирането със Ctags."
 
-#: src/plugins/ctags/ide-ctags-service.c:980
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr "Индексиране на изходния код (на пауза)"
 
@@ -3843,7 +3851,7 @@ msgstr "Dub Run"
 msgid "No file was provided."
 msgstr "Не е предоставен файл."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "Минимален интерфейс на редактора"
 
@@ -4495,11 +4503,11 @@ msgstr "Отваряне на файл или папка"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Подобни файлове (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "Инсталирането е неуспешно"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "Инсталирането е завършено"
 
@@ -4532,7 +4540,7 @@ msgstr ""
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "Име"
 
@@ -4550,40 +4558,40 @@ msgid ""
 msgstr ""
 "„Разработчик“ търси подходящите разширения за SDK, за да изгради проекта ви."
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Създаване на работно пространство за flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr "Премахване на остаряла папка-чернова за flatpak: %s"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:443
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr "Подготвяне на папката за изграждане"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:503
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr "Изтегляне на зависимостите"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:579
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "Изграждане на зависимостите"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:639
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr "Довършване на изграждането за flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:689
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr "Изнасяне на папката-чернова"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:779
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr "Създаване на пакет за flatpak"
 
@@ -4692,7 +4700,7 @@ msgstr "Флаговете „AMEND“ и „GPG_SIGN“ не може да се
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Подаването не може да се подпише без „GPG_KEY_ID“"
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr "Файлове извън работната папка не може да се наблюдават"
@@ -4761,7 +4769,7 @@ msgstr "Необходим е правилен адрес за Git"
 msgid "Authorship"
 msgstr "Автор"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "Е-поща"
 
@@ -4778,35 +4786,35 @@ msgstr "Подготвяне на проекта"
 msgid "Gradle Run"
 msgstr "Gradle Run"
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr "Показване на нов прозорец за посрещане"
 
-#: src/plugins/grep/gbp-grep-panel.c:763
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
 msgstr "Съвпадение"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "Път"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "_Търсене в „%s“"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Заместване в „%s“"
 
-#: src/plugins/grep/gbp-grep-panel.c:851
+#: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
 msgstr "Търсене в проекта"
 
-#: src/plugins/grep/gbp-grep-panel.c:852
+#: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
 msgstr "Заместване в проекта"
 
@@ -5613,6 +5621,10 @@ msgstr "Премахване на „%s“\n"
 msgid "Removing Files…"
 msgstr "Премахване на файлове…"
 
+#: src/plugins/recent/gbp-recent-section.c:612
+msgid "Show More"
+msgstr "Още"
+
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
 msgstr "Скоро ползвани проекти"
@@ -6135,14 +6147,14 @@ msgstr ""
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
-msgid "Application started at %s\r\n"
-msgstr "Програмата стартира на %s\n"
+msgid "Application started at %s"
+msgstr "Програмата стартира на %s"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr "Изход от програмата"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
 msgstr "Процесът завърши"
 
@@ -6434,7 +6446,7 @@ msgstr "Избор на друг клон"
 msgid "Branches"
 msgstr "Клони"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
@@ -6442,21 +6454,21 @@ msgstr ""
 "Въведете адреса на хранилището за изходния код на проекта, който искате да "
 "клонирате."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "Хранилището ще се клонира в нова подпапка."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "Подробности за автора"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 "Може да посочите информация за авторството, за да отмените стандартните "
 "настройките."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "Състояние"
 
@@ -6545,115 +6557,3 @@ msgstr "Дървото на XML не може да се създаде."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файлът трябва да бъде запазен локално, за да се анализира."
-
-#~ msgid "An IDE for GNOME"
-#~ msgstr "Среда за разработка за GNOME"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "Инспектор на D-Bus"
-
-#~ msgid "Cancel"
-#~ msgstr "Отказване"
-
-#~ msgid "Unix/Linux (LF)"
-#~ msgstr "Unix/Linux (LF)"
-
-#~ msgid "Mac OS Classic (CR)"
-#~ msgstr "Mac OS Classic (CR)"
-
-#~ msgid "Windows (CR+LF)"
-#~ msgstr "Windows (CR+LF)"
-
-#~ msgid "Automatically Detected"
-#~ msgstr "Автоматично откриване"
-
-#~ msgid "Character Encoding:"
-#~ msgstr "Кодиране на знаците:"
-
-#~ msgid "Line Ending:"
-#~ msgstr "Край на ред:"
-
-#~ msgid "Browse…"
-#~ msgstr "Разглеждане…"
-
-#~ msgid "_Everything"
-#~ msgstr "_Всичко"
-
-#~ msgid "_Actions"
-#~ msgstr "_Действия"
-
-#~ msgid "_Commands"
-#~ msgstr "_Команди"
-
-#~ msgid "_Files"
-#~ msgstr "_Файлове"
-
-#~ msgid "Christian Hergert, et al."
-#~ msgstr "Christian Hergert и др."
-
-#~ msgid "Allow JavaScript"
-#~ msgstr "Позволяване на JavaScript"
-
-#~ msgid "_Save"
-#~ msgstr "_Запазване"
-
-#~ msgid "Display D-Bus inspector"
-#~ msgstr "Показване на инспектора на D-Bus"
-
-#~ msgid "D-Spy"
-#~ msgstr "D-Spy"
-
-#, c-format
-#~ msgid "The operation has been canceled"
-#~ msgstr "Операцията е отменена"
-
-#~ msgid "No Provided Tool"
-#~ msgstr "Няма предоставен инструмент"
-
-#~ msgid "A name to identify the sysroot."
-#~ msgstr "Име за идентифициране на sysroot."
-
-#~ msgid "The system architecture of the sysroot."
-#~ msgstr "Системната архитектура на sysroot."
-
-#~ msgid "Add Tool:"
-#~ msgstr "Добавяне на инструмент:"
-
-#~ msgid "Any language"
-#~ msgstr "Всякакъв език"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "C++"
-#~ msgstr "C++"
-
-#~ msgid "Python"
-#~ msgstr "Python"
-
-#~ msgid "Vala"
-#~ msgstr "Vala"
-
-#~ msgid "Fortran"
-#~ msgstr "Fortran"
-
-#~ msgid "D"
-#~ msgstr "D"
-
-#~ msgid "Add Tool"
-#~ msgstr "Добавяне на инструмент"
-
-#~ msgid "Delete Toolchain"
-#~ msgstr "Изтриване на инструментариум"
-
-#~ msgid "Enchant 2"
-#~ msgstr "Enchant 2"
-
-#~ msgid "Add to Dictionary"
-#~ msgstr "Добавяне в речника"
-
-#~ msgid "Ignore"
-#~ msgstr "Прескачане"
-
-#~ msgid "Languages"
-#~ msgstr "Езици"
