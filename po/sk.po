@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-04 22:36+0000\n"
-"PO-Revision-Date: 2025-02-19 13:45+0100\n"
+"PO-Revision-Date: 2025-02-24 20:34+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1623,7 +1623,7 @@ msgstr "Nová premenná…"
 # btn tooltip
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
-msgstr "Odoberie premennú prostredia"
+msgstr "Odstráni premennú prostredia"
 
 # page title
 #: src/libide/gui/ide-frame.ui:6
@@ -4510,21 +4510,23 @@ msgstr "Klient bol zatvorený"
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Zlyhalo odobratie manifestu flatpaku: %s"
+msgstr "Zlyhalo odstránenie manifestu flatpaku: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
-msgstr ""
+msgstr "Sieť nie je dostupná, preberanie sa preskočí"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
-msgstr ""
+msgstr "Inštalovať alebo aktualizovať SDK?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
+"Stavbár potrebuje nainštalovať nasledujúce sady na vývoj softvéru kvôli "
+"zostaveniu vášho projektu."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
@@ -4535,239 +4537,219 @@ msgstr "Názov"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 msgid "Architecture"
-msgstr ""
+msgstr "Architektúra"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:114
 msgid "Resolving SDK Extensions"
-msgstr ""
+msgstr "Riešenie rozšírení SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
+"Stavbár vyhľadáva vhodné rozšírenia SDK potrebné na zostavenie vášho projektu"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
-msgstr ""
+msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
-msgstr ""
+msgstr "Vytváranie pracovného priestoru pre flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
-msgstr ""
+msgstr "Odstraňovanie zastaraného zhromažďovacieho adresára flatpaku: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
-#, fuzzy
-#| msgid "Root Build Directory"
 msgid "Preparing build directory"
-msgstr "Koreňový adresár zostavenia"
+msgstr "Príprava adresára na zostavenie"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
-#, fuzzy
-#| msgid "Building dependencies…"
 msgid "Downloading dependencies"
-msgstr "Zostavovanie závislostí…"
+msgstr "Preberanie závislostí"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
-#, fuzzy
-#| msgid "Building dependencies…"
 msgid "Building dependencies"
-msgstr "Zostavovanie závislostí…"
+msgstr "Zostavovanie závislostí"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
-msgstr ""
+msgstr "Dokončovanie zostavenia flatpaku"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
-msgstr ""
+msgstr "Exportovanie zhromažďovacieho adresára"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
-msgstr ""
+msgstr "Vytváranie balíka flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "Flatpak Application"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Aplikácia flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
-#, fuzzy
-#| msgid "Install failed"
 msgid "Installing Necessary SDKs"
-msgstr "Inštalácia zlyhala"
+msgstr "Inštalácia potrebných sád SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
+"Stavbár inštaluje sady vývojových nástrojov potrebných na zostavenie vašej "
+"aplikácie."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
-#, fuzzy, c-format
-#| msgid "Failed to save file: %s"
+#, c-format
 msgid "Failed to update SDKs: %s"
-msgstr "Zlyhalo uloženie súboru: %s"
+msgstr "Zlyhalo aktualizovanie SDK: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
-#, fuzzy
-#| msgid "Updated"
 msgid "Updating Necessary SDKs"
-msgstr "Aktualizované"
+msgstr "Aktualizovanie potrebných SDK"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
+"Stavbár aktualizuje sady vývojových nástrojov potrebných na zostavenie vašej "
+"aplikácie."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
-msgstr ""
+msgstr "Aktualizovanie SDK prostredia pre beh"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
 msgid "Flatpak installation for new SDKs"
-msgstr ""
+msgstr "Inštalácia Flatpaku pre nové SDK"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
 msgstr ""
+"Inštalácia Flatpaku , ktorá sa použije pre nové sady SDK a rozšírenia sád "
+"SDK."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
-msgstr ""
+msgstr "Uprednostňovaná inštalácia Flatpaku"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
+"Pri inštalácii SDK a rozšírení SDK môže Stavbár uprednostniť konkrétnu "
+"inštaláciu Flatpaku, ktorá obsahuje dané rozšírenie."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
 msgstr "Stavbár GNOME"
 
 #: src/plugins/flatpak/tweaks.ui:28
-#, fuzzy
-#| msgid "Username"
 msgid "User"
-msgstr "Používateľské meno"
+msgstr "Používateľ"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "Krížový prekladač GCC %s (Systém)"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
-msgstr ""
+msgstr "Žiadny repozitár na prístup k obsahu súboru"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "Žiadny obsah nebol nastavený do porovnávača"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
+msgstr "Operácia zlyhala. Pôvodná chyba bola: „%s“"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
-#, fuzzy, c-format
-#| msgid ""
-#| "Builder failed to provide appropriate credentials when cloning repository."
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
-"Program Stavbár zlyhal pri poskytovaní správnych poverení pri klonovaní "
-"repozitára."
+"Stavbár zlyhal pri poskytovaní správnych poverení pri klonovaní repozitára."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr ""
+msgstr "Nie je možné nastaviť príznaky AMEND a GPG_SIGN"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
-msgstr ""
+msgstr "Nie je možné podpísať začlenenie bez GPG_KEY_ID"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:407
-#, fuzzy, c-format
-#| msgid "Repository does not have a working directory."
+#, c-format
 msgid "Cannot monitor files outside the working directory"
-msgstr "Repozitár neobsahuje pracovný adresár."
+msgstr "Nie je možné sledovať súbory mimo pracovného adresára"
 
 #: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
-msgstr ""
+msgstr "Integrácia Gitu sa spustila ako proces %s"
 
 #: src/plugins/git/gbp-git-client.c:208
-#, fuzzy
-#| msgid "Integration with Git"
 msgid "Git integration has exited"
-msgstr "Prepojenie s Gitom"
+msgstr "Integrácia Gitu sa ukončila"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
-#, fuzzy
-#| msgid "Uses the Git version control system"
 msgid "Git version control is not in use"
-msgstr "Využíva systém správy verzií Git"
+msgstr "Správa verzií Gitu sa nepoužíva"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
-msgstr ""
+msgstr "Aktualizácia podmodulov Gitu"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
-msgstr ""
+msgstr "Inicializovanie podmodulov Gitu"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:133
 msgid "Network is not available, skipping submodule update"
-msgstr ""
+msgstr "Sieť nie je dostupná, aktualizovanie podmodulov sa preskočí"
 
 #: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
-msgstr ""
+msgstr "Odoslané."
 
 #: src/plugins/git/gbp-git-vcs.c:385
-#, fuzzy, c-format
-#| msgid "Insert “%s”"
+#, c-format
 msgid "Pushing ref “%s”"
-msgstr "Vložiť „%s“"
+msgstr "Odosielanie referencie „%s“"
 
 #: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
-msgstr ""
+msgstr "Adresár nie je v repozitári"
 
 #: src/plugins/git/gbp-git-vcs.c:715
-#, fuzzy
-#| msgid "Git"
 msgid "Git"
 msgstr "Git"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
-#, fuzzy, c-format
-#| msgid "A suitable debugger could not be found."
+#, c-format
 msgid "A repository could not be found at “%s”."
-msgstr "Nepodarilo sa nájsť vhodný odlaďovač"
+msgstr "Repozitár sa nepodarilo nájsť v „%s“."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
-msgstr ""
+msgstr "Protokol „%s“ nie je podporovaný."
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:260
-#, fuzzy
-#| msgid "Clone Repository"
 msgid "Cloning repository"
 msgstr "Klonovanie repozitára"
 
@@ -4777,7 +4759,7 @@ msgstr "Požaduje sa platná URL repozitára Git"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
-msgstr ""
+msgstr "Autorstvo"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
 msgid "Email"
@@ -4785,7 +4767,7 @@ msgstr "Email"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
-msgstr ""
+msgstr "Spustiť cez go"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4794,15 +4776,15 @@ msgstr "Pripravovanie projektu"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
-msgstr ""
+msgstr "Spustiť cez Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
-msgstr ""
+msgstr "Zobrazí nové uvítacie okno"
 
 #: src/plugins/grep/gbp-grep-panel.c:763
 msgid "Match"
-msgstr ""
+msgstr "Zhoda"
 
 #: src/plugins/grep/gbp-grep-panel.c:775
 msgid "Path"
@@ -4812,88 +4794,69 @@ msgstr "Cesta"
 #: src/plugins/grep/gbp-grep-panel.c:839
 #, c-format
 msgid "_Find in %s"
-msgstr ""
+msgstr "_Nájsť v %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:841
-#, fuzzy, c-format
-#| msgid "Replace"
+#, c-format
 msgid "_Replace in %s"
-msgstr "Nahradiť"
+msgstr "Na_hradiť v %s"
 
 #: src/plugins/grep/gbp-grep-panel.c:851
-#, fuzzy
-#| msgid "Open Project"
 msgid "Find in Project"
-msgstr "Otvorenie projektu"
+msgstr "Nájsť v projekte"
 
 #: src/plugins/grep/gbp-grep-panel.c:852
-#, fuzzy
-#| msgid "Recent Projects"
 msgid "Replace in Project"
-msgstr "Nedávne projekty"
+msgstr "Nahradiť v projekte"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
-#, fuzzy
-#| msgid "Show list of open files"
 msgid "Find in Files"
-msgstr "Zobrazenie zoznamu otvorených súborov"
+msgstr "Nájsť v súboroch"
 
 #: src/plugins/grep/gbp-grep-panel.ui:6
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
-msgstr ""
+msgstr "Nájde v súboroch (Shift+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
-#, fuzzy
-#| msgid "Scripts Directory"
 msgid "_Recurse into Directories"
-msgstr "Adresár so skriptami"
+msgstr "_Vnárať sa do adresárov"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
-#, fuzzy
-#| msgid "Match whole word only"
 msgid "Match Whole _Words"
-msgstr "Porovnávať iba celé slová"
+msgstr "Porovnávať iba _celé slová"
 
 #: src/plugins/grep/gbp-grep-panel.ui:106
-#, fuzzy
-#| msgid "Regular expressions"
 msgid "Use Regular _Expressions"
-msgstr "Regulárne výrazy"
+msgstr "Použiť _regulárne výrazy"
 
 #: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
-msgstr ""
+msgstr "Zatvorí panel (kláves Esc)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:137
-#, fuzzy
-#| msgid "_Open Project"
 msgid "_Find in Project"
-msgstr "_Otvoriť projekt"
+msgstr "_Nájsť v projekte"
 
 #: src/plugins/grep/gbp-grep-panel.ui:170
-#, fuzzy
-#| msgid "Recent Projects"
 msgid "_Replace in Project"
-msgstr "Nedávne projekty"
+msgstr "Na_hradiť v projekte"
 
 #: src/plugins/grep/gbp-grep-popover.ui:31
-#, fuzzy
-#| msgid "Search"
 msgid "Search for…"
-msgstr "Vyhľadať"
+msgstr "Vyhľadať…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
-msgstr "_Hľadať"
+msgstr "_Nájsť"
 
 #: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
-msgstr ""
+msgstr "Vyhľadať naprieč _priečinkami"
 
 #: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
-msgstr ""
+msgstr "_Zohľadniť veľkosť písmen pri hľadaní"
 
 #: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
@@ -4904,10 +4867,8 @@ msgid "Allow regular _expressions"
 msgstr "Povoliť _regulárne výrazy"
 
 #: src/plugins/grep/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Show list of open files"
 msgid "_Find in Files"
-msgstr "Zobrazenie zoznamu otvorených súborov"
+msgstr "_Nájsť v súboroch"
 
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
