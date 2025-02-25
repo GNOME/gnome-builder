@@ -1,3 +1,12 @@
+# GNOME Builder 48.rc
+
+ * Remove use of deprecated GtkSourceView API
+ * Add some defensive mechanisms in the recursive file monitor
+ * Various VCS fixes
+ * Treat dot files as ignored when no VCS is in use
+ * Fix `gnome-builder -e` use with home directory
+ * Translation updates
+
 # GNOME Builder 48.beta
 
  * Style improvements to match libadwaita
