@@ -1334,8 +1334,8 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
   GtkSourceView *view;
   gboolean highlight_line;
-  int line_y;
-  int line_height;
+  double line_y;
+  double line_height;
   int width;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
@@ -1352,7 +1352,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   highlight_line = gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
 
-  gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
+  gtk_source_gutter_lines_get_line_extent (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
   width = self->draw_width;
 
   if ((line - self->begin_line) < self->lines->len)
