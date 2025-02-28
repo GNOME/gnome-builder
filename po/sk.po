@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-04 22:36+0000\n"
-"PO-Revision-Date: 2025-02-24 20:34+0100\n"
+"PO-Revision-Date: 2025-02-28 13:03+0100\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -1268,7 +1268,7 @@ msgstr "Používateľ požiadal o zastavenie aplikácie"
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
-msgstr "Hosťujúci systém"
+msgstr "Hostiteľský systém"
 
 #: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
@@ -1666,7 +1666,7 @@ msgstr "Prepnutie ľavého panelu (F9)"
 #: src/libide/gui/ide-primary-workspace.ui:96
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
-msgstr "Zapnúť/vypnúť pravý panel"
+msgstr "Prepnúť pravý panel"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -3890,7 +3890,7 @@ msgstr "Prejsť"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
-msgstr "Prechod na riadok"
+msgstr "Prejsť na riadok"
 
 #: src/plugins/editorui/gtk/menus.ui:5
 msgid "Indentation"
@@ -4872,30 +4872,27 @@ msgstr "_Nájsť v súboroch"
 
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
-msgstr ""
+msgstr "Hostiteľský operačný systém"
 
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
 msgid "Bundled with Builder"
-msgstr ""
+msgstr "Zabalené Stavbárom"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
 #: src/plugins/sphinx-preview/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Open Profile"
 msgid "Open Preview…"
-msgstr "Otvorenie profilu"
+msgstr "Otvoriť náhľad…"
 
 #: src/plugins/ls/gbp-ls-page.c:291
-#, fuzzy, c-format
-#| msgid "Failed to open directory: %s"
+#, c-format
 msgid "Failed to load directory: %s"
-msgstr "Zlyhalo otvorenie adresára: %s"
+msgstr "Zlyhalo načítanie adresára: %s"
 
 #: src/plugins/ls/gbp-ls-page.ui:49
 msgid "Size"
-msgstr ""
+msgstr "Veľkosť"
 
 #: src/plugins/ls/gbp-ls-page.ui:63
 msgid "Modified"
@@ -4903,314 +4900,253 @@ msgstr "Upravený"
 
 #: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
 msgid "With _Folder Listing"
-msgstr ""
+msgstr "S výpisom _priečinka"
 
 #: src/plugins/ls/gtk/menus.ui:15
-#, fuzzy
-#| msgid "_Open Containing Folder"
 msgid "Open Containing Folder"
-msgstr "_Otvoriť priečinok s obsahom"
+msgstr "Otvoriť priečinok s obsahom"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
-#, fuzzy
-#| msgid "Browse…"
 msgid "With File _Browser…"
-msgstr "Prehliadať…"
+msgstr "S prehliadačom _súborov…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
-msgstr ""
+msgstr "Predvolený cieľ pre make"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
 msgid "Make Run"
-msgstr ""
+msgstr "Spustiť cez make"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Empty Makefile Project"
-msgstr "Prázdny projekt"
+msgstr "Prázdny projekt Makefile"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
-#, fuzzy
-#| msgid "Clean the project"
 msgid "Create a new empty project using a simple Makefile"
-msgstr "Vyčistí projekt"
+msgstr "Vytvorí nový prázdny projekt pomocou jednoduchého Makefile"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
 #: src/plugins/manuals/manuals-navigatable.c:391
 msgid "Manuals"
-msgstr ""
+msgstr "Príručky"
 
 #: src/plugins/manuals/gbp-manuals-panel.ui:174
 #: src/plugins/project-tree/gbp-project-tree-pane.ui:116
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 #: src/plugins/todo/gbp-todo-panel.ui:99
-#, fuzzy
 #| msgid "Filters:"
 msgid "Filter…"
-msgstr "Filtre:"
+msgstr "Filtrovať…"
 
 #: src/plugins/manuals/gbp-manuals-search-result.c:215
-#, fuzzy
-#| msgid "Documentation"
 msgid "Open Documentation"
-msgstr "Dokumentácia"
+msgstr "Otvoriť dokumentáciu"
 
 #: src/plugins/manuals/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Search languages…"
 msgid "Search Manuals…"
-msgstr "Vyhľadať jazyky…"
+msgstr "Vyhľadať príručky…"
 
 #: src/plugins/manuals/gtk/menus.ui:8
 msgid "Search documentation for installed SDKs"
-msgstr ""
+msgstr "Vyhľadá dokumentáciu pre nainštalované vývojové sady"
 
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
 #: src/plugins/manuals/manuals-keyword.c:526
 #, c-format
 msgid "View in %s"
-msgstr ""
+msgstr "Zobraziť v %s"
 
 #. Note to the user we're importing this book
 #: src/plugins/manuals/manuals-devhelp-importer.c:697
-#, fuzzy, c-format
-#| msgid "Exporting…"
+#, c-format
 msgid "Importing %s…"
-msgstr "Exportovanie…"
+msgstr "Importovanie %s…"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:116
 msgid "Importing JHBuild Documentation"
-msgstr ""
+msgstr "Importovanie dokumentácie JHBuild"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:117
 msgid "Scanning jhbuild for new documentation"
-msgstr ""
+msgstr "Vyhľadávanie novej dokumentácie v jhbuild"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#, fuzzy
-#| msgid "GNOME Builder"
 msgid "GNOME Nightly"
-msgstr "Stavbár GNOME"
+msgstr "Nočné zostavenia GNOME"
 
 #: src/plugins/manuals/manuals-system-importer.c:77
-#, fuzzy
-#| msgid "Documentation"
 msgid "Importing System Documentation"
-msgstr "Dokumentácia"
+msgstr "Importovanie systémovej dokumentácie"
 
 #: src/plugins/manuals/manuals-system-importer.c:78
 msgid "Scanning system for new documentation"
-msgstr ""
+msgstr "Vyhľadávanie novej dokumentácie v systéme"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
-msgstr ""
+msgstr "Spustiť cez Maven"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
 msgstr "Globálne vyhľadávanie"
 
 #: src/plugins/menu-search/gtk/menus.ui:15
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Focus to the global search entry"
 msgid "Display the global search"
-msgstr "Zameranie rýchleho globálneho vyhľadávania"
+msgstr "Zobrazí globálne vyhľadávanie"
 
 #: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
 msgstr "Panely"
 
 #: src/plugins/menu-search/gtk/menus.ui:28
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel"
-msgstr "Prepnutie ľavého panelu"
+msgstr "Prepnúť ľavý panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:29
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle the left panel in or out of view"
-msgstr "Prepnutie ľavého panelu"
+msgstr "Zobrazí alebo skryje ľavý panel"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
-msgstr ""
+msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:38
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
 msgid "Toggle the right panel in or out of view"
-msgstr "Prepnutie pravého panelu"
+msgstr "Zobrazí alebo skryje pravý panel"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
-msgstr ""
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:45
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel"
-msgstr "Prepnutie spodného panelu"
+msgstr "Prepnúť spodný panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:46
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Toggle the bottom panel in or out of view"
-msgstr "Prepnutie spodného panelu"
+msgstr "Zobrazí alebo skryje spodný panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:60
-#, fuzzy
-#| msgid "Switch to source or header"
 msgid "Switch to Dark Mode"
-msgstr "Prepnutie na zdrojový kód alebo hlavičku"
+msgstr "Prepnúť na tmavý režim"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "Zmení schému štýlu na tmavú obmenu"
 
 #: src/plugins/menu-search/gtk/menus.ui:66
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgid "Switch to Light Mode"
-msgstr "Prepnutie na nasledujúci dokument"
+msgstr "Prepnúť na svetlý režim"
 
 #: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "Zmení schému štýlu na svetlú obmenu"
 
 #: src/plugins/menu-search/gtk/menus.ui:79
-#, fuzzy
-#| msgid "Line diagnostics"
 msgid "Display Build Diagnostics"
-msgstr "Diagnostika riadka"
+msgstr "Zobraziť diagnostiku zostavovania"
 
 #: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
-msgstr ""
+msgstr "Zobrazí chyby a upozornenia nájdené počas zostavovania"
 
 #: src/plugins/menu-search/gtk/menus.ui:88
 msgid "Jump to a specific line or column"
-msgstr ""
+msgstr "Skočí na určený riadok alebo stlpec"
 
 #: src/plugins/menu-search/gtk/menus.ui:101
-#, fuzzy
-#| msgid "Close"
 msgid "Close Page"
-msgstr "Zavrieť"
+msgstr "Zatvoriť stránku"
 
 #: src/plugins/menu-search/gtk/menus.ui:102
-#, fuzzy
-#| msgid "Close the current document"
 msgid "Close the current page"
-msgstr "Zavrie aktuálny dokument"
+msgstr "Zavrie aktuálnu stránku"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#, fuzzy
-#| msgid "All Files"
 msgid "Reload Files"
-msgstr "Všetky súbory"
+msgstr "Znova načítať súbory"
 
 #: src/plugins/menu-search/gtk/menus.ui:116
 msgid "Reload the contents of open files"
-msgstr ""
+msgstr "Znova načíta obsah otvorených súborov"
 
 #: src/plugins/menu-search/gtk/menus.ui:125
-#, fuzzy
-#| msgid "The score of the search result."
 msgid "Move to next search result"
-msgstr "Bodovanie výsledku vyhľadávania."
+msgstr "Presunúť na ďalší výsledok vyhľadávania"
 
 #: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
-msgstr ""
+msgstr "Presunie sa a označí nasledujúci dostupný výsledok vyhľadávania"
 
 #: src/plugins/menu-search/gtk/menus.ui:132
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous match"
 msgid "Move to previous search result"
-msgstr "Presun na predchádzajúcu zhodu"
+msgstr "Presunúť na predošlí výsledok vyhľadávania"
 
 #: src/plugins/menu-search/gtk/menus.ui:133
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Move to the previous match"
 msgid "Move to and select the previous search result"
-msgstr "Presun na predchádzajúcu zhodu"
+msgstr "Presunie sa a označí predchádzajúci výsledok vyhľadávania"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
-msgstr ""
+msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Načítať introspekciu Meson"
 
+# pipeline akcia
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:293
-#, fuzzy
-#| msgid "Mine projects"
 msgid "Install project"
-msgstr "Moje projekty"
+msgstr "Inštalácia projektu"
 
+# konfiguračná fáza pipeline
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
-msgstr ""
+msgstr "Uloženie vývojového prostredia do medzipamäte"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s (read-only)"
 msgid "%s (Meson)"
-msgstr "%s (iba na čítanie)"
+msgstr "%s (Meson)"
 
+# button tooltip
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Tool"
-msgstr "Odstránenie riadka"
+msgstr "Odstráni nástroj"
 
 #: src/plugins/meson/gbp-meson-utils.c:98
-#, fuzzy
-#| msgid "Completion"
 msgid "Compiler"
-msgstr "Dopĺňanie"
+msgstr "Prekladač"
 
 #: src/plugins/meson/gbp-meson-utils.c:100
 msgid "Preprocessor"
-msgstr ""
+msgstr "Predspracovač"
 
 #: src/plugins/meson/gbp-meson-utils.c:102
 msgid "Archiver"
-msgstr ""
+msgstr "Archivátor"
 
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Linker"
-msgstr ""
+msgstr "Prepájač"
 
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Strip"
-msgstr ""
+msgstr "Odstraňovač symbolov"
 
 #: src/plugins/meson/gbp-meson-utils.c:108
 msgid "Executable wrapper"
-msgstr ""
+msgstr "Obaľovač spustiteľnosťou"
 
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
-msgstr ""
+msgstr "Nastavenie balíka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
@@ -5218,17 +5154,15 @@ msgstr "Aplikácia prostredia GNOME"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr ""
+msgstr "Projekt založený na Mensone pre GNOME používajúci GTK 4 a libadwaita"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:190
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "GTK 4 Application"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Aplikácia GTK 4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
-msgstr ""
+msgstr "Projekt založený na Mensone používajúci GTK 4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
@@ -5236,165 +5170,146 @@ msgstr "Zdieľaná knižnica"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
-msgstr ""
+msgstr "Projekt založený na Mensone pre zdieľanú knižnicu"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
-msgstr ""
+msgstr "Nástroj príkazového riadka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
-msgstr ""
+msgstr "Projekt založený na Mensone pre program príkazového riadka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:223
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Empty Meson Project"
-msgstr "Prázdny projekt"
+msgstr "Prázdny projekt Mensonu"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:224
-#, fuzzy
-#| msgid "Return to project selection"
 msgid "An empty Meson project skeleton"
-msgstr "Vráti na výber porjektov"
+msgstr "Prázdna kostra projektu Mensonu"
 
 #: src/plugins/messages/gbp-messages-panel.c:102
 #: src/plugins/messages/gbp-messages-panel.ui:169
-#, fuzzy
-#| msgid "Debugger"
 msgid "Debug"
-msgstr "Odlaďovač"
+msgstr "Ladenie"
 
 #: src/plugins/messages/gbp-messages-panel.c:104
-#, fuzzy
-#| msgid "File Info"
 msgid "Info"
-msgstr "Informačný súbor"
+msgstr "Informácie"
 
 #: src/plugins/messages/gbp-messages-panel.c:106
 #: src/plugins/messages/gbp-messages-panel.ui:116
 #: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
-msgstr "Správa"
+msgstr "Správy"
 
 #: src/plugins/messages/gbp-messages-panel.c:108
 #: src/plugins/messages/gbp-messages-panel.ui:157
-#, fuzzy
-#| msgid "Warnings"
 msgid "Warning"
 msgstr "Upozornenia"
 
 #: src/plugins/messages/gbp-messages-panel.c:110
 #: src/plugins/messages/gbp-messages-panel.ui:151
 msgid "Critical"
-msgstr ""
+msgstr "Kritické správy"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
-#, fuzzy
-#| msgid "Message"
 msgid "Messages"
-msgstr "Správa"
+msgstr "Správy"
 
 #: src/plugins/messages/gbp-messages-panel.ui:25
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: src/plugins/messages/gbp-messages-panel.ui:57
 #: src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
-msgstr ""
+msgstr "Závažnosť"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
-#, fuzzy
-#| msgid "Selection"
 msgid "Section"
-msgstr "Výber"
+msgstr "Sekcia"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
-#, fuzzy
-#| msgid "Select a Project"
 msgid "Suggested GNOME Projects"
-msgstr "Výber projektu"
+msgstr "Navrhované projekty GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
-msgstr ""
+msgstr "Boxy"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
-msgstr ""
+msgstr "Aplikácia GNOME na prístup ku vzdialeným alebo virtuálnym systémom"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr ""
+"Integrované vývojové prostredie pre písanie softvéru založenom na GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Calendar"
-msgstr ""
+msgstr "Kaledár"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr ""
+msgstr "Aplikácia kalendára pre GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
-msgstr ""
+msgstr "Hodiny"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "A clock application for GNOME"
-msgstr ""
+msgstr "Aplikácia hodín pre GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
-msgstr ""
+msgstr "Gitg"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Gitg is a graphical Git client"
-msgstr ""
+msgstr "Gitg je grafický klient Gitu"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
 msgid "Maps"
-msgstr ""
+msgstr "Mapy"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
-#, fuzzy
-#| msgid "GNOME Application"
 msgid "A GNOME maps application"
-msgstr "Aplikácia prostredia GNOME"
+msgstr "Aplikácia máp pre GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
-msgstr ""
+msgstr "Hudba"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:87
 msgid "Music player and management application"
-msgstr ""
+msgstr "Aplikácia na prehrávanie a správu hudby"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
-msgstr ""
+msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
-msgstr ""
+msgstr "Predvolený správca súborov pre GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Polari"
-msgstr ""
+msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:105
-#, fuzzy
-#| msgid "An IDE for GNOME"
 msgid "An IRC Client for GNOME"
-msgstr "Integrované vývojové prostredie pre GNOME"
+msgstr "Klient IRC pre GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
-msgstr ""
+msgstr "Záznamník zvuku"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
-msgstr ""
+msgstr "Moderná aplikácia na nahrávanie zvuku pre GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
