@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-01-12 17:18+0000\n"
-"PO-Revision-Date: 2025-02-20 22:15+0100\n"
+"POT-Creation-Date: 2025-02-21 08:31+0000\n"
+"PO-Revision-Date: 2025-03-07 18:41+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -24,17 +24,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:45
-#: src/libide/editor/ide-editor-workspace.ui:87
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Constructor"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Programari de construcció per a GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Construcció;Desenvolupament;Programació;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Obre un projecte"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Comença un projecte nou"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Clona el repositori"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Nou espai de treball de l'editor"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
@@ -42,7 +69,6 @@ msgstr "Crea aplicacions per al GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -728,34 +754,7 @@ msgstr "Comprova l'ortografia"
 msgid "Automatically check spelling within documents"
 msgstr "Comprova automàticament l'ortografia dels documents"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Programari de construcció per a GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Construcció;Desenvolupament;Programació;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Obre un projecte"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Comença un projecte nou"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
-msgid "Clone Repository"
-msgstr "Clona el repositori"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "Nou espai de treball de l'editor"
-
-#: src/libide/code/ide-buffer.c:3755
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "El llenguatge actual no té cap solucionador de símbols."
 
@@ -881,12 +880,12 @@ msgstr "Pàgines"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:112
-#: src/libide/sourceview/gtk/menus.ui:145
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
@@ -904,8 +903,8 @@ msgstr "Cerca i reemplaça"
 msgid "Documents"
 msgstr "Documents"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "Selecció"
 
@@ -1041,15 +1040,15 @@ msgstr "Coincidència de tota la paraula"
 msgid "Language"
 msgstr "Llenguatge"
 
-#: src/libide/editor/ide-editor-workspace.ui:52
-#: src/libide/editor/ide-editor-workspace.ui:82
-#: src/libide/gui/ide-primary-workspace.ui:43
-#: src/libide/gui/ide-primary-workspace.ui:132
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
 msgid "Search (Ctrl+Enter)"
 msgstr "Cerca (Ctrl+Enter)"
 
-#: src/libide/editor/ide-editor-workspace.ui:136
-#: src/libide/gui/ide-primary-workspace.ui:116
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Commuta quadre inferior (Ctrl+F9)"
 
@@ -1265,7 +1264,7 @@ msgid "Application exited with error: %s"
 msgstr "L'aplicació s'ha sortit amb un error: %s"
 
 #: src/libide/foundry/ide-run-manager.c:893
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "L'aplicació s'ha tancat"
 
@@ -1510,30 +1509,30 @@ msgstr "Cerca"
 msgid "Search for anything"
 msgstr "Busca qualsevol cosa"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "Escriu per a cercar"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr "Prefixa la consulta amb un dels següents per a filtrar els resultats"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Fitxers"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "Símbols"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "Documentació"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Accions"
@@ -1587,7 +1586,7 @@ msgstr "Navegació web"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminal"
@@ -1602,7 +1601,8 @@ msgstr ""
 "Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018\n"
 "Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019-2023\n"
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>, 2020\n"
-"Maite Guix i Ribé <maite.guix@gmail.com>, 2022"
+"Maite Guix i Ribé <maite.guix@gmail.com>, 2022\n"
+"Victor Dargallo <victordargallo@disroot.org>, 2025"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -1676,11 +1676,11 @@ msgstr "No es pot carregar l'HTML. Manca el suport de WebKit."
 msgid "Invalid configuration"
 msgstr "La configuració no és vàlida"
 
-#: src/libide/gui/ide-primary-workspace.ui:55
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "Commuta quadre esquerre (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:96
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Commuta quadre dret"
@@ -1801,7 +1801,7 @@ msgstr "Servidors d'idiomes"
 msgid "Devices & Simulators"
 msgstr "Dispositius i simuladors"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnòstics"
@@ -1917,77 +1917,81 @@ msgid "Zoom In (Ctrl++)"
 msgstr "Amplia (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "Insereix un emoji"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "_Selecció"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Selecciona-ho _tot"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:146
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "Format"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "Tot en majúsc_ules"
 
-#: src/libide/sourceview/gtk/menus.ui:85
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr "Converteix la selecció de text a majúscules"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "Tot en minúscu_les"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr "Converteix la selecció de text a minúscules"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr "_Inverteix majúscules i minúscules"
 
-#: src/libide/sourceview/gtk/menus.ui:99
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr "Inverteix les majúscules i minúscules de la selecció de text"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "Majúscules/minúscules del _títol"
 
-#: src/libide/sourceview/gtk/menus.ui:106
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr "Converteix la selecció de text a majúscules"
 
-#: src/libide/sourceview/gtk/menus.ui:115
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "S_elecciona una línia"
 
-#: src/libide/sourceview/gtk/menus.ui:120
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "S_uprimeix la línia"
 
-#: src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "_Uneix les línies"
 
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "_Ordena les línies"
 
-#: src/libide/sourceview/gtk/menus.ui:136
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "D_uplica la línia"
 
-#: src/libide/sourceview/gtk/menus.ui:143
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "_Formatatge"
 
-#: src/libide/sourceview/gtk/menus.ui:154
-#: src/libide/sourceview/gtk/menus.ui:158
-#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
@@ -2106,7 +2110,7 @@ msgid "Linux"
 msgstr "Linux"
 
 #: src/libide/terminal/ide-terminal-palettes.h:356
-#: src/libide/terminal/ide-terminal-palettes.h:882
+#: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -2119,7 +2123,6 @@ msgid "Fishtank"
 msgstr "Fishtank"
 
 #: src/libide/terminal/ide-terminal-palettes.h:511
-#| msgid "Spaces"
 msgid "Spacedust"
 msgstr "Spacedust"
 
@@ -2142,6 +2145,10 @@ msgstr "VS Code"
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
 msgstr "Monokai Soda"
+
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr "Clon de l'Ubuntu"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -2411,20 +2418,20 @@ msgstr "Avisos (%u)"
 msgid "Errors (%u)"
 msgstr "Errors (%u)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "Compartit"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr "Estàtic"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 msgid "Executable"
 msgstr "Executable"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "No s'han pogut enumerar els objectius de construcció: %s"
@@ -3010,8 +3017,8 @@ msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
-"Directori usat per a desar artefactes de compilació i fitxers en memòria cau del "
-"procés de construcció. Cal reiniciar el Constructor perquè tingui efecte."
+"Directori usat per a desar artefactes de compilació i fitxers en memòria cau "
+"del procés de construcció. Cal reiniciar el Constructor perquè tingui efecte."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
@@ -3323,11 +3330,11 @@ msgstr "_Aplica"
 msgid "Loading…"
 msgstr "S'està carregant…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:46
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
 msgstr "No hi ha cap acció de codi disponible"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr "Error d'acció del codi"
 
@@ -3500,9 +3507,9 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:747
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "Ubicació"
 
@@ -3848,7 +3855,7 @@ msgstr "Dub Run"
 msgid "No file was provided."
 msgstr "No s'ha proporcionat cap fitxer."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "Utilitza la interfície mínima de l'editor"
 
@@ -4538,7 +4545,7 @@ msgstr ""
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "Nom"
 
@@ -4769,7 +4776,7 @@ msgstr "Cal un URL Git vàlid"
 msgid "Authorship"
 msgstr "Autoria"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "Correu electrònic"
 
@@ -4791,31 +4798,31 @@ msgstr "Execució de Gradle"
 msgid "Display a new greeter window"
 msgstr "Mostra una finestra d'inici nova"
 
-#: src/plugins/grep/gbp-grep-panel.c:763
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
 msgstr "Coincidència"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "Camí"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "_Cerca a %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Reemplaça a %s"
 
-#: src/plugins/grep/gbp-grep-panel.c:851
+#: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
 msgstr "Cerca al projecte"
 
-#: src/plugins/grep/gbp-grep-panel.c:852
+#: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
 msgstr "Reemplaça al projecte"
 
@@ -4982,7 +4989,6 @@ msgid "Scanning jhbuild for new documentation"
 msgstr "El «jhbuild» està escanejant a la recerca de documentació nova"
 
 #: src/plugins/manuals/manuals-sdk.c:282
-#| msgid "GNOME Builder"
 msgid "GNOME Nightly"
 msgstr "GNOME Nightly"
 
@@ -5624,6 +5630,10 @@ msgstr "S'està suprimint %s\n"
 msgid "Removing Files…"
 msgstr "S'estan suprimint fitxers…"
 
+#: src/plugins/recent/gbp-recent-section.c:612
+msgid "Show More"
+msgstr "Mostra'n més"
+
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
 msgstr "Projectes recents"
@@ -5719,8 +5729,8 @@ msgstr "Directori de treball"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
-"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "L'ordre s'executarà des d'aquesta ubicació. Utilitzeu <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt> o <tt>$HOME</tt> per a definir un camí relatiu."
@@ -6146,14 +6156,14 @@ msgstr ""
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
-msgid "Application started at %s\r\n"
-msgstr "L'aplicació ha començat a les %s\r\n"
+msgid "Application started at %s"
+msgstr "L'aplicació ha començat a les %s"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr "Sortida de l'aplicació"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
 msgstr "S'ha completat el procés"
 
@@ -6448,28 +6458,28 @@ msgstr "Tria una branca alternativa"
 msgid "Branches"
 msgstr "Branques"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 "Introduïu l'URL del repositori de codi font del projecte que voleu clonar."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "El repositori es clonarà en un subdirectori nou."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "Dades de l'autor"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 "Podeu especificar la informació d'autoria per a substituir els valors "
 "predeterminats."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "Estat"
 
