@@ -1189,9 +1189,10 @@ _cjh_text_region_remove (CjhTextRegion *region,
               }
             else
               {
-                /* Degenerate case in that our leaf and the next leaf are
-                 * full so we must insert the node by re-entering from the
-                 * root of the B+Tree. Possible shakeups occur.
+                /* Degenerate case in that our leaf is full. We could
+                 * potentially peek at the next and push to the head there, but
+                 * I'm avoiding that because it would amortize out with the
+                 * split in place anyway.
                  */
                 *run = saved;
                 cjh_text_region_node_split (region, target);
