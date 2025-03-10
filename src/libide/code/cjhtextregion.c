@@ -1156,6 +1156,7 @@ _cjh_text_region_remove (CjhTextRegion *region,
       }
     else if (offset_within_node > 0 && to_remove < run->length - offset_within_node)
       {
+        CjhTextRegionRun saved;
         CjhTextRegionRun left;
         CjhTextRegionRun right;
         CjhTextRegionRun right2;
@@ -1173,10 +1174,31 @@ _cjh_text_region_remove (CjhTextRegion *region,
         right2.data = run->data;
         cjh_text_region_split (region, calc_offset + left.length, &right, &center, &right2);
 
+        saved = *run;
         *run = left;
 
         if (!join_run (region, calc_offset, run, &right2, run))
-          SORTED_ARRAY_INSERT_VAL (&target->leaf.runs, i, right2);
+          {
+            if (!SORTED_ARRAY_IS_FULL (&target->leaf.runs))
+              {
+                /* If there is space in our sorted array for the additional
+                 * split we have here, then go ahead and do that since it
+                 * avoids re-entering the btree.
+                 */
+                SORTED_ARRAY_INSERT_VAL (&target->leaf.runs, i, right2);
+              }
+            else
+              {
+                /* Degenerate case in that our leaf and the next leaf are
+                 * full so we must insert the node by re-entering from the
+                 * root of the B+Tree. Possible shakeups occur.
+                 */
+                *run = saved;
+                cjh_text_region_node_split (region, target);
+                _cjh_text_region_remove (region, offset, length);
+                break;
+              }
+          }
 
         offset_within_node = 0;
         to_remove = 0;
