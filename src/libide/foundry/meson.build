@@ -220,4 +220,5 @@ gnome_builder_private_sources += files(libide_foundry_private_sources)
 gnome_builder_private_headers += files(libide_foundry_private_headers)
 gnome_builder_generated_headers += libide_foundry_generated_headers
 gnome_builder_include_subdirs += libide_foundry_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-foundry.h', '-DIDE_FOUNDRY_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_FOUNDRY_COMPILATION'
+gnome_builder_main_headers += 'libide-foundry.h'

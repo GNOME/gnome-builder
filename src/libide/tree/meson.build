@@ -97,4 +97,5 @@ gnome_builder_public_headers += files(libide_tree_public_headers)
 gnome_builder_generated_headers += libide_tree_generated_headers
 gnome_builder_generated_sources += libide_tree_generated_sources
 gnome_builder_include_subdirs += libide_tree_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-tree.h', '-DIDE_TREE_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_TREE_COMPILATION'
+gnome_builder_main_headers += 'libide-tree.h'

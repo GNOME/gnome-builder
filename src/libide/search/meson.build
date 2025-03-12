@@ -115,4 +115,5 @@ gnome_builder_public_headers += files(libide_search_public_headers)
 gnome_builder_generated_headers += libide_search_generated_headers
 gnome_builder_generated_sources += libide_search_generated_sources
 gnome_builder_include_subdirs += libide_search_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-search.h', '-DIDE_SEARCH_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_SEARCH_COMPILATION'
+gnome_builder_main_headers += 'libide-search.h'

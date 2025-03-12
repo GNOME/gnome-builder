@@ -126,4 +126,5 @@ gnome_builder_public_headers += files(libide_gtk_public_headers)
 gnome_builder_generated_headers += libide_gtk_generated_headers
 gnome_builder_generated_sources += libide_gtk_generated_sources
 gnome_builder_include_subdirs += libide_gtk_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-gtk.h', '-DIDE_GTK_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_GTK_COMPILATION'
+gnome_builder_main_headers += 'libide-gtk.h'
