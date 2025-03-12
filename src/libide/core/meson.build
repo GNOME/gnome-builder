@@ -158,4 +158,5 @@ gnome_builder_public_headers += files(libide_core_public_headers)
 gnome_builder_private_headers += files(libide_core_private_headers)
 gnome_builder_generated_headers += libide_core_generated_headers
 gnome_builder_include_subdirs += libide_core_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-core.h', '-DIDE_CORE_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_CORE_COMPILATION'
+gnome_builder_main_headers += 'libide-core.h'

@@ -98,4 +98,5 @@ libide_projects_dep = declare_dependency(
 gnome_builder_public_sources += files(libide_projects_public_sources)
 gnome_builder_public_headers += files(libide_projects_public_headers)
 gnome_builder_include_subdirs += libide_projects_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-projects.h', '-DIDE_PROJECTS_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_PROJECTS_COMPILATION'
+gnome_builder_main_headers += 'libide-projects.h'

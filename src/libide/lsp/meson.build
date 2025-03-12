@@ -133,4 +133,5 @@ libide_lsp_dep = declare_dependency(
 gnome_builder_public_sources += files(libide_lsp_public_sources)
 gnome_builder_public_headers += files(libide_lsp_public_headers)
 gnome_builder_include_subdirs += libide_lsp_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-lsp.h', '-DIDE_LSP_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_LSP_COMPILATION'
+gnome_builder_main_headers += 'libide-lsp.h'

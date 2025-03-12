@@ -81,4 +81,5 @@ gnome_builder_public_headers += files(libide_threading_public_headers)
 gnome_builder_private_sources += files(libide_threading_private_sources)
 gnome_builder_private_headers += files(libide_threading_private_headers)
 gnome_builder_include_subdirs += libide_threading_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-threading.h', '-DIDE_THREADING_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_THREADING_COMPILATION'
+gnome_builder_main_headers += 'libide-threading.h'

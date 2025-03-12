@@ -97,4 +97,5 @@ gnome_builder_public_headers += files(libide_vcs_public_headers)
 gnome_builder_generated_headers += libide_vcs_generated_headers
 gnome_builder_generated_sources += libide_vcs_generated_sources
 gnome_builder_include_subdirs += libide_vcs_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-vcs.h', '-DIDE_VCS_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_VCS_COMPILATION'
+gnome_builder_main_headers += 'libide-vcs.h'

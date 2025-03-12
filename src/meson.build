@@ -9,6 +9,7 @@ gnome_builder_private_headers = []
 gnome_builder_generated_sources = []
 gnome_builder_generated_headers = []
 gnome_builder_gir_extra_args = []
+gnome_builder_main_headers = []
 
 # To allow all resources to be initialized with static constructors
 # inside the final executable, we delay compiling them until the
@@ -165,6 +166,7 @@ libide_gir = gnome.generate_gir(gnome_builder,
         symbol_prefix: 'ide',
     identifier_prefix: 'Ide',
              includes: gnome_builder_gir_includes,
+               header: gnome_builder_main_headers,
               install: true,
       install_dir_gir: pkggirdir,
   install_dir_typelib: pkgtypelibdir,

@@ -116,4 +116,5 @@ gnome_builder_private_headers += files(libide_sourceview_private_headers)
 gnome_builder_generated_headers += libide_sourceview_generated_headers
 gnome_builder_generated_sources += libide_sourceview_generated_sources
 gnome_builder_include_subdirs += libide_sourceview_header_subdir
-gnome_builder_gir_extra_args += ['--c-include=libide-sourceview.h', '-DIDE_SOURCEVIEW_COMPILATION']
+gnome_builder_gir_extra_args += '-DIDE_SOURCEVIEW_COMPILATION'
+gnome_builder_main_headers += 'libide-sourceview.h'
