@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Nepali Translation Project\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-05-16 21:59+0000\n"
-"PO-Revision-Date: 2024-06-01 13:51+0545\n"
+"POT-Creation-Date: 2025-03-10 17:18+0000\n"
+"PO-Revision-Date: 2025-03-12 10:56+0545\n"
 "Last-Translator: Pawan Chitrakar <chautari@gmail.com>\n"
 "Language-Team: Nepali Translation Team <chautari@gmail.com>\n"
 "Language: ne\n"
@@ -16,18 +16,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:38 src/libide/editor/ide-editor-workspace.ui:61
+#: data/org.gnome.Builder.desktop.in.in:3 data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50 src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39 src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "बिल्डर"
 
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "जिनोमका लागि सफ्टवेयर निर्माण गर्नुहोस्"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "निर्माण; विकास;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "परियोजना खोल्नुहोस्"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "नयाँ परियोजना सुरु गर्नुहोस्"
+
+#: data/org.gnome.Builder.desktop.in.in:28 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "भण्डार क्लोन गर्नुहोस्"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "नयाँ सम्पादक कार्यस्थान"
+
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
-msgid "An IDE for GNOME"
-msgstr "जिनोमका लागि आईडीई"
+msgid "Create applications for GNOME"
+msgstr "जिनोमका लागि अनुप्रयोग सिर्जना गर्नुहोस्"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
@@ -36,16 +62,20 @@ msgstr "क्रिश्चियन हर्गर्ट"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
-"Builder is an actively developed Integrated Development Environment for GNOME. It combines integrated "
-"support for essential GNOME technologies such as GTK+, GLib, and GNOME APIs with features that any developer "
-"will appreciate, like syntax highlighting and snippets."
+"Builder is an actively developed Integrated Development Environment for GNOME. It combines "
+"integrated support for essential GNOME technologies such as GTK+, GLib, and GNOME APIs with "
+"features that any developer will appreciate, like syntax highlighting and snippets."
 msgstr ""
-"बिल्डर लागि एक सक्रिय रुपमा विकसित विकास विकास वातावरण हो। यसले आवश्यक जिनोम टेक्नोलोजीहरू जस्तै GTK +, GLib, र जिनोम "
-"एपिआईहरूको लागि एकीकृत समर्थन जोड्दछ जुन कुनै पनि विकासकर्ताले सङ्कलन गर्नेछ, जस्तै सिन्ट्याक्स हाइलाइटिङ र स्निपेटहरू।"
+"बिल्डर लागि एक सक्रिय रुपमा विकसित विकास विकास वातावरण हो। यसले आवश्यक जिनोम टेक्नोलोजीहरू जस्तै GTK +, "
+"GLib, र जिनोम एपिआईहरूको लागि एकीकृत समर्थन जोड्दछ जुन कुनै पनि विकासकर्ताले सङ्कलन गर्नेछ, जस्तै सिन्ट्याक्स "
+"हाइलाइटिङ र स्निपेटहरू।."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
-msgid "You can rely on predictable releases of Builder with each new release of GNOME every six months."
-msgstr "तपाईं हरेक छ महिनामा जिनोम को प्रत्येक नयाँ रिलीज संग बिल्डरको अनुमानित रिलीजहरूमा भरोसा गर्न सक्नुहुन्छ।"
+msgid ""
+"You can rely on predictable releases of Builder with each new release of GNOME every six "
+"months."
+msgstr ""
+"तपाईं हरेक छ महिनामा जिनोम को प्रत्येक नयाँ रिलीज संग बिल्डरको अनुमानित रिलीजहरूमा भरोसा गर्न सक्नुहुन्छ।."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
@@ -65,16 +95,15 @@ msgstr "बहु-मोनिटर समर्थन"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Code overview mini-map"
-msgstr ""
+msgstr "कोड अवलोकन मिनी-मानचित्र"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Integration with Git"
 msgstr "गिटसँग एकीकरण"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
-#| msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgid "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, and Waf"
-msgstr ""
+msgstr "अटोटूल, कार्गो, सीमेक, ग्रेडल, मेसन, मेभेन, मेक, पीएचपीज र वाफसँग एकीकरण"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -94,67 +123,69 @@ msgstr "सि, पायथोन, भाला, and एक्सएमएल �
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
-msgstr ""
+msgstr "एचटीएमएल, मार्कडाउन, र पुन: संरचित पाठ, र स्फिंक्स लाइभ पूर्वावलोकन"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr ""
+msgstr "वैकल्पिक भिम, इम्याक्स, र उदात्त पाठ शैली सम्पादन"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "An integrated software profiler for native applications"
-msgstr ""
+msgstr "मूल अनुप्रयोगहरूको लागि एकीकृत सफ्टवेयर प्रोफाइलर"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
 msgid "An integrated debugger for native applications"
-msgstr ""
+msgstr "नेटिभ अनुप्रयोगका लागि एकीकृत डिबगर"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr ""
+msgstr "जेबिल्ड र फ्ल्याटपाक रनटाइमको साथ भवनको लागि समर्थन"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
-msgstr ""
+msgstr "तपाईँको कोड आधारभित्र फेला परेका टिओडीओहरू हेर्नका लागि समर्थन"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
-msgstr ""
+msgstr "फाइल हरू र प्रतीकहरूमा छिटो अस्पष्ट पाठ खोजी गर्नुहोस्"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
+msgid "Debug with the GNU debugger"
+msgstr "GNU डिबगरसँग डिबग गर्नुहोस्"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
 msgid "Quickly access your projects"
-msgstr ""
+msgstr "तपाईँका परियोजनाहरू छिटो पहुँच गर्नुहोस्"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
 msgid "Create new projects from a variety of templates"
-msgstr ""
+msgstr "विभिन्न टेम्प्लेटहरूबाट नयाँ परियोजनाहरू सिर्जना गर्नुहोस्"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
 msgid "Integration with Git to clone your projects"
-msgstr ""
+msgstr "तपाईँका परियोजनाहरू क्लोन गर्न गिटसँग एकीकरण"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
 msgid "The source code editor"
 msgstr "स्रोत कोड सम्पादक"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
 msgid "Fast global fuzzy search"
-msgstr ""
+msgstr "छिटो विश्वव्यापी अस्पष्ट खोजी"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
-msgid "Debug with the GNU debugger"
-msgstr ""
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:74
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
-msgstr ""
+msgstr "फाइलको थप हेर्न मिनिम्याप प्रयोग गर्नुहोस्"
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:6 src/plugins/buildui/tweaks.ui:246
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6 src/plugins/buildui/tweaks.ui:264
 msgid "Build Parallelism"
-msgstr ""
+msgstr "समानान्तरता निर्माण गर्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
-msgid "Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU."
-msgstr "निर्माण कार्य गर्दा प्रयोग गर्ने कार्यकर्ताहरूको संख्या -१ समझदार डिफल्टको लागि। ० सीपीयूको संख्याको लागि।"
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU."
+msgstr ""
+"निर्माण कार्य गर्दा प्रयोग गर्ने कार्यकर्ताहरूको संख्या -१ समझदार डिफल्टको लागि। ० सीपीयूको संख्याको लागि।."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -169,8 +200,9 @@ msgid "Show Log When Building"
 msgstr "निर्माण गर्दा लग देखाउनुहोस्"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
+#, fuzzy
 msgid "If enabled, the build log will be raised when a build starts"
-msgstr ""
+msgstr "यदि सक्षम पारियो भने, बिल्ड सुरु हुँदा बिल्ड लग उठाइनेछ"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -178,30 +210,35 @@ msgstr "सञ्जाललाई अनुमति दिनुहोस्"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
-"Enable automated transfers upon building such as SDK downloads and dependencies when connection is metered."
-msgstr "जडान हुँदा मिल्ने SDK डाउनलोडहरू र निर्भरताहरू जस्तै निर्माणमा स्वचालित स्थानान्तरण सक्षम गर्नुहोस्।"
+"Enable automated transfers upon building such as SDK downloads and dependencies when "
+"connection is metered."
+msgstr "जडान हुँदा मिल्ने SDK डाउनलोडहरू र निर्भरताहरू जस्तै निर्माणमा स्वचालित स्थानान्तरण सक्षम गर्नुहोस्।."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+#, fuzzy
 msgid "Ctags based autocompletion"
-msgstr ""
+msgstr "Ctags आधारित स्वत: पूर्णता"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+#, fuzzy
 msgid "Use Ctags for autocompletion."
-msgstr ""
+msgstr "स्वत: पूर्णताका लागि सीटीएजी हरू प्रयोग गर्नुहोस् ।."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Enable semantic highlighting"
-msgstr ""
+msgstr "सिमेन्टिक हाइलाइटिङ सक्षम पार्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid ""
-"If enabled, additional highlighting will be provided in supported languages based on information extracted "
-"from the source code."
-msgstr "यदि सक्षम छ भने, स्रोत कोडबाट निकालिएको जानकारीमा आधारित समर्थित भाषाहरूमा अतिरिक्त हाइलाइटिङ प्रदान गरिनेछ।"
+"If enabled, additional highlighting will be provided in supported languages based on "
+"information extracted from the source code."
+msgstr ""
+"यदि सक्षम छ भने, स्रोत कोडबाट निकालिएको जानकारीमा आधारित समर्थित भाषाहरूमा अतिरिक्त हाइलाइटिङ प्रदान "
+"गरिनेछ।."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
-msgstr ""
+msgstr "कार्यान्वयन योग्य सीटीएजीएसको मार्ग"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
@@ -209,27 +246,29 @@ msgstr "ctags को बाटो प्रणालीमा कार्या
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
 msgid "Debugger Breakpoint at Main"
-msgstr ""
+msgstr "मुख्यमा विच्छेदबिन्दु डिबगर"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
+#, fuzzy
 msgid "Debugger should automatically insert breakpoint at main() function."
-msgstr ""
+msgstr "डिबगरले मुख्य() प्रकार्यमा स्वचालित रूपमा विच्छेदबिन्दु घुसाउनुपर्छ ।."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
 msgid "Debugger Breakpoint at Criticals"
-msgstr ""
+msgstr "क्रिटिकल्समा डिबगर ब्रेकपोइन्ट"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid "Debugger should automatically insert breakpoint at g_critical() function."
-msgstr ""
+msgstr "डिबगरले g_critical() प्रकार्यमा स्वचालित रूपमा विच्छेदबिन्दु घुसाउनुपर्छ ।."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at Warnings and Criticals"
-msgstr ""
+msgstr "चेतावनी र आलोचनात्मकमा विच्छेदबिन्दु डिबगर गर्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+#, fuzzy
 msgid "Debugger should automatically insert breakpoint at g_warning() and g_critical function."
-msgstr ""
+msgstr "डिबगरले स्वचालित रूपमा g_warning() र g_critical प्रकार्यमा विच्छेदबिन्दु घुसाउनुपर्छ ।."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -287,116 +326,125 @@ msgstr "सम्बन्धित रेखा सङ्ख्या देख
 msgid "If enabled, the editor will show relative line numbers."
 msgstr "यदि सक्षम पारिएमा, सम्पादकले सापेक्षिक रेखा सङ्ख्या देखाउनेछ ।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:54 src/plugins/editorui/tweaks.ui:483
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+msgid "Use line selection styling"
+msgstr "लाइन चयन शैली प्रयोग गर्नुहोस्"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid "If enabled, the editor will use selected style for line numbers for whole lines selected."
+msgstr ""
+"यदि सक्षम पारिएमा, सम्पादकले चयन गरिएका सम्पूर्ण पङ्क्तिहरूका लागि लाइन नम्बरका लागि चयन गरिएको शैली "
+"प्रयोग गर्नेछ ।."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59 src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "स्मार्ट ब्याकस्पेस"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Backspace will remove additional spaces to keep you aligned to the indentation size."
-msgstr "ब्याकस्पेसले इन्डेन्टेशन साइजमा सङ्कलन गर्न अतिरिक्त खाली ठाउँहरू हटाउनेछ।"
+msgstr "ब्याकस्पेसले इन्डेन्टेशन साइजमा सङ्कलन गर्न अतिरिक्त खाली ठाउँहरू हटाउनेछ।."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65 src/plugins/editorui/tweaks.ui:495
-#, fuzzy
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70 src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
-msgstr "छरितो गृह समाप्ति"
+msgstr "स्मार्ट घर/अन्त्य"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
-msgstr "गृह/अन्त्य कुञ्जीहरूको व्यवहार परिमार्जन गर्दछ ।"
+msgstr "गृह/अन्त्य कुञ्जीहरूको व्यवहार परिमार्जन गर्दछ ।."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr "ग्रिड लाइनहरू देखाउ"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "यदि सक्षम भएमा, सम्पादकले कागजातमा ग्रिड लाइनहरू देखाउनेछ।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
-msgstr ""
+msgstr "अवलोकन मानचित्र नीति"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
-msgstr ""
+msgstr "जब सिंहावलोकन नक्शा प्रदर्शित गर्नुपर्छ।."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91 src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96 src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "खालीस्थान घुसाउनुहोस्"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr "सम्पादकमा विभिन्न प्रकारको स्पेस बनाउनुहोस्।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101 src/plugins/editorui/tweaks.ui:77
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106 src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "पाठ बेर्नुहोस्"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "राम्रो दृश्यताको लागि पाठको लामो रेखा लपेट्ने तरिका।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "स्वत: बचत सक्षम"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "स्वत: बचत सुविधा सक्षम वा अक्षम पार्नुहोस् ।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "स्वत: बचत आवृत्ति"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "स्वत: बचत गर्नु अघि परिमार्जन पछि सेकेन्डको सङ्ख्या।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "समाप्ति पङ्क्ति गणना"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
-msgstr "प्रयोगकर्तालाई प्रदर्शन गर्नका लागि पूरा पङ्क्तिहरूको सङ्ख्या ।"
+msgstr "प्रयोगकर्तालाई प्रदर्शन गर्नका लागि पूरा पङ्क्तिहरूको सङ्ख्या ।."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124 src/plugins/editorui/tweaks.ui:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129 src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "पङ्ति उचाइ"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
-msgstr "चयन गरिएको फन्टका लागि प्रयोग हुने लाइन उचाइ ।"
+msgstr "चयन गरिएको फन्टका लागि प्रयोग हुने लाइन उचाइ ।."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "अन्तरक्रियात्मक समाप्ति"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "If enabled, Builder will automatically display completion proposals as you type."
 msgstr "यदि सक्षम पारियो भने, तपाईँले टाइप गर्दा बिल्डरले स्वचालित रूपमा पूरा प्रस्तावहरू प्रदर्शन गर्नेछ ।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
-msgid "Minimum characters for matching selection."
-msgstr "मिल्दो चयनका लागि न्यूनतम क्यारेक्टर ।"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
-msgid "Specify the minimum number of characters for selection matching."
-msgstr "चयन मिलानका लागि क्यारेक्टरको न्यूनतम सङ्ख्या निर्दिष्ट गर्नुहोस् ।"
-
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+msgid "Minimum characters for matching selection."
+msgstr "मिल्दो चयनका लागि न्यूनतम क्यारेक्टर ।."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+msgid "Specify the minimum number of characters for selection matching."
+msgstr "चयन मिलानका लागि क्यारेक्टरको न्यूनतम सङ्ख्या निर्दिष्ट गर्नुहोस् ।."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "स्निप्पेटस् सक्षम पार्नुहोस्"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Allow expanding snippets from the editor by pressing tab after the snippet trigger."
 msgstr "स्निपेट ट्रिगर पछि ट्याब थिचेर सम्पादकबाट स्निपेटहरू विस्तार गर्न अनुमति दिनुहोस् ।"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "पहिलो समाप्ति चयन गर्नुहोस्"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "स्वचालित रूपमा पहिलो स्वत: समाप्ति प्रविष्टि चयन गर्नुहोस् ।"
 
@@ -406,7 +454,7 @@ msgstr "खाली स्थान शैली"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
 msgid "How to apply spaces when reformatting text."
-msgstr "पाठ सुधार गर्दा खाली स्थानहरू कसरी लागू गर्ने।"
+msgstr "पाठ सुधार गर्दा खाली स्थानहरू कसरी लागू गर्ने।."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
@@ -414,7 +462,7 @@ msgstr "सक्षम बनाइयो ।"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
-msgstr "यदि एक्सटेन्सनभित्रको प्रकार सक्षम पारिएको छ भने ।"
+msgstr "यदि एक्सटेन्सनभित्रको प्रकार सक्षम पारिएको छ भने ।."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
@@ -468,12 +516,13 @@ msgid "Clear build caches at startup"
 msgstr "सुरुआतमा निर्माण क्यास खाली गर्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:39
+#, fuzzy
 msgid "If enabled, Builder will clear build caches upon startup."
-msgstr ""
+msgstr "यदि सक्षम पारियो भने, बिल्डरले स्टार्टअपमा बिल्ड क्यासहरू खाली गर्नेछ।."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
-msgstr ""
+msgstr "पृष्ठ हरू परिवर्तन गर्न इन्टरफेस शैली"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
@@ -485,11 +534,12 @@ msgstr "नयाँ परियोजनाका लागि प्रयो
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Inherit Language Server stderr"
-msgstr ""
+msgstr "इनहेरिट भाषा सर्भर stderrइनहेरिट भाषा सर्भर stderr"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
+#, fuzzy
 msgid "If enabled, stderr of language servers will be redirected to the console."
-msgstr ""
+msgstr "यदि सक्षम पारिएमा, भाषा सर्भरको स्टेडर कन्सोलमा पुन: निर्देशित हुनेछ ।."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -497,23 +547,25 @@ msgstr "पूर्वावलोकन खोजी परिणाम"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
-msgstr ""
+msgstr "यदि खोजी परिणामका लागि पूर्वावलोकनहरू स्वचालित रूपमा प्रदर्शित हुनुपर्दछ भने"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
-msgstr ""
+msgstr "प्लगइन सक्षम पारियो"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
-msgstr ""
+msgstr "यदि प्लगइन सक्षम पार्नु पर्दछ भने"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
-msgstr ""
+msgstr "निर्माणका लागि चयन गरिएको कन्फिगरेसन"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:8
-msgid "The configuration that has been selected and will be restored the next time the project loads."
-msgstr ""
+#, fuzzy
+msgid ""
+"The configuration that has been selected and will be restored the next time the project loads."
+msgstr "कन्फिगरेसन जुन चयन गरिएको छ र अर्को पटक परियोजना लोड हुँदा पुन: स्थापना गरिनेछ ।."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
@@ -521,9 +573,11 @@ msgstr "चलाउनु अघि परियोजना स्थापन
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
-"Run the pipelines install phase before running the project. Only use this if you know what you're doing with "
-"your project."
+"Run the pipelines install phase before running the project. Only use this if you know what "
+"you're doing with your project."
 msgstr ""
+"परियोजना चलाउनु अघि पाइपलाइन स्थापना चरण चलाउनुहोस्। तपाईं आफ्नो परियोजना संग के गर्दै हुनुहुन्छ थाहा छ भने "
+"मात्र यो प्रयोग गर्नुहोस्।."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -539,9 +593,11 @@ msgstr "अनुप्रयोग रोक्न का लागि पठ�
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
-"This allows sending something other than sigkill to stop the target application. That might be useful when "
-"you want to gracefully shutdown a server process."
+"This allows sending something other than sigkill to stop the target application. That might be "
+"useful when you want to gracefully shutdown a server process."
 msgstr ""
+"यसले लक्षित अनुप्रयोग रोक्न सिग्किल बाहेक अन्य केहि पठाउन अनुमति दिन्छ। यो उपयोगी हुन सक्छ जब तपाईं सर्भर "
+"प्रक्रियालाई सुन्दर रूपमा बन्द गर्न चाहनुहुन्छ।."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -549,9 +605,9 @@ msgstr "स्थानीय एकाइ परीक्षण"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr ""
+msgstr "एकाइ परीक्षणहरू चलाउँदा कुन वातावरण प्रयोग गर्ने"
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:50 src/plugins/buildui/gtk/menus.ui:241
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50 src/plugins/buildui/gtk/menus.ui:325
 #: src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
@@ -560,7 +616,18 @@ msgstr ""
 msgid "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5 src/plugins/project-tree/tweaks.ui:13
+#: data/gsettings/org.gnome.builder.project.gschema.xml:56
+msgid "Cache Root"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:57
+msgid ""
+"A directory to use as the root for cache data of the project like builds and flatpak staging "
+"directories"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
 msgid "Show Icons"
 msgstr "प्रतिमा मात्र देखउनुहोस्"
 
@@ -568,7 +635,8 @@ msgstr "प्रतिमा मात्र देखउनुहोस्"
 msgid "This setting is deprecated and no longer in use."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10 src/plugins/project-tree/tweaks.ui:25
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
 msgstr "उपेक्षा गरिएका फाइलहरू देखाउनुहोस्"
 
@@ -576,54 +644,24 @@ msgstr "उपेक्षा गरिएका फाइलहरू देख
 msgid "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr "यदि सक्षम भएमा, परियोजना रूखले फाइलहरू प्रदर्शन गर्दछ जुन VCS द्वारा बेवास्ता गरिन्छ।"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15 src/plugins/project-tree/tweaks.ui:37
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
-msgstr ""
+msgstr "पहिले डाइरेक्टरी क्रमबद्ध गर्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid "If enabled, the project tree will sort directories before regular files."
 msgstr "यदि सक्षम भएमा, परियोजना रूख नियमित फाइलहरू अघि निर्देशिकाहरू क्रमबद्ध गर्नेछ।"
 
-#: data/gsettings/org.gnome.builder.spelling.gschema.xml:5 src/plugins/editorui/tweaks.ui:375
-#: src/plugins/spellcheck/editor-spell-menu.c:250
+#: data/gsettings/org.gnome.builder.spelling.gschema.xml:5 src/plugins/editorui/tweaks.ui:387
 msgid "Check Spelling"
 msgstr "र्हिज्जे जाँच गर्नुहोस्"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
 msgid "Automatically check spelling within documents"
-msgstr ""
+msgstr "कागजातभित्र हिज्जे स्वचालित रूपमा जाँच गर्नुहोस्"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "जिनोमका लागि सफ्टवेयर निर्माण गर्नुहोस्"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "निर्माण; विकास;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "परियोजना खोल्नुहोस्"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "नयाँ परियोजना सुरु गर्नुहोस्"
-
-#: data/org.gnome.Builder.desktop.in.in:28 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:287
-msgid "Clone Repository"
-msgstr "भण्डार क्लोन गर्नुहोस्"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "नयाँ सम्पादक कार्यस्थान"
-
-#: data/org.gnome.Builder.desktop.in.in:36
-msgid "D-Bus Inspector"
-msgstr ""
-
-#: src/libide/code/ide-buffer.c:3834
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "हालको भाषाले प्रतीक हलकर्ताको कमी छ।"
 
@@ -649,7 +687,7 @@ msgstr "[विश्वव्यापी] समूहमा हराइर�
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
-msgstr "पूर्वनिर्धारित सुरुआत गर्न असफल भयो ।"
+msgstr "पूर्वनिर्धारित सुरुआत गर्न असफल भयो ।."
 
 #. translators: %s is replaced with the error message
 #: src/libide/code/ide-unsaved-files.c:253
@@ -657,49 +695,60 @@ msgstr "पूर्वनिर्धारित सुरुआत गर्�
 msgid "Failed to save draft: %s"
 msgstr "ड्राफ्ट बचत गर्न असफल: %s"
 
-#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
+#: src/libide/core/ide-context.c:349 src/libide/core/ide-context.c:797
 msgid "Untitled"
 msgstr "शीर्षक विहिन"
 
-#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:528
-#: src/libide/greeter/ide-greeter-workspace.c:666 src/libide/gtk/ide-install-button.ui:31
-#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24 src/libide/gui/ide-workbench.c:1564
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325 src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7 src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117 src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15 src/plugins/testui/gbp-testui-output-panel.c:105
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "परियोजनाहरू"
+
+#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663 src/libide/gtk/ide-install-button.ui:31
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 msgid "_Cancel"
 msgstr "_रद्द गर्नुहोस्"
 
 #: src/libide/debugger/ide-debug-manager.c:977
 msgid "A suitable debugger could not be found."
-msgstr ""
+msgstr "उपयुक्त डिबगर फेला पार्न सकिएन ।."
 
-#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105 src/libide/gui/ide-workbench.c:1560
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
-msgstr "फाइल खोल्नुहोस्"
+msgstr "फाइल खोल्नुहोस्…"
 
 #: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
 msgstr "कार्यस्थानमा फाइल खोल्नुहोस्"
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31 src/libide/gui/gtk/menus.ui:29
-#: src/libide/tweaks/ide-tweaks-window.c:202
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "अभिरुचीहरू"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37 src/libide/gui/gtk/menus.ui:37
-#: src/libide/plugins/ide-plugin.c:346 src/plugins/editorui/tweaks.ui:476
-#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65 src/plugins/shortcutui/tweaks.ui:8
-#: src/plugins/shortcutui/tweaks.ui:12
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
+#: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
+#: src/plugins/editorui/tweaks.ui:488 src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
+#: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "कुञ्जीपाटी सर्टकटहरू"
 
-#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43 src/libide/gui/gtk/menus.ui:45
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:45
 msgid "Help"
 msgstr "सहायता"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49 src/libide/gui/gtk/menus.ui:52
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:49
+#: src/libide/gui/gtk/menus.ui:52
 msgid "About Builder"
 msgstr "बिल्डरको बारेमा"
 
@@ -711,26 +760,30 @@ msgstr "_बन्द गर्नुहोस्"
 msgid "Document"
 msgstr "कागजात"
 
-#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71 src/libide/editor/gtk/menus.ui:80
-#: src/libide/greeter/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
-#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71 src/libide/gui/gtk/menus.ui:75
-#: src/libide/gui/gtk/menus.ui:79 src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
-#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:24 src/plugins/menu-search/gtk/menus.ui:56
-#: src/plugins/menu-search/gtk/menus.ui:97 src/plugins/web-browser/gtk/menus.ui:16
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
+#: src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10
+#: src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25 src/libide/gui/gtk/menus.ui:58
+#: src/libide/gui/gtk/menus.ui:71 src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9
+#: src/plugins/menu-search/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56 src/plugins/menu-search/gtk/menus.ui:97
+#: src/plugins/web-browser/gtk/menus.ui:15
 msgid "Application"
 msgstr "अनुप्रयोग"
 
-#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72 src/plugins/menu-search/gtk/menus.ui:98
+#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#: src/plugins/menu-search/gtk/menus.ui:98
 msgid "Pages"
 msgstr "पृष्ठहरू"
 
-#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84 src/libide/editor/gtk/menus.ui:88
-#: src/libide/gui/tweaks.ui:26 src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:108
-#: src/libide/sourceview/gtk/menus.ui:141 src/libide/sourceview/gtk/menus.ui:149
-#: src/libide/sourceview/gtk/menus.ui:153 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
+#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164 src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111 src/plugins/menu-search/gtk/menus.ui:121
 #: src/plugins/symbol-tree/gtk/menus.ui:5
@@ -741,13 +794,13 @@ msgstr "पाठ सम्पादक"
 msgid "Search & Replace"
 msgstr "खोजी गर्नुहोस् , बदल्नुहोस्"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
-#: src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72
+#: src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "कागजातहरू"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "चयन"
 
@@ -779,9 +832,11 @@ msgstr "फाइलले सङ्केतन त्रुटि हरू �
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
-"The encoding used to load the file detected errors. You may select an alternate encoding from the statusbar "
-"and reload."
+"The encoding used to load the file detected errors. You may select an alternate encoding from "
+"the statusbar and reload."
 msgstr ""
+"फाइल लोड गर्न प्रयोग गरिएको सङ्केतनले त्रुटिहरू पत्ता लगायो । तपाईँले स्थितिपट्टीबाट वैकल्पिक सङ्केतन चयन गर्न "
+"सक्नुहुन्छ र पुन: लोड गर्न सक्नुहुन्छ ।."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -805,7 +860,7 @@ msgstr "कागजात पूर्वावस्थामा ल्या�
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
 msgid "Unsaved document has been restored."
-msgstr "बचत नगरिएका कागजात पूर्वावस्थामा ल्याइएको छ ।"
+msgstr "बचत नगरिएका कागजात पूर्वावस्थामा ल्याइएको छ ।."
 
 #: src/libide/editor/ide-editor-info-bar.ui:81
 msgid "_Discard…"
@@ -821,25 +876,12 @@ msgstr "मुद्रण गर्न असफल : %s"
 #: src/libide/editor/ide-editor-page.c:591
 #, c-format
 msgid "Failed to format selection: %s"
-msgstr ""
+msgstr "चयन ढाँचाबद्ध गर्न असफल भयो: %s"
 
-#: src/libide/editor/ide-editor-page.c:1133 src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:101
+#: src/libide/editor/ide-editor-page.c:1139 src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "फाइल बचत गर्नुहोस्"
-
-#: src/libide/editor/ide-editor-page.c:1136 src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281 src/plugins/editorui/gtk/menus.ui:157
-#: src/plugins/sysprof/gtk/menus.ui:132
-msgid "Save"
-msgstr "सङ्ग्रह गर्नुहोस्"
-
-#: src/libide/editor/ide-editor-page.c:1136 src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280 src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:224
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476 src/plugins/vcsui/gbp-vcsui-clone-page.c:113
-msgid "Cancel"
-msgstr "रद्द गर्ने"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32 src/plugins/grep/gbp-grep-panel.ui:162
 msgid "Replace"
@@ -871,7 +913,7 @@ msgstr "सबै बदल्नुहोस्"
 
 #: src/libide/editor/ide-editor-search-bar.ui:148 src/libide/terminal/ide-terminal-search.ui:95
 msgid "Use Re_gular Expressions"
-msgstr ""
+msgstr "नियमित अभिव्यक्ति प्रयोग गर्नुहोस्"
 
 #: src/libide/editor/ide-editor-search-bar.ui:152 src/libide/terminal/ide-terminal-search.ui:99
 #: src/plugins/grep/gbp-grep-panel.ui:94
@@ -879,81 +921,59 @@ msgid "_Case Sensitive"
 msgstr "संवेदनशिल केस"
 
 #: src/libide/editor/ide-editor-search-bar.ui:156 src/libide/terminal/ide-terminal-search.ui:103
-#, fuzzy
-#| msgid "Match whole word"
 msgid "Match Whole Words"
-msgstr "सम्पूर्ण शब्दहरू मात्रको जोडा मिलाउनुहोस्"
+msgstr "पूरा शब्दहरू मिलाउनुहोस्"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "युनिक्स्/लिनक्स् (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "म्याक ओएस्  क्लासिक (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "विन्डोहरू (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "स्वचालित रूपमा पत्ता लगाइयो"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "वर्ण सङ्केतन"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "पङ्ति समाप्त:"
-
-#: src/libide/editor/ide-editor-utils.c:270 src/plugins/create-project/gbp-create-project-widget.ui:103
+#: src/libide/editor/ide-editor-utils.c:140
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "भाषा"
 
-#: src/libide/editor/ide-editor-workspace.ui:105 src/libide/gui/ide-primary-workspace.ui:112
+#: src/libide/editor/ide-editor-workspace.ui:57 src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48 src/libide/gui/ide-primary-workspace.ui:137
+msgid "Search (Ctrl+Enter)"
+msgstr "खोजी गर्नुहोस् (Ctrl+Enter)"
+
+#: src/libide/editor/ide-editor-workspace.ui:141 src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr ""
+msgstr "तल प्यानल टगल गर्नुहोस् (Ctrl+F9)"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
-msgstr ""
+msgstr "निर्माण पाइपलाइन सुरुआत गर्न असफल: %s"
 
 #: src/libide/foundry/ide-build-manager.c:623
 #, c-format
 msgid "Failed to get device information: %s"
-msgstr ""
+msgstr "यन्त्र सूचना प्राप्त गर्न असफल भयो: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
-#| msgid "Delete the configuration"
+#: src/libide/foundry/ide-config-manager.c:539
 msgid "Active Configuration"
-msgstr ""
+msgstr "सक्रिय कन्फिगरेसन"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, c-format
-#| msgid "Configure Options"
 msgid "Configuration %s changed"
-msgstr ""
+msgstr "कन्फिगरेसन %s परिवर्तन गरियो"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid "Failed to locate build configuration “%s”. It may be invalid or incorrectly formatted."
-msgstr ""
+msgstr "निर्माण कन्फिगरेसन \"%s\" फेला पार्न असफल भयो । यो अमान्य वा गलत ढाँचाबद्ध हुन सक्छ ।."
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
-msgstr ""
+msgstr "\"%s\" मा सक्रिय कन्फिगरेसन सेट गरियो"
 
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
 msgid "Discovered device “%s”"
-msgstr ""
+msgstr "फेला परेको यन्त्र \"%s\""
 
 #: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
@@ -962,11 +982,11 @@ msgstr "यन्त्रहरू"
 #: src/libide/foundry/ide-device-manager.c:643
 #, c-format
 msgid "Device set to %s"
-msgstr ""
+msgstr "%s मा यन्त्र सेट गर्नुहोस्"
 
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr ""
+msgstr "यन्त्रमा परिनियोजन गर्न सकिँदैन, निर्माण पाइपलाइन सुरुआत गरिएको छैन"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143 src/libide/greeter/ide-greeter-row.c:252
 msgid "Fallback"
@@ -976,33 +996,33 @@ msgstr "फलब्याक"
 #: src/libide/foundry/ide-local-device.c:140
 #, c-format
 msgid "My Computer (%s)"
-msgstr ""
+msgstr "मेरो कम्प्युटर (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
-msgstr ""
+msgstr "मेरो कम्प्युटर (%s) — %s"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
-msgstr ""
+msgstr "निर्माण पाइपलाइन असफल अवस्थामा छ"
 
 #: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
-msgstr ""
+msgstr "निर्माण कन्फिगरेसनमा त्रुटिहरू छन्"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr ""
+msgstr "निर्माण वृक्ष को साफ करने के लिए पाइप लाइन शुरू"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
-msgstr ""
+msgstr "पाइपलाइन शुरू हो गई"
 
 #: src/libide/foundry/ide-pipeline.c:980
 msgid "Pipeline finished"
-msgstr ""
+msgstr "पाइपलाइन समाप्त भयो"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1107
@@ -1014,11 +1034,11 @@ msgstr "निर्माण (%s)"
 #: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
-msgstr ""
+msgstr "पोस्ट-स्थापना (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3113 src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr ""
+msgstr "छद्म टर्मिनल सिर्जना असफल भयो । टर्मिनल सुविधाहरू सीमित हुनेछन्।."
 
 #: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
@@ -1043,7 +1063,7 @@ msgstr "निर्भरता निर्माण…"
 
 #: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
-msgstr ""
+msgstr "बूटस्ट्रैपिंग…"
 
 #: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
@@ -1060,7 +1080,7 @@ msgstr "स्थापना गरिदै…"
 
 #: src/libide/foundry/ide-pipeline.c:3394
 msgid "Committing…"
-msgstr "कमिट गर्दै"
+msgstr "कमिट गर्दै…"
 
 #: src/libide/foundry/ide-pipeline.c:3398
 msgid "Exporting…"
@@ -1076,12 +1096,12 @@ msgid "Preparing…"
 msgstr "तयारी गर्दैछ…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3770
+#: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
 msgstr "%s हटाउँदै"
 
-#: src/libide/foundry/ide-pipeline.c:3829
+#: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
 msgstr ""
 
@@ -1090,7 +1110,7 @@ msgid "Cannot build transfer while on metered connection"
 msgstr ""
 
 #: src/libide/foundry/ide-run-command.c:177 src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
-#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
 msgid "Untitled command"
 msgstr "शीर्षक विहिन आदेश"
 
@@ -1099,54 +1119,56 @@ msgid "Unit Test"
 msgstr "एकाइ परीक्षण"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:187
+#: src/libide/foundry/ide-run-manager.c:190
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:567
+#: src/libide/foundry/ide-run-manager.c:592
 msgid "Cannot run target, another target is running"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:846
+#: src/libide/foundry/ide-run-manager.c:890
 #, c-format
 msgid "Application exited with error: %s"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:849 src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/libide/foundry/ide-run-manager.c:893
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr ""
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1038
+#: src/libide/foundry/ide-run-manager.c:1083
 #, c-format
 msgid "Running %s…"
-msgstr "चलिरहेको %s"
+msgstr "चलिरहेको %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1105
+#: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1334
+#: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1366
+#: src/libide/foundry/ide-run-manager.c:1411
 msgid "User requested application to restart"
 msgstr ""
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1396
+#: src/libide/foundry/ide-run-manager.c:1441
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1416
+#: src/libide/foundry/ide-run-manager.c:1461
 msgid "User requested application to stop"
 msgstr ""
 
-#: src/libide/foundry/ide-runtime.c:406 src/plugins/host/gbp-host-runtime-provider.c:54
-#: src/plugins/host/gbp-host-runtime-provider.c:69 src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/libide/foundry/ide-runtime.c:395 src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "होस्ट प्रणाली"
@@ -1172,30 +1194,22 @@ msgid "Sending signal %d to subprocess %s"
 msgstr ""
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
-#| msgid "Host operating system"
 msgid "Default (Host operating system)"
 msgstr ""
 
-#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
-#: src/libide/projects/ide-projects-global.c:103 src/plugins/create-project/gtk/menus.ui:6
-#: src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "परियोजनाहरू"
-
-#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66 src/libide/greeter/gtk/menus.ui:86
-#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
+#: src/libide/greeter/gtk/menus.ui:86 src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
 msgid "_Clone Repository…"
-msgstr "भण्डार क्लोन गर्नुहोस्"
+msgstr "भण्डार क्लोन गर्नुहोस्…"
 
-#: src/libide/greeter/gtk/menus.ui:22 src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:147
+#: src/libide/greeter/gtk/menus.ui:22 src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:426 src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "बन्दगर्नुहोस्"
 
 #: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
-msgstr "परियोजना खोल्नुहोस्"
+msgstr "परियोजना खोल्नुहोस्…"
 
 #: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
@@ -1207,56 +1221,53 @@ msgstr ""
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "फोल्डर चयन गर्नुहोस्"
+msgstr "फोल्डर चयन गर्नुहोस्…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
 msgstr "डाइरेक्टरी"
 
-#: src/libide/greeter/ide-greeter-workspace.c:222 src/libide/gui/ide-workbench.c:348
-#: src/libide/gui/ide-workbench.c:854
+#: src/libide/greeter/ide-greeter-workspace.c:223 src/libide/gui/ide-workbench.c:363
+#: src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
-msgstr "निर्माता — %s "
+msgstr "निर्माता — %s"
 
 #: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:336 src/plugins/create-project/gbp-create-project-widget.c:262
+#: src/libide/greeter/ide-greeter-workspace.c:336
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Close"
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
-#| msgid "Select Project Directory"
+#: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:526
+#: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:529
-#| msgid "Select Project Directory"
+#: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:623 src/libide/greeter/ide-greeter-workspace.c:662
-#| msgid "Select a Project"
+#: src/libide/greeter/ide-greeter-workspace.c:620 src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:628
-#| msgid "Select a Project"
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr ""
 
-#: src/libide/greeter/ide-greeter-workspace.c:667 src/libide/gui/ide-workbench.c:1563
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "खोल्नुहोस्"
 
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr ""
 
@@ -1278,7 +1289,6 @@ msgid "No Projects Found"
 msgstr ""
 
 #: src/libide/greeter/ide-greeter-workspace.ui:113
-#| msgid "Recent Projects"
 msgid "_Remove Projects"
 msgstr ""
 
@@ -1300,20 +1310,6 @@ msgstr "%s मा %s गुण फेला पार्न असफल"
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
 msgstr "va_list मान पुन: प्राप्त गर्न असफल: %s"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:101 src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "खुला"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105 src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475 src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Select"
-msgstr "चयन गर्नुहोस्"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "ब्राउज गर्नुहोस्…"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
@@ -1356,7 +1352,7 @@ msgstr[0] "करिब %u वर्ष अघि"
 msgstr[1] "करिब %u वर्ष अघि"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "स्थापना गर्नुहोस्"
 
@@ -1366,34 +1362,41 @@ msgstr "स्थापना गर्नुहोस्"
 msgid "%u of %u"
 msgstr "%u of %u"
 
-#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16 src/libide/plugins/ide-plugin.c:347
-#: src/plugins/grep/gbp-grep-panel.ui:64 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "_खो"
 
-#: src/libide/gui/ide-search-popover.ui:61
+#: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
 msgstr ""
 
-#: src/libide/gui/ide-search-popover.ui:238
-msgid "_Everything"
-msgstr "सबै"
+#: src/libide/gui/ide-search-popover.ui:84
+msgid "Type to Search"
+msgstr "खोजी गर्न टाईप गर्नुहोस्"
 
-#: src/libide/gui/ide-search-popover.ui:245
-msgid "_Actions"
-msgstr "कार्यहरू"
+#: src/libide/gui/ide-search-popover.ui:85
+msgid "Prefix your query with one of the following to filter results"
+msgstr ""
 
-#: src/libide/gui/ide-search-popover.ui:252
-msgid "_Commands"
-msgstr "आदेशहरू"
-
-#: src/libide/gui/ide-search-popover.ui:259
-msgid "_Files"
+#: src/libide/gui/ide-search-popover.ui:99 src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/menu-search/gtk/menus.ui:112 src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
 msgstr "फाइलहरू"
 
-#: src/libide/gui/ide-search-popover.ui:266
-msgid "_Symbols"
+#: src/libide/gui/ide-search-popover.ui:120
+msgid "Symbols"
 msgstr "प्रतीक"
+
+#: src/libide/gui/ide-search-popover.ui:141
+msgid "Documentation"
+msgstr "अभिलेखीकरण"
+
+#: src/libide/gui/ide-search-popover.ui:162
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "कार्यहरु"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
@@ -1413,8 +1416,8 @@ msgstr ""
 msgid "Close Project"
 msgstr "परियोजना बन्द गर्नुहोस्"
 
-#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59 src/plugins/buildui/tweaks.ui:182
-#: src/plugins/buildui/tweaks.ui:386
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "सामान्य"
 
@@ -1423,8 +1426,6 @@ msgid "Change application preferences"
 msgstr ""
 
 #: src/libide/gui/gtk/menus.ui:38
-#| msgctxt "shortcut window"
-#| msgid "Keyboard Shortcuts"
 msgid "Find keyboard shortcuts"
 msgstr ""
 
@@ -1440,12 +1441,12 @@ msgstr ""
 msgid "Quit without saving changes"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:17
+#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
 msgstr ""
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32 src/libide/terminal/gtk/menus.ui:12
-#: src/libide/terminal/gtk/menus.ui:34 src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/libide/terminal/gtk/menus.ui:34 src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "टर्मिनल"
@@ -1453,10 +1454,6 @@ msgstr "टर्मिनल"
 #: src/libide/gui/gtk/menus.ui:84
 msgid "New Terminals"
 msgstr "नयाँ टर्मिनल"
-
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
-msgstr ""
 
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
@@ -1467,7 +1464,6 @@ msgid "Funded By"
 msgstr "द्वारा अनुदान गरिएको"
 
 #: src/libide/gui/ide-application-command-line.c:62
-#| msgid "Show the application’s version"
 msgid "Show the application preferences"
 msgstr ""
 
@@ -1487,7 +1483,6 @@ msgid "Print version information and exit"
 msgstr "मुद्रण संस्करण विवरण अनि बाहिरनुहोस्"
 
 #: src/libide/gui/ide-application-command-line.c:69
-#| msgid "Increase verbosity, may be specified multiple times"
 msgid "Increase log verbosity (may be repeated)"
 msgstr ""
 
@@ -1498,7 +1493,7 @@ msgstr ""
 
 #: src/libide/gui/ide-environment-editor.c:73
 msgid "New variable…"
-msgstr ""
+msgstr "नयाँ चल…"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -1536,24 +1531,19 @@ msgstr ""
 msgid "Invalid configuration"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:44
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:79 src/plugins/menu-search/gtk/menus.ui:37
+#: src/libide/gui/ide-primary-workspace.ui:101 src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
-msgstr ""
-
-#: src/libide/gui/ide-primary-workspace.ui:87 src/libide/gui/ide-primary-workspace.ui:134
-msgid "Search (Ctrl+Enter)"
-msgstr ""
+msgstr "दायाँ प्यानल टगल गर्नुहोस्"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
 msgstr ""
 
 #: src/libide/gui/ide-run-button.c:68
-#| msgid "Stop running"
 msgid "Stop Running Project"
 msgstr ""
 
@@ -1562,42 +1552,45 @@ msgid "Stop running"
 msgstr "चलिरहेको रोक्नुहोस्"
 
 #: src/libide/gui/ide-run-button.c:151
-#| msgid "Mine projects"
 msgid "Run project"
 msgstr ""
 
 #: src/libide/gui/ide-shortcut-window.c:259 src/libide/gui/ide-shortcut-window.c:285
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "अन्य"
 
-#: src/libide/gui/ide-workbench.c:1076
-#| msgid "Project Name"
+#: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
 msgstr ""
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
 msgstr "परियोजना लोड हुदैंछ: \"%s\""
 
-#: src/libide/gui/ide-workspace.c:1676
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "खुला"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
 msgstr "बचत नभएको कागजातहरू"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160 src/plugins/buildui/gtk/preferences.ui:25
-#: src/plugins/buildui/gtk/preferences.ui:32
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
+#: src/plugins/buildui/gtk/preferences.ui:25 src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "मोहडा"
 
 #: src/libide/gui/tweaks.ui:66
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Configurations"
-msgstr "मोनिटर सेटिङ स्विच गर्नुहोस्"
+msgstr "कन्फिगरेसन"
 
 #: src/libide/gui/tweaks.ui:78
 msgid "Plugins"
@@ -1610,17 +1603,18 @@ msgid_plural "Installing %u packages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437 src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
+#, c-format
 msgid "The operation has been cancelled"
 msgstr ""
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1733
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr ""
 
-#: src/libide/lsp/ide-lsp-client.c:2165 src/libide/lsp/ide-lsp-client.c:2275
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr ""
 
@@ -1629,19 +1623,20 @@ msgid "No LSP client connection is available"
 msgstr ""
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr ""
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:336 src/plugins/create-project/gbp-create-project-widget.ui:117
-#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+#: src/libide/plugins/ide-plugin.c:336
+#: src/plugins/create-project/gbp-create-project-widget.ui:117 src/plugins/git/tweaks.ui:10
+#: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "संस्करण नियन्त्रण"
 
@@ -1649,22 +1644,20 @@ msgstr "संस्करण नियन्त्रण"
 msgid "SDKs"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
-#| msgid "Language"
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
-msgstr ""
+msgstr "भाषा सर्भर"
 
 #: src/libide/plugins/ide-plugin.c:339
 msgid "Devices & Simulators"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:156
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "निदान"
 
 #: src/libide/plugins/ide-plugin.c:341
-#| msgid "Build System"
 msgid "Build Systems"
 msgstr ""
 
@@ -1673,7 +1666,6 @@ msgid "Compilers"
 msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:343
-#| msgid "Debugger"
 msgid "Debuggers"
 msgstr ""
 
@@ -1726,7 +1718,8 @@ msgstr ""
 msgid "Could not parse XML from stream"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:35
+#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
+#: src/libide/terminal/gtk/menus.ui:35
 msgid "Clipboard"
 msgstr "क्लिपबोर्ड"
 
@@ -1763,7 +1756,6 @@ msgid "Zoom"
 msgstr "जुम गर्नुहोस्"
 
 #: src/libide/sourceview/gtk/menus.ui:51
-#| msgid "Zoom _Out"
 msgid "Zoom Out (Ctrl+-)"
 msgstr ""
 
@@ -1776,88 +1768,94 @@ msgid "Zoom In (Ctrl++)"
 msgstr "जुम बढाउनुहोस् (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr "ई-मोजि घुसाउनुहोस्"
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "चयन"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "सबै छान्नुहोस्"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
 msgstr "ढाँचाबद्धता"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "सबै माथिल्लो बर्ण"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:89
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "सबै तल्लो बर्ण"
 
-#: src/libide/sourceview/gtk/menus.ui:90
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:95
+#: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:96
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:101
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "शीर्षक वर्ण"
 
-#: src/libide/sourceview/gtk/menus.ui:102
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:111
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
 msgstr "रेखा चयन गर्नुहोस्"
 
-#: src/libide/sourceview/gtk/menus.ui:116
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
 msgstr "रेखा मेट्नुहोस्"
 
-#: src/libide/sourceview/gtk/menus.ui:121
+#: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
 msgstr "रेखामा सामेल गर्नुहोस्"
 
-#: src/libide/sourceview/gtk/menus.ui:126
+#: src/libide/sourceview/gtk/menus.ui:137
 msgid "S_ort Lines"
 msgstr "रेखाहरू क्रमबद्ध गर्नुहोस्"
 
-#: src/libide/sourceview/gtk/menus.ui:132
+#: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
 msgstr "नक्कल रेखा"
 
-#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr "ढाँचाबद्धता"
 
-#: src/libide/sourceview/gtk/menus.ui:150 src/libide/sourceview/gtk/menus.ui:154
-#: src/libide/sourceview/gtk/menus.ui:160 src/plugins/menu-search/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "कोड नेभिगेसन"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1663 src/plugins/editorui/gbp-editorui-position-label.c:79
+#: src/libide/sourceview/ide-source-view.c:1720
+#: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Ln %u, Col %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1665 src/plugins/editorui/gbp-editorui-position-label.c:82
+#: src/libide/sourceview/ide-source-view.c:1722
+#: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
 msgstr "Ln %u, Col %u (Sel: %u)"
@@ -1894,35 +1892,41 @@ msgstr "स्क्रोलब्याक सहित टर्मिनल�
 msgid "Select _None"
 msgstr "कुनै पनि चयन नगर्नुहोस्"
 
-#: src/libide/terminal/ide-terminal.c:538 src/libide/terminal/ide-terminal.c:571
+#: src/libide/terminal/ide-terminal.c:539 src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "क्लिपबोर्डमा प्रतिलिपि"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "टर्मिनल सामग्री यस रूपमा बचत गर्नुहोस्"
 
-#: src/libide/terminal/ide-terminal-page.c:118
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330 src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/sysprof/gtk/menus.ui:132 src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "सङ्ग्रह गर्नुहोस्"
+
+#: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr "उपप्रक्रिया सुरु आत गर्न असफल भयो । तपाईं आफ्नो परियोजना पुनर्निर्माण गर्न आवश्यक हुन सक्छ."
 
-#: src/libide/terminal/ide-terminal-page.c:123 src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:271
+#: src/libide/terminal/ide-terminal-page.c:125 src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
-msgstr "बिना शीर्षक टर्मिनल "
+msgstr "बिना शीर्षक टर्मिनल"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
 msgstr "निस्कियो"
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "सबप्रोसेस लञ्चर धेरै छिटो असफल भयो, पुन: उत्पन्न हुने छैन ।"
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
-msgstr "बिना शीर्षक टर्मिनल "
+msgstr "बिना शीर्षक टर्मिनल"
 
 #: src/libide/terminal/ide-terminal-palettes.h:48
 msgid "GNOME"
@@ -1948,7 +1952,8 @@ msgstr "नर्ड"
 msgid "Linux"
 msgstr "लिनक्स्"
 
-#: src/libide/terminal/ide-terminal-palettes.h:356 src/libide/terminal/ide-terminal-palettes.h:829
+#: src/libide/terminal/ide-terminal-palettes.h:356
+#: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
 msgstr "XTerm"
 
@@ -1984,6 +1989,10 @@ msgstr "भिएस कोड"
 msgid "Monokai Soda"
 msgstr ""
 
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr ""
+
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
 msgstr "रनटाइम खोजी गर्नुहोस्"
@@ -1998,7 +2007,7 @@ msgstr "पछिल्लो जोडामा सार्नुहोस्"
 
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
-msgstr "_बिटो मार्ने "
+msgstr "_बिटो मार्ने"
 
 #: src/libide/terminal/ide-terminal.ui:154
 msgid "Allow Input"
@@ -2006,7 +2015,7 @@ msgstr "आगत अनुमति दिनुहोस्"
 
 #: src/libide/terminal/ide-terminal.ui:161
 msgid "Search…"
-msgstr "खोजी गर्नुहोस्"
+msgstr "खोजी गर्नुहोस्…"
 
 #: src/libide/terminal/ide-terminal.ui:168 src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
 msgid "Reset"
@@ -2029,9 +2038,17 @@ msgstr "<i>लोड गर्दैछ</i>"
 msgid "Empty"
 msgstr "रित्याउनुहोस्"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
 msgstr "परियोजनाहरू निर्देशिका"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "चयन गर्नुहोस्"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
@@ -2051,25 +2068,13 @@ msgid "unversioned"
 msgstr "संस्करण नभएको"
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "केही छैन"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
 msgstr "खाली पृष्ठ"
-
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:158
-msgid "Settings"
-msgstr "सेटिङ"
-
-#: src/libide/webkit/ide-webkit-page.ui:98
-msgid "Allow JavaScript"
-msgstr "जाभास्क्रिप्ट अनुमति दिनुहोस्"
-
-#: src/libide/webkit/ide-webkit-page.ui:104
-msgid "Print"
-msgstr "मुद्रण गर्नुहोस्"
 
 #: src/main.c:128
 msgid "Run a new instance of Builder"
@@ -2080,19 +2085,21 @@ msgid "Building cache…"
 msgstr "क्यास निर्माण गर्दैछ…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#| msgid "Host operating system"
 msgid "Bootstrapping build system"
 msgstr ""
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290 src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "परियोजना कन्फिगर गर्दैछ"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
-#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86 src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113 src/plugins/make/gbp-make-pipeline-addin.c:142
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:91 src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113
+#: src/plugins/make/gbp-make-pipeline-addin.c:142 src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "परियोजना निर्माण"
@@ -2114,17 +2121,17 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
 msgid "Use KEY=VALUE to set an environment variable"
-msgstr ""
+msgstr "वातावरण चर सेट गर्न कुञ्जी=मान प्रयोग गर्नुहोस्"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
-msgstr ""
+msgstr "कुञ्जीहरू सङ्ख्यासँग सुरु नहुन सक्छ"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
 msgid "Keys may only contain alpha-numerics or underline."
-msgstr ""
+msgstr "कुञ्जीहरूमा अल्फा-सङ्ख्यात्मक वा रेखाङ्कन मात्र हुन सक्छ ।."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
@@ -2149,16 +2156,11 @@ msgstr "प्रतिलिपि गर्नुहोस्"
 msgid "Remove"
 msgstr "हटाउने"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324 src/plugins/testui/gbp-testui-output-panel.c:104
-msgid "_Save"
-msgstr "बचत गर्नुस"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:395
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "निर्माण निर्गत"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:396
-#| msgid "Build Output"
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "निर्गत निर्माण गर्नुहोस् (Shift+Ctrl+L)"
 
@@ -2178,7 +2180,8 @@ msgstr "निर्माण लग बचत गर्नुहोस्"
 msgid "Missing"
 msgstr "नभेटिरहेको"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37 src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
 msgid "Branch"
 msgstr "शाखा"
 
@@ -2186,7 +2189,8 @@ msgstr "शाखा"
 msgid "Build Profile"
 msgstr "निर्माण प्रोफाइल"
 
-#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83 src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
 msgid "Runtime"
 msgstr "रनटाइम"
 
@@ -2196,7 +2200,7 @@ msgstr "यन्त्र"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr "त्यहाँ हालको निर्माण कन्फिगरेसनमा समस्या छ ।"
+msgstr "त्यहाँ हालको निर्माण कन्फिगरेसनमा समस्या छ ।."
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
@@ -2251,21 +2255,20 @@ msgstr "चेतावनी (%u)"
 msgid "Errors (%u)"
 msgstr "त्रुटिहरू (%u)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "साझेदार गरिएको"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr "स्थायी"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
-#, fuzzy
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 msgid "Executable"
-msgstr "कार्यान्वयन योग्य मार्ग"
+msgstr "कार्यान्वयन योग्य"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "निर्माण लक्ष्यसूचीकरण गर्न असफल: %s"
@@ -2280,7 +2283,7 @@ msgstr "उपलब्ध निर्माण लक्ष्यहरू"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid "Some targets may not be available until the project has been configured."
-msgstr "परियोजना कन्फिगर नगरेसम्म केही लक्ष्यहरू उपलब्ध नहुन सक्छन् ।"
+msgstr "परियोजना कन्फिगर नगरेसम्म केही लक्ष्यहरू उपलब्ध नहुन सक्छन् ।."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26 src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
@@ -2299,7 +2302,6 @@ msgid "Duplicate"
 msgstr "नक्कल गर्नुहोस्"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#| msgid "Duplicate the configuration"
 msgid "Duplicate into new configuration"
 msgstr ""
 
@@ -2312,12 +2314,10 @@ msgid "Make configuration active and reload build pipeline"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "मेट्नुहोस्"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:233
-#| msgid "Delete the configuration"
 msgid "Delete configuration"
 msgstr ""
 
@@ -2335,37 +2335,36 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
-msgstr "परियोजना कन्फिगर गर्नुहोस्"
+msgstr "परियोजना कन्फिगर गर्नुहोस्…"
 
 #: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19 src/plugins/buildui/gtk/menus.ui:23
-#: src/plugins/buildui/gtk/menus.ui:32 src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
+#: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
 #: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
 #: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20 src/plugins/buildui/gtk/menus.ui:24
-#: src/plugins/projectui/tweaks.ui:218
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "कन्फिगरेसन"
 
 #: src/plugins/buildui/gtk/menus.ui:16
-#| msgid "Delete the configuration"
 msgid "Reload Configuration"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:18
-#| msgid "Delete the configuration"
 msgid "Reload project configuration"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
-msgstr "निर्माण लक्ष्य चयन गर्नुहोस्"
+msgstr "निर्माण लक्ष्य चयन गर्नुहोस्…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
@@ -2396,12 +2395,10 @@ msgid "_Clean"
 msgstr "सफा"
 
 #: src/plugins/buildui/gtk/menus.ui:52
-#, fuzzy
 msgid "Clean the project"
-msgstr "पूरै परियोजना हटाउनुहोस्"
+msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:58
-#| msgid "Building"
 msgid "Stop Building"
 msgstr ""
 
@@ -2418,8 +2415,9 @@ msgid "Install the project"
 msgstr "परियोजना स्थापना गर्नुहोस्"
 
 #: src/plugins/buildui/gtk/menus.ui:77
+#, fuzzy
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "यन्त्रमा परिनियोजन गर्न सकिँदैन, निर्माण पाइपलाइन सुरुआत गरिएको छैन"
 
 #: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
@@ -2434,12 +2432,10 @@ msgid "_Export"
 msgstr "निर्यात"
 
 #: src/plugins/buildui/gtk/menus.ui:90
-#, fuzzy
 msgid "Export project"
-msgstr "HTML परियोजनामा पठाउनुहोस्"
+msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:98
-#| msgid "Build Output"
 msgid "Show Bui_ld Output"
 msgstr ""
 
@@ -2476,7 +2472,6 @@ msgid "Stop Program"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:146
-#| msgid "Stop running"
 msgid "Stop running the project"
 msgstr ""
 
@@ -2486,74 +2481,213 @@ msgstr "डिबग"
 
 #: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84 src/plugins/testui/gbp-testui-panel.ui:4
-#| msgid "Units:"
+#, fuzzy
 msgid "Unit Tests"
-msgstr ""
+msgstr "एकाइ परीक्षणहरू चलाउँदा कुन वातावरण प्रयोग गर्ने"
+
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/web-browser/gtk/menus.ui:83
+msgid "Settings"
+msgstr "सेटिङ"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "प्रणाली शैली पछ्याउनुहोस्"
 
-#: src/plugins/buildui/gtk/menus.ui:168
-#| msgid "Move Right"
+#: src/plugins/buildui/gtk/menus.ui:166
+msgid "Follow the system style when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:173
+msgid "Force light theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:180
+msgid "Force dark theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:183
+msgid "Accent Color"
+msgstr "उच्चारण रङ"
+
+#: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "प्रणाली"
+
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Use system accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:192
+msgid "Blue"
+msgstr "नीलो"
+
+#: src/plugins/buildui/gtk/menus.ui:196
+msgid "Use blue accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:199
+msgid "Teal"
+msgstr "गाढा नीलो"
+
+#: src/plugins/buildui/gtk/menus.ui:203
+msgid "Use teal accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:206
+msgid "Green"
+msgstr "हरियो"
+
+#: src/plugins/buildui/gtk/menus.ui:210
+msgid "Use green accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:213
+msgid "Yellow"
+msgstr "पहेँलो"
+
+#: src/plugins/buildui/gtk/menus.ui:217
+msgid "Use yellow accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:220
+msgid "Orange"
+msgstr "सुन्तला"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+msgid "Use orange accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:227
+msgid "Red"
+msgstr "रातो"
+
+#: src/plugins/buildui/gtk/menus.ui:231
+msgid "Use red accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:234
+msgid "Pink"
+msgstr "प्याजि"
+
+#: src/plugins/buildui/gtk/menus.ui:238
+msgid "Use pink accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:241
+msgid "Purple"
+msgstr "बैजनी"
+
+#: src/plugins/buildui/gtk/menus.ui:245
+msgid "Use purple accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:248
+msgid "Slate"
+msgstr "पाटी"
+
+#: src/plugins/buildui/gtk/menus.ui:252
+msgid "Use slate accent color when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
 msgstr "पहुँचता"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "High Contrast"
 msgstr "उच्च व्यतिरेक"
 
-#: src/plugins/buildui/gtk/menus.ui:188
+#: src/plugins/buildui/gtk/menus.ui:262
+msgid "Use high contrast theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
 msgstr "पाठ निर्देशन"
 
-#: src/plugins/buildui/gtk/menus.ui:190
+#: src/plugins/buildui/gtk/menus.ui:267
 msgid "Left-to-Right"
 msgstr "बायाँ - दायाँ"
 
-#: src/plugins/buildui/gtk/menus.ui:196
+#: src/plugins/buildui/gtk/menus.ui:271
+msgid "Force left-to-right text when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
 msgstr "दायाँ - बायाँ"
 
-#: src/plugins/buildui/gtk/menus.ui:204
+#: src/plugins/buildui/gtk/menus.ui:278
+msgid "Force right-to-left text when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:283
 msgid "GPU"
 msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:285
 msgid "GTK Renderer"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:208 src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
+#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "निर्धारित कुञ्जीवद्धता"
 
-#: src/plugins/buildui/gtk/menus.ui:214
+#: src/plugins/buildui/gtk/menus.ui:291
+msgid "Use the default GTK renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:294
 msgid "Vulkan"
 msgstr "भल्कन"
 
-#: src/plugins/buildui/gtk/menus.ui:220
+#: src/plugins/buildui/gtk/menus.ui:298
+msgid "Use the Vulkan renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:301
 msgid "GL"
 msgstr "जीएल"
 
-#: src/plugins/buildui/gtk/menus.ui:226
+#: src/plugins/buildui/gtk/menus.ui:305
+msgid "Use the GL renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:308
 msgid "Legacy GL"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:232
+#: src/plugins/buildui/gtk/menus.ui:312
+msgid "Use the legacy GL renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:315
 msgid "Cairo"
 msgstr "काएरो"
 
-#: src/plugins/buildui/gtk/menus.ui:247
-#| msgid "Show Icons"
+#: src/plugins/buildui/gtk/menus.ui:319
+msgid "Use the Cairo software renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:328
+msgid "Request verbose logging when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:332
 msgid "Show Inspector"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:335
+msgid "Request the GTK inspector be shown when running the project"
 msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:36 src/plugins/menu-search/gtk/menus.ui:57
@@ -2646,14 +2780,13 @@ msgid "Starting & Stopping"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:58
-#| msgid "Installing"
 msgid "Install Before Running"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
-"Installs the application before running. This is necessary for most projects unless custom run commands are "
-"used."
+"Installs the application before running. This is necessary for most projects unless custom run "
+"commands are used."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
@@ -2685,117 +2818,133 @@ msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:176
-#| msgid "Building"
 msgid "Build & Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
-msgid "History"
-msgstr "इतिहास"
+#: src/plugins/buildui/tweaks.ui:185
+msgid "Storage"
+msgstr "भण्डारण"
 
 #: src/plugins/buildui/tweaks.ui:188
-msgid "Clear Expired Artifacts"
+msgid "Artifacts and Cached Files"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:189
+msgid ""
+"Directory used for storing build artifacts and cached files from the build pipeline. Requires "
+"restarting Builder to take effect."
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+msgid "History"
+msgstr "इतिहास"
+
+#: src/plugins/buildui/tweaks.ui:206
+msgid "Clear Expired Artifacts"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:200
+#: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
 msgstr "निर्माण लग खाली गर्नुहोस्"
 
-#: src/plugins/buildui/tweaks.ui:201
+#: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:212
+#: src/plugins/buildui/tweaks.ui:230
 msgid "Show Build Logs"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:213
+#: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:229
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:230
+#: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:243
-#, fuzzy
+#: src/plugins/buildui/tweaks.ui:261
 msgid "Workers"
-msgstr "निर्माण कार्य गर्दा प्रयोग गर्ने कार्यकर्ताहरूको संख्या -१ समझदार डिफल्टको लागि। ० सीपीयूको संख्याको लागि।"
+msgstr "कार्यकर्ताहरू"
 
-#: src/plugins/buildui/tweaks.ui:247
+#: src/plugins/buildui/tweaks.ui:265
 #, fuzzy
-#| msgid "Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU."
+#| msgid ""
+#| "Number of workers to use when performing builds. -1 for sensible default. 0 for number of "
+#| "CPU."
 msgid "Number of workers to use when performing builds"
-msgstr "निर्माण कार्य गर्दा प्रयोग गर्ने कार्यकर्ताहरूको संख्या -१ समझदार डिफल्टको लागि। ० सीपीयूको संख्याको लागि।"
+msgstr ""
+"निर्माण कार्य गर्दा प्रयोग गर्ने कार्यकर्ताहरूको संख्या -१ समझदार डिफल्टको लागि। ० सीपीयूको संख्याको लागि।."
 
-#: src/plugins/buildui/tweaks.ui:262
+#: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:354
+#: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:389
+#: src/plugins/buildui/tweaks.ui:407
 msgid "Installation Prefix"
 msgstr "स्थापना उपसर्ग"
 
-#: src/plugins/buildui/tweaks.ui:390
-msgid "The project will be installed to this directory during the installation phase of the build pipeline."
+#: src/plugins/buildui/tweaks.ui:408
+msgid ""
+"The project will be installed to this directory during the installation phase of the build "
+"pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:408
+#: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
 msgstr "कन्फिगर विकल्पहरू"
 
-#: src/plugins/buildui/tweaks.ui:421
+#: src/plugins/buildui/tweaks.ui:439
 msgid ""
-"These options are used by the build system to configure the project during the configure phase of the build "
-"pipeline"
+"These options are used by the build system to configure the project during the configure phase "
+"of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:428
-#| msgid "Environment"
+#: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:431 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
+#: src/plugins/buildui/tweaks.ui:449 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "स्थानीयता"
 
-#: src/plugins/buildui/tweaks.ui:432
+#: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:449
-#| msgid "Indexing Source Code"
+#: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:455
+#: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:476
+#: src/plugins/buildui/tweaks.ui:494
 msgid "The SDK used to build your application is automatically determined from the runtime."
 msgstr ""
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146 src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
-#| msgid "Building dependencies…"
 msgid "Fetch dependencies"
 msgstr ""
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174 src/plugins/dub/gbp-dub-pipeline-addin.c:157
-#: src/plugins/golang/gbp-golang-pipeline-addin.c:156 src/plugins/meson/gbp-meson-pipeline-addin.c:286
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "परियोजना निर्माण गर्नुहोस्"
@@ -2826,7 +2975,6 @@ msgid "If parentheses should be included when completing."
 msgstr ""
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#| msgid "Parameters"
 msgid "Complete parameters"
 msgstr ""
 
@@ -2847,7 +2995,6 @@ msgid "Include parentheses when completing clang proposals"
 msgstr ""
 
 #: src/plugins/clang/tweaks.ui:29
-#| msgid "Parameters"
 msgid "Complete Parameters"
 msgstr ""
 
@@ -2855,16 +3002,44 @@ msgstr ""
 msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 
-#: src/plugins/cmake/gbp-cmake-build-system.c:423
-msgid "CMake"
+#: src/plugins/clang-format/gbp-clang-formatter.c:178
+#, c-format
+#| msgid "Failed to save draft: %s"
+msgid "Failed to execute clang-format: %s"
 msgstr ""
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202 src/plugins/meson/gbp-meson-pipeline-addin.c:276
+#: src/plugins/clang-format/gbp-clang-formatter.c:189
+#, c-format
+msgid "clang-format failed to format document: %s"
+msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:201
+msgid "Missing or corrupted data from clang-format"
+msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:213
+msgid "Invalid cursor position provided from clang-format"
+msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback GNU-style "
+"formatter."
+msgstr ""
+
+#: src/plugins/cmake/gbp-cmake-build-system.c:423
+msgid "CMake"
+msgstr "सीमेक"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
 msgstr "परियोजना कन्फिगर गर्नुहोस्"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245 src/plugins/make/gbp-make-pipeline-addin.c:155
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:103 src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
+#: src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr ""
@@ -2904,7 +3079,7 @@ msgstr ""
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209 src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "अनुक्रमणिका स्रोत कोड"
 
@@ -2915,18 +3090,16 @@ msgstr ""
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:340 src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
+#: src/plugins/code-index/ide-code-index-index.c:340
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
 msgstr "घोषणा"
 
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
-#| msgid "Projects"
 msgid "Project Symbols"
 msgstr ""
 
 #: src/plugins/codeshot/gtk/menus.ui:6
-#| msgctxt "shortcut window"
-#| msgid "Copy and Paste"
 msgid "Copy as Image"
 msgstr ""
 
@@ -2934,7 +3107,7 @@ msgstr ""
 msgid "Copy selected text as an image"
 msgstr ""
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:113
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr ""
@@ -2952,27 +3125,29 @@ msgstr ""
 msgid "_Apply"
 msgstr "_लागू"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30 src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
 msgid "Loading…"
 msgstr "लोड हुँदैछ…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
 msgid "Symbol Not Selected"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492 src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
 msgstr ""
 
@@ -2993,18 +3168,19 @@ msgstr ""
 msgid "Rename Symbol"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10 src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "_पुन: नामकरण गर्नुहोस्"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
-#| msgid "Current line"
-msgid "Current Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
+msgid "Current Symbol Name"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
-msgid "New Symbol name"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:24
+#| msgid "New File Name"
+msgid "New Symbol Name"
 msgstr ""
 
 #: src/plugins/codeui/gtk/menus.ui:7
@@ -3020,7 +3196,6 @@ msgid "Display a list of possible code actions from the cursor position"
 msgstr ""
 
 #: src/plugins/codeui/gtk/menus.ui:20
-#| msgid "Declaration"
 msgid "_Go to Declaration"
 msgstr ""
 
@@ -3033,7 +3208,6 @@ msgid "_Go to Definition"
 msgstr ""
 
 #: src/plugins/codeui/gtk/menus.ui:28
-#| msgid "Jump to the last position when reopening a file"
 msgid "Jump to file and location where item is defined"
 msgstr ""
 
@@ -3054,7 +3228,6 @@ msgid "Add comments surrounding the source code selection"
 msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:16
-#| msgid "Uncomment code"
 msgid "Unco_mment Code"
 msgstr ""
 
@@ -3086,11 +3259,12 @@ msgstr ""
 msgid "Display the project creation guide"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.c:220 src/plugins/vcsui/gbp-vcsui-clone-page.c:109
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "_स्थान छान्नुहोस्"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:260
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
 msgstr ""
 
@@ -3108,23 +3282,24 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
-"A unique name that is used for the project folder and other resources. The name should be in lower case "
-"without spaces and should not start with a number."
+"A unique name that is used for the project folder and other resources. The name should be in "
+"lower case without spaces and should not start with a number."
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
-msgid "Application ID…"
+msgid "Application ID"
 msgstr "अनुप्रयोगहरु आईडी"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
-"A reverse domain-name identifier used to identify the application, such as \"org.gnome.Builder\". It may not "
-"contain dashes."
+"A reverse domain-name identifier used to identify the application, such as \"org.gnome."
+"Builder\". It may not contain dashes."
 msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
-#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95 src/plugins/grep/gbp-grep-panel.c:751
-#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78 src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95 src/plugins/grep/gbp-grep-panel.c:747
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "स्थान"
 
@@ -3146,30 +3321,29 @@ msgstr "परियोजना सिर्जना गर्नुहोस�
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
-msgstr "नयाँ परियोजना सिर्जना गर्नुहोस्"
+msgstr "नयाँ परियोजना सिर्जना गर्नुहोस्…"
 
 #: src/plugins/create-project/gtk/menus.ui:9 src/plugins/create-project/gtk/menus.ui:21
 #: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
-msgstr "नयाँ परियोजना सिर्जना गर्नुहोस्"
+msgstr "नयाँ परियोजना सिर्जना गर्नुहोस्…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "टेम्प्लेटबाट नयाँ परियोजना सिर्जना गर्नुहोस्"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
-msgid "Search, autocompletion, and symbol information may be limited until Ctags indexing is complete."
+msgid ""
+"Search, autocompletion, and symbol information may be limited until Ctags indexing is complete."
 msgstr ""
 
-#: src/plugins/ctags/ide-ctags-service.c:980
-#| msgid "Indexing Source Code"
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:14
-#, fuzzy
 msgid "CTags"
-msgstr "ctags को बाटो प्रणालीमा कार्यान्वयनयोग्य छ।"
+msgstr "CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
 msgid "Suggest Completions"
@@ -3184,9 +3358,8 @@ msgid "CTags Path"
 msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:35
-#, fuzzy
 msgid "The path to the ctags executable"
-msgstr "ctags को बाटो प्रणालीमा कार्यान्वयनयोग्य छ।"
+msgstr "ctags को बाटो प्रणालीमा कार्यान्वयनयोग्य छ"
 
 #: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
@@ -3206,7 +3379,6 @@ msgid "Toggle Breakpoint"
 msgstr "विच्छेदन बिन्दु टगल गर्नुहोस्"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
-#| msgid "Highlight current line"
 msgid "Toggle breakpoint at current line"
 msgstr ""
 
@@ -3227,18 +3399,16 @@ msgid "Pause debugger until continued"
 msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:52
-#, fuzzy
 msgid "Step Over"
-msgstr "प्रकार्य माथि एकल चरण"
+msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:55
 msgid "Execute the current line, stepping over any function calls"
 msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:61
-#, fuzzy
 msgid "Step Into"
-msgstr "यस चरणमा"
+msgstr "स्पन्दनको तह"
 
 #: src/plugins/debuggerui/gtk/menus.ui:64
 msgid "Execute the current line, stepping into any function calls"
@@ -3252,8 +3422,8 @@ msgstr "चरण बाहिर"
 msgid "Run until the end of the function"
 msgstr ""
 
-#: src/plugins/debuggerui/gtk/menus.ui:83 src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
-#: src/plugins/debuggerui/tweaks.ui:16
+#: src/plugins/debuggerui/gtk/menus.ui:83
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253 src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "विच्छेदनबिन्दु"
 
@@ -3297,18 +3467,14 @@ msgid "Type"
 msgstr "वर्ग"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
-#, fuzzy
 msgid "Hits"
-msgstr ""
-"अणु हरू बनाउन परमाणुलाई भूलभुलैयामा डोऱ्याउनुहोस्। परमाणु चयन गर्न र सार्नका लागि, वाण कुञ्जी हरू क्लिक गर्नुहोस् वा प्रयोग "
-"गर्नुहोस् र प्रविष्ट गर्नुहोस् । तथापि, होसियार हुनुहोस्: परमाणुले भित्तामा नहिर्काएसम्म चलहल गरिरहन्छ।."
+msgstr "हिट्स"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
 msgstr "अभिव्यक्ति"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
-#| msgid "Interrupt the program"
 msgid "Pause the program (F6)"
 msgstr ""
 
@@ -3418,7 +3584,6 @@ msgid "Automatically insert a breakpoint at the start of the application"
 msgstr ""
 
 #: src/plugins/debuggerui/tweaks.ui:31
-#| msgid "Stop running"
 msgid "Stop at Warnings"
 msgstr ""
 
@@ -3443,9 +3608,8 @@ msgid "The device port number"
 msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
-#, fuzzy
 msgid "The application to run"
-msgstr "फोटो खिच्ने यन्त्र (क्यामेरा) जडित भएमा कुन प्रोग्राम सुचारु हुने, रोज्नुहोस्"
+msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
@@ -3455,15 +3619,7 @@ msgstr ""
 msgid "Number of seconds to wait for the deviced peer to appear"
 msgstr ""
 
-#: src/plugins/dspy/gbp-dspy-application-addin.c:47
-msgid "Display D-Bus inspector"
-msgstr ""
-
-#: src/plugins/dspy/gbp-dspy-application-addin.c:108
-msgid "D-Spy"
-msgstr "डि-स्पाई"
-
-#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:15
 msgid "D-Bus Inspector…"
 msgstr ""
 
@@ -3471,11 +3627,11 @@ msgstr ""
 msgid "Dub Run"
 msgstr ""
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
-msgstr "कुनै फाइल प्रदान गरिएको थिएन ।"
+msgstr "कुनै फाइल प्रदान गरिएको थिएन ।."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "न्यूनतम सम्पादक इन्टरफेस प्रयोग गर्नुहोस्"
 
@@ -3498,13 +3654,14 @@ msgid "Plain Text"
 msgstr "सादा पाठ"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks-language.ui:65
-#: src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
+#: src/plugins/editorui/tweaks-language.ui:65 src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "खालीस्थान"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "ट्याबहरु"
 
@@ -3512,7 +3669,8 @@ msgstr "ट्याबहरु"
 msgid "Go"
 msgstr "जानुहोस्"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541 src/plugins/menu-search/gtk/menus.ui:87
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "लाइनमा जानुहोस्"
 
@@ -3549,10 +3707,8 @@ msgid "8"
 msgstr "८"
 
 #: src/plugins/editorui/gtk/menus.ui:41 src/plugins/editorui/tweaks-language.ui:145
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation Size"
-msgstr "खाली स्थानमा इन्डेन्टेसन साइज:"
+msgstr "इन्डेन्टेशन साइज"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
@@ -3560,7 +3716,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
-msgstr "पङ्ति समाप्त:"
+msgstr "पङ्ति समाप्त"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
@@ -3572,7 +3728,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
-msgstr ""
+msgstr "नयाँ सम्पादक कार्यस्थान…"
 
 #: src/plugins/editorui/gtk/menus.ui:124
 msgid "New _File"
@@ -3580,7 +3736,7 @@ msgstr "नयाँ फाइल"
 
 #: src/plugins/editorui/gtk/menus.ui:133
 msgid "_Open File…"
-msgstr "फाइल खोल्नुहोस्"
+msgstr "फाइल खोल्नुहोस्…"
 
 #: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
@@ -3590,17 +3746,17 @@ msgstr ""
 msgid "Open in New Workspace…"
 msgstr ""
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "यस रूपमा सङ्ग्रह गर्नुहोस्"
 
 #: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find…"
-msgstr "फेला पार्नुहोस्"
+msgstr "फेला पार्नुहोस्…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
 msgid "Find/Replace…"
-msgstr "फेला पार्नुहोस् र प्रतिस्थापन गर्नुहोस्"
+msgstr "फेला पार्नुहोस् र प्रतिस्थापन गर्नुहोस्…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
@@ -3631,18 +3787,14 @@ msgid "Move the insertion cursor to the next diagnostic location"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:9
-#, fuzzy
 msgid "Programming Languages"
 msgstr ""
-"GtkBuilder प्रयोग गरेर, ग्लेड XML फाईलहरू सी, सी ++, सी #, वाला, जाभा, पर्ल, पाइथन, र अन्य धेरै प्रोग्रामिङ्ग भाषाहरूमा "
-"प्रयोग गर्न सकिन्छ।"
 
 #: src/plugins/editorui/tweaks-language.ui:34
 msgid "Settings provided by .editorconfig and modelines take precedence over those below."
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
-#| msgid "Indentation"
 msgid "Indentation & Formatting"
 msgstr ""
 
@@ -3714,7 +3866,7 @@ msgstr "दायाँ सीमान्त स्थिति"
 msgid "The desired maximum line length"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:203 src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks-language.ui:203 src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "व्यवहार"
 
@@ -3823,7 +3975,6 @@ msgid "Source Code Overview"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:141
-#| msgid "If enabled, Builder will display an overview map of the source file next to the editor."
 msgid "Display an overview of source code next to the editor"
 msgstr ""
 
@@ -3832,9 +3983,8 @@ msgid "Prefer Scrollbars"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:156
-#, fuzzy
 msgid "Always On"
-msgstr "सधैँ"
+msgstr "सधैँ अन"
 
 #: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
@@ -3876,219 +4026,224 @@ msgstr "रेखा परिवर्तन देखाउनुहोस्"
 msgid "Highlight changed lines next to the line number"
 msgstr "रेखा सङ्ख्याको छेउमा परिवर्तन गरिएका रेखाहरू हाइलाइट गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+#, fuzzy
+msgid "Use Line Selection Styling"
+msgstr "लाइन चयन शैली प्रयोग गर्नुहोस्"
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "हाइलाइटिङ"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "हालको लाइन हाइलाइट गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "हालको रेखालाई हाइलाइट्सको साथ खडा गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "मिल्ने कोष्ठकलाई हाइलाइट गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid "Use cursor position to highlight matching brackets, braces, parenthesis, and more"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:252
-#, fuzzy
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
-msgstr "क्ल्याङ्ग आधारित स्वत: पूरा, सिद्ध हाइलाइटिङ, र निदान"
+msgstr "सिमेन्टिक हाइलाइटिङ"
 
-#: src/plugins/editorui/tweaks.ui:253
-msgid "Use symbol information to highlight namespaces, functions, and variables within source code"
+#: src/plugins/editorui/tweaks.ui:265
+msgid ""
+"Use symbol information to highlight namespaces, functions, and variables within source code"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "सामान्य खाली स्थानको प्रतिनिधित्व गर्ने चिनो कोर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "ट्याबको प्रतिनिधित्व गर्ने चिनो कोर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "नयाँ लाइनहरू"
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "रेखाको अन्त्यमा चिनो कोर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 #, fuzzy
 msgid "Leading"
 msgstr "जामो आकार"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "पाठ भित्र"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:351
-#, fuzzy
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "अगिल्लो शुन्यहरू देखाउनुस्"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "हिज्जे"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "चयनहरू"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "स्निप्पेटस्"
 
-#: src/plugins/editorui/tweaks.ui:409
-#| msgid "Snippets"
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:425
-#, fuzzy
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
-msgstr "सङ्केत समाप्ती सक्षम पार्नुहोस्"
-
-#: src/plugins/editorui/tweaks.ui:429
-msgid "Completion Proposals"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:441
+msgid "Completion Proposals"
+msgstr "पूर्ण प्रस्तावहरू"
+
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "चालहरू"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "असक्षम"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "सत्र प्रबन्धक"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "पुनर्स्थापना बचत गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "‌स्वत: बचत"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "स्वतः बचत विलम्ब गर्नुहोस्"
 
-#: src/plugins/editorui/tweaks.ui:555
-#| msgid "The number of seconds after modification before auto saving."
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 #, fuzzy
 msgid "Format on Save"
 msgstr "चित्र बचत गर्न उपयुक्त ढाँचा पत्ता लगाउन सकेन"
 
-#: src/plugins/editorui/tweaks.ui:571
-msgid "Reformat sources when saving to disk. Requires a registered formatter for the source language."
+#: src/plugins/editorui/tweaks.ui:583
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for the source language."
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:587
-#| msgid "Jump to the last position when reopening a file"
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr ""
 
@@ -4096,24 +4251,19 @@ msgstr ""
 msgid "Open file or folder"
 msgstr "फाइल वा फोल्डर खोल्नुहोस्"
 
-#: src/plugins/file-search/gbp-file-search-provider.c:342 src/plugins/menu-search/gtk/menus.ui:112
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "फाइलहरू"
-
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "यस्तै फाइलहरू (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:916
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "स्थापना असफल भयो"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:926
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "स्थापना पूरा भयो"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:454 src/plugins/git/gbp-git-client.c:398
+#: src/plugins/flatpak/gbp-flatpak-client.c:460 src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr ""
 
@@ -4126,22 +4276,21 @@ msgstr ""
 msgid "Network is not available, skipping downloads"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid "Builder needs to install the following software development kits to build your project."
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58 src/plugins/git/tweaks.ui:16
-#: src/plugins/ls/gbp-ls-page.ui:17 src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38 src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80 src/plugins/git/tweaks.ui:16
+#: src/plugins/ls/gbp-ls-page.ui:17 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "नाम"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 msgid "Architecture"
 msgstr "आर्किटेक्चर"
 
@@ -4153,42 +4302,40 @@ msgstr ""
 msgid "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
-#, fuzzy
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
-msgstr "अनुप्रयोग;flatpak;अनुमति;सेटिङ;"
+msgstr "फ्ल्याटपाक"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:190
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:298
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:439
-#| msgid "Projects directory"
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:499
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:575
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "निर्भरता निर्मा"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:635
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:685
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:775
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr ""
 
@@ -4235,8 +4382,8 @@ msgstr ""
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
-"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation which contains "
-"the extension."
+"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation "
+"which contains the extension."
 msgstr ""
 
 #: src/plugins/flatpak/tweaks.ui:22
@@ -4246,10 +4393,6 @@ msgstr "जिनोम बिल्डर"
 #: src/plugins/flatpak/tweaks.ui:28
 msgid "User"
 msgstr "प्रयोगकर्ता"
-
-#: src/plugins/flatpak/tweaks.ui:34
-msgid "System"
-msgstr "प्रणाली"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4266,14 +4409,10 @@ msgstr ""
 msgid "No contents have been set to diff"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264 src/plugins/git/daemon/ipc-git-util.h:33
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
+#: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
-
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
-#, c-format
-msgid "The operation has been canceled"
 msgstr ""
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
@@ -4281,27 +4420,27 @@ msgstr ""
 msgid "Builder failed to provide appropriate credentials when cloning the repository."
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:622
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:631
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr ""
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
 msgstr ""
 
-#: src/plugins/git/gbp-git-client.c:171
+#: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
 msgstr ""
 
-#: src/plugins/git/gbp-git-client.c:195
+#: src/plugins/git/gbp-git-client.c:208
 msgid "Git integration has exited"
 msgstr ""
 
@@ -4321,20 +4460,20 @@ msgstr ""
 msgid "Network is not available, skipping submodule update"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:228
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:266
+#: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:532
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:560
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "गिट"
 
@@ -4357,10 +4496,11 @@ msgid "A valid Git URL is required"
 msgstr ""
 
 #: src/plugins/git/tweaks.ui:13
+#, fuzzy
 msgid "Authorship"
-msgstr ""
+msgstr "तपाईँले पूर्वनिर्धारित अधिलेखन गर्न लेखकत्व जानकारी निर्दिष्ट गर्न सक्नुहुन्छ ।."
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "इमेल"
 
@@ -4368,7 +4508,8 @@ msgstr "इमेल"
 msgid "go run"
 msgstr ""
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96 src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr ""
 
@@ -4376,30 +4517,38 @@ msgstr ""
 msgid "Gradle Run"
 msgstr ""
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-panel.c:763
-#, fuzzy
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
-msgstr "सबै मिलाउनुहोस्"
+msgstr "मिलान"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "मार्ग"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "%s खोज्नुहोस्"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "'%s'मा प्रतिस्थापन गर्नुहोस्"
+
+#: src/plugins/grep/gbp-grep-panel.c:847
+msgid "Find in Project"
+msgstr "परियोजनामा खोज्नुहोस्"
+
+#: src/plugins/grep/gbp-grep-panel.c:848
+#| msgid "Recent Projects"
+msgid "Replace in Project"
+msgstr ""
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -4414,10 +4563,8 @@ msgid "_Recurse into Directories"
 msgstr ""
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
-#, fuzzy
-#| msgid "Match whole word"
 msgid "Match Whole _Words"
-msgstr "सम्पूर्ण शब्दहरू मात्रको जोडा मिलाउनुहोस्"
+msgstr "पूरा शब्दहरू मिलाउनुहोस्"
 
 #: src/plugins/grep/gbp-grep-panel.ui:106
 msgid "Use Regular _Expressions"
@@ -4432,15 +4579,12 @@ msgid "_Find in Project"
 msgstr "परियोजनामा खोज्नुहोस्"
 
 #: src/plugins/grep/gbp-grep-panel.ui:170
-#| msgid "Recent Projects"
 msgid "_Replace in Project"
 msgstr ""
 
 #: src/plugins/grep/gbp-grep-popover.ui:31
-#, fuzzy
-#| msgid "Search"
 msgid "Search for…"
-msgstr "के खोज्ने?"
+msgstr "खोजी गर्नुहोस्…"
 
 #: src/plugins/grep/gbp-grep-popover.ui:41
 msgid "_Find"
@@ -4455,10 +4599,8 @@ msgid "Match _case when searching"
 msgstr ""
 
 #: src/plugins/grep/gbp-grep-popover.ui:73
-#, fuzzy
-#| msgid "Match whole word"
 msgid "Match _whole words"
-msgstr "सम्पूर्ण शब्दहरू मात्रको जोडा मिलाउनुहोस्"
+msgstr "पूरा शब्दहरू मिलाउनुहोस्"
 
 #: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
@@ -4469,13 +4611,11 @@ msgid "_Find in Files"
 msgstr "फाइलहरूमा खोजन्हुहोस्"
 
 #: src/plugins/host/gbp-host-runtime-provider.c:53
-#| msgid "Host operating system"
 msgid "Host Operating System"
 msgstr ""
 
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
-#| msgid "Run with Profiler"
 msgid "Bundled with Builder"
 msgstr ""
 
@@ -4507,14 +4647,13 @@ msgstr "समावेश फोल्डर खोल्नुहोस्"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
 msgid "With File _Browser…"
-msgstr "फाइल ब्राउजर"
+msgstr "फाइल ब्राउजर…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
 msgstr ""
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#| msgid "Make default"
 msgid "Make Run"
 msgstr ""
 
@@ -4526,13 +4665,68 @@ msgstr ""
 msgid "Create a new empty project using a simple Makefile"
 msgstr ""
 
+#: src/plugins/manuals/gbp-manuals-page.c:321 src/plugins/manuals/gbp-manuals-panel.ui:5
+#: src/plugins/manuals/manuals-navigatable.c:391
+msgid "Manuals"
+msgstr ""
+
+#: src/plugins/manuals/gbp-manuals-panel.ui:174
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38 src/plugins/todo/gbp-todo-panel.ui:99
+msgid "Filter…"
+msgstr "फिल्टर…"
+
+#: src/plugins/manuals/gbp-manuals-search-result.c:215
+#| msgid "New documentation"
+msgid "Open Documentation"
+msgstr ""
+
+#: src/plugins/manuals/gtk/menus.ui:6
+msgid "Search Manuals…"
+msgstr ""
+
+#: src/plugins/manuals/gtk/menus.ui:8
+msgid "Search documentation for installed SDKs"
+msgstr ""
+
+#: src/plugins/manuals/manuals-book.c:505 src/plugins/manuals/manuals-heading.c:501
+#: src/plugins/manuals/manuals-keyword.c:526
+#, c-format
+#| msgid "_Find in %s"
+msgid "View in %s"
+msgstr ""
+
+#. Note to the user we're importing this book
+#: src/plugins/manuals/manuals-devhelp-importer.c:697
+#, c-format
+#| msgid "Exporting…"
+msgid "Importing %s…"
+msgstr ""
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:116
+msgid "Importing JHBuild Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:117
+msgid "Scanning jhbuild for new documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-sdk.c:282
+#| msgid "GNOME Builder"
+msgid "GNOME Nightly"
+msgstr ""
+
+#: src/plugins/manuals/manuals-system-importer.c:77
+msgid "Importing System Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-system-importer.c:78
+msgid "Scanning system for new documentation"
+msgstr ""
+
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr ""
-
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "कार्यहरु"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
@@ -4548,7 +4742,7 @@ msgstr "प्यानल"
 
 #: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
-msgstr ""
+msgstr "बायाँ प्यानल टगल गर्नुहोस्"
 
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
@@ -4569,8 +4763,9 @@ msgid "panel-right-symbolic"
 msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:45
+#, fuzzy
 msgid "Toggle Bottom Panel"
-msgstr ""
+msgstr "तल प्यानल टगल गर्नुहोस् (Ctrl+F9)"
 
 #: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
@@ -4593,7 +4788,6 @@ msgid "Change style-scheme to light variant"
 msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:79
-#| msgid "Diagnostics"
 msgid "Display Build Diagnostics"
 msgstr ""
 
@@ -4614,7 +4808,6 @@ msgid "Close the current page"
 msgstr "हालको पृष्ठ बन्द गर्नुहोस्"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#| msgid "All Files"
 msgid "Reload Files"
 msgstr ""
 
@@ -4640,9 +4833,9 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
-msgstr ""
+msgstr "मेसन"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr ""
 
@@ -4659,129 +4852,75 @@ msgstr ""
 msgid "%s (Meson)"
 msgstr "%s (मेसन)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "उपकरण थप्नुहोस्:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169 src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170 src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171 src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172 src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173 src/plugins/meson/gbp-meson-utils.c:106
-#, fuzzy
-msgid "Strip"
-msgstr "खण्ड विशेष क्यारेक्टरहरू"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174 src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175 src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "कुनै पनि भाषा"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "पाइथोन"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "भाला"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-#| msgid "ID"
-msgid "D"
-msgstr "D"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "उपकरण थप्नुहोस्"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr ""
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "कम्पाइलर"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "स्ट्रिप"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr ""
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "जिनोम अनुप्रयोग"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "बांडिएको लाईब्रेरी"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
 msgstr ""
 
@@ -4816,14 +4955,13 @@ msgstr "समय"
 
 #: src/plugins/messages/gbp-messages-panel.ui:57 src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
-msgstr ""
+msgstr "गम्भीरता"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
 msgstr "खण्ड"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
-#| msgid "Select a Project"
 msgid "Suggested GNOME Projects"
 msgstr ""
 
@@ -4856,9 +4994,8 @@ msgid "A clock application for GNOME"
 msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-#, fuzzy
 msgid "Gitg"
-msgstr "gitg"
+msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Gitg is a graphical Git client"
@@ -4913,7 +5050,8 @@ msgstr "निर्माण सफल"
 msgid "Project “%s” has completed building"
 msgstr ""
 
-#: src/plugins/notification/ide-notification-addin.c:128 src/plugins/notification/ide-notification-addin.c:216
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "निर्माण असफल"
 
@@ -4931,7 +5069,6 @@ msgid "Build configured"
 msgstr "निर्माण कन्फिगर गरिएको छ"
 
 #: src/plugins/notification/ide-notification-addin.c:211
-#| msgid "Build System"
 msgid "Build bootstrapped"
 msgstr ""
 
@@ -4940,11 +5077,8 @@ msgid "Downloading npm dependencies"
 msgstr ""
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
-#, fuzzy
 msgid "_External Program…"
 msgstr ""
-"त्रुटि: अडियो परिवर्तनका लागि बाहिरि कार्यक्रम कार्यान्वयन योग्य छैन।\n"
-"फाइलनाम:'%s'\n"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
@@ -4959,7 +5093,6 @@ msgid "Dark"
 msgstr "गाढा"
 
 #: src/plugins/platformui/tweaks.ui:22
-#| msgid "Documentation"
 msgid "Document Navigation"
 msgstr ""
 
@@ -4981,15 +5114,18 @@ msgstr ""
 msgid "Containers/Podman"
 msgstr ""
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:127 src/plugins/project-tree/gbp-rename-file-popover.c:145
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
 msgid "A folder with that name already exists."
-msgstr "त्यो नामको फोल्डर पहिले नै अवस्थित छ ।"
+msgstr "त्यो नामको फोल्डर पहिले नै अवस्थित छ ।."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:130 src/plugins/project-tree/gbp-rename-file-popover.c:148
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
 msgid "A file with that name already exists."
 msgstr "यो नामको फाइल पहिल्यै अवस्थित छ."
 
-#: src/plugins/project-tree/gbp-new-file-popover.c:354 src/plugins/project-tree/gbp-rename-file-popover.ui:15
+#: src/plugins/project-tree/gbp-new-file-popover.c:354
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
 msgstr "फाइलको नाम"
 
@@ -5007,7 +5143,6 @@ msgstr "सिर्जना गर्नुहोस्"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
-#| msgid "Open file"
 msgid "Copying 1 file"
 msgstr ""
 
@@ -5022,13 +5157,11 @@ msgid "Failed to copy files"
 msgstr ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:749
-#| msgid "File chooser"
 msgid "Files copied"
 msgstr ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:753
 #, c-format
-#| msgid "Open file"
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] ""
@@ -5036,21 +5169,16 @@ msgstr[1] ""
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
-msgstr "फाइल प्रतिलिपि हुदैँछ"
+msgstr "फाइल प्रतिलिपि हुदैँछ…"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr ""
 
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:116 src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#: src/plugins/todo/gbp-todo-panel.ui:102
-msgid "Filter…"
-msgstr "फिल्टर"
-
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48 src/plugins/project-tree/tweaks.ui:10
-#, fuzzy
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:51
+#: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
-msgstr "यदि सक्षम भएमा, परियोजना रूख नियमित फाइलहरू अघि निर्देशिकाहरू क्रमबद्ध गर्नेछ।"
+msgstr "परियोजना रूख"
 
 #: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
@@ -5059,11 +5187,11 @@ msgstr "%s पुन: नामाकरण"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
-msgstr "नयाँ फाइल..."
+msgstr "नयाँ फाइल…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New F_older…"
-msgstr "नयाँ फोल्डर..."
+msgstr "नयाँ फोल्डर…"
 
 #: src/plugins/project-tree/gtk/menus.ui:22
 msgid "O_pen"
@@ -5083,7 +5211,7 @@ msgstr "समावेश फोल्डर खोल्नुहोस्"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
 msgid "With _Terminal…"
-msgstr "टर्मिनलसंग"
+msgstr "टर्मिनलसंग…"
 
 #: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Move to Trash"
@@ -5154,13 +5282,13 @@ msgid "Overview"
 msgstr "अधिलेखन गर्नुहोस्"
 
 #: src/plugins/projectui/tweaks.ui:115
-#| msgid "Project sidebar"
 msgid "Project Identifier"
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:123
 msgid ""
-"This identifier is used when referencing your project's settings, build directories, and cached information."
+"This identifier is used when referencing your project's settings, build directories, and "
+"cached information."
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:132
@@ -5172,19 +5300,18 @@ msgid "Source Directory"
 msgstr "स्रोत निर्देशिका"
 
 #: src/plugins/projectui/tweaks.ui:160
-#| msgid "Duplicate the configuration"
 msgid "Current Configuration"
-msgstr ""
+msgstr "हालको कन्फिगरेसन"
 
 #: src/plugins/projectui/tweaks.ui:161
-msgid "The configuration is used to setup build pipelines, configure your build system, and run your project."
+msgid ""
+"The configuration is used to setup build pipelines, configure your build system, and run your "
+"project."
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
-#, fuzzy
-#| msgid "Funded By"
 msgid "Provided By"
-msgstr "कुनै URI प्रदान गरिएको छैन"
+msgstr "उपलब्ध कर्ता"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5197,12 +5324,11 @@ msgstr ""
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
-#, c-format
+#, fuzzy, c-format
 msgid "My Computer (%s) %s"
-msgstr ""
+msgstr "मेरो कम्प्युटर (%s) — %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
-#| msgid "Save File As"
 msgid "Removed Files"
 msgstr ""
 
@@ -5215,6 +5341,10 @@ msgstr "%s हटाउँदै\n"
 #: src/plugins/recent/gbp-recent-section.c:424
 msgid "Removing Files…"
 msgstr ""
+
+#: src/plugins/recent/gbp-recent-section.c:612
+msgid "Show More"
+msgstr "अरू देखाउनुहोस्"
 
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
@@ -5253,21 +5383,20 @@ msgid "Available SDKs"
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:327
-#| msgid "Untitled terminal"
 msgid "Untitled Command"
-msgstr ""
+msgstr "शीर्षक विहिन आदेश"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334 src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334
+#: src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
 msgid "Set Shortcut"
 msgstr "सर्टकट सेट गर्नुहोस्"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:472
-#| msgid "Select Project Directory"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538 src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
-#| msgid "Commands:"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr ""
 
@@ -5276,7 +5405,6 @@ msgid "Cre_ate"
 msgstr "सिर्जना गर्नुहोस्"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
-#| msgid "Commands:"
 msgid "Edit Command"
 msgstr ""
 
@@ -5310,8 +5438,8 @@ msgstr "कार्य निर्देशिका"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt>, or <tt>$HOME</tt> to "
-"define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt>, or "
+"<tt>$HOME</tt> to define a relative path."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
@@ -5323,11 +5451,12 @@ msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
-msgid "Builder can run your command from a number of localities including the host system or build containers."
+msgid ""
+"Builder can run your command from a number of localities including the host system or build "
+"containers."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
-#| msgid "_Delete"
 msgid "_Delete Command"
 msgstr ""
 
@@ -5348,8 +5477,11 @@ msgid "Runs the command within the build pipeline."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#, fuzzy
 msgid "As Target Application"
 msgstr ""
+"यसले लक्षित अनुप्रयोग रोक्न सिग्किल बाहेक अन्य केहि पठाउन अनुमति दिन्छ। यो उपयोगी हुन सक्छ जब तपाईं सर्भर "
+"प्रक्रियालाई सुन्दर रूपमा बन्द गर्न चाहनुहुन्छ।."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
@@ -5380,12 +5512,10 @@ msgid "Current Working Directory"
 msgstr "हालको कार्य निर्देशिका"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-#| msgid "Arguments"
 msgid "Command Arguments"
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-#| msgid "Environment"
 msgid "Command Environment"
 msgstr ""
 
@@ -5395,7 +5525,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
-msgstr ""
+msgstr "शेल प्रयोग गर्नुहोस्"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
@@ -5407,8 +5537,9 @@ msgstr ""
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
-"Use commands to run build tooling, applications, or shell scripts and map them to a keyboard shortcut. They "
-"can run from various environments such as the build pipeline, runtime environment, or host operating system."
+"Use commands to run build tooling, applications, or shell scripts and map them to a keyboard "
+"shortcut. They can run from various environments such as the build pipeline, runtime "
+"environment, or host operating system."
 msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
@@ -5436,40 +5567,20 @@ msgid "Open keybindings.json in editor"
 msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
-#| msgctxt "shortcut window"
-#| msgid "Editor shortcuts"
 msgid "Reset shortcut"
-msgstr ""
+msgstr "सर्टकट रिसेट गर्नुहोस्"
 
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
-#, fuzzy
 msgid "View and Customize Shortcuts…"
-msgstr "सर्टकट हेर्नुहोस् र अनुकूलन गर्नुहोस्"
+msgstr ""
 
 #: src/plugins/shortcutui/tweaks.ui:15
-#| msgid "Keyboard"
 msgid "Keyboard Theme"
 msgstr ""
 
 #: src/plugins/shortcutui/tweaks.ui:16
 msgid "Shortcut themes provide a keyboard experience similar to other IDEs and editors"
 msgstr ""
-
-#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-msgid "Enchant 2"
-msgstr "इनच्ञाट २"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:248
-msgid "Add to Dictionary"
-msgstr "शब्दकोशमा थप्नुहोस्"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:249
-msgid "Ignore"
-msgstr "वेवास्ता गर्नुहोस"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "भाषाहरु"
 
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
@@ -5485,7 +5596,8 @@ msgid "In Page"
 msgstr "पृष्ठमा"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368 src/plugins/symbol-tree/gtk/menus.ui:8
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
+#: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr ""
 
@@ -5500,7 +5612,7 @@ msgstr ""
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
 msgid "System Capture from %s.syscap"
-msgstr ""
+msgstr "%s.syscap बाट प्रणाली क्याप्चर"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
@@ -5515,7 +5627,6 @@ msgid "Run with Profiler"
 msgstr "प्रोफाईलर साथ चलाउनुहोस्"
 
 #: src/plugins/sysprof/gtk/menus.ui:13
-#| msgid "Run with Profiler"
 msgid "Run the project with profiler"
 msgstr ""
 
@@ -5524,7 +5635,6 @@ msgid "Profiler"
 msgstr "प्रोफाईलर"
 
 #: src/plugins/sysprof/gtk/menus.ui:23
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
 msgstr ""
 
@@ -5538,16 +5648,15 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:35
 msgid "Memory Allocations"
-msgstr ""
+msgstr "प्रोफाइल मेमोरी बाँडफाँड"
 
 #: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Sample JavaScript Stacks"
-msgstr ""
+msgstr "नमूना जाभास्क्रिप्ट स्ट्याकहरू"
 
 #: src/plugins/sysprof/gtk/menus.ui:46
-#, fuzzy
 msgid "D-Bus"
-msgstr "D-Bus जडान गर्नु असक्षम: %s\n"
+msgstr "D-Bus"
 
 #: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
@@ -5562,13 +5671,12 @@ msgid "Graphics"
 msgstr "ग्राफिक्स"
 
 #: src/plugins/sysprof/gtk/menus.ui:61
-#| msgid "Display Options"
 msgid "Display Timings"
 msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
-msgstr ""
+msgstr "काउन्टर"
 
 #: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
@@ -5583,7 +5691,6 @@ msgid "Storage I/O"
 msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:84
-#| msgid "Network"
 msgid "Network I/O"
 msgstr ""
 
@@ -5600,7 +5707,6 @@ msgid "Battery Charge"
 msgstr "ब्याट्री चार्ज"
 
 #: src/plugins/sysprof/gtk/menus.ui:104
-#| msgid "Show the application’s version"
 msgid "Allow Application Integration"
 msgstr ""
 
@@ -5614,7 +5720,7 @@ msgstr "प्रोफाईलर साथ चलाउनुहोस्"
 
 #: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
-msgstr ""
+msgstr "पुन: रेकर्ड गर्नुहोस्…"
 
 #: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
@@ -5634,11 +5740,11 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
-msgstr ""
+msgstr "अनुसूची विवरण"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Track when processes are scheduled per CPU"
-msgstr ""
+msgstr "प्रक्रियाहरू प्रति सीपीयू निर्धारित गर्दा ट्रयाक गर्नुहोस्"
 
 #: src/plugins/sysprof/tweaks.ui:55
 msgid "CPU Governor"
@@ -5678,7 +5784,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
-msgstr ""
+msgstr "ऊर्जा प्रयोग"
 
 #: src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about energy usage using RAPL"
@@ -5735,15 +5841,15 @@ msgstr ""
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
-msgid "Application started at %s\r\n"
+#| msgid "Application"
+msgid "Application started at %s"
 msgstr ""
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr ""
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
-#| msgid "Time completed:"
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
 msgstr ""
 
@@ -5764,7 +5870,6 @@ msgid "Open a new terminal in project's build pipeline"
 msgstr ""
 
 #: src/plugins/terminal/gtk/menus.ui:25
-#| msgid "New _Build Terminal"
 msgid "New _Runtime Terminal"
 msgstr ""
 
@@ -5801,9 +5906,8 @@ msgid "Scrolling"
 msgstr "स्क्रोलिङ"
 
 #: src/plugins/terminal/tweaks.ui:58
-#, fuzzy
 msgid "Scroll On Output"
-msgstr "निर्गतमा स्क्रोल गर्नुहोस्"
+msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
@@ -5818,9 +5922,8 @@ msgid "Automatically scroll when typing to insert text"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:87
-#, fuzzy
 msgid "Limit Scrollback"
-msgstr "स्क्रोलब्याक सिमित गर्नुहोस्:"
+msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:88
 msgid "Limit the number of lines that are stored in memory for terminal scrollback"
@@ -5834,7 +5937,7 @@ msgstr ""
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 
-#: src/plugins/testui/gbp-testui-output-panel.c:150
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
 msgstr ""
 
@@ -5843,12 +5946,10 @@ msgid "Clear test output"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:49
-#| msgid "Cancel"
 msgid "Cancel tests"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:59
-#| msgid "Save the document"
 msgid "Save test output"
 msgstr ""
 
@@ -5859,12 +5960,10 @@ msgid "Running all unit tests at %s"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
-#| msgid "Time completed:"
 msgid "Unit tests completed"
 msgstr ""
 
@@ -5881,12 +5980,10 @@ msgid "TODO/FIXMEs"
 msgstr ""
 
 #: src/plugins/todo/gbp-todo-panel.ui:14
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
 msgstr ""
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
-#| msgid "Building dependencies…"
 msgid "Updating Dependencies…"
 msgstr ""
 
@@ -5895,7 +5992,6 @@ msgid "Builder is updating your project’s configured dependencies."
 msgstr ""
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
-#| msgid "Building dependencies…"
 msgid "Update Dependencies…"
 msgstr ""
 
@@ -5904,7 +6000,6 @@ msgid "Download updates to project dependencies"
 msgstr ""
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
-#| msgid "Updating"
 msgid "Updating Builder"
 msgstr ""
 
@@ -5961,9 +6056,8 @@ msgid "Leak Kinds"
 msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
-#, fuzzy
 msgid "Definite"
-msgstr "के म्याट्रिक्स पूर्ण रूपमा सकरात्मक छ"
+msgstr "निश्चित"
 
 #: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
@@ -5994,7 +6088,6 @@ msgid "Include reachable leaks in report summary"
 msgstr ""
 
 #: src/plugins/valgrind/tweaks.ui:71
-#| msgid "Margins"
 msgid "Track Origins"
 msgstr ""
 
@@ -6003,7 +6096,6 @@ msgid "Show origin of undefined values"
 msgstr ""
 
 #: src/plugins/valgrind/tweaks.ui:83
-#| msgid "Number of CPU"
 msgid "Number of Callers"
 msgstr ""
 
@@ -6023,7 +6115,7 @@ msgstr ""
 msgid "Begin cloning project from URI"
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:151
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
 msgstr ""
 
@@ -6033,29 +6125,29 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
 msgid "Choose an alternate branch"
-msgstr ""
+msgstr "वैकल्पिक शाखा रोज्नुहोस्"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
 msgid "Branches"
 msgstr "शाखाहरू"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid "Enter the URL of the source code repository for the project you would like to clone."
-msgstr "तपाईँले क्लोन गर्न चाहनुभएको परियोजनाका लागि स्रोत कोड भण्डारको यूआरएल प्रविष्ट गर्नुहोस् ।"
+msgstr "तपाईँले क्लोन गर्न चाहनुभएको परियोजनाका लागि स्रोत कोड भण्डारको यूआरएल प्रविष्ट गर्नुहोस् ।."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
-msgstr "भण्डारलाई नयाँ उपडाइरेक्टरीमा क्लोन गरिनेछ।"
+msgstr "भण्डारलाई नयाँ उपडाइरेक्टरीमा क्लोन गरिनेछ।."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "लेखक विवरण"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
-msgstr ""
+msgstr "तपाईँले पूर्वनिर्धारित अधिलेखन गर्न लेखकत्व जानकारी निर्दिष्ट गर्न सक्नुहुन्छ ।."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "स्थिति"
 
@@ -6069,11 +6161,11 @@ msgstr "ट्याग"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
 msgid "_Switch to branch"
-msgstr ""
+msgstr "शाखामा स्विच गर्नुहोस्"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
 msgid "_Push to origin"
-msgstr ""
+msgstr "मूलमा पुश गर्नुहोस्"
 
 #: src/plugins/vim/tweaks.ui:14
 msgid "Vim"
@@ -6081,44 +6173,154 @@ msgstr "भिम"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
 msgid "New _Browser Page"
-msgstr ""
+msgstr "नयाँ ब्राउजर पृष्ठ"
 
 #: src/plugins/web-browser/gtk/menus.ui:9
 msgid "Open a web browser in a new page"
-msgstr ""
+msgstr "नयाँ पृष्ठमा वेब ब्राउजर खोल्नुहोस्"
 
-#: src/plugins/web-browser/gtk/menus.ui:19 src/plugins/web-browser/gtk/menus.ui:25
-#| msgid "_Reload"
+#: src/plugins/web-browser/gtk/menus.ui:18 src/plugins/web-browser/gtk/menus.ui:24
 msgid "Reload Page"
-msgstr ""
+msgstr "पृष्ठ पुन: लोड गर्नुहोस्"
 
-#: src/plugins/web-browser/gtk/menus.ui:20
+#: src/plugins/web-browser/gtk/menus.ui:19
 msgid "Reload the current page"
 msgstr "हालको पृष्ठ पुन: लोड गर्नुहोस्"
 
-#: src/plugins/web-browser/gtk/menus.ui:26
+#: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload the current page ignoring cache"
-msgstr ""
+msgstr "क्यास उपेक्षा गर्दै हालको पृष्ठ पुन: लोड गर्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:30
+msgid "Focus Location"
+msgstr "फोकस स्थान"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
-msgid "Focus Location"
-msgstr ""
-
-#: src/plugins/web-browser/gtk/menus.ui:32
 msgid "Focus the current page's location"
-msgstr ""
+msgstr "हालको पृष्ठको स्थान फोकस गर्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:43
+msgid "_Web Browser"
+msgstr "वेब ब्राउजर"
+
+#: src/plugins/web-browser/gtk/menus.ui:54
+msgid "Stop Loading"
+msgstr "लोड गर्न रोक्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:60
+msgid "Reload"
+msgstr "पुन:लोड गर्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:69
+msgid "_Find in Page"
+msgstr "पृष्ठमा फेला पार्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:77
+msgid "Print"
+msgstr "मुद्रण गर्नुहोस्"
+
+#: src/plugins/web-browser/gtk/menus.ui:85
+msgid "Enable _JavaScript"
+msgstr "जाभास्क्रिप्ट सक्षम पार्नुहोस्"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
 msgstr "XML कागजात पद वर्णन गर्न असफल भयो"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604 src/plugins/xml-pack/ide-xml-tree-builder.c:522
+#: src/plugins/xml-pack/ide-xml-parser.c:607 src/plugins/xml-pack/ide-xml-tree-builder.c:522
+#, fuzzy
 msgid "Failed to create the XML tree."
-msgstr ""
+msgstr "एक्सएमएल ट्री सिर्जना गर्न असफल भयो ।."
 
 #: src/plugins/xml-pack/ide-xml-service.c:91
+#, fuzzy
 msgid "File must be saved locally to parse."
-msgstr ""
+msgstr "पद वर्णन गर्न फाइल स्थानीय रूपमा बचत गर्नुपर्दछ ।."
+
+#~ msgid "An IDE for GNOME"
+#~ msgstr "जिनोमका लागि आईडीई"
+
+#~ msgid "Cancel"
+#~ msgstr "रद्द गर्ने"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "युनिक्स्/लिनक्स् (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "म्याक ओएस्  क्लासिक (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "विन्डोहरू (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "स्वचालित रूपमा पत्ता लगाइयो"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "वर्ण सङ्केतन"
+
+#~ msgid "Line Ending:"
+#~ msgstr "पङ्ति समाप्त:"
+
+#~ msgid "Browse…"
+#~ msgstr "ब्राउज गर्नुहोस्…"
+
+#~ msgid "_Everything"
+#~ msgstr "सबै"
+
+#~ msgid "_Actions"
+#~ msgstr "कार्यहरू"
+
+#~ msgid "_Commands"
+#~ msgstr "आदेशहरू"
+
+#~ msgid "_Files"
+#~ msgstr "फाइलहरू"
+
+#~ msgid "Allow JavaScript"
+#~ msgstr "जाभास्क्रिप्ट अनुमति दिनुहोस्"
+
+#~ msgid "_Save"
+#~ msgstr "बचत गर्नुस"
+
+#~ msgid "D-Spy"
+#~ msgstr "डि-स्पाई"
+
+#~ msgid "Add Tool:"
+#~ msgstr "उपकरण थप्नुहोस्:"
+
+#~ msgid "Any language"
+#~ msgstr "कुनै पनि भाषा"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "पाइथोन"
+
+#~ msgid "Vala"
+#~ msgstr "भाला"
+
+#~| msgid "ID"
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Add Tool"
+#~ msgstr "उपकरण थप्नुहोस्"
+
+#~ msgid "Enchant 2"
+#~ msgstr "इनच्ञाट २"
+
+#~ msgid "Add to Dictionary"
+#~ msgstr "शब्दकोशमा थप्नुहोस्"
+
+#~ msgid "Ignore"
+#~ msgstr "वेवास्ता गर्नुहोस"
+
+#~ msgid "Languages"
+#~ msgstr "भाषाहरु"
 
 #~ msgid "Palette: "
 #~ msgstr "रङ्गदानी"
@@ -6179,15 +6381,6 @@ msgstr ""
 
 #~ msgid "Cielab b"
 #~ msgstr "Cielab b"
-
-#~ msgid "Red"
-#~ msgstr "रातो"
-
-#~ msgid "Green"
-#~ msgstr "हरियो"
-
-#~ msgid "Blue"
-#~ msgstr "नीलो"
 
 #~ msgid "Basic"
 #~ msgstr "आधारभूत"
@@ -6269,12 +6462,16 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Automatically Hide Overview Map"
-#~ msgstr "यदि सक्षम छ भने, माउस फोकसले सम्पादक छोड्नेछ जब बिल्डरले स्वचालित रूपमा अवलोकन नक्सा लुकाउँछ, वा एक टाइमआउट हुन्छ।"
+#~ msgstr ""
+#~ "यदि सक्षम छ भने, माउस फोकसले सम्पादक छोड्नेछ जब बिल्डरले स्वचालित रूपमा अवलोकन नक्सा लुकाउँछ, वा एक "
+#~ "टाइमआउट हुन्छ।"
 
 #~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a "
-#~ "timeout occurs."
-#~ msgstr "यदि सक्षम छ भने, माउस फोकसले सम्पादक छोड्नेछ जब बिल्डरले स्वचालित रूपमा अवलोकन नक्सा लुकाउँछ, वा एक टाइमआउट हुन्छ।"
+#~ "If enabled, Builder will automatically hide the overview map when mouse focus leaves the "
+#~ "editor, or a timeout occurs."
+#~ msgstr ""
+#~ "यदि सक्षम छ भने, माउस फोकसले सम्पादक छोड्नेछ जब बिल्डरले स्वचालित रूपमा अवलोकन नक्सा लुकाउँछ, वा एक "
+#~ "टाइमआउट हुन्छ।"
 
 #~ msgid "Overscroll"
 #~ msgstr "ओभरस्क्रोल"
@@ -6575,10 +6772,6 @@ msgstr ""
 #~ msgstr "backspace"
 
 #, fuzzy
-#~ msgid "Search languages…"
-#~ msgstr "भाषाहरु"
-
-#, fuzzy
 #~ msgid "Switch between Search and Search-and-Replace"
 #~ msgstr "क्वेरि खोजी गर्नुहोस् र बदल्नुहोस्"
 
@@ -6838,9 +7031,6 @@ msgstr ""
 
 #~ msgid "New terminal"
 #~ msgstr "नया टर्मिनल"
-
-#~ msgid "New documentation"
-#~ msgstr "नया अभिलेखीकरण"
 
 #, fuzzy
 #~ msgctxt "shortcut window"
@@ -7359,9 +7549,6 @@ msgstr ""
 #~ msgid "New Documentation Page"
 #~ msgstr "नयाँ अभिलेख ट्याब"
 
-#~ msgid "_Show more"
-#~ msgstr "अरू देखाउनुहोस्"
-
 #~ msgid "ESlint"
 #~ msgstr "ESlint"
 
@@ -7379,8 +7566,8 @@ msgstr ""
 #, fuzzy, c-format
 #~ msgid "%s <b>%s</b>"
 #~ msgstr ""
-#~ "निम्न प्याकेजहरू हाल मात्र स्थापना गरिएको संस्करण %B%s%b (%B%s%b) मा आधारित छ, वा संस्करण संग द्धन्द छ यो %s हुन सक्छ "
-#~ "(%B%s%b), र यदि  %s हो भने बिग्रन्छ ।"
+#~ "निम्न प्याकेजहरू हाल मात्र स्थापना गरिएको संस्करण %B%s%b (%B%s%b) मा आधारित छ, वा संस्करण संग द्धन्द छ "
+#~ "यो %s हुन सक्छ (%B%s%b), र यदि  %s हो भने बिग्रन्छ ।"
 
 #, fuzzy, c-format
 #~ msgid "Updated %s %s"
