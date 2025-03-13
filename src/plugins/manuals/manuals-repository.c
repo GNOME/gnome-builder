@@ -199,7 +199,9 @@ manuals_repository_list_sdks_fiber (gpointer user_data)
 
   g_assert (MANUALS_IS_REPOSITORY (self));
 
-  sorting = gom_sorting_new (MANUALS_TYPE_SDK, "name", GOM_SORTING_ASCENDING, NULL);
+  sorting = gom_sorting_new (MANUALS_TYPE_SDK, "name", GOM_SORTING_ASCENDING,
+                             MANUALS_TYPE_SDK, "version", GOM_SORTING_DESCENDING,
+                             G_TYPE_INVALID);
   sorted = gom_repository_find_sorted (GOM_REPOSITORY (self),
                                        MANUALS_TYPE_SDK,
                                        NULL,
