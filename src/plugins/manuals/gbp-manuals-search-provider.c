@@ -116,21 +116,24 @@ gbp_manuals_search_provider_search_async (IdeSearchProvider   *provider,
   query_obj = manuals_search_query_new ();
   manuals_search_query_set_text (query_obj, query_str);
 
+  result = dex_async_result_new (self, cancellable, callback, user_data);
+
+  if (strlen (query_str) < 3)
+    {
+      dex_async_result_await (result,
+                              dex_future_new_take_object (g_list_store_new (IDE_TYPE_SEARCH_RESULT)));
+      return;
+    }
+
   search = g_new0 (Search, 1);
   search->query = g_steal_pointer (&query_obj);
   search->repository = gbp_manuals_application_addin_load_repository (self->app_addin);
 
-  result = dex_async_result_new (self, cancellable, callback, user_data);
-
-  if (strlen (query_str) < 3)
-    dex_async_result_await (result,
-                            dex_future_new_take_object (g_list_store_new (IDE_TYPE_SEARCH_RESULT)));
-  else
-    dex_async_result_await (result,
-                            dex_scheduler_spawn (NULL, 0,
-                                                 gbp_manuals_search_provider_search_fiber,
-                                                 search,
-                                                 (GDestroyNotify)search_free));
+  dex_async_result_await (result,
+                          dex_scheduler_spawn (NULL, 0,
+                                               gbp_manuals_search_provider_search_fiber,
+                                               search,
+                                               (GDestroyNotify)search_free));
 }
 
 static GListModel *
