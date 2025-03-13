@@ -63,6 +63,7 @@ enum {
 
 static GParamSpec *properties[N_PROPS];
 static guint signals[N_SIGNALS];
+static GIcon *book_symbolic;
 static GIcon *library_symbolic;
 
 static DexFuture *
@@ -386,6 +387,9 @@ manuals_navigatable_new_for_resource (GObject *object)
   if (library_symbolic == NULL)
     library_symbolic = g_themed_icon_new ("library-symbolic");
 
+  if (book_symbolic == NULL)
+    book_symbolic = g_themed_icon_new ("book-symbolic");
+
   if (MANUALS_IS_REPOSITORY (object))
     {
       title = _("Manuals");
@@ -410,7 +414,7 @@ manuals_navigatable_new_for_resource (GObject *object)
 
       title = manuals_book_get_title (book);
       uri = manuals_book_get_default_uri (book);
-      icon = g_object_ref (library_symbolic);
+      icon = g_object_ref (book_symbolic);
     }
   else if (MANUALS_IS_HEADING (object))
     {
