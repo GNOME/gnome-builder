@@ -60,7 +60,12 @@ get_jhbuild_install_dir_thread (gpointer data)
   g_autoptr(DexPromise) promise = data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GSubprocessLauncher) launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  g_autoptr(GSubprocess) subprocess = g_subprocess_launcher_spawn (launcher, &error, "jhbuild", "run", "sh", "-c", "echo $JHBUILD_PREFIX", NULL);
+  g_autoptr(GSubprocess) subprocess = NULL;
+
+  if (g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS))
+    subprocess = g_subprocess_launcher_spawn (launcher, &error, "flatpak-spawn", "--host", "--watch-bus", "jhbuild", "run", "sh", "-c", "echo $JHBUILD_PREFIX", NULL);
+  else
+    subprocess = g_subprocess_launcher_spawn (launcher, &error, "jhbuild", "run", "sh", "-c", "echo $JHBUILD_PREFIX", NULL);
 
   if (subprocess != NULL)
     {
