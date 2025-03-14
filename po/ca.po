@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-21 08:31+0000\n"
-"PO-Revision-Date: 2025-03-07 18:41+0100\n"
+"PO-Revision-Date: 2025-03-14 18:41+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -4271,7 +4271,7 @@ msgstr "Usa l'estil de selecció de línies"
 #: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr ""
-"Usa l'estil de selecció pels números de línia si hi una una línia sencera "
+"Usa l'estil de selecció pels números de línia si hi una línia sencera "
 "seleccionada"
 
 #: src/plugins/editorui/tweaks.ui:237
