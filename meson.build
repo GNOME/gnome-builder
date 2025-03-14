@@ -228,6 +228,10 @@ foreach arg: test_c_args
   endif
 endforeach
 
+if get_option('development')
+  global_c_args += '-DDEX_ENABLE_DEBUG'
+endif
+
 if cc.has_multi_arguments('-Wmissing-declarations')
   libide_args += '-Wmissing-declarations'
 endif
