@@ -1,3 +1,10 @@
+# GNOME Builder 48.0
+
+ * Various Manuals backports into Builder
+ * Updated icon for manuals
+ * Fixes for B+Tree used in text regions
+ * Translation updates
+
 # GNOME Builder 48.rc
 
  * Remove use of deprecated GtkSourceView API
