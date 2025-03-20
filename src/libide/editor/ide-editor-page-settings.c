@@ -95,32 +95,22 @@ grid_lines_to_background_pattern (GValue   *value,
 }
 
 static void
-update_font (IdeEditorPage *self,
-             const char    *font_description)
+update_font (IdeEditorPage *self)
 {
-  ide_source_view_set_font_desc (self->view, pango_font_description_from_string (font_description));
-}
+  g_autoptr(PangoFontDescription) font_desc = NULL;
+  g_autofree char *font_name = NULL;
 
-static void
-on_font_name_changed (IdeEditorPage *self,
-                      const char    *key,
-                      GSettings     *settings)
-{
-  if (!g_settings_get_boolean (settings, "use-custom-font"))
-    return;
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (G_IS_SETTINGS (editor_settings));
 
-  update_font (self, g_settings_get_string (settings, "font-name"));
-}
-
-static void
-on_use_custom_font_changed (IdeEditorPage *self,
-                            const char    *key,
-                            GSettings     *settings)
-{
-  if (g_settings_get_boolean (settings, "use-custom-font"))
-    update_font (self, g_settings_get_string (settings, "font-name"));
+  if (g_settings_get_boolean (editor_settings, "use-custom-font"))
+    font_name = g_settings_get_string (editor_settings, "font-name");
   else
-    update_font (self, ide_application_get_system_font_name (IDE_APPLICATION_DEFAULT));
+    font_name = g_strdup (ide_application_get_system_font_name (IDE_APPLICATION_DEFAULT));
+
+  font_desc = pango_font_description_from_string (font_name);
+
+  ide_source_view_set_font_desc (self->view, font_desc);
 }
 
 static gboolean
@@ -350,15 +340,15 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
 
   g_signal_connect_object (editor_settings,
                            "changed::font-name",
-                           G_CALLBACK (on_font_name_changed),
+                           G_CALLBACK (update_font),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (editor_settings,
                            "changed::use-custom-font",
-                           G_CALLBACK (on_use_custom_font_changed),
+                           G_CALLBACK (update_font),
                            self,
                            G_CONNECT_SWAPPED);
-
+  update_font (self);
 
   _ide_editor_page_settings_reload (self);
 
