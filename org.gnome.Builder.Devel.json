@@ -46,6 +46,7 @@
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=xdg-data/meson",
         "--filesystem=/var/lib/flatpak",
+        "--filesystem=/var/tmp",
         "--env=G_SLICE=always-malloc"
     ],
     "x-run-args" : [
@@ -440,19 +441,100 @@
             ]
         },
         {
+            "name" : "polkit",
+            "config-opts" : [
+                "--disable-polkitd",
+                "--disable-man-pages",
+                "--disable-introspection",
+                "--disable-examples",
+                "--disable-gtk-doc",
+                "--disable-libelogind",
+                "--disable-libsystemd-login",
+                "--with-systemdsystemunitdir=no",
+                "--with-authdb=dummy",
+                "--with-authfw=none"
+            ],
+            "rm-configure" : true,
+            "build-options" : {
+                "env" : {
+                    "CFLAGS" : "-Wno-implicit-function-declaration"
+                }
+            },
+            "cleanup" : [
+                "/bin/*",
+                "/etc/pam.d",
+                "/etc/dbus-1",
+                "/share/dbus-1/system-services/*",
+                "/share/polkit-1",
+                "/lib/polkit-1"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.freedesktop.org/software/polkit/releases/polkit-0.116.tar.gz",
+                    "sha256" : "88170c9e711e8db305a12fdb8234fac5706c61969b94e084d0f117d8ec5d34b1"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "build-aux/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
+                },
+                {
+                    "type" : "file",
+                    "path" : "build-aux/flatpak/polkit-autogen",
+                    "dest-filename" : "autogen.sh"
+                }
+            ]
+        },
+        {
+            "name": "bubblewrap",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dman=disabled",
+                "-Dselinux=disabled",
+                "-Dtests=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/projectatomic/bubblewrap/archive/refs/tags/v0.11.0.tar.gz",
+                    "sha256": "cfeeb15fcc47d177d195f06fdf0847e93ee3aa6bf46f6ac0a141fa142759e2c3"
+                }
+            ]
+        },
+        {
+            "name": "xdg-dbus-proxy",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dman=disabled",
+                "-Dtests=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/flatpak/xdg-dbus-proxy/archive/refs/tags/0.1.6.tar.gz",
+                    "sha256": "ee9c1d665f4e3b025a83d522d478ff7930070f2817fc2cb446db0dca93c990b1"
+                }
+            ]
+        },
+        {
             "name" : "flatpak",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dgtkdoc=disabled",
                 "-Ddocbook_docs=disabled",
-                "-Dseccomp=disabled",
-                "-Dsandboxed_triggers=false",
-                "-Dsystem_helper=disabled",
-                "-Dsystem_install_dir=/var/lib/flatpak",
-                "--sysconfdir=/var/run/host/etc",
+                "-Dtests=false",
                 "-Dman=disabled",
+                "-Dseccomp=disabled",
+                "-Dselinux_module=disabled",
+                "-Dmalcontent=disabled",
+                "-Dsandboxed_triggers=false",
+                "-Dsystem_helper=enabled",
                 "-Dhttp_backend=curl",
                 "-Dsystemd=disabled",
-                "-Dtests=false"
+                "-Dsystem_install_dir=/var/lib/flatpak",
+                "-Dsystem_bubblewrap=bwrap",
+                "-Dsystem_dbus_proxy=xdg-dbus-proxy",
+                "--sysconfdir=/var/run/host/etc"
             ],
             "cleanup" : [
                 "/bin/flatpak-bisect",
@@ -473,7 +555,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git",
-                    "tag" : "1.15.6"
+                    "tag" : "1.16.0"
                 }
             ]
         },
