@@ -94,19 +94,33 @@ grid_lines_to_background_pattern (GValue   *value,
   return TRUE;
 }
 
-static gboolean
-font_name_to_font_desc (GValue   *value,
-                        GVariant *variant,
-                        gpointer  user_data)
+static void
+update_font (IdeEditorPage *self,
+             const char    *font_description)
 {
-  const char *str;
+  ide_source_view_set_font_desc (self->view, pango_font_description_from_string (font_description));
+}
 
-  if ((str = g_variant_get_string (variant, NULL)))
-    g_value_take_boxed (value, pango_font_description_from_string (str));
+static void
+on_font_name_changed (IdeEditorPage *self,
+                      const char    *key,
+                      GSettings     *settings)
+{
+  if (!g_settings_get_boolean (settings, "use-custom-font"))
+    return;
+
+  update_font (self, g_settings_get_string (settings, "font-name"));
+}
+
+static void
+on_use_custom_font_changed (IdeEditorPage *self,
+                            const char    *key,
+                            GSettings     *settings)
+{
+  if (g_settings_get_boolean (settings, "use-custom-font"))
+    update_font (self, g_settings_get_string (settings, "font-name"));
   else
-    g_value_set_boxed (value, NULL);
-
-  return TRUE;
+    update_font (self, ide_application_get_system_font_name (IDE_APPLICATION_DEFAULT));
 }
 
 static gboolean
@@ -308,12 +322,6 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                                wrap_text_to_wrap_mode,
                                NULL, NULL, NULL);
 
-  g_settings_bind_with_mapping (editor_settings, "font-name",
-                                self->view, "font-desc",
-                                G_SETTINGS_BIND_GET,
-                                font_name_to_font_desc,
-                                NULL, NULL, NULL);
-
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
   g_settings_bind (editor_settings, "select-first-completion",
                    completion, "select-on-show",
@@ -339,6 +347,18 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                            self,
                            G_CONNECT_SWAPPED);
   on_draw_spaces_changed (self, "draw-spaces", editor_settings);
+
+  g_signal_connect_object (editor_settings,
+                           "changed::font-name",
+                           G_CALLBACK (on_font_name_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (editor_settings,
+                           "changed::use-custom-font",
+                           G_CALLBACK (on_use_custom_font_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
 
   _ide_editor_page_settings_reload (self);
 
