@@ -1173,14 +1173,18 @@ ide_terminal_font_changed (IdeTerminal *self,
 {
   g_autoptr(PangoFontDescription) font_desc = NULL;
   g_autofree char *font_name = NULL;
+  const char *system_font_name;
 
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (G_IS_SETTINGS (settings_));
 
   font_name = g_settings_get_string (settings_, "font-name");
+  system_font_name = ide_application_get_system_font_name (IDE_APPLICATION_DEFAULT);
 
-  if (font_name != NULL)
+  if (g_settings_get_boolean (settings_, "use-custom-font"))
     font_desc = pango_font_description_from_string (font_name);
+  else
+    font_desc = pango_font_description_from_string (system_font_name);
 
   vte_terminal_set_font (VTE_TERMINAL (self), font_desc);
 }
@@ -1252,6 +1256,11 @@ ide_terminal_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (settings,
                            "changed::font-name",
+                           G_CALLBACK (ide_terminal_font_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (settings,
+                           "changed::use-custom-font",
                            G_CALLBACK (ide_terminal_font_changed),
                            self,
                            G_CONNECT_SWAPPED);

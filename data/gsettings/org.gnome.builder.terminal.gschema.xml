@@ -9,6 +9,9 @@
     <key name="font-name" type="s">
       <default>"Monospace 10"</default>
     </key>
+    <key name="use-custom-font" type="b">
+      <default>false</default>
+    </key>
     <key name="limit-scrollback" type="b">
       <default>true</default>
     </key>

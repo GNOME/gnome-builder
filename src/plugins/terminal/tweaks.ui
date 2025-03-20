@@ -10,12 +10,17 @@
                 <property name="title" translatable="yes">Fonts &amp; Styling</property>
                 <child>
                   <object class="IdeTweaksFont" id="terminal_font">
-                    <property name="title" translatable="yes">Font</property>
-                    <property name="subtitle" translatable="yes">The font used within terminals</property>
+                    <property name="title" translatable="yes">Custom Font</property>
                     <property name="binding">
                       <object class="IdeTweaksSetting">
                         <property name="schema-id">org.gnome.builder.terminal</property>
                         <property name="schema-key">font-name</property>
+                      </object>
+                    </property>
+                    <property name="enabled-binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">use-custom-font</property>
                       </object>
                     </property>
                   </object>
