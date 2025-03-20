@@ -75,8 +75,13 @@
       <summary>Show grid lines</summary>
       <description>If enabled, the editor will show grid lines in the document.</description>
     </key>
+    <key name="use-custom-font" type="b">
+      <default>false</default>
+      <description>If enabled, the editor will respect the font-name setting.</description>
+    </key>
     <key name="font-name" type="s">
       <default>"Monospace 10"</default>
+      <description>This setting is only respected if the use-custom-font setting is enabled.</description>
     </key>
     <key name="style-scheme-name" type="s">
       <default>"Adwaita"</default>
