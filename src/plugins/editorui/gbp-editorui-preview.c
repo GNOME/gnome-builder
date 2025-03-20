@@ -125,6 +125,9 @@ gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
   if (!key || ide_str_equal0 (key, "font-name"))
     update_css = TRUE;
 
+  if (!key || ide_str_equal0 (key, "use-custom-font"))
+    update_css = TRUE;
+
   if (update_css)
     {
       g_autofree char *css = NULL;
@@ -133,7 +136,12 @@ gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
       double line_height;
 
       line_height = g_settings_get_double (settings, "line-height");
-      font_name = g_settings_get_string (settings, "font-name");
+
+      if (g_settings_get_boolean (settings, "use-custom-font"))
+        font_name = g_settings_get_string (settings, "font-name");
+      else
+        font_name = g_strdup (ide_application_get_system_font_name (IDE_APPLICATION_DEFAULT));
+
       font_desc = pango_font_description_from_string (font_name);
 
       if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), font_desc, 1, line_height)))
