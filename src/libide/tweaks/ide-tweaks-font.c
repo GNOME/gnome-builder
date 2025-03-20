@@ -32,12 +32,14 @@
 struct _IdeTweaksFont
 {
   IdeTweaksWidget parent_instance;
+  IdeTweaksBinding *enabled_binding;
   char *title;
   char *subtitle;
 };
 
 enum {
   PROP_0,
+  PROP_ENABLED_BINDING,
   PROP_SUBTITLE,
   PROP_TITLE,
   N_PROPS
@@ -66,18 +68,18 @@ ide_tweaks_font_dialog_response_cb (GtkFontChooserDialog *dialog,
 }
 
 static void
-ide_tweaks_font_button_clicked_cb (GtkButton        *button,
+ide_tweaks_font_button_clicked_cb (GtkWidget        *widget,
                                    IdeTweaksBinding *binding)
 {
   g_autofree char *font_name = NULL;
   GtkWidget *dialog;
   GtkRoot *root;
 
-  g_assert (GTK_IS_BUTTON (button));
+  g_assert (GTK_IS_WIDGET (widget));
   g_assert (IDE_IS_TWEAKS_BINDING (binding));
 
   font_name = ide_tweaks_binding_dup_string (binding);
-  root = gtk_widget_get_root (GTK_WIDGET (button));
+  root = gtk_widget_get_root (widget);
   dialog = gtk_font_chooser_dialog_new (_("Select Font"), GTK_WINDOW (root));
 
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER (dialog), font_name);
@@ -97,35 +99,76 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
 {
   IdeTweaksFont *self = (IdeTweaksFont *)widget;
   IdeTweaksBinding *binding;
-  AdwActionRow *row;
-  GtkButton *button;
+  GtkWidget *row;
+  GtkWidget *arrow;
+  GtkWidget *expander;
+  GtkWidget *toggle;
 
   g_assert (IDE_IS_TWEAKS_FONT (self));
 
   if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (self))))
-      return NULL;
+    return NULL;
 
-  button = g_object_new (GTK_TYPE_BUTTON,
-                         "css-classes", IDE_STRV_INIT ("flat"),
-                         "valign", GTK_ALIGN_CENTER,
-                         "can-shrink", TRUE,
-                         NULL);
+  if (self->enabled_binding == NULL)
+    {
+      GtkButton *button;
+
+      button = g_object_new (GTK_TYPE_BUTTON,
+                             "css-classes", IDE_STRV_INIT ("flat"),
+                             "valign", GTK_ALIGN_CENTER,
+                             "can-shrink", TRUE,
+                             NULL);
+      row = g_object_new (ADW_TYPE_ACTION_ROW,
+                          "title", self->title,
+                          "subtitle", self->subtitle,
+                          "activatable-widget", button,
+                          NULL);
+      adw_action_row_add_suffix (ADW_ACTION_ROW (row), GTK_WIDGET (button));
+
+      g_signal_connect_object (button,
+                               "clicked",
+                               G_CALLBACK (ide_tweaks_font_button_clicked_cb),
+                               binding,
+                               0);
+
+      ide_tweaks_binding_bind (binding, button, "label");
+
+      return row;
+    }
+
+  expander = g_object_new (ADW_TYPE_EXPANDER_ROW,
+                           "expanded", FALSE,
+                           "title", self->title,
+                           "subtitle", self->subtitle,
+                           NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title", self->title,
-                      "subtitle", self->subtitle,
-                      "activatable-widget", button,
+                      "activatable", TRUE,
                       NULL);
-  adw_action_row_add_suffix (row, GTK_WIDGET (button));
+  ide_tweaks_binding_bind (binding, row, "title");
 
-  g_signal_connect_object (button,
-                           "clicked",
+  toggle = g_object_new (GTK_TYPE_SWITCH,
+                         "valign", GTK_ALIGN_CENTER,
+                         NULL);
+  g_object_bind_property (expander, "expanded",
+                          toggle, "active",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+  adw_expander_row_add_suffix (ADW_EXPANDER_ROW (expander), toggle);
+
+  ide_tweaks_binding_bind (self->enabled_binding, expander, "expanded");
+
+  arrow = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", "pan-end-symbolic",
+                        NULL);
+  adw_action_row_add_suffix (ADW_ACTION_ROW (row), GTK_WIDGET (arrow));
+  adw_expander_row_add_row (ADW_EXPANDER_ROW (expander), row);
+
+  g_signal_connect_object (row,
+                           "activated",
                            G_CALLBACK (ide_tweaks_font_button_clicked_cb),
                            binding,
                            0);
 
-  ide_tweaks_binding_bind (binding, button, "label");
-
-  return GTK_WIDGET (row);
+  return GTK_WIDGET (expander);
 }
 
 static void
@@ -135,6 +178,7 @@ ide_tweaks_font_dispose (GObject *object)
 
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
+  g_clear_object (&self->enabled_binding);
 
   G_OBJECT_CLASS (ide_tweaks_font_parent_class)->dispose (object);
 }
@@ -149,6 +193,10 @@ ide_tweaks_font_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ENABLED_BINDING:
+      g_value_set_object (value, self->enabled_binding);
+      break;
+
     case PROP_SUBTITLE:
       g_value_set_string (value, ide_tweaks_font_get_subtitle (self));
       break;
@@ -172,6 +220,10 @@ ide_tweaks_font_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ENABLED_BINDING:
+      g_set_object (&self->enabled_binding, g_value_get_object (value));
+      break;
+
     case PROP_SUBTITLE:
       ide_tweaks_font_set_subtitle (self, g_value_get_string (value));
       break;
@@ -205,6 +257,11 @@ ide_tweaks_font_class_init (IdeTweaksFontClass *klass)
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                          NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_ENABLED_BINDING] =
+    g_param_spec_object ("enabled-binding", NULL, NULL,
+                         IDE_TYPE_TWEAKS_BINDING,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
