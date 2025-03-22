@@ -1,0 +1,19 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2025 Jamie Gravendeel
+Description=Provides integration with Ruff for Python
+Embedded=ide_lsp_plugin_register_types
+Module=ruff
+Name=Ruff
+X-Category=lsps
+X-Completion-Provider-Languages=python,python3
+X-Symbol-Resolver-Languages=python,python3
+X-Diagnostic-Provider-Languages=python,python3
+X-Highlighter-Languages=python,python3
+X-Hover-Provider-Languages=python,python3
+X-LSP-Command=ruff server
+X-LSP-Languages=python
+X-LSP-Settings=settings.json
+X-Rename-Provider-Languages=python,python3
+X-Formatter-Languages=python,python3
+X-Code-Action-Languages=python,python3

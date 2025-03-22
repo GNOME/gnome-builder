@@ -124,6 +124,7 @@ subdir('restore-cursor')
 subdir('retab')
 subdir('rstcheck')
 subdir('rubocop')
+subdir('ruff')
 subdir('rust-analyzer')
 subdir('sdkui')
 subdir('serve-d')
@@ -255,6 +256,7 @@ status += [
   'python-lsp-server ........... (Python) : @0@'.format(get_option('plugin_python_lsp_server')),
   'serve-d .......................... (D) : @0@'.format(get_option('plugin_serve_d')),
   'SourceKit .................... (Swift) : @0@'.format(get_option('plugin_sourcekit_lsp')),
+  'ruff ........................ (Python) : @0@'.format(get_option('plugin_ruff')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vala_language_server')),
