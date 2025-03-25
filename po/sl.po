@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2024-10-29 05:19+0000\n"
-"PO-Revision-Date: 2024-10-29 22:23+0100\n"
+"POT-Creation-Date: 2025-03-20 19:00+0000\n"
+"PO-Revision-Date: 2025-03-25 23:11+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -24,8 +24,8 @@ msgstr ""
 
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
-#: src/libide/editor/ide-editor-workspace.ui:45
-#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
@@ -65,7 +65,6 @@ msgstr "Ustvarite programe za GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -380,7 +379,7 @@ msgstr ""
 "izbranih celih vrsticah."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:500
 msgid "Smart Backspace"
 msgstr "Pametna vračalka"
 
@@ -393,7 +392,7 @@ msgstr ""
 "velikosti zamika."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
-#: src/plugins/editorui/tweaks.ui:507
+#: src/plugins/editorui/tweaks.ui:512
 msgid "Smart Home/End"
 msgstr "Pametni tipki Domov (Home) in Konec (End)"
 
@@ -409,71 +408,81 @@ msgstr "Pokaži mrežne črte"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Izbrana možnost omogoča, da bodo v urejevalniku pokazane črte mreže."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid "If enabled, the editor will respect the font-name setting."
+msgstr "Če je omogočeno, bo urejevalnik spoštoval nastavitev imena pisave."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"This setting is only respected if the use-custom-font setting is enabled."
+msgstr ""
+"Ta nastavitev se upošteva le, če je omogočena nastavitev use-custom-font."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
 msgstr "Pokaži pregledni zemljevid"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "When the overview map should be displayed."
 msgstr "Kdaj naj bo prikazan pregledni zemljevid."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
-#: src/plugins/editorui/tweaks.ui:278
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw Spaces"
 msgstr "Izriši presledke"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The various types of space to draw in the editor."
 msgstr "Različne vrste presledkov, ki bodo izrisani v urejevalniku."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/plugins/editorui/tweaks.ui:77
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: src/plugins/editorui/tweaks.ui:82
 msgid "Wrap Text"
 msgstr "Prelomi besedilo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "Način preloma dolgih vrstic besedila za boljšo preglednost."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "Autosave Enabled"
 msgstr "Samodejno shranjevanje je omogočeno"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Enable or disable autosave feature."
 msgstr "Omogoči ali onemogoči možnost samodejnega shranjevanja."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 msgid "Autosave Frequency"
 msgstr "Pogostost samodejnega shranjevanja"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Čas po spreminjanju v sekundah, po katerem se izvede samodejno shranjevanje."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 msgid "Completion Row Count"
 msgstr "Števec vrstic dopolnjevanja"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "The number of completion rows to display to the user."
 msgstr "Število vrstic, ki naj jih drsnik pokaže."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#: src/plugins/editorui/tweaks.ui:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: src/plugins/editorui/tweaks.ui:65
 msgid "Line Height"
 msgstr "Višina vrstice"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "The line height to use for the selected font."
 msgstr "Višina vrstice, ki naj bo v uporabi za izbrano pisavo."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Interactive Completion"
 msgstr "Odzivno dopolnjevanje"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -481,19 +490,19 @@ msgstr ""
 "Izbrana možnost določa, da bo dopolnjevanje samodejno prikazano med "
 "tipkanjem."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
 msgstr "Najmanjše število znakov za skladanje izbora."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Določi najmanjše število znakov za skladanje izbora."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Enable Snippets"
 msgstr "Omogoči izsečke"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -501,11 +510,11 @@ msgstr ""
 "Omogočite razširitev izsečkov iz urejevalnika s pritiskom tabulatorke po "
 "sprožilcu izsečka."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:155
 msgid "Select First Completion"
 msgstr "Izberi prvo dokončanje"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:156
 msgid "Automatically select the first auto-completion entry."
 msgstr "Samodejno izberite prvi vnos samodejnega dokončanja."
 
@@ -729,7 +738,7 @@ msgstr ""
 "Izbrana možnost določa, da bodo v drevesnem pogledu mape pred datotekami."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:387
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
 msgstr "Preveri črkovanje"
 
@@ -815,7 +824,7 @@ msgstr "Možnosti"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:488
+#: src/plugins/editorui/tweaks.ui:493
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -1022,15 +1031,15 @@ msgstr "Išči le cele besede"
 msgid "Language"
 msgstr "Jezik"
 
-#: src/libide/editor/ide-editor-workspace.ui:52
-#: src/libide/editor/ide-editor-workspace.ui:82
-#: src/libide/gui/ide-primary-workspace.ui:43
-#: src/libide/gui/ide-primary-workspace.ui:132
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
 msgid "Search (Ctrl+Enter)"
 msgstr "Poišči (krmilka+vnašalka)"
 
-#: src/libide/editor/ide-editor-workspace.ui:136
-#: src/libide/gui/ide-primary-workspace.ui:116
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Preklopi spodnji pladenj (krmilka+F9)"
 
@@ -1488,31 +1497,31 @@ msgstr "Poišči"
 msgid "Search for anything"
 msgstr "Iščite karkoli"
 
-#: src/libide/gui/ide-search-popover.ui:74
+#: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
 msgstr "Iskana vrsta"
 
-#: src/libide/gui/ide-search-popover.ui:75
+#: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
 "Poizvedbi dodaj predpono z eno od teh možnosti za filtriranje rezultatov"
 
-#: src/libide/gui/ide-search-popover.ui:89
+#: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
 #: src/plugins/menu-search/gtk/menus.ui:112
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Datoteke"
 
-#: src/libide/gui/ide-search-popover.ui:110
+#: src/libide/gui/ide-search-popover.ui:120
 msgid "Symbols"
 msgstr "Simboli"
 
-#: src/libide/gui/ide-search-popover.ui:131
+#: src/libide/gui/ide-search-popover.ui:141
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-#: src/libide/gui/ide-search-popover.ui:152
+#: src/libide/gui/ide-search-popover.ui:162
 #: src/plugins/menu-search/gbp-menu-search-provider.c:190
 msgid "Actions"
 msgstr "Dejanja"
@@ -1651,11 +1660,11 @@ msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 msgid "Invalid configuration"
 msgstr "Neveljavna nastavitev"
 
-#: src/libide/gui/ide-primary-workspace.ui:55
+#: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
 msgstr "Preklopi levi pladenj (F9)"
 
-#: src/libide/gui/ide-primary-workspace.ui:96
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Preklopi desni pladenj"
@@ -2185,7 +2194,7 @@ msgstr "Mapa projektov"
 msgid "Select"
 msgstr "Izberi"
 
-#: src/libide/tweaks/ide-tweaks-font.c:81
+#: src/libide/tweaks/ide-tweaks-font.c:83
 msgid "Select Font"
 msgstr "Izbor pisave"
 
@@ -2866,7 +2875,7 @@ msgstr "Pokaži vzorec mreže"
 msgid "Display a grid pattern underneath source code"
 msgstr "Prikaže mrežni vzorec pod izvorno kodo"
 
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
 msgid "Never"
 msgstr "Nikoli"
 
@@ -2992,7 +3001,7 @@ msgstr ""
 "datotek iz cevovoda izgradnje. Če želite, da začne veljati, potrebujete "
 "vnovični zagon programa Builder."
 
-#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
 msgstr "Zgodovina"
 
@@ -3814,7 +3823,7 @@ msgstr "Zagon Dub"
 msgid "No file was provided."
 msgstr "Ni podane datoteke"
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "Uporabi minimalni vmesnik urejevalnika"
 
@@ -3840,13 +3849,13 @@ msgstr "Navadno besedilo"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "Presledki"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:299
 msgid "Tabs"
 msgstr "Zavihki"
 
@@ -4057,7 +4066,7 @@ msgid "The desired maximum line length"
 msgstr "Želena največja dolžina vrstice"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:385
 msgid "Behavior"
 msgstr "Obnašanje"
 
@@ -4118,130 +4127,126 @@ msgid "Preview"
 msgstr "Predogled"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
-msgid "Font"
-msgstr "Pisava"
+msgid "Custom Font"
+msgstr "Pisava po meri"
 
-#: src/plugins/editorui/tweaks.ui:49
-msgid "The font used within the source code editor"
-msgstr "Pisava, uporabljena v urejevalniku izvorne kode"
-
-#: src/plugins/editorui/tweaks.ui:61
+#: src/plugins/editorui/tweaks.ui:66
 msgid "Adjust spacing between lines"
 msgstr "Prilagodi razmik med vrsticami"
 
-#: src/plugins/editorui/tweaks.ui:78
+#: src/plugins/editorui/tweaks.ui:83
 msgid "How text should be wrapped when wider than the frame"
 msgstr "Kako naj bo besedilo prelomljeno, ko je širše od okvirja"
 
-#: src/plugins/editorui/tweaks.ui:93
+#: src/plugins/editorui/tweaks.ui:98
 msgid "At Spaces"
 msgstr "Pri presledkih"
 
-#: src/plugins/editorui/tweaks.ui:99
+#: src/plugins/editorui/tweaks.ui:104
 msgid "Anywhere"
 msgstr "Kjerkoli"
 
-#: src/plugins/editorui/tweaks.ui:111
+#: src/plugins/editorui/tweaks.ui:116
 msgid "Background Pattern"
 msgstr "Vzorec ozadja"
 
-#: src/plugins/editorui/tweaks.ui:112
+#: src/plugins/editorui/tweaks.ui:117
 msgid "Show a background pattern underneath source code"
 msgstr "Pokaži vzorec ozadja pod izvorno kodo"
 
-#: src/plugins/editorui/tweaks.ui:121
+#: src/plugins/editorui/tweaks.ui:126
 msgid "No Pattern"
 msgstr "Brez vzorca"
 
-#: src/plugins/editorui/tweaks.ui:127
+#: src/plugins/editorui/tweaks.ui:132
 msgid "Grid Lines"
 msgstr "Mrežne črte"
 
-#: src/plugins/editorui/tweaks.ui:137
+#: src/plugins/editorui/tweaks.ui:142
 msgid "Scrollbars"
 msgstr "Drsniki"
 
-#: src/plugins/editorui/tweaks.ui:140
+#: src/plugins/editorui/tweaks.ui:145
 msgid "Source Code Overview"
 msgstr "Pregled izvorne kode"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:146
 msgid "Display an overview of source code next to the editor"
 msgstr "Prikaži pregled izvorne kode ob urejevalniku"
 
-#: src/plugins/editorui/tweaks.ui:150
+#: src/plugins/editorui/tweaks.ui:155
 msgid "Prefer Scrollbars"
 msgstr "Prednost imajo drsniki"
 
-#: src/plugins/editorui/tweaks.ui:156
+#: src/plugins/editorui/tweaks.ui:161
 msgid "Always On"
 msgstr "Vedno omogočeno"
 
-#: src/plugins/editorui/tweaks.ui:162
+#: src/plugins/editorui/tweaks.ui:167
 msgid "Automatic"
 msgstr "Samodejno"
 
-#: src/plugins/editorui/tweaks.ui:172
+#: src/plugins/editorui/tweaks.ui:177
 msgid "Line Numbers"
 msgstr "Številke vrstic"
 
-#: src/plugins/editorui/tweaks.ui:175
+#: src/plugins/editorui/tweaks.ui:180
 msgid "Show Line Numbers"
 msgstr "Pokaži številke vrstic"
 
-#: src/plugins/editorui/tweaks.ui:176
+#: src/plugins/editorui/tweaks.ui:181
 msgid "Display line numbers next to each line of code"
 msgstr "Prikaži številke vrstic poleg vsake vrstice kode"
 
-#: src/plugins/editorui/tweaks.ui:187
+#: src/plugins/editorui/tweaks.ui:192
 msgid "Use Relative Line Numbers"
 msgstr "Uporabi relativne številke vrstic"
 
-#: src/plugins/editorui/tweaks.ui:188
+#: src/plugins/editorui/tweaks.ui:193
 msgid "Show line numbers relative to the current line"
 msgstr "Pokaže številke vrstic relativno na trenutno vrstico"
 
-#: src/plugins/editorui/tweaks.ui:199
+#: src/plugins/editorui/tweaks.ui:204
 msgid "Show Diagnostics"
 msgstr "Pokaži diagnostiko"
 
-#: src/plugins/editorui/tweaks.ui:200
+#: src/plugins/editorui/tweaks.ui:205
 msgid "Display diagnostics next to the line number"
 msgstr "Pokaži diagnostiko ob številki vrstice"
 
-#: src/plugins/editorui/tweaks.ui:211
+#: src/plugins/editorui/tweaks.ui:216
 msgid "Show Line Changes"
 msgstr "Pokaži spremembe vrstic"
 
-#: src/plugins/editorui/tweaks.ui:212
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Highlight changed lines next to the line number"
 msgstr "Poudari spremenjene vrstice ob številki vrstice"
 
-#: src/plugins/editorui/tweaks.ui:223
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Use Line Selection Styling"
 msgstr "Uporabi slog izbora vrstice"
 
-#: src/plugins/editorui/tweaks.ui:224
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr "Uporabi slog izbora za številke vrstic, če je izbrana cela vrstica"
 
-#: src/plugins/editorui/tweaks.ui:237
+#: src/plugins/editorui/tweaks.ui:242
 msgid "Highlighting"
 msgstr "Poudarjanje"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:245
 msgid "Highlight Current Line"
 msgstr "Poudari trenutno vrstico"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:246
 msgid "Make the current line stand out with highlights"
 msgstr "Naj trenutna vrstica izstopa s poudarki"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Highlight Matching Brackets"
 msgstr "Poudari ujemajoče oklepaje"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:258
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4249,11 +4254,11 @@ msgstr ""
 "Uporabi položaj kazalke za poudarjanje ujemajočih se oklepajev, zavitih "
 "oklepajev, narekovajev in še več"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Semantic Highlighting"
 msgstr "Skladenjsko poudarjanje"
 
-#: src/plugins/editorui/tweaks.ui:265
+#: src/plugins/editorui/tweaks.ui:270
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4261,179 +4266,179 @@ msgstr ""
 "Uporabi informacije o simbolih za označevanje imenskih prostorov, funkcij in "
 "spremenljivk znotraj izvorne kode"
 
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:287
 msgid "Draw a mark representing normal spaces"
 msgstr "Nariši oznako, ki predstavlja navadne presledke"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:300
 msgid "Draw a mark representing tabs"
 msgstr "Nariši oznako, ki predstavlja tabulatorje"
 
-#: src/plugins/editorui/tweaks.ui:307
+#: src/plugins/editorui/tweaks.ui:312
 msgid "Newlines"
 msgstr "Nove vrstice"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Draw a mark at the end of lines"
 msgstr "Nariši oznako na koncu vrstic"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Non-breaking spaces"
 msgstr "Nedeljivi presledki"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Izriši oznako pri neprelomnih znakih presledkov"
 
-#: src/plugins/editorui/tweaks.ui:337
+#: src/plugins/editorui/tweaks.ui:342
 msgid "Leading"
 msgstr "Vodilno"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:343
 msgid "Draw marks for leading spaces only"
 msgstr "Izriši sledi le za presledne znake na začetku"
 
-#: src/plugins/editorui/tweaks.ui:350
+#: src/plugins/editorui/tweaks.ui:355
 msgid "Inside Text"
 msgstr "Znotraj besedila"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Draw marks inside a line of text only"
 msgstr "Nariši oznake samo v vrsticah besedila"
 
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Trailing"
 msgstr "Sled"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:369
 msgid "Draw marks for trailing spaces only"
 msgstr "Izriši sledi le za presledne znake na koncu"
 
-#: src/plugins/editorui/tweaks.ui:384
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Spelling"
 msgstr "Črkovanje"
 
-#: src/plugins/editorui/tweaks.ui:388
+#: src/plugins/editorui/tweaks.ui:393
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Podčrtaj morebitne napake črkovanja med vnosom"
 
-#: src/plugins/editorui/tweaks.ui:401
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Selections"
 msgstr "Izbori"
 
-#: src/plugins/editorui/tweaks.ui:404
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Minimum Characters to Highlight"
 msgstr "Najmanjše število znakov za poudarjanje"
 
-#: src/plugins/editorui/tweaks.ui:405
+#: src/plugins/editorui/tweaks.ui:410
 msgid "The minimum selection length before highlighting matches"
 msgstr "Najmanjša dolžina izbora pred poudarjanjem ujemanj"
 
-#: src/plugins/editorui/tweaks.ui:418
+#: src/plugins/editorui/tweaks.ui:423
 msgid "Snippets"
 msgstr "Izsečki"
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:426
 msgid "Expand Snippets"
 msgstr "Razširi izsečke"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:427
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Uporabite tabulatorko za razširitev prilagojenih izsečkov v urejevalniku"
 
-#: src/plugins/editorui/tweaks.ui:437
+#: src/plugins/editorui/tweaks.ui:442
 msgid "Code Completion"
 msgstr "Dopolnjevanje kode"
 
-#: src/plugins/editorui/tweaks.ui:441
+#: src/plugins/editorui/tweaks.ui:446
 msgid "Completion Proposals"
 msgstr "Predlogi dopolnjevanja"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:449
 msgid "Suggest Code Completions"
 msgstr "Predlagaj dopolnjevanje kode"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:450
 msgid "Automatically suggest code completions while typing"
 msgstr "Samodejno predlagaj dokončanje kode med vnašanjem"
 
-#: src/plugins/editorui/tweaks.ui:456
+#: src/plugins/editorui/tweaks.ui:461
 msgid "Select First Completion Proposal"
 msgstr "Izbor prvega predloga dopolnjevanja"
 
-#: src/plugins/editorui/tweaks.ui:457
+#: src/plugins/editorui/tweaks.ui:462
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Samodejno izberi prvi predlog za dokončanje, ko je prikazan"
 
-#: src/plugins/editorui/tweaks.ui:472
+#: src/plugins/editorui/tweaks.ui:477
 msgid "Maximum Completion Proposals"
 msgstr "Največje število predlogov dokončevanja"
 
-#: src/plugins/editorui/tweaks.ui:473
+#: src/plugins/editorui/tweaks.ui:478
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Največje število vrstic za dokončanje, ki bodo prikazane hkrati"
 
-#: src/plugins/editorui/tweaks.ui:492
+#: src/plugins/editorui/tweaks.ui:497
 msgid "Movements"
 msgstr "Premikanje"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:501
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "S povratno tipko bodo odstranjeni dodatni presledni znaki za ohranjanje "
 "ustreznega zamika kode"
 
-#: src/plugins/editorui/tweaks.ui:508
+#: src/plugins/editorui/tweaks.ui:513
 msgid "Navigate to non-space characters"
 msgstr "Krmari do znakov, ki niso presledki"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:522
 msgid "Before line boundaries"
 msgstr "Pred mejami vrstic"
 
-#: src/plugins/editorui/tweaks.ui:523
+#: src/plugins/editorui/tweaks.ui:528
 msgid "After line boundaries"
 msgstr "Za mejami vrstic"
 
-#: src/plugins/editorui/tweaks.ui:529
+#: src/plugins/editorui/tweaks.ui:534
 msgid "Instead of line boundaries"
 msgstr "Namesto meja vrstic"
 
-#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: src/plugins/editorui/tweaks.ui:547
+#: src/plugins/editorui/tweaks.ui:552
 msgid "Session Management"
 msgstr "Upravljanje sej"
 
-#: src/plugins/editorui/tweaks.ui:551
+#: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
 msgstr "Shrani in obnovi"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
 msgstr "Samodejno shrani"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:560
 msgid "Regularly save the document as you type"
 msgstr "Redno shranjuj dokument med vnašanjem"
 
-#: src/plugins/editorui/tweaks.ui:566
+#: src/plugins/editorui/tweaks.ui:571
 msgid "Auto-Save Delay"
 msgstr "Zamik samodejnega shranjevanja"
 
-#: src/plugins/editorui/tweaks.ui:567
+#: src/plugins/editorui/tweaks.ui:572
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "Čas v sekundah po spremembi, ko naj se izvede samodejno shranjevanje"
 
-#: src/plugins/editorui/tweaks.ui:582
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Format on Save"
 msgstr "Preoblikuj ob shranjevanju"
 
-#: src/plugins/editorui/tweaks.ui:583
+#: src/plugins/editorui/tweaks.ui:588
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4441,11 +4446,11 @@ msgstr ""
 "Preoblikuje izvorno kodo pri shranjevanju na disk. Zahteva registriran "
 "formatnik za izvorni jezik."
 
-#: src/plugins/editorui/tweaks.ui:598
+#: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
 msgstr "Obnovi položaj kazalke"
 
-#: src/plugins/editorui/tweaks.ui:599
+#: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
 msgstr "Skoči na zadnji položaj ob ponovnem odprtju datoteke"
 
@@ -4457,11 +4462,11 @@ msgstr "Odpri datoteko ali mapo"
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Podobne datoteke (Ctrl+Shift+O)"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:938
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "Namestitev je spodletela"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:948
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 msgid "Installation complete"
 msgstr "Nameščanje je končano"
 
@@ -4511,7 +4516,7 @@ msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder išče ustrezne razširitve kompleta SDK za izgradnjo projekta"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:852
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4889,7 +4894,7 @@ msgstr "Ustvari nov prazen projekt z uporabo Makefile"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
-#: src/plugins/manuals/manuals-navigatable.c:391
+#: src/plugins/manuals/manuals-navigatable.c:395
 msgid "Manuals"
 msgstr "Priročniki"
 
@@ -4927,11 +4932,11 @@ msgstr "Pokaži v %s"
 msgid "Importing %s…"
 msgstr "Uvažanje %s …"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:116
+#: src/plugins/manuals/manuals-jhbuild-importer.c:121
 msgid "Importing JHBuild Documentation"
 msgstr "Uvažanje dokumentacije JHBuild"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:117
+#: src/plugins/manuals/manuals-jhbuild-importer.c:122
 msgid "Scanning jhbuild for new documentation"
 msgstr "Pregledovanje jhbuild za novo dokumentacijo"
 
@@ -6132,60 +6137,56 @@ msgstr "Odpri nov terminal v izvajalnem okolju projekta"
 msgid "Split"
 msgstr "Razdeli"
 
-#: src/plugins/terminal/tweaks.ui:14
-msgid "The font used within terminals"
-msgstr "Pisava, ki se uporablja v terminalih"
-
-#: src/plugins/terminal/tweaks.ui:29
+#: src/plugins/terminal/tweaks.ui:34
 msgid "Allow Bold"
 msgstr "Dovoli krepko besedilo"
 
-#: src/plugins/terminal/tweaks.ui:30
+#: src/plugins/terminal/tweaks.ui:35
 msgid "Allows the use of bold escape sequences"
 msgstr "Omogoča uporabo krepkih zaporedij izhodov v sili"
 
-#: src/plugins/terminal/tweaks.ui:41
+#: src/plugins/terminal/tweaks.ui:46
 msgid "Allow Hyperlinks"
 msgstr "Dovoli hiperpovezave"
 
-#: src/plugins/terminal/tweaks.ui:42
+#: src/plugins/terminal/tweaks.ui:47
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Omogoča uporabo ubežnih zaporedij hiperpovezave"
 
-#: src/plugins/terminal/tweaks.ui:55
+#: src/plugins/terminal/tweaks.ui:60
 msgid "Scrolling"
 msgstr "Drsenje"
 
-#: src/plugins/terminal/tweaks.ui:58
+#: src/plugins/terminal/tweaks.ui:63
 msgid "Scroll On Output"
 msgstr "Drsenje ob dopolnjenem izpisu"
 
-#: src/plugins/terminal/tweaks.ui:59
+#: src/plugins/terminal/tweaks.ui:64
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr "Samodejno drsaj, ko programi na izhod v terminalu podajajo besedilo"
 
-#: src/plugins/terminal/tweaks.ui:70
+#: src/plugins/terminal/tweaks.ui:75
 msgid "Scroll On Keyboard Input"
 msgstr "Drsenje ob vpisu s tipkovnico"
 
-#: src/plugins/terminal/tweaks.ui:71
+#: src/plugins/terminal/tweaks.ui:76
 msgid "Automatically scroll when typing to insert text"
 msgstr "Vsebina samodejno zdrsi, ko je vneseno besedilo"
 
-#: src/plugins/terminal/tweaks.ui:87
+#: src/plugins/terminal/tweaks.ui:92
 msgid "Limit Scrollback"
 msgstr "Omeji drsanje"
 
-#: src/plugins/terminal/tweaks.ui:88
+#: src/plugins/terminal/tweaks.ui:93
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr "Omeji število vrstic, ki so shranjene v pomnilniku drsnika terminala"
 
-#: src/plugins/terminal/tweaks.ui:99
+#: src/plugins/terminal/tweaks.ui:104
 msgid "Maximum Lines in Scrollback"
 msgstr "Število shranjenih vrstic zgodovine drsnika"
 
-#: src/plugins/terminal/tweaks.ui:100
+#: src/plugins/terminal/tweaks.ui:105
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "Največje število vrstic, shranjenih v zgodovini pri omejevanju povratnega "
