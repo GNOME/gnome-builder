@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="foundry_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="arduino_page">
+            <property name="icon-name">text-arduino-symbolic</property>
+            <property name="title" translatable="yes">Arduino</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Additional URLs</property>
+                <child>
+                  <object class="IdeTweaksWidget">
+                    <signal name="create-for-item" handler="create_additional_urls_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Installed Libraries</property>
+                <child>
+                  <object class="IdeTweaksWidget">
+                    <signal name="create-for-item" handler="create_libraries_manager_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Installed Platforms</property>
+                <child>
+                  <object class="IdeTweaksWidget">
+                    <signal name="create-for-item" handler="create_platforms_manager_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

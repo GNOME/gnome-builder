@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/arduino">
+    <file>arduino.plugin</file>
+    <file>style.css</file>
+    <file compressed="true">resources/sketch.ino</file>
+    <file compressed="true">resources/sketch.yaml</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
+    <file preprocess="xml-stripblanks">tweaks-arduino-page.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-board-options-widget.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-libraries-editor.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-platforms-editor.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-libraries-manager.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-platforms-manager.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-platform-editor-row.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-string-row.ui</file>
+    <file preprocess="xml-stripblanks">gbp-arduino-urls-editor.ui</file>
+  </gresource>
+</gresources>
+

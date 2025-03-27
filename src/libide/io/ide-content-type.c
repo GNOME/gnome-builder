@@ -55,6 +55,8 @@ static const struct {
   { "requirements.txt", "text-makefile-symbolic" },
   { "go.mod", "text-makefile-symbolic" },
   { "wscript", "text-makefile-symbolic" },
+  { "sketch.yaml", "text-makefile-symbolic" },
+  { "sketch.yml", "text-makefile-symbolic" },
 };
 
 static const struct {
@@ -63,6 +65,7 @@ static const struct {
 } suffix_content_type_overrides[] = {
   { ".md", "text-markdown-symbolic" },
   { ".swift", "text-swift-symbolic" },
+  { ".ino", "text-arduino-symbolic" },
 };
 
 #if defined (G_HAS_CONSTRUCTORS)

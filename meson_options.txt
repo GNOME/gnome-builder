@@ -17,6 +17,7 @@ option('network_tests', type: 'boolean', value: true, description: 'Allow networ
 option('ctags_path', type: 'string', value: '')
 option('webkit', type: 'feature', value: 'enabled', description: 'Enable features which require WebKit')
 
+option('plugin_arduino', type: 'boolean')
 option('plugin_autotools', type: 'boolean')
 option('plugin_bash_language_server', type: 'boolean')
 option('plugin_blueprint', type: 'boolean')

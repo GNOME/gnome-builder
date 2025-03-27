@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpArduinoBoardOptionsWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">24</property>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Board Settings</property>
+            <child>
+              <object class="AdwComboRow" id="fqbn_combo">
+                <property name="title" translatable="yes">Board</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup" id="programmer_group">
+            <child>
+              <object class="AdwComboRow" id="programmer_combo">
+                <property name="title" translatable="yes">Programmer</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="selection-mode">none</property>
+            <property name="visible">false</property>
+            <style>
+              <class name="boxed-list"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+
