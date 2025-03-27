@@ -462,7 +462,9 @@ gbp_flatpak_config_provider_monitor_changed (GbpFlatpakConfigProvider *self,
       g_autofree gchar *name = g_file_get_basename (file);
 
       if (name != NULL &&
-          g_str_has_suffix (name, ".json") &&
+          (g_str_has_suffix (name, ".json") ||
+           g_str_has_suffix (name, ".yaml") ||
+           g_str_has_suffix (name, ".yml")) &&
           !contains_file (self, file))
         {
           g_autoptr(GbpFlatpakManifest) manifest = NULL;
@@ -507,6 +509,15 @@ gbp_flatpak_config_provider_load_client_cb (GObject      *object,
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
+  /* expect a.b.json at least, if not
+   * a.b.c.json or a.b.c.d.json or more.
+   */
+  const gchar *patterns[4] = {
+    "*.*.json",
+    "*.*.yaml",
+    "*.*.yml",
+    NULL
+  };
 
   IDE_ENTRY;
 
@@ -535,15 +546,12 @@ gbp_flatpak_config_provider_load_client_cb (GObject      *object,
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_g_file_find_with_depth_async (workdir,
-                                    /* expect a.b.json at least, if not
-                                     * a.b.c.json or a.b.c.d.json or more.
-                                     */
-                                    "*.*.json",
-                                    DISCOVERY_MAX_DEPTH,
-                                    ide_task_get_cancellable (task),
-                                    load_find_files_cb,
-                                    g_object_ref (task));
+  ide_g_file_find_multiple_with_depth_async (workdir,
+                                             patterns,
+                                             DISCOVERY_MAX_DEPTH,
+                                             ide_task_get_cancellable (task),
+                                             load_find_files_cb,
+                                             g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -588,6 +596,10 @@ guess_best_config (GPtrArray *ar)
 
       if (strstr (path, "-unstable.json") != NULL)
         return IDE_CONFIG (config);
+      else if (strstr (path, "-unstable.yml") != NULL)
+        return IDE_CONFIG (config);
+      else if (strstr (path, "-unstable.yaml") != NULL)
+        return IDE_CONFIG (config);
     }
 
   for (guint i = 0; i < ar->len; i++)
@@ -596,12 +608,21 @@ guess_best_config (GPtrArray *ar)
       g_autofree gchar *path = gbp_flatpak_manifest_get_path (config);
       g_autofree gchar *base = g_path_get_basename (path);
       const gchar *app_id = ide_config_get_app_id (IDE_CONFIG (config));
-      g_autofree gchar *app_id_json = g_strdup_printf ("%s.json", app_id);
+      g_autofree gchar *app_id_manifest = NULL;
+
+      if (g_str_has_suffix(base, ".json"))
+        app_id_manifest = g_strdup_printf ("%s.json", app_id);
+      else if (g_str_has_suffix(base, ".yml"))
+        app_id_manifest = g_strdup_printf ("%s.yml", app_id);
+      else if (g_str_has_suffix(base, ".yaml"))
+        app_id_manifest = g_strdup_printf ("%s.yaml", app_id);
+      else
+        continue;
 
       /* If appid.json is the same as the filename, that is the
        * best match (after unstable) we can have. Use it.
        */
-      if (ide_str_equal0 (app_id_json, base))
+      if (ide_str_equal0 (app_id_manifest, base))
         return IDE_CONFIG (config);
     }
 
@@ -724,6 +745,7 @@ gbp_flatpak_config_provider_duplicate (IdeConfigProvider *provider,
   g_autofree gchar *path = NULL;
   g_autofree gchar *base = NULL;
   g_autoptr(GFile) parent = NULL;
+  const gchar *extension = ".json";
   gchar *dot;
   GFile *file;
 
@@ -735,12 +757,18 @@ gbp_flatpak_config_provider_duplicate (IdeConfigProvider *provider,
   base = g_file_get_basename (file);
   parent = g_file_get_parent (file);
 
-  if ((dot = strrchr (base, '.')))
+  if ((dot = strrchr (base, '.'))) {
+    if (ide_str_equal0 (dot, ".yaml"))
+      extension = ".yaml";
+    else if (ide_str_equal0 (dot, ".yml"))
+      extension = ".yml";
+
     *dot = '\0';
+  }
 
   for (guint i = 2; i <= 10; i++)
     {
-      g_autofree gchar *name = g_strdup_printf ("%s-%u.json", base, i);
+      g_autofree gchar *name = g_strdup_printf ("%s-%u%s", base, i, extension);
       g_autoptr(GFile) dest = g_file_get_child (parent, name);
 
       if (!g_file_query_exists (dest, NULL))

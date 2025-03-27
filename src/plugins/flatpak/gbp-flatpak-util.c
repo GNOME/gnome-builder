@@ -23,9 +23,13 @@
 #include <string.h>
 #include <libide-foundry.h>
 #include <libide-vcs.h>
+#include <yaml.h>
 
 #include "gbp-flatpak-client.h"
 #include "gbp-flatpak-util.h"
+
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (yaml_parser_t, yaml_parser_delete)
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (yaml_document_t, yaml_document_delete)
 
 gchar *
 gbp_flatpak_get_repo_dir (IdeContext *context)
@@ -257,4 +261,130 @@ gbp_flatpak_get_a11y_bus (const char **out_unix_path,
     *out_address_suffix = a11y_bus_suffix;
 
   return a11y_bus;
+}
+
+
+static JsonNode *
+parse_yaml_node_to_json (yaml_document_t *doc,
+                         yaml_node_t     *node)
+{
+  JsonNode *json = json_node_alloc ();
+  const char *scalar = NULL;
+  g_autoptr(JsonArray) array = NULL;
+  g_autoptr(JsonObject) object = NULL;
+  yaml_node_item_t *item = NULL;
+  yaml_node_pair_t *pair = NULL;
+
+  g_assert (doc);
+  g_assert (node);
+
+  switch (node->type)
+    {
+    case YAML_NO_NODE:
+      json_node_init_null (json);
+      break;
+    case YAML_SCALAR_NODE:
+      scalar = (gchar *) node->data.scalar.value;
+      if (node->data.scalar.style == YAML_PLAIN_SCALAR_STYLE)
+        {
+          if (strcmp (scalar, "true") == 0)
+            {
+              json_node_init_boolean (json, TRUE);
+              break;
+            }
+          else if (strcmp (scalar, "false") == 0)
+            {
+              json_node_init_boolean (json, FALSE);
+              break;
+            }
+          else if (strcmp (scalar, "null") == 0)
+            {
+              json_node_init_null (json);
+              break;
+            }
+
+          if (*scalar != '\0')
+            {
+              gchar *endptr;
+              gint64 num = g_ascii_strtoll (scalar, &endptr, 10);
+              if (*endptr == '\0')
+                {
+                  json_node_init_int (json, num);
+                  break;
+                }
+              // Make sure that N.N, N., and .N (where N is a digit) are picked up as numbers.
+              else if (*endptr == '.' && (endptr != scalar || endptr[1] != '\0'))
+                {
+                  g_ascii_strtoll (endptr + 1, &endptr, 10);
+                  if (*endptr == '\0')
+                    g_warning ("%zu:%zu: '%s' will be parsed as a number by many YAML parsers",
+                               node->start_mark.line + 1, node->start_mark.column + 1, scalar);
+                }
+            }
+        }
+
+      json_node_init_string (json, scalar);
+      break;
+    case YAML_SEQUENCE_NODE:
+      array = json_array_new ();
+      for (item = node->data.sequence.items.start; item < node->data.sequence.items.top; item++)
+        {
+          yaml_node_t *child = yaml_document_get_node (doc, *item);
+          if (child != NULL)
+            json_array_add_element (array, parse_yaml_node_to_json (doc, child));
+        }
+
+      json_node_init_array (json, array);
+      break;
+    case YAML_MAPPING_NODE:
+      object = json_object_new ();
+      for (pair = node->data.mapping.pairs.start; pair < node->data.mapping.pairs.top; pair++)
+        {
+          yaml_node_t *key = yaml_document_get_node (doc, pair->key);
+          yaml_node_t *value = yaml_document_get_node (doc, pair->value);
+
+          g_warn_if_fail (key->type == YAML_SCALAR_NODE);
+          json_object_set_member (object, (gchar *) key->data.scalar.value,
+                                  parse_yaml_node_to_json (doc, value));
+        }
+
+      json_node_init_object (json, object);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return json;
+}
+
+JsonNode *
+gbp_flatpak_yaml_to_json (const gchar  *contents,
+                          gsize         len,
+                          GError      **error)
+{
+  g_auto(yaml_parser_t) parser = {0};
+  g_auto(yaml_document_t) doc = {{0}};
+  yaml_node_t *root;
+
+  if (!yaml_parser_initialize (&parser))
+    g_error ("yaml_parser_initialize is out of memory.");
+
+  yaml_parser_set_input_string (&parser, (yaml_char_t *) contents, len);
+
+  if (!yaml_parser_load (&parser, &doc))
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "%zu:%zu: %s", parser.problem_mark.line + 1,
+                   parser.problem_mark.column + 1, parser.problem);
+      return NULL;
+    }
+
+  root = yaml_document_get_root_node (&doc);
+  if (root == NULL)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Document has no root node.");
+      return NULL;
+    }
+
+  return parse_yaml_node_to_json (&doc, root);
 }

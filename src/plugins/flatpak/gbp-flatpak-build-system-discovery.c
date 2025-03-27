@@ -23,6 +23,7 @@
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-build-system-discovery.h"
+#include "gbp-flatpak-util.h"
 
 #define DISCOVERY_MAX_DEPTH 3
 
@@ -35,11 +36,20 @@ struct _GbpFlatpakBuildSystemDiscovery
   GObject parent_instance;
 };
 
-/* Returns whether @filename seems to be a JSON file, naively detected. */
-static gboolean
-maybe_is_json_file (const char *filename)
+/* Returns whether @filename seems to be a JSON/YAML file, naively detected and return its basename. */
+static gchar *
+maybe_is_json_or_yaml_file (const char *filename)
 {
-  return strlen (filename) >= strlen (".json") && g_str_has_suffix (filename, ".json");
+  size_t filename_len = strlen (filename);
+  if (filename_len >= strlen (".json") && g_str_has_suffix (filename, ".json")) {
+      return g_strndup (filename, filename_len - strlen (".json"));
+  } else if (filename_len >= strlen (".yaml") && g_str_has_suffix (filename, ".yaml")) {
+      return g_strndup (filename, filename_len - strlen (".yaml"));
+  }  else if (filename_len >= strlen (".yml") && g_str_has_suffix (filename, ".yml")) {
+      return g_strndup (filename, filename_len - strlen (".yml"));
+  }
+
+  return NULL;
 }
 
 static void
@@ -102,10 +112,9 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
             }
         }
 
-      if (!maybe_is_json_file (name))
+      if (!(app_id = maybe_is_json_or_yaml_file (name)))
         continue;
 
-      app_id = g_strndup (name, strlen (name) - strlen (".json"));
       if (!g_application_id_is_valid (app_id))
         continue;
 
@@ -181,13 +190,12 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
   for (guint i = 0; i < manifests->len; i++)
     {
       GFile *file = g_ptr_array_index (manifests, i);
+      g_autoptr(JsonNode) root_node = NULL;
       g_autofree gchar *path = NULL;
       g_autofree gchar *base = NULL;
       const gchar *buildsystem;
       const gchar *app_id_str;
-      g_autoptr(JsonParser) parser = NULL;
       JsonObject *root_object;
-      JsonNode *root_node;
       JsonNode *app_id;
       JsonNode *modules_node;
       JsonArray *modules_array;
@@ -202,12 +210,29 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
       IDE_TRACE_MSG ("Checking potential manifest \"%s\"", path);
 
       base = g_file_get_basename (file);
-      parser = json_parser_new ();
 
-      if (!json_parser_load_from_file (parser, path, NULL))
-        continue;
+      if (g_str_has_suffix (base, ".yaml") || g_str_has_suffix (base, ".yml"))
+        {
+          g_autofree gchar *contents = NULL;
+          gsize contents_len = 0;
 
-      root_node = json_parser_get_root (parser);
+          if (!g_file_load_contents (file, cancellable, &contents, &contents_len, NULL, error))
+            continue;
+
+          root_node = gbp_flatpak_yaml_to_json (contents, contents_len, error);
+          if (!root_node)
+            continue;
+        }
+      else
+        {
+          g_autoptr(JsonParser) parser = json_parser_new ();
+
+          if (!json_parser_load_from_file (parser, path, NULL))
+            continue;
+
+          root_node = json_parser_steal_root (parser);
+        }
+
 
       if ((root_object = json_node_get_object (root_node)) &&
           ((app_id = json_object_get_member (root_object, "id")) ||

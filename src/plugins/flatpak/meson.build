@@ -10,6 +10,7 @@ endif
 
 libostree_dep = dependency('ostree-1')
 libsoup_dep = dependency('libsoup-3.0')
+libyaml_dep = dependency('yaml-0.1')
 
 subdir('daemon')
 
@@ -49,6 +50,7 @@ plugins_deps += [
   libostree_dep,
   libportal_dep,
   libsoup_dep,
+  libyaml_dep,
 ]
 
 plugins_sources += plugin_flatpak_resources

@@ -55,6 +55,13 @@ GPtrArray *ide_g_file_find_with_depth               (GFile                *file,
                                                      guint                 max_depth,
                                                      GCancellable         *cancellable);
 IDE_AVAILABLE_IN_ALL
+void       ide_g_file_find_multiple_with_depth_async (GFile                *file,
+                                                      const gchar * const  *patterns,
+                                                      guint                 max_depth,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_find_with_depth_async         (GFile                *file,
                                                      const gchar          *pattern,
                                                      guint                 max_depth,

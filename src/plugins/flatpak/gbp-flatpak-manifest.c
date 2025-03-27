@@ -519,12 +519,12 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
                                     GError       **error)
 {
   GbpFlatpakManifest *self = (GbpFlatpakManifest *)initable;
+  g_autofree gchar *file_basename = NULL;
   g_autofree gchar *app_id = NULL;
   g_autofree gchar *contents = NULL;
   g_autofree gchar *dir_name = NULL;
   g_autofree gchar *display_name = NULL;
   g_autofree gchar *run_args = NULL;
-  g_autoptr(JsonParser) parser = NULL;
   g_auto(GStrv) build_commands = NULL;
   g_auto(GStrv) make_args = NULL;
   g_auto(GStrv) make_install_args = NULL;
@@ -532,10 +532,10 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   const gchar *app_id_field = "app-id";
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GFile) workdir = NULL;
+  g_autoptr(JsonNode) root = NULL;
   JsonObject *root_obj;
   JsonObject *primary;
   JsonObject *obj;
-  JsonNode *root;
   JsonNode *node;
   gsize len = 0;
 
@@ -546,12 +546,22 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   if (!g_file_load_contents (self->file, cancellable, &contents, &len, NULL, error))
     return FALSE;
 
-  parser = json_parser_new ();
+  file_basename = g_file_get_basename (self->file);
+  if (g_str_has_suffix (file_basename, ".yaml") || g_str_has_suffix (file_basename, ".yml"))
+    {
+      root = gbp_flatpak_yaml_to_json (contents, len, error);
+      if (!root)
+        return FALSE;
+    }
+  else
+    {
+      g_autoptr(JsonParser) parser = json_parser_new ();
 
-  if (!json_parser_load_from_data (parser, contents, len, error))
-    return FALSE;
+      if (!json_parser_load_from_data (parser, contents, len, error))
+        return FALSE;
 
-  root = json_parser_get_root (parser);
+      root = json_parser_steal_root (parser);
+    }
 
   if (root == NULL || !JSON_NODE_HOLDS_OBJECT (root))
     {
