@@ -1075,6 +1075,27 @@ ide_buffer_manager_apply_edits_completed_cb (IdeBufferManager *self,
   IDE_EXIT;
 }
 
+static int
+compare_edits (gconstpointer a,
+               gconstpointer b)
+{
+  IdeTextEdit *edit_a = *(IdeTextEdit * const *)a;
+  IdeTextEdit *edit_b = *(IdeTextEdit * const *)b;
+  IdeRange *range_a = ide_text_edit_get_range (edit_a);
+  IdeRange *range_b = ide_text_edit_get_range (edit_b);
+  IdeLocation *loc_a = ide_range_get_begin (range_a);
+  IdeLocation *loc_b = ide_range_get_begin (range_b);
+  int cmpval = ide_location_compare (loc_a, loc_b);
+
+  /* Reverse sort */
+  if (cmpval < 0)
+    return 1;
+  else if (cmpval > 0)
+    return -1;
+  else
+    return 0;
+}
+
 /**
  * ide_buffer_manager_apply_edits_async:
  * @self: An #IdeBufferManager
@@ -1109,6 +1130,8 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (edits, g_object_unref);
+
+  g_ptr_array_sort (edits, compare_edits);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_buffer_manager_apply_edits_async);
