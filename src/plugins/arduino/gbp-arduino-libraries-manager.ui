@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpArduinoLibrariesManager">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkStack" id="stack">
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">empty</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">true</property>
+                    <property name="spacing">12</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">No libraries installed</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">24</property>
+                        <property name="margin-end">24</property>
+                        <style>
+                          <class name="dimmed"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">libraries</property>
+                <property name="child">
+                  <object class="GtkListBox" id="list_box">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="menu_button">
+            <property name="direction">left</property>
+            <property name="halign">end</property>
+            <property name="child">
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Install _Library</property>
+                <property name="use-underline">true</property>
+              </object>
+            </property>
+            <property name="popover">
+              <object class="GtkPopover">
+                <style>
+                  <class name="search-popover"/>
+                </style>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="margin-top">6</property>
+                        <property name="label" translatable="yes">Search for a Library</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="margin-end">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkSearchEntry" id="search_entry">
+                            <property name="hexpand">true</property>
+                            <signal name="activate" handler="on_search_entry_activate_cb" swapped="true" object="GbpArduinoLibrariesManager"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <signal name="clicked" handler="on_search_entry_activate_cb" swapped="true" object="GbpArduinoLibrariesManager"/>
+                            <property name="label" translatable="yes">Search</property>
+                            <style>
+                              <class name="suggested-action"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStack" id="search_stack">
+                        <child>
+                          <object class="GtkStackPage">
+                            <property name="name">results</property>
+                            <property name="child">
+                              <object class="GtkScrolledWindow">
+                                <property name="max-content-height">500</property>
+                                <property name="min-content-width">400</property>
+                                <property name="propagate-natural-height">True</property>
+                                <style>
+                                  <class name="undershoot-top"/>
+                                </style>
+                                <child>
+                                  <object class="GtkListBox" id="search_list_box">
+                                    <property name="activate-on-single-click">false</property>
+                                    <property name="selection-mode">none</property>
+                                    <signal name="row-activated" handler="on_search_list_row_activated_cb" swapped="true" object="GbpArduinoLibrariesManager"/>
+                                    <style>
+                                      <class name="navigation-sidebar"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkStackPage">
+                            <property name="name">empty</property>
+                            <property name="child">
+                              <object class="GtkLabel" id="label">
+                                <property name="label" translatable="yes">No libraries found</property>
+                                <property name="margin-top">12</property>
+                                <property name="margin-bottom">12</property>
+                                <property name="margin-start">24</property>
+                                <property name="margin-end">24</property>
+                                <style>
+                                  <class name="dimmed"/>
+                                </style>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

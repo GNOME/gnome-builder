@@ -1,0 +1,12 @@
+[Plugin]
+Authors=Nokse
+Builtin=true
+Copyright=Copyright © 2025 Nokse
+Description=Provides integration with arduino-cli
+Embedded=_gbp_arduino_register_types
+Hidden=false
+Module=arduino
+Name=Arduino
+X-Category=devices
+X-Project-File-Filter-Name=Arduino (sketch.yaml)
+X-Project-File-Filter-Pattern=sketch.yaml,sketch.yml

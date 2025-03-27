@@ -34,6 +34,7 @@ if get_option('webkit').enabled()
   plugins_deps += [libide_webkit_dep]
 endif
 
+subdir('arduino')
 subdir('auto-save')
 subdir('autotools')
 subdir('bash-language-server')
@@ -174,6 +175,7 @@ plugins = static_library('plugins', plugins_sources,
 status += [
   'Plugins:',
   '',
+  'Arduino .............................. : @0@'.format(get_option('plugin_arduino')),
   'Autotools ............................ : @0@'.format(get_option('plugin_autotools')),
   'BuildStream .......................... : @0@'.format(get_option('plugin_buildstream')),
   'C Pack ............................... : @0@'.format(get_option('plugin_c_pack')),

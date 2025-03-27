@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpArduinoUrlsEditor">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkStack" id="stack">
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">urls</property>
+                <property name="child">
+                  <object class="GtkListBox" id="list_box">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">empty</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">true</property>
+                    <property name="spacing">12</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">No additional URL</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">24</property>
+                        <property name="margin-end">24</property>
+                        <style>
+                          <class name="dimmed"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="direction">left</property>
+            <property name="halign">end</property>
+            <property name="child">
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Add URL</property>
+                <property name="use-underline">true</property>
+              </object>
+            </property>
+            <property name="popover">
+              <object class="IdeEntryPopover">
+                <property name="title" translatable="yes">Add URL</property>
+                <property name="button-text" translatable="yes">_Add</property>
+                <property name="width-request">400</property>
+                <signal name="changed" handler="on_url_entry_changed_cb" swapped="true" object="GbpArduinoUrlsEditor"/>
+                <signal name="activate" handler="on_url_entry_activate_cb" swapped="true" object="GbpArduinoUrlsEditor"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

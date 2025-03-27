@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="configs_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="config_factory">
+          <object class="IdeTweaksFactory">
+            <child internal-child="config_page">
+              <object class="IdeTweaksPage">
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_notes_entry_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">notes</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_board_options_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">fqbn</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_libraries_list_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">libraries</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_platforms_list_cb" swapped="true" object="GbpArduinoTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">platforms</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+
