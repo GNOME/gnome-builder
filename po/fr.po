@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-03-30 16:52+0000\n"
-"PO-Revision-Date: 2025-03-28 09:48+0100\n"
+"POT-Creation-Date: 2025-03-31 17:52+0000\n"
+"PO-Revision-Date: 2025-03-31 21:51+0200\n"
 "Last-Translator: Mathis Joussemet <joussemetmathis@gmail.com>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -394,7 +394,7 @@ msgstr ""
 "numéros de lignes de toutes les lignes sélectionnées."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/plugins/editorui/tweaks.ui:500
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "Retours arrières intelligents"
 
@@ -407,7 +407,7 @@ msgstr ""
 "aligné avec votre taille d’indentation."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
-#: src/plugins/editorui/tweaks.ui:512
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr "Origine et Fin intelligents"
 
@@ -423,85 +423,75 @@ msgstr "Afficher les lignes de la grille"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Indique si la grille doit être affichée en arrière-plan du document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-msgid "If enabled, the editor will respect the font-name setting."
-msgstr "Si activé, l’éditeur respectera les paramètres de police."
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
-msgid ""
-"This setting is only respected if the use-custom-font setting is enabled."
-msgstr ""
-"Ce paramètre n’est respecté que si le paramètre use-custom-font est activé."
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr "Politique du panneau d’aperçu"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr "Indique quand le panneau d’aperçu doit être affiché."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
-#: src/plugins/editorui/tweaks.ui:283
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "Dessiner les espaces"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr "Les divers types d’espaces à dessiner dans l’éditeur."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-#: src/plugins/editorui/tweaks.ui:82
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Césure du texte"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 "La manière de faire la césure pour améliorer la visibilité des longues "
 "lignes."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "Enregistrement automatique activé"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Active ou désactive l’enregistrement automatique."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Autosave Frequency"
 msgstr "Fréquence d’enregistrement automatique"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Le nombre de secondes après une modification avant l’enregistrement "
 "automatique."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "Completion Row Count"
 msgstr "Nombre de lignes de complétion"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid "The number of completion rows to display to the user."
 msgstr ""
 "Le nombre de lignes de complétion qu’il faut afficher pour l’utilisateur."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
-#: src/plugins/editorui/tweaks.ui:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Hauteur de ligne"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "La hauteur de ligne à utiliser pour la police sélectionnée."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "Complétion interactive"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -509,21 +499,21 @@ msgstr ""
 "Indique si Builder affiche automatiquement les propositions de complétion au "
 "fur et à mesure de votre saisie."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
 msgstr "Caractères minimum pour la correspondance de la sélection."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Indiquer le nombre minimum de caractères pour la correspondance de la "
 "sélection."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "Activer les extraits"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -531,11 +521,11 @@ msgstr ""
 "Permet d’étendre les extraits de code de l’éditeur en appuyant sur la touche "
 "tabulation après l’affichage de l’extrait."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:155
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Select First Completion"
 msgstr "Sélectionner la première complétion"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:156
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr "Sélectionner automatiquement la première entrée d’auto-complétion."
 
@@ -768,7 +758,7 @@ msgstr ""
 "fichiers."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:387
 msgid "Check Spelling"
 msgstr "Vérifier l’orthographe"
 
@@ -854,7 +844,7 @@ msgstr "Préférences"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:493
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -2237,7 +2227,7 @@ msgstr "Répertoire des projets"
 msgid "Select"
 msgstr "Choisir"
 
-#: src/libide/tweaks/ide-tweaks-font.c:83
+#: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
 msgstr "Sélectionner la police"
 
@@ -2931,7 +2921,7 @@ msgstr "Afficher le motif de grille"
 msgid "Display a grid pattern underneath source code"
 msgstr "Afficher un motif de grille sous le code source"
 
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
 msgstr "Jamais"
 
@@ -3064,7 +3054,7 @@ msgstr ""
 "mis en cache depuis le canal de complilation. Nécessite le redémarrage de "
 "Builder pour prendre effet."
 
-#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
 msgid "History"
 msgstr "Historique"
 
@@ -3934,13 +3924,13 @@ msgstr "Texte simple"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:286
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "Espaces"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:299
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "Tabulations"
 
@@ -4156,7 +4146,7 @@ msgid "The desired maximum line length"
 msgstr "La longueur maximale souhaitée pour la ligne"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "Comportement"
 
@@ -4219,128 +4209,132 @@ msgid "Preview"
 msgstr "Aperçu"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
-msgid "Custom Font"
-msgstr "Police personnalisée"
+msgid "Font"
+msgstr "Police"
 
-#: src/plugins/editorui/tweaks.ui:66
+#: src/plugins/editorui/tweaks.ui:49
+msgid "The font used within the source code editor"
+msgstr "La police utilisée au sein de l’éditeur de code source"
+
+#: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
 msgstr "Ajuster l’espacement entre les lignes"
 
-#: src/plugins/editorui/tweaks.ui:83
+#: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
 msgstr "Où le texte doit retourner à la ligne lorsqu’il dépasse du cadre"
 
-#: src/plugins/editorui/tweaks.ui:98
+#: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
 msgstr "Aux espaces"
 
-#: src/plugins/editorui/tweaks.ui:104
+#: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
 msgstr "N’importe où"
 
-#: src/plugins/editorui/tweaks.ui:116
+#: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
 msgstr "Motif d’arrière-plan"
 
-#: src/plugins/editorui/tweaks.ui:117
+#: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
 msgstr "Afficher un motif de fond d’écran sous le code source"
 
-#: src/plugins/editorui/tweaks.ui:126
+#: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
 msgstr "Aucun motif"
 
-#: src/plugins/editorui/tweaks.ui:132
+#: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
 msgstr "Lignes de la grille"
 
-#: src/plugins/editorui/tweaks.ui:142
+#: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
 msgstr "Barres de défilement"
 
-#: src/plugins/editorui/tweaks.ui:145
+#: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
 msgstr "Aperçu du code source"
 
-#: src/plugins/editorui/tweaks.ui:146
+#: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
 msgstr "Afficher une vue d’ensemble du fichier source à côté de l’éditeur"
 
-#: src/plugins/editorui/tweaks.ui:155
+#: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
 msgstr "Préférer les barres de défilement"
 
-#: src/plugins/editorui/tweaks.ui:161
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
 msgstr "Toujours actif"
 
-#: src/plugins/editorui/tweaks.ui:167
+#: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
 msgstr "Automatique"
 
-#: src/plugins/editorui/tweaks.ui:177
+#: src/plugins/editorui/tweaks.ui:172
 msgid "Line Numbers"
 msgstr "Numéros de lignes"
 
-#: src/plugins/editorui/tweaks.ui:180
+#: src/plugins/editorui/tweaks.ui:175
 msgid "Show Line Numbers"
 msgstr "Afficher les numéros de lignes"
 
-#: src/plugins/editorui/tweaks.ui:181
+#: src/plugins/editorui/tweaks.ui:176
 msgid "Display line numbers next to each line of code"
 msgstr "Afficher les numéros de lignes à côté de chaque ligne de code"
 
-#: src/plugins/editorui/tweaks.ui:192
+#: src/plugins/editorui/tweaks.ui:187
 msgid "Use Relative Line Numbers"
 msgstr "Utiliser les numéros de lignes relatifs"
 
-#: src/plugins/editorui/tweaks.ui:193
+#: src/plugins/editorui/tweaks.ui:188
 msgid "Show line numbers relative to the current line"
 msgstr "Afficher les numéros de lignes relatifs à la ligne actuelle"
 
-#: src/plugins/editorui/tweaks.ui:204
+#: src/plugins/editorui/tweaks.ui:199
 msgid "Show Diagnostics"
 msgstr "Afficher les diagnostics"
 
-#: src/plugins/editorui/tweaks.ui:205
+#: src/plugins/editorui/tweaks.ui:200
 msgid "Display diagnostics next to the line number"
 msgstr "Afficher les diagnostics à côté du numéro de ligne"
 
-#: src/plugins/editorui/tweaks.ui:216
+#: src/plugins/editorui/tweaks.ui:211
 msgid "Show Line Changes"
 msgstr "Afficher les lignes modifiées"
 
-#: src/plugins/editorui/tweaks.ui:217
+#: src/plugins/editorui/tweaks.ui:212
 msgid "Highlight changed lines next to the line number"
 msgstr "Mettre en surbrillance les lignes modifiées à côté du numéro de ligne"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:223
 msgid "Use Line Selection Styling"
 msgstr "Utiliser le style de sélection de ligne"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:224
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr ""
 "Utiliser le style de sélection pour les numéros de ligne si la ligne entière "
 "est sélectionnée"
 
-#: src/plugins/editorui/tweaks.ui:242
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "Mise en surbrillance"
 
-#: src/plugins/editorui/tweaks.ui:245
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "Mettre en surbrillance la ligne actuelle"
 
-#: src/plugins/editorui/tweaks.ui:246
+#: src/plugins/editorui/tweaks.ui:241
 msgid "Make the current line stand out with highlights"
 msgstr "Faire ressortir la ligne actuelle avec une surbrillance"
 
-#: src/plugins/editorui/tweaks.ui:257
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "Mettre en surbrillance les accolades correspondantes"
 
-#: src/plugins/editorui/tweaks.ui:258
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4348,11 +4342,11 @@ msgstr ""
 "Utiliser la position du curseur pour mettre en évidence les crochets, "
 "accolades, parenthèses et autres éléments correspondants"
 
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "Coloration sémantique"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4360,188 +4354,188 @@ msgstr ""
 "Utiliser les informations sur les symboles pour mettre en évidence les "
 "espaces de noms, les fonctions et les variables dans le code source"
 
-#: src/plugins/editorui/tweaks.ui:287
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr "Afficher un symbole matérialisant les espaces normaux"
 
-#: src/plugins/editorui/tweaks.ui:300
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr "Afficher un symbole matérialisant les tabulations"
 
-#: src/plugins/editorui/tweaks.ui:312
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr "Nouvelles lignes"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr "Afficher un symbole à la fin des lignes"
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "Espaces insécables"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Afficher un symbole pour les espaces insécables"
 
-#: src/plugins/editorui/tweaks.ui:342
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Leading"
 msgstr "En début de ligne"
 
-#: src/plugins/editorui/tweaks.ui:343
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr "Afficher un symbole seulement pour les espaces en début de ligne"
 
-#: src/plugins/editorui/tweaks.ui:355
+#: src/plugins/editorui/tweaks.ui:350
 msgid "Inside Text"
 msgstr "Au sein du texte"
 
-#: src/plugins/editorui/tweaks.ui:356
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr "Afficher un symbole seulement au sein d’une ligne de texte"
 
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:363
 msgid "Trailing"
 msgstr "En fin de ligne"
 
-#: src/plugins/editorui/tweaks.ui:369
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr "Afficher un symbole seulement pour les espaces de fin de ligne"
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "Orthographe"
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Souligner de potentielles fautes d’orthographe pendant la saisie"
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "Sélections"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr "Nombre minimal de caractères à mettre en surbrillance"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr ""
 "Longueur minimale de la sélection avant la mise en évidence des "
 "correspondances"
 
-#: src/plugins/editorui/tweaks.ui:423
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "Extraits de code"
 
-#: src/plugins/editorui/tweaks.ui:426
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Expand Snippets"
 msgstr "Étendre les extraits de code"
 
-#: src/plugins/editorui/tweaks.ui:427
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Utilisez « Tabulation » pour étendre les extraits de code configurés dans "
 "l’éditeur"
 
-#: src/plugins/editorui/tweaks.ui:442
+#: src/plugins/editorui/tweaks.ui:437
 msgid "Code Completion"
 msgstr "Complétion de code"
 
-#: src/plugins/editorui/tweaks.ui:446
+#: src/plugins/editorui/tweaks.ui:441
 msgid "Completion Proposals"
 msgstr "Propositions de complétion"
 
-#: src/plugins/editorui/tweaks.ui:449
+#: src/plugins/editorui/tweaks.ui:444
 msgid "Suggest Code Completions"
 msgstr "Suggestions de complétions de code"
 
-#: src/plugins/editorui/tweaks.ui:450
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr "Suggérer automatiquement des complétions de code lors de la saisie"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:456
 msgid "Select First Completion Proposal"
 msgstr "Sélectionner la première proposition de complétion"
 
-#: src/plugins/editorui/tweaks.ui:462
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 "Sélectionner automatiquement la première proposition de complétion "
 "lorsqu’elle s’affiche"
 
-#: src/plugins/editorui/tweaks.ui:477
+#: src/plugins/editorui/tweaks.ui:472
 msgid "Maximum Completion Proposals"
 msgstr "Nombre maximal de propositions de complétion"
 
-#: src/plugins/editorui/tweaks.ui:478
+#: src/plugins/editorui/tweaks.ui:473
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
 "Nombre maximum de propositions de complétion qui seront affichées en même "
 "temps."
 
-#: src/plugins/editorui/tweaks.ui:497
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "Déplacements"
 
-#: src/plugins/editorui/tweaks.ui:501
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "La touche Retour arrière effacera les espaces supplémentaires pour rester "
 "aligné avec votre indentation"
 
-#: src/plugins/editorui/tweaks.ui:513
+#: src/plugins/editorui/tweaks.ui:508
 msgid "Navigate to non-space characters"
 msgstr "Naviguer vers les caractères qui ne sont pas des espaces"
 
-#: src/plugins/editorui/tweaks.ui:522
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr "Avant les limites de ligne"
 
-#: src/plugins/editorui/tweaks.ui:528
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr "Après les limites de ligne"
 
-#: src/plugins/editorui/tweaks.ui:534
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr "À la place des limites de ligne"
 
-#: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Désactivée"
 
-#: src/plugins/editorui/tweaks.ui:552
+#: src/plugins/editorui/tweaks.ui:547
 msgid "Session Management"
 msgstr "Gestion de session"
 
-#: src/plugins/editorui/tweaks.ui:556
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "Enregistrer et restaurer"
 
-#: src/plugins/editorui/tweaks.ui:559
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "Enregistrement automatique"
 
-#: src/plugins/editorui/tweaks.ui:560
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr "Enregistrer le document régulièrement pendant votre saisie"
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:566
 msgid "Auto-Save Delay"
 msgstr "Délai d’enregistrement automatique"
 
-#: src/plugins/editorui/tweaks.ui:572
+#: src/plugins/editorui/tweaks.ui:567
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Le délai, en secondes, à attendre avant d’enregistrer automatiquement le "
 "document"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr "Mettre en forme à l’enregistrement"
 
-#: src/plugins/editorui/tweaks.ui:588
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4549,11 +4543,11 @@ msgstr ""
 "Remettre en forme les sources lors de l’enregistrement sur le disque. "
 "Nécessite qu’un outil de mise en forme soit enregistré pour ce langage."
 
-#: src/plugins/editorui/tweaks.ui:603
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Restore Cursor Position"
 msgstr "Restaurer la position du curseur"
 
-#: src/plugins/editorui/tweaks.ui:604
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr "Aller à la dernière position à la réouverture d’un fichier"
 
@@ -4578,7 +4572,7 @@ msgstr "L’installation est achevée"
 msgid "The client has been closed"
 msgstr "Le client a été fermé"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:806
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Échec lors de la suppression du manifeste flatpak : %s"
@@ -4621,7 +4615,7 @@ msgstr ""
 "Builder recherche les extensions de SDK appropriées pour construire votre "
 "projet"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:857
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -6261,60 +6255,64 @@ msgstr "Ouvrir un nouveau terminal dans l’environnement d’exécution du proj
 msgid "Split"
 msgstr "Diviser"
 
-#: src/plugins/terminal/tweaks.ui:34
+#: src/plugins/terminal/tweaks.ui:14
+msgid "The font used within terminals"
+msgstr "La police utilisée au sein du terminal"
+
+#: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
 msgstr "Autoriser le gras"
 
-#: src/plugins/terminal/tweaks.ui:35
+#: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
 msgstr "Permet l’utilisation de séquences d’échappement du gras"
 
-#: src/plugins/terminal/tweaks.ui:46
+#: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
 msgstr "Autoriser les liens hypertextes"
 
-#: src/plugins/terminal/tweaks.ui:47
+#: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Permet l’utilisation des séquences d’échappement des hyperliens"
 
-#: src/plugins/terminal/tweaks.ui:60
+#: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
 msgstr "Défilement"
 
-#: src/plugins/terminal/tweaks.ui:63
+#: src/plugins/terminal/tweaks.ui:58
 msgid "Scroll On Output"
 msgstr "Défilement sur la sortie"
 
-#: src/plugins/terminal/tweaks.ui:64
+#: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
 "Défiler automatiquement lorsque les application dans le terminal affichent "
 "du texte"
 
-#: src/plugins/terminal/tweaks.ui:75
+#: src/plugins/terminal/tweaks.ui:70
 msgid "Scroll On Keyboard Input"
 msgstr "Défilement sur la saisie au clavier"
 
-#: src/plugins/terminal/tweaks.ui:76
+#: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
 msgstr "Défiler automatiquement lors de la saisie du texte"
 
-#: src/plugins/terminal/tweaks.ui:92
+#: src/plugins/terminal/tweaks.ui:87
 msgid "Limit Scrollback"
 msgstr "Limite du défilement"
 
-#: src/plugins/terminal/tweaks.ui:93
+#: src/plugins/terminal/tweaks.ui:88
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
 "Limiter le nombre de lignes qui sont stockées en mémoire pour le défilement "
 "du terminal"
 
-#: src/plugins/terminal/tweaks.ui:104
+#: src/plugins/terminal/tweaks.ui:99
 msgid "Maximum Lines in Scrollback"
 msgstr "Nombre maximal de lignes du défilement"
 
-#: src/plugins/terminal/tweaks.ui:105
+#: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "Le nombre maximal de lignes du défilement dans l’historique lorsque le "
@@ -6629,3 +6627,15 @@ msgstr "Échec lors de la création de l’arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Le fichier doit être enregistré localement pour l’analyse."
+
+#~ msgid "If enabled, the editor will respect the font-name setting."
+#~ msgstr "Si activé, l’éditeur respectera les paramètres de police."
+
+#~ msgid ""
+#~ "This setting is only respected if the use-custom-font setting is enabled."
+#~ msgstr ""
+#~ "Ce paramètre n’est respecté que si le paramètre use-custom-font est "
+#~ "activé."
+
+#~ msgid "Custom Font"
+#~ msgstr "Police personnalisée"
