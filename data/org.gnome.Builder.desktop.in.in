@@ -25,7 +25,7 @@ Exec=gnome-builder --create-project
 
 [Desktop Action clone-repo]
 Name=Clone Repository
-Exec=gnome-builder --clone
+Exec=gnome-builder --clone=
 
 [Desktop Action new-editor]
 Name=New Editor Workspace
