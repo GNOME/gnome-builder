@@ -264,6 +264,17 @@
             ]
         },
         {
+            "name" : "simdutf",
+            "buildsystem" : "cmake-ninja",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/simdutf/simdutf.git",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
             "name" : "vte",
             "buildsystem" : "meson",
             "config-opts" : [
