@@ -91,14 +91,20 @@ collect_indexer_info (void)
           globs = gtk_source_language_get_globs (lang);
           mime_types = gtk_source_language_get_mime_types (lang);
 
-          for (guint j = 0; globs[j] != NULL; j++)
+          if (globs != NULL)
             {
-              g_autoptr(GPatternSpec) spec = g_pattern_spec_new (globs[j]);
-              g_ptr_array_add (info->specs, g_steal_pointer (&spec));
+              for (guint j = 0; globs[j] != NULL; j++)
+                {
+                  g_autoptr(GPatternSpec) spec = g_pattern_spec_new (globs[j]);
+                  g_ptr_array_add (info->specs, g_steal_pointer (&spec));
+                }
             }
 
-          for (guint j = 0; mime_types[j]; j++)
-            g_ptr_array_add (info->mime_types, (gchar *)g_intern_string (mime_types[j]));
+          if (mime_types != NULL)
+            {
+              for (guint j = 0; mime_types[j] != NULL; j++)
+                g_ptr_array_add (info->mime_types, (gchar *)g_intern_string (mime_types[j]));
+            }
         }
 
       g_ptr_array_add (indexers, g_steal_pointer (&info));
