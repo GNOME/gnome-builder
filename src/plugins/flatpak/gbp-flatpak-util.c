@@ -230,7 +230,7 @@ gbp_flatpak_get_a11y_bus (const char **out_unix_path,
   static char *a11y_bus;
   static char *a11y_bus_path;
   static const char *a11y_bus_suffix;
-  static gboolean initialized;
+  static gsize initialized;
 
   if (g_once_init_enter (&initialized))
     {
@@ -246,9 +246,9 @@ gbp_flatpak_get_a11y_bus (const char **out_unix_path,
             a11y_bus_path = g_strdup (skip);
         }
 
-      *a11y_bus = address;
+      a11y_bus = address;
 
-      g_once_init_leave (&iniitialized, TRUE);
+      g_once_init_leave (&initialized, TRUE);
     }
 
 #if 0
