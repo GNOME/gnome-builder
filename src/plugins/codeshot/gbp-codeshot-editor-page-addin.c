@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <math.h>
+
 #include <libide-code.h>
 #include <libide-editor.h>
 
@@ -119,7 +121,7 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
   guint stride;
   int min_width, min_height;
   int nat_width, nat_height;
-  int scale_factor;
+  double scale;
 
   IDE_ENTRY;
 
@@ -153,7 +155,7 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
 
   gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
   gtk_native_get_surface_transform (GTK_NATIVE (window), &transform_x, &transform_y);
-  scale_factor = gdk_surface_get_scale_factor (gdk_surface);
+  scale = gdk_surface_get_scale (gdk_surface);
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable, snapshot, nat_width, nat_height);
@@ -169,8 +171,8 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
     }
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_surface_get_width (gdk_surface) / (double)scale_factor * 2,
-                                        gdk_surface_get_height (gdk_surface) / (double)scale_factor * 2);
+                                        ceil (gdk_surface_get_width (gdk_surface) / scale * 2),
+                                        ceil (gdk_surface_get_height (gdk_surface) / scale * 2));
   cairo_surface_set_device_scale (surface, 2, 2);
 
   cr = cairo_create (surface);
@@ -178,7 +180,7 @@ gbp_codeshot_editor_page_addin_clipboard_action (GbpCodeshotEditorPageAddin *sel
                    gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer)),
                    gdk_surface_get_width (gdk_surface),
                    gdk_surface_get_height (gdk_surface));
-  cairo_scale (cr, 1. / scale_factor, 1. / scale_factor);
+  cairo_scale (cr, 1. / scale, 1. / scale);
   cairo_translate (cr, transform_x, transform_y);
   gsk_render_node_draw (root, cr);
   cairo_surface_flush (surface);
