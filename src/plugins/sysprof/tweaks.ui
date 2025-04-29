@@ -176,7 +176,7 @@
                         </child>
                         <child>
                           <object class="IdeTweaksRadio">
-                            <property name="title" translatable="yes">Disk Usage</property>
+                            <property name="title" translatable="yes">Battery Charge</property>
                             <property name="subtitle" translatable="yes">Record statistics about battery charge and discharge rates</property>
                             <property name="binding">
                               <object class="IdeTweaksSetting">
