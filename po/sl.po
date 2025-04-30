@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-04-25 20:52+0000\n"
-"PO-Revision-Date: 2025-04-27 10:17+0200\n"
+"POT-Creation-Date: 2025-04-29 17:20+0000\n"
+"PO-Revision-Date: 2025-04-30 16:35+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2254,12 +2254,10 @@ msgid "Uninstalling Arduino Platform"
 msgstr "Odstranitev platforme Arduino"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
-#, fuzzy
 msgid "Board Settings"
 msgstr "Nastavitve matične plošče"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
-#, fuzzy
 msgid "Board"
 msgstr "Matična plošča"
 
@@ -6102,7 +6100,7 @@ msgstr "Energija"
 msgid "Consumption"
 msgstr "Poraba virov"
 
-#: src/plugins/sysprof/gtk/menus.ui:97
+#: src/plugins/sysprof/gtk/menus.ui:97 src/plugins/sysprof/tweaks.ui:179
 msgid "Battery Charge"
 msgstr "Napetost baterije"
 
@@ -6206,10 +6204,6 @@ msgstr "Uporaba omrežja"
 #: src/plugins/sysprof/tweaks.ui:168
 msgid "Record statistics about network usage"
 msgstr "Beleži statistiko o rabi omrežja"
-
-#: src/plugins/sysprof/tweaks.ui:179
-msgid "Disk Usage"
-msgstr "Uporaba diska"
 
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
