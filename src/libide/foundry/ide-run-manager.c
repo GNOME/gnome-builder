@@ -712,11 +712,9 @@ apply_adaptive_preview (IdeRunContext *run_context,
   if (adaptive_preview)
     {
       ide_run_context_setenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW", "1");
-      ide_run_context_setenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW", "1");
     }
   else
     {
-      ide_run_context_unsetenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW");
       ide_run_context_unsetenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW");
     }
 
