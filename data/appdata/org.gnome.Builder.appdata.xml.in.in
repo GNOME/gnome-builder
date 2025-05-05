@@ -42,6 +42,7 @@
       <li>Support for building with jhbuild and flatpak runtimes</li>
       <li>Support for viewing TODOs found within your code base</li>
       <li>Fast fuzzy text search across files and symbols</li>
+      <li>Arduino integration with arduino-cli</li>
     </ul>
   </description>
 
