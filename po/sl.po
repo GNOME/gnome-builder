@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-04-29 17:20+0000\n"
-"PO-Revision-Date: 2025-04-30 16:35+0200\n"
+"POT-Creation-Date: 2025-05-05 18:03+0000\n"
+"PO-Revision-Date: 2025-05-06 18:49+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -165,31 +165,35 @@ msgstr "Podpora za pregled nalog je najdena v kodi"
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Hitro iskanje besedila po datotekah in simbolih"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:45
+msgid "Arduino integration with arduino-cli"
+msgstr "Integracija Arduina z arduino-cli"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:56
 msgid "Debug with the GNU debugger"
 msgstr "Izvedi razhroščevanje z razhroščevalnikom GNU"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "Hiter dostop do datotek projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:64
 msgid "Create new projects from a variety of templates"
 msgstr "Ustvari nov projekt s pomočjo različnih predlog"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:68
 msgid "Integration with Git to clone your projects"
 msgstr "Povezljivost z Git za kloniranje projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:72
 msgid "The source code editor"
 msgstr "Urejevalnik izvorne kode"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:76
 msgid "Fast global fuzzy search"
 msgstr "Hitro ohlapno splošno iskanje"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:80
 msgid "Use the minimap to see more of the file"
 msgstr "Uporabite mali zemljevid za pregled strukture datoteke"
 
