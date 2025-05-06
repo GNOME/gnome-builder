@@ -93,6 +93,8 @@ static void ide_run_manager_actions_color_scheme        (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_accent_color        (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_adaptive_preview    (IdeRunManager  *self,
+                                                         GVariant       *param);
 static void ide_run_manager_actions_high_contrast       (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_text_direction      (IdeRunManager  *self,
@@ -110,6 +112,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
   { "accent-color", ide_run_manager_actions_accent_color, "s", "'system'" },
   { "renderer", ide_run_manager_actions_renderer, "s", "'default'" },
+  { "adaptive-preview", ide_run_manager_actions_adaptive_preview, NULL, "false" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
   { "interactive", ide_run_manager_actions_interactive, NULL, "false" },
@@ -194,6 +197,20 @@ ide_run_manager_set_run_tool_from_module_name (IdeRunManager *self,
     plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), name);
 
   ide_run_manager_set_run_tool_from_plugin_info (self, plugin_info);
+}
+
+static void
+ide_run_manager_actions_adaptive_preview (IdeRunManager *self,
+                                          GVariant      *param)
+{
+  GVariant *state;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  state = ide_run_manager_get_action_state (self, "adaptive-preview");
+  ide_run_manager_set_action_state (self,
+                                    "adaptive-preview",
+                                    g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
 static void
@@ -683,6 +700,28 @@ apply_accent_color (IdeRunContext *run_context,
 }
 
 static void
+apply_adaptive_preview (IdeRunContext *run_context,
+                        gboolean       adaptive_preview)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  g_debug ("Applying adaptive-preview %d", adaptive_preview);
+
+  if (adaptive_preview)
+    {
+      ide_run_context_setenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW", "1");
+    }
+  else
+    {
+      ide_run_context_unsetenv (run_context, "ADW_DEBUG_ADAPTIVE_PREVIEW");
+    }
+
+  IDE_EXIT;
+}
+
+static void
 apply_high_contrast (IdeRunContext *run_context,
                      gboolean       high_contrast)
 {
@@ -972,6 +1011,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   ide_run_context_push (run_context, NULL, NULL, NULL);
   apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
   apply_accent_color (run_context, get_action_state_string (self, "accent-color"));
+  apply_adaptive_preview (run_context, get_action_state_bool (self, "adaptive-preview"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
   apply_renderer (run_context, get_action_state_string (self, "renderer"));
   apply_gtk_debug (run_context,

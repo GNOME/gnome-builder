@@ -261,6 +261,12 @@
           <attribute name="action">context.run-manager.high-contrast</attribute>
           <attribute name="description" translatable="yes">Use high contrast theme when running the project</attribute>
         </item>
+        <item>
+          <attribute name="label" translatable="yes">Adaptive Preview</attribute>
+          <attribute name="role">check</attribute>
+          <attribute name="action">context.run-manager.adaptive-preview</attribute>
+          <attribute name="description" translatable="yes">Start the app in adaptive preview</attribute>
+        </item>
         <section id="run-menu-a11y-text-direction">
           <attribute name="label" translatable="yes">Text Direction</attribute>
           <item>
