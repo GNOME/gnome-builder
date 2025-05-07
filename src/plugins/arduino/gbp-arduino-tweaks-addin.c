@@ -71,7 +71,7 @@ create_notes_entry_cb (GbpArduinoTweaksAddin *self,
     return NULL;
 
   if (!GBP_IS_ARDUINO_PROFILE (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding))))
-    return g_object_new (GTK_TYPE_BOX, NULL);
+    return NULL;
 
   row = ADW_ENTRY_ROW(adw_entry_row_new());
   adw_preferences_row_set_title(ADW_PREFERENCES_ROW(row), _("Notes"));
@@ -96,7 +96,7 @@ create_board_options_cb (GbpArduinoTweaksAddin *self,
     return NULL;
 
   if (!GBP_IS_ARDUINO_PROFILE (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding))))
-    return g_object_new (GTK_TYPE_BOX, NULL);
+    return NULL;
 
   return gbp_arduino_board_options_widget_new (binding);
 }
@@ -116,7 +116,7 @@ create_libraries_list_cb (GbpArduinoTweaksAddin *self,
     return NULL;
 
   if (!GBP_IS_ARDUINO_PROFILE (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding))))
-    return g_object_new (GTK_TYPE_BOX, NULL);
+    return NULL;
 
   return gbp_arduino_libraries_editor_new (binding);
 }
@@ -136,7 +136,7 @@ create_platforms_list_cb (GbpArduinoTweaksAddin *self,
     return NULL;
 
   if (!GBP_IS_ARDUINO_PROFILE (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding))))
-    return g_object_new (GTK_TYPE_BOX, NULL);
+    return NULL;
 
   return gbp_arduino_platforms_editor_new (binding);
 }
