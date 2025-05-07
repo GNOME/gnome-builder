@@ -90,8 +90,9 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
       self->current_list = NULL;
       self->current_list_has_non_rows = FALSE;
       self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
-                            "title", title_escaped,
-                            NULL);
+                                          "title", title_escaped,
+                                          "visible", FALSE,
+                                          NULL);
       adw_preferences_page_add (self->prefs_page, self->current_group);
 
       return IDE_TWEAKS_ITEM_VISIT_RECURSE;
@@ -100,12 +101,12 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
     {
       GtkWidget *child = _ide_tweaks_widget_create_for_item (IDE_TWEAKS_WIDGET (item), item);
 
+      g_assert (!child || GTK_IS_WIDGET (child));
+
       if (child == NULL)
-        {
-          g_critical ("Failed to create widget from #%s",
-                      ide_tweaks_item_get_id (item));
-        }
-      else if (self->current_group == NULL)
+        return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
+
+      if (self->current_group == NULL)
         {
           g_critical ("Attempt to add #%s without a group, this is discouraged",
                       ide_tweaks_item_get_id (item));
@@ -147,6 +148,8 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
               self->current_list_has_non_rows = TRUE;
               adw_preferences_group_add (self->current_group, child);
             }
+
+          gtk_widget_set_visible (GTK_WIDGET (self->current_group), TRUE);
         }
     }
 
