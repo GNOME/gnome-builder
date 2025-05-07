@@ -390,17 +390,6 @@
             ]
         },
         {
-            "name" : "libglnx",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libglnx.git",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
             "name" : "ostree",
             "config-opts" : [
                 "--disable-man",
@@ -597,8 +586,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/archive/refs/tags/1.4.4.tar.gz",
-		    "sha256" : "104ef0775a5558c72f457e9569db65f61e9afb2d88e86b6bbc5bc08ef2ae02a2"
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.4.4/flatpak-builder-1.4.4.tar.xz",
+		    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
                 }
             ]
         },
