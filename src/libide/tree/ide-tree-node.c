@@ -652,6 +652,17 @@ ide_tree_node_set_children_possible (IdeTreeNode *self,
   if (children_possible != self->children_possible)
     {
       self->children_possible = children_possible;
+
+      /* If we are rooted then we need to tell the parent node that
+       * our node has been added/removed so GtkTreeListModel will pickup
+       * the changes to whether or not our node can be expanded.
+       */
+      if (self->parent != NULL)
+        {
+          guint position = g_queue_link_index (&self->parent->children, &self->link);
+          g_list_model_items_changed (G_LIST_MODEL (self->parent), position, 1, 1);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHILDREN_POSSIBLE]);
     }
 }
