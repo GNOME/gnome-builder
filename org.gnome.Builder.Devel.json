@@ -390,6 +390,17 @@
             ]
         },
         {
+            "name" : "libglnx",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libglnx.git",
+                    "branch" : "master"
+                }
+            ]
+        },
+        {
             "name" : "ostree",
             "config-opts" : [
                 "--disable-man",
