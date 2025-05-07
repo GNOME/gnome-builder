@@ -587,7 +587,7 @@
                 {
                     "type" : "archive",
                     "url" : "https://github.com/flatpak/flatpak-builder/archive/refs/tags/1.4.4.tar.gz",
-		    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
+		    "sha256" : "104ef0775a5558c72f457e9569db65f61e9afb2d88e86b6bbc5bc08ef2ae02a2"
                 }
             ]
         },
