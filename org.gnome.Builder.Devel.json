@@ -578,7 +578,6 @@
         {
             "name" : "flatpak-builder",
             "buildsystem" : "meson",
-            "builddir" : true,
             "config-opts" : [
                 "-Ddocs=disabled",
                 "-Dtests=false",
@@ -586,9 +585,8 @@
             ],
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak-builder.git",
-                    "branch" : "main"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/flatpak-builder/archive/refs/tags/1.4.4.tar.gz"
                 }
             ]
         },
