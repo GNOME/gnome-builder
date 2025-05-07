@@ -586,7 +586,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/archive/refs/tags/1.4.4.tar.gz"
+                    "url" : "https://github.com/flatpak/flatpak-builder/archive/refs/tags/1.4.4.tar.gz",
+		    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
                 }
             ]
         },
