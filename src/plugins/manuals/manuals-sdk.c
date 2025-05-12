@@ -362,6 +362,9 @@ manuals_sdk_get_icon_name (ManualsSdk *self)
   if (g_strcmp0 (self->name, "org.gnome.Sdk.Docs") == 0)
     return "org.gnome.Sdk-symbolic";
 
+  if (!self->icon_name)
+    return "builder-sdk-symbolic";
+
   return self->icon_name;
 }
 
