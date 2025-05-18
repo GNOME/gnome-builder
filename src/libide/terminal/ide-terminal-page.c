@@ -501,7 +501,6 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (klass);
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
   object_class->dispose = ide_terminal_page_dispose;
@@ -519,8 +518,8 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalPage, search_revealer);
 
-  panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
-  panel_widget_class_install_action (panel_widget_class, "terminal.search", NULL, search_show_action);
+  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
+  gtk_widget_class_install_action (widget_class, "terminal.search", NULL, search_show_action);
 
   g_type_ensure (IDE_TYPE_TERMINAL_SEARCH);
 

@@ -71,7 +71,7 @@
         <child>
           <object class="GtkButton" id="close_button">
             <property name="margin-end">3</property>
-            <property name="action-name">page.search.hide</property>
+            <property name="action-name">search.hide</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <property name="tooltip-text" translatable="yes">Close search</property>
