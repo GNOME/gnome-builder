@@ -4,20 +4,22 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2017.
 # Yuki Okushi <yokushi@gnome.org>, 2023.
 # Takayuki Kusano <gnome-l10n@tkusano.jp>, 2025.
+# Makoto Sakaguchi <ycco34vx@gmail.com>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-04-24 11:10+0000\n"
-"PO-Revision-Date: 2025-04-25 00:43+0000\n"
-"Last-Translator: Takayuki Kusano <gnome-l10n@tkusano.jp>\n"
+"POT-Creation-Date: 2025-05-12 18:35+0000\n"
+"PO-Revision-Date: 2025-05-15 18:09+0900\n"
+"Last-Translator: Makoto Sakaguchi <ycco34vx@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.gnome.org/teams/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.6\n"
 
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
@@ -31,7 +33,7 @@ msgstr "ビルダー"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
-msgstr "GNOME用ソフトウェアをビルド"
+msgstr "GNOME向けソフトウェアをビルドする"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
@@ -44,7 +46,7 @@ msgstr "プロジェクトを開く"
 
 #: data/org.gnome.Builder.desktop.in.in:24
 msgid "Start New Project"
-msgstr "新しいプロジェクト"
+msgstr "新しいプロジェクトを開始"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
@@ -54,16 +56,16 @@ msgstr "リポジトリをクローン"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
-msgstr "新しいエディアのワークスペース"
+msgstr "新規エディターワークスペース"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "Create applications for GNOME"
-msgstr "GNOME用アプリケーションの作成"
+msgstr "GNOME向けアプリケーションを作成する"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
 msgid "Christian Hergert"
-msgstr "Christian Hergert"
+msgstr ""
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
@@ -72,17 +74,18 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"ビルダーは活発に開発されているGNOME用の統合開発環境です。GTK+、GLib、GNOME "
-"APIといったGNOME技術の統合的なサポートと、開発者に嬉しい文法ハイライトやスニ"
-"ペットといった機能を組み合わせています。"
+"ビルダーは、GNOME 向けの統合開発環境 (IDE) として活発に開発が進められていま"
+"す。GTK+、GLib、GNOME API といった必須の GNOME テクノロジーへの統合サポートに"
+"加え、シンタックスハイライトやスニペットなど、あらゆる開発者にとって有用な機"
+"能を備えています。"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"6ヶ月ごとのGNOMEのリリースごとにビルダーは予期可能なリリースがありますので信"
-"頼することができます。"
+"6ヶ月ごとの GNOME の新しいリリースと合わせて、ビルダーも予測可能なリリースが"
+"行われるため安心して利用できます。"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
@@ -90,11 +93,11 @@ msgstr "機能:"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
-msgstr "組み込みの多くの言語に対応した文法ハイライト"
+msgstr "多くの言語に対応した組み込みの構文ハイライト"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid "Side-by-side code editors"
-msgstr "サイド・バイ・サイドのコードエディタ"
+msgstr "サイド・バイ・サイドのコードエディター"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Multi-monitor support"
@@ -102,7 +105,7 @@ msgstr "マルチモニターのサポート"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Code overview mini-map"
-msgstr "コードを概観するミニマップ"
+msgstr "コード概要ミニマップ"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Integration with Git"
@@ -113,79 +116,84 @@ msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 msgstr ""
-"Autotools、Cargo、CMake、Gradle、Meson、Maven、Make、PHPizeそしてWafとの統合"
+"Autotools、Cargo、CMake、Gradle、Meson、Maven、Make、PHPize、および Waf との"
+"統合"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Clangベースの自動補完、セマンティックハイライト、そして診断"
+msgstr "Clang に基づく自動補完、セマンティックハイライト、および診断機能"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
-msgstr "Pythonベースの自動補完、セマンティックハイライト、そして診断"
+msgstr "Python に基づく自動補完、セマンティックハイライト、および診断機能"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
-msgstr "Valaベースの自動補完、診断"
+msgstr "Vala に基づく自動補完および診断機能"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr "C、Python、Vala、そしてXMLのオートインデント"
+msgstr "C、Python、Vala、および XML 用の自動インデント機能"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
-msgstr "HTML、Markdown、そしてreStructuredTextやSphinxのライブプレビュー"
+msgstr "HTML、Markdown、reStructuredText、および Sphinx のライブプレビュー"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr "オプションでVim、Emacs、SublimeTextスタイルの編集"
+msgstr "Vim、Emacs、および SublimeText スタイルの編集（オプション）"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "An integrated software profiler for native applications"
-msgstr "ネイティブアプリ用の統合されたソフトウェアプロファイラー"
+msgstr "ネイティブアプリケーション向けの統合ソフトウェアプロファイラ"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
 msgid "An integrated debugger for native applications"
-msgstr "ネイティブアプリ用の統合されたデバッガー"
+msgstr "ネイティブアプリケーション向けの統合デバッガー"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "jhbuildやflatpak runtimeを使ったビルドのサポート"
+msgstr "jhbuild および Flatpak ランタイムを用いたビルドのサポート"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
-msgstr "コードに埋め込まれたTODOの表示のサポート"
+msgstr "コードベース内に見つかった TODO の表示サポート"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
-msgstr "ファイルやシンボルを横断した高速な曖昧テキスト検索"
+msgstr "ファイルおよびシンボルを横断する高速ファジーテキスト検索"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:45
+msgid "Arduino integration with arduino-cli"
+msgstr "arduino-cli を用いた Arduino 統合"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:56
 msgid "Debug with the GNU debugger"
-msgstr "GNUデバッガーでのデバッグ"
+msgstr "GNU デバッガーを用いたデバッグ"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "プロジェクトへの素早いアクセス"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:64
 msgid "Create new projects from a variety of templates"
-msgstr "様々なテンプレートを使ったプロジェクトの新規作成"
+msgstr "さまざまなテンプレートから新規プロジェクトを作成"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:68
 msgid "Integration with Git to clone your projects"
-msgstr "プロジェクトを統合したGitでのクローン"
+msgstr "Gitとの統合によるプロジェクトのクローン作成"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:72
 msgid "The source code editor"
-msgstr "ソースコードエディタ"
+msgstr "ソースコードエディター"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:76
 msgid "Fast global fuzzy search"
-msgstr "高速でグローバルな曖昧検索"
+msgstr "高速なグローバルファジー検索"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:80
 msgid "Use the minimap to see more of the file"
-msgstr "ミニマップを使ってファイルの全体像を見る"
+msgstr "ミニマップを使用すると、ファイルの全体像が見渡せます"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 #: src/plugins/buildui/tweaks.ui:264
@@ -196,8 +204,7 @@ msgstr "並行ビルド"
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
-msgstr ""
-"ビルドの実行時使うワーカーの数。-1 は安全のためのデフォルト。0 でCPUの数。"
+msgstr "ビルド実行時に使用するワーカーの数。デフォルトは -1 です。CPU 数は 0。"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -205,7 +212,7 @@ msgstr "ビルドログをクリア"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr "有効にすると再ビルドでビルドのログのペーンはクリアされます。"
+msgstr "有効な場合、再ビルド時にビルドログペインがクリアされます。"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Show Log When Building"
@@ -213,7 +220,7 @@ msgstr "ビルド時にログを表示"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "If enabled, the build log will be raised when a build starts"
-msgstr "有効にするとビルドが始まるとビルドログが前面に"
+msgstr "有効な場合、ビルド開始時にビルドログが最前面に表示されます"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -224,83 +231,85 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"接続が従量制の時でもSDKのダウンロードや、依存関係などをビルド時に自動的に転送"
-"するのを許可。"
+"接続が従量課金制の時でも、ビルド時に SDK のダウンロードや依存関係などの自動転"
+"送を有効にする。"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
-msgstr "Ctagsベースの自動補完"
+msgstr "Ctags に基づく自動補完"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Use Ctags for autocompletion."
-msgstr "自動補完のためにCtagsを使う。"
+msgstr "自動補完に Ctags を使用する。"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Enable semantic highlighting"
-msgstr "セマンティックなハイライトを有効"
+msgstr "セマンティックハイライトを有効にする"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"有効にするとソースコードから抽出された情報を元にサポートされた言語で追加のハ"
-"イライトをする。"
+"有効にすると、ソースコードから抽出された情報に基づいて、サポートされている言"
+"語で追加のハイライトが提供されます。"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
-msgstr "ctagsの実行ファイルのパス"
+msgstr "ctags 実行可能ファイルへのパス"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
-msgstr "システム上のctagsの実行ファイルへのパス"
+msgstr "システム上の ctags 実行可能ファイルへのパス。"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
 msgid "Debugger Breakpoint at Main"
-msgstr "main()のデバッガーブレークポイント"
+msgstr "main でのデバッガーブレークポイント"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
 msgid "Debugger should automatically insert breakpoint at main() function."
-msgstr "デバッガーがmain()関数に自動的にブレークポイントを挿入する。"
+msgstr "デバッガーは main() 関数に自動的にブレークポイントを挿入します。"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
 msgid "Debugger Breakpoint at Criticals"
-msgstr "criticalでデバッガーブレークポイント"
+msgstr "critical でのデバッガーブレークポイント"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
-msgstr "デバッガーがg_critical()関数で自動的にブレークポイントを挿入する。"
+msgstr "デバッガーは g_critical() 関数に自動的にブレークポイントを挿入します。"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at Warnings and Criticals"
-msgstr "warningやcriticalでデバッガーブレークポイント"
+msgstr "warning および critical でのデバッガーブレークポイント"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() and "
 "g_critical function."
 msgstr ""
-"デバッガーがg_warning()やg_critical()関数で自動的にブレークポイントを挿入す"
-"る。"
+"デバッガーは、g_warning() および g_critical() 関数に自動的にブレークポイント"
+"を挿入します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
-msgstr ""
+msgstr "最後の位置を復元"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
-msgstr ""
+msgstr "ファイルを再度開いたとき、最後の位置にジャンプする"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
-msgstr ""
+msgstr "変更された行を表示"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
+"有効にすると、エディターはソースコードの横に追加された行および変更された行を"
+"表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
@@ -309,31 +318,31 @@ msgstr "行番号の隣に診断を表示"
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
-msgstr ""
+msgstr "有効にすると、エディターは行番号の左側に診断を表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
-msgstr ""
+msgstr "現在の行をハイライト"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
+msgstr "有効にすると、エディターはカーソルがある行を強調表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
-msgstr ""
+msgstr "対応するカッコをハイライト"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
+msgstr "有効にすると、エディターは対応するカッコを強調表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
-msgstr ""
+msgstr "行番号を表示"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "有効にすると、エディターは行番号を表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
@@ -341,81 +350,82 @@ msgstr "相対行番号を表示"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
-msgstr ""
+msgstr "有効にすると、エディターは相対行番号を表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 msgid "Use line selection styling"
-msgstr ""
+msgstr "行選択のスタイルを使用"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "If enabled, the editor will use selected style for line numbers for whole "
 "lines selected."
 msgstr ""
+"有効にすると、エディターは行全体が選択されている行の行番号に、行選択のスタイ"
+"ルを適用します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/plugins/editorui/tweaks.ui:500
 msgid "Smart Backspace"
-msgstr ""
+msgstr "スマートバックスペース"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
-msgstr ""
+msgstr "バックスペースは、インデント幅に合わせて余分なスペースを削除します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 #: src/plugins/editorui/tweaks.ui:512
 msgid "Smart Home/End"
-msgstr "スマートなHome/End"
+msgstr "スマート Home/End"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Home/End キーの動作を変更します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
-msgstr ""
+msgstr "グリッド線を表示"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
+msgstr "有効にすると、エディターはドキュメントにグリッド線を表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-#, fuzzy
 msgid "If enabled, the editor will respect the font-name setting."
-msgstr "有効にするとビルドが始まるとビルドログが前面に"
+msgstr "有効にすると、エディターは font-name 設定を尊重します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "This setting is only respected if the use-custom-font setting is enabled."
-msgstr ""
+msgstr "この設定は、use-custom-font 設定が有効な場合にのみ尊重されます。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
-msgstr ""
+msgstr "概要マップポリシー"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "When the overview map should be displayed."
-msgstr ""
+msgstr "概要マップが表示されるタイミング。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Draw Spaces"
-msgstr ""
+msgstr "空白の表示"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The various types of space to draw in the editor."
-msgstr ""
+msgstr "エディターで表示する空白の種類。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 #: src/plugins/editorui/tweaks.ui:82
 msgid "Wrap Text"
-msgstr ""
+msgstr "テキストを折り返す"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
+msgstr "より見やすくするために、長いテキスト行を折り返す方法。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "Autosave Enabled"
@@ -423,23 +433,23 @@ msgstr "自動保存を有効にする"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Enable or disable autosave feature."
-msgstr ""
+msgstr "自動保存機能を有効または無効にします。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 msgid "Autosave Frequency"
-msgstr ""
+msgstr "自動保存間隔"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The number of seconds after modification before auto saving."
-msgstr ""
+msgstr "変更後に自動保存が行われるまでの秒数。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 msgid "Completion Row Count"
-msgstr ""
+msgstr "補完行数"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "The number of completion rows to display to the user."
-msgstr ""
+msgstr "ユーザーに表示する補完行数。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 #: src/plugins/editorui/tweaks.ui:65
@@ -448,92 +458,96 @@ msgstr "行の高さ"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "The line height to use for the selected font."
-msgstr ""
+msgstr "選択されたフォントで使用する行の高さ。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Interactive Completion"
-msgstr "対話的補完"
+msgstr "対話型補完"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
-msgstr ""
+msgstr "有効にすると、ビルダーは入力時に自動的に補完候補を表示します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
-msgstr ""
+msgstr "一致選択の最小文字数。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Specify the minimum number of characters for selection matching."
-msgstr ""
+msgstr "一致選択の最小文字数を指定します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Enable Snippets"
-msgstr "スニペットを有効に"
+msgstr "スニペットを有効にする"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
+"スニペットトリガー入力後にタブキーを押すことで、エディター上でスニペットの展"
+"開を許可します。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:155
 msgid "Select First Completion"
-msgstr "最初の補完を選択"
+msgstr "最初の補完を選択する"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:156
 msgid "Automatically select the first auto-completion entry."
-msgstr ""
+msgstr "自動補完の最初の候補を自動的に選択する。"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
-msgstr "空白スタイル"
+msgstr "空白のスタイル"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
 msgid "How to apply spaces when reformatting text."
-msgstr ""
+msgstr "テキスト整形時に空白を適用する方法。"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
-msgstr ""
+msgstr "有効"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
-msgstr ""
+msgstr "拡張内のタイプが有効な場合。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
-msgstr ""
+msgstr "ウィンドウサイズ"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:6
 msgid "Window size (width and height)."
-msgstr ""
+msgstr "ウィンドウサイズ（幅と高さ）"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:10
 msgid "Window maximized"
-msgstr ""
+msgstr "ウィンドウ最大化"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:11
 msgid "Window maximized state"
-msgstr ""
+msgstr "ウィンドウの最大化状態"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Style Variant"
-msgstr ""
+msgstr "スタイル・バリアント"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid ""
 "Use the light or dark variant of the GTK theme and/or GtkSourceView style "
 "scheme."
 msgstr ""
+"GTK テーマおよび / または GtkSourceView スタイルスキームのライトまたはダーク"
+"バリアントを使用します。"
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:27
 msgid "\"Projects\""
-msgstr "\"Projects\""
+msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
 msgid "Projects directory"
@@ -541,92 +555,97 @@ msgstr "プロジェクトディレクトリ"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:29
 msgid "Directory for all Builder projects."
-msgstr ""
+msgstr "すべてのビルダープロジェクトのディレクトリ。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
-msgstr "セッションのリストア"
+msgstr "セッションを復元する"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr ""
+msgstr "読み込み時にプロジェクトの前回のセッションを復元します。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
-msgstr ""
+msgstr "起動時にビルドキャッシュをクリアする"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
-msgstr ""
+msgstr "有効にすると、ビルダーは起動時にビルドキャッシュをクリアします。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
-msgstr ""
+msgstr "ページ切替用のインターフェーススタイル"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
-msgstr "デフォルトのライセンス"
+msgstr "既定のライセンス"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
-msgstr ""
+msgstr "新しいプロジェクトで使用する既定のライセンス"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Inherit Language Server stderr"
-msgstr ""
+msgstr "言語サーバの標準エラー出力を継承する"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
 msgstr ""
+"有効にすると、言語サーバーの標準エラー出力がコンソールにリダイレクトされま"
+"す。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
-msgstr ""
+msgstr "検索結果のプレビュー"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
-msgstr ""
+msgstr "検索結果のプレビューを自動的に表示する場合"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
-msgstr ""
+msgstr "プラグインが有効"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
 msgid "If the plugin should be enabled"
-msgstr ""
+msgstr "プラグインを有効にする場合"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
-msgstr "選択されたビルドの構成"
+msgstr "選択されたビルド構成"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:8
 msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
-msgstr "選択され、次回のプロジェクトの読み込み時にリストアされる構成"
+msgstr "選択された構成は、次回プロジェクトが読み込まれる際に復元されます。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
-msgstr ""
+msgstr "実行前にプロジェクトをインストールする"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
+"プロジェクトを実行する前に、パイプラインのインストールフェーズを実行します。"
+"このオプションは、プロジェクトで行う処理内容を十分に理解している場合にのみ使"
+"用してください。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
-msgstr "デフォルトの実行コマンド"
+msgstr "既定の実行コマンド"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
 msgid "The id of the default run command"
-msgstr "デフォルトの実行コマンドのID"
+msgstr "既定の実行コマンドの ID"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
-msgstr "アプリを停止するために送るシグナル"
+msgstr "アプリを停止するためのシグナル"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
@@ -634,34 +653,40 @@ msgid ""
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
 msgstr ""
+"これにより、対象のアプリケーションを停止する際に、SIGKILL以外のシグナルを送信"
+"できます。これは、サーバープロセスを正常にシャットダウンしたい場合に有用で"
+"す。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
-msgstr ""
+msgstr "ユニットテストのローカリティ"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr "ユニットテストを実行するのに使用するのはどの環境か"
+msgstr "ユニットテストを実行するのに使用する環境"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
-msgstr "詳細なロギング"
+msgstr "詳細なログ出力"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
+"対象アプリケーションを実行する際に、G_MESSAGES_DEBUG=all を使用する場合"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
-msgstr ""
+msgstr "キャッシュのルート"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:57
 msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 msgstr ""
+"ビルドや Flatpak のステージングディレクトリなど、プロジェクトのキャッシュデー"
+"タ用のルートディレクトリ"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -670,17 +695,19 @@ msgstr "アイコンを表示する"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
 msgid "This setting is deprecated and no longer in use."
-msgstr ""
+msgstr "この設定は非推奨で、もはや使用されていません。"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
-msgstr ""
+msgstr "無視されたファイルを表示する"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
+"有効にすると、プロジェクトツリーにVCSによって無視されるファイルが表示されま"
+"す。"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/tweaks.ui:37
@@ -691,6 +718,8 @@ msgstr "ディレクトリを先頭に表示する"
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
+"有効にすると、プロジェクトツリーではディレクトリが通常のファイルよりも先に並"
+"べ替えられます。"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:392
@@ -699,35 +728,35 @@ msgstr "スペルチェック"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
 msgid "Automatically check spelling within documents"
-msgstr "ドキュメント中で自動的にスペルチェック"
+msgstr "ドキュメント内のスペルチェックを自動で行う"
 
 #: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
-msgstr ""
+msgstr "現在の言語には、シンボルリゾルバがありません。"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
-msgstr ""
+msgstr "未保存ファイル %u"
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr ""
+msgstr "「%s」には無効なASCII文字が含まれています"
 
 #: src/libide/code/ide-language-defaults.c:234
 #, c-format
 msgid "Failed to parse integer from “%s”"
-msgstr ""
+msgstr "“%s”から整数の解析に失敗しました"
 
 #: src/libide/code/ide-language-defaults.c:309
 msgid "language defaults missing version in [global] group."
-msgstr ""
+msgstr "[global] グループ内の言語既定値に、バージョンが指定されていません。"
 
 #: src/libide/code/ide-language-defaults.c:403
 msgid "Failed to initialize defaults."
-msgstr ""
+msgstr "既定値の初期化に失敗しました。"
 
 #. translators: %s is replaced with the error message
 #: src/libide/code/ide-unsaved-files.c:253
@@ -737,7 +766,7 @@ msgstr "下書きの保存に失敗しました: %s"
 
 #: src/libide/core/ide-context.c:349 src/libide/core/ide-context.c:797
 msgid "Untitled"
-msgstr ""
+msgstr "無題"
 
 #: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
@@ -761,7 +790,7 @@ msgstr "キャンセル(_C)"
 
 #: src/libide/debugger/ide-debug-manager.c:977
 msgid "A suitable debugger could not be found."
-msgstr ""
+msgstr "適切なデバッガーが見つかりませんでした。"
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
 #: src/libide/gui/ide-workbench.c:1614
@@ -770,7 +799,7 @@ msgstr "ファイルを開く…"
 
 #: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
-msgstr ""
+msgstr "ワークスペース内のファイルを開く"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
 #: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
@@ -783,7 +812,7 @@ msgstr "設定"
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
-msgstr "キーボード・ショートカット"
+msgstr "キーボードショートカット"
 
 #: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
 #: src/libide/gui/gtk/menus.ui:45
@@ -862,30 +891,32 @@ msgstr "印刷"
 #: src/libide/editor/ide-editor.c:121
 #, c-format
 msgid "Failed to open file: %s"
-msgstr "ファイルを開くのを失敗しました: %s"
+msgstr "ファイルを開くのに失敗しました: %s"
 
 #: src/libide/editor/ide-editor-info-bar.c:85
 #: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
-msgstr ""
+msgstr "変更を破棄して再読み込み(_D)"
 
 #: src/libide/editor/ide-editor-info-bar.c:88
 msgid "File Has Changed on Disk"
-msgstr ""
+msgstr "ファイルがディスク上で変更されました"
 
 #: src/libide/editor/ide-editor-info-bar.c:89
 msgid "The file has been changed by another program."
-msgstr ""
+msgstr "他のプログラムによってファイルが変更されました。"
 
 #: src/libide/editor/ide-editor-info-bar.c:99
 msgid "File Contains Encoding Errors"
-msgstr ""
+msgstr "ファイルにエンコーディングエラーが含まれています"
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
+"ファイルの読み込みに使用されたエンコーディングでエラーが検出されました。ス"
+"テータスバーから別のエンコーディングを選択して再読み込みしてください。"
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -893,11 +924,11 @@ msgstr "ファイルを開けませんでした"
 
 #: src/libide/editor/ide-editor-info-bar.ui:29
 msgid "You do not have permission to open the file."
-msgstr ""
+msgstr "ファイルを開く権限がありません。"
 
 #: src/libide/editor/ide-editor-info-bar.ui:37
 msgid "_Retry"
-msgstr "やり直し(_R)"
+msgstr "再試行(_R)"
 
 #: src/libide/editor/ide-editor-info-bar.ui:44
 msgid "Open As _Administrator"
@@ -905,11 +936,11 @@ msgstr "管理者として開く(_A)"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
 msgid "Document Restored"
-msgstr "ドキュメントを回復しました"
+msgstr "ドキュメントが復元されました"
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
 msgid "Unsaved document has been restored."
-msgstr "保存されていなかったドキュメントが回復されました。"
+msgstr "未保存のドキュメントが復元されました。"
 
 #: src/libide/editor/ide-editor-info-bar.ui:81
 msgid "_Discard…"
@@ -919,13 +950,13 @@ msgstr "破棄(_D)…"
 #: src/libide/editor/ide-editor-page.c:515
 #, c-format
 msgid "Print failed: %s"
-msgstr "印刷に失敗: %s"
+msgstr "印刷に失敗しました: %s"
 
 #. translators: %s contains the error message
 #: src/libide/editor/ide-editor-page.c:591
 #, c-format
 msgid "Failed to format selection: %s"
-msgstr "選択のフォーマットに失敗しました: %s"
+msgstr "選択範囲のフォーマットに失敗しました: %s"
 
 #: src/libide/editor/ide-editor-page.c:1139
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
@@ -944,7 +975,7 @@ msgstr "前の一致へ移動 (Ctrl+Shift+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:59
 msgid "Move to next match (Ctrl+G)"
-msgstr "次の一致へ移動する (Ctrl+G)"
+msgstr "次の一致へ移動 (Ctrl+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:74
 msgid "Search & Replace (Ctrl+H)"
@@ -977,7 +1008,7 @@ msgstr "大文字小文字を区別(_C)"
 #: src/libide/editor/ide-editor-search-bar.ui:156
 #: src/libide/terminal/ide-terminal-search.ui:103
 msgid "Match Whole Words"
-msgstr "単語全体に一致"
+msgstr "単語単位で一致"
 
 #: src/libide/editor/ide-editor-utils.c:140
 #: src/plugins/create-project/gbp-create-project-widget.ui:103
@@ -994,7 +1025,7 @@ msgstr "検索 (Ctrl+Enter)"
 #: src/libide/editor/ide-editor-workspace.ui:141
 #: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "下パネルの表示を切り替える(Ctrl+F9)"
+msgstr "下部パネルを切り替える(Ctrl+F9)"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1022,20 +1053,20 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"ビルドの構成 \"%s\" を見つけられませんでした。無効か、フォーマットが正しくあ"
-"りません。"
+"ビルド構成 “%s” が見つかりませんでした。無効であるか、書式が正しくない可能性"
+"があります。"
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
-msgstr "アクティブな構成を “%s” にしました"
+msgstr "アクティブな構成が “%s” に設定されました"
 
 #. translators: %s is replaced with the external device name
 #: src/libide/foundry/ide-device-manager.c:149
 #, c-format
 msgid "Discovered device “%s”"
-msgstr "デバイス “%s” を発見しました"
+msgstr "デバイス “%s” が検出されました"
 
 #: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
@@ -1044,11 +1075,11 @@ msgstr "デバイス"
 #: src/libide/foundry/ide-device-manager.c:643
 #, c-format
 msgid "Device set to %s"
-msgstr ""
+msgstr "デバイスが「%s」に設定されました"
 
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr ""
+msgstr "デバイスにデプロイできません。ビルドパイプラインが初期化されていません"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
@@ -1069,15 +1100,15 @@ msgstr "マイコンピューター (%s) — %s"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
-msgstr ""
+msgstr "ビルドパイプラインは失敗状態にあります"
 
 #: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
-msgstr "ビルドの構成にエラーがあります"
+msgstr "ビルド構成にエラーがあります"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr "ビルドツリーを消去するパイプラインが開始されました"
+msgstr "ビルドパイプラインがビルドツリーのクリーニングを開始しました"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
@@ -1097,16 +1128,16 @@ msgstr "ビルド (%s)"
 #: src/libide/foundry/ide-pipeline.c:1148
 #, c-format
 msgid "Post-install (%s)"
-msgstr "ポスト・インスｔール (%s)"
+msgstr "インストール後 (%s)"
 
 #: src/libide/foundry/ide-pipeline.c:3113
 #: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr "仮想端末の作成に失敗しました。端末機能に制限があります。"
+msgstr "擬似端末の作成に失敗しました。端末機能は制限されます。"
 
 #: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
-msgstr "クリーン中…"
+msgstr "クリーニング中…"
 
 #: src/libide/foundry/ide-pipeline.c:3353
 #: src/libide/foundry/ide-pipeline.c:3410
@@ -1167,73 +1198,74 @@ msgstr "準備中…"
 #: src/libide/foundry/ide-pipeline.c:3774
 #, c-format
 msgid "Removing %s"
-msgstr ""
+msgstr "ファイル「%s」を削除中"
 
 #: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
-msgstr ""
+msgstr "ビルドディレクトリを削除中…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr ""
+msgstr "従量課金制接続では、ビルド転送を実行できません"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
 msgid "Untitled command"
-msgstr ""
+msgstr "無題のコマンド"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
-msgstr ""
+msgstr "ユニットテスト"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:190
+#: src/libide/foundry/ide-run-manager.c:193
 #, c-format
 msgid "User requested run tool “%s”"
-msgstr ""
+msgstr "ユーザーが実行ツール “%s” をリクエストしました"
 
-#: src/libide/foundry/ide-run-manager.c:592
+#: src/libide/foundry/ide-run-manager.c:609
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "ターゲットを実行できません。別のターゲットが実行中です"
 
-#: src/libide/foundry/ide-run-manager.c:890
+#: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Application exited with error: %s"
-msgstr ""
+msgstr "アプリケーションがエラーにより終了しました: %s"
 
-#: src/libide/foundry/ide-run-manager.c:893
+#: src/libide/foundry/ide-run-manager.c:932
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
-msgstr "アプリケーションを終了しました"
+msgstr "アプリケーションが終了しました"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1083
+#: src/libide/foundry/ide-run-manager.c:1123
 #, c-format
 msgid "Running %s…"
 msgstr "%s を実行中…"
 
-#: src/libide/foundry/ide-run-manager.c:1150
+#: src/libide/foundry/ide-run-manager.c:1190
 msgid "Deploying to device…"
 msgstr "デバイスにデプロイ中…"
 
-#: src/libide/foundry/ide-run-manager.c:1379
+#: src/libide/foundry/ide-run-manager.c:1419
 msgid "User requested application to run"
-msgstr ""
+msgstr "ユーザーがアプリケーションの実行をリクエストしました"
 
-#: src/libide/foundry/ide-run-manager.c:1411
+#: src/libide/foundry/ide-run-manager.c:1451
 msgid "User requested application to restart"
-msgstr ""
+msgstr "ユーザーがアプリケーションの再起動をリクエストしました"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1441
+#: src/libide/foundry/ide-run-manager.c:1481
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
+"ユーザーがツール “%s” を使用してアプリケーションの実行をリクエストしました"
 
-#: src/libide/foundry/ide-run-manager.c:1461
+#: src/libide/foundry/ide-run-manager.c:1501
 msgid "User requested application to stop"
-msgstr ""
+msgstr "ユーザーがアプリケーションの停止をリクエストしました"
 
 #: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
@@ -1246,32 +1278,32 @@ msgstr "ホストシステム"
 #: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
 msgid "Discovered runtime “%s”"
-msgstr ""
+msgstr "ランタイム “%s” を検出しました"
 
 #: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
-msgstr ""
+msgstr "ランタイム “%s” を削除中"
 
 #: src/libide/foundry/ide-run-tool.c:68
 #, c-format
 msgid "Forcing subprocess %s to exit"
-msgstr ""
+msgstr "サブプロセス「%s」を強制終了中"
 
 #: src/libide/foundry/ide-run-tool.c:84
 #, c-format
 msgid "Sending signal %d to subprocess %s"
-msgstr ""
+msgstr "サブプロセス「%2$s」にシグナル %1$d を送信中"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
-msgstr "デフォルト (ホストのOS)"
+msgstr "既定 (ホストオペレーティングシステム)"
 
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
 msgid "_Clone Repository…"
-msgstr ""
+msgstr "リポジトリをクローン(_C)…"
 
 #: src/libide/greeter/gtk/menus.ui:22
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
@@ -1286,15 +1318,15 @@ msgstr "プロジェクトを開く(_P)…"
 
 #: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
-msgstr "新規にプロジェクトを作成するか、既存のプロジェクトを開く"
+msgstr "新規または既存のプロジェクトを開く"
 
 #: src/libide/greeter/gtk/menus.ui:69
 msgid "Create a new project by cloning a repository"
-msgstr "リポジトリをクローンして新規にプロジェクトを作成"
+msgstr "リポジトリをクローンして新規プロジェクトを作成"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "フォルダを選択(_F)…"
+msgstr "フォルダーを選択(_F)…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
@@ -1318,12 +1350,13 @@ msgstr "閉じる(_C)"
 
 #: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
-msgstr "プロジェクトのソースを削除しますか?"
+msgstr "プロジェクトソースを削除しますか?"
 
 #: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
-"コンピューター上からプロジェクトのソースコードを削除すると元に戻せません。"
+"コンピュータからプロジェクトのソースコードを削除すると、元に戻すことができま"
+"せん。"
 
 #: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
@@ -1332,11 +1365,11 @@ msgstr "プロジェクトのソースを削除(_D)"
 #: src/libide/greeter/ide-greeter-workspace.c:620
 #: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
-msgstr "プロジェクトのフォルダを選択"
+msgstr "プロジェクトフォルダーを選択"
 
 #: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
-msgstr "プロジェクトのファイルを選択"
+msgstr "プロジェクトファイルを選択"
 
 #: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
@@ -1357,7 +1390,7 @@ msgstr "選択モードを切り替える"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:58
 msgid "Search all Builder projects…"
-msgstr "すべてのビルダーのプロジェクトを検索…"
+msgstr "すべてのビルダープロジェクトを検索…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:80
 msgid "No Projects Found"
@@ -1374,34 +1407,34 @@ msgstr "プロジェクトとソースを削除…"
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr ""
+msgstr "クラス「%2$s」内にプロパティ「%1$s」が見つかりません"
 
 #: src/libide/gtk/ide-animation.c:997
 #, c-format
 msgid "Failed to find property %s in %s"
-msgstr ""
+msgstr "「%2$s」内にプロパティ「%1$s」が見つかりません"
 
 #: src/libide/gtk/ide-animation.c:1006
 #, c-format
 msgid "Failed to retrieve va_list value: %s"
-msgstr ""
+msgstr "va_list の値の取得に失敗しました: %s"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
-msgstr ""
+msgstr "ファイルパスが NULL です"
 
 #: src/libide/gtk/ide-file-manager.c:108 src/libide/gtk/ide-file-manager.c:119
 msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
+msgstr "UTF-8ファイル名のワイド文字変換に失敗しました"
 
 #: src/libide/gtk/ide-file-manager.c:127
 msgid "ILCreateFromPath() failed"
-msgstr ""
+msgstr "ILCreateFromPath() の呼び出しに失敗しました"
 
 #: src/libide/gtk/ide-file-manager.c:164
 #, c-format
 msgid "Cannot convert “%s” into a valid NSURL."
-msgstr ""
+msgstr "“%s” を有効な NSURL に変換できません。"
 
 #: src/libide/gtk/ide-gtk.c:453
 msgid "Just now"
@@ -1434,25 +1467,29 @@ msgstr "インストール(_I)"
 #: src/libide/gtk/ide-search-entry.c:184
 #, c-format
 msgid "%u of %u"
-msgstr ""
+msgstr "全 %2$u 件中 %1$u 件目"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/plugins/ide-plugin.c:347
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:95
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:95
+#: src/plugins/grep/gbp-grep-panel.ui:64 src/plugins/manuals/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "検索"
 
 #: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
-msgstr ""
+msgstr "何でも検索"
 
 #: src/libide/gui/ide-search-popover.ui:84
 msgid "Type to Search"
-msgstr "タイプして検索"
+msgstr "入力して検索"
 
 #: src/libide/gui/ide-search-popover.ui:85
 msgid "Prefix your query with one of the following to filter results"
 msgstr ""
+"検索結果を絞り込むには、検索クエリの先頭に以下のいずれかを付けてください"
 
 #: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
@@ -1478,15 +1515,17 @@ msgstr "アクション"
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
-msgstr ""
+msgstr "新しいショートカットを入力して、<b>%s</b> を変更する。"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:31
 msgid "_Set"
-msgstr ""
+msgstr "設定(_S)"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:72
 msgid "Press Escape to cancel or Backspace to disable."
 msgstr ""
+"キャンセルするには Esc キーを、無効にするには Backspace キーを押してくださ"
+"い。"
 
 #: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
@@ -1499,27 +1538,27 @@ msgstr "全般"
 
 #: src/libide/gui/gtk/menus.ui:30
 msgid "Change application preferences"
-msgstr "アプリケーション設定を行う"
+msgstr "アプリケーションの設定を変更する"
 
 #: src/libide/gui/gtk/menus.ui:38
 msgid "Find keyboard shortcuts"
-msgstr "キーボード・ショートカットを見つける"
+msgstr "キーボードショートカットを見つける"
 
 #: src/libide/gui/gtk/menus.ui:46
 msgid "Get help with using Builder"
-msgstr ""
+msgstr "ビルダーの使い方に関するヘルプを表示する"
 
 #: src/libide/gui/gtk/menus.ui:54
 msgid "Show information about Builder"
-msgstr ""
+msgstr "ビルダーの情報を表示する"
 
 #: src/libide/gui/gtk/menus.ui:63
 msgid "Quit without saving changes"
-msgstr ""
+msgstr "変更を保存せずに終了する"
 
 #: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
-msgstr ""
+msgstr "ウェブ閲覧"
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
@@ -1537,19 +1576,20 @@ msgid "translator-credits"
 msgstr ""
 "松澤二郎 <jmatsuzawa@gnome.org>\n"
 "Yuki Okushi <yokushi@gnome.org>\n"
-"Takayuki Kusano <https://tkusano.jp/>"
+"Takayuki Kusano <https://tkusano.jp/>\n"
+"Makoto Sakaguchi <ycco34vx@gmail.com>"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
-msgstr ""
+msgstr "資金提供"
 
 #: src/libide/gui/ide-application-command-line.c:62
 msgid "Show the application preferences"
-msgstr ""
+msgstr "アプリケーションの設定を表示"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "Open project in new workbench"
-msgstr ""
+msgstr "新しいワークベンチでプロジェクトを開く"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
@@ -1560,16 +1600,16 @@ msgstr ""
 #.
 #: src/libide/gui/ide-application-command-line.c:68
 msgid "Print version information and exit"
-msgstr ""
+msgstr "バージョン情報を表示して終了"
 
 #: src/libide/gui/ide-application-command-line.c:69
 msgid "Increase log verbosity (may be repeated)"
-msgstr ""
+msgstr "ログの詳細度を上げる（複数回指定可能）"
 
 #: src/libide/gui/ide-application-command-line.c:119
 #, c-format
 msgid "Failed to open project: %s"
-msgstr ""
+msgstr "プロジェクトを開くのに失敗しました: %s"
 
 #: src/libide/gui/ide-environment-editor.c:73
 msgid "New variable…"
@@ -1577,7 +1617,7 @@ msgstr "新しい変数…"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
-msgstr ""
+msgstr "環境変数を削除"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
@@ -1585,11 +1625,11 @@ msgstr "ファイルまたは端末を開く"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
-msgstr "上のページ切り替えを使うか下記のうちの一つを使ってください:"
+msgstr "上部のページ切り替えを使用するか、以下のいずれかを使用してください:"
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
-msgstr "プロジェクトサイドバー"
+msgstr "プロジェクトのサイドバー"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
@@ -1605,7 +1645,7 @@ msgstr "アプリケーションメニューを開く (F10)"
 
 #: src/libide/gui/ide-marked-view.c:427
 msgid "Cannot load HTML. Missing WebKit support."
-msgstr "HTMLを読み込みできません。WebKitのサポートが見つかりません。"
+msgstr "HTML を読み込むことができません。WebKit のサポートがありません。"
 
 #: src/libide/gui/ide-primary-workspace.c:87
 msgid "Invalid configuration"
@@ -1613,12 +1653,12 @@ msgstr "無効な構成"
 
 #: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
-msgstr "左パネルの表示を切り替える(F9)"
+msgstr "左側パネルを切り替える (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
-msgstr "右パネルの表示を切り替える"
+msgstr "右側パネルを切り替える"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1626,7 +1666,7 @@ msgstr "プロジェクトを実行 (Shift+Ctrl+Space)"
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
-msgstr "プロジェクトの実行を停止"
+msgstr "実行中のプロジェクトを停止"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
@@ -1649,7 +1689,7 @@ msgstr "その他"
 
 #: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
-msgstr "プロジェクトを読み込みました"
+msgstr "プロジェクトが読み込まれました"
 
 #. translators: %s is replaced with the project name
 #: src/libide/gui/ide-workbench.c:1296
@@ -1663,7 +1703,7 @@ msgstr "開く"
 
 #: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
-msgstr "保存していないドキュメントがあります"
+msgstr "保存されていないのドキュメントがあります"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1683,27 +1723,27 @@ msgstr "プラグイン"
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
-msgstr[0] ""
+msgstr[0] "パッケージを %u 個インストール中"
 
 #: src/libide/lsp/ide-lsp-client.c:437
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
-msgstr ""
+msgstr "操作がキャンセルされました"
 
 #. translators: %s is replaced with the error message
 #: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
-msgstr ""
+msgstr "言語サーバーの初期化に失敗しました: %s"
 
 #: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
-msgstr ""
+msgstr "言語サーバーに接続できません"
 
 #: src/libide/lsp/ide-lsp-code-action-provider.c:302
 msgid "No LSP client connection is available"
-msgstr ""
+msgstr "LSP クライアント接続が利用できません"
 
 #. translators: %s is replaced with the name of the language server
 #: src/libide/lsp/ide-lsp-service.c:516
@@ -1715,7 +1755,7 @@ msgstr "言語サーバー “%s” が終了しました"
 #: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
-msgstr "言語サーバー “%s” がプロセス %s として起動しました"
+msgstr "言語サーバー “%s” がプロセス %s として起動されました"
 
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:117
@@ -1760,13 +1800,14 @@ msgstr "テンプレート"
 msgid "Editing & Formatting"
 msgstr "編集とフォーマット"
 
+# プラグインカテゴリ名として使用されており、未翻訳のほうが自然であると判断した。
 #: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
-msgstr "ウェブ"
+msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Language Enablement"
-msgstr ""
+msgstr "言語の有効化"
 
 #: src/libide/plugins/ide-plugin.c:350
 msgid "Desktop Integration"
@@ -1790,7 +1831,7 @@ msgstr "ウェブサイト"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "宛先ファイルはプロジェクトツリー内に存在する必要があります。"
 
 #: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
@@ -1799,7 +1840,7 @@ msgstr "ファイルはプロジェクトツリー内に存在する必要があ
 #: src/libide/projects/xml-reader.c:329
 #, c-format
 msgid "Could not parse XML from stream"
-msgstr ""
+msgstr "ストリームから XML を解析できませんでした"
 
 #: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
 #: src/libide/terminal/gtk/menus.ui:35
@@ -1808,15 +1849,15 @@ msgstr "クリップボード"
 
 #: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut (Ctrl+X)"
-msgstr "切り取り (_U) (Ctrl+X)"
+msgstr "切り取り(_U) (Ctrl+X)"
 
 #: src/libide/sourceview/gtk/menus.ui:16
 msgid "_Copy (Ctrl+C)"
-msgstr "コピー (_C) (Ctrl+C)"
+msgstr "コピー(_C) (Ctrl+C)"
 
 #: src/libide/sourceview/gtk/menus.ui:22
 msgid "_Paste (Ctrl+V)"
-msgstr "貼り付け (_P) (Ctrl+V)"
+msgstr "貼り付け(_P) (Ctrl+V)"
 
 #: src/libide/sourceview/gtk/menus.ui:29
 msgid "Undo"
@@ -1824,7 +1865,7 @@ msgstr "元に戻す"
 
 #: src/libide/sourceview/gtk/menus.ui:31
 msgid "Undo & Redo"
-msgstr "元に戻す&やり直す"
+msgstr "元に戻す & やり直す"
 
 #: src/libide/sourceview/gtk/menus.ui:33
 msgid "Undo (Ctrl+Z)"
@@ -1844,7 +1885,7 @@ msgstr "縮小 (Ctrl+-)"
 
 #: src/libide/sourceview/gtk/menus.ui:57
 msgid "Reset Zoom (Ctrl+0)"
-msgstr "ズームのリセット (Ctrl+0)"
+msgstr "ズームをリセット (Ctrl+0)"
 
 #: src/libide/sourceview/gtk/menus.ui:63
 msgid "Zoom In (Ctrl++)"
@@ -1873,7 +1914,7 @@ msgstr "すべて大文字(_U)"
 
 #: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
-msgstr "選択したテキストを大文字に変換"
+msgstr "選択したテキストを大文字に変換する"
 
 #: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
@@ -1881,7 +1922,7 @@ msgstr "すべて小文字(L)"
 
 #: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
-msgstr "選択したテキストを小文字に変換"
+msgstr "選択したテキストを小文字に変換する"
 
 #: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
@@ -1889,7 +1930,7 @@ msgstr "大文字/小文字を入れ替え(_V)"
 
 #: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
-msgstr "選択したテキストの大文字と小文字を入れ替え"
+msgstr "選択したテキストの大文字と小文字を反転する"
 
 #: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
@@ -1897,7 +1938,7 @@ msgstr "タイトルケース(_T)"
 
 #: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
-msgstr "選択したテキストをタイトルケースへ変換"
+msgstr "選択したテキストをタイトルケースに変換する"
 
 #: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
@@ -1929,7 +1970,7 @@ msgstr "フォーマット(_F)"
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
-msgstr "コード・ナビゲーション"
+msgstr "コードナビゲーション"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1720
@@ -1967,11 +2008,11 @@ msgstr "貼り付け(_P)"
 
 #: src/libide/terminal/gtk/menus.ui:28 src/libide/terminal/ide-terminal.ui:133
 msgid "Paste from clipboard into the terminal"
-msgstr "クリップボードから端末へコピー"
+msgstr "クリップボードの内容を端末に貼り付ける"
 
 #: src/libide/terminal/gtk/menus.ui:38 src/libide/terminal/ide-terminal.ui:141
 msgid "Selection all text from terminal including scrollback"
-msgstr "端末からスクロールバックを含めてすべてのテキストを選択"
+msgstr "端末からスクロールバックを含めてすべてのテキストを選択する"
 
 #: src/libide/terminal/gtk/menus.ui:44 src/libide/terminal/ide-terminal.ui:147
 msgid "Select _None"
@@ -1996,21 +2037,25 @@ msgstr "保存"
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
+"サブプロセスの起動に失敗しました。プロジェクトを再構築する必要があるかもしれ"
+"ません。"
 
 #: src/libide/terminal/ide-terminal-page.c:125
 #: src/libide/terminal/ide-terminal-page.c:160
 #: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
-msgstr ""
+msgstr "無名の端末"
 
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
-msgstr ""
+msgstr "終了"
 
 #: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
+"サブプロセスの起動に失敗しました。あまりにも早く失敗したため、再起動は行われ"
+"ません。"
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
@@ -2018,61 +2063,74 @@ msgstr "無名の端末"
 
 #: src/libide/terminal/ide-terminal-palettes.h:48
 msgid "GNOME"
-msgstr "GNOME"
+msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
 msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:152
 msgid "Tango"
 msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:203
 msgid "Dracula"
 msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:254
 msgid "Nord"
 msgstr ""
 
 #: src/libide/terminal/ide-terminal-palettes.h:305
 msgid "Linux"
-msgstr "Linux"
+msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:356
 #: src/libide/terminal/ide-terminal-palettes.h:935
 msgid "XTerm"
-msgstr "XTerm"
+msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:407
 msgid "RXVT"
 msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:458
 msgid "Fishtank"
 msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:511
 msgid "Spacedust"
-msgstr "星くず"
+msgstr ""
 
+# カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:564
 msgid "Catppuccin"
 msgstr ""
 
+# ‪カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:617
 msgid "Horizon"
 msgstr ""
 
+# ‪‪カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:670
 msgid "Tokyo Night"
-msgstr "東京の夜"
+msgstr ""
 
+# ‪‪カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:723
 msgid "VS Code"
 msgstr ""
 
+# ‪‪‪カラースキームであり原文を維持する
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
 msgstr ""
@@ -2154,24 +2212,180 @@ msgstr "Builder — 設定"
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
-msgstr ""
+msgstr "バージョン管理されていない"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:705
 msgid "None"
-msgstr ""
+msgstr "なし"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
-msgstr ""
+msgstr "空白ページ"
 
 #: src/main.c:128
 msgid "Run a new instance of Builder"
-msgstr "新しいビルダーのインスタンスを実行"
+msgstr "ビルダーの新しいインスタンスを実行"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:929
+msgid "Installing Arduino Library"
+msgstr "Arduinoライブラリをインストール中"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:930
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1047
+msgid "Downloading and installing"
+msgstr "ダウンロードおよびインストール中"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:982
+msgid "Uninstalling Arduino Library"
+msgstr "Arduinoライブラリをアンインストール中"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:983
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1099
+msgid "Uninstalling"
+msgstr "アンインストール中"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1046
+msgid "Installing Arduino Platform"
+msgstr "Arduinoプラットフォームをインストール中"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1098
+msgid "Uninstalling Arduino Platform"
+msgstr "Arduinoプラットフォームをアンインストール中"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
+msgid "Board Settings"
+msgstr "ボード設定"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
+msgid "Board"
+msgstr "ボード"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
+msgid "Programmer"
+msgstr "プログラマー"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
+msgid "Libraries"
+msgstr "ライブラリ"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:40
+msgid "No libraries are present in this profile"
+msgstr "このプロファイルにはライブラリがありません"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
+msgid "Add _Library"
+msgstr "ライブラリを追加(_L)"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:24
+msgid "No libraries installed"
+msgstr "ライブラリがインストールされていません"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
+msgid "Install _Library"
+msgstr "ライブラリをインストール(_L)"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
+msgid "Search for a Library"
+msgstr "ライブラリを検索"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
+msgid "No libraries found"
+msgstr "ライブラリが見つかりません"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:220
+msgid "Update Arduino Packages"
+msgstr "Arduinoパッケージを更新"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:227
+msgid "Compile Arduino Sketch"
+msgstr "Arduinoスケッチをコンパイル"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:245
+msgid "Upload Arduino Sketch"
+msgstr "Arduinoスケッチをアップロード"
+
+#: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35
+#: src/plugins/arduino/gbp-arduino-string-row.ui:23
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+msgid "Remove"
+msgstr "削除"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:6
+msgid "Platforms"
+msgstr "プラットフォーム"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:40
+msgid "No platforms are present in this profile"
+msgstr "このプロファイルにはプラットフォームがありません"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:62
+msgid "Add _Platform"
+msgstr "プラットフォームを追加(_P)"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:24
+msgid "No platforms installed"
+msgstr "プラットフォームがインストールされていません"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
+msgid "Install _Platform"
+msgstr "プラットフォームをインストール(_P)"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
+msgid "Search for a Platform"
+msgstr "プラットフォームを検索"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
+msgid "No platforms found"
+msgstr "プラットフォームが見つかりません"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:48
+msgid "Arduino Sketch Project"
+msgstr "Arduinoスケッチプロジェクト"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:49
+msgid "An empty arduino sketch project"
+msgstr "空のArduinoスケッチプロジェクト"
+
+#: src/plugins/arduino/gbp-arduino-tweaks-addin.c:77
+msgid "Notes"
+msgstr "ノート"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
+msgid "No additional URL"
+msgstr "追加のURLがありません"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:59
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:65
+msgid "Add URL"
+msgstr "URLを追加"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:66
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
+msgid "_Add"
+msgstr "追加(_A)"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:9
+msgid "Arduino"
+msgstr ""
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:12
+msgid "Additional URLs"
+msgstr "追加のURL"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:22
+msgid "Installed Libraries"
+msgstr "インストール済みライブラリ"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:32
+msgid "Installed Platforms"
+msgstr "インストール済みプラットフォーム"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:204
 msgid "Building cache…"
-msgstr "キャッシュをビルド中…"
+msgstr "キャッシュを構築中…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
@@ -2181,7 +2395,7 @@ msgstr "ビルドシステムをブートストラップ中"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
-msgstr "プロジェクトを構成"
+msgstr "プロジェクトを構成中"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
@@ -2207,21 +2421,23 @@ msgstr "%s (コピー)"
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
+"BuildStream プロジェクトを使用中ですが、“bst” 実行可能ファイルが見つかりませ"
+"ん。"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
 msgid "Use KEY=VALUE to set an environment variable"
-msgstr ""
+msgstr "環境変数の設定には、KEY=VALUE形式を使用"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
-msgstr ""
+msgstr "キーは数字で始めることはできません"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
 msgid "Keys may only contain alpha-numerics or underline."
-msgstr ""
+msgstr "キーには英数字またはアンダースコア以外の文字を含めることはできません。"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
@@ -2233,27 +2449,18 @@ msgstr "変数を追加(_V)"
 msgid "Add Variable"
 msgstr "変数を追加"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
-msgid "_Add"
-msgstr "追加(_A)"
-
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
 #: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "コピー"
 
-#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-msgid "Remove"
-msgstr "削除"
-
 #: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
-msgstr ""
+msgstr "ビルド出力"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
-msgstr ""
+msgstr "ビルド出力 (Shift+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
@@ -2269,7 +2476,7 @@ msgstr "ビルドログを保存"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
-msgstr ""
+msgstr "欠落"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
@@ -2291,7 +2498,7 @@ msgstr "デバイス"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr "現在のビルドの構成に問題があります。"
+msgstr "現在のビルド構成に問題があります。"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
@@ -2299,7 +2506,7 @@ msgstr "ビルドステータス"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:186
 msgid "Last build"
-msgstr "最終ビルド"
+msgstr "前回のビルド"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
 msgid "Build result"
@@ -2321,7 +2528,7 @@ msgstr "ビルドパイプライン"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:4
 msgid "Build Issues"
-msgstr "ビルドーイシュー"
+msgstr "ビルドの問題"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:21
 msgid "Build status:"
@@ -2329,12 +2536,12 @@ msgstr "ビルドステータス:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
-msgstr ""
+msgstr "完了時刻:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:53
 #: src/plugins/buildui/gbp-buildui-pane.ui:67
 msgid "—"
-msgstr "—"
+msgstr ""
 
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
@@ -2364,7 +2571,7 @@ msgstr "実行可能"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr "ビルドターゲットをリストするのに失敗: %s"
+msgstr "ビルドターゲットをリストするのに失敗しました: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
@@ -2377,20 +2584,22 @@ msgstr "利用可能なビルドターゲット"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
-msgstr "プロジェクトが構成されるまでいくつかのターゲットは利用できません。"
+msgstr ""
+"一部のビルドターゲットは、プロジェクトが構成されるまで利用できない場合があり"
+"ます。"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
-msgstr "自動的に発見"
+msgstr "自動検出"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "この選択により、ビルダーは最適な候補を選ぶことができます。"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr ""
+msgstr "アプリケーションのビルドと実行に使用されるコンテナ"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2406,7 +2615,7 @@ msgstr "アクティブにする"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:219
 msgid "Make configuration active and reload build pipeline"
-msgstr "構成をアクティブにしビルドパイプラインを再読込する"
+msgstr "ビルド構成を有効にして、ビルドパイプラインを再読み込みする"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
 msgid "Delete"
@@ -2442,7 +2651,7 @@ msgstr "プロジェクトに関連した設定を構成する"
 #: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
 #: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
-msgstr ""
+msgstr "コードファウンドリー"
 
 #: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
@@ -2455,7 +2664,7 @@ msgstr "構成を再読込"
 
 #: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
-msgstr "プロジェクトの構成を再読込"
+msgstr "プロジェクトの構成を再読み込み"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
@@ -2463,7 +2672,7 @@ msgstr "ビルドターゲットを選択…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
-msgstr "デフォルトのびるどターゲットを変更"
+msgstr "デフォルトのビルドターゲットを変更"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
 msgid "Building"
@@ -2491,7 +2700,7 @@ msgstr "クリーン(_C)"
 
 #: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
-msgstr "プロジェクトのクリーンを実行"
+msgstr "プロジェクトをクリーン"
 
 #: src/plugins/buildui/gtk/menus.ui:58
 msgid "Stop Building"
@@ -2499,11 +2708,11 @@ msgstr "ビルドを停止"
 
 #: src/plugins/buildui/gtk/menus.ui:59
 msgid "Cancel the current build operation"
-msgstr ""
+msgstr "現在のビルド操作をキャンセル"
 
 #: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
-msgstr ""
+msgstr "インストールとデプロイ"
 
 #: src/plugins/buildui/gtk/menus.ui:72
 msgid "Install the project"
@@ -2515,7 +2724,7 @@ msgstr "デバイスへデプロイ…"
 
 #: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
-msgstr ""
+msgstr "プロジェクトを現在のデバイスにデプロイ"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -2531,11 +2740,11 @@ msgstr "プロジェクトをエクスポート"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
-msgstr "ビルドの出力を表示(_L)"
+msgstr "ビルド出力を表示(_L)"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "ビルドログを含むパネルを表示"
 
 #: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
@@ -2555,11 +2764,11 @@ msgstr "プロジェクトを実行"
 
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
-msgstr "プログラムの再実行"
+msgstr "プログラムを再起動"
 
 #: src/plugins/buildui/gtk/menus.ui:137
 msgid "Restart the running program"
-msgstr "実行中のプログラムを再実行"
+msgstr "実行中のプログラムを再起動"
 
 #: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
@@ -2567,7 +2776,7 @@ msgstr "プログラムを停止"
 
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
-msgstr "プロジェクトの実行を停止"
+msgstr "実行中のプロジェクトを停止"
 
 #: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
@@ -2585,31 +2794,31 @@ msgstr "設定"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
-msgstr "システムのスタイルに従う"
+msgstr "システムスタイルに従う"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
-msgstr "プロジェクトを実行中に強制的にシステムのスタイルに従う"
+msgstr "プロジェクト実行時はシステムスタイルに従う"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
-msgstr "Lightを強制"
+msgstr "ライトテーマを強制"
 
 #: src/plugins/buildui/gtk/menus.ui:173
 msgid "Force light theme when running the project"
-msgstr "プロジェクトを実行中に強制的にLightテーマにする"
+msgstr "プロジェクト実行時にライトテーマを強制する"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
-msgstr "Darkを強制"
+msgstr "ダークテーマを強制"
 
 #: src/plugins/buildui/gtk/menus.ui:180
 msgid "Force dark theme when running the project"
-msgstr "プロジェクトを実行中に強制的にDarkテーマにする"
+msgstr "プロジェクト実行時にダークテーマを強制する"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
-msgstr ""
+msgstr "アクセントカラー"
 
 #: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
 msgid "System"
@@ -2617,79 +2826,79 @@ msgstr "システム"
 
 #: src/plugins/buildui/gtk/menus.ui:189
 msgid "Use system accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にシステムアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
-msgstr ""
+msgstr "ブルー"
 
 #: src/plugins/buildui/gtk/menus.ui:196
 msgid "Use blue accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にブルーアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
-msgstr ""
+msgstr "ティール"
 
 #: src/plugins/buildui/gtk/menus.ui:203
 msgid "Use teal accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にティールアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
-msgstr ""
+msgstr "グリーン"
 
 #: src/plugins/buildui/gtk/menus.ui:210
 msgid "Use green accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にグリーンアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
-msgstr ""
+msgstr "イエロー"
 
 #: src/plugins/buildui/gtk/menus.ui:217
 msgid "Use yellow accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にイエローアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
-msgstr ""
+msgstr "オレンジ"
 
 #: src/plugins/buildui/gtk/menus.ui:224
 msgid "Use orange accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にオレンジアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
-msgstr ""
+msgstr "レッド"
 
 #: src/plugins/buildui/gtk/menus.ui:231
 msgid "Use red accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にレッドアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
-msgstr ""
+msgstr "ピンク"
 
 #: src/plugins/buildui/gtk/menus.ui:238
 msgid "Use pink accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にピンクアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
-msgstr ""
+msgstr "パープル"
 
 #: src/plugins/buildui/gtk/menus.ui:245
 msgid "Use purple accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にパープルアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:248
 msgid "Slate"
-msgstr ""
+msgstr "スレート"
 
 #: src/plugins/buildui/gtk/menus.ui:252
 msgid "Use slate accent color when running the project"
-msgstr ""
+msgstr "プロジェクト実行時にスレートアクセントカラーを使用する"
 
 #: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
@@ -2701,88 +2910,96 @@ msgstr "ハイコントラスト"
 
 #: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
-msgstr "プロジェクトの実行中にハイコントラストのテーマを使用する"
+msgstr "プロジェクト実行時にハイコントラストテーマを使用"
 
 #: src/plugins/buildui/gtk/menus.ui:265
+msgid "Adaptive Preview"
+msgstr "アダプティブプレビュー"
+
+#: src/plugins/buildui/gtk/menus.ui:268
+msgid "Start the app in adaptive preview"
+msgstr "アダプティブプレビューでアプリを起動"
+
+#: src/plugins/buildui/gtk/menus.ui:271
 msgid "Text Direction"
 msgstr "テキストの方向"
 
-#: src/plugins/buildui/gtk/menus.ui:267
+#: src/plugins/buildui/gtk/menus.ui:273
 msgid "Left-to-Right"
 msgstr "左から右"
 
-#: src/plugins/buildui/gtk/menus.ui:271
+#: src/plugins/buildui/gtk/menus.ui:277
 msgid "Force left-to-right text when running the project"
-msgstr "プロジェクトの実行中に強制的に左から右へのテキストにする"
+msgstr "プロジェクト実行時に左から右へのテキストを強制する"
 
-#: src/plugins/buildui/gtk/menus.ui:274
+#: src/plugins/buildui/gtk/menus.ui:280
 msgid "Right-to-Left"
 msgstr "右から左"
 
-#: src/plugins/buildui/gtk/menus.ui:278
+#: src/plugins/buildui/gtk/menus.ui:284
 msgid "Force right-to-left text when running the project"
-msgstr "プロジェクトの実行中に強制的に右から左へのテキストにする"
+msgstr "プロジェクト実行時に右から左へのテキストを強制する"
 
-#: src/plugins/buildui/gtk/menus.ui:283
+#: src/plugins/buildui/gtk/menus.ui:289
 msgid "GPU"
-msgstr "GPU"
+msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:285
+#: src/plugins/buildui/gtk/menus.ui:291
 msgid "GTK Renderer"
 msgstr "GTKレンダラー"
 
-#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "デフォルト"
 
-#: src/plugins/buildui/gtk/menus.ui:291
+#: src/plugins/buildui/gtk/menus.ui:297
 msgid "Use the default GTK renderer when running the project"
-msgstr "プロジェクトの実行時にデフォルトのGTKレンダラーを使用"
+msgstr "プロジェクト実行時にデフォルトのGTKレンダラーを使用する"
 
-#: src/plugins/buildui/gtk/menus.ui:294
+#: src/plugins/buildui/gtk/menus.ui:300
 msgid "Vulkan"
-msgstr "Vulkan"
+msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:298
+#: src/plugins/buildui/gtk/menus.ui:304
 msgid "Use the Vulkan renderer when running the project"
-msgstr "プロジェクトの実行時にVulkanレンダラーを使用"
+msgstr "プロジェクト実行時にVulkanレンダラーを使用する"
 
-#: src/plugins/buildui/gtk/menus.ui:301
+#: src/plugins/buildui/gtk/menus.ui:307
 msgid "GL"
-msgstr "GL"
+msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:305
+#: src/plugins/buildui/gtk/menus.ui:311
 msgid "Use the GL renderer when running the project"
-msgstr "プロジェクトの実行時にGLレンダラーを使用"
+msgstr "プロジェクト実行時にGLレンダラーを使用する"
 
-#: src/plugins/buildui/gtk/menus.ui:308
+#: src/plugins/buildui/gtk/menus.ui:314
 msgid "Legacy GL"
 msgstr "レガシーGL"
 
-#: src/plugins/buildui/gtk/menus.ui:312
+#: src/plugins/buildui/gtk/menus.ui:318
 msgid "Use the legacy GL renderer when running the project"
-msgstr "プロジェクトの実行時にレガシーGLレンダラーを使用"
+msgstr "プロジェクト実行時にレガシーGLレンダラーを使用する"
 
-#: src/plugins/buildui/gtk/menus.ui:315
+#: src/plugins/buildui/gtk/menus.ui:321
 msgid "Cairo"
-msgstr "Cairo"
+msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:319
+#: src/plugins/buildui/gtk/menus.ui:325
 msgid "Use the Cairo software renderer when running the project"
-msgstr "プロジェクトの実行時にCairoソフトウェアレンダラーを使用"
+msgstr "プロジェクト実行時にCairoソフトウェアレンダラーを使用する"
 
-#: src/plugins/buildui/gtk/menus.ui:328
+#: src/plugins/buildui/gtk/menus.ui:334
 msgid "Request verbose logging when running the project"
-msgstr "プロジェクトの実行時に詳細なロギングをリクエスト"
+msgstr "プロジェクト実行時に詳細ログを要求する"
 
-#: src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/gtk/menus.ui:338
 msgid "Show Inspector"
 msgstr "インスペクターを表示"
 
-#: src/plugins/buildui/gtk/menus.ui:335
+#: src/plugins/buildui/gtk/menus.ui:341
 msgid "Request the GTK inspector be shown when running the project"
-msgstr "プロジェクト実行中にGTKインスペクターをリクエスト"
+msgstr "プロジェクト実行時にGTKインスペクターの表示を要求する"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -2796,11 +3013,11 @@ msgstr "インターフェイス"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
 msgid "Editor Font"
-msgstr "エディターのフォント"
+msgstr "エディターフォント"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
-msgstr "ソースコードエディタで使うフォント"
+msgstr "ソースコードエディターで使用されるフォント"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
@@ -2808,7 +3025,7 @@ msgstr "端末のフォント"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
 msgid "The font used in the terminal"
-msgstr "端末で使用するフォント"
+msgstr "端末で使用されるフォント"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
@@ -2816,23 +3033,23 @@ msgstr "グリッドパターンを表示"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
-msgstr ""
+msgstr "ソースコードの下にグリッドパターンを表示"
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
 msgid "Never"
-msgstr ""
+msgstr "しない"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "概要マップは表示されない"
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
-msgstr ""
+msgstr "常に"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "概要マップは常に表示される"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
 msgid "Auto"
@@ -2840,23 +3057,23 @@ msgstr "自動"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
+msgstr "概要マップはユーザー入力に基づいて自動的に表示される"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "タブでナビゲート"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "タブ付きインターフェースでドキュメントを切り替える"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "ポップオーバーでナビゲート"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr ""
+msgstr "ポップオーバーでドキュメントを切り替える"
 
 #: src/plugins/buildui/tweaks.ui:12
 #: src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
@@ -2870,7 +3087,7 @@ msgstr "実行コマンド"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr "このコマンドはプロジェクトの実行に使われます"
+msgstr "このコマンドはプロジェクトを実行するために使用される"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2885,8 +3102,8 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"アプリケーションを実行する前にインストールする。カスタマイズした実行コマンド"
-"を使わない限り、ほとんどのプロジェクトで必要です。"
+"実行前にアプリケーションをインストールする。これは、カスタム実行コマンドを使"
+"用する場合を除き、ほとんどのプロジェクトで必要です。"
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2896,7 +3113,7 @@ msgstr "停止シグナル"
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
-msgstr "アプリケーションに停止を要求するときにターゲットに送るシグナル"
+msgstr "アプリケーションに停止を要求するときにターゲットにシグナルを送信する。"
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
@@ -2907,12 +3124,12 @@ msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
-"トラブルシュートのために環境変数で <tt>G_MESSAGES_DEBUG=all</tt> を設定して実"
-"行"
+"トラブルシューティングのために環境変数 <tt>G_MESSAGES_DEBUG=all</tt> を設定し"
+"て実行する"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
-msgstr "ビルド環境内でユニットテストを実行。"
+msgstr "ビルド環境内でユニットテストを実行する。"
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -2921,6 +3138,8 @@ msgstr "アプリケーションとして"
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
+"ディスプレイやその他の実行時環境機能へのアクセスを有しながら、ユニットテスト"
+"を実行する。"
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
@@ -2932,13 +3151,15 @@ msgstr "ストレージ"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Artifacts and Cached Files"
-msgstr ""
+msgstr "成果物およびキャッシュファイル"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
+"ビルドパイプラインで生成された成果物およびキャッシュファイルを保存するディレ"
+"クトリ。設定を有効にするには、ビルダーの再起動が必要です。"
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -2946,11 +3167,11 @@ msgstr "履歴"
 
 #: src/plugins/buildui/tweaks.ui:206
 msgid "Clear Expired Artifacts"
-msgstr ""
+msgstr "期限切れの成果物を削除"
 
 #: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr ""
+msgstr "期限切れの成果物は、ビルダーの起動時に削除される"
 
 #: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
@@ -2970,11 +3191,11 @@ msgstr "新規ビルドの開始時にビルドログを表示する"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
-msgstr "ログをコンソールへ"
+msgstr "コンソールにログを出力"
 
 #: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
-msgstr "言語サーバーのエラーのログをstderrへリダイレクトする"
+msgstr "言語サーバーのエラーログを stderr にリダイレクトする"
 
 #: src/plugins/buildui/tweaks.ui:261
 msgid "Workers"
@@ -2986,7 +3207,7 @@ msgstr "ビルドを実行する時に使用するワーカーの数"
 
 #: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
-msgstr "CPUあたり1つ"
+msgstr "CPUごとに1つ"
 
 #: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
@@ -3001,16 +3222,20 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
+"ビルドパイプラインのインストールフェーズ中に、プロジェクトはこのディレクトリ"
+"にインストールされる。"
 
 #: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
-msgstr ""
+msgstr "オプション構成"
 
 #: src/plugins/buildui/tweaks.ui:439
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"これらのオプションは、ビルドパイプラインの構成フェーズ中に、ビルドシステムが"
+"プロジェクトを構成するために使用される"
 
 #: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
@@ -3019,25 +3244,27 @@ msgstr "ビルド環境"
 #: src/plugins/buildui/tweaks.ui:449
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
-msgstr ""
+msgstr "ローカリティ"
 
 #: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
-msgstr ""
+msgstr "プロジェクトがビルドされる場所"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
-msgstr ""
+msgstr "ソースツリー内"
 
 #: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
-msgstr ""
+msgstr "ソースツリー外"
 
 #: src/plugins/buildui/tweaks.ui:494
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"アプリケーションのビルドに使用される SDK は、実行時環境から自動的に決定され"
+"る。"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
@@ -3055,82 +3282,86 @@ msgstr "プロジェクトをビルド"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
-msgstr ""
+msgstr "Cargo 実行"
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
-msgstr ""
+msgstr "Clang統合サーバーが終了しました"
 
 #: src/plugins/clang/ide-clang-client.c:199
 #, c-format
 msgid "Clang integration server has started as process %s"
-msgstr ""
+msgstr "Clang統合サーバーがプロセス %s として起動しました"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
-msgstr ""
+msgstr "匿名"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "括弧を補完する"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "補完時に括弧を含めるかどうか。"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
-msgstr ""
+msgstr "パラメーターを補完する"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"補完時にパラメーターも含める場合は、complete-parentheses を有効にする必要があ"
+"ります。"
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
-msgstr "Clang"
+msgstr ""
 
 #: src/plugins/clang/tweaks.ui:17
 msgid "Complete Parentheses"
-msgstr ""
+msgstr "括弧を補完する"
 
 #: src/plugins/clang/tweaks.ui:18
 msgid "Include parentheses when completing clang proposals"
-msgstr ""
+msgstr "Clang 提案の補完時に括弧を含める"
 
 #: src/plugins/clang/tweaks.ui:29
 msgid "Complete Parameters"
-msgstr ""
+msgstr "パラメーターを補完する"
 
 #: src/plugins/clang/tweaks.ui:30
 msgid "Include parameters and type information when completing clang proposals"
-msgstr ""
+msgstr "Clang 提案の補完時にパラメーターおよび型情報を含める"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
 #, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr "clang-formatの実行に失敗しました: %s"
+msgstr "clang-format の実行に失敗しました: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
 #, c-format
 msgid "clang-format failed to format document: %s"
-msgstr ""
+msgstr "clang-format がドキュメントの整形に失敗しました: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "clang-format からのデータが欠落しているか、破損しています"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "clang-format から提供されたカーソル位置が無効です"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
+".clang-format が見つかりません。プロジェクトに .clang-format ファイルを追加し"
+"てください。代わりに GNU スタイルのフォーマッターが使用されます。"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3156,7 +3387,7 @@ msgstr ""
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
 msgid "Create or update code-index for project file"
-msgstr ""
+msgstr "プロジェクトファイルのコードインデックスを作成または更新する"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
 msgid "PROJECT_FILE"
@@ -3165,33 +3396,33 @@ msgstr ""
 #: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
 msgid "Failed to load flags for plan: %s"
-msgstr ""
+msgstr "プランのフラグの読み込みに失敗しました: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:195
 #, c-format
 msgid "Failed to cull index plan: %s"
-msgstr ""
+msgstr "インデックスプランの間引きに失敗しました: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:230
 #, c-format
 msgid "Failed to populate index plan: %s"
-msgstr ""
+msgstr "インデックスプランの展開に失敗しました: %s"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
-msgstr ""
+msgstr "プロジェクトの読み込みに失敗しました: %s"
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
 #: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
-msgstr ""
+msgstr "ソースコードのインデックス作成中"
 
 #: src/plugins/code-index/gbp-code-index-service.c:210
 msgid "Search, diagnostics, and autocompletion may be limited until complete."
-msgstr ""
+msgstr "検索、診断、および自動補完は、完了するまで制限される可能性があります。"
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3199,11 +3430,11 @@ msgstr ""
 #: src/plugins/code-index/ide-code-index-index.c:340
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
-msgstr ""
+msgstr "宣言"
 
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
 msgid "Project Symbols"
-msgstr "プロジェクトのシンボル"
+msgstr "プロジェクトシンボル"
 
 #: src/plugins/codeshot/gtk/menus.ui:6
 msgid "Copy as Image"
@@ -3211,21 +3442,21 @@ msgstr "画像としてコピー"
 
 #: src/plugins/codeshot/gtk/menus.ui:7
 msgid "Copy selected text as an image"
-msgstr "選択テキストを画像としてコピーする"
+msgstr "選択したテキストを画像としてコピーする"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
-msgstr ""
+msgstr "“%s” は誤字の可能性があります。もしかして “%s” ですか?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
 msgid "Failed to format while saving document: %s"
-msgstr ""
+msgstr "ドキュメントの保存時に整形に失敗しました: %s"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:4
 msgid "Code Actions"
-msgstr ""
+msgstr "コードアクション"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:10
 msgid "_Apply"
@@ -3238,47 +3469,48 @@ msgstr "読み込み中…"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 msgid "No code actions available"
-msgstr ""
+msgstr "利用可能なコードアクションはありません"
 
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
-msgstr ""
+msgstr "コードアクションの失敗"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
 msgid "Symbol Not Selected"
-msgstr ""
+msgstr "シンボルが選択されていません"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
-msgstr ""
+msgstr "名前を変更するシンボルを選択する必要があります"
 
 #: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 msgid "Find References"
-msgstr "リファレンスを検索"
+msgstr "参照を検索"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:168
 msgid "No references found"
-msgstr "リファレンスが見つかりません"
+msgstr "参照が見つかりません"
 
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
+"プログラミング言語のツールは、参照の検索をサポートしていない可能性があります"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
 msgid "Failed to rename symbol: %s"
-msgstr ""
+msgstr "シンボルの名前変更に失敗しました: %s"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
 msgid "Rename Symbol"
-msgstr "シンボルのリネーム"
+msgstr "シンボルの名前変更"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
-msgstr "名前を変更(_R)"
+msgstr "名前の変更(_R)"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
 msgid "Current Symbol Name"
@@ -3290,15 +3522,15 @@ msgstr "新しいシンボル名"
 
 #: src/plugins/codeui/gtk/menus.ui:7
 msgid "R_ename Symbol…"
-msgstr "シンボルをリネーム(_E)…"
+msgstr "シンボルの名前変更(_E)…"
 
 #: src/plugins/codeui/gtk/menus.ui:12
 msgid "Code Actions…"
-msgstr ""
+msgstr "コードアクション…"
 
 #: src/plugins/codeui/gtk/menus.ui:14
 msgid "Display a list of possible code actions from the cursor position"
-msgstr ""
+msgstr "カーソル位置から利用可能なコードアクションの一覧を表示する"
 
 #: src/plugins/codeui/gtk/menus.ui:20
 msgid "_Go to Declaration"
@@ -3306,68 +3538,68 @@ msgstr "宣言へ移動(_G)"
 
 #: src/plugins/codeui/gtk/menus.ui:21
 msgid "Jump to file and location where item is declared"
-msgstr "アイテムが宣言されているファイルと場所へジャンプ"
+msgstr "アイテムが宣言されているファイルと位置に移動する"
 
 #: src/plugins/codeui/gtk/menus.ui:27
 msgid "_Go to Definition"
-msgstr "定義元へ移動(_G)"
+msgstr "定義へ移動(_G)"
 
 #: src/plugins/codeui/gtk/menus.ui:28
 msgid "Jump to file and location where item is defined"
-msgstr "アイテムが定義されているファイルと場所へジャンプ"
+msgstr "アイテムが定義されているファイルと位置に移動する"
 
 #: src/plugins/codeui/gtk/menus.ui:33
 msgid "_Find References"
-msgstr "リファレンスを検索(_F)"
+msgstr "参照を検索(_F)"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
-msgstr ""
+msgstr "コードコメント"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
 msgid "_Comment Code"
-msgstr ""
+msgstr "コードのコメント(_C)"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr ""
+msgstr "選択されたソースコードをコメントで囲む"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
-msgstr ""
+msgstr "コードのコメントを解除(_M)"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
+msgstr "選択されたソースコードからコメントを削除する"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "保存する前に著作権情報を更新"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "ディスクに保存する前に、ユーザーの著作権情報を更新する。"
 
 #: src/plugins/copyright/tweaks.ui:16
 msgid "Update Copyright"
-msgstr ""
+msgstr "著作権情報を更新"
 
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
-msgstr ""
+msgstr "ドキュメント保存時に著作権ヘッダーを更新する"
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
-msgstr ""
+msgstr "関数プロトタイプを再フォーマット"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
-msgstr ""
+msgstr "プロジェクト作成ガイドを表示する"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
-msgstr "場所の選択"
+msgstr "場所を選択"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
@@ -3383,7 +3615,7 @@ msgstr "プロジェクト名"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
-msgstr "この名前のサブディレクトリーは既に存在します"
+msgstr "この名前のサブディレクトリはすでに存在します"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
@@ -3391,8 +3623,8 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"プロジェクトのフォルダーや他のリソースのために使われるユニークな名前です。名"
-"前は空白を含まない小文字で数字で始まってはいけません。"
+"プロジェクトフォルダーやその他のリソースに使用する一意の名前です。名前は小文"
+"字で、空白を含まず、数字で始めてはいけません。"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID"
@@ -3403,8 +3635,8 @@ msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"アプリケーションを識別するのに使用するドメイン名を逆順にした識別子、例え"
-"ば、\"org.gnome.Builder\"。ダッシュを含むことはできません。"
+"アプリケーションを識別するのに使用するドメイン名を逆順にした識別子、例えば、"
+"\"org.gnome.Builder\"。ダッシュを含むことはできません。"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3443,41 +3675,43 @@ msgstr "新しいプロジェクトの作成…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
-msgstr "テンプレートから新しいプロジェクトを作成"
+msgstr "テンプレートから新しいプロジェクトを作成する"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
 msgstr ""
+"Ctags のインデックス作成が完了するまでは、検索、自動補完、およびシンボル情報"
+"が制限される可能性があります。"
 
 #: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
-msgstr ""
+msgstr "ソースコードのインデックス作成（一時停止中）"
 
 #: src/plugins/ctags/tweaks.ui:14
 msgid "CTags"
-msgstr "CTags"
+msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:17
 msgid "Suggest Completions"
-msgstr ""
+msgstr "補完候補を提案"
 
 #: src/plugins/ctags/tweaks.ui:18
 msgid "Use CTags to suggest code completion proposals"
-msgstr ""
+msgstr "CTags を使用してコード補完候補を提案"
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
-msgstr "CTagsのパス"
+msgstr "CTags パス"
 
 #: src/plugins/ctags/tweaks.ui:35
 msgid "The path to the ctags executable"
-msgstr "ctagsの実行プログラムへのパス"
+msgstr "CTags 実行可能ファイルへのパス"
 
 #: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
-msgstr "デバッガーで実行する"
+msgstr "デバッガーで実行"
 
 #: src/plugins/debuggerui/gtk/menus.ui:14
 msgid "Run the project with debugger"
@@ -3492,19 +3726,19 @@ msgstr "デバッガー"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Toggle Breakpoint"
-msgstr "ブレークポイントの設定・解除"
+msgstr "ブレークポイントの切り替え"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
 msgid "Toggle breakpoint at current line"
-msgstr "現在行のブレークポイントを設定・解除"
+msgstr "現在の行でブレークポイントを切り替える"
 
 #: src/plugins/debuggerui/gtk/menus.ui:34
 msgid "Continue"
-msgstr "続ける"
+msgstr "続行"
 
 #: src/plugins/debuggerui/gtk/menus.ui:37
 msgid "Continue debugging to next breakpoint"
-msgstr "次のブレークポイントまでデバッグを継続"
+msgstr "次のブレークポイントまでデバッグを続行する"
 
 #: src/plugins/debuggerui/gtk/menus.ui:43
 msgid "Pause"
@@ -3512,31 +3746,31 @@ msgstr "一時停止"
 
 #: src/plugins/debuggerui/gtk/menus.ui:46
 msgid "Pause debugger until continued"
-msgstr ""
+msgstr "続行されるまでデバッガーを一時停止する"
 
 #: src/plugins/debuggerui/gtk/menus.ui:52
 msgid "Step Over"
-msgstr ""
+msgstr "ステップオーバー"
 
 #: src/plugins/debuggerui/gtk/menus.ui:55
 msgid "Execute the current line, stepping over any function calls"
-msgstr ""
+msgstr "現在の行を実行し、関数呼び出しはステップオーバーする"
 
 #: src/plugins/debuggerui/gtk/menus.ui:61
 msgid "Step Into"
-msgstr ""
+msgstr "ステップイン"
 
 #: src/plugins/debuggerui/gtk/menus.ui:64
 msgid "Execute the current line, stepping into any function calls"
-msgstr ""
+msgstr "現在の行を実行し、関数呼び出しに対してステップインする"
 
 #: src/plugins/debuggerui/gtk/menus.ui:70
 msgid "Step Out"
-msgstr ""
+msgstr "ステップアウト"
 
 #: src/plugins/debuggerui/gtk/menus.ui:73
 msgid "Run until the end of the function"
-msgstr ""
+msgstr "関数の末尾まで実行する"
 
 #: src/plugins/debuggerui/gtk/menus.ui:83
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
@@ -3546,20 +3780,20 @@ msgstr "ブレークポイント"
 
 #: src/plugins/debuggerui/gtk/menus.ui:85
 msgid "Automatically Break at Program Start"
-msgstr ""
+msgstr "プログラム開始時に自動的にブレーク"
 
 #: src/plugins/debuggerui/gtk/menus.ui:90
 msgid "Automatically Break at Warnings"
-msgstr "自動的に警告でブレーク"
+msgstr "警告時に自動的にブレーク"
 
 #: src/plugins/debuggerui/gtk/menus.ui:95
 msgid "Automatically Break at Criticals"
-msgstr "自動的にクリティカルでブレーク"
+msgstr "クリティカル時に自動的にブレーク"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
 msgid "File"
@@ -3581,43 +3815,43 @@ msgstr "アドレス"
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:28
 msgid "Type"
-msgstr ""
+msgstr "タイプ"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
 msgid "Hits"
-msgstr ""
+msgstr "ヒット"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
 msgid "Expression"
-msgstr ""
+msgstr "式"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:17
 msgid "Pause the program (F6)"
-msgstr ""
+msgstr "プログラムを一時停止 (F6)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
 msgid "Continue running the program (F5)"
-msgstr ""
+msgstr "プログラムの実行を続行 (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
 msgid "Execute the current line, stepping into any function calls (F8)"
-msgstr ""
+msgstr "現在の行を実行し、関数呼び出しに対してステップイン (F8)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
 msgid "Execute the current line, stepping over any function calls (F7)"
-msgstr ""
+msgstr "現在の行を実行し、関数呼び出しはステップオーバー (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
 msgid "Run until the end of the function (Shift+F8)"
-msgstr ""
+msgstr "現在の関数の終了まで実行 (Shift+F8)"
 
 #: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
-msgstr ""
+msgstr "逆アセンブル"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "ブレークしない"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
@@ -3625,44 +3859,44 @@ msgstr "ブレークポイント"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "カウントポイント"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
-msgstr ""
+msgstr "ライブラリ"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
 msgid "Address Range"
-msgstr ""
+msgstr "アドレス範囲"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:312
 msgid "Locals"
-msgstr ""
+msgstr "ローカル変数"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.c:367
 msgid "Parameters"
-msgstr ""
+msgstr "パラメータ"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:16
 msgid "Variable"
-msgstr ""
+msgstr "変数"
 
 #: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
 msgid "Value"
-msgstr ""
+msgstr "値"
 
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
-msgstr ""
+msgstr "レジスタ"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:17
 msgid "Group"
-msgstr ""
+msgstr "グループ"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:38
 msgid "Thread"
-msgstr ""
+msgstr "スレッド"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:58
 msgid "Frame"
@@ -3670,35 +3904,31 @@ msgstr "フレーム"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:82
 msgid "Arguments"
-msgstr ""
+msgstr "引数"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:106
 msgid "Binary"
-msgstr ""
+msgstr "バイナリ"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:234
 msgid "Threads"
-msgstr ""
-
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
-msgid "Libraries"
-msgstr ""
+msgstr "スレッド"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:263
 msgid "Registers"
-msgstr ""
+msgstr "レジスタ"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:268
 msgid "Console"
-msgstr ""
+msgstr "コンソール"
 
 #: src/plugins/debuggerui/tweaks.ui:19
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "プログラム起動後にブレーク"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr ""
+msgstr "アプリケーション開始時に自動的にブレークポイントを挿入する"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
@@ -3706,7 +3936,7 @@ msgstr "警告で停止"
 
 #: src/plugins/debuggerui/tweaks.ui:32
 msgid "Automatically insert a breakpoint on warning logs"
-msgstr ""
+msgstr "警告ログ発生時に自動的にブレークポイントを挿入する"
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
@@ -3714,61 +3944,61 @@ msgstr "クリティカルで停止"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr ""
+msgstr "クリティカルログ発生時に自動的にブレークポイントを挿入する"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
-msgstr ""
+msgstr "デバイスのアドレス"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:49
 msgid "The device port number"
-msgstr ""
+msgstr "デバイスのポート番号"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
 msgid "The application to run"
-msgstr ""
+msgstr "実行するアプリケーション"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "デバイスへの双方向プロキシ用疑似端末"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "デバイスのピアが現れるまでの待機秒数"
 
 #: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:15
 msgid "D-Bus Inspector…"
-msgstr ""
+msgstr "D-Bus インスペクタ…"
 
 #: src/plugins/dub/gbp-dub-run-command-provider.c:74
 msgid "Dub Run"
-msgstr ""
+msgstr "Dub 実行"
 
 #: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
-msgstr ""
+msgstr "ファイルが指定されていません。"
 
 #: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
-msgstr ""
+msgstr "最小限のエディターインターフェースを使用する"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:62
 #, c-format
 msgid "Switch to %s style"
-msgstr ""
+msgstr "スタイルを %s に切り替える"
 
 #: src/plugins/editorui/gbp-editorui-search-result.c:181
 msgid "Switch application and editor theme"
-msgstr ""
+msgstr "アプリケーションとエディターのテーマを切り替える"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr ""
+msgstr "言語設定をアプリケーション既定値に戻す"
 
 #. translators: "Plain Text" means text without formatting
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Plain Text"
-msgstr ""
+msgstr "プレーンテキスト"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
@@ -3776,7 +4006,7 @@ msgstr ""
 #: src/plugins/editorui/tweaks-language.ui:242
 #: src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
-msgstr "空白"
+msgstr "スペース"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
@@ -3795,28 +4025,27 @@ msgstr "指定行へ移動"
 
 #: src/plugins/editorui/gtk/menus.ui:5
 msgid "Indentation"
-msgstr ""
+msgstr "インデント"
 
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
-msgstr ""
+msgstr "スペースでインデントする"
 
 #: src/plugins/editorui/gtk/menus.ui:13
-#, fuzzy
 msgid "Spaces per Tab"
-msgstr "空白"
+msgstr "タブごとのスペース数"
 
 #: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
-msgstr "2"
+msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
-msgstr "3"
+msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
 msgid "4"
-msgstr "4"
+msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
@@ -3824,7 +4053,7 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
-msgstr "8"
+msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
@@ -3832,14 +4061,12 @@ msgid "Indentation Size"
 msgstr "インデントサイズ"
 
 #: src/plugins/editorui/gtk/menus.ui:44
-#, fuzzy
 msgid "Same as Tab Width"
-msgstr "タブ幅"
+msgstr "タブ幅と同じ"
 
 #: src/plugins/editorui/gtk/menus.ui:81
-#, fuzzy
 msgid "Line Ending"
-msgstr "変更行"
+msgstr "改行コード"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
@@ -3851,72 +4078,63 @@ msgstr ""
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
-msgstr ""
+msgstr "新規エディターワークスペース…"
 
 #: src/plugins/editorui/gtk/menus.ui:124
-#, fuzzy
 msgid "New _File"
-msgstr "新しいファイル"
+msgstr "新しいファイル(_F)"
 
 #: src/plugins/editorui/gtk/menus.ui:133
-#, fuzzy
 msgid "_Open File…"
-msgstr "ファイルを開く…"
+msgstr "ファイルを開く(_O)…"
 
 #: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:39
 msgid "Open in New Frame"
 msgstr "新しいフレームで開く"
 
 #: src/plugins/editorui/gtk/menus.ui:147
-#, fuzzy
 msgid "Open in New Workspace…"
-msgstr "新しいフレームで開く"
+msgstr "新しいワークスペースで開く…"
 
 #: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "名前を付けて保存(_A)"
 
 #: src/plugins/editorui/gtk/menus.ui:171
-#, fuzzy
 msgid "Find…"
-msgstr "検索"
+msgstr "検索…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
-#, fuzzy
 msgid "Find/Replace…"
-msgstr "検索と置換"
+msgstr "検索/置換…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
 msgid "Print…"
 msgstr "印刷…"
 
 #: src/plugins/editorui/gtk/menus.ui:194
-#, fuzzy
 msgid "Format Document"
-msgstr "ドキュメント"
+msgstr "ドキュメントを整形"
 
 #: src/plugins/editorui/gtk/menus.ui:200
-#, fuzzy
 msgid "Format Selection"
-msgstr "選択"
+msgstr "選択範囲を整形"
 
 #: src/plugins/editorui/gtk/menus.ui:208
-#, fuzzy
 msgid "Move to Previous Diagnostic"
-msgstr "前の位置語句へ移動する"
+msgstr "前の診断に移動"
 
 #: src/plugins/editorui/gtk/menus.ui:209
 msgid "Move the insertion cursor to the previous diagnostic location"
-msgstr ""
+msgstr "挿入カーソルを前の診断位置に移動する"
 
 #: src/plugins/editorui/gtk/menus.ui:216
-#, fuzzy
 msgid "Move to Next Diagnostic"
-msgstr "次の一致語句へ移動する"
+msgstr "次の診断に移動"
 
 #: src/plugins/editorui/gtk/menus.ui:217
 msgid "Move the insertion cursor to the next diagnostic location"
-msgstr ""
+msgstr "挿入カーソルを次の診断位置に移動する"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -3926,7 +4144,9 @@ msgstr "プログラミング言語"
 msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
-msgstr ".editorconfigやmodelineでの設定が以下のものに優先します。"
+msgstr ""
+".editorconfig および modelines によって提供される設定は、以下の設定よりも優先"
+"されます。"
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -3946,19 +4166,19 @@ msgstr "タブ"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
-msgstr "行末の改行を挿入"
+msgstr "末尾に改行を挿入"
 
 #: src/plugins/editorui/tweaks-language.ui:74
 msgid "Ensure files end with a newline"
-msgstr "ファイルが改行で終わるようにする"
+msgstr "ファイルの末尾が改行で終わるようにする"
 
 #: src/plugins/editorui/tweaks-language.ui:90
 msgid "Trim Trailing Space"
-msgstr "行末の空白を削除"
+msgstr "末尾の空白を削除"
 
 #: src/plugins/editorui/tweaks-language.ui:91
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr "保存時に修正した行の末尾の空白が削除されます"
+msgstr "保存時、変更された行の末尾の空白は削除されます"
 
 #: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
@@ -3966,11 +4186,11 @@ msgstr "自動インデント"
 
 #: src/plugins/editorui/tweaks-language.ui:112
 msgid "Automatically indent source code as you type"
-msgstr "入力時に自動でソースコードをインデントする"
+msgstr "入力時、ソースコードは自動でインデントされます"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
-msgstr "タブのサイズ"
+msgstr "タブ幅"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
@@ -3978,7 +4198,7 @@ msgstr "タブでインデントする文字数"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
-msgstr "インデント時の文字数。あるいは -1 でタブのサイズ"
+msgstr "タブでインデントする文字数（-1 の場合、タブ幅を使用）"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -3990,7 +4210,7 @@ msgstr "右マージンを表示"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr "幅の好ましい最大値を示すためにエディタでマージンを表示"
+msgstr "エディター内に望ましい最大幅を示すマージンを表示する"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -3998,7 +4218,7 @@ msgstr "右マージンの位置"
 
 #: src/plugins/editorui/tweaks-language.ui:185
 msgid "The desired maximum line length"
-msgstr "好ましい最大の行の長さ"
+msgstr "望ましい行の最大長"
 
 #: src/plugins/editorui/tweaks-language.ui:203
 #: src/plugins/editorui/tweaks.ui:385
@@ -4007,47 +4227,47 @@ msgstr "振る舞い"
 
 #: src/plugins/editorui/tweaks-language.ui:206
 msgid "Overwrite Braces"
-msgstr "ブレースを上書き"
+msgstr "波カッコを上書き"
 
 #: src/plugins/editorui/tweaks-language.ui:207
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-msgstr "閉じブレース、ブラケット、カッコ、そして引用符を上書きする"
+msgstr "閉じ波カッコ、角カッコ、丸カッコ、および引用符を上書きする"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
-msgstr "対応するブレースを挿入"
+msgstr "波カッコに対応する文字を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:224
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "ブレース、ブラケット、カッコ、そして引用符に対応する文字を挿入する"
+msgstr "波カッコ、角カッコ、丸カッコ、および引用符に対応する文字を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
-msgstr "開きカッコの前の空白"
+msgstr "開き丸カッコの前に空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:262
 msgid "Space before opening brackets"
-msgstr "開きブラケットの前の空白"
+msgstr "開き角カッコの前の空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:269
 msgid "Space before opening braces"
-msgstr "開きブレースの前の空白"
+msgstr "開き波カッコの前に空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:276
 msgid "Space before opening angles"
-msgstr "開き山カッコの前の空白"
+msgstr "開き山カッコの前の空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:283
 msgid "Prefer a space before colon"
-msgstr "コロンの前では空白を好む"
+msgstr "コロンの前に空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:290
 msgid "Prefer a space before commas"
-msgstr "コンマの前では空白を好む"
+msgstr "コンマの前に空白を挿入する"
 
 #: src/plugins/editorui/tweaks-language.ui:297
 msgid "Prefer a space before semicolons"
-msgstr "セミコロンの前では空白を好む"
+msgstr "セミコロンの前に空白を挿入する"
 
 #: src/plugins/editorui/tweaks.ui:10
 msgid "Color"
@@ -4062,25 +4282,24 @@ msgid "Preview"
 msgstr "プレビュー"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
-#, fuzzy
 msgid "Custom Font"
-msgstr "エディターのフォント"
+msgstr "カスタムフォント"
 
 #: src/plugins/editorui/tweaks.ui:66
 msgid "Adjust spacing between lines"
-msgstr ""
+msgstr "行間を調整する"
 
 #: src/plugins/editorui/tweaks.ui:83
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "フレームよりも幅が広い場合のテキスト折り返し方法"
 
 #: src/plugins/editorui/tweaks.ui:98
 msgid "At Spaces"
-msgstr ""
+msgstr "空白で折り返す"
 
 #: src/plugins/editorui/tweaks.ui:104
 msgid "Anywhere"
-msgstr ""
+msgstr "任意の位置で折り返す"
 
 #: src/plugins/editorui/tweaks.ui:116
 msgid "Background Pattern"
@@ -4088,7 +4307,7 @@ msgstr "背景パターン"
 
 #: src/plugins/editorui/tweaks.ui:117
 msgid "Show a background pattern underneath source code"
-msgstr ""
+msgstr "ソースコードの下に背景パターンを表示する"
 
 #: src/plugins/editorui/tweaks.ui:126
 msgid "No Pattern"
@@ -4096,27 +4315,27 @@ msgstr "パターン無し"
 
 #: src/plugins/editorui/tweaks.ui:132
 msgid "Grid Lines"
-msgstr ""
+msgstr "グリッド線"
 
 #: src/plugins/editorui/tweaks.ui:142
 msgid "Scrollbars"
-msgstr ""
+msgstr "スクロールバー"
 
 #: src/plugins/editorui/tweaks.ui:145
 msgid "Source Code Overview"
-msgstr ""
+msgstr "ソースコード概要"
 
 #: src/plugins/editorui/tweaks.ui:146
 msgid "Display an overview of source code next to the editor"
-msgstr ""
+msgstr "エディターの隣にソースコードの概要を表示する"
 
 #: src/plugins/editorui/tweaks.ui:155
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "スクロールバーを優先"
 
 #: src/plugins/editorui/tweaks.ui:161
 msgid "Always On"
-msgstr ""
+msgstr "常にオン"
 
 #: src/plugins/editorui/tweaks.ui:167
 msgid "Automatic"
@@ -4128,19 +4347,19 @@ msgstr "行番号"
 
 #: src/plugins/editorui/tweaks.ui:180
 msgid "Show Line Numbers"
-msgstr "行番号の表示"
+msgstr "行番号を表示"
 
 #: src/plugins/editorui/tweaks.ui:181
 msgid "Display line numbers next to each line of code"
-msgstr ""
+msgstr "コードの各行の横に行番号を表示する"
 
 #: src/plugins/editorui/tweaks.ui:192
 msgid "Use Relative Line Numbers"
-msgstr ""
+msgstr "相対行番号を使用"
 
 #: src/plugins/editorui/tweaks.ui:193
 msgid "Show line numbers relative to the current line"
-msgstr "現在行との相対行番号を表示"
+msgstr "カーソル行を基準に相対行番号を表示する"
 
 #: src/plugins/editorui/tweaks.ui:204
 msgid "Show Diagnostics"
@@ -4148,24 +4367,23 @@ msgstr "診断を表示"
 
 #: src/plugins/editorui/tweaks.ui:205
 msgid "Display diagnostics next to the line number"
-msgstr ""
+msgstr "行番号の横に診断を表示する"
 
 #: src/plugins/editorui/tweaks.ui:216
 msgid "Show Line Changes"
-msgstr ""
+msgstr "変更行を表示"
 
 #: src/plugins/editorui/tweaks.ui:217
-#, fuzzy
 msgid "Highlight changed lines next to the line number"
-msgstr "行番号の隣にその行が追加または変更されたかどうかを表示する"
+msgstr "行番号の横に変更された行を強調表示する"
 
 #: src/plugins/editorui/tweaks.ui:228
 msgid "Use Line Selection Styling"
-msgstr ""
+msgstr "行選択スタイリングを使用"
 
 #: src/plugins/editorui/tweaks.ui:229
 msgid "Use selection styling for line numbers if whole line is selected"
-msgstr ""
+msgstr "行全体が選択された場合、行番号に選択スタイリングを適用する"
 
 #: src/plugins/editorui/tweaks.ui:242
 msgid "Highlighting"
@@ -4173,87 +4391,92 @@ msgstr "ハイライト"
 
 #: src/plugins/editorui/tweaks.ui:245
 msgid "Highlight Current Line"
-msgstr "現在行のハイライト"
+msgstr "現在行をハイライト"
 
+# 項目の説明という性質上、「ハイライト」ではなく「強調表示」を用いるのが望ましいです。
 #: src/plugins/editorui/tweaks.ui:246
 msgid "Make the current line stand out with highlights"
-msgstr ""
+msgstr "現在の行を強調表示する"
 
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Highlight Matching Brackets"
-msgstr "対応するカッコのハイライト"
+msgstr "対応するカッコをハイライト"
 
+# 項目の説明という性質上、「ハイライト」ではなく「強調表示」を用いるのが望ましいです。
 #: src/plugins/editorui/tweaks.ui:258
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
+"カーソルの位置をもとに、対応するカッコ、波カッコ、丸カッコなどを強調表示する"
 
 #: src/plugins/editorui/tweaks.ui:269
 msgid "Semantic Highlighting"
-msgstr ""
+msgstr "セマンティックハイライト"
 
+# ‪項目の説明という性質上、「ハイライト」ではなく「強調表示」を用いるのが望ましいです。
 #: src/plugins/editorui/tweaks.ui:270
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"シンボル情報を使用して、ソースコード内の名前空間、関数、変数を強調表示する"
 
 #: src/plugins/editorui/tweaks.ui:287
 msgid "Draw a mark representing normal spaces"
-msgstr ""
+msgstr "通常のスペースを表す記号を描画する"
 
 #: src/plugins/editorui/tweaks.ui:300
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "タブを表す記号を描画する"
 
 #: src/plugins/editorui/tweaks.ui:312
 msgid "Newlines"
-msgstr ""
+msgstr "改行"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "行末を表す記号を描画する"
 
 #: src/plugins/editorui/tweaks.ui:325
 msgid "Non-breaking spaces"
-msgstr ""
+msgstr "非改行スペース"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Draw a mark at non-breaking space characters"
-msgstr ""
+msgstr "非改行スペースを描画する"
 
 #: src/plugins/editorui/tweaks.ui:342
 msgid "Leading"
-msgstr ""
+msgstr "行頭の空白"
 
 #: src/plugins/editorui/tweaks.ui:343
 msgid "Draw marks for leading spaces only"
-msgstr ""
+msgstr "行頭の空白のみを描画する"
 
 #: src/plugins/editorui/tweaks.ui:355
 msgid "Inside Text"
-msgstr ""
+msgstr "テキスト内"
 
 #: src/plugins/editorui/tweaks.ui:356
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "テキスト内でのみ記号を描画する"
 
 #: src/plugins/editorui/tweaks.ui:368
 msgid "Trailing"
-msgstr ""
+msgstr "行末の余分な空白"
 
 #: src/plugins/editorui/tweaks.ui:369
 msgid "Draw marks for trailing spaces only"
-msgstr ""
+msgstr "行末の余分な空白のみを描画する"
 
 #: src/plugins/editorui/tweaks.ui:389
 msgid "Spelling"
-msgstr ""
+msgstr "スペルチェック"
 
 #: src/plugins/editorui/tweaks.ui:393
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "入力中に潜在的なスペルミスに下線を引く"
 
 #: src/plugins/editorui/tweaks.ui:406
 msgid "Selections"
@@ -4261,11 +4484,12 @@ msgstr "選択"
 
 #: src/plugins/editorui/tweaks.ui:409
 msgid "Minimum Characters to Highlight"
-msgstr ""
+msgstr "ハイライトする最小文字数"
 
+# ‪‪項目の説明という性質上、「ハイライト」ではなく「強調表示」を用いるのが望ましいです。
 #: src/plugins/editorui/tweaks.ui:410
 msgid "The minimum selection length before highlighting matches"
-msgstr ""
+msgstr "一致する文字列を強調表示する前の最小選択文字数"
 
 #: src/plugins/editorui/tweaks.ui:423
 msgid "Snippets"
@@ -4277,7 +4501,7 @@ msgstr "スニペットを展開"
 
 #: src/plugins/editorui/tweaks.ui:427
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "エディター内で設定済みのスニペットを展開するには「Tab」キーを使用する"
 
 #: src/plugins/editorui/tweaks.ui:442
 msgid "Code Completion"
@@ -4285,68 +4509,69 @@ msgstr "コード補完"
 
 #: src/plugins/editorui/tweaks.ui:446
 msgid "Completion Proposals"
-msgstr "補完の提案"
+msgstr "コード補完候補"
 
 #: src/plugins/editorui/tweaks.ui:449
 msgid "Suggest Code Completions"
-msgstr ""
+msgstr "コード補完を提案"
 
 #: src/plugins/editorui/tweaks.ui:450
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "入力中に自動的にコード補完を提案する"
 
 #: src/plugins/editorui/tweaks.ui:461
 msgid "Select First Completion Proposal"
-msgstr ""
+msgstr "最初のコード補完候補を選択"
 
 #: src/plugins/editorui/tweaks.ui:462
 msgid "Automatically select the first completion proposal when displayed"
-msgstr ""
+msgstr "表示されたときに最初のコード補完候補を自動的に選択する"
 
 #: src/plugins/editorui/tweaks.ui:477
 msgid "Maximum Completion Proposals"
-msgstr ""
+msgstr "コード補完候補の最大数"
 
 #: src/plugins/editorui/tweaks.ui:478
 msgid "The maximum number of completion rows that will be displayed at once"
-msgstr ""
+msgstr "一度に表示されるコード補完候補の最大行数"
 
 #: src/plugins/editorui/tweaks.ui:497
 msgid "Movements"
 msgstr "移動"
 
+# 「Smart Backspace」設定のサブタイトル
 #: src/plugins/editorui/tweaks.ui:501
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
-msgstr ""
+msgstr "「バックスペース」はインデントに合わせて余分な空白を削除する"
 
 #: src/plugins/editorui/tweaks.ui:513
 msgid "Navigate to non-space characters"
-msgstr ""
+msgstr "空白以外の文字に移動する"
 
 #: src/plugins/editorui/tweaks.ui:522
 msgid "Before line boundaries"
-msgstr ""
+msgstr "行境界の直前"
 
 #: src/plugins/editorui/tweaks.ui:528
 msgid "After line boundaries"
-msgstr ""
+msgstr "行境界の直後"
 
 #: src/plugins/editorui/tweaks.ui:534
 msgid "Instead of line boundaries"
-msgstr ""
+msgstr "行境界の代わり"
 
 #: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
-msgstr ""
+msgstr "無効"
 
 #: src/plugins/editorui/tweaks.ui:552
 msgid "Session Management"
-msgstr ""
+msgstr "セッション管理"
 
 #: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
-msgstr ""
+msgstr "保存と復元"
 
 #: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
@@ -4354,7 +4579,7 @@ msgstr "自動保存"
 
 #: src/plugins/editorui/tweaks.ui:560
 msgid "Regularly save the document as you type"
-msgstr ""
+msgstr "入力中にドキュメントを定期的に保存する"
 
 #: src/plugins/editorui/tweaks.ui:571
 msgid "Auto-Save Delay"
@@ -4362,25 +4587,27 @@ msgstr "自動保存の遅延"
 
 #: src/plugins/editorui/tweaks.ui:572
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr ""
+msgstr "ドキュメントを自動保存する前に待機する秒数"
 
 #: src/plugins/editorui/tweaks.ui:587
 msgid "Format on Save"
-msgstr ""
+msgstr "保存時に整形"
 
 #: src/plugins/editorui/tweaks.ui:588
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
+"ディスクに保存する際にソースを整形する。ソース言語に対応した登録済みのフォー"
+"マッターが必要です。"
 
 #: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
-msgstr "カーソル位置の復帰"
+msgstr "カーソル位置を復元"
 
 #: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
-msgstr ""
+msgstr "ファイルを再度開いた際に、最後の位置へジャンプする"
 
 #: src/plugins/file-search/gbp-file-search-index.c:397
 msgid "Open file or folder"
@@ -4388,7 +4615,7 @@ msgstr "ファイルまたはフォルダーを開く"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
-msgstr ""
+msgstr "類似ファイル (Ctrl+Shift+O)"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
@@ -4401,28 +4628,28 @@ msgstr "インストールが完了しました"
 #: src/plugins/flatpak/gbp-flatpak-client.c:460
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
-msgstr ""
+msgstr "クライアントが閉じられました"
 
 #: src/plugins/flatpak/gbp-flatpak-config-provider.c:806
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr ""
+msgstr "Flatpak マニフェストの削除に失敗しました: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
-msgstr ""
+msgstr "ネットワークが利用できないため、ダウンロードをスキップします"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
-msgstr "SDKをインストールか更新?"
+msgstr "SDK をインストールまたは更新しますか?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
-"ビルダーはプロジェクトをビルドするために以下のソフトウェア開発キット(SDK)をイ"
-"ンストールする必要があります。"
+"ビルダーはプロジェクトをビルドするために、以下のソフトウェア開発キットをイン"
+"ストールする必要があります。"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
@@ -4437,25 +4664,26 @@ msgstr "アーキテクチャ"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:114
 msgid "Resolving SDK Extensions"
-msgstr "SDK拡張を解決中"
+msgstr "SDK拡張機能の解決中"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
+"ビルダーはプロジェクトをビルドするために、適切な SDK 拡張機能を探しています"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:857
 msgid "Flatpak"
-msgstr "Flatpak"
+msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
-msgstr "Flatpakワークスペースを作成中"
+msgstr "Flatpak ワークスペースを作成中"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
-msgstr ""
+msgstr "古い Flatpak ステージングディレクトリを削除中: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
@@ -4471,7 +4699,7 @@ msgstr "依存関係をビルド中"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
-msgstr "Flatpakのビルドをファイナライズ中"
+msgstr "Flatpak ビルドをファイナライズ中"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
@@ -4479,7 +4707,7 @@ msgstr "ステージングディレクトリをエクスポート中"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
-msgstr "Flatpakバンドルを作成中"
+msgstr "Flatpak バンドルを作成中"
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
 msgid "Flatpak Application"
@@ -4494,52 +4722,53 @@ msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"ビルダーはアプリケーションのビルドに必要なソフトウェア開発キット(SDK)をインス"
-"トール中"
+"ビルダーはアプリケーションのビルドに必要なソフトウェア開発キットをインストー"
+"ルしています。"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
 msgid "Failed to update SDKs: %s"
-msgstr "SDKの更新に失敗しました: %s"
+msgstr "SDK の更新に失敗しました: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
 msgid "Updating Necessary SDKs"
-msgstr "必要なSDを更新中"
+msgstr "必要な SDK を更新中"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
 msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"ビルダーはアプリケーションのビルドに必要なソフトウェア開発キット(SDK)を更新中"
+"ビルダーはアプリケーションのビルドに必要なソフトウェア開発キットを更新してい"
+"ます。"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
-msgstr "SDKランタイムの更新"
+msgstr "SDK ランタイムを更新中"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:11
 msgid "Flatpak installation for new SDKs"
-msgstr "新しいSDKのためのFlatpakのインストール"
+msgstr "新しい SDK 用の Flatpak をインストール"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
-msgstr "新しいSDKやSDKの拡張に使用するFlatpakのインストール"
+msgstr "新しい SDK および SDK 拡張機能用の Flatpak をインストール。"
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
-msgstr "推奨されるFlatpakのインスール"
+msgstr "推奨 Flatpak をインストール"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
 "When installing SDKs and SDK extensions, Builder may prefer a specific "
 "Flatpak installation which contains the extension."
 msgstr ""
-"SDKやSDKの拡張のインストール時に、ビルダーは拡張を含む特定のFlatpakインスール"
-"を優先するかもしれません。"
+"SDK および SDK 拡張機能をインストールする際、ビルダーは拡張機能が含まれている"
+"特定の Flatpak インストールを優先する場合があります。"
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
-msgstr "GNOMEビルダー"
+msgstr "GNOME ビルダー"
 
 #: src/plugins/flatpak/tweaks.ui:28
 msgid "User"
@@ -4548,23 +4777,23 @@ msgstr "ユーザー"
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "GCC %s クロスコンパイラ (システム)"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
-msgstr ""
+msgstr "ファイルの内容にアクセスするためのリポジトリがありません"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
 #, c-format
 msgid "No contents have been set to diff"
-msgstr ""
+msgstr "差分対象の内容が設定されていません"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
 #: src/plugins/git/daemon/ipc-git-util.h:33
 #, c-format
 msgid "The operation failed. The original error was \"%s\""
-msgstr ""
+msgstr "操作に失敗しました。元のエラーは \"%s\" でした"
 
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
@@ -4572,59 +4801,60 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
+"ビルダーはリポジトリのクローン作成時に適切な認証情報を提供できませんでした。"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
-msgstr ""
+msgstr "AMEND および GPG_SIGN フラグを設定できません"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
-msgstr ""
+msgstr "GPG_KEY_ID が指定されていないため、コミットに署名できません"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
-msgstr ""
+msgstr "作業ディレクトリ外のファイルを監視できません"
 
 #: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
-msgstr ""
+msgstr "Git 統合がプロセス %s として開始されました"
 
 #: src/plugins/git/gbp-git-client.c:208
 msgid "Git integration has exited"
-msgstr ""
+msgstr "Git 統合が終了しました"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
-msgstr "Gitバージョン管理システムは使われていません"
+msgstr "Git バージョン管理が使用されていません"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
-msgstr ""
+msgstr "Git サブモジュールを更新中"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:60
 msgid "Initialize git submodules"
-msgstr ""
+msgstr "Git サブモジュールを初期化中"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:133
 msgid "Network is not available, skipping submodule update"
-msgstr ""
+msgstr "ネットワークが利用できないため、サブモジュールの更新をスキップします"
 
 #: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
-msgstr ""
+msgstr "プッシュしました。"
 
 #: src/plugins/git/gbp-git-vcs.c:385
 #, c-format
 msgid "Pushing ref “%s”"
-msgstr ""
+msgstr "リファレンス “%s” をプッシュ中"
 
 #: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
-msgstr ""
+msgstr "ディレクトリはリポジトリ内にありません"
 
 #: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
@@ -4633,29 +4863,30 @@ msgstr ""
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
-msgstr ""
+msgstr "“%s” にリポジトリが見つかりませんでした。"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:182
 #, c-format
 msgid "The protocol “%s” is not supported."
-msgstr ""
+msgstr "プロトコル “%s” はサポートされていません。"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:260
 msgid "Cloning repository"
-msgstr ""
+msgstr "リポジトリをクローン中"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
-msgstr "有効なGit URLを指定してください"
+msgstr "有効な Git URL を指定してください"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
-msgstr "認証情報"
+msgstr "著者情報"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "メールアドレス"
 
+# Go プログラミング言語における実行コマンドであり、原文を使用する。
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
 msgstr ""
@@ -4663,15 +4894,16 @@ msgstr ""
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
-msgstr "プロジェクトのブートストラップ中"
+msgstr "プロジェクトをブートストラップ中"
 
+# Gradle における実行タスクを示すコマンドであり、原文を使用する。
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
 msgstr ""
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
-msgstr ""
+msgstr "新しいグリーティングウィンドウを表示中"
 
 #: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
@@ -4685,33 +4917,33 @@ msgstr "パス"
 #: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
-msgstr "%s で検索(_F)"
+msgstr "%s 内を検索(_F)"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
-msgstr "%s で置換(_R)"
+msgstr "%s 内を置換(_R)"
 
 #: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
-msgstr "プロジェクトで検索"
+msgstr "プロジェクト内を検索"
 
 #: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
-msgstr "プロジェクトで置換"
+msgstr "プロジェクト内を置換"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
-msgstr "ファイルで検索"
+msgstr "ファイル内を検索"
 
 #: src/plugins/grep/gbp-grep-panel.ui:6
 msgid "Find in Files (Shift+Ctrl+Alt+F)"
-msgstr "ファイルで検索 (Shift+Ctrl+Alt+F)"
+msgstr "ファイル内を検索 (Shift+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
 msgid "_Recurse into Directories"
-msgstr "ディレクトリを再帰的に(_R)"
+msgstr "ディレクトリを再帰的に検索(_R)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
 msgid "Match Whole _Words"
@@ -4723,15 +4955,15 @@ msgstr "正規表現を使用(_E)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
-msgstr "パネルを閉じる (ESCキー)"
+msgstr "パネルを閉じる (Esc キー)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
-msgstr "プロジェクトで検索(_F)"
+msgstr "プロジェクト内を検索(_F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
-msgstr "プロジェクトで置換(_R)"
+msgstr "プロジェクト内を置換(_R)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
@@ -4743,15 +4975,15 @@ msgstr "検索(_F)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:58
 msgid "Search _recursively through folders"
-msgstr "フォルダを再帰的に検索(_R)"
+msgstr "フォルダーを再帰的に検索(_R)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
-msgstr "検索時に大文字・小文字を区別(_C)"
+msgstr "検索時に大文字と小文字を区別(_C)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
-msgstr "単語全体に一致(_W)"
+msgstr "単語全体で一致(_W)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:80
 msgid "Allow regular _expressions"
@@ -4759,7 +4991,7 @@ msgstr "正規表現を許可(_E)"
 
 #: src/plugins/grep/gtk/menus.ui:7
 msgid "_Find in Files"
-msgstr "ファイルで検索(_F)"
+msgstr "ファイル内を検索(_F)"
 
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 msgid "Host Operating System"
@@ -4768,7 +5000,7 @@ msgstr "ホスト OS"
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
 msgid "Bundled with Builder"
-msgstr "ビルダーにバンドルされている"
+msgstr "ビルダーに同梱"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4779,35 +5011,35 @@ msgstr "プレビューを開く…"
 #: src/plugins/ls/gbp-ls-page.c:291
 #, c-format
 msgid "Failed to load directory: %s"
-msgstr ""
+msgstr "ディレクトリの読み込みに失敗しました: %s"
 
 #: src/plugins/ls/gbp-ls-page.ui:49
 msgid "Size"
-msgstr ""
+msgstr "サイズ"
 
 #: src/plugins/ls/gbp-ls-page.ui:63
 msgid "Modified"
-msgstr ""
+msgstr "変更済み"
 
 #: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
 msgid "With _Folder Listing"
-msgstr ""
+msgstr "フォルダーリスト(_F)"
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
-msgstr ""
+msgstr "親フォルダー開く"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
 msgid "With File _Browser…"
-msgstr ""
+msgstr "ファイルブラウザ(_B)…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
-msgstr ""
+msgstr "既定の Make ターゲット"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
 msgid "Make Run"
-msgstr ""
+msgstr "Make 実行"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -4815,7 +5047,7 @@ msgstr "空の Makefile プロジェクト"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
 msgid "Create a new empty project using a simple Makefile"
-msgstr ""
+msgstr "シンプルな Makefile を用いて、新しい空のプロジェクトを作成する"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
@@ -4840,14 +5072,14 @@ msgstr "マニュアルを検索…"
 
 #: src/plugins/manuals/gtk/menus.ui:8
 msgid "Search documentation for installed SDKs"
-msgstr "インストールされたSDKのドキュメントを検索"
+msgstr "インストール済みの SDK のドキュメントを検索する"
 
 #: src/plugins/manuals/manuals-book.c:505
 #: src/plugins/manuals/manuals-heading.c:501
 #: src/plugins/manuals/manuals-keyword.c:526
 #, c-format
 msgid "View in %s"
-msgstr "%s で表示"
+msgstr "%s 内を表示"
 
 #. Note to the user we're importing this book
 #: src/plugins/manuals/manuals-devhelp-importer.c:697
@@ -4857,35 +5089,36 @@ msgstr "%s をインポート中…"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:121
 msgid "Importing JHBuild Documentation"
-msgstr "JHBuild のドキュメントをインポート中"
+msgstr "JHBuild ドキュメントをインポート中"
 
 #: src/plugins/manuals/manuals-jhbuild-importer.c:122
 msgid "Scanning jhbuild for new documentation"
-msgstr "新しいドキュメント用に jhbuild をスキャン"
+msgstr "新しいドキュメントのために jhbuild をスキャン中"
 
+# 「Nightly」は訳さなくても支障がないため、原文を使用する。
 #: src/plugins/manuals/manuals-sdk.c:282
 msgid "GNOME Nightly"
-msgstr "GNOME Nightly"
+msgstr ""
 
 #: src/plugins/manuals/manuals-system-importer.c:77
 msgid "Importing System Documentation"
-msgstr ""
+msgstr "システムドキュメントをインポート中"
 
 #: src/plugins/manuals/manuals-system-importer.c:78
 msgid "Scanning system for new documentation"
-msgstr ""
+msgstr "システムから新しいドキュメントをスキャン中"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
-msgstr ""
+msgstr "Maven 実行"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 msgid "Global Search"
-msgstr "グローバルサーチ"
+msgstr "グローバル検索"
 
 #: src/plugins/menu-search/gtk/menus.ui:15
 msgid "Display the global search"
-msgstr "グローバルサーチを表示"
+msgstr "グローバル検索を表示"
 
 #: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Panels"
@@ -4893,11 +5126,11 @@ msgstr "パネル"
 
 #: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
-msgstr "左パネルの表示を切り替える"
+msgstr "左パネルの切り替え"
 
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
-msgstr "左パネルを表示したり消したり切り替える"
+msgstr "左パネルの表示/非表示を切り替える"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:31
@@ -4906,7 +5139,7 @@ msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
-msgstr "右パネルを表示したり消したりを切り替える"
+msgstr "右パネルの表示/非表示を切り替え"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
@@ -4915,39 +5148,39 @@ msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
-msgstr "下パネルの表示を切り替える"
+msgstr "下パネルの切り替え"
 
 #: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
-msgstr "下パネルを表示したり消したり切り替える"
+msgstr "下パネルの表示/非表示を切り替える"
 
 #: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
-msgstr ""
+msgstr "ダークモードに切り替え"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "スタイルスキームをダークバリアントに切り替える"
 
 #: src/plugins/menu-search/gtk/menus.ui:66
 msgid "Switch to Light Mode"
-msgstr ""
+msgstr "ライトモードに切り替え"
 
 #: src/plugins/menu-search/gtk/menus.ui:67
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "スタイルスキームをライトバリアントに切り替える"
 
 #: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
-msgstr ""
+msgstr "ビルド診断を表示"
 
 #: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
-msgstr ""
+msgstr "ビルド中に検出されたエラーと警告を表示する"
 
 #: src/plugins/menu-search/gtk/menus.ui:88
 msgid "Jump to a specific line or column"
-msgstr ""
+msgstr "特定の行または列に移動する"
 
 #: src/plugins/menu-search/gtk/menus.ui:101
 msgid "Close Page"
@@ -4963,31 +5196,31 @@ msgstr "ファイルを再読込"
 
 #: src/plugins/menu-search/gtk/menus.ui:116
 msgid "Reload the contents of open files"
-msgstr "開いているファイルの内容を再読込"
+msgstr "開いているファイルの内容を再読み込み"
 
 #: src/plugins/menu-search/gtk/menus.ui:125
 msgid "Move to next search result"
-msgstr "次の検索結果へ移動する"
+msgstr "次の検索結果に移動"
 
 #: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
-msgstr "次の利用可能な検索結果へ移動し選択する"
+msgstr "次の利用可能な検索結果に移動して選択する"
 
 #: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
-msgstr "前の検索結果へ移動する"
+msgstr "前の検索結果に移動"
 
 #: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
-msgstr "前の利用可能な検索結果へ移動市選択する"
+msgstr "前の利用可能な検索結果に移動して選択する"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
-msgstr "Meson"
+msgstr ""
 
 #: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
-msgstr "Meson Introspectionを読み込む"
+msgstr "Meson Introspection を読み込む"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
@@ -5000,7 +5233,7 @@ msgstr "開発環境をキャッシュ"
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
 msgid "%s (Meson)"
-msgstr "%s (Meson)"
+msgstr ""
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
@@ -5028,7 +5261,7 @@ msgstr "ストリップ"
 
 #: src/plugins/meson/gbp-meson-utils.c:108
 msgid "Executable wrapper"
-msgstr "実行可能ファイルのラッパー"
+msgstr "実行可能ラッパー"
 
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
@@ -5036,11 +5269,11 @@ msgstr "パッケージの構成"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
-msgstr "GNOMEアプリケーション"
+msgstr "GNOME アプリケーション"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr ""
+msgstr "GTK 4 と libadwaita を使用した GNOME 向けの Meson ベースプロジェクト"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 msgid "GTK 4 Application"
@@ -5048,7 +5281,7 @@ msgstr "GTK 4 アプリケーション"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
-msgstr ""
+msgstr "GTK 4 を使用する Meson ベースのプロジェクト"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
@@ -5056,7 +5289,7 @@ msgstr "共有ライブラリ"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 msgid "A Meson-based project for a shared library"
-msgstr "共有ライブラリ用Mesonベースのプロジェクト"
+msgstr "共有ライブラリ向けの Meson ベースプロジェクト"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
@@ -5064,30 +5297,30 @@ msgstr "コマンドラインツール"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
-msgstr "コマンドラインプログラム用Mesonベースのプロジェクト"
+msgstr "コマンドラインプログラム向けの Meson ベースプロジェクト"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 msgid "Empty Meson Project"
-msgstr "空のMesonプロジェクト"
+msgstr "空の Meson プロジェクト"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 msgid "An empty Meson project skeleton"
-msgstr ""
+msgstr "空の Meson プロジェクトスケルトン"
 
 #: src/plugins/messages/gbp-messages-panel.c:102
 #: src/plugins/messages/gbp-messages-panel.ui:169
 msgid "Debug"
-msgstr ""
+msgstr "デバッグ"
 
 #: src/plugins/messages/gbp-messages-panel.c:104
 msgid "Info"
-msgstr ""
+msgstr "情報"
 
 #: src/plugins/messages/gbp-messages-panel.c:106
 #: src/plugins/messages/gbp-messages-panel.ui:116
 #: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
-msgstr ""
+msgstr "メッセージ"
 
 #: src/plugins/messages/gbp-messages-panel.c:108
 #: src/plugins/messages/gbp-messages-panel.ui:157
@@ -5101,20 +5334,20 @@ msgstr "クリティカル"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
-msgstr ""
+msgstr "メッセージ"
 
 #: src/plugins/messages/gbp-messages-panel.ui:25
 msgid "Time"
-msgstr ""
+msgstr "時間"
 
 #: src/plugins/messages/gbp-messages-panel.ui:57
 #: src/plugins/messages/gbp-messages-panel.ui:149
 msgid "Severity"
-msgstr ""
+msgstr "重大度"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
-msgstr "選択"
+msgstr "セクション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -5126,27 +5359,27 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
-msgstr ""
+msgstr "リモートまたは仮想システムにアクセスする GNOME アプリケーション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
-msgstr ""
+msgstr "GNOME ベースのソフトウェアを開発するための IDE"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Calendar"
-msgstr ""
+msgstr "カレンダー"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr ""
+msgstr "GNOME 向けのカレンダーアプリケーション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
-msgstr ""
+msgstr "時計"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "A clock application for GNOME"
-msgstr ""
+msgstr "GNOME 向けの時計アプリケーション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
@@ -5154,23 +5387,23 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Gitg is a graphical Git client"
-msgstr ""
+msgstr "Gitg はグラフィカルな Git クライアント"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
 msgid "Maps"
-msgstr ""
+msgstr "地図"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
 msgid "A GNOME maps application"
-msgstr "GNOMEマップアプリケーション"
+msgstr "GNOME 向けのマップアプリケーション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
-msgstr ""
+msgstr "ミュージック"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:87
 msgid "Music player and management application"
-msgstr ""
+msgstr "音楽プレーヤーおよび管理アプリケーション"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
@@ -5178,7 +5411,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
-msgstr ""
+msgstr "GNOME 向けの標準ファイルマネージャー"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Polari"
@@ -5186,7 +5419,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "An IRC Client for GNOME"
-msgstr ""
+msgstr "GNOME 向けの IRC クライアント"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
@@ -5194,7 +5427,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
-msgstr ""
+msgstr "GNOME 向けのモダンなサウンドレコーダー"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -5203,7 +5436,7 @@ msgstr "ビルド成功"
 #: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr "プロジェクト“%s”はビルドが完了しました"
+msgstr "プロジェクト “%s” のビルドが完了しました"
 
 #: src/plugins/notification/ide-notification-addin.c:128
 #: src/plugins/notification/ide-notification-addin.c:216
@@ -5213,27 +5446,27 @@ msgstr "ビルド失敗"
 #: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr "プロジェクト“%s”はビルドに失敗しました"
+msgstr "プロジェクト “%s” のビルドに失敗しました"
 
 #: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
-msgstr "ビルドが成功しました"
+msgstr "ビルドに成功しました"
 
 #: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
-msgstr "ビルドを構成しました"
+msgstr "ビルドの構成が完了しました"
 
 #: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
-msgstr "ビルドのブートストラップを実行しました"
+msgstr "ビルドのブートストラップが完了しました"
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
-msgstr "npmの依存関係をダウンロード中"
+msgstr "npm の依存関係をダウンロード中"
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
 msgid "_External Program…"
-msgstr "外部のプログラム(_E)…"
+msgstr "外部プログラム(_E)…"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
@@ -5241,11 +5474,11 @@ msgstr "システムに従う"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
-msgstr ""
+msgstr "ライト"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
-msgstr ""
+msgstr "ダーク"
 
 #: src/plugins/platformui/tweaks.ui:22
 msgid "Document Navigation"
@@ -5253,21 +5486,21 @@ msgstr "ドキュメントナビゲーション"
 
 #: src/plugins/platformui/tweaks.ui:31
 msgid "Tab Bar"
-msgstr ""
+msgstr "タブバー"
 
 #: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
-msgstr ""
+msgstr "ドロップダウン"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:675
 msgid "Containers/Toolbox"
-msgstr ""
+msgstr "コンテナ/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Podman"
-msgstr ""
+msgstr "コンテナ/Podman"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:127
 #: src/plugins/project-tree/gbp-rename-file-popover.c:145
@@ -5299,13 +5532,13 @@ msgstr "作成(_C)"
 #: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying 1 file"
-msgstr "ファイルを1つコピー中"
+msgstr "1 ファイルをコピーしています"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:703
 #, c-format
 msgid "Copying %s of %s files"
-msgstr "ファイルをコピー中 (%s / %s)"
+msgstr "%2$s ファイル中 %1$s ファイルをコピーしています"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:739
 msgid "Failed to copy files"
@@ -5327,7 +5560,7 @@ msgstr "ファイルのコピー…"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
-msgstr ""
+msgstr "ファイルはまもなくコピーされます"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:51
 #: src/plugins/project-tree/tweaks.ui:10
@@ -5337,7 +5570,7 @@ msgstr "プロジェクトツリー"
 #: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
-msgstr ""
+msgstr "“%s” の名前を変更"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
@@ -5353,15 +5586,15 @@ msgstr "開く(_P)"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
 msgid "Open _With…"
-msgstr ""
+msgstr "他のアプリケーションで開く(_W)…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
 msgid "_Source Code Editor"
-msgstr "ソースコードエディタ(_S)"
+msgstr "ソースコードエディター(_S)"
 
 #: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Open _Containing Folder"
-msgstr ""
+msgstr "ファイルのあるフォルダーを開く(_C)"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
 msgid "With _Terminal…"
@@ -5385,23 +5618,23 @@ msgstr "ディレクトリを先頭に表示(_O)"
 
 #: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
-msgstr ""
+msgstr "プロジェクトツリーで表示"
 
 #: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
-msgstr ""
+msgstr "プロジェクトツリーで表示(_T)"
 
 #: src/plugins/project-tree/tweaks.ui:14
 msgid "Display icons next to files within the project tree"
-msgstr "プロジェクトツリー中のファイルの隣にアイコンを表示"
+msgstr "プロジェクトツリー内のファイルの横にアイコンを表示"
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr ""
+msgstr "通常は無視されるファイルを表示する"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
-msgstr ""
+msgstr "同じディレクトリ内では、ディレクトリをファイルよりも先に並べる"
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
@@ -5409,11 +5642,11 @@ msgstr "バージョン管理無し"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
-msgstr "以前のセッションを復帰"
+msgstr "以前のセッションを復元"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
-msgstr ""
+msgstr "プロジェクト読み込み時に、以前開いていたファイルを開く"
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
@@ -5421,11 +5654,11 @@ msgstr "プロジェクトの作成"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
-msgstr ""
+msgstr "ビルダーで作成されたプロジェクトは、このディレクトリ内に配置されます"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
-msgstr "プロジェクトの作成時のデフォルトのライセンス"
+msgstr "新規プロジェクト作成時のデフォルトライセンス"
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
@@ -5444,8 +5677,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
-"この識別子はプロジェクトの設定、プロジェクトのディレクトリ、そしてキャッシュ"
-"情報を参照するために使用します。"
+"この識別子はプロジェクトの設定、ビルドディレクトリ、およびキャッシュされた情"
+"報を参照する際に使用されます。"
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5453,7 +5686,7 @@ msgstr "ビルドシステム"
 
 #: src/plugins/projectui/tweaks.ui:140
 msgid "Source Directory"
-msgstr "ソースの場所"
+msgstr "ソースディレクトリ"
 
 #: src/plugins/projectui/tweaks.ui:160
 msgid "Current Configuration"
@@ -5464,27 +5697,27 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
-"この構成は、ビルドのパイプラインをセットアップし、ビルドシステムを構成し、プ"
-"ロジェクトを実行するために使用します。"
+"この構成は、ビルドパイプラインのセットアップ、ビルドシステムの構成、そしてプ"
+"ロジェクトの実行に使用されます。"
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
-msgstr "提供者："
+msgstr "提供者"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
-msgstr "Aarch64エミュレーション"
+msgstr "Aarch64 エミュレーション"
 
 #: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
-msgstr "Armエミュレーション"
+msgstr "Arm エミュレーション"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
-msgstr "マイコンピューター (%s) %s"
+msgstr "コンピューター (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
@@ -5499,7 +5732,7 @@ msgstr "%s を削除中\n"
 
 #: src/plugins/recent/gbp-recent-section.c:424
 msgid "Removing Files…"
-msgstr "ファイルを削除…"
+msgstr "ファイルを削除中…"
 
 #: src/plugins/recent/gbp-recent-section.c:612
 msgid "Show More"
@@ -5519,7 +5752,7 @@ msgstr "更新"
 
 #: src/plugins/sdkui/gtk/menus.ui:6
 msgid "Manage SDKs…"
-msgstr "SDKの管理…"
+msgstr "SDK を管理…"
 
 #: src/plugins/sdkui/tweaks.ui:12
 msgid "Downloads"
@@ -5527,13 +5760,13 @@ msgstr "ダウンロード"
 
 #: src/plugins/sdkui/tweaks.ui:15
 msgid "Download on Metered Connections"
-msgstr "従量制の接続でダウンロード"
+msgstr "従量課金制接続時にダウンロード"
 
 #: src/plugins/sdkui/tweaks.ui:16
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "従量制のインターネット接続でSDKや依存関係のダウンロードを許可する"
+msgstr "従量課金制接続時に SDK および依存関係のダウンロードを許可する"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Sources"
@@ -5541,11 +5774,11 @@ msgstr "ソース"
 
 #: src/plugins/sdkui/tweaks.ui:34
 msgid "Available SDKs"
-msgstr "利用可能なSDK"
+msgstr "利用可能な SDK"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:327
 msgid "Untitled Command"
-msgstr ""
+msgstr "無題のコマンド"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:334
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.c:171
@@ -5554,12 +5787,12 @@ msgstr "ショートカットを設定"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 msgid "Select Working Directory"
-msgstr "作業ディレクトリの選択"
+msgstr "作業ディレクトリを選択"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
-msgstr ""
+msgstr "コマンドを作成"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:539
 msgid "Cre_ate"
@@ -5567,7 +5800,7 @@ msgstr "作成(_A)"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
 msgid "Edit Command"
-msgstr ""
+msgstr "コマンドを編集"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:22
 msgid "S_ave"
@@ -5575,19 +5808,19 @@ msgstr "保存(_A)"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:49
 msgid "Keyboard Shortcut"
-msgstr "キーボード・ショートカット"
+msgstr "キーボードショートカット"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:50
 msgid "An optional shortcut to run the command"
-msgstr ""
+msgstr "コマンドを実行するための任意のショートカット"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:65
 msgid "Shell Command"
-msgstr ""
+msgstr "シェルコマンド"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:70
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "パラメータには、シングルクオートまたはダブルクオートを使用できます。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:85
 msgid "Environment"
@@ -5602,60 +5835,64 @@ msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"コマンドはこの場所から実行されます。相対パスを定義するには、<tt>$BUILDDIR</"
+"tt>、<tt>$SRCDIR</tt>、または <tt>$HOME</tt> を使用してください。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
-msgstr ""
+msgstr "サブシェルを使用"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:121
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
-msgstr ""
+msgstr "プログラムは <tt>sh -c ''</tt> などのサブシェルから実行されます"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
+"ビルダーは、ホストシステムやビルドコンテナなど、複数の場所からコマンドを実行"
+"できます。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
-msgstr ""
+msgstr "コマンドを削除(_D)"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 msgid "Subprocess"
-msgstr "サブプロエス"
+msgstr "サブプロセス"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
-msgstr ""
+msgstr "ビルダーのサブプロセスとしてコマンドを実行します。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
-msgstr ""
+msgstr "ホストシステムでコマンドを実行します。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
-msgstr ""
+msgstr "ビルドパイプライン内でコマンドを実行します。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
-msgstr "対象のアプリケーションとして"
+msgstr "ターゲットアプリケーションとして"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
-msgstr ""
+msgstr "ターゲットアプリケーションであるかのように、コマンドを実行する。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
-msgstr ""
+msgstr "コマンドはプロジェクトのビルド、実行、または変更に使用できます"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:118
 msgid "These commands are specific to this project."
-msgstr ""
+msgstr "これらのコマンドは、このプロジェクト専用です。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:119
 msgid "These commands are shared across all projects."
-msgstr ""
+msgstr "これらのコマンドは、すべてのプロジェクトで共有されます。"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -5675,11 +5912,11 @@ msgstr "コマンドの引数"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
 msgid "Command Environment"
-msgstr "コマンドの環境"
+msgstr "コマンド環境"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
-msgstr ""
+msgstr "コマンド実行場所"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
@@ -5687,11 +5924,11 @@ msgstr "シェルを使用"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
-msgstr ""
+msgstr "コマンドを実行"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
-msgstr ""
+msgstr "アプリケーションまたはプロジェクト用に読み込む実行コマンドIDのリスト。"
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -5699,14 +5936,18 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
+"コマンドを使用して、ビルドツール、アプリケーション、またはシェルスクリプトを"
+"実行し、キーボードショートカットに割り当てます。これらのコマンドは、ビルドパ"
+"イプライン、実行環境、またはホストオペレーティングシステムなど、さまざまな環"
+"境で実行できます。"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
-msgstr "キーボード・ショートカットが見つかりませんでした"
+msgstr "キーボードショートカットが見つかりません"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:53
 msgid "Try a different search"
-msgstr "違う検索を試す"
+msgstr "別の検索を試してください"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:73
 msgid "_Reset All"
@@ -5714,7 +5955,7 @@ msgstr "すべてリセット(_R)"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:77
 msgid "Reset all actions to original keyboard shortcut"
-msgstr ""
+msgstr "すべてのアクションのキーボードショートカットを元の状態にリセットします"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:85
 msgid "_Edit File"
@@ -5722,38 +5963,41 @@ msgstr "ファイルを編集(_E)"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:88
 msgid "Open keybindings.json in editor"
-msgstr ""
+msgstr "エディターで keybindings.json を開く"
 
 #: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
 msgid "Reset shortcut"
-msgstr ""
+msgstr "キーボードショートカットをリセット"
 
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:91
 msgid "View and Customize Shortcuts…"
-msgstr ""
+msgstr "キーボードショートカットを表示およびカスタマイズ…"
 
 #: src/plugins/shortcutui/tweaks.ui:15
 msgid "Keyboard Theme"
-msgstr "キーボードのテーマ"
+msgstr "キーボードテーマ"
 
 #: src/plugins/shortcutui/tweaks.ui:16
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
+"ショートカットテーマは、他のIDEやエディターと同様のキーボード操作体験を提供し"
+"ます"
 
+# Swift パッケージマネージャのにおける実行コマンドであり、原文を使用する。
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
 msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 msgid "Symbols in File"
-msgstr ""
+msgstr "ファイル内シンボル"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
-msgstr ""
+msgstr "ページ内"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
@@ -5763,76 +6007,76 @@ msgstr "シンボルを選択…"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
-msgstr ""
+msgstr "シンボルを選択 (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
-msgstr ""
+msgstr "現在のページ内のシンボルへ移動"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:77
 #, c-format
 msgid "System Capture from %s.syscap"
-msgstr "%s.syscap からのシステムキャプチャー"
+msgstr "%s.syscap からのシステムキャプチャ"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:327
 msgid "Profiling Application…"
-msgstr ""
+msgstr "アプリケーションをプロファイリング中…"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:328
 msgid "Symbol decoding will begin after application exits"
-msgstr ""
+msgstr "アプリケーション終了後に、シンボルのデコードが開始されます"
 
 #: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
-msgstr "プロファイラーで実行する"
+msgstr "プロファイラで実行"
 
 #: src/plugins/sysprof/gtk/menus.ui:13
 msgid "Run the project with profiler"
-msgstr "プロファイラーでプロジェクトを実行する"
+msgstr "プロジェクトをプロファイラで実行する"
 
 #: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
-msgstr "プロファイラー"
+msgstr "プロファイラ"
 
 #: src/plugins/sysprof/gtk/menus.ui:23
 msgid "Thread Sampling"
-msgstr "スレッドのサンプリング"
+msgstr "スレッドサンプリング"
 
 #: src/plugins/sysprof/gtk/menus.ui:25
 msgid "CPU Performance"
-msgstr ""
+msgstr "CPUパフォーマンス"
 
 #: src/plugins/sysprof/gtk/menus.ui:30
 msgid "Process Scheduling"
-msgstr ""
+msgstr "プロセススケジューリング"
 
 #: src/plugins/sysprof/gtk/menus.ui:35
 msgid "Memory Allocations"
-msgstr ""
+msgstr "メモリ割り当て"
 
 #: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Sample JavaScript Stacks"
-msgstr ""
+msgstr "JavaScriptスタックのサンプル"
 
 #: src/plugins/sysprof/gtk/menus.ui:46
 msgid "D-Bus"
-msgstr "D-Bus"
+msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
-msgstr "セッションBus"
+msgstr "セッションバス"
 
 #: src/plugins/sysprof/gtk/menus.ui:53 src/plugins/sysprof/tweaks.ui:123
 msgid "System Bus"
-msgstr "システムBus"
+msgstr "システムバス"
 
 #: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Graphics"
-msgstr "グラフィック"
+msgstr "グラフィックス"
 
 #: src/plugins/sysprof/gtk/menus.ui:61
 msgid "Display Timings"
-msgstr ""
+msgstr "ディスプレイタイミング"
 
 #: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
@@ -5840,15 +6084,15 @@ msgstr "カウンター"
 
 #: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr ""
+msgstr "CPU 使用率"
 
 #: src/plugins/sysprof/gtk/menus.ui:74 src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Usage"
-msgstr ""
+msgstr "メモリ使用率"
 
 #: src/plugins/sysprof/gtk/menus.ui:79
 msgid "Storage I/O"
-msgstr ""
+msgstr "ストレージ I/O"
 
 #: src/plugins/sysprof/gtk/menus.ui:84
 msgid "Network I/O"
@@ -5856,131 +6100,127 @@ msgstr "ネットワーク I/O"
 
 #: src/plugins/sysprof/gtk/menus.ui:90
 msgid "Energy"
-msgstr ""
+msgstr "エネルギー"
 
 #: src/plugins/sysprof/gtk/menus.ui:92
 msgid "Consumption"
-msgstr ""
+msgstr "消費"
 
-#: src/plugins/sysprof/gtk/menus.ui:97
+#: src/plugins/sysprof/gtk/menus.ui:97 src/plugins/sysprof/tweaks.ui:179
 msgid "Battery Charge"
-msgstr ""
+msgstr "バッテリー残量"
 
 #: src/plugins/sysprof/gtk/menus.ui:104
 msgid "Allow Application Integration"
-msgstr ""
+msgstr "アプリケーション統合を許可"
 
 #: src/plugins/sysprof/gtk/menus.ui:109
 msgid "Allow CPU Throttling"
-msgstr ""
+msgstr "CPU スロットリングを許可"
 
 #: src/plugins/sysprof/gtk/menus.ui:121
 msgid "Run with _Profiler"
-msgstr "プロファイラーで実行(_P)"
+msgstr "プロファイラで実行(_P)"
 
 #: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
-msgstr ""
+msgstr "もう一度記録…"
 
 #: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
-msgstr ""
+msgstr "インストゥルメント"
 
 #: src/plugins/sysprof/tweaks.ui:20
 msgid "Records CPU usage and CPU frequency statistics"
-msgstr ""
+msgstr "CPU 使用率および CPU 周波数の統計情報を記録します"
 
 #: src/plugins/sysprof/tweaks.ui:31
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "コールスタックのサンプル"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
-msgstr ""
+msgstr "定期的にスタックトレースを記録し、コールグラフを構築する"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
-msgstr ""
+msgstr "スケジューラーの詳細"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Track when processes are scheduled per CPU"
-msgstr ""
+msgstr "CPU ごとにプロセスがスケジュールされるタイミングを追跡する"
 
 #: src/plugins/sysprof/tweaks.ui:55
 msgid "CPU Governor"
-msgstr ""
+msgstr "CPU ガバナー"
 
 #: src/plugins/sysprof/tweaks.ui:56
 msgid "Force performance mode while profiling"
-msgstr ""
+msgstr "プロファイリング中にパフォーマンスモードを強制する"
 
 #: src/plugins/sysprof/tweaks.ui:65
 msgid "Don't Change Governor"
-msgstr ""
+msgstr "ガバナーを変更しない"
 
 #: src/plugins/sysprof/tweaks.ui:71
 msgid "Force Performance Mode"
-msgstr ""
+msgstr "パフォーマンスモードを強制する"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Simple memory statistics about the process such as total memory used"
-msgstr ""
+msgstr "プロセスに関するシンプルなメモリ統計情報（例：使用メモリの合計）"
 
 #: src/plugins/sysprof/tweaks.ui:95
 msgid "Memory Profiling"
-msgstr ""
+msgstr "メモリプロファイリング"
 
 #: src/plugins/sysprof/tweaks.ui:96
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
+msgstr "メモリ割り当ておよび解放のスタックトレースを記録する"
 
 #: src/plugins/sysprof/tweaks.ui:112
 msgid "Record D-Bus messages on the session bus"
-msgstr ""
+msgstr "セッションバス上の D-Bus メッセージを記録する"
 
 #: src/plugins/sysprof/tweaks.ui:124
 msgid "Record D-Bus messages on the system bus"
-msgstr ""
+msgstr "システムバス上の D-Bus メッセージを記録する"
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Energy Usage"
-msgstr ""
+msgstr "エネルギー使用状況"
 
 #: src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about energy usage using RAPL"
-msgstr ""
+msgstr "RAPL を使用してエネルギー使用統計を記録する"
 
 #: src/plugins/sysprof/tweaks.ui:151
 msgid "Battery Usage"
-msgstr ""
+msgstr "バッテリー使用状況"
 
 #: src/plugins/sysprof/tweaks.ui:152 src/plugins/sysprof/tweaks.ui:180
 msgid "Record statistics about battery charge and discharge rates"
-msgstr ""
+msgstr "バッテリーの充電および放電レートに関する統計を記録する"
 
 #: src/plugins/sysprof/tweaks.ui:167
 msgid "Network Usage"
-msgstr ""
+msgstr "ネットワーク使用状況"
 
 #: src/plugins/sysprof/tweaks.ui:168
 msgid "Record statistics about network usage"
-msgstr ""
-
-#: src/plugins/sysprof/tweaks.ui:179
-msgid "Disk Usage"
-msgstr ""
+msgstr "ネットワークの使用状況に関する統計情報を記録する"
 
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
-msgstr ""
+msgstr "GNOME Shell のパフォーマンス"
 
 #: src/plugins/sysprof/tweaks.ui:196
 msgid "Collect performance and timing information from GNOME Shell"
-msgstr ""
+msgstr "GNOME Shell からパフォーマンスおよびタイミング情報を収集する"
 
 #: src/plugins/sysprof/tweaks.ui:209
 msgid "Integration"
-msgstr ""
+msgstr "統合"
 
 #: src/plugins/sysprof/tweaks.ui:212
 msgid "JavaScript"
@@ -5988,31 +6228,33 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:213
 msgid "Collect information from GJS-based applications"
-msgstr ""
+msgstr "GJS ベースのアプリケーションから情報を収集する"
 
 #: src/plugins/sysprof/tweaks.ui:224
 msgid "Application Tracing"
-msgstr ""
+msgstr "アプリケーショントレース"
 
 #: src/plugins/sysprof/tweaks.ui:225
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
+"アプリケーションがカスタムイベントを送信できるように TRACE_FD 環境変数を提供"
+"する"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s"
-msgstr "アプリケーションは %s にスタートしました"
+msgstr "アプリケーションは %s に起動しました"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
-msgstr ""
+msgstr "アプリケーション出力"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 msgid "Process completed"
-msgstr ""
+msgstr "プロセス完了"
 
 #: src/plugins/terminal/gtk/menus.ui:7
 msgid "New _Terminal"
@@ -6020,7 +6262,7 @@ msgstr "新しい端末(_T)"
 
 #: src/plugins/terminal/gtk/menus.ui:12
 msgid "Open a new terminal on the host operating system"
-msgstr ""
+msgstr "ホスト OS 上で新しい端末を開く"
 
 #: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
@@ -6028,15 +6270,15 @@ msgstr "新しいビルド端末(_B)"
 
 #: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
-msgstr ""
+msgstr "プロジェクトのビルドパイプライン上で新しい端末を開く"
 
 #: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
-msgstr "新しい実行端末(_R)"
+msgstr "新しいランタイム端末(_R)"
 
 #: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
-msgstr ""
+msgstr "プロジェクトのランタイム環境上で新しい端末を開く"
 
 #: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
@@ -6044,64 +6286,66 @@ msgstr "分割"
 
 #: src/plugins/terminal/tweaks.ui:34
 msgid "Allow Bold"
-msgstr ""
+msgstr "太字を許可"
 
 #: src/plugins/terminal/tweaks.ui:35
 msgid "Allows the use of bold escape sequences"
-msgstr ""
+msgstr "太字のエスケープシーケンスの使用を許可する"
 
 #: src/plugins/terminal/tweaks.ui:46
 msgid "Allow Hyperlinks"
-msgstr ""
+msgstr "ハイパーリンクを許可"
 
 #: src/plugins/terminal/tweaks.ui:47
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "ハイパーリンクのエスケープシーケンスの使用を許可する"
 
 #: src/plugins/terminal/tweaks.ui:60
 msgid "Scrolling"
-msgstr ""
+msgstr "スクロール"
 
 #: src/plugins/terminal/tweaks.ui:63
 msgid "Scroll On Output"
-msgstr ""
+msgstr "出力時にスクロール"
 
 #: src/plugins/terminal/tweaks.ui:64
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
+"ターミナル内のアプリケーションがテキストを出力した際に、自動的にスクロールす"
+"る"
 
 #: src/plugins/terminal/tweaks.ui:75
 msgid "Scroll On Keyboard Input"
-msgstr ""
+msgstr "キーボード入力時にスクロール"
 
 #: src/plugins/terminal/tweaks.ui:76
 msgid "Automatically scroll when typing to insert text"
-msgstr ""
+msgstr "テキスト挿入時のキーボード入力に伴い、自動的にスクロールする"
 
 #: src/plugins/terminal/tweaks.ui:92
 msgid "Limit Scrollback"
-msgstr ""
+msgstr "スクロールバックを制限する"
 
 #: src/plugins/terminal/tweaks.ui:93
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
-msgstr ""
+msgstr "ターミナルのスクロールバックに保持される行数を制限する"
 
 #: src/plugins/terminal/tweaks.ui:104
 msgid "Maximum Lines in Scrollback"
-msgstr ""
+msgstr "スクロールバックの最大行数"
 
 #: src/plugins/terminal/tweaks.ui:105
 msgid "The maximum number of lines stored in history when limiting scrollback"
-msgstr ""
+msgstr "スクロールバック制限時に保持される履歴の最大行数"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
-msgstr ""
+msgstr "ユニットテスト出力"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:39
 msgid "Clear test output"
-msgstr ""
+msgstr "テスト出力をクリア"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:49
 msgid "Cancel tests"
@@ -6109,13 +6353,13 @@ msgstr "テストをキャンセル"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:59
 msgid "Save test output"
-msgstr "テストの出力を保存する"
+msgstr "テスト出力を保存"
 
 #. Translators: %s is replaced with the time in the current locale
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
 #, c-format
 msgid "Running all unit tests at %s"
-msgstr ""
+msgstr "すべてのユニットテストを %s に実行中"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 msgid "Unit tests completed in %lf seconds"
@@ -6131,7 +6375,7 @@ msgstr "全ユニットテストを実行"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr ""
+msgstr "すべてのユニットテストを実行するよう要求する"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
@@ -6140,7 +6384,7 @@ msgstr "TODO/FIXME"
 
 #: src/plugins/todo/gbp-todo-panel.ui:14
 msgid "Loading TODOs…"
-msgstr "TODOをロード中…"
+msgstr "TODO をロード中…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:136
 msgid "Updating Dependencies…"
@@ -6148,57 +6392,64 @@ msgstr "依存関係を更新中…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
-msgstr "ビルダーはプロジェクトの構成の依存関係を更新中。"
+msgstr "ビルダーがプロジェクトの設定済み依存関係を更新中です。"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
 msgstr "依存関係を更新…"
 
+# 「updates」が名詞として使用されているため、ここでは「アップデート」と表記しました。
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr "プロジェクトの依存関係の更新をダウンロード"
+msgstr "プロジェクトの依存関係のアップデートをダウンロードする"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
 msgstr "ビルダーを更新中"
 
+# 「Update」が名詞として使用されているため、ここでは「アップデート」と表記しました。
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
 msgid "Update Available"
-msgstr ""
+msgstr "アップデートが利用可能"
 
+# 「update」が名詞として使用されているため、ここでは「アップデート」と表記しました。
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
 msgstr ""
+"ビルダーのアップデートが利用可能です。ビルダーはあなたの代わりにアップデート"
+"をダウンロードし、インストールすることができます。"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
 msgstr "更新(_U)"
 
+# ‪「Updates」が名詞として使用されているため、ここでは「アップデート」と表記しました。
 #: src/plugins/update-manager/gtk/menus.ui:7
 msgid "Install Updates…"
-msgstr "更新をインストール…"
+msgstr "アップデートをインストール…"
 
+# ‪‪「updates」が名詞として使用されているため、ここでは「アップデート」と表記しました。
 #: src/plugins/update-manager/gtk/menus.ui:8
 msgid "Install pending updates for Builder"
-msgstr ""
+msgstr "ビルダーの保留中のアップデートをインストールする"
 
 #: src/plugins/valgrind/gtk/menus.ui:11
 msgid "Run with Leak Detector"
-msgstr "リーク検知有りで実行"
+msgstr "メモリリーク検出を有効にして実行"
 
 #: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
-msgstr "プロジェクトをValgrindで実行"
+msgstr "Valgrind を使用してプロジェクトを実行"
 
 #: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
-msgstr "リーク検知"
+msgstr "リーク検出"
 
 #: src/plugins/valgrind/gtk/menus.ui:25
 msgid "Track Origin of Leaks"
-msgstr "リークの元を追跡"
+msgstr "リーク元を追跡"
 
 #: src/plugins/valgrind/gtk/menus.ui:31
 msgid "Report Leaks"
@@ -6210,7 +6461,7 @@ msgstr "サマリー"
 
 #: src/plugins/valgrind/gtk/menus.ui:39
 msgid "Full"
-msgstr ""
+msgstr "全文"
 
 #: src/plugins/valgrind/gtk/menus.ui:52 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
@@ -6218,51 +6469,51 @@ msgstr "リークの種類"
 
 #: src/plugins/valgrind/gtk/menus.ui:54 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
-msgstr "Definite (明確)"
+msgstr "確実 (Definite)"
 
 #: src/plugins/valgrind/gtk/menus.ui:59 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
-msgstr "Indirect (間接的)"
+msgstr "間接的 (Indirect)"
 
 #: src/plugins/valgrind/gtk/menus.ui:64 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
-msgstr "Possible (可能性)"
+msgstr "可能性 (Possible)"
 
 #: src/plugins/valgrind/gtk/menus.ui:69 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
-msgstr "Reachable (到達可能)"
+msgstr "到達可能 (Reachable)"
 
 #: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
-msgstr "レポートのサマリーに Definite リークを含める"
+msgstr "レポートサマリーに確実なリークを含める"
 
 #: src/plugins/valgrind/tweaks.ui:32
 msgid "Include possible leaks in report summary"
-msgstr "レポートのサマリーに Possible リークを含める"
+msgstr "レポートサマリーに可能性のあるリークを含める"
 
 #: src/plugins/valgrind/tweaks.ui:44
 msgid "Include indirect leaks in report summary"
-msgstr "レポートのサマリーに Indirect リークを含める"
+msgstr "レポートサマリーに間接的なリークを含める"
 
 #: src/plugins/valgrind/tweaks.ui:56
 msgid "Include reachable leaks in report summary"
-msgstr "レポートのサマリーに Reachable リークを含める"
+msgstr "レポートサマリーに到達可能なリークを含める"
 
 #: src/plugins/valgrind/tweaks.ui:71
 msgid "Track Origins"
-msgstr "オリジンを追跡"
+msgstr "発生元を追跡"
 
 #: src/plugins/valgrind/tweaks.ui:72
 msgid "Show origin of undefined values"
-msgstr "未定義の値のオリジンを表示"
+msgstr "未定義の値の発生元を表示"
 
 #: src/plugins/valgrind/tweaks.ui:83
 msgid "Number of Callers"
-msgstr "コーラーの数"
+msgstr "呼び出し元の数"
 
 #: src/plugins/valgrind/tweaks.ui:84
 msgid "Set the limit to the number of entries in stack traces"
-msgstr "スタックトレース中のエントリーの数に上限を設定"
+msgstr "スタックトレースのエントリ数の上限を設定する"
 
 #: src/plugins/valgrind/tweaks.ui:99
 msgid "Leak Check"
@@ -6270,23 +6521,23 @@ msgstr "リークチェック"
 
 #: src/plugins/valgrind/tweaks.ui:100
 msgid "Search for memory leaks at exit"
-msgstr "終了時にメモリーリークを検索"
+msgstr "終了時にメモリリークを検索する"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
-msgstr "URIからプロジェクトのクローンを開始"
+msgstr "URI からプロジェクトのクローンを開始"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
-msgstr "リポジトリのクローン時に問題が発生しました。"
+msgstr "リポジトリのクローン作成に失敗しました。"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
-msgstr "リポジトリのURL"
+msgstr "リポジトリ URL"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
 msgid "Choose an alternate branch"
-msgstr "他のブランチを選択"
+msgstr "別のブランチを選択する"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
 msgid "Branches"
@@ -6297,22 +6548,23 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"クローンしたいプロジェクトのソースコードリポジトリの URL を入力してください。"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
-msgstr ""
+msgstr "リポジトリは新しいサブディレクトリにクローンされます。"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
-msgstr ""
+msgstr "著者の詳細"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
-msgstr ""
+msgstr "著者情報を指定することで、既定値を上書きできます。"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
-msgstr ""
+msgstr "状態"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
 msgid "_Branches"
@@ -6324,44 +6576,44 @@ msgstr "タグ(_T)"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
 msgid "_Switch to branch"
-msgstr ""
+msgstr "ブランチに切り替え(_S)"
 
 #: src/plugins/vcsui/gtk/menus.ui:12
 msgid "_Push to origin"
-msgstr ""
+msgstr "origin にプッシュ(_P)"
 
 #: src/plugins/vim/tweaks.ui:14
 msgid "Vim"
-msgstr "Vim テキストエディターをエミュレートする"
+msgstr "Vim テキストエディター"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
 msgid "New _Browser Page"
-msgstr ""
+msgstr "新しいブラウザページ(_B)"
 
 #: src/plugins/web-browser/gtk/menus.ui:9
 msgid "Open a web browser in a new page"
-msgstr ""
+msgstr "新しいページでウェブブラウザを開く"
 
 #: src/plugins/web-browser/gtk/menus.ui:18
 #: src/plugins/web-browser/gtk/menus.ui:24
 msgid "Reload Page"
-msgstr ""
+msgstr "ページを再読み込み"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 msgid "Reload the current page"
-msgstr ""
+msgstr "現在のページを再読み込み"
 
 #: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload the current page ignoring cache"
-msgstr ""
+msgstr "現在のページをキャッシュを無視して再読み込み"
 
 #: src/plugins/web-browser/gtk/menus.ui:30
 msgid "Focus Location"
-msgstr ""
+msgstr "フォーカス位置"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
 msgid "Focus the current page's location"
-msgstr ""
+msgstr "現在のページの位置にフォーカスする"
 
 #: src/plugins/web-browser/gtk/menus.ui:43
 msgid "_Web Browser"
@@ -6369,15 +6621,15 @@ msgstr "ウェブブラウザ(_W)"
 
 #: src/plugins/web-browser/gtk/menus.ui:54
 msgid "Stop Loading"
-msgstr "読み込みの停止"
+msgstr "読み込みを停止"
 
 #: src/plugins/web-browser/gtk/menus.ui:60
 msgid "Reload"
-msgstr "再読込"
+msgstr "再読み込み"
 
 #: src/plugins/web-browser/gtk/menus.ui:69
 msgid "_Find in Page"
-msgstr "ページで検索(_F)"
+msgstr "ページ内検索(_F)"
 
 #: src/plugins/web-browser/gtk/menus.ui:77
 msgid "Print"
@@ -6385,20 +6637,20 @@ msgstr "印刷"
 
 #: src/plugins/web-browser/gtk/menus.ui:85
 msgid "Enable _JavaScript"
-msgstr "JavaScriptを許可(_J)"
+msgstr "JavaScript を許可(_J)"
 
 #: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
-msgstr "XMLドキュメントのパースに失敗しました"
+msgstr "XMLドキュメントの解析に失敗しました"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
-msgstr ""
+msgstr "XMLツリーの作成に失敗しました。"
 
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
-msgstr ""
+msgstr "解析するには、ファイルをローカルに保存する必要があります。"
 
 #~ msgid "Font"
 #~ msgstr "フォント"
