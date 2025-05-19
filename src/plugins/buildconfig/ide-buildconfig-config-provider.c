@@ -440,6 +440,7 @@ ide_buildconfig_config_provider_file_changed_cb (IdeBuildconfigConfigProvider *s
 {
   g_autoptr(GFile) cfg_file = NULL;
   g_autoptr(GDateTime) cfg_mtime = NULL;
+  gboolean should_reload;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (G_IS_FILE_MONITOR (file_monitor));
@@ -450,13 +451,21 @@ ide_buildconfig_config_provider_file_changed_cb (IdeBuildconfigConfigProvider *s
   if (!ide_buildconfig_config_build_file (self, &cfg_file, &cfg_mtime))
     return;
 
-  /*
-   * Only reload file when mtime available. Otherwise it might drop the config edited in the
-   * project config editor GUI.
-   */
-  if (self->mtime != NULL &&
-      cfg_mtime != NULL &&
-      g_date_time_compare (self->mtime, cfg_mtime) < 0)
+  if (event == G_FILE_MONITOR_EVENT_CREATED)
+    /* If the file was newly created, load it if we don't have a recorded mtime, so we
+     * know we did not load a config previously.
+     */
+    should_reload = self->mtime == NULL;
+  else
+    /*
+     * If it was updated, only reload file when mtime available. Otherwise it might drop
+     * the config edited in the project config editor GUI.
+     */
+    should_reload = self->mtime != NULL &&
+                    cfg_mtime != NULL &&
+                    g_date_time_compare (self->mtime, cfg_mtime) < 0;
+
+  if (should_reload)
     reload_keyfile (IDE_CONFIG_PROVIDER (self), cfg_file, cfg_mtime);
 }
 
