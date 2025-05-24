@@ -3,44 +3,78 @@
 # This file is distributed under the same license as the gnome-builder package.
 # Daniel PUENTES <blatberk@openmailbox.org>, 2015.
 # Carmen Bianca BAKKER <carmen@carmenbianca.eu>, 2018-2020.
-# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2015-2023.
+# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2015-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2023-09-11 01:42+0000\n"
-"PO-Revision-Date: 2023-09-15 22:56+0200\n"
+"POT-Creation-Date: 2025-05-10 14:42+0000\n"
+"PO-Revision-Date: 2025-05-24 18:55+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 42.0\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/editor/ide-editor-workspace.ui:21
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: src/libide/editor/ide-editor-workspace.ui:50
+#: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Konstruilo"
 
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Konstrui programaron por GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Konstrui;Programi;Verki;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Malfermi projekton"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Komenci novan projekton"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Kloni deponejon"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+#, fuzzy
+#| msgid "Workspace"
+msgid "New Editor Workspace"
+msgstr "Laborspaco"
+
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
-msgid "An IDE for GNOME"
+#, fuzzy
+#| msgid "An IDE for GNOME"
+msgid "Create applications for GNOME"
 msgstr "Programada medio por GNOME"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:168
-msgid "Christian Hergert, et al."
+#. developer_name tag deprecated with Appstream 1.0
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
+#, fuzzy
+#| msgid "Christian Hergert, et al."
+msgid "Christian Hergert"
 msgstr "Christian HERGERT, kaj aliaj."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -52,7 +86,7 @@ msgstr ""
 "API-oj kun funkcioj, kiujn ĉiu programisto aprezos, kiel sintaksa emfazado "
 "kaj fragmentoj."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -60,32 +94,32 @@ msgstr ""
 "Vi povas konfidi antaŭdireblajn eldonojn de Konstruilo kun ĉiu nova eldono "
 "de GNOME ĉiujn ses monatojn."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Features:"
 msgstr "Funkcioj:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr "Integrita sintaksa emfazado por multe da lingvoj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Flankalfklankaj kodaj redaktikoj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Multi-monitor support"
-msgstr ""
+msgstr "Subteno por pluraj ekranoj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 #, fuzzy
 msgid "Code overview mini-map"
 msgstr "Montri superrigardan mapon"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Integrigo kun Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -93,80 +127,80 @@ msgstr ""
 "Integrigo kun Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
 "kaj Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Clang-bazita aŭtomata kompletigo, sintaksa emfazado, kaj diagnozo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Python-bazita aŭtomata kompletigo, sintaksa emfazado, kaj diagnozo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Vala-bazita aŭtomata kompletigo kaj diagnozo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Aŭtomata deŝova subteno por C, Python, Vala, kaj XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "Senpera antaŭrigardo por HTML, Markdown, reStructuredText, kaj Sphinx"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Malnepra Vim, Emacs, kaj SublimeText redaktmaniero"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "Integrita programara profililo por indiĝenaj aplikaĵoj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "Integrita sencimigilo por indiĝenaj aplikaĵoj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Subteno por konstrui kun jhbuild kaj flatpak rultempaj medioj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
-msgstr ""
+msgstr "Subteno por rigardi farendaĵojn (TODOs) trovitajn en via kodbazo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Rapida neklara teksto-serĉo tra dosieroj kaj simboloj"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
-msgid "Quickly access your projects"
-msgstr "Rapide aliri viajn projektojn"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
-msgid "Create new projects from a variety of templates"
-msgstr "Krei novajn projektojn el diversaj ŝablonoj"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
-msgid "Integration with Git to clone your projects"
-msgstr "Integrigo kun Git por kloni viajn projektojn"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
-msgid "The source code editor"
-msgstr "La fontkoda redaktilo"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
-msgid "Fast global fuzzy search"
-msgstr "Rapida malloka svaga serĉo"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
 msgid "Debug with the GNU debugger"
 msgstr "Sencimigi kun la GNU sencimigilo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+msgid "Quickly access your projects"
+msgstr "Rapide aliri viajn projektojn"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+msgid "Create new projects from a variety of templates"
+msgstr "Krei novajn projektojn el diversaj ŝablonoj"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+msgid "Integration with Git to clone your projects"
+msgstr "Integrigo kun Git por kloni viajn projektojn"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+msgid "The source code editor"
+msgstr "La fontkoda redaktilo"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+msgid "Fast global fuzzy search"
+msgstr "Rapida malloka svaga serĉo"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
 msgid "Use the minimap to see more of the file"
-msgstr ""
+msgstr "Uzu la mapeton por vidi pli de la dosiero"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:246
+#: src/plugins/buildui/tweaks.ui:264
 #, fuzzy
 #| msgid "Build Profile"
 msgid "Build Parallelism"
@@ -177,6 +211,8 @@ msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
+"Nombro da laboristoj uzotaj dum konstruado. -1 por sentebla defaŭlto. 0 por "
+"nombro de CPU."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 #, fuzzy
@@ -187,10 +223,12 @@ msgstr "Vakigi konstruan protokolon"
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
 msgstr ""
+"Se enŝaltita, la fenestro de la konstruprotokolo estos malplenigita dum "
+"rekonstruo."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Show Log When Building"
-msgstr ""
+msgstr "Montri protokolon dum konstruado"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 #, fuzzy
@@ -199,14 +237,17 @@ msgid "If enabled, the build log will be raised when a build starts"
 msgstr "Montri relativajn lineajn numerojn"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
+#, fuzzy
 msgid "Allow network when metered"
-msgstr ""
+msgstr "Permesi reton kiam mezurita"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
+"Enŝalti aŭtomatajn translokigojn dum konstruado, kiel ekzemple elŝutojn de "
+"SDK kaj dependecojn kiam la konekto estas mezurita."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 #, fuzzy
@@ -229,10 +270,13 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
+"Se enŝaltita, plia elstarigado estos provizita en subtenataj lingvoj bazita "
+"sur informoj eltiritaj el la fontkodo."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+#, fuzzy
 msgid "Path to ctags executable"
-msgstr ""
+msgstr "Vojo al la ctags-efektivigilo"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
@@ -339,11 +383,23 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Montri relativajn lineajn numerojn"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:483
+msgid "Use line selection styling"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#, fuzzy
+#| msgid "Show relative line numbers"
+msgid ""
+"If enabled, the editor will use selected style for line numbers for whole "
+"lines selected."
+msgstr "Montri relativajn lineajn numerojn"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/plugins/editorui/tweaks.ui:495
 msgid "Smart Backspace"
 msgstr "Inteligenta reen-klavo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 #, fuzzy
 #| msgid ""
 #| "Backspace will remove extra space to keep you aligned with your "
@@ -353,95 +409,95 @@ msgid ""
 "indentation size."
 msgstr "Reen-klavo forigos ceteran spacon por ke vi viĉiĝos je via deŝovo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:495
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Smart Home/End"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "Modifies the behavior of Home/End keys."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:75
 msgid "Show grid lines"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:76
 #, fuzzy
 #| msgid "Show relative line numbers"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Montri relativajn lineajn numerojn"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Overview Map Policy"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "When the overview map should be displayed."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
-#: src/plugins/editorui/tweaks.ui:266
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Draw Spaces"
 msgstr "Desegni spacetojn"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "The various types of space to draw in the editor."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Faldi tekston"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
 msgstr "Aŭtomata konservado ŝaltita"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
 msgstr "Ŝalti aŭ malŝalti aŭtomatan konservadon."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 #, fuzzy
 #| msgid "Autosave"
 msgid "Autosave Frequency"
 msgstr "Aŭtomate konservi"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "The number of seconds after modification before auto saving."
 msgstr "La nombro da sekundoj post ŝanĝo antaŭ ol aŭtomate konservi."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #, fuzzy
 #| msgid "Completion"
 msgid "Completion Row Count"
 msgstr "Kompletigo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #, fuzzy
 #| msgid "Number of completions to display"
 msgid "The number of completion rows to display to the user."
 msgstr "Montrenda nombro da kompletigoj"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Linialteco"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "The line height to use for the selected font."
 msgstr "La linialteco uzebla por la elektita tiparo."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Interactive Completion"
 msgstr "Interaga kompletigo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 #, fuzzy
 #| msgid ""
 #| "When saving a file Builder will automatically update copyright "
@@ -453,33 +509,33 @@ msgstr ""
 "Kiam Konstruilo konservas dosieron, ĝi aŭtomate ĝisdatigos la "
 "kopirajtinformojn por vi"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 #, fuzzy
 #| msgid "Words matching selection"
 msgid "Minimum characters for matching selection."
 msgstr "Vortoj kiuj kongruas elektaĵon"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Enable Snippets"
 msgstr "Ebligi fragmentojn"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 #, fuzzy
 #| msgid "Interactive Completion"
 msgid "Select First Completion"
 msgstr "Interaga kompletigo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid "Automatically select the first auto-completion entry."
 msgstr ""
 
@@ -665,13 +721,23 @@ msgid "What environment to use when running unit tests"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:215 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:56
+msgid "Cache Root"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:57
+msgid ""
+"A directory to use as the root for cache data of the project like builds and "
+"flatpak staging directories"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
@@ -710,8 +776,7 @@ msgid ""
 msgstr "Montri relativajn lineajn numerojn"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:375
-#: src/plugins/spellcheck/editor-spell-menu.c:250
+#: src/plugins/editorui/tweaks.ui:387
 msgid "Check Spelling"
 msgstr "Literumada kontrolo"
 
@@ -721,41 +786,7 @@ msgstr "Literumada kontrolo"
 msgid "Automatically check spelling within documents"
 msgstr "Aŭtomate kaŝi mapon kiam redaktilo malfokusas"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Konstrui programaron por GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Konstrui;Programi;Verki;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Malfermi projekton"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Komenci novan projekton"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
-msgid "Clone Repository"
-msgstr "Kloni deponejon"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-#, fuzzy
-#| msgid "Workspace"
-msgid "New Editor Workspace"
-msgstr "Laborspaco"
-
-#: data/org.gnome.Builder.desktop.in.in:36
-#: src/plugins/dspy/gbp-dspy-workspace.ui:11
-msgid "D-Bus Inspector"
-msgstr "D-Bus-inspektilo"
-
-#: src/libide/code/ide-buffer.c:3834
+#: src/libide/code/ide-buffer.c:3763
 msgid "The current language lacks a symbol resolver."
 msgstr "Simbola solvilo mankas por aktuala lingvo."
 
@@ -789,24 +820,27 @@ msgstr "Malsukcesis pravalorizi implicitojn."
 msgid "Failed to save draft: %s"
 msgstr "Malsukcesis konservi malneton: %s"
 
-#: src/libide/core/ide-context.c:348 src/libide/core/ide-context.c:811
+#: src/libide/core/ide-context.c:349 src/libide/core/ide-context.c:797
 msgid "Untitled"
 msgstr "Sentitola"
 
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Projektoj"
+
 #: src/libide/core/ide-transfer.c:545
-#: src/libide/greeter/ide-greeter-workspace.c:528
-#: src/libide/greeter/ide-greeter-workspace.c:666
+#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/libide/gui/ide-workbench.c:1531
-#: src/plugins/buildui/gbp-buildui-log-pane.c:325
 #: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
 #: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:331
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
-#: src/plugins/testui/gbp-testui-output-panel.c:104
 msgid "_Cancel"
 msgstr "_Nuligi"
 
@@ -817,7 +851,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Taŭga sencimigilo ne troveblis."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:105
-#: src/libide/gui/ide-workbench.c:1527
+#: src/libide/gui/ide-workbench.c:1614
 msgid "Open File…"
 msgstr "Malfermi dosieron…"
 
@@ -828,13 +862,13 @@ msgid "Open a file in the workspace"
 msgstr "Malfermi en nova stablo"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31
-#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:204
+#: src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "Agordoj"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:476
+#: src/plugins/editorui/tweaks.ui:488
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -864,12 +898,12 @@ msgstr "Dokumento"
 #: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
 #: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
-#: src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9
 #: src/plugins/menu-search/gtk/menus.ui:10
 #: src/plugins/menu-search/gtk/menus.ui:24
 #: src/plugins/menu-search/gtk/menus.ui:56
 #: src/plugins/menu-search/gtk/menus.ui:97
-#: src/plugins/web-browser/gtk/menus.ui:16
+#: src/plugins/web-browser/gtk/menus.ui:15
 msgid "Application"
 msgstr "Aplikaĵo"
 
@@ -881,20 +915,21 @@ msgstr "Paĝoj"
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
-#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:72
-#: src/libide/sourceview/gtk/menus.ui:80 src/libide/sourceview/gtk/menus.ui:111
-#: src/libide/sourceview/gtk/menus.ui:144
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
 #: src/libide/sourceview/gtk/menus.ui:152
-#: src/libide/sourceview/gtk/menus.ui:156
-#: src/libide/sourceview/gtk/menus.ui:162
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:111
+#: src/plugins/menu-search/gtk/menus.ui:121
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Tekstredaktilo"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
 #, fuzzy
 #| msgid "Search languages…"
 msgid "Search & Replace"
@@ -905,8 +940,8 @@ msgstr "Serĉi lingvojn…"
 msgid "Documents"
 msgstr "Dokumentoj"
 
-#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:73
-#: src/libide/sourceview/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:120
 msgid "Selection"
 msgstr "Elektado"
 
@@ -973,40 +1008,23 @@ msgid "_Discard…"
 msgstr "_Forĵeti…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:514
+#: src/libide/editor/ide-editor-page.c:515
 #, c-format
 msgid "Print failed: %s"
 msgstr "Presado malsukcesis: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:590
+#: src/libide/editor/ide-editor-page.c:591
 #, fuzzy, c-format
 #| msgid "Failed to load file: %s"
 msgid "Failed to format selection: %s"
 msgstr "Malsukcesis ŝargi dosieron: %s"
 
-#: src/libide/editor/ide-editor-page.c:1131
-#: src/plugins/buildui/gbp-buildui-log-pane.c:321
-#: src/plugins/testui/gbp-testui-output-panel.c:100
+#: src/libide/editor/ide-editor-page.c:1139
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329
+#: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "Konservi dosieron"
-
-#: src/libide/editor/ide-editor-page.c:1134
-#: src/libide/gtk/ide-file-chooser-entry.c:109
-#: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:142
-msgid "Save"
-msgstr "Konservi"
-
-#: src/libide/editor/ide-editor-page.c:1134
-#: src/libide/gtk/ide-file-chooser-entry.c:156
-#: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:112
-msgid "Cancel"
-msgstr "Nuligi"
 
 #: src/libide/editor/ide-editor-search-bar.ui:32
 #: src/plugins/grep/gbp-grep-panel.ui:162
@@ -1056,34 +1074,27 @@ msgstr "U_sklecodistinga"
 msgid "Match Whole Words"
 msgstr "Kongrui tutajn vortojn"
 
-#: src/libide/editor/ide-editor-utils.c:40
-msgid "Unix/Linux (LF)"
-msgstr "Unikso/Linukso (LF)"
-
-#: src/libide/editor/ide-editor-utils.c:41
-msgid "Mac OS Classic (CR)"
-msgstr "Mac OS Classic (CR)"
-
-#: src/libide/editor/ide-editor-utils.c:42
-msgid "Windows (CR+LF)"
-msgstr "Vindozo (CR+LF)"
-
-#: src/libide/editor/ide-editor-utils.c:141
-msgid "Automatically Detected"
-msgstr "Aŭtomate detektita"
-
-#: src/libide/editor/ide-editor-utils.c:157
-msgid "Character Encoding:"
-msgstr "Karakterkodado:"
-
-#: src/libide/editor/ide-editor-utils.c:192
-msgid "Line Ending:"
-msgstr "Finaĵo de linio:"
-
-#: src/libide/editor/ide-editor-utils.c:270
-#: src/plugins/create-project/gbp-create-project-widget.ui:100
+#: src/libide/editor/ide-editor-utils.c:140
+#: src/plugins/create-project/gbp-create-project-widget.ui:103
 msgid "Language"
 msgstr "Lingvo"
+
+#: src/libide/editor/ide-editor-workspace.ui:57
+#: src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48
+#: src/libide/gui/ide-primary-workspace.ui:137
+#, fuzzy
+#| msgid "Search Results"
+msgid "Search (Ctrl+Enter)"
+msgstr "Serĉrezultoj"
+
+#: src/libide/editor/ide-editor-workspace.ui:141
+#: src/libide/gui/ide-primary-workspace.ui:121
+#, fuzzy
+#| msgctxt "shortcut window"
+#| msgid "Toggle bottom panel"
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Baskuligi suban panelon"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1095,20 +1106,20 @@ msgstr "Malsukcesis pravalorizi konstruan ĉenstablon: %s"
 msgid "Failed to get device information: %s"
 msgstr "Malsukcesis akiri aparatajn informojn: %s"
 
-#: src/libide/foundry/ide-config-manager.c:538
+#: src/libide/foundry/ide-config-manager.c:539
 #, fuzzy
 #| msgid "Build Configurations"
 msgid "Active Configuration"
 msgstr "Konstruaj agordoj"
 
-#: src/libide/foundry/ide-config-manager.c:626
+#: src/libide/foundry/ide-config-manager.c:627
 #, fuzzy, c-format
 #| msgid "Build Configurations"
 msgid "Configuration %s changed"
 msgstr "Konstruaj agordoj"
 
 #. translators: %s will be replaced with the build configuration identifier
-#: src/libide/foundry/ide-config-manager.c:872
+#: src/libide/foundry/ide-config-manager.c:873
 #, c-format
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
@@ -1116,7 +1127,7 @@ msgid ""
 msgstr ""
 
 #. translators: %s is set to the identifier of the build configuration
-#: src/libide/foundry/ide-config-manager.c:1068
+#: src/libide/foundry/ide-config-manager.c:1069
 #, c-format
 msgid "Active configuration set to “%s”"
 msgstr ""
@@ -1257,13 +1268,13 @@ msgid "Preparing…"
 msgstr "Preparante…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3770
+#: src/libide/foundry/ide-pipeline.c:3774
 #, fuzzy, c-format
 #| msgid "Removing %s\n"
 msgid "Removing %s"
 msgstr "Forigante %s\n"
 
-#: src/libide/foundry/ide-pipeline.c:3829
+#: src/libide/foundry/ide-pipeline.c:3833
 #, fuzzy
 #| msgid "Preparing build directory"
 msgid "Removing build directories…"
@@ -1277,7 +1288,7 @@ msgstr "Ne povas fari transmeton per limiga konekto"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
-#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
 #, fuzzy
 #| msgid "Untitled Terminal"
 msgid "Untitled command"
@@ -1290,72 +1301,72 @@ msgid "Unit Test"
 msgstr "Testo de unuoj"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:184
+#: src/libide/foundry/ide-run-manager.c:190
 #, fuzzy, c-format
 #| msgid "Connected to “%s”"
 msgid "User requested run tool “%s”"
 msgstr "Konektita al “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:545
+#: src/libide/foundry/ide-run-manager.c:592
 msgid "Cannot run target, another target is running"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:805
+#: src/libide/foundry/ide-run-manager.c:890
 #, fuzzy, c-format
 #| msgid "Application exited\r\n"
 msgid "Application exited with error: %s"
 msgstr "Aplikaĵo ĉesis\r\n"
 
-#: src/libide/foundry/ide-run-manager.c:808
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
+#: src/libide/foundry/ide-run-manager.c:893
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 #, fuzzy
 #| msgid "Application exited\r\n"
 msgid "Application exited"
 msgstr "Aplikaĵo ĉesis\r\n"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:996
+#: src/libide/foundry/ide-run-manager.c:1083
 #, c-format
 msgid "Running %s…"
 msgstr "Rulante %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1063
+#: src/libide/foundry/ide-run-manager.c:1150
 msgid "Deploying to device…"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1292
+#: src/libide/foundry/ide-run-manager.c:1379
 msgid "User requested application to run"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1324
+#: src/libide/foundry/ide-run-manager.c:1411
 msgid "User requested application to restart"
 msgstr ""
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1354
+#: src/libide/foundry/ide-run-manager.c:1441
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 
-#: src/libide/foundry/ide-run-manager.c:1374
+#: src/libide/foundry/ide-run-manager.c:1461
 msgid "User requested application to stop"
 msgstr ""
 
-#: src/libide/foundry/ide-runtime.c:406
+#: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
 #: src/plugins/host/gbp-host-runtime-provider.c:69
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:264
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Gastiga sistemo"
 
-#: src/libide/foundry/ide-runtime-provider.c:147
+#: src/libide/foundry/ide-runtime-provider.c:157
 #, fuzzy, c-format
 #| msgid "Discovered device “%s”"
 msgid "Discovered runtime “%s”"
 msgstr "Malkovrita aparato “%s”"
 
-#: src/libide/foundry/ide-runtime-provider.c:170
+#: src/libide/foundry/ide-runtime-provider.c:180
 #, fuzzy, c-format
 #| msgid "Removing Files…"
 msgid "Removing runtime “%s”"
@@ -1375,12 +1386,6 @@ msgstr ""
 msgid "Default (Host operating system)"
 msgstr "Implicita (gastiga operaciumo)"
 
-#: src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "Projektoj"
-
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
@@ -1388,9 +1393,9 @@ msgid "_Clone Repository…"
 msgstr "_Kloni deponejon…"
 
 #: src/libide/greeter/gtk/menus.ui:22
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:226
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:436
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:157
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:426
+#: src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Fermi"
 
@@ -1418,29 +1423,29 @@ msgstr "Elekti _dosieron…"
 msgid "Directory"
 msgstr "Dosierujo"
 
-#: src/libide/greeter/ide-greeter-workspace.c:220
-#: src/libide/gui/ide-workbench.c:348 src/libide/gui/ide-workbench.c:854
+#: src/libide/greeter/ide-greeter-workspace.c:223
+#: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Konstruilo — %s"
 
-#: src/libide/greeter/ide-greeter-workspace.c:332
+#: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
 msgstr "Malsukcesis ŝargi la projekton"
 
-#: src/libide/greeter/ide-greeter-workspace.c:334
-#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/libide/greeter/ide-greeter-workspace.c:336
+#: src/plugins/create-project/gbp-create-project-widget.c:259
 #: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Fermi"
 
-#: src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:522
 #, fuzzy
 #| msgid "Delete Project Sources"
 msgid "Delete Project Sources?"
 msgstr "Forigi projektajn fontojn"
 
-#: src/libide/greeter/ide-greeter-workspace.c:526
+#: src/libide/greeter/ide-greeter-workspace.c:523
 #, fuzzy
 #| msgid ""
 #| "Removing project sources will delete them from your computer and cannot "
@@ -1450,27 +1455,26 @@ msgstr ""
 "Forigado de projektajn dosierojn forigos ilin el via komputilo kaj oni ne "
 "povas malfari tion."
 
-#: src/libide/greeter/ide-greeter-workspace.c:529
+#: src/libide/greeter/ide-greeter-workspace.c:526
 #, fuzzy
 #| msgid "Delete Project Sources"
 msgid "_Delete Project Sources"
 msgstr "Forigi projektajn fontojn"
 
-#: src/libide/greeter/ide-greeter-workspace.c:623
-#: src/libide/greeter/ide-greeter-workspace.c:662
+#: src/libide/greeter/ide-greeter-workspace.c:620
+#: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
 msgstr "Elekti projektan dosierujon"
 
-#: src/libide/greeter/ide-greeter-workspace.c:628
+#: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
 msgstr "Elekti projektan dosieron"
 
-#: src/libide/greeter/ide-greeter-workspace.c:667
-#: src/libide/gui/ide-workbench.c:1530
+#: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
 msgstr "_Malfermi"
 
-#: src/libide/greeter/ide-greeter-workspace.c:678
+#: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
 msgstr "Ĉiuj projektaj specoj"
 
@@ -1517,23 +1521,6 @@ msgstr "Malsukcesis trovi econ %s en %s"
 msgid "Failed to retrieve va_list value: %s"
 msgstr "Malsukcesis alporti va_list-valoron: %s"
 
-#: src/libide/gtk/ide-file-chooser-entry.c:101
-#: src/libide/gtk/ide-file-chooser-entry.c:157
-msgid "Open"
-msgstr "Malfermi"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:141
-#: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:474
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
-msgid "Select"
-msgstr "Elekti"
-
-#: src/libide/gtk/ide-file-chooser-entry.c:448
-msgid "Browse…"
-msgstr "Foliumi…"
-
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
 msgstr "Dosiervojo estas NULL"
@@ -1575,7 +1562,7 @@ msgstr[0] "Ĉirkaŭ %u jaro antaŭe"
 msgstr[1] "Ĉirkaŭ %u jaroj antaŭe"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "_Instali"
 
@@ -1587,39 +1574,49 @@ msgstr "%u de %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Serĉi"
 
-#: src/libide/gui/ide-search-popover.ui:61
+#: src/libide/gui/ide-search-popover.ui:31
 #, fuzzy
 #| msgid "Search Results"
 msgid "Search for anything"
 msgstr "Serĉrezultoj"
 
-#: src/libide/gui/ide-search-popover.ui:238
-msgid "_Everything"
-msgstr "Ĉ_io"
-
-#: src/libide/gui/ide-search-popover.ui:245
-msgid "_Actions"
-msgstr "_Agoj"
-
-#: src/libide/gui/ide-search-popover.ui:252
+#: src/libide/gui/ide-search-popover.ui:84
 #, fuzzy
-#| msgid "Command"
-msgid "_Commands"
-msgstr "Komando"
+#| msgid "Search"
+msgid "Type to Search"
+msgstr "Serĉi"
 
-#: src/libide/gui/ide-search-popover.ui:259
-msgid "_Files"
-msgstr "_Dosieroj"
+#: src/libide/gui/ide-search-popover.ui:85
+msgid "Prefix your query with one of the following to filter results"
+msgstr ""
 
-#: src/libide/gui/ide-search-popover.ui:266
+#: src/libide/gui/ide-search-popover.ui:99
+#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Dosieroj"
+
+#: src/libide/gui/ide-search-popover.ui:120
 #, fuzzy
 #| msgid "Symbols"
-msgid "_Symbols"
+msgid "Symbols"
 msgstr "Simboloj"
+
+#: src/libide/gui/ide-search-popover.ui:141
+#, fuzzy
+#| msgid "Documentation"
+msgid "Documentation"
+msgstr "Dokumentaro"
+
+#: src/libide/gui/ide-search-popover.ui:162
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Agoj"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
@@ -1640,7 +1637,7 @@ msgid "Close Project"
 msgstr "Fermi projekton"
 
 #: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
-#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:386
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "Ĝenerala"
 
@@ -1670,13 +1667,13 @@ msgstr ""
 msgid "Quit without saving changes"
 msgstr ""
 
-#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:17
+#: src/libide/gui/gtk/menus.ui:80 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
 msgstr ""
 
 #: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:277
 #: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Terminalo"
@@ -1687,14 +1684,14 @@ msgstr "Terminalo"
 msgid "New Terminals"
 msgstr "Nova terminalo"
 
-#: src/libide/gui/ide-application-actions.c:175
+#: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
 msgstr ""
 "Kristjan SCHMIDT\n"
 "Daniel PUENTES\n"
 "Carmen Bianca BAKKER <carmen@carmenbianca.eu>"
 
-#: src/libide/gui/ide-application-actions.c:180
+#: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
 msgstr "Financita de"
 
@@ -1766,30 +1763,23 @@ msgstr ""
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr ""
 
-#: src/libide/gui/ide-primary-workspace.ui:17
+#: src/libide/gui/ide-primary-workspace.c:87
+#, fuzzy
+#| msgid "Duplicate the configuration"
+msgid "Invalid configuration"
+msgstr "Duobligi la agordadon"
+
+#: src/libide/gui/ide-primary-workspace.ui:60
 #, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle left panel"
 msgid "Toggle Left Panel (F9)"
 msgstr "Baskuligi maldekstran panelon"
 
-#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
 msgstr "Ŝalti dekstran panelon"
-
-#: src/libide/gui/ide-primary-workspace.ui:59
-#, fuzzy
-#| msgid "Search Results"
-msgid "Search (Ctrl+Enter)"
-msgstr "Serĉrezultoj"
-
-#: src/libide/gui/ide-primary-workspace.ui:106
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
-msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Baskuligi suban panelon"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1822,24 +1812,28 @@ msgstr "Konstrui projekton"
 msgid "Other"
 msgstr "Alia"
 
-#: src/libide/gui/ide-workbench.c:1076
+#: src/libide/gui/ide-workbench.c:1109
 #, fuzzy
 #| msgid "Project Name"
 msgid "Project loaded"
 msgstr "Projektnomo"
 
 #. translators: %s is replaced with the project name
-#: src/libide/gui/ide-workbench.c:1246
+#: src/libide/gui/ide-workbench.c:1296
 #, fuzzy, c-format
 #| msgid "Cloning project %s"
 msgid "Loading project “%s”"
 msgstr "Klonante projekton %s"
 
-#: src/libide/gui/ide-workspace.c:1730
+#: src/libide/gui/ide-workbench.c:1615
+msgid "Open"
+msgstr "Malfermi"
+
+#: src/libide/gui/ide-workspace.c:1698
 msgid "There are unsaved documents"
 msgstr "Estas nekonservitaj dokumentoj"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:170
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1862,17 +1856,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Instalante %u pakon"
 msgstr[1] "Instalante %u pakojn"
 
-#: src/libide/lsp/ide-lsp-client.c:169
+#: src/libide/lsp/ide-lsp-client.c:437
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
+#, c-format
 msgid "The operation has been cancelled"
 msgstr ""
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1736
+#: src/libide/lsp/ide-lsp-client.c:1734
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Malsukcesis pravalorizi lingvan servilon: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2168 src/libide/lsp/ide-lsp-client.c:2278
+#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
 msgid "No connection to language server"
 msgstr ""
 
@@ -1881,19 +1877,19 @@ msgid "No LSP client connection is available"
 msgstr ""
 
 #. translators: %s is replaced with the name of the language server
-#: src/libide/lsp/ide-lsp-service.c:517
+#: src/libide/lsp/ide-lsp-service.c:516
 #, c-format
 msgid "Language server “%s” exited"
 msgstr ""
 
 #. translators: the first %s is replaced with the language server name, second %s with PID
-#: src/libide/lsp/ide-lsp-service.c:556
+#: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
 msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:336
-#: src/plugins/create-project/gbp-create-project-widget.ui:114
+#: src/plugins/create-project/gbp-create-project-widget.ui:117
 #: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Versikontrolo"
@@ -1902,7 +1898,7 @@ msgstr "Versikontrolo"
 msgid "SDKs"
 msgstr "SDK-oj"
 
-#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:226
+#: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 #, fuzzy
 #| msgid "Install Package"
 msgid "Language Servers"
@@ -1912,7 +1908,7 @@ msgstr "Instali pakon"
 msgid "Devices & Simulators"
 msgstr ""
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:159
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Diagnozo"
@@ -2049,91 +2045,96 @@ msgid "Zoom In (Ctrl++)"
 msgstr "Zomi"
 
 #: src/libide/sourceview/gtk/menus.ui:71
+msgid "Insert Emoji"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
 msgstr "_Elekto"
 
-#: src/libide/sourceview/gtk/menus.ui:75 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Elekti ĉi_ujn"
 
-#: src/libide/sourceview/gtk/menus.ui:81 src/libide/sourceview/gtk/menus.ui:145
+#: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 #, fuzzy
 #| msgid "Committing…"
 msgid "Formatting"
 msgstr "Enmetante…"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
 msgstr "Ĉiuj m_inusklaj"
 
-#: src/libide/sourceview/gtk/menus.ui:84
+#: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:90
+#: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
 msgstr "Ĉiuj m_ajusklaj"
 
-#: src/libide/sourceview/gtk/menus.ui:91
+#: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:97
+#: src/libide/sourceview/gtk/menus.ui:105
 #, fuzzy
 #| msgid "_Invert Case"
 msgid "In_vert Case"
 msgstr "_Inverti usklecon"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:104
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
 msgstr "_Nomuskla"
 
-#: src/libide/sourceview/gtk/menus.ui:105
+#: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:114
+#: src/libide/sourceview/gtk/menus.ui:122
 #, fuzzy
 #| msgid "Select _None"
 msgid "Select _Line"
 msgstr "Elekti _neniun"
 
-#: src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:127
 #, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Delete line"
 msgid "_Delete Line"
 msgstr "Forigi linion"
 
-#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:132
 #, fuzzy
 #| msgid "Join Lines"
 msgid "_Join Lines"
 msgstr "Kunigi liniojn"
 
-#: src/libide/sourceview/gtk/menus.ui:129
+#: src/libide/sourceview/gtk/menus.ui:137
 #, fuzzy
 #| msgid "Sort Lines"
 msgid "S_ort Lines"
 msgstr "Ordigi liniojn"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:143
 #, fuzzy
 #| msgid "_Duplicate"
 msgid "D_uplicate Line"
 msgstr "_Duobligi"
 
-#: src/libide/sourceview/gtk/menus.ui:142
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:153
-#: src/libide/sourceview/gtk/menus.ui:157
-#: src/libide/sourceview/gtk/menus.ui:163
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
 #: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 #, fuzzy
@@ -2143,85 +2144,170 @@ msgid "Code Navigation"
 msgstr "Navigado"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1624
+#: src/libide/sourceview/ide-source-view.c:1720
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Ln %u, Kol %u"
 
 #. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
-#: src/libide/sourceview/ide-source-view.c:1626
+#: src/libide/sourceview/ide-source-view.c:1722
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
 msgid "Ln %u, Col %u (Sel: %u)"
 msgstr ""
 
-#: src/libide/terminal/gtk/menus.ui:6
+#: src/libide/terminal/gtk/menus.ui:6 src/libide/terminal/ide-terminal.ui:113
 msgid "_Open Link"
 msgstr "_Malfermi ligilon"
 
-#: src/libide/terminal/gtk/menus.ui:16
+#: src/libide/terminal/gtk/menus.ui:16 src/libide/terminal/ide-terminal.ui:121
 msgid "_Copy"
 msgstr "_Kopii"
 
-#: src/libide/terminal/gtk/menus.ui:17
+#: src/libide/terminal/gtk/menus.ui:17 src/libide/terminal/ide-terminal.ui:122
 #, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
 msgstr "Kopii elektitan tekston al tondujo"
 
-#: src/libide/terminal/gtk/menus.ui:22
+#: src/libide/terminal/gtk/menus.ui:22 src/libide/terminal/ide-terminal.ui:126
 #, fuzzy
 #| msgid "_Copy Link Address"
 msgid "_Copy Link"
 msgstr "_Kopii adreson de ligilo"
 
-#: src/libide/terminal/gtk/menus.ui:27
+#: src/libide/terminal/gtk/menus.ui:27 src/libide/terminal/ide-terminal.ui:132
 msgid "_Paste"
 msgstr "_Alglui"
 
-#: src/libide/terminal/gtk/menus.ui:28
+#: src/libide/terminal/gtk/menus.ui:28 src/libide/terminal/ide-terminal.ui:133
 #, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Paste text from clipboard"
 msgid "Paste from clipboard into the terminal"
 msgstr "Alglui tekston el tondujo"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:38 src/libide/terminal/ide-terminal.ui:141
 msgid "Selection all text from terminal including scrollback"
 msgstr ""
 
-#: src/libide/terminal/gtk/menus.ui:44
+#: src/libide/terminal/gtk/menus.ui:44 src/libide/terminal/ide-terminal.ui:147
 msgid "Select _None"
 msgstr "Elekti _neniun"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:272
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
+#, fuzzy
+#| msgid "Clipboard"
+msgid "Copied to clipboard"
+msgstr "Tondujo"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Konservi terminalan enhavon kiel"
 
-#: src/libide/terminal/ide-terminal-page.c:117
+#: src/libide/terminal/ide-terminal-page-actions.c:249
+#: src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/testui/gbp-testui-output-panel.c:97
+msgid "Save"
+msgstr "Konservi"
+
+#: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 
-#: src/libide/terminal/ide-terminal-page.c:122
-#: src/libide/terminal/ide-terminal-page.c:157
-#: src/libide/terminal/ide-terminal-page.c:270
+#: src/libide/terminal/ide-terminal-page.c:125
+#: src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
 msgstr "Sentitola terminalo"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:124
+#: src/libide/terminal/ide-terminal-page.c:127
 msgid "Exited"
 msgstr "Ĉesis"
 
-#: src/libide/terminal/ide-terminal-page.c:144
+#: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
 msgstr "Sentitola terminalo"
+
+#: src/libide/terminal/ide-terminal-palettes.h:48
+msgid "GNOME"
+msgstr "GNOMO"
+
+#: src/libide/terminal/ide-terminal-palettes.h:99
+#, fuzzy
+#| msgid "Polari"
+msgid "Solarized"
+msgstr "Polario"
+
+#: src/libide/terminal/ide-terminal-palettes.h:152
+msgid "Tango"
+msgstr "Tango"
+
+#: src/libide/terminal/ide-terminal-palettes.h:203
+msgid "Dracula"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:254
+msgid "Nord"
+msgstr "Nordo"
+
+#: src/libide/terminal/ide-terminal-palettes.h:305
+msgid "Linux"
+msgstr "Linukso"
+
+#: src/libide/terminal/ide-terminal-palettes.h:356
+#: src/libide/terminal/ide-terminal-palettes.h:935
+#, fuzzy
+#| msgid "Terminal"
+msgid "XTerm"
+msgstr "Terminalo"
+
+#: src/libide/terminal/ide-terminal-palettes.h:407
+msgid "RXVT"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:458
+msgid "Fishtank"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:511
+#, fuzzy
+#| msgid "Spaces"
+msgid "Spacedust"
+msgstr "Spacetoj"
+
+#: src/libide/terminal/ide-terminal-palettes.h:564
+msgid "Catppuccin"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:617
+msgid "Horizon"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:670
+msgid "Tokyo Night"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:723
+msgid "VS Code"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:776
+msgid "Monokai Soda"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-palettes.h:882
+msgid "Clone of Ubuntu"
+msgstr ""
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 #, fuzzy
@@ -2245,6 +2331,25 @@ msgstr "Iri al sekva kongruo"
 msgid "Wrap around"
 msgstr "Ĉirkaŭflui"
 
+#: src/libide/terminal/ide-terminal.ui:154
+msgid "Allow Input"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal.ui:161
+#, fuzzy
+#| msgid "Search for…"
+msgid "Search…"
+msgstr "Serĉi…"
+
+#: src/libide/terminal/ide-terminal.ui:168
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Reagordi"
+
+#: src/libide/terminal/ide-terminal.ui:174
+msgid "Reset and Clear"
+msgstr ""
+
 #: src/libide/threading/ide-subprocess.c:164
 #, c-format
 msgid "Process terminated by signal %d"
@@ -2258,23 +2363,31 @@ msgstr ""
 msgid "Empty"
 msgstr "Malplena"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:137
+#. FIXME? Shouldn't title come from a tweak property?
+#: src/libide/tweaks/ide-tweaks-directory.c:176
 #, fuzzy
 #| msgid "Projects directory"
 msgid "Projects Directory"
 msgstr "Dosierujo de projektoj"
 
+#: src/libide/tweaks/ide-tweaks-directory.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+msgid "Select"
+msgstr "Elekti"
+
 #: src/libide/tweaks/ide-tweaks-font.c:81
 msgid "Select Font"
 msgstr "Elekti tiparon"
 
-#: src/libide/tweaks/ide-tweaks-window.c:88
+#: src/libide/tweaks/ide-tweaks-window.c:86
 #, fuzzy, c-format
 #| msgid "Builder — Preferences"
 msgid "Builder — %s — Preferences"
 msgstr "Konstruilo — Agordoj"
 
-#: src/libide/tweaks/ide-tweaks-window.c:92
+#: src/libide/tweaks/ide-tweaks-window.c:90
 msgid "Builder — Preferences"
 msgstr "Konstruilo — Agordoj"
 
@@ -2283,25 +2396,13 @@ msgid "unversioned"
 msgstr ""
 
 #. translators: None means "no version control system"
-#: src/libide/vcs/ide-vcs.c:665
+#: src/libide/vcs/ide-vcs.c:705
 msgid "None"
 msgstr "Neniu"
 
 #: src/libide/webkit/ide-webkit-page.ui:5
 msgid "Blank page"
 msgstr "Malplena paĝo"
-
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:168
-msgid "Settings"
-msgstr "Agordoj"
-
-#: src/libide/webkit/ide-webkit-page.ui:98
-msgid "Allow JavaScript"
-msgstr ""
-
-#: src/libide/webkit/ide-webkit-page.ui:104
-msgid "Print"
-msgstr "Presi"
 
 #: src/main.c:128
 #, fuzzy
@@ -2366,21 +2467,21 @@ msgid "Keys may only contain alpha-numerics or underline."
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 #, fuzzy
 #| msgid "Variable"
 msgid "Add _Variable"
 msgstr "Variabloj"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:208
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 #, fuzzy
 #| msgid "Variable"
 msgid "Add Variable"
 msgstr "Variabloj"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:209
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "_Aldoni"
 
@@ -2393,30 +2494,25 @@ msgstr "Kopii"
 msgid "Remove"
 msgstr "Forigi"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:324
-#: src/plugins/testui/gbp-testui-output-panel.c:103
-msgid "_Save"
-msgstr "Kon_servi"
-
-#: src/plugins/buildui/gbp-buildui-log-pane.c:356
+#: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
 msgstr "Eligo de konstruo"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.c:357
+#: src/plugins/buildui/gbp-buildui-log-pane.c:398
 #, fuzzy
 #| msgid "Build Output"
 msgid "Build Output (Shift+Ctrl+L)"
 msgstr "Eligo de konstruo"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
 msgstr "Vakigi konstruan protokolon"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:56
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:60
 msgid "Cancel build"
 msgstr "Nuligi konstruadon"
 
-#: src/plugins/buildui/gbp-buildui-log-pane.ui:72
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:76
 msgid "Save build log"
 msgstr "Konservi konstruan protokolon"
 
@@ -2425,7 +2521,7 @@ msgid "Missing"
 msgstr "Mankante"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:103
 msgid "Branch"
 msgstr "Branĉo"
 
@@ -2468,7 +2564,7 @@ msgstr "Avertoj"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:367
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:271
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 #, fuzzy
 #| msgid "Build Profile"
 msgid "Build Pipeline"
@@ -2505,22 +2601,22 @@ msgstr "Avertoj"
 msgid "Errors (%u)"
 msgstr "Eraroj"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
 msgid "Shared"
 msgstr "Kunhavigita"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
 msgid "Static"
 msgstr ""
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
 #, fuzzy
 #| msgid "Immutable"
 msgid "Executable"
 msgstr "Malŝanĝebla"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, fuzzy, c-format
 #| msgid "Failed to load file: %s"
 msgid "Failed to list build targets: %s"
@@ -2581,7 +2677,6 @@ msgid "Make configuration active and reload build pipeline"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
 msgid "Delete"
 msgstr "Forigi"
 
@@ -2618,9 +2713,8 @@ msgstr "Agordante projekton"
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
 #: src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
-#: src/plugins/buildui/gtk/menus.ui:105 src/plugins/buildui/gtk/menus.ui:119
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:160
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr ""
 
@@ -2652,7 +2746,6 @@ msgid "Change default build target"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
-#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Building"
 msgstr "Kreante"
 
@@ -2730,118 +2823,315 @@ msgstr "_Elporti"
 msgid "Export project"
 msgstr "Malplena projekto"
 
-# Substantivo
 #: src/plugins/buildui/gtk/menus.ui:98
-#, fuzzy
-#| msgid "Build"
-msgid "Stop Build"
-msgstr "Konstruo"
-
-#: src/plugins/buildui/gtk/menus.ui:100
-#, fuzzy
-#| msgid "Building project"
-msgid "Stop building project"
-msgstr "Konstruante projekton"
-
-#: src/plugins/buildui/gtk/menus.ui:108
 #, fuzzy
 #| msgid "Build Output"
 msgid "Show Bui_ld Output"
 msgstr "Eligo de konstruo"
 
-#: src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/gtk/menus.ui:129
+#: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
 msgstr "Rulante"
 
-#: src/plugins/buildui/gtk/menus.ui:122
+#: src/plugins/buildui/gtk/menus.ui:112
 #, fuzzy
 #| msgid "Delete Command"
 msgid "Select Run Command…"
 msgstr "Forigi komandon"
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:125
 msgid "Run"
 msgstr "Lanĉi"
 
-#: src/plugins/buildui/gtk/menus.ui:138
+#: src/plugins/buildui/gtk/menus.ui:128
 #, fuzzy
 #| msgid "Build the project"
 msgid "Run the project"
 msgstr "Konstrui la projekton"
 
-#: src/plugins/buildui/gtk/menus.ui:144
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:137
 #, fuzzy
 #| msgid "Continue running the program"
 msgid "Restart the running program"
 msgstr "Daŭrigi ruladon de la programo"
 
-#: src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Stop Program"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:156
+#: src/plugins/buildui/gtk/menus.ui:146
 #, fuzzy
 #| msgid "Build the project"
 msgid "Stop running the project"
 msgstr "Konstrui la projekton"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
 msgstr "Sencimigo"
 
-#: src/plugins/buildui/gtk/menus.ui:165 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Testo de unuoj"
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:158 src/plugins/web-browser/gtk/menus.ui:83
+msgid "Settings"
+msgstr "Agordoj"
+
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Follow System Style"
 msgstr "Sekvi la stilon de la sistemo"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:166
+msgid "Follow the system style when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:169
 #, fuzzy
 #| msgid "Move Right"
 msgid "Force Light"
 msgstr "Movi dekstren"
 
-#: src/plugins/buildui/gtk/menus.ui:184
+#: src/plugins/buildui/gtk/menus.ui:173
+#, fuzzy
+#| msgid "Build the project"
+msgid "Force light theme when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:180
+#, fuzzy
+#| msgid "Build the project"
+msgid "Force dark theme when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:183
+msgid "Accent Color"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:185 src/plugins/flatpak/tweaks.ui:34
+msgid "System"
+msgstr "Sistemo"
+
+#: src/plugins/buildui/gtk/menus.ui:189
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use system accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:192
+msgid "Blue"
+msgstr "Blue"
+
+#: src/plugins/buildui/gtk/menus.ui:196
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use blue accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:199
+msgid "Teal"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:203
+#, fuzzy
+#| msgid "The prefix to use when installing the project"
+msgid "Use teal accent color when running the project"
+msgstr "La uzenda prefikso kiam instalante la projekon"
+
+#: src/plugins/buildui/gtk/menus.ui:206
+msgid "Green"
+msgstr "Verde"
+
+#: src/plugins/buildui/gtk/menus.ui:210
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use green accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:213
+msgid "Yellow"
+msgstr "Flavo"
+
+#: src/plugins/buildui/gtk/menus.ui:217
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use yellow accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:220
+msgid "Orange"
+msgstr "Oranĝkolora"
+
+#: src/plugins/buildui/gtk/menus.ui:224
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use orange accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:227
+#, fuzzy
+#| msgid "Ready"
+msgid "Red"
+msgstr "Preta"
+
+#: src/plugins/buildui/gtk/menus.ui:231
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use red accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:234
+msgid "Pink"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:238
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use pink accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:241
+msgid "Purple"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:245
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use purple accent color when running the project"
+msgstr "Konstrui la projekton"
+
+# Imperativo
+#: src/plugins/buildui/gtk/menus.ui:248
+#, fuzzy
+#| msgid "Template"
+msgid "Slate"
+msgstr "Ŝablono"
+
+#: src/plugins/buildui/gtk/menus.ui:252
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use slate accent color when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
 msgstr "Alirebleco"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:259
 msgid "High Contrast"
 msgstr "Alta kontrasto"
 
-#: src/plugins/buildui/gtk/menus.ui:198
+#: src/plugins/buildui/gtk/menus.ui:262
+msgid "Use high contrast theme when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:265
 msgid "Text Direction"
 msgstr "Teksta direkto"
 
-#: src/plugins/buildui/gtk/menus.ui:200
+#: src/plugins/buildui/gtk/menus.ui:267
 msgid "Left-to-Right"
 msgstr "Dekstrena"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:271
+#, fuzzy
+#| msgid "Build the project"
+msgid "Force left-to-right text when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:274
 msgid "Right-to-Left"
 msgstr "Maldekstrena"
 
-#: src/plugins/buildui/gtk/menus.ui:221
+#: src/plugins/buildui/gtk/menus.ui:278
+#, fuzzy
+#| msgid "Build the project"
+msgid "Force right-to-left text when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:283
+msgid "GPU"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:285
+msgid "GTK Renderer"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/tweaks.ui:461
+msgid "Default"
+msgstr "Implicita"
+
+#: src/plugins/buildui/gtk/menus.ui:291
+#, fuzzy
+#| msgid "The prefix to use when installing the project"
+msgid "Use the default GTK renderer when running the project"
+msgstr "La uzenda prefikso kiam instalante la projekon"
+
+#: src/plugins/buildui/gtk/menus.ui:294
+msgid "Vulkan"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:298
+#, fuzzy
+#| msgid "The prefix to use when installing the project"
+msgid "Use the Vulkan renderer when running the project"
+msgstr "La uzenda prefikso kiam instalante la projekon"
+
+#: src/plugins/buildui/gtk/menus.ui:301
+msgid "GL"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:305
+#, fuzzy
+#| msgid "Build the project"
+msgid "Use the GL renderer when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:308
+msgid "Legacy GL"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:312
+msgid "Use the legacy GL renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:315
+msgid "Cairo"
+msgstr "Cairo"
+
+#: src/plugins/buildui/gtk/menus.ui:319
+msgid "Use the Cairo software renderer when running the project"
+msgstr ""
+
+#: src/plugins/buildui/gtk/menus.ui:328
+#, fuzzy
+#| msgid "Build the project"
+msgid "Request verbose logging when running the project"
+msgstr "Konstrui la projekton"
+
+#: src/plugins/buildui/gtk/menus.ui:332
 #, fuzzy
 #| msgid "D-Bus Inspector"
 msgid "Show Inspector"
 msgstr "D-Bus-inspektilo"
+
+#: src/plugins/buildui/gtk/menus.ui:335
+msgid "Request the GTK inspector be shown when running the project"
+msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -3003,124 +3293,134 @@ msgstr ""
 msgid "Build & Tooling"
 msgstr "Konstruante"
 
-#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
-msgid "History"
-msgstr "Historio"
+#: src/plugins/buildui/tweaks.ui:185
+msgid "Storage"
+msgstr "Konservejo"
 
 #: src/plugins/buildui/tweaks.ui:188
-msgid "Clear Expired Artifacts"
+msgid "Artifacts and Cached Files"
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:189
+msgid ""
+"Directory used for storing build artifacts and cached files from the build "
+"pipeline. Requires restarting Builder to take effect."
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+msgid "History"
+msgstr "Historio"
+
+#: src/plugins/buildui/tweaks.ui:206
+msgid "Clear Expired Artifacts"
+msgstr ""
+
+#: src/plugins/buildui/tweaks.ui:207
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:200
+#: src/plugins/buildui/tweaks.ui:218
 #, fuzzy
 #| msgid "Clear build log"
 msgid "Clear Build Logs"
 msgstr "Vakigi konstruan protokolon"
 
-#: src/plugins/buildui/tweaks.ui:201
+#: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:212
+#: src/plugins/buildui/tweaks.ui:230
 #, fuzzy
 #| msgid "Save build log"
 msgid "Show Build Logs"
 msgstr "Konservi konstruan protokolon"
 
-#: src/plugins/buildui/tweaks.ui:213
+#: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:229
+#: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:230
+#: src/plugins/buildui/tweaks.ui:248
 msgid "Redirect language server error logs to stderr"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:243
+#: src/plugins/buildui/tweaks.ui:261
 #, fuzzy
 #| msgid "Workspace"
 msgid "Workers"
 msgstr "Laborspaco"
 
-#: src/plugins/buildui/tweaks.ui:247
+#: src/plugins/buildui/tweaks.ui:265
 msgid "Number of workers to use when performing builds"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:256 src/plugins/buildui/tweaks.ui:443
-msgid "Default"
-msgstr "Implicita"
-
-#: src/plugins/buildui/tweaks.ui:262
+#: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:354
+#: src/plugins/buildui/tweaks.ui:372
 msgid "Tooling"
-msgstr ""
+msgstr "Ilaro"
 
-#: src/plugins/buildui/tweaks.ui:389
+#: src/plugins/buildui/tweaks.ui:407
 #, fuzzy
 #| msgid "Installation Prefix"
 msgid "Installation Prefix"
 msgstr "Instala prefikso"
 
-#: src/plugins/buildui/tweaks.ui:390
+#: src/plugins/buildui/tweaks.ui:408
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:408
+#: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
 msgstr "Agordi opciojn"
 
-#: src/plugins/buildui/tweaks.ui:421
+#: src/plugins/buildui/tweaks.ui:439
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
 
-#: src/plugins/buildui/tweaks.ui:428
+#: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
 msgstr "Konstrua medio"
 
-#: src/plugins/buildui/tweaks.ui:431
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:132
+#: src/plugins/buildui/tweaks.ui:449
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
 msgstr "Urbo"
 
-#: src/plugins/buildui/tweaks.ui:432
+#: src/plugins/buildui/tweaks.ui:450
 #, fuzzy
 #| msgid "Search your project"
 msgid "Where your project builds"
 msgstr "Serĉi vian projekton"
 
-#: src/plugins/buildui/tweaks.ui:449
+#: src/plugins/buildui/tweaks.ui:467
 #, fuzzy
 #| msgid "Indexing Source Code"
 msgid "Inside Source Tree"
 msgstr "Indeksante fontkodon"
 
-#: src/plugins/buildui/tweaks.ui:455
+#: src/plugins/buildui/tweaks.ui:473
 #, fuzzy
 #| msgid "View Source"
 msgid "Outside Source Tree"
 msgstr "Vidi fonton"
 
-#: src/plugins/buildui/tweaks.ui:476
+#: src/plugins/buildui/tweaks.ui:494
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:145
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 #, fuzzy
@@ -3128,7 +3428,7 @@ msgstr ""
 msgid "Fetch dependencies"
 msgstr "Ĝisdatigi dependecojn de la projekto"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:173
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #: src/plugins/dub/gbp-dub-pipeline-addin.c:157
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:156
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
@@ -3199,6 +3499,32 @@ msgstr "Kompletigi parametrojn"
 msgid "Include parameters and type information when completing clang proposals"
 msgstr "Inkluzivi parametrojn kaj tipojn kiam kompletigante clang-proponojn"
 
+#: src/plugins/clang-format/gbp-clang-formatter.c:178
+#, fuzzy, c-format
+#| msgid "Failed to get device information: %s"
+msgid "Failed to execute clang-format: %s"
+msgstr "Malsukcesis akiri aparatajn informojn: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:189
+#, fuzzy, c-format
+#| msgid "Failed to save file: %s"
+msgid "clang-format failed to format document: %s"
+msgstr "Malsukcesis konservi dosieron: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:201
+msgid "Missing or corrupted data from clang-format"
+msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:213
+msgid "Invalid cursor position provided from clang-format"
+msgstr ""
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
 msgstr "CMake"
@@ -3258,7 +3584,7 @@ msgstr "Malsukcesis ŝargi la projekton"
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
 #: src/plugins/ctags/ide-ctags-service.c:131
-#: src/plugins/ctags/ide-ctags-service.c:1023
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "Indeksante fontkodon"
 
@@ -3298,7 +3624,7 @@ msgstr "Kopii kaj alglui"
 msgid "Copy selected text as an image"
 msgstr "Kopii elektitan tekston al tondujo"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr ""
@@ -3319,30 +3645,30 @@ msgstr "Kompletigo"
 msgid "_Apply"
 msgstr "_Apliki"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:30
-#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:25
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:13
 msgid "Loading…"
 msgstr "Ŝargante…"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:49
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:45
 #, fuzzy
 #| msgid "No commands available"
 msgid "No code actions available"
 msgstr "Neniu komando disponebla"
 
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:59
+#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:58
 msgid "Code Action Failure"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:224
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:216
 msgid "Symbol Not Selected"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:225
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:217
 msgid "A symbol to rename must be selected"
 msgstr ""
 
-#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:492
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:478
 #: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
 #, fuzzy
 #| msgid "Build Preferences"
@@ -3377,15 +3703,17 @@ msgstr "Alinomi simbolon"
 msgid "_Rename"
 msgstr "_Alinomi"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:18
 #, fuzzy
 #| msgid "Current line"
-msgid "Current Symbol name"
+msgid "Current Symbol Name"
 msgstr "Aktuala linio"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
-msgid "New Symbol name"
-msgstr ""
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:24
+#, fuzzy
+#| msgid "File Name"
+msgid "New Symbol Name"
+msgstr "Dosiernomo"
 
 #: src/plugins/codeui/gtk/menus.ui:7
 #, fuzzy
@@ -3481,12 +3809,12 @@ msgstr ""
 msgid "Display the project creation guide"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.c:219
-#: src/plugins/vcsui/gbp-vcsui-clone-page.c:108
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
 msgid "Select Location"
 msgstr "Elekti lokon"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/create-project/gbp-create-project-widget.c:257
 #, fuzzy
 #| msgid "Failed to load the project"
 msgid "Failed to Create Project"
@@ -3502,11 +3830,11 @@ msgstr "Krei projekton"
 msgid "Project Name"
 msgstr "Projektnomo"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:23
+#: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:30
+#: src/plugins/create-project/gbp-create-project-widget.ui:31
 #, fuzzy
 #| msgid ""
 #| "Unique name that is used for your project’s folder and other technical "
@@ -3521,43 +3849,43 @@ msgstr ""
 "teĥnikaj risurcoj. Devus esti minuskla sen spacetoj, kaj ne permesas komenci "
 "kun cifero."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:46
+#: src/plugins/create-project/gbp-create-project-widget.ui:47
 #, fuzzy
 #| msgid "Application ID"
-msgid "Application ID…"
+msgid "Application ID"
 msgstr "Aplikaĵa ID"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:52
+#: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:68
+#: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
-#: src/plugins/grep/gbp-grep-panel.c:751
+#: src/plugins/grep/gbp-grep-panel.c:747
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:155
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "Loko"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:84
+#: src/plugins/create-project/gbp-create-project-widget.ui:87
 #, fuzzy
 #| msgid "Your project will be created within a new child directory."
 msgid "The project will be created in a new subdirectory."
 msgstr "Via projekto kreiĝos en nova ida dosierujo."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:107
+#: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
 msgstr "Permesilo"
 
 # Imperativo
-#: src/plugins/create-project/gbp-create-project-widget.ui:126
+#: src/plugins/create-project/gbp-create-project-widget.ui:123
 msgid "Template"
 msgstr "Ŝablono"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:185
+#: src/plugins/create-project/gbp-create-project-widget.ui:182
 msgid "Create Project"
 msgstr "Krei projekton"
 
@@ -3591,7 +3919,7 @@ msgid ""
 msgstr ""
 "Serĉo, diagnozo kaj aŭtomata kompletigo povas esti limigita ĝis kompleta."
 
-#: src/plugins/ctags/ide-ctags-service.c:980
+#: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
 msgstr "Indeksante fontkodon (paŭzigita)"
 
@@ -3904,11 +4232,7 @@ msgstr ""
 msgid "Number of seconds to wait for the deviced peer to appear"
 msgstr ""
 
-#: src/plugins/dspy/gbp-dspy-application-addin.c:47
-msgid "Display D-Bus inspector"
-msgstr ""
-
-#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:15
 msgid "D-Bus Inspector…"
 msgstr "D-Bus-inspektilo…"
 
@@ -3916,11 +4240,11 @@ msgstr "D-Bus-inspektilo…"
 msgid "Dub Run"
 msgstr ""
 
-#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:154
 msgid "No file was provided."
 msgstr "Neniu dosiero estis provizita."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr ""
 
@@ -3937,10 +4261,6 @@ msgstr "Ŝanĝi al la sekva dokumento"
 msgid "Switch application and editor theme"
 msgstr "Pozicio de dekstra marĝeno"
 
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-msgid "Reset"
-msgstr "Reagordi"
-
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
 msgstr ""
@@ -3954,13 +4274,13 @@ msgstr "Plata teksto"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:281
 msgid "Spaces"
 msgstr "Spacetoj"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:294
 msgid "Tabs"
 msgstr "Taboj"
 
@@ -4058,7 +4378,7 @@ msgstr "Malfermi en nova kadro"
 msgid "Open in New Workspace…"
 msgstr "Malfermi en nova stablo"
 
-#: src/plugins/editorui/gtk/menus.ui:163
+#: src/plugins/editorui/gtk/menus.ui:163 src/plugins/terminal/gtk/menus.ui:50
 msgid "Save _As"
 msgstr "Konservi _kiel"
 
@@ -4206,7 +4526,7 @@ msgid "The desired maximum line length"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:368
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Behavior"
 msgstr "Konduto"
 
@@ -4402,250 +4722,258 @@ msgstr "Liniaj ŝanĝoj"
 msgid "Highlight changed lines next to the line number"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:225
+#: src/plugins/editorui/tweaks.ui:223
+msgid "Use Line Selection Styling"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:224
+msgid "Use selection styling for line numbers if whole line is selected"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:237
 msgid "Highlighting"
 msgstr "Emfazado"
 
-#: src/plugins/editorui/tweaks.ui:228
+#: src/plugins/editorui/tweaks.ui:240
 msgid "Highlight Current Line"
 msgstr "Emfazi la aktualan linion"
 
-#: src/plugins/editorui/tweaks.ui:229
+#: src/plugins/editorui/tweaks.ui:241
 #, fuzzy
 #| msgid "Make current line stand out with highlights"
 msgid "Make the current line stand out with highlights"
 msgstr "Emfazi aktualan linion"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Highlight Matching Brackets"
 msgstr "Emfazi kongruajn krampojn"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:253
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Semantic Highlighting"
 msgstr "Sintaksa emfazado"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:265
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Draw a mark representing normal spaces"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:283
+#: src/plugins/editorui/tweaks.ui:295
 msgid "Draw a mark representing tabs"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:307
 msgid "Newlines"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:296
+#: src/plugins/editorui/tweaks.ui:308
 msgid "Draw a mark at the end of lines"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Non-breaking spaces"
 msgstr "Nerompebla spaceto"
 
-#: src/plugins/editorui/tweaks.ui:309
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Draw a mark at non-breaking space characters"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:325
+#: src/plugins/editorui/tweaks.ui:337
 #, fuzzy
 #| msgid "Leading Only"
 msgid "Leading"
 msgstr "Nur antaŭiraj"
 
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:338
 msgid "Draw marks for leading spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:350
 #, fuzzy
 #| msgid "Sublime Text"
 msgid "Inside Text"
 msgstr "Sublime Text"
 
-#: src/plugins/editorui/tweaks.ui:339
+#: src/plugins/editorui/tweaks.ui:351
 msgid "Draw marks inside a line of text only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:363
 #, fuzzy
 #| msgid "Trailing Only"
 msgid "Trailing"
 msgstr "Nur vostaj"
 
-#: src/plugins/editorui/tweaks.ui:352
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Draw marks for trailing spaces only"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:384
 msgid "Spelling"
 msgstr "Literumado"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:388
 msgid "Underline potential spelling mistakes as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:389
+#: src/plugins/editorui/tweaks.ui:401
 msgid "Selections"
 msgstr "Elektoj"
 
-#: src/plugins/editorui/tweaks.ui:392
+#: src/plugins/editorui/tweaks.ui:404
 msgid "Minimum Characters to Highlight"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:393
+#: src/plugins/editorui/tweaks.ui:405
 msgid "The minimum selection length before highlighting matches"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Snippets"
 msgstr "Fragmentoj"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:421
 #, fuzzy
 #| msgid "Snippets"
 msgid "Expand Snippets"
 msgstr "Fragmentoj"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:422
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:425
+#: src/plugins/editorui/tweaks.ui:437
 #, fuzzy
 #| msgid "Completion"
 msgid "Code Completion"
 msgstr "Kompletigo"
 
-#: src/plugins/editorui/tweaks.ui:429
+#: src/plugins/editorui/tweaks.ui:441
 #, fuzzy
 #| msgid "Completion Providers"
 msgid "Completion Proposals"
 msgstr "Kompletigaj provizantoj"
 
-#: src/plugins/editorui/tweaks.ui:432
+#: src/plugins/editorui/tweaks.ui:444
 #, fuzzy
 #| msgid "Auto Completion"
 msgid "Suggest Code Completions"
 msgstr "Proponi Snippet-kompletigon"
 
-#: src/plugins/editorui/tweaks.ui:433
+#: src/plugins/editorui/tweaks.ui:445
 msgid "Automatically suggest code completions while typing"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:456
 #, fuzzy
 #| msgid "Auto Completion"
 msgid "Select First Completion Proposal"
 msgstr "Proponi Snippet-kompletigon"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:457
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:460
+#: src/plugins/editorui/tweaks.ui:472
 #, fuzzy
 #| msgid "Completion Providers"
 msgid "Maximum Completion Proposals"
 msgstr "Kompletigaj provizantoj"
 
-#: src/plugins/editorui/tweaks.ui:461
+#: src/plugins/editorui/tweaks.ui:473
 #, fuzzy
 #| msgid "Number of completions to display"
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Montrenda nombro da kompletigoj"
 
-#: src/plugins/editorui/tweaks.ui:480
+#: src/plugins/editorui/tweaks.ui:492
 msgid "Movements"
 msgstr "Movoj"
 
-#: src/plugins/editorui/tweaks.ui:484
+#: src/plugins/editorui/tweaks.ui:496
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "Reen-klavo forigos ceteran spacon por ke vi viĉiĝos je via deŝovo"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:508
 #, fuzzy
 #| msgid "Visible Whitespace Characters"
 msgid "Navigate to non-space characters"
 msgstr "Videblaj blankspacaj signoj"
 
-#: src/plugins/editorui/tweaks.ui:505
+#: src/plugins/editorui/tweaks.ui:517
 msgid "Before line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:511
+#: src/plugins/editorui/tweaks.ui:523
 msgid "After line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:529
 msgid "Instead of line boundaries"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:523 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Elŝaltite"
 
-#: src/plugins/editorui/tweaks.ui:535
+#: src/plugins/editorui/tweaks.ui:547
 #, fuzzy
 #| msgid "Palette management"
 msgid "Session Management"
 msgstr "Paletra administrado"
 
-#: src/plugins/editorui/tweaks.ui:539
+#: src/plugins/editorui/tweaks.ui:551
 msgid "Save & Restore"
 msgstr "Konservi & restaŭri"
 
-#: src/plugins/editorui/tweaks.ui:542
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Auto-Save"
 msgstr "Aŭtomata konservo"
 
-#: src/plugins/editorui/tweaks.ui:543
+#: src/plugins/editorui/tweaks.ui:555
 msgid "Regularly save the document as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:566
 #, fuzzy
 #| msgid "Autosave"
 msgid "Auto-Save Delay"
 msgstr "Aŭtomate konservi"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:567
 #, fuzzy
 #| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "La nombro da sekundoj post ŝanĝo antaŭ ol aŭtomate konservi"
 
-#: src/plugins/editorui/tweaks.ui:570
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Format on Save"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:571
+#: src/plugins/editorui/tweaks.ui:583
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:586
+#: src/plugins/editorui/tweaks.ui:598
 #, fuzzy
 #| msgid "Restore cursor position"
 msgid "Restore Cursor Position"
 msgstr "Restaŭri montrilan pozicion"
 
-#: src/plugins/editorui/tweaks.ui:587
+#: src/plugins/editorui/tweaks.ui:599
 msgid "Jump to the last position when re-opening a file"
 msgstr ""
 
@@ -4655,31 +4983,26 @@ msgstr ""
 msgid "Open file or folder"
 msgstr "Malfermi dosieron aŭ terminalon"
 
-#: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/project-tree/gbp-project-tree-addin.c:212
-msgid "Files"
-msgstr "Dosieroj"
-
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr ""
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:891
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:962
 msgid "Installation failed"
 msgstr "Instalado malsukcesis"
 
-#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:901
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:972
 #, fuzzy
 #| msgid "Installing project"
 msgid "Installation complete"
 msgstr "Instalante projekton"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:454
-#: src/plugins/git/gbp-git-client.c:398
+#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:754
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Malsukcesis forigi flatpak-manifeston: %s"
@@ -4688,74 +5011,72 @@ msgstr "Malsukcesis forigi flatpak-manifeston: %s"
 msgid "Network is not available, skipping downloads"
 msgstr "Reto ne disponeblas, preterpasante elŝutojn"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 #, fuzzy
 #| msgid "Installing "
 msgid "Install or Update SDK?"
 msgstr "Instalante "
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:200
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "Nomo"
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:92
 msgid "Architecture"
 msgstr "Arĥitekturo"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:113
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:114
 msgid "Resolving SDK Extensions"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:115
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:839
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
 msgid "Flatpak"
 msgstr "Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:176
 msgid "Creating flatpak workspace"
 msgstr "Kreante flatpak-laborspacon"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:430
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
 msgstr "Prepari konstruan dosierujon"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:490
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
 msgstr "Elŝutante dependecojn"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:566
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
 msgstr "Konstruante dependecojn"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:626
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
 msgstr "Finante flatpak-konstruon"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:676
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:766
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
 msgstr ""
 
@@ -4763,13 +5084,13 @@ msgstr ""
 msgid "Flatpak Application"
 msgstr "Flatpak-aplikaĵo"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:441
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:445
 #, fuzzy
 #| msgid "Installing rust "
 msgid "Installing Necessary SDKs"
 msgstr "Instalante rust "
 
-#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:442
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:446
 msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
@@ -4823,10 +5144,6 @@ msgstr "GNOME Konstruilo"
 msgid "User"
 msgstr "Uzanto"
 
-#: src/plugins/flatpak/tweaks.ui:34
-msgid "System"
-msgstr "Sistemo"
-
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
@@ -4848,11 +5165,6 @@ msgstr ""
 msgid "The operation failed. The original error was \"%s\""
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
-#, c-format
-msgid "The operation has been canceled"
-msgstr ""
-
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
@@ -4860,28 +5172,28 @@ msgid ""
 "repository."
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr ""
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr ""
 
-#: src/plugins/git/gbp-git-buffer-change-monitor.c:433
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, fuzzy, c-format
 #| msgid "Repository does not have a working directory."
 msgid "Cannot monitor files outside the working directory"
 msgstr "Deponejo ne havas laboran dosierujon."
 
-#: src/plugins/git/gbp-git-client.c:171
+#: src/plugins/git/gbp-git-client.c:184
 #, c-format
 msgid "Git integration has started as process %s"
 msgstr ""
 
-#: src/plugins/git/gbp-git-client.c:195
+#: src/plugins/git/gbp-git-client.c:208
 #, fuzzy
 #| msgid "Integration with Git"
 msgid "Git integration has exited"
@@ -4907,21 +5219,21 @@ msgstr ""
 msgid "Network is not available, skipping submodule update"
 msgstr "Reto ne disponeblas, preterpasante elŝutojn"
 
-#: src/plugins/git/gbp-git-vcs.c:228
+#: src/plugins/git/gbp-git-vcs.c:347
 msgid "Pushed."
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:266
+#: src/plugins/git/gbp-git-vcs.c:385
 #, fuzzy, c-format
 #| msgid "Insert “%s”"
 msgid "Pushing ref “%s”"
 msgstr "Enigi “%s”"
 
-#: src/plugins/git/gbp-git-vcs.c:532
+#: src/plugins/git/gbp-git-vcs.c:687
 msgid "Directory is not within repository"
 msgstr ""
 
-#: src/plugins/git/gbp-git-vcs.c:560
+#: src/plugins/git/gbp-git-vcs.c:715
 msgid "Git"
 msgstr "Git"
 
@@ -4951,7 +5263,7 @@ msgstr "Valida Git-URL necesas"
 msgid "Authorship"
 msgstr "Retpoŝtadreso de aŭtoro"
 
-#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:206
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "Retpoŝtadreso"
 
@@ -4968,29 +5280,41 @@ msgstr "Praŝargante projekton"
 msgid "Gradle Run"
 msgstr ""
 
-#: src/plugins/greeter/gbp-greeter-application-addin.c:169
+#: src/plugins/greeter/gbp-greeter-application-addin.c:170
 msgid "Display a new greeter window"
 msgstr ""
 
-#: src/plugins/grep/gbp-grep-panel.c:763
+#: src/plugins/grep/gbp-grep-panel.c:759
 msgid "Match"
 msgstr "Kongrui"
 
-#: src/plugins/grep/gbp-grep-panel.c:775
+#: src/plugins/grep/gbp-grep-panel.c:771
 msgid "Path"
 msgstr "Vojo"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:839
+#: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "_Serĉi en %s"
 
 #. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
-#: src/plugins/grep/gbp-grep-panel.c:841
+#: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
 msgstr "_Anstataŭigi en %s"
+
+#: src/plugins/grep/gbp-grep-panel.c:847
+#, fuzzy
+#| msgid "_Open Project"
+msgid "Find in Project"
+msgstr "_Malfermi projekton"
+
+#: src/plugins/grep/gbp-grep-panel.c:848
+#, fuzzy
+#| msgid "Recent Projects"
+msgid "Replace in Project"
+msgstr "Lasttempaj projektoj"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -5127,13 +5451,77 @@ msgstr "Malplena Makefile-projekto"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Krei novan malplenan projekton uzante simplan Makefile"
 
+#: src/plugins/manuals/gbp-manuals-page.c:321
+#: src/plugins/manuals/gbp-manuals-panel.ui:5
+#: src/plugins/manuals/manuals-navigatable.c:395
+msgid "Manuals"
+msgstr ""
+
+#: src/plugins/manuals/gbp-manuals-panel.ui:174
+#: src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
+#: src/plugins/todo/gbp-todo-panel.ui:99
+#, fuzzy
+#| msgid "Filter"
+msgid "Filter…"
+msgstr "Filtrilo"
+
+#: src/plugins/manuals/gbp-manuals-search-result.c:215
+#, fuzzy
+#| msgid "Documentation"
+msgid "Open Documentation"
+msgstr "Dokumentaro"
+
+#: src/plugins/manuals/gtk/menus.ui:6
+#, fuzzy
+#| msgid "Search for…"
+msgid "Search Manuals…"
+msgstr "Serĉi…"
+
+#: src/plugins/manuals/gtk/menus.ui:8
+msgid "Search documentation for installed SDKs"
+msgstr ""
+
+#: src/plugins/manuals/manuals-book.c:505
+#: src/plugins/manuals/manuals-heading.c:501
+#: src/plugins/manuals/manuals-keyword.c:526
+#, fuzzy, c-format
+#| msgid "_Find in %s"
+msgid "View in %s"
+msgstr "_Serĉi en %s"
+
+#. Note to the user we're importing this book
+#: src/plugins/manuals/manuals-devhelp-importer.c:697
+#, fuzzy, c-format
+#| msgid "Exporting…"
+msgid "Importing %s…"
+msgstr "Elportante…"
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:121
+msgid "Importing JHBuild Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-jhbuild-importer.c:122
+msgid "Scanning jhbuild for new documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-sdk.c:282
+#, fuzzy
+#| msgid "GNOME Builder"
+msgid "GNOME Nightly"
+msgstr "GNOME Konstruilo"
+
+#: src/plugins/manuals/manuals-system-importer.c:77
+msgid "Importing System Documentation"
+msgstr ""
+
+#: src/plugins/manuals/manuals-system-importer.c:78
+msgid "Scanning system for new documentation"
+msgstr ""
+
 #: src/plugins/maven/gbp-maven-run-command-provider.c:200
 msgid "Maven Run"
 msgstr ""
-
-#: src/plugins/menu-search/gbp-menu-search-provider.c:192
-msgid "Actions"
-msgstr "Agoj"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
 #, fuzzy
@@ -5239,21 +5627,33 @@ msgstr "Fermi la aktualan paĝon"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
 #, fuzzy
+#| msgid "Removing Files…"
+msgid "Reload Files"
+msgstr "Forigante dosierojn…"
+
+#: src/plugins/menu-search/gtk/menus.ui:116
+#, fuzzy
+#| msgid "Reload the current page"
+msgid "Reload the contents of open files"
+msgstr "Reŝargi la aktualan paĝon"
+
+#: src/plugins/menu-search/gtk/menus.ui:125
+#, fuzzy
 #| msgid "Move to the next match"
 msgid "Move to next search result"
 msgstr "Iri al sekva kongruo"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
 msgstr ""
 
-#: src/plugins/menu-search/gtk/menus.ui:122
+#: src/plugins/menu-search/gtk/menus.ui:132
 #, fuzzy
 #| msgid "Move to the previous match"
 msgid "Move to previous search result"
 msgstr "Iri al antaŭa kongruo"
 
-#: src/plugins/menu-search/gtk/menus.ui:123
+#: src/plugins/menu-search/gtk/menus.ui:133
 #, fuzzy
 #| msgid "Move to the previous match"
 msgid "Move to and select the previous search result"
@@ -5263,7 +5663,7 @@ msgstr "Iri al antaŭa kongruo"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:640
+#: src/plugins/meson/gbp-meson-introspection.c:643
 msgid "Load Meson Introspection"
 msgstr ""
 
@@ -5280,140 +5680,81 @@ msgstr ""
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
-msgid "No Provided Tool"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
-msgid "A name to identify the sysroot."
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
-msgid "The system architecture of the sysroot."
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
-msgid "Add Tool:"
-msgstr "Aldoni ilon:"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "Kompililo"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "Arĥivilo"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr ""
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
-msgid "Any language"
-msgstr "Iu ajn lingvo"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
-msgid "C"
-msgstr "C"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-msgid "C++"
-msgstr "C++"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
-msgid "Python"
-msgstr "Python"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
-msgid "Vala"
-msgstr "Vala"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
-msgid "Fortran"
-msgstr "Fortran"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-msgid "D"
-msgstr "D"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
-msgid "Add Tool"
-msgstr "Aldoni ilon"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
-msgid "Delete Toolchain"
-msgstr ""
-
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
 msgstr "Forigi ilon"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "Kompililo"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "Arĥivilo"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr ""
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "GNOME-Aplikaĵo"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
 #, fuzzy
 #| msgid "GNOME Application"
 msgid "GTK 4 Application"
 msgstr "GNOME-Aplikaĵo"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "A Meson-based project using GTK 4"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
 msgid "Shared Library"
 msgstr "Komuna biblioteko"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
 #, fuzzy
 #| msgid "Create a new project with a shared library"
 msgid "A Meson-based project for a shared library"
 msgstr "Krei novan projekton kun komuna biblioteko"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
 msgid "Command Line Tool"
 msgstr "Komandlinia ilo"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
 msgid "An Meson-based project for a command-line program"
 msgstr ""
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:222
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
 #, fuzzy
 #| msgid "Empty Project"
 msgid "Empty Meson Project"
 msgstr "Malplena projekto"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
 #, fuzzy
 #| msgid "Return to project selection"
 msgid "An empty Meson project skeleton"
@@ -5530,28 +5871,20 @@ msgid "Default file manager for GNOME"
 msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
-msgid "Photos"
-msgstr "Fotoj"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "Access, organize and share your photos on GNOME"
-msgstr ""
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polario"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 #, fuzzy
 #| msgid "An IDE for GNOME"
 msgid "An IRC Client for GNOME"
 msgstr "Programada medio por GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "Sound Recorder"
 msgstr "Sonregistrilo"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#: src/plugins/newcomers/gbp-newcomers-section.ui:115
 msgid "A modern sound recorder for GNOME"
 msgstr ""
 
@@ -5625,14 +5958,14 @@ msgid "Drop Down"
 msgstr ""
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:672
+#: src/plugins/podman/gbp-podman-runtime.c:675
 #, fuzzy
 #| msgid "Containers/Podman"
 msgid "Containers/Toolbox"
 msgstr "Ujoj/Podman"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:678
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Podman"
 msgstr "Ujoj/Podman"
 
@@ -5665,30 +5998,30 @@ msgstr "Dosiernomo"
 msgid "_Create"
 msgstr "_Krei"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:697
+#: src/plugins/project-tree/gbp-project-tree-addin.c:700
 #, c-format
 msgid "Copying 1 file"
 msgstr "Kopiante 1 dosieron"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
-#: src/plugins/project-tree/gbp-project-tree-addin.c:700
+#: src/plugins/project-tree/gbp-project-tree-addin.c:703
 #, c-format
 msgid "Copying %s of %s files"
 msgstr "Kopiante %s el %s dosierojn"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:736
+#: src/plugins/project-tree/gbp-project-tree-addin.c:739
 #, fuzzy
 #| msgid "Failed to load file: %s"
 msgid "Failed to copy files"
 msgstr "Malsukcesis ŝargi dosieron: %s"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:746
+#: src/plugins/project-tree/gbp-project-tree-addin.c:749
 #, fuzzy
 #| msgid "File chooser"
 msgid "Files copied"
 msgstr "Dosier-elektilo"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:750
+#: src/plugins/project-tree/gbp-project-tree-addin.c:753
 #, fuzzy, c-format
 #| msgctxt "shortcut window"
 #| msgid "Close all files"
@@ -5697,20 +6030,15 @@ msgid_plural "Copied %s files"
 msgstr[0] "Fermi ĉiujn dosierojn"
 msgstr[1] "Fermi ĉiujn dosierojn"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:941
+#: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
 msgstr "Kopiante dosierojn…"
 
-#: src/plugins/project-tree/gbp-project-tree-addin.c:942
+#: src/plugins/project-tree/gbp-project-tree-addin.c:945
 msgid "Files will be copied in a moment"
 msgstr ""
 
-#: src/plugins/project-tree/gbp-project-tree-pane.ui:113
-#: src/plugins/todo/gbp-todo-panel.ui:99
-msgid "Filter"
-msgstr "Filtrilo"
-
-#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:51
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
 msgstr "Projekta arbo"
@@ -5910,6 +6238,12 @@ msgstr "Forigante %s\n"
 msgid "Removing Files…"
 msgstr "Forigante dosierojn…"
 
+#: src/plugins/recent/gbp-recent-section.c:612
+#, fuzzy
+#| msgid "Show Icons"
+msgid "Show More"
+msgstr "Montri piktogramojn"
+
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
 msgstr "Lasttempaj projektoj"
@@ -5965,20 +6299,20 @@ msgstr "Sentitola terminalo"
 msgid "Set Shortcut"
 msgstr "Agordi klavkombinon"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:471
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
 #, fuzzy
 #| msgid "Select Project Directory"
 msgid "Select Working Directory"
 msgstr "Elekti projekto-dosierujon"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:537
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 #, fuzzy
 #| msgid "Delete Command"
 msgid "Create Command"
 msgstr "Forigi komandon"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:538
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:539
 msgid "Cre_ate"
 msgstr "_Krei"
 
@@ -6034,45 +6368,45 @@ msgstr ""
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:133
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:229
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 #, fuzzy
 #| msgid "Delete Command"
 msgid "_Delete Command"
 msgstr "Forigi komandon"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:257
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:251
 #, fuzzy
 #| msgid "Success"
 msgid "Subprocess"
 msgstr "Sukceso"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 #, fuzzy
 #| msgid "Run with Profiler"
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Lanĉi kun profililo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:278
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #, fuzzy
 #| msgid "GNOME Application"
 msgid "As Target Application"
 msgstr "GNOME-Aplikaĵo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -6188,31 +6522,9 @@ msgid ""
 "editors"
 msgstr ""
 
-#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
-msgid "Enchant 2"
-msgstr "Enchant 2"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:248
-msgid "Add to Dictionary"
-msgstr "Aldoni al la vortaro"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:249
-msgid "Ignore"
-msgstr "Ignori"
-
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "Lingvoj"
-
 #: src/plugins/swift/gbp-swift-run-command-provider.c:77
 msgid "swift run"
 msgstr ""
-
-#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#, fuzzy
-#| msgid "Select Symbol…"
-msgid "Filter Symbols…"
-msgstr "Elekti simbolon…"
 
 #: src/plugins/symbol-tree/gbp-symbol-search-provider.c:156
 #, fuzzy
@@ -6227,13 +6539,13 @@ msgstr "Simboloj"
 msgid "In Page"
 msgstr "Malfermi paĝojn"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368
 #: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Elekti simbolon…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:371
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr ""
 
@@ -6256,124 +6568,119 @@ msgstr ""
 msgid "Symbol decoding will begin after application exits"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:8
-msgctxt "menu label"
-msgid "Open _Sysprof Capture…"
-msgstr ""
-
-#: src/plugins/sysprof/gtk/menus.ui:20
+#: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
 msgstr "Lanĉi kun profililo"
 
-#: src/plugins/sysprof/gtk/menus.ui:23
+#: src/plugins/sysprof/gtk/menus.ui:13
 #, fuzzy
 #| msgid "Run with Profiler"
 msgid "Run the project with profiler"
 msgstr "Lanĉi kun profililo"
 
-#: src/plugins/sysprof/gtk/menus.ui:31 src/plugins/sysprof/tweaks.ui:13
+#: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profililo"
 
-#: src/plugins/sysprof/gtk/menus.ui:33
+#: src/plugins/sysprof/gtk/menus.ui:23
 #, fuzzy
 #| msgid "Check _Spelling"
 msgid "Thread Sampling"
 msgstr "Kontrol _literumadon"
 
-#: src/plugins/sysprof/gtk/menus.ui:35
+#: src/plugins/sysprof/gtk/menus.ui:25
 msgid "CPU Performance"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:40
+#: src/plugins/sysprof/gtk/menus.ui:30
 msgid "Process Scheduling"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:45
+#: src/plugins/sysprof/gtk/menus.ui:35
 msgid "Memory Allocations"
 msgstr "Memoro-Allokigoj"
 
-#: src/plugins/sysprof/gtk/menus.ui:50
+#: src/plugins/sysprof/gtk/menus.ui:40
 msgid "Sample JavaScript Stacks"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:56
+#: src/plugins/sysprof/gtk/menus.ui:46
 msgid "D-Bus"
 msgstr "D-Bus"
 
-#: src/plugins/sysprof/gtk/menus.ui:58 src/plugins/sysprof/tweaks.ui:111
+#: src/plugins/sysprof/gtk/menus.ui:48 src/plugins/sysprof/tweaks.ui:111
 msgid "Session Bus"
 msgstr "Seanca buso"
 
-#: src/plugins/sysprof/gtk/menus.ui:63 src/plugins/sysprof/tweaks.ui:123
+#: src/plugins/sysprof/gtk/menus.ui:53 src/plugins/sysprof/tweaks.ui:123
 msgid "System Bus"
 msgstr "Sistembuso"
 
-#: src/plugins/sysprof/gtk/menus.ui:69
+#: src/plugins/sysprof/gtk/menus.ui:59
 msgid "Graphics"
 msgstr "Grafikoj"
 
-#: src/plugins/sysprof/gtk/menus.ui:71
+#: src/plugins/sysprof/gtk/menus.ui:61
 #, fuzzy
 #| msgid "Display right margin"
 msgid "Display Timings"
 msgstr "Montri dekstran marĝenon"
 
-#: src/plugins/sysprof/gtk/menus.ui:77
+#: src/plugins/sysprof/gtk/menus.ui:67
 msgid "Counters"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:79 src/plugins/sysprof/tweaks.ui:19
+#: src/plugins/sysprof/gtk/menus.ui:69 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:84 src/plugins/sysprof/tweaks.ui:83
+#: src/plugins/sysprof/gtk/menus.ui:74 src/plugins/sysprof/tweaks.ui:83
 #, fuzzy
 #| msgid "Messages"
 msgid "Memory Usage"
 msgstr "Mesaĝoj"
 
-#: src/plugins/sysprof/gtk/menus.ui:89
+#: src/plugins/sysprof/gtk/menus.ui:79
 msgid "Storage I/O"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:94
+#: src/plugins/sysprof/gtk/menus.ui:84
 #, fuzzy
 #| msgid "Network"
 msgid "Network I/O"
 msgstr "Reto"
 
-#: src/plugins/sysprof/gtk/menus.ui:100
+#: src/plugins/sysprof/gtk/menus.ui:90
 msgid "Energy"
 msgstr "Energio"
 
-#: src/plugins/sysprof/gtk/menus.ui:102
+#: src/plugins/sysprof/gtk/menus.ui:92
 #, fuzzy
 #| msgid "Completion"
 msgid "Consumption"
 msgstr "Kompletigo"
 
-#: src/plugins/sysprof/gtk/menus.ui:107
+#: src/plugins/sysprof/gtk/menus.ui:97
 msgid "Battery Charge"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:104
 #, fuzzy
 #| msgid "Application Runtime"
 msgid "Allow Application Integration"
 msgstr "Aplikaĵa rultempo"
 
-#: src/plugins/sysprof/gtk/menus.ui:119
+#: src/plugins/sysprof/gtk/menus.ui:109
 msgid "Allow CPU Throttling"
 msgstr ""
 
-#: src/plugins/sysprof/gtk/menus.ui:131
+#: src/plugins/sysprof/gtk/menus.ui:121
 #, fuzzy
 #| msgid "Run with Profiler"
 msgid "Run with _Profiler"
 msgstr "Lanĉi kun profililo"
 
-#: src/plugins/sysprof/gtk/menus.ui:149
+#: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
 msgstr ""
 
@@ -6501,15 +6808,16 @@ msgstr ""
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
-#, c-format
-msgid "Application started at %s\r\n"
+#, fuzzy, c-format
+#| msgid "Application started at %s\r\n"
+msgid "Application started at %s"
 msgstr "Aplikaĵo komencis je %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:296
 msgid "Application Output"
 msgstr "Aplikaĵa eligo"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:368
 #, fuzzy
 #| msgid "Time completed:"
 msgid "Process completed"
@@ -6607,7 +6915,7 @@ msgstr ""
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 
-#: src/plugins/testui/gbp-testui-output-panel.c:147
+#: src/plugins/testui/gbp-testui-output-panel.c:138
 #, fuzzy
 #| msgid "Unit Tests"
 msgid "Unit Test Output"
@@ -6636,7 +6944,6 @@ msgid "Running all unit tests at %s"
 msgstr "Ruli ĉ_iujn testojn"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
-#, c-format
 msgid "Unit tests completed in %lf seconds"
 msgstr ""
 
@@ -6835,25 +7142,25 @@ msgstr ""
 msgid "Branches"
 msgstr "Branĉoj"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:142
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:171
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
 msgstr "La deponejo estos klonita en novan subdosierujon."
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:196
 msgid "Author Details"
 msgstr "Detaloj pri la aŭtoro"
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:215
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:214
 msgid "You may specify authorship information to override defaults."
 msgstr ""
 
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:231
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:230
 msgid "Status"
 msgstr "Stato"
 
@@ -6885,32 +7192,64 @@ msgstr ""
 msgid "Open a web browser in a new page"
 msgstr ""
 
-#: src/plugins/web-browser/gtk/menus.ui:19
-#: src/plugins/web-browser/gtk/menus.ui:25
+#: src/plugins/web-browser/gtk/menus.ui:18
+#: src/plugins/web-browser/gtk/menus.ui:24
 msgid "Reload Page"
 msgstr "Reŝargi paĝon"
 
-#: src/plugins/web-browser/gtk/menus.ui:20
+#: src/plugins/web-browser/gtk/menus.ui:19
 msgid "Reload the current page"
 msgstr "Reŝargi la aktualan paĝon"
 
-#: src/plugins/web-browser/gtk/menus.ui:26
+#: src/plugins/web-browser/gtk/menus.ui:25
 msgid "Reload the current page ignoring cache"
 msgstr "Reŝargi la nunan paĝon ignorante kaŝmemoron"
 
-#: src/plugins/web-browser/gtk/menus.ui:31
+#: src/plugins/web-browser/gtk/menus.ui:30
 msgid "Focus Location"
 msgstr ""
 
-#: src/plugins/web-browser/gtk/menus.ui:32
+#: src/plugins/web-browser/gtk/menus.ui:31
 msgid "Focus the current page's location"
 msgstr "Fokusi la lokon de la nuna paĝo"
 
-#: src/plugins/xml-pack/ide-xml-formatter.c:143
+#: src/plugins/web-browser/gtk/menus.ui:43
+msgid "_Web Browser"
+msgstr ""
+
+#: src/plugins/web-browser/gtk/menus.ui:54
+#, fuzzy
+#| msgid "Stop running"
+msgid "Stop Loading"
+msgstr "Haltigi ruladon"
+
+#: src/plugins/web-browser/gtk/menus.ui:60
+#, fuzzy
+#| msgid "Reload Page"
+msgid "Reload"
+msgstr "Reŝargi paĝon"
+
+#: src/plugins/web-browser/gtk/menus.ui:69
+#, fuzzy
+#| msgid "_Open Project"
+msgid "_Find in Page"
+msgstr "_Malfermi projekton"
+
+#: src/plugins/web-browser/gtk/menus.ui:77
+msgid "Print"
+msgstr "Presi"
+
+#: src/plugins/web-browser/gtk/menus.ui:85
+#, fuzzy
+#| msgid "JavaScript"
+msgid "Enable _JavaScript"
+msgstr "JavaScript"
+
+#: src/plugins/xml-pack/ide-xml-formatter.c:144
 msgid "Failed to parse XML document"
 msgstr "Malsukcesis analizi la XML-dokumenton"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-parser.c:607
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
 msgstr "Malsukcesis krei la XML-arbon."
@@ -6918,3 +7257,108 @@ msgstr "Malsukcesis krei la XML-arbon."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Nepras konservi la bildon loke por analizi."
+
+#~ msgid "An IDE for GNOME"
+#~ msgstr "Programada medio por GNOME"
+
+#~ msgid "D-Bus Inspector"
+#~ msgstr "D-Bus-inspektilo"
+
+#~ msgid "Cancel"
+#~ msgstr "Nuligi"
+
+#~ msgid "Unix/Linux (LF)"
+#~ msgstr "Unikso/Linukso (LF)"
+
+#~ msgid "Mac OS Classic (CR)"
+#~ msgstr "Mac OS Classic (CR)"
+
+#~ msgid "Windows (CR+LF)"
+#~ msgstr "Vindozo (CR+LF)"
+
+#~ msgid "Automatically Detected"
+#~ msgstr "Aŭtomate detektita"
+
+#~ msgid "Character Encoding:"
+#~ msgstr "Karakterkodado:"
+
+#~ msgid "Line Ending:"
+#~ msgstr "Finaĵo de linio:"
+
+#~ msgid "Browse…"
+#~ msgstr "Foliumi…"
+
+#~ msgid "_Everything"
+#~ msgstr "Ĉ_io"
+
+#~ msgid "_Actions"
+#~ msgstr "_Agoj"
+
+#, fuzzy
+#~| msgid "Command"
+#~ msgid "_Commands"
+#~ msgstr "Komando"
+
+#~ msgid "_Files"
+#~ msgstr "_Dosieroj"
+
+#~ msgid "_Save"
+#~ msgstr "Kon_servi"
+
+# Substantivo
+#, fuzzy
+#~| msgid "Build"
+#~ msgid "Stop Build"
+#~ msgstr "Konstruo"
+
+#, fuzzy
+#~| msgid "Building project"
+#~ msgid "Stop building project"
+#~ msgstr "Konstruante projekton"
+
+#~ msgid "Add Tool:"
+#~ msgstr "Aldoni ilon:"
+
+#~ msgid "Any language"
+#~ msgstr "Iu ajn lingvo"
+
+#~ msgid "C"
+#~ msgstr "C"
+
+#~ msgid "C++"
+#~ msgstr "C++"
+
+#~ msgid "Python"
+#~ msgstr "Python"
+
+#~ msgid "Vala"
+#~ msgstr "Vala"
+
+#~ msgid "Fortran"
+#~ msgstr "Fortran"
+
+#~ msgid "D"
+#~ msgstr "D"
+
+#~ msgid "Add Tool"
+#~ msgstr "Aldoni ilon"
+
+#~ msgid "Photos"
+#~ msgstr "Fotoj"
+
+#~ msgid "Enchant 2"
+#~ msgstr "Enchant 2"
+
+#~ msgid "Add to Dictionary"
+#~ msgstr "Aldoni al la vortaro"
+
+#~ msgid "Ignore"
+#~ msgstr "Ignori"
+
+#~ msgid "Languages"
+#~ msgstr "Lingvoj"
+
+#, fuzzy
+#~| msgid "Select Symbol…"
+#~ msgid "Filter Symbols…"
+#~ msgstr "Elekti simbolon…"
