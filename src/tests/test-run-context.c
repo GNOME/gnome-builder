@@ -40,7 +40,7 @@ sort_strv (const char * const *strv)
 {
   char **copy = g_strdupv ((char **)strv);
   gsize n_elements = g_strv_length (copy);
-  g_qsort_with_data (copy, n_elements, sizeof (char *), sort_strv_strcmpptr, NULL);
+  g_sort_array (copy, n_elements, sizeof (char *), sort_strv_strcmpptr, NULL);
   return copy;
 }
 

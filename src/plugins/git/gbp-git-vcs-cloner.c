@@ -441,8 +441,8 @@ gbp_git_vcs_cloner_list_remote_refs_by_kind_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  g_qsort_with_data (refs, g_strv_length (refs), sizeof (char *),
-                     (GCompareDataFunc)strptrcmp, NULL);
+  g_sort_array (refs, g_strv_length (refs), sizeof (char *),
+                (GCompareDataFunc)strptrcmp, NULL);
   store = g_list_store_new (GBP_TYPE_GIT_BRANCH);
 
   for (guint i = 0; refs[i]; i++)

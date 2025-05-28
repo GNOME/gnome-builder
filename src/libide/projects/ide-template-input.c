@@ -179,11 +179,11 @@ ide_template_input_set_templates (IdeTemplateInput *self,
     }
 
   sorted_langs = (char **)g_hash_table_get_keys_as_array (seen_languages, &len);
-  g_qsort_with_data (sorted_langs,
-                     len,
-                     sizeof (char *),
-                     (GCompareDataFunc) sort_strings,
-                     NULL);
+  g_sort_array (sorted_langs,
+                len,
+                sizeof (char *),
+                (GCompareDataFunc) sort_strings,
+                NULL);
 
   gtk_string_list_splice (self->languages, 0, 0,
                           (const char * const *)sorted_langs);

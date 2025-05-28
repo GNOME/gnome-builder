@@ -300,9 +300,9 @@ ide_strv_sort (char   **strv,
 {
   if (len < 0)
     len = g_strv_length (strv);
-  g_qsort_with_data (strv, len, sizeof (char*),
-                     (GCompareDataFunc)ide_strv_qsort_compare_element,
-                     NULL);
+  g_sort_array (strv, len, sizeof (char*),
+                (GCompareDataFunc)ide_strv_qsort_compare_element,
+                NULL);
 }
 
 static inline gboolean

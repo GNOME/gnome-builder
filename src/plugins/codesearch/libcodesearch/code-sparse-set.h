@@ -174,11 +174,11 @@ code_sparse_set_sort (CodeSparseSet *sparse_set)
   if (sparse_set->len < 2)
     return;
 
-  g_qsort_with_data (sparse_set->dense,
-                     sparse_set->len,
-                     sizeof sparse_set->dense[0],
-                     _code_sparse_set_compare,
-                     NULL);
+  g_sort_array (sparse_set->dense,
+                sparse_set->len,
+                sizeof sparse_set->dense[0],
+                _code_sparse_set_compare,
+                NULL);
 
   for (guint i = 0; i < sparse_set->len; i++)
     sparse_set->sparse[sparse_set->dense[i].value] = i;
