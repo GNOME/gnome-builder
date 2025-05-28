@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <libpeas.h>
-#include <girepository.h>
 
 #include <libide-core.h>
 #include <libide-webkit-api.h>
@@ -106,7 +105,7 @@ _ide_webkit_register_types (PeasObjectModule *module)
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
   g_type_ensure (IDE_TYPE_WEBKIT_PAGE);
 
-  if (!g_irepository_require (NULL,
+  if (!gi_repository_require (ide_get_gir_repository (),
                               PACKAGE_WEBKIT_GIR_NAME,
                               PACKAGE_WEBKIT_GIR_VERSION,
                               0, &error))

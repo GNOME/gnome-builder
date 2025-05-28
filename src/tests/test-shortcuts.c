@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <girepository.h>
+#include <girepository/girepository.h>
 
 #include <libide-gui.h>
 
@@ -115,8 +115,8 @@ main (int   argc,
   g_assert_nonnull (g_getenv ("G_TEST_BUILDDIR"));
 
   path = g_build_filename (g_getenv ("G_TEST_BUILDDIR"), "../", NULL);
-  g_irepository_prepend_search_path (path);
-  g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error);
+  gi_repository_prepend_search_path (ide_get_gir_repository (), path);
+  gi_repository_require (ide_get_gir_repository (), "Ide", PACKAGE_ABI_S, 0, &error);
   g_assert_no_error (error);
 
   gtk_init ();

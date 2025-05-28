@@ -137,6 +137,7 @@ libide_core_sources += ide_marshal
 libide_core_deps = [
   libdex_dep,
   libgio_dep,
+  libgir_dep,
   libgtk_dep,
   libpeas_dep,
 ]

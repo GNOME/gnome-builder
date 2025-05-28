@@ -29,7 +29,7 @@
 
 #include <glib/gi18n.h>
 
-#include <girepository.h>
+#include <girepository/girepository.h>
 #include <gtksourceview/gtksource.h>
 
 #ifdef ENABLE_TRACING_SYSCAP
@@ -131,7 +131,7 @@ early_params_check (gint       *argc,
     { NULL }
   };
 
-  gir_group = g_irepository_get_option_group ();
+  gir_group = gi_repository_get_option_group ();
 
   context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (context, TRUE);
@@ -294,7 +294,7 @@ main (gint   argc,
   _ide_terminal_init ();
 
   app = _ide_application_new (standalone);
-  g_application_add_option_group (G_APPLICATION (app), g_irepository_get_option_group ());
+  g_application_add_option_group (G_APPLICATION (app), gi_repository_get_option_group ());
   ret = g_application_run (G_APPLICATION (app), argc, argv);
   /* Force disposal of the application (to help catch cleanup
    * issues at shutdown) and then (hopefully) finalize the app.

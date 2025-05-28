@@ -616,3 +616,23 @@ ide_dup_default_cache_dir (void)
 
   return default_cache_dir;
 }
+
+/**
+ * ide_get_gir_repository: (skip)
+ *
+ * Returns: (transfer none):
+ */
+GIRepository *
+ide_get_gir_repository (void)
+{
+  static GIRepository *instance;
+
+  if (instance == NULL)
+#if GLIB_CHECK_VERSION(2, 85, 0)
+    instance = gi_repository_dup_default ();
+#else
+    instance = gi_repository_new ();
+#endif
+
+  return instance;
+}

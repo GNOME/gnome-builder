@@ -25,6 +25,7 @@
 #endif
 
 #include <glib.h>
+#include <girepository/girepository.h>
 
 #include "ide-version-macros.h"
 
@@ -76,5 +77,7 @@ IDE_AVAILABLE_IN_ALL
 gchar          *ide_path_expand           (const gchar *path);
 IDE_AVAILABLE_IN_ALL
 char           *ide_dup_default_cache_dir (void);
+IDE_AVAILABLE_IN_ALL
+GIRepository   *ide_get_gir_repository    (void);
 
 G_END_DECLS

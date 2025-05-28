@@ -28,7 +28,6 @@
 
 #include <glib/gi18n.h>
 
-#include <girepository.h>
 #include <libpeas.h>
 
 #include "ide-language-defaults.h"
@@ -135,7 +134,7 @@ ide_application_load_all_typelibs (GError **error, ...)
       const char *version = va_arg (args, const char *);
       g_autoptr(GError) local_error = NULL;
 
-      if (!g_irepository_require (NULL, typelib, version, 0, &local_error))
+      if (!gi_repository_require (ide_get_gir_repository (), typelib, version, 0, &local_error))
         {
           if (msg->len)
             g_string_append (msg, "; ");
@@ -148,8 +147,8 @@ ide_application_load_all_typelibs (GError **error, ...)
   if (had_failure)
     {
       g_set_error_literal (error,
-                           G_IREPOSITORY_ERROR,
-                           G_IREPOSITORY_ERROR_TYPELIB_NOT_FOUND,
+                           GI_REPOSITORY_ERROR,
+                           GI_REPOSITORY_ERROR_TYPELIB_NOT_FOUND,
                            msg->str);
       return FALSE;
     }
@@ -167,7 +166,8 @@ ide_application_load_typelibs (IdeApplication *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
+  gi_repository_prepend_search_path (ide_get_gir_repository (),
+                                     PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
 
   /* Ensure that we have all our required GObject Introspection packages
    * loaded so that plugins don't need to require_version() as that is

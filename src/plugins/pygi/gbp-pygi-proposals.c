@@ -22,7 +22,9 @@
 
 #include "config.h"
 
-#include <girepository.h>
+#include <girepository/girepository.h>
+
+#include <libide-core.h>
 
 #include "gbp-pygi-proposal.h"
 #include "gbp-pygi-proposals.h"
@@ -57,13 +59,13 @@ get_libraries (void)
   if (items == NULL)
     {
       g_autoptr(GHashTable) found = g_hash_table_new (NULL, NULL);
-      const GSList *search_path = g_irepository_get_search_path ();
+      const char * const *search_path = gi_repository_get_search_path (ide_get_gir_repository (), NULL);
 
       items = g_ptr_array_new ();
 
-      for (const GSList *iter = search_path; iter; iter = iter->next)
+      for (guint i = 0; search_path[i]; i++)
         {
-          const char *path = iter->data;
+          const char *path = search_path[i];
           const char *name;
           GDir *dir;
 
