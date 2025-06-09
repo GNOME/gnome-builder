@@ -730,27 +730,22 @@ static gchar *
 find_terminal_executable (void)
 {
   g_autofree gchar *path = NULL;
-  g_autoptr(GSettings) terminal_settings = NULL;
   g_autofree gchar *gsettings_terminal = NULL;
   const gchar *terminals[] = {
-    NULL,                     /* GSettings */
     "x-terminal-emulator",    /* Debian's alternative system */
+    "ptyxis",
     "gnome-terminal",
-    NULL,                     /* getenv ("TERM") */
+    g_getenv ("TERM"),        /* This is generally one of the fallback terminals */
     "nxterm", "color-xterm",
     "rxvt", "xterm", "dtterm"
   };
 
-  /* This is deprecated, but at least the user can specify it! */
-  terminal_settings = g_settings_new ("org.gnome.desktop.default-applications.terminal");
-  gsettings_terminal = g_settings_get_string (terminal_settings, "exec");
-  terminals[0] = gsettings_terminal;
-
-  /* This is generally one of the fallback terminals */
-  terminals[3] = g_getenv ("TERM");
+  /* TODO: Probably should look at ~/.config/xdg-terminals.list */
 
   for (guint i = 0; i < G_N_ELEMENTS (terminals) && path == NULL; ++i)
     {
+      g_debug ("Checking for terminal priority %u `%s`", i, terminals[i]);
+
       if (terminals[i] != NULL)
         path = ide_find_program_in_host_path (terminals[i]);
     }
@@ -796,8 +791,11 @@ gbp_project_tree_pane_actions_open_in_terminal (GSimpleAction *action,
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_set_cwd (launcher, g_file_peek_path (workdir));
   ide_subprocess_launcher_push_argv (launcher, terminal_executable);
+  if (g_str_has_suffix (terminal_executable, "/ptyxis"))
+    ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("--tab", "-d", g_file_peek_path (workdir)));
+  else
+    ide_subprocess_launcher_set_cwd (launcher, g_file_peek_path (workdir));
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     g_warning ("Failed to spawn terminal: %s", error->message);
