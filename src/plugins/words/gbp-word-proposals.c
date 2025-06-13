@@ -434,6 +434,9 @@ gbp_word_proposals_get_item (GListModel *model,
 
   g_assert (GBP_IS_WORD_PROPOSALS (self));
 
+  if (position >= self->items->len)
+    return NULL;
+
   item = &g_array_index (self->items, Item, position);
 
   return gbp_word_proposal_new (item->word);
