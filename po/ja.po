@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-05-12 18:35+0000\n"
-"PO-Revision-Date: 2025-05-15 18:09+0900\n"
+"POT-Creation-Date: 2025-06-09 07:24+0000\n"
+"PO-Revision-Date: 2025-06-11 08:40+0900\n"
 "Last-Translator: Makoto Sakaguchi <ycco34vx@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.gnome.org/teams/ja/>\n"
 "Language: ja\n"
@@ -863,13 +863,13 @@ msgstr "ページ"
 #: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:111
-#: src/plugins/menu-search/gtk/menus.ui:121
+#: src/plugins/menu-search/gtk/menus.ui:148
+#: src/plugins/menu-search/gtk/menus.ui:165
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "テキストエディター"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:166
 msgid "Search & Replace"
 msgstr "検索と置換"
 
@@ -1493,7 +1493,7 @@ msgstr ""
 
 #: src/libide/gui/ide-search-popover.ui:99
 #: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/menu-search/gtk/menus.ui:149
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "ファイル"
@@ -2029,7 +2029,9 @@ msgstr "端末の内容を保存"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:249
 #: src/plugins/buildui/gbp-buildui-log-pane.c:330
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:132
 #: src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
 msgstr "保存"
@@ -2413,7 +2415,7 @@ msgid "Caching build commands"
 msgstr "ビルドコマンドをキャッシュ中"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:935
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (コピー)"
@@ -4101,14 +4103,17 @@ msgid "Save _As"
 msgstr "名前を付けて保存(_A)"
 
 #: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/menu-search/gtk/menus.ui:169
 msgid "Find…"
 msgstr "検索…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
+#: src/plugins/menu-search/gtk/menus.ui:176
 msgid "Find/Replace…"
 msgstr "検索/置換…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
+#: src/plugins/menu-search/gtk/menus.ui:158
 msgid "Print…"
 msgstr "印刷…"
 
@@ -5190,27 +5195,84 @@ msgstr "ページを閉じる"
 msgid "Close the current page"
 msgstr "現在のページを閉じる"
 
-#: src/plugins/menu-search/gtk/menus.ui:115
-msgid "Reload Files"
-msgstr "ファイルを再読込"
+#: src/plugins/menu-search/gtk/menus.ui:108
+#: src/plugins/project-tree/gtk/menus.ui:99
+msgid "Reveal in Project Tree"
+msgstr "プロジェクトツリーで表示"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Reveal the current page in the project tree"
+msgstr "プロジェクトツリーで現在のページを表示する"
+
+#: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Save the current page"
+msgstr "現在のページを保存する"
+
+#: src/plugins/menu-search/gtk/menus.ui:121
+msgid "Move Page Down"
+msgstr "ページを下に移動"
+
+#: src/plugins/menu-search/gtk/menus.ui:122
+msgid "Move the current page down"
+msgstr "現在のページを下に移動する"
+
+#: src/plugins/menu-search/gtk/menus.ui:127
+msgid "Move Page Left"
+msgstr "ページを左に移動"
+
+#: src/plugins/menu-search/gtk/menus.ui:128
+msgid "Move the current page left"
+msgstr "現在のページを左に移動する"
+
+#: src/plugins/menu-search/gtk/menus.ui:133
+msgid "Move Page Right"
+msgstr "ページを右に移動"
+
+#: src/plugins/menu-search/gtk/menus.ui:134
+msgid "Move the current page right"
+msgstr "現在のページを右に移動する"
+
+#: src/plugins/menu-search/gtk/menus.ui:139
+msgid "Move Page Up"
+msgstr "ページを上に移動"
+
+#: src/plugins/menu-search/gtk/menus.ui:140
+msgid "Move the current page up"
+msgstr "現在のページを上に移動する"
+
+#: src/plugins/menu-search/gtk/menus.ui:152
+msgid "Reload Files"
+msgstr "ファイルを再読み込み"
+
+#: src/plugins/menu-search/gtk/menus.ui:153
 msgid "Reload the contents of open files"
 msgstr "開いているファイルの内容を再読み込み"
 
-#: src/plugins/menu-search/gtk/menus.ui:125
+#: src/plugins/menu-search/gtk/menus.ui:159
+msgid "Print the current page"
+msgstr "現在のページを印刷"
+
+#: src/plugins/menu-search/gtk/menus.ui:170
+msgid "Find a string in the current page"
+msgstr "現在のページ内で文字列を検索"
+
+#: src/plugins/menu-search/gtk/menus.ui:177
+msgid "Find and replace a string in the current page"
+msgstr "現在のページ内で文字列を検索して置換する"
+
+#: src/plugins/menu-search/gtk/menus.ui:183
 msgid "Move to next search result"
 msgstr "次の検索結果に移動"
 
-#: src/plugins/menu-search/gtk/menus.ui:126
+#: src/plugins/menu-search/gtk/menus.ui:184
 msgid "Move to and select the next available search result"
 msgstr "次の利用可能な検索結果に移動して選択する"
 
-#: src/plugins/menu-search/gtk/menus.ui:132
+#: src/plugins/menu-search/gtk/menus.ui:190
 msgid "Move to previous search result"
 msgstr "前の検索結果に移動"
 
-#: src/plugins/menu-search/gtk/menus.ui:133
+#: src/plugins/menu-search/gtk/menus.ui:191
 msgid "Move to and select the previous search result"
 msgstr "前の利用可能な検索結果に移動して選択する"
 
@@ -5615,10 +5677,6 @@ msgstr "無視したファイルを表示(_H)"
 #: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "ディレクトリを先頭に表示(_O)"
-
-#: src/plugins/project-tree/gtk/menus.ui:99
-msgid "Reveal in Project Tree"
-msgstr "プロジェクトツリーで表示"
 
 #: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
