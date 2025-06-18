@@ -350,6 +350,11 @@ manuals_search_query_execute_fiber (gpointer user_data)
                                             filter));
     }
 
+  if (futures->len == 0)
+    return dex_future_new_reject (G_IO_ERROR,
+                                  G_IO_ERROR_NOT_SUPPORTED,
+                                  "Not supported");
+
   if (!dex_await (dex_future_allv ((DexFuture **)futures->pdata, futures->len), &error))
     return dex_future_new_for_error (g_steal_pointer (&error));
 
