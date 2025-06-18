@@ -106,6 +106,8 @@ ide_file_search_preview_load_cb (GObject      *object,
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
   g_autoptr(IdeFileSearchPreview) self = user_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_SOURCE_IS_FILE_LOADER (loader));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -124,6 +126,8 @@ ide_file_search_preview_load_cb (GObject      *object,
 
       ide_file_search_preview_apply_scroll (self);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -134,6 +138,9 @@ ide_file_search_preview_load (IdeFileSearchPreview *self)
   g_autofree char *path = NULL;
   g_autofree char *title = NULL;
   g_autofree char *subtitle = NULL;
+  g_autofree char *uri = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_FILE_SEARCH_PREVIEW (self));
@@ -159,6 +166,9 @@ ide_file_search_preview_load (IdeFileSearchPreview *self)
   file = gtk_source_file_new ();
   gtk_source_file_set_location (file, self->file);
 
+  uri = g_file_get_uri (self->file);
+  g_debug ("Loading search preview for `%s`", uri);
+
   loader = gtk_source_file_loader_new (self->buffer, file);
   gtk_source_file_loader_load_async (loader,
                                      G_PRIORITY_DEFAULT,
@@ -168,6 +178,8 @@ ide_file_search_preview_load (IdeFileSearchPreview *self)
                                      g_object_unref,
                                      ide_file_search_preview_load_cb,
                                      g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void

@@ -154,7 +154,7 @@ gbp_file_search_index_init (GbpFileSearchIndex *self)
 static void
 populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
                    IdeVcs               *vcs,
-                   const gchar          *relpath,
+                   const char           *relpath,
                    GFile                *directory,
                    gint                  depth,
                    GCancellable         *cancellable)
@@ -167,6 +167,8 @@ populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
   g_assert (G_IS_FILE (directory));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  g_debug ("Indexing directory `%s`", relpath);
+
   if (depth <= 0)
     return;
 
@@ -175,7 +177,7 @@ populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
 
   if (relpath != NULL)
     {
-      g_autofree gchar *with_slash = g_strdup_printf ("%s%s", relpath, G_DIR_SEPARATOR_S);
+      g_autofree char *with_slash = g_strdup_printf ("%s%s", relpath, G_DIR_SEPARATOR_S);
       ide_fuzzy_mutable_index_insert (fuzzy, with_slash, NULL);
     }
 
@@ -193,10 +195,10 @@ populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
   while ((file_info_ptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
       g_autoptr(GFileInfo) file_info = file_info_ptr;
-      g_autofree gchar *path = NULL;
+      g_autofree char *path = NULL;
       g_autoptr(GFile) file = NULL;
       GFileType file_type;
-      const gchar *name;
+      const char *name;
 
       if (g_file_info_get_is_symlink (file_info))
         continue;
@@ -238,8 +240,8 @@ populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
 
       for (i = 0; i < children->len; i++)
         {
-          g_autofree gchar *path = NULL;
-          g_autofree gchar *name = NULL;
+          g_autofree char *path = NULL;
+          g_autofree char *name = NULL;
           GFile *child;
 
           child = g_ptr_array_index (children, i);
@@ -257,9 +259,9 @@ populate_from_dir (IdeFuzzyMutableIndex *fuzzy,
 
 static void
 gbp_file_search_index_builder (IdeTask      *task,
-                              gpointer      source_object,
-                              gpointer      task_data,
-                              GCancellable *cancellable)
+                               gpointer      source_object,
+                               gpointer      task_data,
+                               GCancellable *cancellable)
 {
   GbpFileSearchIndex *self = source_object;
   g_autoptr(GTimer) timer = NULL;
@@ -269,6 +271,8 @@ gbp_file_search_index_builder (IdeTask      *task,
   IdeFuzzyMutableIndex *fuzzy;
   gdouble elapsed;
   gint max_depth;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FILE_SEARCH_INDEX (self));
@@ -297,6 +301,8 @@ gbp_file_search_index_builder (IdeTask      *task,
   g_message ("File index built in %lf seconds.", elapsed);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -306,6 +312,8 @@ gbp_file_search_index_build_async (GbpFileSearchIndex  *self,
                                    gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -320,36 +328,43 @@ gbp_file_search_index_build_async (GbpFileSearchIndex  *self,
                                  G_IO_ERROR,
                                  G_IO_ERROR_INVALID_FILENAME,
                                  "Root directory has not been set.");
-      return;
+      IDE_EXIT;
     }
 
   ide_task_set_task_data (task, g_object_ref (self->root_directory), g_object_unref);
   ide_task_run_in_thread (task, gbp_file_search_index_builder);
+
+  IDE_EXIT;
 }
 
 gboolean
 gbp_file_search_index_build_finish (GbpFileSearchIndex  *self,
-                                   GAsyncResult       *result,
-                                   GError            **error)
+                                    GAsyncResult        *result,
+                                    GError             **error)
 {
   IdeTask *task = (IdeTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return ide_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
 }
 
 GPtrArray *
 gbp_file_search_index_populate (GbpFileSearchIndex *self,
-                                const gchar        *query,
+                                const char         *query,
                                 gsize               max_results)
 {
   g_auto(IdeSearchReducer) reducer = { 0 };
   g_autoptr(GString) delimited = NULL;
   g_autoptr(GArray) ar = NULL;
-  const gchar *iter = query;
+  const char *iter = query;
   gsize i;
 
   g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), NULL);
@@ -409,7 +424,7 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
 
 gboolean
 gbp_file_search_index_contains (GbpFileSearchIndex *self,
-                               const gchar       *relative_path)
+                                const char         *relative_path)
 {
   g_return_val_if_fail (GBP_IS_FILE_SEARCH_INDEX (self), FALSE);
   g_return_val_if_fail (relative_path != NULL, FALSE);
@@ -420,7 +435,7 @@ gbp_file_search_index_contains (GbpFileSearchIndex *self,
 
 void
 gbp_file_search_index_insert (GbpFileSearchIndex *self,
-                             const gchar       *relative_path)
+                              const char         *relative_path)
 {
   g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (relative_path != NULL);
@@ -431,7 +446,7 @@ gbp_file_search_index_insert (GbpFileSearchIndex *self,
 
 void
 gbp_file_search_index_remove (GbpFileSearchIndex *self,
-                             const gchar       *relative_path)
+                              const char         *relative_path)
 {
   g_return_if_fail (GBP_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (relative_path != NULL);

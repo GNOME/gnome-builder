@@ -69,6 +69,8 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
   ide_task_set_source_tag (task, gbp_file_search_provider_search_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
+  g_debug ("Searching File Index (%p) with terms `%s`", self->index, search_terms);
+
   if (self->index == NULL ||
       !(results = gbp_file_search_index_populate (self->index, search_terms, max_results)))
     {
@@ -118,12 +120,14 @@ on_buffer_loaded (GbpFileSearchProvider *self,
   IdeVcs *vcs;
   GFile *file;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
 
   if (self->index == NULL)
-    return;
+    IDE_EXIT;
 
   file = ide_buffer_get_file (buffer);
   context = ide_buffer_ref_context (buffer);
@@ -135,6 +139,8 @@ on_buffer_loaded (GbpFileSearchProvider *self,
       !ide_vcs_is_ignored (vcs, file, NULL) &&
       !gbp_file_search_index_contains (self->index, relative_path))
     gbp_file_search_index_insert (self->index, relative_path);
+
+  IDE_EXIT;
 }
 
 static void
@@ -147,6 +153,8 @@ on_file_renamed (GbpFileSearchProvider *self,
   g_autofree gchar *new_path = NULL;
   g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (G_IS_FILE (src_file));
@@ -162,6 +170,8 @@ on_file_renamed (GbpFileSearchProvider *self,
 
   if (NULL != (new_path = g_file_get_relative_path (workdir, dst_file)))
     gbp_file_search_index_insert (self->index, new_path);
+
+  IDE_EXIT;
 }
 
 static void
@@ -173,18 +183,22 @@ on_file_trashed (GbpFileSearchProvider *self,
   g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_PROJECT (project));
 
   if (self->index == NULL)
-    return;
+    IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (project));
   workdir = ide_context_ref_workdir (context);
 
   if ((path = g_file_get_relative_path (workdir, file)))
     gbp_file_search_index_remove (self->index, path);
+
+  IDE_EXIT;
 }
 
 static void
@@ -196,6 +210,8 @@ gbp_file_search_provider_build_cb (GObject      *object,
   g_autoptr(GbpFileSearchProvider) self = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FILE_SEARCH_INDEX (index));
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
 
@@ -203,6 +219,8 @@ gbp_file_search_provider_build_cb (GObject      *object,
     g_warning ("%s", error->message);
   else
     g_set_object (&self->index, index);
+
+  IDE_EXIT;
 }
 
 static void
@@ -260,11 +278,13 @@ gbp_file_search_provider_parent_set (IdeObject *object,
   IdeProject *project;
   IdeVcs *vcs;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (!parent || IDE_IS_OBJECT (parent));
 
   if (parent == NULL)
-    return;
+    IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -308,6 +328,8 @@ gbp_file_search_provider_parent_set (IdeObject *object,
                                      NULL,
                                      gbp_file_search_provider_build_cb,
                                      g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void

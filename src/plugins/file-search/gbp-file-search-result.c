@@ -73,6 +73,9 @@ gbp_file_search_result_load_preview (IdeSearchResult *result,
   GbpFileSearchResult *self = (GbpFileSearchResult *)result;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) file = NULL;
+  IdeSearchPreview *ret;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FILE_SEARCH_RESULT (self));
@@ -80,8 +83,9 @@ gbp_file_search_result_load_preview (IdeSearchResult *result,
 
   workdir = ide_context_ref_workdir (context);
   file = g_file_get_child (workdir, self->path);
+  ret = ide_file_search_preview_new (file);
 
-  return ide_file_search_preview_new (file);
+  IDE_RETURN (ret);
 }
 
 static void
