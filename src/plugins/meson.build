@@ -35,6 +35,7 @@ if get_option('webkit').enabled()
 endif
 
 subdir('arduino')
+subdir('astro-language-server')
 subdir('auto-save')
 subdir('autotools')
 subdir('bash-language-server')
@@ -243,6 +244,7 @@ status += [
   '',
   'Language Servers:',
   '',
+  'astro-language-server ........ (Astro) : @0@'.format(get_option('plugin_astro_language_server')),
   'bash-language-server .......... (Bash) : @0@'.format(get_option('plugin_bash_language_server')),
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
