@@ -1,0 +1,19 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2025 Nokse
+Description=Provides integration with astro-ls for Astro
+Embedded=ide_lsp_plugin_register_types
+Module=astro-language-server
+Name=Astro Language Server
+X-Category=lsps
+X-LSP-Command=astro-ls --stdio
+X-LSP-Languages=astro
+X-LSP-Settings=settings.json
+X-Completion-Provider-Languages=astro
+X-Symbol-Resolver-Languages=astro
+X-Diagnostic-Provider-Languages=astro
+X-Highlighter-Languages=astro
+X-Hover-Provider-Languages=astro
+X-Rename-Provider-Languages=astro
+X-Formatter-Languages=astro
+X-Code-Action-Languages=astro

@@ -19,6 +19,7 @@ option('webkit', type: 'feature', value: 'enabled', description: 'Enable feature
 
 option('plugin_arduino', type: 'boolean')
 option('plugin_autotools', type: 'boolean')
+option('plugin_astro_language_server', type: 'boolean')
 option('plugin_bash_language_server', type: 'boolean')
 option('plugin_blueprint', type: 'boolean')
 option('plugin_buildstream', type: 'boolean')
