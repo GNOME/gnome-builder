@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-01-12 17:19+0000\n"
-"PO-Revision-Date: 2025-01-19 21:21-0300\n"
+"POT-Creation-Date: 2025-05-10 14:42+0000\n"
+"PO-Revision-Date: 2025-06-20 23:36-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
 "Language: pt_BR\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 47.1\n"
+"X-Generator: Gtranslator 48.0\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: pt_BR\n"
@@ -77,7 +77,6 @@ msgstr "Crie aplicativos para o GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
-#: src/libide/gui/ide-application-actions.c:168
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -1602,7 +1601,8 @@ msgstr ""
 "Gustavo Marques\n"
 "Rafael Fontenelle\n"
 "Ricardo Silva Veloso\n"
-"Leônidas Araújo"
+"Leônidas Araújo\n"
+"Samuel Schlemper"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -3854,7 +3854,7 @@ msgstr "Executar Dub"
 msgid "No file was provided."
 msgstr "Nenhum arquivo foi fornecido."
 
-#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+#: src/plugins/editorui/gbp-editorui-application-addin.c:144
 msgid "Use minimal editor interface"
 msgstr "Usar interface mínima do editor"
 
@@ -4489,7 +4489,7 @@ msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
-"Reformata fontes ao salvar no disco. Requer um formatador registado para a "
+"Reformata fontes ao salvar no disco. Requer um formatador registrado para a "
 "linguagem de origem."
 
 #: src/plugins/editorui/tweaks.ui:598
@@ -4942,7 +4942,7 @@ msgstr "Crie um novo projeto vazio usando um Makefile simples"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
-#: src/plugins/manuals/manuals-navigatable.c:391
+#: src/plugins/manuals/manuals-navigatable.c:395
 msgid "Manuals"
 msgstr "Manuais"
 
@@ -4978,11 +4978,11 @@ msgstr "Ver em %s"
 msgid "Importing %s…"
 msgstr "Importando %s…"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:116
+#: src/plugins/manuals/manuals-jhbuild-importer.c:121
 msgid "Importing JHBuild Documentation"
 msgstr "Importando documentação do JHBuild"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:117
+#: src/plugins/manuals/manuals-jhbuild-importer.c:122
 msgid "Scanning jhbuild for new documentation"
 msgstr "Verificando o jhbuild para nova documentação"
 
