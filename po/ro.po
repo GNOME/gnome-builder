@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-05-24 16:58+0000\n"
-"PO-Revision-Date: 2025-06-25 10:54+0200\n"
+"POT-Creation-Date: 2025-06-25 09:26+0000\n"
+"PO-Revision-Date: 2025-06-26 15:42+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -2232,7 +2232,7 @@ msgstr "Se generează cache…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
-msgstr "Se trece prin procesul de bootstrap al sistemului de generare"
+msgstr "Se pornește sistemul de compilare"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
@@ -2249,11 +2249,11 @@ msgstr "Se configurează proiectul"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr "Se generează proiectul"
+msgstr "Se compilează proiectul"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr "Se adaugă în cache comenzile de generare"
+msgstr "Se salvează în cache comenzile de compilare"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
@@ -2307,11 +2307,11 @@ msgstr "Elimină"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
-msgstr "Rezultat generare"
+msgstr "Rezultatul compilării"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
-msgstr "Rezultat generare (Shift+Ctrl+L)"
+msgstr "Rezultatul compilării (Shift+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
@@ -2422,21 +2422,21 @@ msgstr "Executabil"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Nu s-au putut lista țintele de generare: %s"
+msgstr "Lista obiectivelor compilării a eșuat: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr "Selectează ținta de generare"
+msgstr "Alege obiectivul compilării"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
-msgstr "Ținte de generare disponibile"
+msgstr "Obiective de compilare disponibile"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
-"Unele ținte pot să nu fie disponibile până când proiectul a fost configurat."
+"Unele obiective pot să nu fie disponibile până la configurarea proiectului."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
@@ -2445,11 +2445,11 @@ msgstr "Descoperă automat"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr "Această selecție permite Builder să aleagă cel mai bun candidat."
+msgstr "Această selecție permite ca Builder să aleagă cel mai bun candidat."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr "Container-ul utilizat pentru a genera și rula aplicația"
+msgstr "Container-ul utilizat pentru a compila și porni aplicația"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -4157,11 +4157,13 @@ msgstr "Fontul utilizat în editorul de cod sursă"
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr "Ajustează spațierea între linii"
+msgstr "Reglează spațiul dintre rânduri"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr "Cum ar trebui să fie împachetat textul când este mai lat decât cadrul"
+msgstr ""
+"Când trebuie textul să treacă pe un rând nou atunci când este mai lat decât "
+"pagina"
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
@@ -5072,15 +5074,15 @@ msgstr "Mută la rezultatul următor al căutării"
 
 #: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
-msgstr "Mută la și selectează următorul rezultat al căutării disponibil"
+msgstr "Mută la următorul rezultat al căutării și selecționează-l"
 
 #: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
-msgstr "Mută la rezultatul anterior al căutării"
+msgstr "Mută la rezultatul precedent al căutării"
 
 #: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
-msgstr "Mută la și selectează rezultatul anterior al căutării"
+msgstr "Mută la rezultatul precedent al căutării și selecționează-l"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
