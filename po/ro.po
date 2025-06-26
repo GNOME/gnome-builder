@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-05-24 16:58+0000\n"
-"PO-Revision-Date: 2025-06-25 10:54+0200\n"
+"POT-Creation-Date: 2025-06-25 09:30+0000\n"
+"PO-Revision-Date: 2025-06-26 15:42+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -168,31 +168,35 @@ msgstr "Vizualizarea elementelor TODO găsite în baza de cod"
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Căutare rapidă și aproximativă a textului în fișiere și simboluri"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:45
+msgid "Arduino integration with arduino-cli"
+msgstr "Integrare Arduino cu arduino-cli"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:56
 msgid "Debug with the GNU debugger"
 msgstr "Depanare cu depanatorul GNU"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "Accesare rapidă a proiectelor"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:64
 msgid "Create new projects from a variety of templates"
 msgstr "Creare de proiecte noi de la o varietate de modele"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:68
 msgid "Integration with Git to clone your projects"
 msgstr "Integrare cu Git pentru a clona proiectele"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:72
 msgid "The source code editor"
 msgstr "Editorul de cod sursă"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:76
 msgid "Fast global fuzzy search"
 msgstr "Căutare globală rapidă și aproximativă"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:80
 msgid "Use the minimap to see more of the file"
 msgstr "Folosește vederea de ansamblu pentru a vedea mai mult din fișier"
 
@@ -376,7 +380,7 @@ msgstr ""
 "rândului."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:500
 msgid "Smart Backspace"
 msgstr "Ștergere inteligentă"
 
@@ -388,7 +392,7 @@ msgstr ""
 "Tasta Înapoi va elimina spațiile în plus pentru a păstra mărimea alineatului."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
-#: src/plugins/editorui/tweaks.ui:507
+#: src/plugins/editorui/tweaks.ui:512
 msgid "Smart Home/End"
 msgstr "Home/End inteligent"
 
@@ -404,72 +408,83 @@ msgstr "Arată liniile de grilă"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Dacă este activat, editorul va arăta liniile de grilă în document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid "If enabled, the editor will respect the font-name setting."
+msgstr "Dacă este activată, editorul va respecta numele tipului de caractere."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"This setting is only respected if the use-custom-font setting is enabled."
+msgstr ""
+"Această opțiune este luată în considerare numai dacă use-custom-font este "
+"activată."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
 msgstr "Regulile vederii de ansamblu"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "When the overview map should be displayed."
 msgstr "Când ar trebui să fie afișată vederea de ansamblu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
-#: src/plugins/editorui/tweaks.ui:278
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw Spaces"
 msgstr "Desenează spații"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The various types of space to draw in the editor."
 msgstr "Tipurile variate de spațiu de desenat în editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/plugins/editorui/tweaks.ui:77
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: src/plugins/editorui/tweaks.ui:82
 msgid "Wrap Text"
 msgstr "Automat pe rând nou"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 "Cum se realizează trecerea pe un rând nou a unui șir lung de text pentru o "
 "mai bună vizibilitate."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "Autosave Enabled"
 msgstr "Salvare automată activată"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Enable or disable autosave feature."
 msgstr "Activează sau dezactivează salvarea automată."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 msgid "Autosave Frequency"
 msgstr "Frecvența de salvare automată"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The number of seconds after modification before auto saving."
 msgstr "Numărul de secunde după modificare înainte de salvarea automată."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 msgid "Completion Row Count"
 msgstr "Numărul de rânduri ale completării"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "The number of completion rows to display to the user."
 msgstr "Numărul de rânduri de completări de afișat utilizatorului."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#: src/plugins/editorui/tweaks.ui:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: src/plugins/editorui/tweaks.ui:65
 msgid "Line Height"
 msgstr "Înălțimea rândului"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "The line height to use for the selected font."
 msgstr "Înălțimea rândului de utilizat pentru tipul de litere ales."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Interactive Completion"
 msgstr "Completare interactivă"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -477,19 +492,19 @@ msgstr ""
 "Dacă este activată, Builder va afișa automat propuneri de completare pe "
 "măsură ce se tastează."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
 msgstr "Caractere minime pentru selectarea de potrivire."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Specifică numărul minim de caractere pentru potrivirea selecției."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Enable Snippets"
 msgstr "Activează fragmentele"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -497,11 +512,11 @@ msgstr ""
 "Permite extinderea fragmentelor din editor apăsând tab după declanșatorul "
 "fragmentului."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:155
 msgid "Select First Completion"
 msgstr "Selectează prima completare"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:156
 msgid "Automatically select the first auto-completion entry."
 msgstr "Selectează automat prima intrare completată automat."
 
@@ -677,7 +692,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Ce mediu să se utilizeze la rularea testelor unitate"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Jurnalizare detaliată"
 
@@ -734,7 +749,7 @@ msgstr ""
 "fișierelor obișnuite."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:387
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
 msgstr "Verifică ortografia"
 
@@ -821,7 +836,7 @@ msgstr "Preferințe"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:488
+#: src/plugins/editorui/tweaks.ui:493
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -876,13 +891,13 @@ msgstr "Pagini"
 #: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:111
-#: src/plugins/menu-search/gtk/menus.ui:121
+#: src/plugins/menu-search/gtk/menus.ui:148
+#: src/plugins/menu-search/gtk/menus.ui:165
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Editor de text"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:166
 msgid "Search & Replace"
 msgstr "Caută și înlocuiește"
 
@@ -1235,50 +1250,50 @@ msgid "Unit Test"
 msgstr "Test unitate"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:190
+#: src/libide/foundry/ide-run-manager.c:193
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Utilizatorul a cerut unealta de rulare „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:592
+#: src/libide/foundry/ide-run-manager.c:609
 msgid "Cannot run target, another target is running"
 msgstr "Nu se poate rula ținta, altă țintă rulează"
 
-#: src/libide/foundry/ide-run-manager.c:890
+#: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplicația a ieșit cu eroarea: %s"
 
-#: src/libide/foundry/ide-run-manager.c:893
+#: src/libide/foundry/ide-run-manager.c:932
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Aplicația a ieșit"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1083
+#: src/libide/foundry/ide-run-manager.c:1123
 #, c-format
 msgid "Running %s…"
 msgstr "Se rulează %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1150
+#: src/libide/foundry/ide-run-manager.c:1190
 msgid "Deploying to device…"
 msgstr "Se transferă în aparat…"
 
-#: src/libide/foundry/ide-run-manager.c:1379
+#: src/libide/foundry/ide-run-manager.c:1419
 msgid "User requested application to run"
 msgstr "Utilizatorul a cerut ca aplicația să ruleze"
 
-#: src/libide/foundry/ide-run-manager.c:1411
+#: src/libide/foundry/ide-run-manager.c:1451
 msgid "User requested application to restart"
 msgstr "Utilizatorul a cerut ca aplicația să repornească"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1441
+#: src/libide/foundry/ide-run-manager.c:1481
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Utilizatorul a cerut ca aplicația să ruleze cu instrumentul „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1461
+#: src/libide/foundry/ide-run-manager.c:1501
 msgid "User requested application to stop"
 msgstr "Utilizatorul a cerut ca aplicația să se oprească"
 
@@ -1486,8 +1501,11 @@ msgid "%u of %u"
 msgstr "%u din %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/plugins/ide-plugin.c:347
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:95
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:95
+#: src/plugins/grep/gbp-grep-panel.ui:64 src/plugins/manuals/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Caută"
 
@@ -1506,8 +1524,8 @@ msgstr ""
 "la textul căutării"
 
 #: src/libide/gui/ide-search-popover.ui:99
-#: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/menu-search/gtk/menus.ui:112
+#: src/plugins/file-search/gbp-file-search-provider.c:364
+#: src/plugins/menu-search/gtk/menus.ui:149
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Fișiere"
@@ -2043,7 +2061,9 @@ msgstr "Salvează conținutul terminalului ca"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:249
 #: src/plugins/buildui/gbp-buildui-log-pane.c:330
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:132
 #: src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
 msgstr "Salvează"
@@ -2196,7 +2216,7 @@ msgstr "Dosarul de proiecte"
 msgid "Select"
 msgstr "Selectează"
 
-#: src/libide/tweaks/ide-tweaks-font.c:81
+#: src/libide/tweaks/ide-tweaks-font.c:83
 msgid "Select Font"
 msgstr "Selectează fontul"
 
@@ -2226,13 +2246,169 @@ msgstr "Pagină liberă"
 msgid "Run a new instance of Builder"
 msgstr "Rulează o instanță nouă a Builder"
 
+#: src/plugins/arduino/gbp-arduino-application-addin.c:929
+msgid "Installing Arduino Library"
+msgstr "Instalarea bibliotecii Arduino"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:930
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1047
+msgid "Downloading and installing"
+msgstr "Descărcare și instalare"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:982
+msgid "Uninstalling Arduino Library"
+msgstr "Dezinstalarea bibliotecii Arduino"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:983
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1099
+msgid "Uninstalling"
+msgstr "Dezinstalare"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1046
+msgid "Installing Arduino Platform"
+msgstr "Instalarea platformei Arduino"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1098
+msgid "Uninstalling Arduino Platform"
+msgstr "Dezinstalarea platformei Arduino"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
+msgid "Board Settings"
+msgstr "Reglări placă de bază"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
+msgid "Board"
+msgstr "Placă"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
+msgid "Programmer"
+msgstr "Programator"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
+msgid "Libraries"
+msgstr "Bibioteci"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:40
+msgid "No libraries are present in this profile"
+msgstr "Nu există biblioteci în acest profil"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
+msgid "Add _Library"
+msgstr "Adaugă o _bibliotecă"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:24
+msgid "No libraries installed"
+msgstr "Nicio bibliotecă instalată"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
+msgid "Install _Library"
+msgstr "Instalează _biblioteca"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
+msgid "Search for a Library"
+msgstr "Caută o bibliotecă"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
+msgid "No libraries found"
+msgstr "Nu s-a găsit nicio bibliotecă"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:220
+msgid "Update Arduino Packages"
+msgstr "Actualizează pachetele Arduino"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:227
+msgid "Compile Arduino Sketch"
+msgstr "Compilează proiectul Arduino"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:245
+msgid "Upload Arduino Sketch"
+msgstr "Încarcă proiectul Arduino"
+
+#: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35
+#: src/plugins/arduino/gbp-arduino-string-row.ui:23
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+msgid "Remove"
+msgstr "Elimină"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:6
+msgid "Platforms"
+msgstr "Platforme"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:40
+msgid "No platforms are present in this profile"
+msgstr "Nu există platforme în acest profil"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:62
+msgid "Add _Platform"
+msgstr "Adaugă o _Platformă"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:24
+msgid "No platforms installed"
+msgstr "Nicio platformă instalată"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
+msgid "Install _Platform"
+msgstr "Instalează _Platforma"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
+msgid "Search for a Platform"
+msgstr "Caută o Platformă"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
+msgid "No platforms found"
+msgstr "Nu s-a găsit nicio platformă"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:48
+msgid "Arduino Sketch Project"
+msgstr "Proiectul Arduino"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:49
+msgid "An empty arduino sketch project"
+msgstr "Un proiect Arduino gol"
+
+#: src/plugins/arduino/gbp-arduino-tweaks-addin.c:77
+msgid "Notes"
+msgstr "Observații"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
+msgid "No additional URL"
+msgstr "Niciun URL suplimentar"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:59
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:65
+msgid "Add URL"
+msgstr "Adaugă un URL"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:66
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
+msgid "_Add"
+msgstr "_Adaugă"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:9
+msgid "Arduino"
+msgstr "Arduino"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:12
+msgid "Additional URLs"
+msgstr "URL-uri suplimentare"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:22
+msgid "Installed Libraries"
+msgstr "Bibioteci instalate"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:32
+msgid "Installed Platforms"
+msgstr "Platforme instalate"
+
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:204
 msgid "Building cache…"
 msgstr "Se generează cache…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
-msgstr "Se trece prin procesul de bootstrap al sistemului de generare"
+msgstr "Se pornește sistemul de compilare"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
@@ -2249,14 +2425,14 @@ msgstr "Se configurează proiectul"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr "Se generează proiectul"
+msgstr "Se compilează proiectul"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr "Se adaugă în cache comenzile de generare"
+msgstr "Se salvează în cache comenzile de compilare"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:935
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copie)"
@@ -2291,27 +2467,18 @@ msgstr "Adaugă o _variabilă"
 msgid "Add Variable"
 msgstr "Adaugă o variabilă"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
-msgid "_Add"
-msgstr "_Adaugă"
-
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
 #: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Copiază"
 
-#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-msgid "Remove"
-msgstr "Elimină"
-
 #: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
-msgstr "Rezultat generare"
+msgstr "Rezultatul compilării"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
-msgstr "Rezultat generare (Shift+Ctrl+L)"
+msgstr "Rezultatul compilării (Shift+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
@@ -2422,21 +2589,21 @@ msgstr "Executabil"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Nu s-au putut lista țintele de generare: %s"
+msgstr "Lista obiectivelor compilării a eșuat: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr "Selectează ținta de generare"
+msgstr "Alege obiectivul compilării"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
-msgstr "Ținte de generare disponibile"
+msgstr "Obiective de compilare disponibile"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
-"Unele ținte pot să nu fie disponibile până când proiectul a fost configurat."
+"Unele obiective pot să nu fie disponibile până la configurarea proiectului."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
@@ -2445,11 +2612,11 @@ msgstr "Descoperă automat"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 msgid "This selection allows Builder to choose the best candidate."
-msgstr "Această selecție permite Builder să aleagă cel mai bun candidat."
+msgstr "Această selecție permite ca Builder să aleagă cel mai bun candidat."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr "Container-ul utilizat pentru a genera și rula aplicația"
+msgstr "Container-ul utilizat pentru a compila și porni aplicația"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2764,83 +2931,91 @@ msgid "Use high contrast theme when running the project"
 msgstr "Folosește contrastul mărit la executarea proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:265
+msgid "Adaptive Preview"
+msgstr "Previzualizare adaptabilă"
+
+#: src/plugins/buildui/gtk/menus.ui:268
+msgid "Start the app in adaptive preview"
+msgstr "Pornește aplicația în previzualizare adaptabilă"
+
+#: src/plugins/buildui/gtk/menus.ui:271
 msgid "Text Direction"
 msgstr "Direcția textului"
 
-#: src/plugins/buildui/gtk/menus.ui:267
+#: src/plugins/buildui/gtk/menus.ui:273
 msgid "Left-to-Right"
 msgstr "De la stânga la dreapta"
 
-#: src/plugins/buildui/gtk/menus.ui:271
+#: src/plugins/buildui/gtk/menus.ui:277
 msgid "Force left-to-right text when running the project"
 msgstr "Impune de la stânga la dreapta la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:274
+#: src/plugins/buildui/gtk/menus.ui:280
 msgid "Right-to-Left"
 msgstr "De la dreapta la stânga"
 
-#: src/plugins/buildui/gtk/menus.ui:278
+#: src/plugins/buildui/gtk/menus.ui:284
 msgid "Force right-to-left text when running the project"
 msgstr "Impune de la dreapta la stânga la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:283
+#: src/plugins/buildui/gtk/menus.ui:289
 msgid "GPU"
 msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:285
+#: src/plugins/buildui/gtk/menus.ui:291
 msgid "GTK Renderer"
 msgstr "Redare GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Prestabilită"
 
-#: src/plugins/buildui/gtk/menus.ui:291
+#: src/plugins/buildui/gtk/menus.ui:297
 msgid "Use the default GTK renderer when running the project"
 msgstr "Impune redarea GTK prestabilită la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:294
+#: src/plugins/buildui/gtk/menus.ui:300
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:298
+#: src/plugins/buildui/gtk/menus.ui:304
 msgid "Use the Vulkan renderer when running the project"
 msgstr "Folosește redarea Vulkan la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:301
+#: src/plugins/buildui/gtk/menus.ui:307
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:305
+#: src/plugins/buildui/gtk/menus.ui:311
 msgid "Use the GL renderer when running the project"
 msgstr "Folosește redarea GL la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:308
+#: src/plugins/buildui/gtk/menus.ui:314
 msgid "Legacy GL"
 msgstr "GL vechi"
 
-#: src/plugins/buildui/gtk/menus.ui:312
+#: src/plugins/buildui/gtk/menus.ui:318
 msgid "Use the legacy GL renderer when running the project"
 msgstr "Folosește redarea veche GL la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:315
+#: src/plugins/buildui/gtk/menus.ui:321
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:319
+#: src/plugins/buildui/gtk/menus.ui:325
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Folosește redarea programului Cairo la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:328
+#: src/plugins/buildui/gtk/menus.ui:334
 msgid "Request verbose logging when running the project"
 msgstr "Solicită un jurnal detaliat la executarea proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/gtk/menus.ui:338
 msgid "Show Inspector"
 msgstr "Arată inspectorul"
 
-#: src/plugins/buildui/gtk/menus.ui:335
+#: src/plugins/buildui/gtk/menus.ui:341
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Solicită afișarea inspectorului GTK la executarea proiectului"
 
@@ -2878,7 +3053,7 @@ msgstr "Afișează grila"
 msgid "Display a grid pattern underneath source code"
 msgstr "Afișează o grilă sub codul sursă"
 
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
 msgid "Never"
 msgstr "Niciodată"
 
@@ -3008,7 +3183,7 @@ msgstr ""
 "procesul de compilare. Pentru a avea efect trebuie repornită aplicația "
 "Builder."
 
-#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
 msgstr "Cronologia"
 
@@ -3769,10 +3944,6 @@ msgstr "Binar"
 msgid "Threads"
 msgstr "Thread-uri"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
-msgid "Libraries"
-msgstr "Bibioteci"
-
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:263
 msgid "Registers"
 msgstr "Regiștri"
@@ -3864,13 +4035,13 @@ msgstr "Text simplu"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "Spații"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:299
 msgid "Tabs"
 msgstr "Taburi"
 
@@ -3961,14 +4132,17 @@ msgid "Save _As"
 msgstr "S_alvează ca"
 
 #: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/menu-search/gtk/menus.ui:169
 msgid "Find…"
 msgstr "Găsește…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
+#: src/plugins/menu-search/gtk/menus.ui:176
 msgid "Find/Replace…"
 msgstr "Găsește/Înlocuiește…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
+#: src/plugins/menu-search/gtk/menus.ui:158
 msgid "Print…"
 msgstr "Tipărește…"
 
@@ -4083,7 +4257,7 @@ msgid "The desired maximum line length"
 msgstr "Lungimea de linie maximă dorită"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:385
 msgid "Behavior"
 msgstr "Comportament"
 
@@ -4148,132 +4322,130 @@ msgid "Preview"
 msgstr "Previzualizare"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
-msgid "Font"
-msgstr "Font"
+msgid "Custom Font"
+msgstr "Caractere personalizate"
 
-#: src/plugins/editorui/tweaks.ui:49
-msgid "The font used within the source code editor"
-msgstr "Fontul utilizat în editorul de cod sursă"
-
-#: src/plugins/editorui/tweaks.ui:61
+#: src/plugins/editorui/tweaks.ui:66
 msgid "Adjust spacing between lines"
-msgstr "Ajustează spațierea între linii"
+msgstr "Reglează spațiul dintre rânduri"
 
-#: src/plugins/editorui/tweaks.ui:78
+#: src/plugins/editorui/tweaks.ui:83
 msgid "How text should be wrapped when wider than the frame"
-msgstr "Cum ar trebui să fie împachetat textul când este mai lat decât cadrul"
+msgstr ""
+"Când trebuie textul să treacă pe un rând nou atunci când este mai lat decât "
+"pagina"
 
-#: src/plugins/editorui/tweaks.ui:93
+#: src/plugins/editorui/tweaks.ui:98
 msgid "At Spaces"
 msgstr "La spații"
 
-#: src/plugins/editorui/tweaks.ui:99
+#: src/plugins/editorui/tweaks.ui:104
 msgid "Anywhere"
 msgstr "Oriunde"
 
-#: src/plugins/editorui/tweaks.ui:111
+#: src/plugins/editorui/tweaks.ui:116
 msgid "Background Pattern"
 msgstr "Model de fundal"
 
-#: src/plugins/editorui/tweaks.ui:112
+#: src/plugins/editorui/tweaks.ui:117
 msgid "Show a background pattern underneath source code"
 msgstr "Arată un model de fundal sub codul sursă"
 
-#: src/plugins/editorui/tweaks.ui:121
+#: src/plugins/editorui/tweaks.ui:126
 msgid "No Pattern"
 msgstr "Niciun model"
 
-#: src/plugins/editorui/tweaks.ui:127
+#: src/plugins/editorui/tweaks.ui:132
 msgid "Grid Lines"
 msgstr "Linii de grilă"
 
-#: src/plugins/editorui/tweaks.ui:137
+#: src/plugins/editorui/tweaks.ui:142
 msgid "Scrollbars"
 msgstr "Bare de derulare"
 
-#: src/plugins/editorui/tweaks.ui:140
+#: src/plugins/editorui/tweaks.ui:145
 msgid "Source Code Overview"
 msgstr "Prezentare generală a codului sursă"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:146
 msgid "Display an overview of source code next to the editor"
 msgstr "Afișează o prezentare generală a codului sursă lângă editor"
 
-#: src/plugins/editorui/tweaks.ui:150
+#: src/plugins/editorui/tweaks.ui:155
 msgid "Prefer Scrollbars"
 msgstr "Preferă barele de derulare"
 
-#: src/plugins/editorui/tweaks.ui:156
+#: src/plugins/editorui/tweaks.ui:161
 msgid "Always On"
 msgstr "Întotdeauna pornit"
 
-#: src/plugins/editorui/tweaks.ui:162
+#: src/plugins/editorui/tweaks.ui:167
 msgid "Automatic"
 msgstr "Automat"
 
-#: src/plugins/editorui/tweaks.ui:172
+#: src/plugins/editorui/tweaks.ui:177
 msgid "Line Numbers"
 msgstr "Numere de linii"
 
-#: src/plugins/editorui/tweaks.ui:175
+#: src/plugins/editorui/tweaks.ui:180
 msgid "Show Line Numbers"
 msgstr "Arată numerele de linii"
 
-#: src/plugins/editorui/tweaks.ui:176
+#: src/plugins/editorui/tweaks.ui:181
 msgid "Display line numbers next to each line of code"
 msgstr "Afișează numerele de linii lângă fiecare linie de cod"
 
-#: src/plugins/editorui/tweaks.ui:187
+#: src/plugins/editorui/tweaks.ui:192
 msgid "Use Relative Line Numbers"
 msgstr "Utilizează numere de linii relative"
 
-#: src/plugins/editorui/tweaks.ui:188
+#: src/plugins/editorui/tweaks.ui:193
 msgid "Show line numbers relative to the current line"
 msgstr "Arată numerele de linii relative la linia curentă"
 
-#: src/plugins/editorui/tweaks.ui:199
+#: src/plugins/editorui/tweaks.ui:204
 msgid "Show Diagnostics"
 msgstr "Arată diagnosticele"
 
-#: src/plugins/editorui/tweaks.ui:200
+#: src/plugins/editorui/tweaks.ui:205
 msgid "Display diagnostics next to the line number"
 msgstr "Arată diagnosticele lână numărul de linie"
 
-#: src/plugins/editorui/tweaks.ui:211
+#: src/plugins/editorui/tweaks.ui:216
 msgid "Show Line Changes"
 msgstr "Arată modificările de linie"
 
-#: src/plugins/editorui/tweaks.ui:212
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Highlight changed lines next to the line number"
 msgstr "Evidențiază liniile modificate lângă numărul de linie"
 
-#: src/plugins/editorui/tweaks.ui:223
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Use Line Selection Styling"
 msgstr "Folosește stilul rândului selecționat"
 
-#: src/plugins/editorui/tweaks.ui:224
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr ""
 "Folosește stilul selecției pentru numărul rândului dacă este selecționat tot "
 "rândul"
 
-#: src/plugins/editorui/tweaks.ui:237
+#: src/plugins/editorui/tweaks.ui:242
 msgid "Highlighting"
 msgstr "Evidențiere"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:245
 msgid "Highlight Current Line"
 msgstr "Evidențiază rândul actual"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:246
 msgid "Make the current line stand out with highlights"
 msgstr "Scoate în evidență rândul actual"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Highlight Matching Brackets"
 msgstr "Evidențiază parantezele pereche"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:258
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4281,11 +4453,11 @@ msgstr ""
 "Utilizează poziția cursorului pentru a evidenția parantezele pătrate, "
 "acoladele, parantezele rotunde pereche și multe altele"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Semantic Highlighting"
 msgstr "Evidențiere semantică"
 
-#: src/plugins/editorui/tweaks.ui:265
+#: src/plugins/editorui/tweaks.ui:270
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4293,179 +4465,179 @@ msgstr ""
 "Utilizează informațiile de simbol pentru a evidenția spațiile de nume, "
 "funcțiile și variabilele în cadrul codului sursă"
 
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:287
 msgid "Draw a mark representing normal spaces"
 msgstr "Desenează un semn care reprezintă spațiile normale"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:300
 msgid "Draw a mark representing tabs"
 msgstr "Desenează un semn care reprezintă tab-urile"
 
-#: src/plugins/editorui/tweaks.ui:307
+#: src/plugins/editorui/tweaks.ui:312
 msgid "Newlines"
 msgstr "Caractere newline"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Draw a mark at the end of lines"
 msgstr "Desenează un semn la sfârșitul rândului"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Non-breaking spaces"
 msgstr "Spații de unire"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Desenează un semn la caracterele spațiu care nu întrerup"
 
-#: src/plugins/editorui/tweaks.ui:337
+#: src/plugins/editorui/tweaks.ui:342
 msgid "Leading"
 msgstr "Din față"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:343
 msgid "Draw marks for leading spaces only"
 msgstr "Desenează semnele doar pentru spațiile din față"
 
-#: src/plugins/editorui/tweaks.ui:350
+#: src/plugins/editorui/tweaks.ui:355
 msgid "Inside Text"
 msgstr "Text de interior"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Draw marks inside a line of text only"
 msgstr "Desenează semnele doar înăuntrul unei linii de text"
 
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Trailing"
 msgstr "Din spate"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:369
 msgid "Draw marks for trailing spaces only"
 msgstr "Desenează semnele doar pentru spațiile din spate"
 
-#: src/plugins/editorui/tweaks.ui:384
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Spelling"
 msgstr "Ortografie"
 
-#: src/plugins/editorui/tweaks.ui:388
+#: src/plugins/editorui/tweaks.ui:393
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Subliniază potențialele greșeli de ortografie în timpul tastării"
 
-#: src/plugins/editorui/tweaks.ui:401
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Selections"
 msgstr "Selecții"
 
-#: src/plugins/editorui/tweaks.ui:404
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Minimum Characters to Highlight"
 msgstr "Caractere minime de evidențiat"
 
-#: src/plugins/editorui/tweaks.ui:405
+#: src/plugins/editorui/tweaks.ui:410
 msgid "The minimum selection length before highlighting matches"
 msgstr "Lungimea minimă a selecției înainte de evidențierea potrivirilor"
 
-#: src/plugins/editorui/tweaks.ui:418
+#: src/plugins/editorui/tweaks.ui:423
 msgid "Snippets"
 msgstr "Fragmente"
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:426
 msgid "Expand Snippets"
 msgstr "Extinde fragmentele"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:427
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "Utilizați „Tab” pentru a extinde fragmentele configurate în editor"
 
-#: src/plugins/editorui/tweaks.ui:437
+#: src/plugins/editorui/tweaks.ui:442
 msgid "Code Completion"
 msgstr "Completare de cod"
 
-#: src/plugins/editorui/tweaks.ui:441
+#: src/plugins/editorui/tweaks.ui:446
 msgid "Completion Proposals"
 msgstr "Propuneri de completare"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:449
 msgid "Suggest Code Completions"
 msgstr "Propune completări de cod"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:450
 msgid "Automatically suggest code completions while typing"
 msgstr "Sugerează automat completări de cod în timpul tastării"
 
-#: src/plugins/editorui/tweaks.ui:456
+#: src/plugins/editorui/tweaks.ui:461
 msgid "Select First Completion Proposal"
 msgstr "Selectează prima propunere de finalizare"
 
-#: src/plugins/editorui/tweaks.ui:457
+#: src/plugins/editorui/tweaks.ui:462
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Selectează automat prima propunere de finalizare când este afișat"
 
-#: src/plugins/editorui/tweaks.ui:472
+#: src/plugins/editorui/tweaks.ui:477
 msgid "Maximum Completion Proposals"
 msgstr "Propuneri de completare maximă"
 
-#: src/plugins/editorui/tweaks.ui:473
+#: src/plugins/editorui/tweaks.ui:478
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Numărul maxim de rânduri de completare care for fi afișate simultan"
 
-#: src/plugins/editorui/tweaks.ui:492
+#: src/plugins/editorui/tweaks.ui:497
 msgid "Movements"
 msgstr "Mișcări"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:501
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backspace va elimina spațiul extra pentru a menține alinierea cu indentarea"
 
-#: src/plugins/editorui/tweaks.ui:508
+#: src/plugins/editorui/tweaks.ui:513
 msgid "Navigate to non-space characters"
 msgstr "Navighează la caractere non-spațiu"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:522
 msgid "Before line boundaries"
 msgstr "Înainte de limitele liniei"
 
-#: src/plugins/editorui/tweaks.ui:523
+#: src/plugins/editorui/tweaks.ui:528
 msgid "After line boundaries"
 msgstr "După limitele liniei"
 
-#: src/plugins/editorui/tweaks.ui:529
+#: src/plugins/editorui/tweaks.ui:534
 msgid "Instead of line boundaries"
 msgstr "În locul limitelor liniei"
 
-#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: src/plugins/editorui/tweaks.ui:547
+#: src/plugins/editorui/tweaks.ui:552
 msgid "Session Management"
 msgstr "Administrarea sesiunii"
 
-#: src/plugins/editorui/tweaks.ui:551
+#: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
 msgstr "Salvează & restaurează"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
 msgstr "Salvare automată"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:560
 msgid "Regularly save the document as you type"
 msgstr "Salvează în mod regulat documentul în timp ce se tastează"
 
-#: src/plugins/editorui/tweaks.ui:566
+#: src/plugins/editorui/tweaks.ui:571
 msgid "Auto-Save Delay"
 msgstr "Întârziere salvare automată"
 
-#: src/plugins/editorui/tweaks.ui:567
+#: src/plugins/editorui/tweaks.ui:572
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Întârzierea în secunde de așteptat înainte de salvarea automată a "
 "documentului"
 
-#: src/plugins/editorui/tweaks.ui:582
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Format on Save"
 msgstr "Formatează la salvare"
 
-#: src/plugins/editorui/tweaks.ui:583
+#: src/plugins/editorui/tweaks.ui:588
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4473,15 +4645,15 @@ msgstr ""
 "Reformatează sursele la salvarea pe disc. Necesită un formator înregistrat "
 "pentru limbajul sursă."
 
-#: src/plugins/editorui/tweaks.ui:598
+#: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
 msgstr "Restaurează poziția cursorului"
 
-#: src/plugins/editorui/tweaks.ui:599
+#: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
 msgstr "Sari la ultima poziție la redeschiderea unui fișier"
 
-#: src/plugins/file-search/gbp-file-search-index.c:397
+#: src/plugins/file-search/gbp-file-search-index.c:412
 msgid "Open file or folder"
 msgstr "Deschide un fișier sau dosar"
 
@@ -4502,7 +4674,7 @@ msgstr "Instalare completă"
 msgid "The client has been closed"
 msgstr "Clientul a fost închis"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:806
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Nu s-a putut elimina manifestul flatpak: %s"
@@ -4543,7 +4715,7 @@ msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder localizează extensiile SDK potrivite pentru a genera proiectul"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:857
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -5058,29 +5230,86 @@ msgstr "Închide pagina"
 msgid "Close the current page"
 msgstr "Închide pagina curentă"
 
+#: src/plugins/menu-search/gtk/menus.ui:108
+#: src/plugins/project-tree/gtk/menus.ui:99
+msgid "Reveal in Project Tree"
+msgstr "Arată în arborele proiectului"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Reveal the current page in the project tree"
+msgstr "Arată pagina actuală în arborele proiectului"
+
 #: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Save the current page"
+msgstr "Salvează pagina actuală"
+
+#: src/plugins/menu-search/gtk/menus.ui:121
+msgid "Move Page Down"
+msgstr "Mută pagina în jos"
+
+#: src/plugins/menu-search/gtk/menus.ui:122
+msgid "Move the current page down"
+msgstr "Mută pagina actuală în jos"
+
+#: src/plugins/menu-search/gtk/menus.ui:127
+msgid "Move Page Left"
+msgstr "Mută pagina la stânga"
+
+#: src/plugins/menu-search/gtk/menus.ui:128
+msgid "Move the current page left"
+msgstr "Mută pagina actuală la stânga"
+
+#: src/plugins/menu-search/gtk/menus.ui:133
+msgid "Move Page Right"
+msgstr "Mută pagina la dreapta"
+
+#: src/plugins/menu-search/gtk/menus.ui:134
+msgid "Move the current page right"
+msgstr "Mută pagina actuală la dreapta"
+
+#: src/plugins/menu-search/gtk/menus.ui:139
+msgid "Move Page Up"
+msgstr "Mută pagina în sus"
+
+#: src/plugins/menu-search/gtk/menus.ui:140
+msgid "Move the current page up"
+msgstr "Mută pagina actuală în sus"
+
+#: src/plugins/menu-search/gtk/menus.ui:152
 msgid "Reload Files"
 msgstr "Reîncarcă fișierele"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:153
 msgid "Reload the contents of open files"
 msgstr "Reîncarcă conținutul fișierelor deschise"
 
-#: src/plugins/menu-search/gtk/menus.ui:125
+#: src/plugins/menu-search/gtk/menus.ui:159
+msgid "Print the current page"
+msgstr "Tipărește pagina actuală"
+
+#: src/plugins/menu-search/gtk/menus.ui:170
+msgid "Find a string in the current page"
+msgstr "Caută un șir de caractere în pagina actuală"
+
+#: src/plugins/menu-search/gtk/menus.ui:177
+msgid "Find and replace a string in the current page"
+msgstr "Caută și înlocuiește un șir de caractere în pagina actuală"
+
+#: src/plugins/menu-search/gtk/menus.ui:183
 msgid "Move to next search result"
 msgstr "Mută la rezultatul următor al căutării"
 
-#: src/plugins/menu-search/gtk/menus.ui:126
+#: src/plugins/menu-search/gtk/menus.ui:184
 msgid "Move to and select the next available search result"
-msgstr "Mută la și selectează următorul rezultat al căutării disponibil"
+msgstr "Mută la următorul rezultat al căutării și selecționează-l"
 
-#: src/plugins/menu-search/gtk/menus.ui:132
+#: src/plugins/menu-search/gtk/menus.ui:190
 msgid "Move to previous search result"
-msgstr "Mută la rezultatul anterior al căutării"
+msgstr "Mută la rezultatul precedent al căutării"
 
-#: src/plugins/menu-search/gtk/menus.ui:133
+#: src/plugins/menu-search/gtk/menus.ui:191
 msgid "Move to and select the previous search result"
-msgstr "Mută la și selectează rezultatul anterior al căutării"
+msgstr "Mută la rezultatul precedent al căutării și selecționează-l"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -5485,10 +5714,6 @@ msgstr "_Arată fișierele ignorate"
 #: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "S_ortează mai întâi dosarele"
-
-#: src/plugins/project-tree/gtk/menus.ui:99
-msgid "Reveal in Project Tree"
-msgstr "Dezvăluie în arborele proiectului"
 
 #: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
@@ -5980,7 +6205,7 @@ msgstr "Energie"
 msgid "Consumption"
 msgstr "Consum"
 
-#: src/plugins/sysprof/gtk/menus.ui:97
+#: src/plugins/sysprof/gtk/menus.ui:97 src/plugins/sysprof/tweaks.ui:179
 msgid "Battery Charge"
 msgstr "Încărcare baterie"
 
@@ -6089,10 +6314,6 @@ msgstr "Utilizare rețea"
 msgid "Record statistics about network usage"
 msgstr "Înregistrează statistici despre utilizarea rețelei"
 
-#: src/plugins/sysprof/tweaks.ui:179
-msgid "Disk Usage"
-msgstr "Utilizare disc"
-
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
 msgstr "Performanță Shell GNOME"
@@ -6168,64 +6389,60 @@ msgstr "Deschide un terminal nou în mediul de runtime al proiectului"
 msgid "Split"
 msgstr "Separă"
 
-#: src/plugins/terminal/tweaks.ui:14
-msgid "The font used within terminals"
-msgstr "Fontul utilizat în terminale"
-
-#: src/plugins/terminal/tweaks.ui:29
+#: src/plugins/terminal/tweaks.ui:34
 msgid "Allow Bold"
 msgstr "Permite îngroșat"
 
-#: src/plugins/terminal/tweaks.ui:30
+#: src/plugins/terminal/tweaks.ui:35
 msgid "Allows the use of bold escape sequences"
 msgstr "Permite utilizarea de secvențe de citare îngroșate"
 
-#: src/plugins/terminal/tweaks.ui:41
+#: src/plugins/terminal/tweaks.ui:46
 msgid "Allow Hyperlinks"
 msgstr "Permite hiperlegăturile"
 
-#: src/plugins/terminal/tweaks.ui:42
+#: src/plugins/terminal/tweaks.ui:47
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Permite utilizarea de secvențe de citare cu legătură"
 
-#: src/plugins/terminal/tweaks.ui:55
+#: src/plugins/terminal/tweaks.ui:60
 msgid "Scrolling"
 msgstr "Derulare"
 
-#: src/plugins/terminal/tweaks.ui:58
+#: src/plugins/terminal/tweaks.ui:63
 msgid "Scroll On Output"
 msgstr "Derulează la ieșire"
 
-#: src/plugins/terminal/tweaks.ui:59
+#: src/plugins/terminal/tweaks.ui:64
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
 "Derulează automat când aplicațiile sunt în cadrul textului de ieșire al "
 "terminalului"
 
-#: src/plugins/terminal/tweaks.ui:70
+#: src/plugins/terminal/tweaks.ui:75
 msgid "Scroll On Keyboard Input"
 msgstr "Derulează la intrarea tastaturii"
 
-#: src/plugins/terminal/tweaks.ui:71
+#: src/plugins/terminal/tweaks.ui:76
 msgid "Automatically scroll when typing to insert text"
 msgstr "Derulează automat la tastarea pentru inserarea de text"
 
-#: src/plugins/terminal/tweaks.ui:87
+#: src/plugins/terminal/tweaks.ui:92
 msgid "Limit Scrollback"
 msgstr "Limitează scrollback-ul"
 
-#: src/plugins/terminal/tweaks.ui:88
+#: src/plugins/terminal/tweaks.ui:93
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
 "Limitează numărul de linii care sunt stocate în memorie pentru derularea "
 "înapoi în terminal"
 
-#: src/plugins/terminal/tweaks.ui:99
+#: src/plugins/terminal/tweaks.ui:104
 msgid "Maximum Lines in Scrollback"
 msgstr "Linii maxime în scrollback"
 
-#: src/plugins/terminal/tweaks.ui:100
+#: src/plugins/terminal/tweaks.ui:105
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "Numărul maxim de linii stocate în istoric când se limitează derularea înapoi"
