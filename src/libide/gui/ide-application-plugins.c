@@ -411,8 +411,14 @@ _ide_application_load_plugins (IdeApplication *self)
                                        NULL);
   peas_engine_add_search_path (engine, user_plugins_dir, NULL);
 
+#if 0
+  /* Until GJS has moved to girepository-2.0 we cannot continue to
+   * support dynamic plugins with GJS. You'll have to port to C or
+   * wait until they have caught up.
+   */
   if (self->loaded_typelibs)
     peas_engine_enable_loader (engine, "gjs");
+#endif
 
   peas_engine_rescan_plugins (engine);
 
