@@ -32,7 +32,8 @@
 
 #include "gbp-css-preview-hover-provider.h"
 
-#define COLOR_FN_REGEX "(rgb|rgba|hsl|hsla)\\([0-9%,/.\\s]*\\)"
+#define COLOR_FN_REGEX "(rgba?|hsla?)\\([0-9%]+(?:\\s*,\\s*[0-9%]+){2}(?:\\s*,\\s*[0-9]*\\.?[0-9]+)?\\s*\\)"
+#define COLOR_UNS_FN_REGEX "(rgb|hsl|hwb|oklab|oklch|color)\\([^)]+\\)"
 #define COLOR_HEX_REGEX "#[0-9a-fA-F]+"
 #define GRADIENT_REGEX "(linear-gradient|radial-gradient|conic-gradient|repeating-linear-gradient|repeating-radial-gradient)\\s*\\((?:[^()]|\\([^)]*\\))*\\)"
 
@@ -555,6 +556,16 @@ extract_at_position (GbpCSSPreviewHoverProvider *self,
 
       return TRUE;
     }
+  else if (regex_match_text_to_cursor_position (COLOR_UNS_FN_REGEX, text, cursor_offset, &result))
+    {
+      g_set_str (&self->css_str,
+                 g_strdup_printf ("* { background-color: %s; }", result));
+
+      g_set_str (&self->description_str,
+                 g_strdup_printf ("<tt>%s</tt>", result));
+
+      return TRUE;
+    }
   else if (regex_match_text_to_cursor_position (GRADIENT_REGEX, text, cursor_offset, &result))
     {
       g_set_str (&self->css_str,
@@ -618,6 +629,7 @@ gbp_css_preview_hover_provider_populate_async (GtkSourceHoverProvider *provider,
 
   color_box = g_object_new (GTK_TYPE_BOX,
                             "width-request", 60,
+                            "height-request", 60,
                             "css-classes", IDE_STRV_INIT ("css-hover-preview-box"),
                             "vexpand", TRUE,
                             NULL);
@@ -636,6 +648,7 @@ gbp_css_preview_hover_provider_populate_async (GtkSourceHoverProvider *provider,
                             "label", self->description_str,
                             "use-markup", TRUE,
                             "xalign", 0.0f,
+                            "yalign", 0.0f,
                             "margin-start", 12,
                             "selectable", TRUE,
                             NULL);
