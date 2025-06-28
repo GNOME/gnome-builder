@@ -57,6 +57,28 @@ gbp_manuals_search_result_load_preview (IdeSearchResult *result,
 }
 
 static void
+do_delayed_activate (ManualsSearchResult *result,
+                     GParamSpec          *pspec,
+                     GbpManualsPage      *page)
+{
+  ManualsNavigatable *navigatable;
+
+  g_assert (MANUALS_IS_SEARCH_RESULT (result));
+  g_assert (pspec != NULL);
+  g_assert (GBP_IS_MANUALS_PAGE (page));
+
+  g_signal_handlers_disconnect_by_func (result,
+                                        G_CALLBACK (do_delayed_activate),
+                                        page);
+
+  if (gtk_widget_get_root (GTK_WIDGET (page)) == NULL)
+    return;
+
+  if ((navigatable = manuals_search_result_get_item (result)))
+    gbp_manuals_page_navigate_to (page, navigatable);
+}
+
+static void
 gbp_manuals_search_result_activate (IdeSearchResult *result,
                                     GtkWidget       *last_focus)
 {
@@ -81,7 +103,18 @@ gbp_manuals_search_result_activate (IdeSearchResult *result,
     page = gbp_manuals_workspace_addin_get_page (GBP_MANUALS_WORKSPACE_ADDIN (workspace_addin));
 
   if ((navigatable = manuals_search_result_get_item (self->result)))
-    gbp_manuals_page_navigate_to (page, navigatable);
+    {
+      gbp_manuals_page_navigate_to (page, navigatable);
+    }
+  else
+    {
+      /* We have to wait for the lazy search item to be populated. */
+      g_signal_connect_object (self->result,
+                               "notify::item",
+                               G_CALLBACK (do_delayed_activate),
+                               page,
+                               0);
+    }
 
   gtk_widget_grab_focus (GTK_WIDGET (page));
 }
