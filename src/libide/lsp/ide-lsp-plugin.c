@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <json-glib/json-glib.h>
 #include <libide-search.h>
 
 #include "ide-lsp-diagnostic-provider.h"
@@ -88,7 +89,7 @@ load_bytes (const char *path)
     }
   else if (g_str_has_prefix (path, "resource://"))
     {
-      return g_resources_lookup_data (path, 0, NULL);
+      return g_resources_lookup_data (path + strlen("resource://"), 0, NULL);
     }
   else
     {
@@ -133,12 +134,48 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
   if (!(context = ide_object_get_context (IDE_OBJECT (service))))
     return;
 
-  /* TODO: User configurable settings */
-
-#if 0
   if (klass->info->default_settings)
-    ide_lsp_client_set_initialization_options (client, klass->data->default_settings);
-#endif
+    {
+      g_autoptr (JsonParser) parser = NULL;
+      g_autoptr (GVariant) init_options = NULL;
+      g_autoptr (GError) error = NULL;
+      const char *data;
+      gsize size;
+      JsonNode *root;
+      JsonObject *root_obj;
+      JsonObject *plugin_obj;
+      JsonNode *init_node;
+
+      data = g_bytes_get_data (klass->info->default_settings, &size);
+
+      parser = json_parser_new ();
+      if (!json_parser_load_from_data (parser, data, size, &error))
+        {
+          g_debug ("%s", error->message);
+          return;
+        }
+
+      if (!(root = json_parser_get_root (parser)) ||
+          !JSON_NODE_HOLDS_OBJECT (root) ||
+          !(root_obj = json_node_get_object (root)) ||
+          !(plugin_obj = json_object_get_object_member (root_obj, klass->info->module_name)) ||
+          !json_object_has_member (plugin_obj, "initializationOptions"))
+        {
+          g_debug ("settings.json not valid for %s", klass->info->module_name);
+          return;
+        }
+
+      init_node = json_object_get_member (plugin_obj, "initializationOptions");
+      init_options = json_gvariant_deserialize (init_node, NULL, &error);
+
+      if (!init_options)
+        {
+          g_debug ("%s", error->message);
+          return;
+        }
+
+      ide_lsp_client_set_initialization_options (client, g_steal_pointer (&init_options));
+    }
 }
 
 static void
