@@ -1,4 +1,9 @@
 {
     "astro-language-server" : {
+        "initializationOptions" : {
+            "typescript" : {
+                "tsdk" : "./node_modules/typescript/lib"
+            }
+        }
     }
 }
