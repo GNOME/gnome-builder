@@ -151,7 +151,8 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
       parser = json_parser_new ();
       if (!json_parser_load_from_data (parser, data, size, &error))
         {
-          g_debug ("%s", error->message);
+          g_debug ("Could not parse %s settings.json: %s",
+                   klass->info->module_name, error->message);
           return;
         }
 
@@ -161,7 +162,8 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
           !(plugin_obj = json_object_get_object_member (root_obj, klass->info->module_name)) ||
           !json_object_has_member (plugin_obj, "initializationOptions"))
         {
-          g_debug ("settings.json not valid for %s", klass->info->module_name);
+          g_debug ("settings.json not valid for %s",
+                   klass->info->module_name);
           return;
         }
 
@@ -170,7 +172,8 @@ ide_lsp_plugin_service_configure_client (IdeLspService *service,
 
       if (!init_options)
         {
-          g_debug ("%s", error->message);
+          g_debug ("Could not deserialize %s initializationOptions: %s",
+                   klass->info->module_name, error->message);
           return;
         }
 
