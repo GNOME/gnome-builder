@@ -1,3 +1,17 @@
+# GNOME Builder 49.0
+
+ * Arduino support has landed
+ * Improved manuals integration
+ * Port to girepository-2.0
+ * Support for Astro language server
+ * Adaptive preview toggle when running projects
+ * Add support for YAML flatpak manifests
+ * Custom font fixes to track system font changes
+ * Terminal search fixes
+ * Various robustness fixes
+ * Meson template updates
+ * Translation updates
+
 # GNOME Builder 48.0
 
  * Various Manuals backports into Builder

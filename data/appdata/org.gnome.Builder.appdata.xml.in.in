@@ -115,7 +115,7 @@
   </supports>
 
   <releases>
-    <release version="48.0" date="2025-03-15"/>
+    <release version="49.alpha" date="2025-06-28"/>
   </releases>
 
   <content_rating type="oars-1.1" />
