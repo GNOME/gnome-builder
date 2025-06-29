@@ -447,7 +447,7 @@ ide_marked_view_new (IdeMarkedContent *content)
                                 "xalign", 0.0f,
                                 "visible", TRUE,
                                 "use-markup", TRUE,
-                                "label", parsed,
+                                "label", g_strstrip (parsed),
                                 NULL);
       }
       break;
