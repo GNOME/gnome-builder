@@ -198,20 +198,6 @@ struct _GbpCSSPreviewHoverProvider
 };
 
 static gboolean
-is_css_language (const gchar *language_id)
-{
-  return language_id != NULL &&
-         (g_strcmp0 (language_id, "css") == 0 ||
-          g_strcmp0 (language_id, "scss") == 0 ||
-          g_strcmp0 (language_id, "less") == 0 ||
-          /* They can have some CSS or colors */
-          g_strcmp0 (language_id, "markdown") == 0 ||
-          g_strcmp0 (language_id, "astro") == 0 ||
-          g_strcmp0 (language_id, "xml") == 0 ||
-          g_strcmp0 (language_id, "html") == 0);
-}
-
-static gboolean
 regex_match_text_to_cursor_position (const char *regex_str,
                                      const char *text,
                                      guint       cursor_offset,
@@ -599,7 +585,6 @@ gbp_css_preview_hover_provider_populate_async (GtkSourceHoverProvider *provider,
   g_autofree char *display_text = NULL;
   g_autofree char *color_text = NULL;
   g_autoptr (GtkCssProvider) css_provider = NULL;
-  const gchar *language_id;
 
   g_assert (GBP_IS_CSS_PREVIEW_HOVER_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_HOVER_CONTEXT (context));
@@ -612,10 +597,7 @@ gbp_css_preview_hover_provider_populate_async (GtkSourceHoverProvider *provider,
   gtk_source_hover_context_get_iter (context, &iter);
   buffer = gtk_source_hover_context_get_buffer (context);
 
-  language_id = ide_buffer_get_language_id (IDE_BUFFER (buffer));
-
-  if (!is_css_language (language_id) ||
-      !extract_at_position (self, GTK_TEXT_BUFFER (buffer), &iter))
+  if (!extract_at_position (self, GTK_TEXT_BUFFER (buffer), &iter))
     {
       g_task_return_boolean (task, TRUE);
       return;

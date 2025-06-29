@@ -7,3 +7,4 @@ Embedded=_gbp_css_preview_register_types
 Hidden=false
 Module=css-preview
 Name=CSS Preview
+X-Hover-Provider-Languages=css,scss,less,markdown,astro,xml,html
