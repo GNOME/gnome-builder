@@ -143,20 +143,9 @@ parse_marked_string (GVariant *v)
     }
   if (gstr->len)
     {
-      g_autoptr (GRegex) regex_1 = NULL;
-      g_autoptr (GRegex) regex_2 = NULL;
-      g_autofree char *result_1 = NULL;
-      g_autofree char *result_2 = NULL;
-
-      regex_1 = g_regex_new ("```\\n*```|^\\n*|\\n*$", 0, 0, NULL);
-      result_1 = g_regex_replace (regex_1, gstr->str, -1, 0, "", G_REGEX_MATCH_NEWLINE_ANY, NULL);
-      g_string_assign (gstr, result_1);
-
-      regex_2 = g_regex_new ("\\n*```", 0, 0, NULL);
-      result_2 = g_regex_replace (regex_2, gstr->str, -1, 0, "\n```", 0, NULL);
-      g_string_assign (gstr, result_2);
-
-      if (gstr->len == 0)
+      g_autoptr (GRegex) regex_check = NULL;
+      regex_check = g_regex_new ("^[\\s\\n]*(?:```[\\s\\n]*```[\\s\\n]*)*[\\s\\n]*$", 0, 0, NULL);
+      if (g_regex_match (regex_check, gstr->str, 0, NULL))
         return NULL;
 
       return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);

@@ -157,3 +157,7 @@ window.workspace paneldockchild.bottom {
 .notifications-list {
   background-color: var(--popover-bg-color);
 }
+
+.hide-caret {
+  caret-color: transparent;
+}

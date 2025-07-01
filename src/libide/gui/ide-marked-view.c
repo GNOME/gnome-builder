@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #ifdef HAVE_WEBKIT
 # include <libide-webkit-api.h>
@@ -31,9 +32,64 @@
 #include <cmark.h>
 
 #include "ide-marked-view.h"
+#include "ide-application-private.h"
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_node, cmark_node_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_iter, cmark_iter_free);
+
+static gchar *
+get_syntax_highlighted_markup (const gchar *code_text,
+                               const gchar *language_id)
+{
+  g_autoptr(GtkSourceBuffer) buffer = NULL;
+  g_autoptr(GtkSourceLanguageManager) lang_manager = NULL;
+  g_autoptr(GtkSourceStyleSchemeManager) scheme_manager = NULL;
+  IdeApplication *app;
+  GtkSourceLanguage *language = NULL;
+  GtkSourceStyleScheme *scheme = NULL;
+  GtkTextIter start_iter, end_iter;
+
+  app = IDE_APPLICATION_DEFAULT;
+
+  buffer = gtk_source_buffer_new (NULL);
+
+  lang_manager = gtk_source_language_manager_get_default ();
+  if (!ide_str_empty0 (language_id))
+    {
+      const char *final_lang_id;
+
+      /* For python overwrite to use python3 */
+      if (ide_str_equal0 (language_id, "python"))
+        final_lang_id = "python3";
+      else
+        final_lang_id = language_id;
+
+      language = gtk_source_language_manager_get_language (lang_manager, final_lang_id);
+      if (language)
+        {
+          gtk_source_buffer_set_language (buffer, language);
+        }
+      else
+        {
+          g_debug ("Language '%s' not found, using plain text", language_id);
+          return g_strdup (code_text);
+        }
+    }
+
+  scheme_manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (scheme_manager,
+                                                       ide_application_get_style_scheme (app));
+
+  if (scheme)
+    gtk_source_buffer_set_style_scheme (buffer, scheme);
+
+  gtk_text_buffer_set_text (GTK_TEXT_BUFFER (buffer), code_text, -1);
+
+  gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &start_iter);
+  gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (buffer), &end_iter);
+
+  return gtk_source_buffer_get_markup (buffer, &start_iter, &end_iter);
+}
 
 /* Keeps track of a markdown list we are currently rendering in. */
 struct list_context {
@@ -57,10 +113,10 @@ node_is_leaf(cmark_node *node)
 
 /**
  * render_node:
- * @out: (transfer none):        The #GString that the markdown is renderer into
+ * @out: (transfer none):        The #GString that the markdown is rendered into
  * @list_stack: (transfer none): A stack used to track all lists currently rendered into, must
  *                               be empty for the first #render_node call
- * @node: (transfer none):       The node that will be rendererd
+ * @node: (transfer none):       The node that will be rendered
  * @ev_type:                     The event that occurred when iterating to the provided none.
  *                               Either CMARK_EVENT_ENTER or CMARK_EVENT_EXIT
  *
@@ -93,8 +149,10 @@ render_node(GString          *out,
 
     /* Leaf nodes, these will never have an exit event. */
     case CMARK_NODE_THEMATIC_BREAK:
-    case CMARK_NODE_LINEBREAK:
       g_string_append (out, "\n");
+      break;
+    case CMARK_NODE_LINEBREAK:
+      g_string_append (out, "\n<span line_height=\"0.5\">\n</span>");
       break;
 
     case CMARK_NODE_SOFTBREAK:
@@ -102,11 +160,40 @@ render_node(GString          *out,
       break;
 
     case CMARK_NODE_CODE_BLOCK:
+      {
+        g_autofree char *code_content = NULL;
+        g_autofree char *highlighted_markup = NULL;
+        const char *lang_info = NULL;
+
+        code_content = g_strstrip (g_strdup (cmark_node_get_literal (node)));
+        if (ide_str_empty0 (code_content))
+          break;
+
+        lang_info = cmark_node_get_fence_info (node);
+
+        if (!ide_str_empty0(lang_info) &&
+            (highlighted_markup = get_syntax_highlighted_markup (code_content, lang_info)))
+          {
+              g_string_append (out, "<tt>");
+              g_string_append (out, highlighted_markup);
+              g_string_append (out, "</tt>");
+          }
+        else
+          {
+              literal_escaped = g_markup_escape_text (code_content, -1);
+              g_string_append (out, "<tt>");
+              g_string_append (out, literal_escaped);
+              g_string_append (out, "</tt>");
+          }
+
+        g_string_append (out, "\n<span line_height=\"0.5\">\n</span>");
+        break;
+      }
     case CMARK_NODE_CODE:
       literal_escaped = g_markup_escape_text (cmark_node_get_literal (node), -1);
-      g_string_append (out, "<tt>");
+      g_string_append (out, "<span font_family=\"monospace\" background=\"#bbbbbb2e\">");
       g_string_append (out, literal_escaped);
-      g_string_append (out, "</tt>");
+      g_string_append (out, "</span>");
       break;
 
     case CMARK_NODE_TEXT:
@@ -154,10 +241,11 @@ render_node(GString          *out,
                                   "<a href=\"%s\">",
                                   cmark_node_get_url (node)
                                  );
-          g_string_append (out, cmark_node_get_title (node));
         }
       if (!entering || node_is_leaf (node))
+        {
           g_string_append (out, "</a>");
+        }
       break;
 
     case CMARK_NODE_HEADING:
@@ -195,7 +283,7 @@ render_node(GString          *out,
               g_return_val_if_reached(FALSE);
             }
 
-          g_string_append_printf (out, "<span size=\"%s\">", level);
+          g_string_append_printf (out, "<span weight=\"bold\" size=\"%s\">", level);
         }
       if (!entering || node_is_leaf (node))
         {
@@ -206,12 +294,10 @@ render_node(GString          *out,
     case CMARK_NODE_PARAGRAPH:
       if (!entering)
         {
-          g_string_append (out, "\n");
-
-          /* When not in a list, append another newline to create vertical space
-           * between paragraphs.
-           */
+          /* When not in a list, create more vertical space between paragraphs. */
           if (g_queue_is_empty (list_stack))
+            g_string_append (out, "\n<span line_height=\"0.5\">\n</span>");
+          else
             g_string_append (out, "\n");
         }
       break;
@@ -233,9 +319,7 @@ render_node(GString          *out,
         {
           g_free (g_queue_pop_tail (list_stack));
 
-          /* If this was the outermost list, add a newline to create vertical spacing. */
-          if (g_queue_is_empty (list_stack))
-            g_string_append (out, "\n");
+          g_string_append (out, "<span line_height=\"0.5\">\n</span>");
         }
       break;
 
@@ -259,7 +343,7 @@ render_node(GString          *out,
             }
           else
             {
-              g_string_append (out, "• ");
+              g_string_append (out, " • ");
             }
         }
       break;
@@ -303,12 +387,14 @@ static gchar *
 parse_markdown (const gchar *markdown,
                 gssize       len)
 {
-  g_autoptr(GString)     result = NULL;
-  g_autoqueue(GQueue)    list_stack = NULL;
-  g_autoptr(cmark_node)  root_node = NULL;
-  cmark_node            *current_node;
-  g_autoptr(cmark_iter)  iter = NULL;
-  cmark_event_type       ev_type;
+  g_autoptr (GString) result = NULL;
+  g_autoqueue (GQueue) list_stack = NULL;
+  g_autoptr (cmark_node) root_node = NULL;
+  cmark_node *current_node;
+  g_autoptr (cmark_iter) iter = NULL;
+  cmark_event_type ev_type;
+  g_autoptr (GRegex) regex = NULL;
+  g_autofree char *string = NULL;
 
   IDE_ENTRY;
 
@@ -331,6 +417,10 @@ parse_markdown (const gchar *markdown,
       current_node = cmark_iter_get_node (iter);
       g_return_val_if_fail (render_node (result, list_stack, current_node, ev_type), NULL);
     }
+
+  regex = g_regex_new ("\\n*<span line_height=\"([0-9]*\\.?)[0-9]+\">\\n*</span>$", 0, 0, NULL);
+  string = g_regex_replace (regex, result->str, -1, 0, "", G_REGEX_MATCH_NEWLINE_ANY, NULL);
+  g_string_assign (result, string);
 
   IDE_RETURN (g_string_free (g_steal_pointer (&result), FALSE));
 }
@@ -400,19 +490,13 @@ ide_marked_view_new (IdeMarkedContent *content)
         g_autofree char *markup_nul_terminated = g_strndup (markup, markup_len);
         child = g_object_new (GTK_TYPE_LABEL,
                               "max-width-chars", 80,
-#if 0
-                              /* This is causing issues if users right click to display
-                               * the popover which cannot be recovered from. We'll have
-                               * to figure out the right way to handle that if we want to
-                               * reenable this.
-                               */
                               "selectable", TRUE,
-#endif
+                              "css-classes", IDE_STRV_INIT ("hide-caret", NULL),
                               "wrap", TRUE,
                               "xalign", 0.0f,
                               "visible", TRUE,
                               "use-markup", kind == IDE_MARKED_KIND_PANGO,
-                              "label", markup_nul_terminated,
+                              "label", g_strstrip (markup_nul_terminated),
                               NULL);
         break;
       }
@@ -436,13 +520,13 @@ ide_marked_view_new (IdeMarkedContent *content)
 
         parsed = parse_markdown (markup, markup_len);
 
+        g_print (" ----- MARKDOWN -----\n%s\n", parsed);
+
         if (parsed != NULL)
           child = g_object_new (GTK_TYPE_LABEL,
                                 "max-width-chars", 80,
-#if 0
-                                /* See comment above */
                                 "selectable", TRUE,
-#endif
+                                "css-classes", IDE_STRV_INIT ("hide-caret", NULL),
                                 "wrap", TRUE,
                                 "xalign", 0.0f,
                                 "visible", TRUE,
