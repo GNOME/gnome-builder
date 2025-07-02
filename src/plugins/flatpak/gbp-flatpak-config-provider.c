@@ -29,7 +29,7 @@
 #include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-manifest.h"
 
-#define DISCOVERY_MAX_DEPTH 3
+#define DISCOVERY_MAX_DEPTH 4
 #define MAX_MANIFEST_SIZE_IN_BYTES (1024L*256L) /* 256kb */
 
 struct _GbpFlatpakConfigProvider
