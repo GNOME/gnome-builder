@@ -3,7 +3,7 @@
   <gresource prefix="/plugins/meson-templates">
     <file>meson-templates.plugin</file>
     <file compressed="true">resources/src/window-gtk4.ui</file>
-    <file compressed="true">resources/src/help-overlay.ui</file>
+    <file compressed="true">resources/src/shortcuts-file.ui</file>
     <file compressed="true">resources/src/window-gtk4.js</file>
     <file compressed="true">resources/src/meson-py-gtk4.build</file>
     <file compressed="true">resources/src/window-gtk4.h</file>

@@ -63,7 +63,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "po/LINGUAS",                                          "po/LINGUAS" },
   { "po/meson.build",                                      "po/meson.build" },
   { "po/POTFILES.in",                                      "po/POTFILES.in" },
-  { "src/help-overlay.ui",                                 "src/gtk/help-overlay.ui" },
+  { "src/shortcuts-file.ui",                               "src/{{shortcuts_path}}.ui" },
 
   /* C */
   { "src/application-gtk4.c", "src/{{prefix}}-application.c", IDE_STRV_INIT ("C") },
@@ -182,7 +182,8 @@ static const GbpMesonTemplateInfo templates[] = {
                    "enable_i18n=true",
                    "enable_gnome=true",
                    "ui_file=window.ui",
-                   "exec_name={{name}}"),
+                   "exec_name={{name}}",
+                   "shortcuts_path=shortcuts-dialog"),
   },
   {
     -900,
@@ -197,7 +198,8 @@ static const GbpMesonTemplateInfo templates[] = {
                    "enable_i18n=true",
                    "enable_gnome=true",
                    "ui_file=window.ui",
-                   "exec_name={{name}}"),
+                   "exec_name={{name}}",
+                   "shortcuts_path=gtk/help-overlay"),
   },
   {
     -800,

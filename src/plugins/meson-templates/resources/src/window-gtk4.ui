@@ -64,7 +64,11 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
+{{if is_adwaita}}
+        <attribute name="action">app.shortcuts</attribute>
+{{else}}
         <attribute name="action">win.show-help-overlay</attribute>
+{{end}}
       </item>
       <item>
         <attribute name="label" translatable="yes">_About {{Title}}</attribute>

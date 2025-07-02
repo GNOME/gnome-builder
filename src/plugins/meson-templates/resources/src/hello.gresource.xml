@@ -3,7 +3,7 @@
   <gresource prefix="{{appid_path}}">
     <file preprocess="xml-stripblanks">{{ui_file}}</file>
 {{if is_gtk4}}
-    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file preprocess="xml-stripblanks">{{shortcuts_path}}.ui</file>
 {{end}}
   </gresource>
 </gresources>
