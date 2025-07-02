@@ -93,7 +93,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkShortcutLabel" id="display_shortcut">
+                      <object class="AdwShortcutLabel" id="display_shortcut">
                         <property name="halign">center</property>
                         <style>
                           <class name="dim-label"/>

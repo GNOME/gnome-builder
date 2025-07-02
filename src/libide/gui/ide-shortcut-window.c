@@ -436,22 +436,16 @@ ide_shortcut_window_new (GListModel *shortcuts)
   xml = g_string_new ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
   g_string_append (xml, "<interface>\n");
   g_string_append (xml, "  <requires lib=\"gtk\" version=\"4.0\"/>\n");
-  g_string_append (xml, "  <object class=\"GtkShortcutsWindow\" id=\"help_overlay\">\n");
-  g_string_append (xml, "    <property name=\"modal\">true</property>\n");
+  g_string_append (xml, "  <requires lib=\"adw\" version=\"1.8\"/>\n");
+  g_string_append (xml, "  <object class=\"AdwShortcutsDialog\" id=\"shortcuts_dialog\">\n");
   for (const GList *piter = pages.head; piter; piter = piter->next)
     {
       PageInfo *pi = piter->data;
-      g_autofree char *page_title = g_markup_escape_text (pi->title, -1);
 
       if (g_str_equal (pi->title, "ignore"))
         continue;
 
       g_queue_sort (&pi->groups, (GCompareDataFunc)sort_groups_func, NULL);
-
-      g_string_append        (xml, "    <child>\n");
-      g_string_append        (xml, "      <object class=\"GtkShortcutsSection\">\n");
-      g_string_append_printf (xml, "        <property name=\"section-name\">%s</property>\n", page_title);
-      g_string_append_printf (xml, "        <property name=\"title\">%s</property>\n", page_title);
 
       for (const GList *giter = pi->groups.head; giter; giter = giter->next)
         {
@@ -476,9 +470,9 @@ ide_shortcut_window_new (GListModel *shortcuts)
           if (!has_at_least_one)
             continue;
 
-          g_string_append        (xml, "        <child>\n");
-          g_string_append        (xml, "          <object class=\"GtkShortcutsGroup\">\n");
-          g_string_append_printf (xml, "            <property name=\"title\">%s</property>\n", group_title);
+          g_string_append        (xml, "    <child>\n");
+          g_string_append        (xml, "      <object class=\"AdwShortcutsSection\">\n");
+          g_string_append_printf (xml, "        <property name=\"title\">%s</property>\n", group_title);
 
           for (const GList *siter = gi->shortcuts.head; siter; siter = siter->next)
             {
@@ -494,32 +488,18 @@ ide_shortcut_window_new (GListModel *shortcuts)
 
               remove_underline_and_ellipsis (shortcut_title);
 
-              g_string_append        (xml, "            <child>\n");
-              g_string_append        (xml, "              <object class=\"GtkShortcutsShortcut\">\n");
-              g_string_append_printf (xml, "                <property name=\"accelerator\">%s</property>\n", accel);
-              g_string_append_printf (xml, "                <property name=\"title\">%s</property>\n", shortcut_title);
+              g_string_append        (xml, "        <child>\n");
+              g_string_append        (xml, "          <object class=\"AdwShortcutsItem\">\n");
+              g_string_append_printf (xml, "            <property name=\"accelerator\">%s</property>\n", accel);
+              g_string_append_printf (xml, "            <property name=\"title\">%s</property>\n", shortcut_title);
               if (si->subtitle)
-                g_string_append_printf (xml, "                <property name=\"subtitle\">%s</property>\n", si->subtitle);
-#if 0
-              if (si->icon_name)
-                {
-                  g_string_append        (xml, "                <property name=\"icon\">\n");
-                  g_string_append        (xml, "                  <object class=\"GThemedIcon\">\n");
-                  g_string_append_printf (xml, "                    <property name=\"name\">%s</property>\n", si->icon_name);
-                  g_string_append        (xml, "                  </object>\n");
-                  g_string_append        (xml, "                </property>\n");
-                }
-#endif
-              g_string_append        (xml, "              </object>\n");
-              g_string_append        (xml, "            </child>\n");
+                g_string_append_printf (xml, "            <property name=\"subtitle\">%s</property>\n", si->subtitle);
+              g_string_append        (xml, "          </object>\n");
+              g_string_append        (xml, "        </child>\n");
             }
-
-          g_string_append        (xml, "          </object>\n");
-          g_string_append        (xml, "        </child>\n");
+          g_string_append        (xml, "      </object>\n");
+          g_string_append        (xml, "    </child>\n");
         }
-
-      g_string_append        (xml, "      </object>\n");
-      g_string_append        (xml, "    </child>\n");
     }
   g_string_append        (xml, "  </object>\n");
   g_string_append        (xml, "</interface>\n");
@@ -534,7 +514,7 @@ ide_shortcut_window_new (GListModel *shortcuts)
   if (!(builder = gtk_builder_new_from_string (xml->str, -1)))
     IDE_RETURN (NULL);
 
-  if (!(window = GTK_WIDGET (gtk_builder_get_object (builder, "help_overlay"))))
+  if (!(window = GTK_WIDGET (gtk_builder_get_object (builder, "shortcuts_dialog"))))
     IDE_RETURN (NULL);
 
   g_object_set_data_full (G_OBJECT (window),

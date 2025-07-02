@@ -564,7 +564,7 @@ ide_workspace_action_help_overlay (gpointer    instance,
   g_assert (IDE_IS_WORKSPACE (self));
 
   if ((window = ide_shortcut_window_new (priv->shortcuts)))
-    gtk_window_present (GTK_WINDOW (window));
+    adw_dialog_present (ADW_DIALOG (window), GTK_WIDGET (self));
 }
 
 static void
