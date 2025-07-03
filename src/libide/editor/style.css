@@ -45,17 +45,19 @@ GtkSourceAssistant.hover-assistant {
               0 0 20px 20px transparent;
 }
 
-IdeChangeScrollbar scrollbar > range > trough  {
+IdeScrollbar scrollbar > range > trough  {
   margin-left: 2px;
   margin-right: 2px;
+  transition: margin-left ease-in-out 100ms,
+              margin-right ease-in-out 100ms;
 }
 
-IdeChangeScrollbar scrollbar:hover > range > trough {
-  margin-left: 6px;
-  margin-right: 6px;
+IdeScrollbar scrollbar:hover > range > trough {
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
-IdeChangeScrollbar scrollbar > range > trough > slider {
+IdeScrollbar scrollbar > range > trough > slider {
   border-width: 0px;
   margin: 0px;
 }

@@ -28,18 +28,36 @@
 #include <math.h>
 
 #define SCROLLBAR_V_MARGIN 6
-#define SCROLLBAR_H_MARGIN 6
+#define SCROLLBAR_H_MARGIN 8
+
+typedef enum {
+  LINE_CHANGED,
+  LINE_ADDED,
+  LINE_DELETED,
+  LINE_ERROR,
+  LINE_FATAL,
+  LINE_WARNING,
+  LINE_DEPRECATED
+} ChunkType;
+
+typedef struct {
+  guint     start_line;
+  guint     end_line;
+  ChunkType line_type;
+} LinesChunk;
 
 struct _IdeScrollbar {
   GtkWidget          parent_instance;
 
   GtkScrollbar      *scrollbar;
 
+  GList             *chunks;
+
   IdeSourceView     *view;
   IdeBuffer         *buffer;
 
-  GSignalGroup      *buffer_signals;
   GSignalGroup      *monitor_signals;
+  GSignalGroup      *buffer_signals;
   GSignalGroup      *view_signals;
 
   GdkRGBA            add_color;
@@ -133,7 +151,6 @@ notify_style_scheme_cb (IdeBuffer             *buffer,
                         GParamSpec            *pspec,
                         IdeScrollbar *self)
 {
-  g_debug ("notify_style_scheme_cb");
   connect_style_scheme (self);
 }
 
@@ -168,32 +185,184 @@ ide_scrollbar_dispose(GObject *object)
 }
 
 static void
-snapshot_changed_chunk (IdeScrollbar *self,
-                        IdeBufferLineChange    change,
-                        GtkSnapshot           *snapshot,
-                        double                 start_y,
-                        double                 end_y,
-                        double                 width)
+snapshot_chunk (IdeScrollbar *self,
+                ChunkType     chunk_type,
+                int           start_y,
+                int           end_y,
+                double        width,
+                GtkSnapshot  *snapshot)
 {
   const GdkRGBA *color = NULL;
-  double height;
+  gboolean is_change = TRUE;
 
-  if (change == 0)
-    return;
-
-  if (change & IDE_BUFFER_LINE_CHANGE_ADDED)
-    color = &self->add_color;
-  else if (change & IDE_BUFFER_LINE_CHANGE_CHANGED)
-    color = &self->change_color;
-  else if (change & IDE_BUFFER_LINE_CHANGE_DELETED)
-    color = &self->remove_color;
+  switch (chunk_type)
+    {
+    case LINE_ADDED:
+      color = &self->add_color;
+      break;
+    case LINE_DELETED:
+      color = &self->remove_color;
+      break;
+    case LINE_CHANGED:
+      color = &self->change_color;
+      break;
+    case LINE_ERROR:
+      color = &self->error_color;
+      is_change = FALSE;
+      break;
+    case LINE_FATAL:
+      color = &self->fatal_color;
+      is_change = FALSE;
+      break;
+    case LINE_WARNING:
+      color = &self->warning_color;
+      is_change = FALSE;
+      break;
+    case LINE_DEPRECATED:
+      color = &self->deprecated_color;
+      is_change = FALSE;
+      break;
+    default:
+      return;
+    }
 
   if (color && end_y > start_y)
     {
-      height = (int)MAX (end_y - start_y, 1);
+      double height = (int)MAX (end_y - start_y, 1);
+      int chunk_width = MIN (SCROLLBAR_H_MARGIN, width / 2);
+
       gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT(0, (int)start_y, width, height));
+                                 &GRAPHENE_RECT_INIT(is_change ? 0 : width - chunk_width,
+                                                     (int)start_y,
+                                                     chunk_width,
+                                                     height));
     }
+}
+
+static void
+ide_scrollbar_update_chunks (IdeScrollbar *self)
+{
+  IdeBufferChangeMonitor *monitor;
+  IdeDiagnostics *diagnostics;
+  IdeBufferLineChange last_change;
+  double chunk_start_line;
+  gboolean first_line = TRUE;
+  int total_lines;
+  int line;
+
+  g_return_if_fail (self->buffer);
+
+  g_list_free_full (self->chunks, g_free);
+  self->chunks = NULL;
+
+  total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER(self->buffer));
+
+  /* Update lines changes */
+  if ((monitor = ide_buffer_get_change_monitor (self->buffer)))
+    {
+      for (line = 0; line <= total_lines; line++)
+        {
+          IdeBufferLineChange change;
+
+          if (line == total_lines)
+            change = IDE_BUFFER_LINE_CHANGE_NONE;
+          else
+            change = ide_buffer_change_monitor_get_change (monitor, line);
+
+          if (first_line)
+            {
+              last_change = change;
+              chunk_start_line = line;
+              first_line = FALSE;
+            }
+          else if (change != last_change)
+            {
+              LinesChunk *chunk = g_new0 (LinesChunk, 1);
+              chunk->start_line = chunk_start_line;
+              chunk->end_line = line + 1;
+
+              switch (last_change)
+                {
+                case IDE_BUFFER_LINE_CHANGE_ADDED:
+                  chunk->line_type = LINE_ADDED;
+                  break;
+
+                case IDE_BUFFER_LINE_CHANGE_CHANGED:
+                  chunk->line_type = LINE_CHANGED;
+                  break;
+
+                case IDE_BUFFER_LINE_CHANGE_DELETED:
+                  chunk->line_type = LINE_DELETED;
+                  break;
+
+                case IDE_BUFFER_LINE_CHANGE_NONE:
+                case IDE_BUFFER_LINE_CHANGE_PREVIOUS_DELETED:
+                default:
+                  g_free (chunk);
+                  chunk = NULL;
+                  break;
+                }
+
+              if (chunk)
+                self->chunks = g_list_append (self->chunks, chunk);
+
+              last_change = change;
+              chunk_start_line = line + 1;
+            }
+        }
+    }
+
+  /* Update diagnostics */
+  if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (self->buffer))))
+    {
+      GFile *file;
+
+      file = ide_buffer_get_file (IDE_BUFFER (self->buffer));
+
+      for (line = 0; line < total_lines; line++)
+        {
+          IdeDiagnostic *diagnostic;
+          IdeDiagnosticSeverity severity;
+          LinesChunk *chunk;
+
+          diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line);
+
+          if ((diagnostic == NULL) || !IDE_IS_DIAGNOSTIC (diagnostic))
+            continue;
+
+          severity = ide_diagnostic_get_severity (diagnostic);
+
+          chunk = g_new0 (LinesChunk, 1);
+          chunk->start_line = line;
+          chunk->end_line = line + 1;
+
+          switch (severity)
+            {
+            case IDE_DIAGNOSTIC_WARNING:
+              chunk->line_type = LINE_WARNING;
+              break;
+            case IDE_DIAGNOSTIC_ERROR:
+              chunk->line_type = LINE_ERROR;
+              break;
+            case IDE_DIAGNOSTIC_FATAL:
+              chunk->line_type = LINE_FATAL;
+              break;
+            case IDE_DIAGNOSTIC_DEPRECATED:
+              chunk->line_type = LINE_DEPRECATED;
+              break;
+            case IDE_DIAGNOSTIC_IGNORED:
+            case IDE_DIAGNOSTIC_NOTE:
+            case IDE_DIAGNOSTIC_UNUSED:
+            default:
+              g_free (chunk);
+              continue;
+            }
+
+          self->chunks = g_list_append (self->chunks, chunk);
+        }
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
@@ -201,10 +370,7 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
                         GtkSnapshot *snapshot)
 {
   IdeScrollbar *self = IDE_SCROLLBAR(widget);
-  IdeBufferChangeMonitor *monitor;
-  IdeDiagnostics *diagnostics;
   int total_lines;
-  int line;
   GtkAllocation allocation;
   double width;
   double height;
@@ -216,15 +382,10 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
   int cursor_position;
   int cursor_line;
   GtkTextIter cursor_iter;
-  IdeBufferLineChange last_change = 0;
-  double chunk_start_y = 0;
   double line_height;
   int quantized_line_h;
-  gboolean first_line = TRUE;
 
   g_return_if_fail (self->buffer);
-
-  monitor = ide_buffer_get_change_monitor (self->buffer);
 
   total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER(self->buffer));
 
@@ -259,99 +420,25 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
                                                       quantized_line_h));
     }
 
-  /* Draw changes */
-  for (line = 0; line < total_lines; line++)
+  /* Draw changes and diagnostics */
+  for (GList *l = self->chunks; l != NULL; l = l->next)
     {
-      IdeBufferLineChange change;
-      double line_y;
+      LinesChunk *chunk = l->data;
 
-      change = ide_buffer_change_monitor_get_change (monitor, line);
-      line_y = top_margin + (double)(line + 1) * line_height;
+      double chunk_start_y = top_margin + (double)chunk->start_line * line_height;
+      double chunk_end_y   = top_margin + (double)chunk->end_line   * line_height;
 
-      if (first_line)
-        {
-          last_change = change;
-          chunk_start_y = line_y;
-          first_line = FALSE;
-        }
-      else if (change != last_change)
-        {
-          snapshot_changed_chunk (self,
-                                  last_change,
-                                  snapshot,
-                                  chunk_start_y,
-                                  line_y,
-                                  SCROLLBAR_H_MARGIN);
-
-          last_change = change;
-          chunk_start_y = line_y;
-        }
-    }
-
-  if (!first_line)
-    {
-      double final_y = top_margin + content_height;
-      snapshot_changed_chunk (self,
-                              last_change,
-                              snapshot,
-                              chunk_start_y,
-                              final_y,
-                              SCROLLBAR_H_MARGIN);
-    }
-
-  /* Draw diagnostics */
-  if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (self->buffer))))
-    {
-      const GdkRGBA *color = NULL;
-      GFile *file;
-
-      file = ide_buffer_get_file (IDE_BUFFER (self->buffer));
-
-      for (line = 0; line < total_lines; line++)
-        {
-          IdeDiagnostic *diagnostic;
-          IdeDiagnosticSeverity severity;
-          double line_y;
-
-          diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line);
-
-          if ((diagnostic == NULL) || !IDE_IS_DIAGNOSTIC (diagnostic))
-            continue;
-
-          severity = ide_diagnostic_get_severity (diagnostic);
-          line_y = top_margin + (double)line * line_height;
-
-          switch (severity)
-            {
-            case IDE_DIAGNOSTIC_WARNING:
-              color = &self->warning_color;
-              break;
-            case IDE_DIAGNOSTIC_ERROR:
-              color = &self->error_color;
-              break;
-            case IDE_DIAGNOSTIC_FATAL:
-              color = &self->fatal_color;
-              break;
-            case IDE_DIAGNOSTIC_DEPRECATED:
-            case IDE_DIAGNOSTIC_IGNORED:
-            case IDE_DIAGNOSTIC_NOTE:
-            case IDE_DIAGNOSTIC_UNUSED:
-            default:
-              break;
-            }
-
-          if (color != NULL)
-            gtk_snapshot_append_color (snapshot,
-                                       color,
-                                       &GRAPHENE_RECT_INIT (width - SCROLLBAR_H_MARGIN,
-                                                            (int)line_y,
-                                                            SCROLLBAR_H_MARGIN,
-                                                            quantized_line_h));
-        }
+      snapshot_chunk (self,
+                      chunk->line_type,
+                      chunk_start_y,
+                      chunk_end_y,
+                      width,
+                      snapshot);
     }
 
   gtk_widget_snapshot_child (GTK_WIDGET (self), GTK_WIDGET (self->scrollbar), snapshot);
 }
+
 void
 ide_scrollbar_set_view (IdeScrollbar *self,
                         IdeSourceView         *view)
@@ -436,7 +523,7 @@ ide_scrollbar_class_init(IdeScrollbarClass *klass)
                                     N_PROPERTIES,
                                     properties);
 
-  gtk_widget_class_set_css_name (widget_class, "IdeChangeScrollbar");
+  gtk_widget_class_set_css_name (widget_class, "IdeScrollbar");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-scrollbar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeScrollbar, scrollbar);
@@ -454,7 +541,7 @@ ide_scrollbar_init(IdeScrollbar *self)
 
   g_signal_group_connect_object (self->monitor_signals,
                                  "changed",
-                                 G_CALLBACK(gtk_widget_queue_draw),
+                                 G_CALLBACK(ide_scrollbar_update_chunks),
                                  self,
                                  G_CONNECT_SWAPPED);
 
@@ -463,6 +550,12 @@ ide_scrollbar_init(IdeScrollbar *self)
   g_signal_group_connect_object (self->buffer_signals,
                                  "cursor-moved",
                                  G_CALLBACK(gtk_widget_queue_draw),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "notify::has-diagnostics",
+                                 G_CALLBACK(ide_scrollbar_update_chunks),
                                  self,
                                  G_CONNECT_SWAPPED);
 
