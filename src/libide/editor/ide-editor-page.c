@@ -35,6 +35,7 @@
 #include "ide-editor-page-private.h"
 #include "ide-editor-print-operation.h"
 #include "ide-editor-save-delegate.h"
+#include "ide-scrollbar.h"
 #include "ide-source-map.h"
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GActionGroup, g_object_unref)
@@ -924,6 +925,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-editor-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scrubber_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_revealer);
@@ -945,6 +947,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
+  g_type_ensure (IDE_TYPE_SCROLLBAR);
   g_type_ensure (IDE_TYPE_SOURCE_MAP);
 }
 

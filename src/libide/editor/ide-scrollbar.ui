@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeScrollbar" parent="GtkWidget">
+    <child>
+      <object class="GtkScrollbar" id="scrollbar">
+        <property name="orientation">vertical</property>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -25,6 +25,7 @@ libide_editor_private_headers = [
   'ide-editor-page-private.h',
   'ide-editor-print-operation.h',
   'ide-editor-save-delegate.h',
+  'ide-scrollbar.h',
   'ide-source-map.h',
 ]
 
@@ -51,6 +52,7 @@ libide_editor_private_sources = [
   'ide-editor-print-operation.c',
   'ide-editor-save-delegate.c',
   'ide-editor-search-bar.c',
+  'ide-scrollbar.c',
   'ide-source-map.c',
 ]
 

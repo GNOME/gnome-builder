@@ -67,19 +67,20 @@ _ide_editor_page_settings_reload (IdeEditorPage *self)
 }
 
 static gboolean
-map_policy_to_vscrollbar_policy (GValue   *value,
+map_policy_to_scrollbar_visible (GValue   *value,
                                  GVariant *variant,
                                  gpointer  user_data)
 {
   const char *policy = g_variant_get_string (variant, NULL);
 
-  if (g_strcmp0 (policy, "always") == 0)
-    g_value_set_enum (value, GTK_POLICY_EXTERNAL);
+  if (g_strcmp0 (policy, "never") == 0)
+    g_value_set_boolean (value, TRUE);
   else
-    g_value_set_enum (value, GTK_POLICY_AUTOMATIC);
+    g_value_set_boolean (value, FALSE);
 
   return TRUE;
 }
+
 
 static gboolean
 grid_lines_to_background_pattern (GValue   *value,
@@ -277,9 +278,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                    self->view, "highlight-current-line",
                    G_SETTINGS_BIND_GET);
   g_settings_bind_with_mapping (editor_settings, "map-policy",
-                                self->scroller, "vscrollbar-policy",
+                                self->scrollbar, "visible",
                                 G_SETTINGS_BIND_GET,
-                                map_policy_to_vscrollbar_policy,
+                                map_policy_to_scrollbar_visible,
                                 NULL, NULL, NULL);
   g_settings_bind_with_mapping (editor_settings, "show-grid-lines",
                                 self->view, "background-pattern",

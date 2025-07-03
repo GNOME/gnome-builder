@@ -14,20 +14,34 @@
         <property name="hexpand">true</property>
         <property name="vexpand">true</property>
         <property name="content">
-          <object class="GtkScrolledWindow" id="scroller">
+          <object class="GtkOverlay">
             <child>
-              <object class="IdeSourceView" id="view">
-                <property name="monospace">true</property>
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
-                <property name="show-line-numbers">false</property>
-                <property name="left-margin">0</property>
-                <property name="top-margin">12</property>
+              <object class="GtkScrolledWindow" id="scroller">
+                <property name="vscrollbar-policy">external</property>
+                <style>
+                  <class name="editor-scrolledview"/>
+                </style>
                 <child>
-                  <object class="GtkEventControllerFocus">
-                    <signal name="enter" handler="ide_editor_page_focus_enter_cb" swapped="true" object="IdeEditorPage"/>
+                  <object class="IdeSourceView" id="view">
+                    <property name="monospace">true</property>
+                    <property name="hexpand">true</property>
+                    <property name="vexpand">true</property>
+                    <property name="show-line-numbers">false</property>
+                    <property name="left-margin">0</property>
+                    <property name="top-margin">12</property>
+                    <child>
+                      <object class="GtkEventControllerFocus">
+                        <signal name="enter" handler="ide_editor_page_focus_enter_cb" swapped="true" object="IdeEditorPage"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="IdeScrollbar" id="scrollbar">
+                <property name="view">view</property>
+                <property name="halign">end</property>
               </object>
             </child>
           </object>

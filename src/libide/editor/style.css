@@ -44,3 +44,18 @@ GtkSourceAssistant.hover-assistant {
               /* give a bit more pointer space to avoid flickering display */
               0 0 20px 20px transparent;
 }
+
+IdeChangeScrollbar scrollbar > range > trough  {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+IdeChangeScrollbar scrollbar:hover > range > trough {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+IdeChangeScrollbar scrollbar > range > trough > slider {
+  border-width: 0px;
+  margin: 0px;
+}
