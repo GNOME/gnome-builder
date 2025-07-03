@@ -34,7 +34,7 @@ struct _IdeShortcutAccelDialog
 
   GtkStack             *stack;
   GtkLabel             *display_label;
-  GtkShortcutLabel     *display_shortcut;
+  AdwShortcutLabel     *display_shortcut;
   GtkLabel             *selection_label;
 
   char                 *shortcut_title;

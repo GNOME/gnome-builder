@@ -276,7 +276,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutLabel">
+              <object class="AdwShortcutLabel">
                 <property name="valign">center</property>
                 <binding name="accelerator">
                   <lookup name="accelerator" type="IdeSearchResult">

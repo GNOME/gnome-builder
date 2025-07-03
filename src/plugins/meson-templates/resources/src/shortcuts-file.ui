@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+{{if is_adwaita}}
+  <object class="AdwShortcutsDialog" id="shortcuts_dialog">
+    <child>
+      <object class="AdwShortcutsSection">
+        <property name="title" translatable="yes">Shortcuts</property>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Show Shortcuts</property>
+            <property name="action-name">app.shortcuts</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwShortcutsItem">
+            <property name="title" translatable="yes" context="shortcut window">Quit</property>
+            <property name="action-name">app.quit</property>
+{{else}}
   <object class="GtkShortcutsWindow" id="help_overlay">
     <property name="modal">True</property>
     <child>
@@ -21,6 +37,7 @@
                 <property name="action-name">app.quit</property>
               </object>
             </child>
+{{end}}
           </object>
         </child>
       </object>

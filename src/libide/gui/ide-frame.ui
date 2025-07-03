@@ -21,7 +21,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutLabel">
+              <object class="AdwShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
                 <property name="accelerator">&lt;Control&gt;Return</property>
                 <layout>
@@ -41,7 +41,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutLabel">
+              <object class="AdwShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
                 <property name="accelerator">F9</property>
                 <layout>
@@ -61,7 +61,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutLabel">
+              <object class="AdwShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
                 <property name="accelerator">&lt;Ctrl&gt;&amp;O</property>
                 <layout>
@@ -81,7 +81,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkShortcutLabel">
+              <object class="AdwShortcutLabel">
                 <property name="halign">GTK_ALIGN_END</property>
                 <property name="accelerator">&lt;Ctrl&gt;&amp;&lt;Shift&gt;&amp;T</property>
                 <layout>
