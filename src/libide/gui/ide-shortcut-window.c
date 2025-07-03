@@ -435,8 +435,6 @@ ide_shortcut_window_new (GListModel *shortcuts)
   /* Generate XML for the shortcuts window */
   xml = g_string_new ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
   g_string_append (xml, "<interface>\n");
-  g_string_append (xml, "  <requires lib=\"gtk\" version=\"4.0\"/>\n");
-  g_string_append (xml, "  <requires lib=\"adw\" version=\"1.8\"/>\n");
   g_string_append (xml, "  <object class=\"AdwShortcutsDialog\" id=\"shortcuts_dialog\">\n");
   for (const GList *piter = pages.head; piter; piter = piter->next)
     {
