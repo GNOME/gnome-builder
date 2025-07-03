@@ -200,28 +200,35 @@ snapshot_chunk (IdeScrollbar *self,
     case LINE_ADDED:
       color = &self->add_color;
       break;
+
     case LINE_DELETED:
       color = &self->remove_color;
       break;
+
     case LINE_CHANGED:
       color = &self->change_color;
       break;
+
     case LINE_ERROR:
       color = &self->error_color;
       is_change = FALSE;
       break;
+
     case LINE_FATAL:
       color = &self->fatal_color;
       is_change = FALSE;
       break;
+
     case LINE_WARNING:
       color = &self->warning_color;
       is_change = FALSE;
       break;
+
     case LINE_DEPRECATED:
       color = &self->deprecated_color;
       is_change = FALSE;
       break;
+
     default:
       return;
     }
@@ -341,15 +348,19 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
             case IDE_DIAGNOSTIC_WARNING:
               chunk->line_type = LINE_WARNING;
               break;
+
             case IDE_DIAGNOSTIC_ERROR:
               chunk->line_type = LINE_ERROR;
               break;
+
             case IDE_DIAGNOSTIC_FATAL:
               chunk->line_type = LINE_FATAL;
               break;
+
             case IDE_DIAGNOSTIC_DEPRECATED:
               chunk->line_type = LINE_DEPRECATED;
               break;
+
             case IDE_DIAGNOSTIC_IGNORED:
             case IDE_DIAGNOSTIC_NOTE:
             case IDE_DIAGNOSTIC_UNUSED:
@@ -374,7 +385,6 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
   GtkAllocation allocation;
   double width;
   double height;
-  double content_height;
   double view_height;
   double top_margin;
   double bottom_margin;
@@ -383,7 +393,9 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
   int cursor_line;
   GtkTextIter cursor_iter;
   double line_height;
-  int quantized_line_h;
+
+  g_assert (IDE_IS_SCROLLBAR (self));
+  g_assert (GTK_IS_SNAPSHOT (snapshot));
 
   g_return_if_fail (self->buffer);
 
@@ -397,11 +409,8 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
   ratio = height / view_height;
   top_margin = ratio * gtk_text_view_get_top_margin (GTK_TEXT_VIEW (self->view)) + SCROLLBAR_V_MARGIN;
   bottom_margin = ratio * gtk_text_view_get_bottom_margin (GTK_TEXT_VIEW (self->view)) + SCROLLBAR_V_MARGIN;
-  content_height = height - top_margin - bottom_margin;
 
-  line_height = content_height / total_lines;
-
-  quantized_line_h = (int)MAX (line_height, 1);
+  line_height = (height - top_margin - bottom_margin) / total_lines;
 
   /* Draw cursor */
   g_object_get (self->buffer, "cursor-position", &cursor_position, NULL);
@@ -410,14 +419,14 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
 
   if (cursor_line >= 0 && cursor_line < total_lines)
     {
-      double cursor_y = top_margin + (double)cursor_line * line_height;
+      int cursor_y = top_margin + cursor_line * line_height;
 
       gtk_snapshot_append_color (snapshot,
                                  &self->cursor_color,
                                  &GRAPHENE_RECT_INIT (0,
                                                       (int)cursor_y,
                                                       width,
-                                                      quantized_line_h));
+                                                      (int)MAX (line_height, 1)));
     }
 
   /* Draw changes and diagnostics */
@@ -425,8 +434,8 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
     {
       LinesChunk *chunk = l->data;
 
-      double chunk_start_y = top_margin + (double)chunk->start_line * line_height;
-      double chunk_end_y   = top_margin + (double)chunk->end_line   * line_height;
+      int chunk_start_y = top_margin + chunk->start_line * line_height;
+      int chunk_end_y   = top_margin + chunk->end_line   * line_height;
 
       snapshot_chunk (self,
                       chunk->line_type,
@@ -478,6 +487,7 @@ ide_scrollbar_set_property (GObject      *object,
         case PROP_VIEW:
             ide_scrollbar_set_view (self, g_value_get_object(value));
             break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -495,6 +505,7 @@ ide_scrollbar_get_property (GObject    *object,
         case PROP_VIEW:
             g_value_set_object(value, self->view);
             break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
