@@ -4,7 +4,7 @@
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm18"
+        "org.freedesktop.Sdk.Extension.llvm20"
     ],
     "command" : "gnome-builder",
     "tags" : [
@@ -58,8 +58,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm18/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm18/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm20/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm20/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -116,8 +116,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.71.0.tar.gz",
-                    "sha256" : "403a0f34463c0d6b0fbf230d8a03b7af9f493faa235208417793350db062003c"
+                    "url" : "https://github.com/uncrustify/uncrustify/archive/refs/tags/uncrustify-0.81.0.tar.gz",
+                    "sha256" : "484623dc16b92206adc6ac0770077c6c67c6e441102148c2a121a19549330ff9"
                 }
             ]
         },
@@ -198,7 +198,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libssh2/libssh2.git",
-                    "tag" : "libssh2-1.10.0"
+                    "tag" : "libssh2-1.11.1"
                 }
             ]
         },
@@ -446,7 +446,8 @@
             "buildsystem" : "cmake-ninja",
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib"
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
             ],
             "sources" : [
                 {
@@ -667,7 +668,8 @@
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
-                "-DBUILD_SHARED_LIB=OFF"
+                "-DBUILD_SHARED_LIB=OFF",
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
             ],
             "sources" : [
                 {
@@ -803,11 +805,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm18/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm18/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm18/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm18/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm18/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm20/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm20/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm20/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm20/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm20/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }
