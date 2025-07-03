@@ -70,16 +70,16 @@ struct _IdeScrollbar {
   GdkRGBA            deprecated_color;
 };
 
-G_DEFINE_TYPE_WITH_CODE(IdeScrollbar, ide_scrollbar,
-                        GTK_TYPE_WIDGET, G_IMPLEMENT_INTERFACE(GTK_TYPE_BUILDABLE, NULL))
+G_DEFINE_TYPE_WITH_CODE (IdeScrollbar, ide_scrollbar, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, NULL))
 
 enum {
-    PROP_0,
-    PROP_VIEW,
-    N_PROPERTIES
+  PROP_0,
+  PROP_VIEW,
+  N_PROPS
 };
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *properties [N_PROPS];
 
 static gboolean
 get_style_rgba (GtkSourceStyleScheme *scheme,
@@ -143,12 +143,12 @@ connect_style_scheme (IdeScrollbar *self)
   if (!get_style_rgba (scheme, "def:note", &self->deprecated_color))
     gdk_rgba_parse (&self->deprecated_color, IDE_DIAGNOSTIC_FALLBACK_DEPRECATED);
 
-  gtk_widget_queue_draw(GTK_WIDGET(self));
+  gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
-notify_style_scheme_cb (IdeBuffer             *buffer,
-                        GParamSpec            *pspec,
+notify_style_scheme_cb (IdeBuffer    *buffer,
+                        GParamSpec   *pspec,
                         IdeScrollbar *self)
 {
   connect_style_scheme (self);
@@ -161,7 +161,7 @@ notify_buffer_cb (GtkTextView *text_view,
 {
   IdeScrollbar *self = IDE_SCROLLBAR (user_data);
 
-  self->buffer = IDE_BUFFER (gtk_text_view_get_buffer(text_view));
+  self->buffer = IDE_BUFFER (gtk_text_view_get_buffer (text_view));
 
   g_signal_group_set_target (self->buffer_signals, self->buffer);
 
@@ -173,15 +173,18 @@ notify_buffer_cb (GtkTextView *text_view,
 }
 
 static void
-ide_scrollbar_dispose(GObject *object)
+ide_scrollbar_dispose (GObject *object)
 {
   IdeScrollbar *self;
 
   self = IDE_SCROLLBAR (object);
   g_clear_object (&self->view);
   g_clear_object (&self->buffer);
+  g_clear_object (&self->monitor_signals);
+  g_clear_object (&self->buffer_signals);
+  g_clear_object (&self->view_signals);
 
-  G_OBJECT_CLASS (ide_scrollbar_parent_class)->dispose(object);
+  G_OBJECT_CLASS (ide_scrollbar_parent_class)->dispose (object);
 }
 
 static void
@@ -235,14 +238,14 @@ snapshot_chunk (IdeScrollbar *self,
 
   if (color && end_y > start_y)
     {
-      double height = (int)MAX (end_y - start_y, 1);
+      int height = MAX (end_y - start_y, 2);
       int chunk_width = MIN (SCROLLBAR_H_MARGIN, width / 2);
 
       gtk_snapshot_append_color (snapshot, color,
-                                 &GRAPHENE_RECT_INIT(is_change ? 0 : width - chunk_width,
-                                                     (int)start_y,
-                                                     chunk_width,
-                                                     height));
+                                 &GRAPHENE_RECT_INIT (is_change ? 0 : width - chunk_width,
+                                                      start_y,
+                                                      chunk_width,
+                                                      height));
     }
 }
 
@@ -251,9 +254,6 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
 {
   IdeBufferChangeMonitor *monitor;
   IdeDiagnostics *diagnostics;
-  IdeBufferLineChange last_change;
-  double chunk_start_line;
-  gboolean first_line = TRUE;
   int total_lines;
   int line;
 
@@ -262,11 +262,15 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
   g_list_free_full (self->chunks, g_free);
   self->chunks = NULL;
 
-  total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER(self->buffer));
+  total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER (self->buffer));
 
   /* Update lines changes */
   if ((monitor = ide_buffer_get_change_monitor (self->buffer)))
     {
+      IdeBufferLineChange last_change;
+      int chunk_start_line;
+      gboolean first_line = TRUE;
+
       for (line = 0; line <= total_lines; line++)
         {
           IdeBufferLineChange change;
@@ -284,7 +288,7 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
             }
           else if (change != last_change)
             {
-              LinesChunk *chunk = g_new0 (LinesChunk, 1);
+              g_autofree LinesChunk *chunk = g_new0 (LinesChunk, 1);
               chunk->start_line = chunk_start_line;
               chunk->end_line = line + 1;
 
@@ -305,13 +309,13 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
                 case IDE_BUFFER_LINE_CHANGE_NONE:
                 case IDE_BUFFER_LINE_CHANGE_PREVIOUS_DELETED:
                 default:
-                  g_free (chunk);
-                  chunk = NULL;
-                  break;
+                  last_change = change;
+                  chunk_start_line = line + 1;
+                  continue;
                 }
 
-              if (chunk)
-                self->chunks = g_list_append (self->chunks, chunk);
+              self->chunks = g_list_append (self->chunks,
+                                            g_steal_pointer (&chunk));
 
               last_change = change;
               chunk_start_line = line + 1;
@@ -330,7 +334,7 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
         {
           IdeDiagnostic *diagnostic;
           IdeDiagnosticSeverity severity;
-          LinesChunk *chunk;
+          g_autofree LinesChunk *chunk = NULL;
 
           diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line);
 
@@ -365,11 +369,11 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
             case IDE_DIAGNOSTIC_NOTE:
             case IDE_DIAGNOSTIC_UNUSED:
             default:
-              g_free (chunk);
               continue;
             }
 
-          self->chunks = g_list_append (self->chunks, chunk);
+          self->chunks = g_list_append (self->chunks,
+                                        g_steal_pointer (&chunk));
         }
     }
 
@@ -380,28 +384,28 @@ static void
 ide_scrollbar_snapshot (GtkWidget  *widget,
                         GtkSnapshot *snapshot)
 {
-  IdeScrollbar *self = IDE_SCROLLBAR(widget);
-  int total_lines;
+  IdeScrollbar *self = IDE_SCROLLBAR (widget);
   GtkAllocation allocation;
-  double width;
-  double height;
-  double view_height;
-  double top_margin;
+  GtkTextIter cursor_iter;
   double bottom_margin;
+  double view_height;
+  double line_height;
+  double top_margin;
+  double height;
+  double width;
   double ratio;
   int cursor_position;
+  int total_lines;
   int cursor_line;
-  GtkTextIter cursor_iter;
-  double line_height;
 
   g_assert (IDE_IS_SCROLLBAR (self));
   g_assert (GTK_IS_SNAPSHOT (snapshot));
 
   g_return_if_fail (self->buffer);
 
-  total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER(self->buffer));
+  total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER (self->buffer));
 
-  gtk_widget_get_allocation(widget, &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
   height = allocation.height;
   width  = allocation.width;
 
@@ -424,9 +428,9 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
       gtk_snapshot_append_color (snapshot,
                                  &self->cursor_color,
                                  &GRAPHENE_RECT_INIT (0,
-                                                      (int)cursor_y,
+                                                      cursor_y,
                                                       width,
-                                                      (int)MAX (line_height, 1)));
+                                                      MAX ((int)line_height, 2)));
     }
 
   /* Draw changes and diagnostics */
@@ -435,7 +439,7 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
       LinesChunk *chunk = l->data;
 
       int chunk_start_y = top_margin + chunk->start_line * line_height;
-      int chunk_end_y   = top_margin + chunk->end_line   * line_height;
+      int chunk_end_y   = top_margin + chunk->end_line * line_height;
 
       snapshot_chunk (self,
                       chunk->line_type,
@@ -449,15 +453,15 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
 }
 
 void
-ide_scrollbar_set_view (IdeScrollbar *self,
-                        IdeSourceView         *view)
+ide_scrollbar_set_view (IdeScrollbar  *self,
+                        IdeSourceView *view)
 {
   GtkAdjustment *v_adjustment;
 
   g_return_if_fail (IDE_IS_SCROLLBAR (self));
   g_return_if_fail (GTK_SOURCE_IS_VIEW (view));
 
-  g_set_object(&self->view, view);
+  g_set_object (&self->view, view);
 
   v_adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->view));
   gtk_scrollbar_set_adjustment (self->scrollbar, v_adjustment);
@@ -466,7 +470,7 @@ ide_scrollbar_set_view (IdeScrollbar *self,
 
   g_signal_connect_object (view,
                            "notify::buffer",
-                           G_CALLBACK(notify_buffer_cb),
+                           G_CALLBACK (notify_buffer_cb),
                            self,
                            0);
 
@@ -481,15 +485,16 @@ ide_scrollbar_set_property (GObject      *object,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-    IdeScrollbar *self = IDE_SCROLLBAR (object);
+  IdeScrollbar *self = IDE_SCROLLBAR (object);
 
-    switch (prop_id) {
-        case PROP_VIEW:
-            ide_scrollbar_set_view (self, g_value_get_object(value));
-            break;
+  switch (prop_id)
+    {
+    case PROP_VIEW:
+        ide_scrollbar_set_view (self, g_value_get_object (value));
+        break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -499,26 +504,27 @@ ide_scrollbar_get_property (GObject    *object,
                             GValue     *value,
                             GParamSpec *pspec)
 {
-    IdeScrollbar *self = IDE_SCROLLBAR (object);
+  IdeScrollbar *self = IDE_SCROLLBAR (object);
 
-    switch (prop_id) {
-        case PROP_VIEW:
-            g_value_set_object(value, self->view);
-            break;
+  switch (prop_id)
+    {
+    case PROP_VIEW:
+        g_value_set_object (value, self->view);
+        break;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
 static void
-ide_scrollbar_class_init(IdeScrollbarClass *klass)
+ide_scrollbar_class_init (IdeScrollbarClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class = G_OBJECT_CLASS(klass);
-  widget_class = GTK_WIDGET_CLASS(klass);
+  object_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->set_property = ide_scrollbar_set_property;
   object_class->get_property = ide_scrollbar_get_property;
@@ -526,13 +532,11 @@ ide_scrollbar_class_init(IdeScrollbarClass *klass)
   widget_class->snapshot = ide_scrollbar_snapshot;
 
   properties[PROP_VIEW] =
-      g_param_spec_object("view", NULL, NULL,
-                          IDE_TYPE_SOURCE_VIEW,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+      g_param_spec_object ("view", NULL, NULL,
+                           IDE_TYPE_SOURCE_VIEW,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties(object_class,
-                                    N_PROPERTIES,
-                                    properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "IdeScrollbar");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -541,18 +545,15 @@ ide_scrollbar_class_init(IdeScrollbarClass *klass)
 }
 
 static void
-ide_scrollbar_init(IdeScrollbar *self)
+ide_scrollbar_init (IdeScrollbar *self)
 {
-  gtk_widget_set_hexpand(GTK_WIDGET(self), FALSE);
-  gtk_widget_set_vexpand(GTK_WIDGET(self), TRUE);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->monitor_signals = g_signal_group_new (IDE_TYPE_BUFFER_CHANGE_MONITOR);
 
   g_signal_group_connect_object (self->monitor_signals,
                                  "changed",
-                                 G_CALLBACK(ide_scrollbar_update_chunks),
+                                 G_CALLBACK (ide_scrollbar_update_chunks),
                                  self,
                                  G_CONNECT_SWAPPED);
 
@@ -560,19 +561,19 @@ ide_scrollbar_init(IdeScrollbar *self)
 
   g_signal_group_connect_object (self->buffer_signals,
                                  "cursor-moved",
-                                 G_CALLBACK(gtk_widget_queue_draw),
+                                 G_CALLBACK (gtk_widget_queue_draw),
                                  self,
                                  G_CONNECT_SWAPPED);
 
   g_signal_group_connect_object (self->buffer_signals,
                                  "notify::has-diagnostics",
-                                 G_CALLBACK(ide_scrollbar_update_chunks),
+                                 G_CALLBACK (ide_scrollbar_update_chunks),
                                  self,
                                  G_CONNECT_SWAPPED);
 
   g_signal_group_connect_object (self->buffer_signals,
                                  "notify::style-scheme",
-                                 G_CALLBACK(notify_style_scheme_cb),
+                                 G_CALLBACK (notify_style_scheme_cb),
                                  self,
                                  0);
 
@@ -580,13 +581,13 @@ ide_scrollbar_init(IdeScrollbar *self)
 
   g_signal_group_connect_object (self->view_signals,
                                  "notify::bottom-margin",
-                                 G_CALLBACK(gtk_widget_queue_draw),
+                                 G_CALLBACK (gtk_widget_queue_draw),
                                  self,
                                  G_CONNECT_SWAPPED);
 
   g_signal_group_connect_object (self->view_signals,
                                  "notify::top-margin",
-                                 G_CALLBACK(gtk_widget_queue_draw),
+                                 G_CALLBACK (gtk_widget_queue_draw),
                                  self,
                                  G_CONNECT_SWAPPED);
 }
