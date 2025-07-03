@@ -49,6 +49,8 @@ typedef struct
   guint did_prepare : 1;
 } IdeLspHoverProviderPrivate;
 
+static GRegex *regex_check;
+
 static void hover_provider_iface_init (GtkSourceHoverProviderInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeLspHoverProvider,
@@ -143,8 +145,6 @@ parse_marked_string (GVariant *v)
     }
   if (gstr->len)
     {
-      g_autoptr (GRegex) regex_check = NULL;
-      regex_check = g_regex_new ("^[\\s\\n]*(?:```[\\s\\n]*```[\\s\\n]*)*[\\s\\n]*$", 0, 0, NULL);
       if (g_regex_match (regex_check, gstr->str, 0, NULL))
         return NULL;
 
@@ -246,6 +246,11 @@ ide_lsp_hover_provider_class_init (IdeLspHoverProviderClass *klass)
   i_object_class->destroy = ide_lsp_hover_provider_destroy;
 
   klass->prepare = ide_lsp_hover_provider_real_prepare;
+
+  regex_check = g_regex_new ("^[\\s\\n]*(?:```[\\s\\n]*```[\\s\\n]*)*[\\s\\n]*$",
+                             G_REGEX_OPTIMIZE,
+                             G_REGEX_MATCH_DEFAULT,
+                             NULL);
 
   /**
    * IdeLspHoverProvider:client:

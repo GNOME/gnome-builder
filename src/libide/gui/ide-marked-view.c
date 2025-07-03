@@ -37,6 +37,8 @@
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_node, cmark_node_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (cmark_iter, cmark_iter_free);
 
+static GRegex *regex;
+
 static gchar *
 get_syntax_highlighted_markup (const gchar *code_text,
                                const gchar *language_id)
@@ -393,7 +395,6 @@ parse_markdown (const gchar *markdown,
   cmark_node *current_node;
   g_autoptr (cmark_iter) iter = NULL;
   cmark_event_type ev_type;
-  g_autoptr (GRegex) regex = NULL;
   g_autofree char *string = NULL;
 
   IDE_ENTRY;
@@ -418,7 +419,6 @@ parse_markdown (const gchar *markdown,
       g_return_val_if_fail (render_node (result, list_stack, current_node, ev_type), NULL);
     }
 
-  regex = g_regex_new ("\\n*<span line_height=\"([0-9]*\\.?)[0-9]+\">\\n*</span>$", 0, 0, NULL);
   string = g_regex_replace (regex, result->str, -1, 0, "", G_REGEX_MATCH_NEWLINE_ANY, NULL);
   g_string_assign (result, string);
 
@@ -453,6 +453,11 @@ ide_marked_view_class_init (IdeMarkedViewClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "markedview");
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+
+  regex = g_regex_new ("\\n*<span line_height=\"([0-9]*\\.?)[0-9]+\">\\n*</span>$",
+                       G_REGEX_OPTIMIZE,
+                       G_REGEX_MATCH_DEFAULT,
+                       NULL);
 }
 
 static void
