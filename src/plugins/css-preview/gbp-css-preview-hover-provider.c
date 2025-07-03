@@ -37,6 +37,11 @@
 #define COLOR_HEX_REGEX "#[0-9a-fA-F]+"
 #define GRADIENT_REGEX "(linear-gradient|radial-gradient|conic-gradient|repeating-linear-gradient|repeating-radial-gradient)\\s*\\((?:[^()]|\\([^)]*\\))*\\)"
 
+static GRegex *color_fn_regex = NULL;
+static GRegex *color_uns_fn_regex = NULL;
+static GRegex *color_hex_regex = NULL;
+static GRegex *gradient_regex = NULL;
+
 static const struct {
   const char *name;
   const char *hex;
@@ -198,17 +203,15 @@ struct _GbpCSSPreviewHoverProvider
 };
 
 static gboolean
-regex_match_text_to_cursor_position (const char *regex_str,
+regex_match_text_to_cursor_position (GRegex     *regex,
                                      const char *text,
                                      guint       cursor_offset,
                                      char      **result)
 {
-  g_autoptr (GRegex) regex = NULL;
   g_autoptr (GMatchInfo) match_info = NULL;
 
   *result = NULL;
 
-  regex = g_regex_new (regex_str, 0, 0, NULL);
   if (regex == NULL)
     return FALSE;
 
@@ -480,7 +483,7 @@ extract_at_position (GbpCSSPreviewHoverProvider *self,
 
   cursor_offset = gtk_text_iter_get_offset (iter) - gtk_text_iter_get_offset (&start);
 
-  if (regex_match_text_to_cursor_position (COLOR_FN_REGEX, text, cursor_offset, &result))
+  if (regex_match_text_to_cursor_position (color_fn_regex, text, cursor_offset, &result))
     {
       g_autofree char *color_name = NULL;
 
@@ -508,7 +511,7 @@ extract_at_position (GbpCSSPreviewHoverProvider *self,
 
       return TRUE;
     }
-  else if (regex_match_text_to_cursor_position (COLOR_HEX_REGEX, text, cursor_offset, &result))
+  else if (regex_match_text_to_cursor_position (color_hex_regex, text, cursor_offset, &result))
     {
       g_autofree char *color_name = NULL;
 
@@ -542,7 +545,7 @@ extract_at_position (GbpCSSPreviewHoverProvider *self,
 
       return TRUE;
     }
-  else if (regex_match_text_to_cursor_position (COLOR_UNS_FN_REGEX, text, cursor_offset, &result))
+  else if (regex_match_text_to_cursor_position (color_uns_fn_regex, text, cursor_offset, &result))
     {
       g_set_str (&self->css_str,
                  g_strdup_printf ("* { background-color: %s; }", result));
@@ -552,7 +555,7 @@ extract_at_position (GbpCSSPreviewHoverProvider *self,
 
       return TRUE;
     }
-  else if (regex_match_text_to_cursor_position (GRADIENT_REGEX, text, cursor_offset, &result))
+  else if (regex_match_text_to_cursor_position (gradient_regex, text, cursor_offset, &result))
     {
       g_set_str (&self->css_str,
                  g_strdup_printf ("* { background: %s; }", result));
@@ -680,8 +683,12 @@ static void
 gbp_css_preview_hover_provider_class_init (GbpCSSPreviewHoverProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
   object_class->finalize = gbp_css_preview_hover_provider_finalize;
+
+  color_fn_regex = g_regex_new (COLOR_FN_REGEX, G_REGEX_OPTIMIZE, 0, NULL);
+  color_uns_fn_regex = g_regex_new (COLOR_UNS_FN_REGEX, G_REGEX_OPTIMIZE, 0, NULL);
+  color_hex_regex = g_regex_new (COLOR_HEX_REGEX, G_REGEX_OPTIMIZE, 0, NULL);
+  gradient_regex = g_regex_new (GRADIENT_REGEX, G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
