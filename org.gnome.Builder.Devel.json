@@ -216,7 +216,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libgit2/libgit2.git",
-                    "tag" : "v1.6.4"
+                    "tag" : "v1.9.1"
                 }
             ]
         },
@@ -248,7 +248,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/editorconfig/editorconfig-core-c.git",
-                    "tag" : "v0.12.5"
+                    "tag" : "v0.12.9"
                 }
             ]
         },
@@ -408,7 +408,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/ostreedev/ostree.git",
-                    "tag" : "v2023.6"
+                    "tag" : "v2025.2"
                 }
             ]
         },
@@ -459,46 +459,27 @@
         },
         {
             "name" : "polkit",
+            "buildsystem": "meson",
             "config-opts" : [
-                "--disable-polkitd",
-                "--disable-man-pages",
-                "--disable-introspection",
-                "--disable-examples",
-                "--disable-gtk-doc",
-                "--disable-libelogind",
-                "--disable-libsystemd-login",
-                "--with-systemdsystemunitdir=no",
-                "--with-authdb=dummy",
-                "--with-authfw=none"
+                "-Dlibs-only=true",
+                "-Dintrospection=false",
+                "-Dauthfw=shadow"
             ],
-            "rm-configure" : true,
-            "build-options" : {
-                "env" : {
-                    "CFLAGS" : "-Wno-implicit-function-declaration"
-                }
-            },
             "cleanup" : [
                 "/bin/*",
-                "/etc/pam.d",
                 "/etc/dbus-1",
+                "/etc/pam.d",
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/polkit-1",
                 "/share/dbus-1/system-services/*",
-                "/share/polkit-1",
-                "/lib/polkit-1"
+                "/share/polkit-1"
             ],
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://www.freedesktop.org/software/polkit/releases/polkit-0.116.tar.gz",
-                    "sha256" : "88170c9e711e8db305a12fdb8234fac5706c61969b94e084d0f117d8ec5d34b1"
-                },
-                {
-                    "type" : "patch",
-                    "path" : "build-aux/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
-                },
-                {
-                    "type" : "file",
-                    "path" : "build-aux/flatpak/polkit-autogen",
-                    "dest-filename" : "autogen.sh"
+                    "url" : "https://github.com/polkit-org/polkit/archive/refs/tags/126.tar.gz",
+                    "sha256" : "2814a7281989f6baa9e57bd33bbc5e148827e2721ccef22aaf28ab2b376068e8"
                 }
             ]
         },
@@ -572,7 +553,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git",
-                    "tag" : "1.16.0"
+                    "tag" : "1.16.1"
                 }
             ]
         },
@@ -622,8 +603,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/lathiat/avahi/releases/download/v0.7/avahi-0.7.tar.gz",
-                    "sha256" : "57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804"
+                    "url" : "https://github.com/avahi/avahi/releases/download/v0.8/avahi-0.8.tar.gz",
+                    "sha256" : "060309d7a333d38d951bc27598c677af1796934dbd98e1024e7ad8de798fedda"
                 }
             ]
         },
@@ -648,7 +629,10 @@
             "name" : "libportal",
             "config-opts" : [
                 "--buildtype=debugoptimized",
-                "-Dbackends=gtk4",
+                "-Dbackend-gtk3=disabled",
+                "-Dbackend-gtk4=enabled",
+                "-Dbackend-qt5=disabled",
+                "-Dbackend-qt6=disabled",
                 "-Ddocs=false",
                 "-Dtests=false"
             ],
@@ -657,8 +641,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/libportal/releases/download/0.6/libportal-0.6.tar.xz",
-                    "sha256" : "88a12c3ba71bc31acff7238c280de697d609cebc50830c3766776ec35abc6566"
+                    "url" : "https://github.com/flatpak/libportal/releases/download/0.9.1/libportal-0.9.1.tar.xz",
+                    "sha256" : "de801ee349ed3c255a9af3c01b1a401fab5b3fc1c35eb2fd7dfb35d4b8194d7f"
                 }
             ]
         },
