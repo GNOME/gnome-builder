@@ -43,8 +43,8 @@ static GRegex *color_hex_regex = NULL;
 static GRegex *gradient_regex = NULL;
 
 static const struct {
-  const char *name;
-  const char *hex;
+  char name[32];
+  char hex[8];
 } css_colors[] = {
   {"aliceblue", "#f0f8ff"},
   {"antiquewhite", "#faebd7"},
