@@ -4,6 +4,7 @@ subdir('daemon')
 
 plugins_sources += files([
   'daemon/line-cache.c',
+  'gbp-git-annotation-provider.c',
   'gbp-git-branch.c',
   'gbp-git-buffer-addin.c',
   'gbp-git-buffer-change-monitor.c',
@@ -19,10 +20,12 @@ plugins_sources += files([
   'gbp-git-vcs-initializer.c',
   'gbp-git-vcs.c',
   'gbp-git-workbench-addin.c',
+  'gbp-git-editor-page-addin.c',
   'git-plugin.c',
 ])
 
 plugins_sources += [
+  ipc_git_blame_src,
   ipc_git_change_monitor_src,
   ipc_git_config_src,
   ipc_git_progress_src,
@@ -43,5 +46,7 @@ plugin_git_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_git_resources
+
+install_data(['org.gnome.builder.git.gschema.xml'], install_dir: schema_dir)
 
 endif
