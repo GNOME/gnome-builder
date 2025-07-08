@@ -1,7 +1,7 @@
 {
     "id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "master",
+    "runtime-version" : "48",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.llvm18"
@@ -12,7 +12,7 @@
     ],
     "add-extensions" : {
         "org.gnome.Builder.Plugin" : {
-            "version" : "master",
+            "version" : "48",
             "directory" : "extensions",
             "add-ld-path" : "lib",
             "merge-dirs" : "lib/gnome-builder/plugins",
