@@ -46,6 +46,7 @@
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=xdg-data/meson",
         "--filesystem=/var/lib/flatpak",
+        "--filesystem=/var/tmp",
         "--env=G_SLICE=always-malloc"
     ],
     "x-run-args" : [
@@ -115,8 +116,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.71.0.tar.gz",
-                    "sha256" : "403a0f34463c0d6b0fbf230d8a03b7af9f493faa235208417793350db062003c"
+                    "url" : "https://github.com/uncrustify/uncrustify/archive/refs/tags/uncrustify-0.81.0.tar.gz",
+                    "sha256" : "484623dc16b92206adc6ac0770077c6c67c6e441102148c2a121a19549330ff9"
                 }
             ]
         },
@@ -197,7 +198,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libssh2/libssh2.git",
-                    "tag" : "libssh2-1.10.0"
+                    "tag" : "libssh2-1.11.1"
                 }
             ]
         },
@@ -215,7 +216,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/libgit2/libgit2.git",
-                    "tag" : "v1.6.4"
+                    "tag" : "v1.9.1"
                 }
             ]
         },
@@ -247,7 +248,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/editorconfig/editorconfig-core-c.git",
-                    "tag" : "v0.12.5"
+                    "tag" : "v0.12.9"
                 }
             ]
         },
@@ -259,6 +260,22 @@
                     "type" : "git",
                     "url" : "https://github.com/fastfloat/fast_float.git",
                     "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name" : "simdutf",
+            "buildsystem" : "cmake-ninja",
+            "config-opts" : [
+                "-DCMAKE_CXX_VISIBILITY_PRESET=hidden",
+                "-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE",
+                "-DCMAKE_VISIBILITY_INLINES_HIDDEN=TRUE"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/simdutf/simdutf.git",
+                    "branch" : "master"
                 }
             ]
         },
@@ -391,7 +408,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/ostreedev/ostree.git",
-                    "tag" : "v2023.6"
+                    "tag" : "v2025.2"
                 }
             ]
         },
@@ -429,7 +446,8 @@
             "buildsystem" : "cmake-ninja",
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib"
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
             ],
             "sources" : [
                 {
@@ -440,19 +458,81 @@
             ]
         },
         {
+            "name" : "polkit",
+            "buildsystem": "meson",
+            "config-opts" : [
+                "-Dlibs-only=true",
+                "-Dintrospection=false",
+                "-Dauthfw=shadow"
+            ],
+            "cleanup" : [
+                "/bin/*",
+                "/etc/dbus-1",
+                "/etc/pam.d",
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/polkit-1",
+                "/share/dbus-1/system-services/*",
+                "/share/polkit-1"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/polkit-org/polkit/archive/refs/tags/126.tar.gz",
+                    "sha256" : "2814a7281989f6baa9e57bd33bbc5e148827e2721ccef22aaf28ab2b376068e8"
+                }
+            ]
+        },
+        {
+            "name": "bubblewrap",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dman=disabled",
+                "-Dselinux=disabled",
+                "-Dtests=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/projectatomic/bubblewrap/archive/refs/tags/v0.11.0.tar.gz",
+                    "sha256": "cfeeb15fcc47d177d195f06fdf0847e93ee3aa6bf46f6ac0a141fa142759e2c3"
+                }
+            ]
+        },
+        {
+            "name": "xdg-dbus-proxy",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dman=disabled",
+                "-Dtests=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/flatpak/xdg-dbus-proxy/archive/refs/tags/0.1.6.tar.gz",
+                    "sha256": "ee9c1d665f4e3b025a83d522d478ff7930070f2817fc2cb446db0dca93c990b1"
+                }
+            ]
+        },
+        {
             "name" : "flatpak",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dgtkdoc=disabled",
                 "-Ddocbook_docs=disabled",
-                "-Dseccomp=disabled",
-                "-Dsandboxed_triggers=false",
-                "-Dsystem_helper=disabled",
-                "-Dsystem_install_dir=/var/lib/flatpak",
-                "--sysconfdir=/var/run/host/etc",
+                "-Dtests=false",
                 "-Dman=disabled",
+                "-Dseccomp=disabled",
+                "-Dselinux_module=disabled",
+                "-Dmalcontent=disabled",
+                "-Dsandboxed_triggers=false",
+                "-Dsystem_helper=enabled",
                 "-Dhttp_backend=curl",
                 "-Dsystemd=disabled",
-                "-Dtests=false"
+                "-Dsystem_install_dir=/var/lib/flatpak",
+                "-Dsystem_bubblewrap=bwrap",
+                "-Dsystem_dbus_proxy=xdg-dbus-proxy",
+                "--sysconfdir=/var/run/host/etc"
             ],
             "cleanup" : [
                 "/bin/flatpak-bisect",
@@ -473,14 +553,13 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git",
-                    "tag" : "1.15.6"
+                    "tag" : "1.16.1"
                 }
             ]
         },
         {
             "name" : "flatpak-builder",
             "buildsystem" : "meson",
-            "builddir" : true,
             "config-opts" : [
                 "-Ddocs=disabled",
                 "-Dtests=false",
@@ -488,9 +567,9 @@
             ],
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak-builder.git",
-                    "branch" : "main"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.4.4/flatpak-builder-1.4.4.tar.xz",
+		    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
                 }
             ]
         },
@@ -524,8 +603,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/lathiat/avahi/releases/download/v0.7/avahi-0.7.tar.gz",
-                    "sha256" : "57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804"
+                    "url" : "https://github.com/avahi/avahi/releases/download/v0.8/avahi-0.8.tar.gz",
+                    "sha256" : "060309d7a333d38d951bc27598c677af1796934dbd98e1024e7ad8de798fedda"
                 }
             ]
         },
@@ -550,7 +629,10 @@
             "name" : "libportal",
             "config-opts" : [
                 "--buildtype=debugoptimized",
-                "-Dbackends=gtk4",
+                "-Dbackend-gtk3=disabled",
+                "-Dbackend-gtk4=enabled",
+                "-Dbackend-qt5=disabled",
+                "-Dbackend-qt6=disabled",
                 "-Ddocs=false",
                 "-Dtests=false"
             ],
@@ -559,8 +641,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/libportal/releases/download/0.6/libportal-0.6.tar.xz",
-                    "sha256" : "88a12c3ba71bc31acff7238c280de697d609cebc50830c3766776ec35abc6566"
+                    "url" : "https://github.com/flatpak/libportal/releases/download/0.9.1/libportal-0.9.1.tar.xz",
+                    "sha256" : "de801ee349ed3c255a9af3c01b1a401fab5b3fc1c35eb2fd7dfb35d4b8194d7f"
                 }
             ]
         },
@@ -570,7 +652,8 @@
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
-                "-DBUILD_SHARED_LIB=OFF"
+                "-DBUILD_SHARED_LIB=OFF",
+                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
             ],
             "sources" : [
                 {
