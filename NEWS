@@ -1,3 +1,10 @@
+# GNOME Builder 48.1
+
+ * Meson template fixes
+ * Translation updates
+ * Fix application of text edits with some LSPs
+ * Fix certain types of directory updates to project tree
+
 # GNOME Builder 48.0
 
  * Various Manuals backports into Builder
