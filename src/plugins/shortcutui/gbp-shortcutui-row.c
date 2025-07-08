@@ -65,6 +65,13 @@ gbp_shortcutui_row_reset_action (GtkWidget  *widget,
   IDE_EXIT;
 }
 
+static char *
+null_to_string (gpointer    instance,
+                const char *param)
+{
+  return g_strdup (param ? param : "");
+}
+
 static void
 gbp_shortcutui_row_constructed (GObject *object)
 {
@@ -147,6 +154,7 @@ gbp_shortcutui_row_class_init (GbpShortcutuiRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shortcutui/gbp-shortcutui-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShortcutuiRow, label);
+  gtk_widget_class_bind_template_callback (widget_class, null_to_string);
 
   gtk_widget_class_install_action (widget_class, "shortcut.reset", NULL, gbp_shortcutui_row_reset_action);
 
