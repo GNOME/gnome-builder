@@ -1,10 +1,10 @@
 {
     "id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "48",
+    "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm18"
+        "org.freedesktop.Sdk.Extension.llvm20"
     ],
     "command" : "gnome-builder",
     "tags" : [
@@ -12,7 +12,7 @@
     ],
     "add-extensions" : {
         "org.gnome.Builder.Plugin" : {
-            "version" : "48",
+            "version" : "master",
             "directory" : "extensions",
             "add-ld-path" : "lib",
             "merge-dirs" : "lib/gnome-builder/plugins",
@@ -57,8 +57,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm18/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm18/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm20/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm20/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -706,11 +706,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm18/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm18/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm18/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm18/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm18/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm20/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm20/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm20/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm20/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm20/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }
