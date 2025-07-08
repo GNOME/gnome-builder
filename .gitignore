@@ -2,3 +2,4 @@ build
 .flatpak-builder
 *.swp
 *~
+.foundry/cache/
