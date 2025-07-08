@@ -114,6 +114,7 @@
   </supports>
 
   <releases>
+    <release version="48.2" date="2025-07-08"/>
     <release version="48.1" date="2025-07-08"/>
     <release version="48.0" date="2025-03-15"/>
   </releases>

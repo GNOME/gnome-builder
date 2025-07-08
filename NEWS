@@ -1,3 +1,7 @@
+# GNOME Builder 48.2
+
+ * Fix CI for release tarballs
+
 # GNOME Builder 48.1
 
  * Meson template fixes
