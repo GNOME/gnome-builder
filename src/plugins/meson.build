@@ -55,6 +55,7 @@ subdir('code-index')
 # subdir('codesearch')
 subdir('codeshot')
 subdir('codeui')
+subdir('css-preview')
 subdir('comment-code')
 subdir('copyright')
 subdir('c-pack')
@@ -184,6 +185,7 @@ status += [
   'Clang Format ......................... : @0@'.format(get_option('plugin_clang_format')),
   'CMake ................................ : @0@'.format(get_option('plugin_cmake')),
   'Codeshot ............................. : @0@'.format(get_option('plugin_codeshot')),
+  'CSS Preview .......................... : @0@'.format(get_option('plugin_css_preview')),
   'Codespell ............................ : @0@'.format(get_option('plugin_codespell')),
   'Code Index ........................... : @0@'.format(get_option('plugin_code_index')),
   'Code Search .......................... : @0@'.format(get_option('plugin_codesearch')),

@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Nokse <nokse@posteo.com>
+Builtin=true
+Copyright=Copyright © 2025 Nokse
+Description=Preview CSS colors and more on hover
+Embedded=_gbp_css_preview_register_types
+Hidden=false
+Module=css-preview
+Name=CSS Preview
+X-Hover-Provider-Languages=css,scss,less,markdown,astro,xml,html

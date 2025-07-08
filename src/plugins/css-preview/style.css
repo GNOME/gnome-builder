@@ -1,0 +1,4 @@
+.css-hover-preview-box {
+  border-radius: 6px;
+  border: 1px solid alpha(var(--window-fg-color), 0.5);
+}
