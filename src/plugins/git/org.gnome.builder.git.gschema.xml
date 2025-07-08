@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.git" path="/org/gnome/builder/plugins/git/" gettext-domain="gnome-builder">
+    <key name="inline-blame-enabled" type="b">
+      <default>false</default>
+    </key>
+  </schema>
+</schemalist>

@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
+#include "ipc-git-blame-impl.h"
 #include "ipc-git-change-monitor-impl.h"
 #include "ipc-git-config-impl.h"
 #include "ipc-git-index-monitor.h"
@@ -44,6 +45,7 @@ struct _IpcGitRepositoryImpl
 {
   IpcGitRepositorySkeleton  parent;
   GgitRepository           *repository;
+  GHashTable               *blamers;
   GHashTable               *change_monitors;
   GHashTable               *configs;
   IpcGitIndexMonitor       *monitor;
@@ -316,6 +318,17 @@ on_monitor_closed_cb (IpcGitRepositoryImpl *self,
     g_hash_table_remove (self->change_monitors, monitor);
 }
 
+static void
+on_blame_closed_cb (IpcGitRepositoryImpl *self,
+                    IpcGitBlame  *blame)
+{
+  g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
+  g_assert (IPC_IS_GIT_BLAME (blame));
+
+  if (self->blamers != NULL)
+    g_hash_table_remove (self->blamers, blame);
+}
+
 static gboolean
 ipc_git_repository_impl_handle_create_change_monitor (IpcGitRepository      *repository,
                                                       GDBusMethodInvocation *invocation,
@@ -351,6 +364,45 @@ ipc_git_repository_impl_handle_create_change_monitor (IpcGitRepository      *rep
                        g_strdup (obj_path));
 
   ipc_git_repository_complete_create_change_monitor (repository, invocation, obj_path);
+
+  return TRUE;
+}
+
+static gboolean
+ipc_git_repository_impl_handle_blame (IpcGitRepository      *repository,
+                                      GDBusMethodInvocation *invocation,
+                                      const gchar           *path)
+{
+  IpcGitRepositoryImpl *self = (IpcGitRepositoryImpl *)repository;
+  g_autoptr(IpcGitBlame) blame = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *guid = NULL;
+  g_autofree gchar *obj_path = NULL;
+  GDBusConnection *conn;
+
+  g_assert (IPC_IS_GIT_REPOSITORY_IMPL (repository));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+  g_assert (path != NULL);
+
+  conn = g_dbus_method_invocation_get_connection (invocation);
+  guid = g_dbus_generate_guid ();
+  obj_path = g_strdup_printf ("/org/gnome/Builder/Git/Blame/%s", guid);
+  blame = ipc_git_blame_impl_new (self->repository, path);
+
+  if (!g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (blame), conn, obj_path, &error))
+    return complete_wrapped_error (invocation, error);
+
+  g_signal_connect_object (blame,
+                           "closed",
+                           G_CALLBACK (on_blame_closed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_hash_table_insert (self->blamers,
+                       g_steal_pointer (&blame),
+                       g_strdup (obj_path));
+
+  ipc_git_repository_complete_blame (repository, invocation, obj_path);
 
   return TRUE;
 }
@@ -1060,6 +1112,7 @@ git_repository_iface_init (IpcGitRepositoryIface *iface)
   iface->handle_close = ipc_git_repository_impl_handle_close;
   iface->handle_commit = ipc_git_repository_impl_handle_commit;
   iface->handle_create_change_monitor = ipc_git_repository_impl_handle_create_change_monitor;
+  iface->handle_blame = ipc_git_repository_impl_handle_blame;
   iface->handle_list_refs_by_kind = ipc_git_repository_impl_handle_list_refs_by_kind;
   iface->handle_list_status = ipc_git_repository_impl_handle_list_status;
   iface->handle_load_config = ipc_git_repository_impl_handle_load_config;
@@ -1081,6 +1134,7 @@ ipc_git_repository_impl_finalize (GObject *object)
 
   g_clear_object (&self->monitor);
   g_clear_pointer (&self->change_monitors, g_hash_table_unref);
+  g_clear_pointer (&self->blamers, g_hash_table_unref);
   g_clear_pointer (&self->configs, g_hash_table_unref);
   g_clear_object (&self->repository);
 
@@ -1100,6 +1154,7 @@ ipc_git_repository_impl_init (IpcGitRepositoryImpl *self)
 {
   self->configs = g_hash_table_new_full (NULL, NULL, g_object_unref, g_free);
   self->change_monitors = g_hash_table_new_full (NULL, NULL, g_object_unref, g_free);
+  self->blamers = g_hash_table_new_full (NULL, NULL, g_object_unref, g_free);
 }
 
 IpcGitRepository *

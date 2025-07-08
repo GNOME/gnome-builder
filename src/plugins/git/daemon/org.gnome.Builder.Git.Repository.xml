@@ -110,6 +110,16 @@
       <arg name="obj_path" direction="out" type="o"/>
     </method>
     <!--
+      Blame:
+      @path: the path within the repository
+
+      Create a new org.gnome.Builder.Git.Blame to blame file lines.
+    -->
+    <method name="Blame">
+      <arg name="path" direction="in" type="s"/>
+      <arg name="obj_path" direction="out" type="o"/>
+    </method>
+    <!--
       StageFile:
       @path: the file to be staged
 

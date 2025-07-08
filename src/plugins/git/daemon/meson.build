@@ -37,6 +37,12 @@ gnome_builder_git_deps = [
   libgit2_glib_dep,
 ]
 
+ipc_git_blame_src = gnome.gdbus_codegen('ipc-git-blame',
+           sources: 'org.gnome.Builder.Git.Blame.xml',
+  interface_prefix: 'org.gnome.Builder.',
+         namespace: 'Ipc',
+)
+
 ipc_git_change_monitor_src = gnome.gdbus_codegen('ipc-git-change-monitor',
            sources: 'org.gnome.Builder.Git.ChangeMonitor.xml',
   interface_prefix: 'org.gnome.Builder.',
@@ -70,12 +76,14 @@ ipc_git_service_src = gnome.gdbus_codegen('ipc-git-service',
 gnome_builder_git_sources = [
   'gnome-builder-git.c',
   'ipc-git-config-impl.c',
+  'ipc-git-blame-impl.c',
   'ipc-git-change-monitor-impl.c',
   'ipc-git-index-monitor.c',
   'ipc-git-remote-callbacks.c',
   'ipc-git-repository-impl.c',
   'ipc-git-service-impl.c',
   'line-cache.c',
+  ipc_git_blame_src,
   ipc_git_change_monitor_src,
   ipc_git_config_src,
   ipc_git_progress_src,
@@ -90,6 +98,7 @@ gnome_builder_git = executable('gnome-builder-git', gnome_builder_git_sources,
 )
 
 test_git_sources = [
+  ipc_git_blame_src,
   ipc_git_change_monitor_src,
   ipc_git_config_src,
   ipc_git_progress_src,

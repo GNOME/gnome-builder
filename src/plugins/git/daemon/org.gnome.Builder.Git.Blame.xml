@@ -1,0 +1,29 @@
+<!DOCTYPE node PUBLIC
+        "-//freedesktop//DTD D-Bus Object Introspection 1.0//EN"
+        "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd" >
+<node xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd">
+  <interface name="org.gnome.Builder.Git.Blame">
+    <property name="path" type="s" access="read"/>
+    <signal name="Closed"/>
+
+    <method name="UpdateContent">
+      <arg name="contents" direction="in" type="s"/>
+    </method>
+
+    <method name="QueryLine">
+      <arg name="line_number" direction="in" type="u"/>
+      <arg name="commit_hash" direction="out" type="s"/>
+      <arg name="author_name" direction="out" type="s"/>
+      <arg name="author_email" direction="out" type="s"/>
+      <arg name="commit_message" direction="out" type="s"/>
+      <arg name="commit_date" direction="out" type="s"/>
+      <arg name="line_in_commit" direction="out" type="u"/>
+    </method>
+
+    <method name="QueryLineRange">
+      <arg name="first" direction="in" type="u"/>
+      <arg name="lenght" direction="in" type="u"/>
+      <arg name="blame_range" direction="out" type="aa{sv}"/>
+    </method>
+  </interface>
+</node>
