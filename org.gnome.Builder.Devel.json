@@ -292,7 +292,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/vte.git",
-                    "branch" : "master"
+                    "branch" : "0.80.3"
                 }
             ]
         },
@@ -307,7 +307,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/libpeas.git",
-                    "branch" : "main"
+                    "tag" : "2.0.7"
                 }
             ]
         },
@@ -323,7 +323,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/template-glib.git",
-                    "branch" : "main"
+                    "tag" : "3.36.3"
                 }
             ]
         },
