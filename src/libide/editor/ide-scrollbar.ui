@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeScrollbar" parent="GtkWidget">
+    <child>
+      <object class="GtkScrollbar" id="scrollbar">
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="overlay-indicator"/>
+        </style>
+        <child>
+          <object class="GtkEventControllerMotion" id="motion_event">
+            <signal name="enter" handler="on_motion_enter" swapped="true"/>
+            <signal name="leave" handler="on_motion_leave" swapped="true"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
