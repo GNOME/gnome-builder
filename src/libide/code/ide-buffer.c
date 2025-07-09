@@ -101,6 +101,7 @@ struct _IdeBuffer
   guint                   settling_source;
   int                     hold;
   guint                   release_in_idle;
+  guint                   diagnostics_stamp;
 
   GArray                 *commit_funcs;
   guint                   next_commit_handler;
@@ -2728,10 +2729,65 @@ ide_buffer_apply_diagnostic (IdeBuffer     *self,
     }
 }
 
+typedef struct _ApplyDiagnostics
+{
+  IdeBuffer  *buffer;
+  GListModel *diagnostics;
+  guint       stamp;
+} ApplyDiagnostics;
+
+static void
+apply_diagnostics_free (ApplyDiagnostics *state)
+{
+  g_clear_object (&state->buffer);
+  g_clear_object (&state->diagnostics);
+  g_free (state);
+}
+
+static gint64
+next_deadline (void)
+{
+  return g_get_monotonic_time () + (G_USEC_PER_SEC / 1000L);
+}
+
+static DexFuture *
+ide_buffer_apply_diagnostics_fiber (gpointer data)
+{
+  ApplyDiagnostics *state = data;
+  gint64 deadline;
+  guint n_items;
+
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_MODEL (state->diagnostics));
+  g_assert (IDE_IS_BUFFER (state->buffer));
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (state->diagnostics));
+  deadline = next_deadline ();
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeDiagnostic) diagnostic = NULL;
+
+      if (g_get_monotonic_time () > deadline)
+        {
+          deadline = next_deadline ();
+          dex_await (dex_timeout_new_deadline (deadline), NULL);
+        }
+
+      if (state->stamp != state->buffer->diagnostics_stamp)
+        break;
+
+      if ((diagnostic = g_list_model_get_item (G_LIST_MODEL (state->diagnostics), i)))
+        ide_buffer_apply_diagnostic (state->buffer, diagnostic);
+    }
+
+  return dex_future_new_true ();
+}
+
 static void
 ide_buffer_apply_diagnostics (IdeBuffer *self)
 {
-  guint n_items;
+  ApplyDiagnostics *state;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
@@ -2742,15 +2798,15 @@ ide_buffer_apply_diagnostics (IdeBuffer *self)
   if (self->diagnostics == NULL)
     return;
 
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->diagnostics));
+  state = g_new0 (ApplyDiagnostics, 1);
+  state->stamp = ++self->diagnostics_stamp;
+  state->diagnostics = g_object_ref (G_LIST_MODEL (self->diagnostics));
+  state->buffer = g_object_ref (self);
 
-  for (guint i = 0; i < n_items; i++)
-    {
-      g_autoptr(IdeDiagnostic) diagnostic = NULL;
-
-      diagnostic = g_list_model_get_item (G_LIST_MODEL (self->diagnostics), i);
-      ide_buffer_apply_diagnostic (self, diagnostic);
-    }
+  dex_future_disown (dex_scheduler_spawn (NULL, 0,
+                                          ide_buffer_apply_diagnostics_fiber,
+                                          state,
+                                          (GDestroyNotify)apply_diagnostics_free));
 }
 
 /**
