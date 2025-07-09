@@ -31,6 +31,11 @@
 #define SCROLLBAR_H_MARGIN 7
 #define SLIDER_W 3
 
+#define FALLBACK_ERROR      "#ff4444"
+#define FALLBACK_FATAL      "#cc0000"
+#define FALLBACK_WARNING    "#ffaa00"
+#define FALLBACK_DEPRECATED "#8888ff"
+
 typedef enum {
   LINE_CHANGED,
   LINE_ADDED,
@@ -136,13 +141,13 @@ connect_style_scheme (IdeScrollbar *self)
     gdk_rgba_parse (&self->cursor_color, IDE_LINE_CHANGES_FALLBACK_REMOVED);
 
   if (!get_style_rgba (scheme, "def:error", &self->error_color))
-    gdk_rgba_parse (&self->error_color, IDE_DIAGNOSTIC_FALLBACK_ERROR);
+    gdk_rgba_parse (&self->error_color, FALLBACK_ERROR);
   if (!get_style_rgba (scheme, "def:error", &self->fatal_color))
-    gdk_rgba_parse (&self->fatal_color, IDE_DIAGNOSTIC_FALLBACK_FATAL);
+    gdk_rgba_parse (&self->fatal_color, FALLBACK_FATAL);
   if (!get_style_rgba (scheme, "def:warning", &self->warning_color))
-    gdk_rgba_parse (&self->warning_color, IDE_DIAGNOSTIC_FALLBACK_WARNING);
+    gdk_rgba_parse (&self->warning_color, FALLBACK_WARNING);
   if (!get_style_rgba (scheme, "def:note", &self->deprecated_color))
-    gdk_rgba_parse (&self->deprecated_color, IDE_DIAGNOSTIC_FALLBACK_DEPRECATED);
+    gdk_rgba_parse (&self->deprecated_color, FALLBACK_DEPRECATED);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
