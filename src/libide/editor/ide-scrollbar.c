@@ -184,7 +184,7 @@ ide_scrollbar_dispose (GObject *object)
   g_clear_object (&self->monitor_signals);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
-  g_array_free (self->chunks, TRUE);
+  g_clear_pointer (&self->chunks, g_array_unref);
 
   G_OBJECT_CLASS (ide_scrollbar_parent_class)->dispose (object);
 }
@@ -287,7 +287,7 @@ diagnostic_line_cb (guint                 line,
       return;
     }
 
-  self->chunks = g_array_append_val (self->chunks, chunk);
+  g_array_append_val (self->chunks, chunk);
 }
 
 static void
@@ -299,7 +299,8 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
 
   g_return_if_fail (self->buffer);
 
-  g_array_set_size (self->chunks, 0);
+  /* Truncate without freeing allocation */
+  self->chunks->len = 0;
 
   total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER (self->buffer));
 
@@ -354,7 +355,7 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
                   continue;
                 }
 
-              self->chunks = g_array_append_val (self->chunks, chunk);
+              g_array_append_val (self->chunks, chunk);
 
               last_change = change;
               chunk_start_line = line + 1;
@@ -436,7 +437,7 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
   /* Draw changes and diagnostics */
   for (guint i = 0; i < self->chunks->len; i++)
     {
-      LinesChunk *chunk = &g_array_index (self->chunks, LinesChunk, i);
+      const LinesChunk *chunk = &g_array_index (self->chunks, LinesChunk, i);
 
       int chunk_start_y = top_margin + chunk->start_line * line_height;
       int chunk_end_y   = top_margin + chunk->end_line * line_height;
