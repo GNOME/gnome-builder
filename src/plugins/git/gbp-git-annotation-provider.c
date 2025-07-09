@@ -176,7 +176,6 @@ gbp_git_annotation_provider_query_line_cb (GObject      *object,
     {
       g_debug ("Error while querying line blame: %s", error->message);
       IDE_EXIT;
-      return;
     }
 
   is_valid_commit = (commit_hash != NULL &&
@@ -216,7 +215,7 @@ gbp_git_annotation_provider_query_line (GbpGitAnnotationProvider *self)
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
 
   if (self->blame_service == NULL)
-    return;
+    IDE_EXIT;
 
   if (self->blame_cancellable)
     g_cancellable_cancel (self->blame_cancellable);
@@ -258,10 +257,7 @@ gbp_git_annotation_provider_update_content (GbpGitAnnotationProvider *self,
   self->update_cancellable = g_cancellable_new ();
 
   if (self->blame_service == NULL)
-    {
-      IDE_EXIT;
-      return;
-    }
+    IDE_EXIT;
 
   bytes = ide_buffer_dup_content (buffer);
 
@@ -292,7 +288,7 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
 
   if (self->buffer == NULL)
-    return;
+    IDE_EXIT;
 
   context = ide_buffer_ref_context (self->buffer);
   file = ide_buffer_get_file (self->buffer);
@@ -300,22 +296,22 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
 
   workbench = ide_workbench_from_context (context);
   if (workbench == NULL)
-    return;
+    IDE_EXIT;
 
   vcs = ide_workbench_get_vcs (workbench);
   if (!GBP_IS_GIT_VCS (vcs))
-    return;
+    IDE_EXIT;
 
   repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs));
   if (repository == NULL)
-    return;
+    IDE_EXIT;
 
   if (!ipc_git_repository_call_blame_sync (repository,
                                            relative_path,
                                            &obj_path,
                                            NULL,
                                            &error))
-    return;
+    IDE_EXIT;
 
   connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (repository));
 
@@ -325,7 +321,7 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
                                               obj_path,
                                               NULL,
                                               &error)))
-    return;
+    IDE_EXIT;
 
   g_clear_object (&self->blame_service);
   self->blame_service = g_steal_pointer (&proxy);
@@ -441,7 +437,6 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
       g_task_return_boolean (task, TRUE);
       g_object_unref (task);
       IDE_EXIT;
-      return;
     }
 
   top_box = g_object_new (GTK_TYPE_BOX,
@@ -546,18 +541,21 @@ gbp_git_annotation_provider_new (IdeBuffer *buffer)
 
   if (g_set_object (&self->buffer, buffer))
     {
-      g_signal_connect_swapped (self->buffer,
-                                "cursor-moved",
-                                G_CALLBACK (gbp_git_annotation_provider_buffer_cursor_moved_cb),
-                                self);
-      g_signal_connect_swapped (self->buffer,
-                                "changed",
-                                G_CALLBACK (gbp_git_annotation_provider_buffer_changed_cb),
-                                self);
-      g_signal_connect_swapped (self->buffer,
-                                "change-settled",
-                                G_CALLBACK (gbp_git_annotation_provider_buffer_change_settled_cb),
-                                self);
+      g_signal_connect_object (self->buffer,
+                               "cursor-moved",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_cursor_moved_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->buffer,
+                               "changed",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->buffer,
+                               "change-settled",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_change_settled_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       if (buffer != NULL)
         gbp_git_annotation_provider_update_blame_service (self);
