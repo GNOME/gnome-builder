@@ -51,7 +51,7 @@ struct _IdeScrollbar {
 
   GtkScrollbar      *scrollbar;
 
-  GList             *chunks;
+  GArray            *chunks;
 
   IdeSourceView     *view;
   IdeBuffer         *buffer;
@@ -183,6 +183,7 @@ ide_scrollbar_dispose (GObject *object)
   g_clear_object (&self->monitor_signals);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
+  g_array_free (self->chunks, TRUE);
 
   G_OBJECT_CLASS (ide_scrollbar_parent_class)->dispose (object);
 }
@@ -250,17 +251,54 @@ snapshot_chunk (IdeScrollbar *self,
 }
 
 static void
+diagnostic_line_cb (guint                 line,
+                    IdeDiagnosticSeverity severity,
+                    gpointer              user_data)
+{
+  IdeScrollbar *self = user_data;
+  LinesChunk chunk = {0};
+
+  chunk.start_line = line;
+  chunk.end_line = line + 1;
+
+  switch (severity)
+    {
+    case IDE_DIAGNOSTIC_WARNING:
+      chunk.line_type = LINE_WARNING;
+      break;
+
+    case IDE_DIAGNOSTIC_ERROR:
+      chunk.line_type = LINE_ERROR;
+      break;
+
+    case IDE_DIAGNOSTIC_FATAL:
+      chunk.line_type = LINE_FATAL;
+      break;
+
+    case IDE_DIAGNOSTIC_DEPRECATED:
+      chunk.line_type = LINE_DEPRECATED;
+      break;
+
+    case IDE_DIAGNOSTIC_IGNORED:
+    case IDE_DIAGNOSTIC_NOTE:
+    case IDE_DIAGNOSTIC_UNUSED:
+    default:
+      return;
+    }
+
+  self->chunks = g_array_append_val (self->chunks, chunk);
+}
+
+static void
 ide_scrollbar_update_chunks (IdeScrollbar *self)
 {
   IdeBufferChangeMonitor *monitor;
   IdeDiagnostics *diagnostics;
   int total_lines;
-  int line;
 
   g_return_if_fail (self->buffer);
 
-  g_list_free_full (self->chunks, g_free);
-  self->chunks = NULL;
+  g_array_set_size (self->chunks, 0);
 
   total_lines = gtk_text_buffer_get_line_count (GTK_TEXT_BUFFER (self->buffer));
 
@@ -270,6 +308,7 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
       IdeBufferLineChange last_change;
       int chunk_start_line;
       gboolean first_line = TRUE;
+      guint line;
 
       for (line = 0; line <= total_lines; line++)
         {
@@ -288,22 +327,22 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
             }
           else if (change != last_change)
             {
-              g_autofree LinesChunk *chunk = g_new0 (LinesChunk, 1);
-              chunk->start_line = chunk_start_line;
-              chunk->end_line = line + 1;
+              LinesChunk chunk = {0};
+              chunk.start_line = chunk_start_line;
+              chunk.end_line = line + 1;
 
               switch (last_change)
                 {
                 case IDE_BUFFER_LINE_CHANGE_ADDED:
-                  chunk->line_type = LINE_ADDED;
+                  chunk.line_type = LINE_ADDED;
                   break;
 
                 case IDE_BUFFER_LINE_CHANGE_CHANGED:
-                  chunk->line_type = LINE_CHANGED;
+                  chunk.line_type = LINE_CHANGED;
                   break;
 
                 case IDE_BUFFER_LINE_CHANGE_DELETED:
-                  chunk->line_type = LINE_DELETED;
+                  chunk.line_type = LINE_DELETED;
                   break;
 
                 case IDE_BUFFER_LINE_CHANGE_NONE:
@@ -314,8 +353,7 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
                   continue;
                 }
 
-              self->chunks = g_list_append (self->chunks,
-                                            g_steal_pointer (&chunk));
+              self->chunks = g_array_append_val (self->chunks, chunk);
 
               last_change = change;
               chunk_start_line = line + 1;
@@ -330,51 +368,12 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
 
       file = ide_buffer_get_file (IDE_BUFFER (self->buffer));
 
-      for (line = 0; line < total_lines; line++)
-        {
-          IdeDiagnostic *diagnostic;
-          IdeDiagnosticSeverity severity;
-          g_autofree LinesChunk *chunk = NULL;
-
-          diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line);
-
-          if ((diagnostic == NULL) || !IDE_IS_DIAGNOSTIC (diagnostic))
-            continue;
-
-          severity = ide_diagnostic_get_severity (diagnostic);
-
-          chunk = g_new0 (LinesChunk, 1);
-          chunk->start_line = line;
-          chunk->end_line = line + 1;
-
-          switch (severity)
-            {
-            case IDE_DIAGNOSTIC_WARNING:
-              chunk->line_type = LINE_WARNING;
-              break;
-
-            case IDE_DIAGNOSTIC_ERROR:
-              chunk->line_type = LINE_ERROR;
-              break;
-
-            case IDE_DIAGNOSTIC_FATAL:
-              chunk->line_type = LINE_FATAL;
-              break;
-
-            case IDE_DIAGNOSTIC_DEPRECATED:
-              chunk->line_type = LINE_DEPRECATED;
-              break;
-
-            case IDE_DIAGNOSTIC_IGNORED:
-            case IDE_DIAGNOSTIC_NOTE:
-            case IDE_DIAGNOSTIC_UNUSED:
-            default:
-              continue;
-            }
-
-          self->chunks = g_list_append (self->chunks,
-                                        g_steal_pointer (&chunk));
-        }
+      ide_diagnostics_foreach_line_in_range (diagnostics,
+                                             file,
+                                             0,
+                                             total_lines,
+                                             diagnostic_line_cb,
+                                             self);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -434,9 +433,9 @@ ide_scrollbar_snapshot (GtkWidget  *widget,
     }
 
   /* Draw changes and diagnostics */
-  for (GList *l = self->chunks; l != NULL; l = l->next)
+  for (guint i = 0; i < self->chunks->len; i++)
     {
-      LinesChunk *chunk = l->data;
+      LinesChunk *chunk = &g_array_index (self->chunks, LinesChunk, i);
 
       int chunk_start_y = top_margin + chunk->start_line * line_height;
       int chunk_end_y   = top_margin + chunk->end_line * line_height;
@@ -490,11 +489,11 @@ ide_scrollbar_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_VIEW:
-        ide_scrollbar_set_view (self, g_value_get_object (value));
-        break;
+      ide_scrollbar_set_view (self, g_value_get_object (value));
+      break;
 
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -509,11 +508,11 @@ ide_scrollbar_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_VIEW:
-        g_value_set_object (value, self->view);
-        break;
+      g_value_set_object (value, self->view);
+      break;
 
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -548,6 +547,8 @@ static void
 ide_scrollbar_init (IdeScrollbar *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->chunks = g_array_new (FALSE, FALSE, sizeof (LinesChunk));
 
   self->monitor_signals = g_signal_group_new (IDE_TYPE_BUFFER_CHANGE_MONITOR);
 
