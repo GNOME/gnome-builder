@@ -54,6 +54,8 @@ struct _GbpGitAnnotationProvider
   char                       *commit_message;
   char                       *commit_date;
   char                       *natural_time;
+
+  guint                       content_updated : 1;
 };
 
 G_DEFINE_TYPE (GbpGitAnnotationProvider, gbp_git_annotation_provider, GTK_SOURCE_TYPE_ANNOTATION_PROVIDER)
@@ -64,6 +66,8 @@ gbp_git_annotation_provider_add_annotation (GbpGitAnnotationProvider *self,
 {
   GtkSourceAnnotation *annotation;
 
+  IDE_ENTRY;
+
   annotation = gtk_source_annotation_new (g_strdup (blame_text),
                                           g_icon_new_for_string ("commit-symbolic", NULL),
                                           self->last_line,
@@ -71,6 +75,8 @@ gbp_git_annotation_provider_add_annotation (GbpGitAnnotationProvider *self,
 
   gtk_source_annotation_provider_remove_all (GTK_SOURCE_ANNOTATION_PROVIDER (self));
   gtk_source_annotation_provider_add_annotation (GTK_SOURCE_ANNOTATION_PROVIDER (self), annotation);
+
+  IDE_EXIT;
 }
 
 static char *
@@ -83,13 +89,15 @@ format_relative_time (char *time_past_str)
   int64_t seconds, minutes, hours, days, weeks, months, years;
   char *result = NULL;
 
+  IDE_ENTRY;
+
   local_timezone = g_time_zone_new_local ();
   time_past = g_date_time_new_from_iso8601 (time_past_str, local_timezone);
   time_now = g_date_time_new_now_local ();
   time_diff = g_date_time_difference (time_now, time_past);
 
   if (time_diff < 0)
-    return g_strdup (_("in the future"));
+    IDE_RETURN (g_strdup (_("in the future")));
 
   seconds = time_diff / G_TIME_SPAN_SECOND;
   minutes = seconds / 60;
@@ -132,7 +140,7 @@ format_relative_time (char *time_past_str)
                                        years),
                               years);
 
-  return result;
+  IDE_RETURN (result);
 }
 
 static void
@@ -151,6 +159,8 @@ gbp_git_annotation_provider_query_line_cb (GObject      *object,
   gboolean is_valid_commit = FALSE;
   guint line_in_commit = 0;
 
+  IDE_ENTRY;
+
   g_assert (IPC_IS_GIT_BLAME (blame_service));
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
 
@@ -164,13 +174,14 @@ gbp_git_annotation_provider_query_line_cb (GObject      *object,
                                              result,
                                              &error))
     {
-      return;
+      g_debug ("Error while querying line blame: %s", error->message);
+      IDE_EXIT;
     }
 
   is_valid_commit = (commit_hash != NULL &&
-                    *commit_hash != '\0' &&
-                    author_name != NULL &&
-                    *author_name != '\0');
+                     *commit_hash != '\0' &&
+                     author_name != NULL &&
+                     *author_name != '\0');
 
   if (is_valid_commit)
     {
@@ -192,15 +203,19 @@ gbp_git_annotation_provider_query_line_cb (GObject      *object,
 
       gbp_git_annotation_provider_add_annotation (self, blame_text);
     }
+
+  IDE_EXIT;
 }
 
 static void
 gbp_git_annotation_provider_query_line (GbpGitAnnotationProvider *self)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
 
   if (self->blame_service == NULL)
-    return;
+    IDE_EXIT;
 
   if (self->blame_cancellable)
     g_cancellable_cancel (self->blame_cancellable);
@@ -219,6 +234,8 @@ gbp_git_annotation_provider_query_line (GbpGitAnnotationProvider *self)
                                  self->blame_cancellable,
                                  gbp_git_annotation_provider_query_line_cb,
                                  self);
+
+  IDE_EXIT;
 }
 
 static void
@@ -226,6 +243,8 @@ gbp_git_annotation_provider_update_content (GbpGitAnnotationProvider *self,
                                             IdeBuffer                *buffer)
 {
   g_autoptr(GBytes) bytes = NULL;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -238,7 +257,7 @@ gbp_git_annotation_provider_update_content (GbpGitAnnotationProvider *self,
   self->update_cancellable = g_cancellable_new ();
 
   if (self->blame_service == NULL)
-    return;
+    IDE_EXIT;
 
   bytes = ide_buffer_dup_content (buffer);
 
@@ -246,6 +265,8 @@ gbp_git_annotation_provider_update_content (GbpGitAnnotationProvider *self,
                                      (const char *)g_bytes_get_data (bytes, NULL),
                                      self->update_cancellable,
                                      NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -262,10 +283,12 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
   IdeWorkbench *workbench;
   GFile *file;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
 
   if (self->buffer == NULL)
-    return;
+    IDE_EXIT;
 
   context = ide_buffer_ref_context (self->buffer);
   file = ide_buffer_get_file (self->buffer);
@@ -273,22 +296,22 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
 
   workbench = ide_workbench_from_context (context);
   if (workbench == NULL)
-    return;
+    IDE_EXIT;
 
   vcs = ide_workbench_get_vcs (workbench);
   if (!GBP_IS_GIT_VCS (vcs))
-    return;
+    IDE_EXIT;
 
   repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs));
   if (repository == NULL)
-    return;
+    IDE_EXIT;
 
   if (!ipc_git_repository_call_blame_sync (repository,
                                            relative_path,
                                            &obj_path,
                                            NULL,
                                            &error))
-    return;
+    IDE_EXIT;
 
   connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (repository));
 
@@ -298,12 +321,14 @@ gbp_git_annotation_provider_update_blame_service (GbpGitAnnotationProvider *self
                                               obj_path,
                                               NULL,
                                               &error)))
-    return;
+    IDE_EXIT;
 
   g_clear_object (&self->blame_service);
   self->blame_service = g_steal_pointer (&proxy);
 
   gbp_git_annotation_provider_update_content (self, self->buffer);
+
+  IDE_EXIT;
 }
 
 static void
@@ -326,6 +351,8 @@ gbp_git_annotation_provider_buffer_cursor_moved_cb (GbpGitAnnotationProvider *se
   GtkTextIter iter;
   guint line_number;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
@@ -341,24 +368,46 @@ gbp_git_annotation_provider_buffer_cursor_moved_cb (GbpGitAnnotationProvider *se
       gbp_git_annotation_provider_clear (self);
       gtk_source_annotation_provider_remove_all (GTK_SOURCE_ANNOTATION_PROVIDER (self));
 
-      self->last_line = line_number;
-
       if ((monitor = ide_buffer_get_change_monitor (buffer)) &&
-          ide_buffer_change_monitor_get_change (monitor, line_number - 1) == IDE_BUFFER_LINE_CHANGE_NONE)
+          ide_buffer_change_monitor_get_change (monitor, line_number - 1) == IDE_BUFFER_LINE_CHANGE_NONE &&
+          self->content_updated)
         {
           gbp_git_annotation_provider_query_line (self);
+          self->last_line = line_number;
         }
     }
+
+  IDE_EXIT;
 }
 
 static void
 gbp_git_annotation_provider_buffer_changed_cb (GbpGitAnnotationProvider *self,
                                                IdeBuffer                *buffer)
 {
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  self->content_updated = FALSE;
+
+  IDE_EXIT;
+}
+
+static void
+gbp_git_annotation_provider_buffer_change_settled_cb (GbpGitAnnotationProvider *self,
+                                                      IdeBuffer                *buffer)
+{
+  IDE_ENTRY;
+
   g_assert (GBP_IS_GIT_ANNOTATION_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   gbp_git_annotation_provider_update_content (self, buffer);
+
+  self->content_updated = TRUE;
+
+  IDE_EXIT;
 }
 
 void
@@ -370,9 +419,11 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
                                                   gpointer                      user_data)
 {
   GbpGitAnnotationProvider *self = GBP_GIT_ANNOTATION_PROVIDER (provider);
-  GTask *task = NULL;
+  g_autoptr(GTask) task = NULL;
   GtkWidget *top_box;
   GtkWidget *bottom_box;
+
+  IDE_ENTRY;
 
   g_assert (GTK_SOURCE_IS_ANNOTATION_PROVIDER (provider));
   g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
@@ -384,8 +435,7 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
   if (self->author_name == NULL || self->commit_message == NULL)
     {
       g_task_return_boolean (task, TRUE);
-      g_object_unref (task);
-      return;
+      IDE_EXIT;
     }
 
   top_box = g_object_new (GTK_TYPE_BOX,
@@ -459,7 +509,8 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
   gtk_source_hover_display_append (display, bottom_box);
 
   g_task_return_boolean (task, TRUE);
-  g_object_unref (task);
+
+  IDE_EXIT;
 }
 
 gboolean
@@ -467,10 +518,12 @@ gbp_git_annotation_provider_populate_hover_finish (GtkSourceAnnotationProvider  
                                                    GAsyncResult                 *result,
                                                    GError                      **error)
 {
+  IDE_ENTRY;
+
   g_return_val_if_fail (GTK_SOURCE_IS_ANNOTATION_PROVIDER (provider), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  IDE_RETURN (g_task_propagate_boolean (G_TASK (result), error));
 }
 
 GbpGitAnnotationProvider *
@@ -478,26 +531,35 @@ gbp_git_annotation_provider_new (IdeBuffer *buffer)
 {
   GbpGitAnnotationProvider *self;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (!buffer || IDE_IS_BUFFER (buffer), NULL);
 
   self = g_object_new (GBP_TYPE_GIT_ANNOTATION_PROVIDER, NULL);
 
   if (g_set_object (&self->buffer, buffer))
     {
-      g_signal_connect_swapped (self->buffer,
-                                "cursor-moved",
-                                G_CALLBACK (gbp_git_annotation_provider_buffer_cursor_moved_cb),
-                                self);
-      g_signal_connect_swapped (self->buffer,
-                                "change-settled",
-                                G_CALLBACK (gbp_git_annotation_provider_buffer_changed_cb),
-                                self);
+      g_signal_connect_object (self->buffer,
+                               "cursor-moved",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_cursor_moved_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->buffer,
+                               "changed",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->buffer,
+                               "change-settled",
+                               G_CALLBACK (gbp_git_annotation_provider_buffer_change_settled_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       if (buffer != NULL)
         gbp_git_annotation_provider_update_blame_service (self);
     }
 
-  return self;
+  IDE_RETURN (self);
 }
 
 static void
