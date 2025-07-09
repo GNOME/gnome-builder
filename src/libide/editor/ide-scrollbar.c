@@ -181,9 +181,8 @@ notify_buffer_cb (GtkTextView *text_view,
 static void
 ide_scrollbar_dispose (GObject *object)
 {
-  IdeScrollbar *self;
+  IdeScrollbar *self = (IdeScrollbar *)object;
 
-  self = IDE_SCROLLBAR (object);
   g_clear_object (&self->view);
   g_clear_object (&self->buffer);
   g_clear_object (&self->monitor_signals);
@@ -302,7 +301,8 @@ ide_scrollbar_update_chunks (IdeScrollbar *self)
   IdeDiagnostics *diagnostics;
   int total_lines;
 
-  g_return_if_fail (self->buffer);
+  g_assert (GTK_IS_TEXT_BUFFER (self->buffer));
+  g_assert (self->chunks != NULL);
 
   /* Truncate without freeing allocation */
   self->chunks->len = 0;
