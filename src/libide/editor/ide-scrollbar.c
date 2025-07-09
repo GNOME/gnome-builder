@@ -28,7 +28,8 @@
 #include <math.h>
 
 #define SCROLLBAR_V_MARGIN 6
-#define SCROLLBAR_H_MARGIN 8
+#define SCROLLBAR_H_MARGIN 7
+#define SLIDER_W 3
 
 typedef enum {
   LINE_CHANGED,
@@ -240,7 +241,7 @@ snapshot_chunk (IdeScrollbar *self,
   if (color && end_y > start_y)
     {
       int height = MAX (end_y - start_y, 2);
-      int chunk_width = MIN (SCROLLBAR_H_MARGIN, width / 2);
+      int chunk_width = MIN (SCROLLBAR_H_MARGIN, (width - SLIDER_W) / 2);
 
       gtk_snapshot_append_color (snapshot, color,
                                  &GRAPHENE_RECT_INIT (is_change ? 0 : width - chunk_width,
@@ -517,6 +518,17 @@ ide_scrollbar_get_property (GObject    *object,
 }
 
 static void
+on_motion_enter (IdeScrollbar *self)
+{
+  gtk_widget_add_css_class (GTK_WIDGET (self->scrollbar), "hovering");
+}
+
+static void on_motion_leave (IdeScrollbar *self)
+{
+  gtk_widget_remove_css_class (GTK_WIDGET (self->scrollbar), "hovering");
+}
+
+static void
 ide_scrollbar_class_init (IdeScrollbarClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -541,6 +553,8 @@ ide_scrollbar_class_init (IdeScrollbarClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-scrollbar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeScrollbar, scrollbar);
+  gtk_widget_class_bind_template_callback (widget_class, on_motion_enter);
+  gtk_widget_class_bind_template_callback (widget_class, on_motion_leave);
 }
 
 static void
