@@ -419,7 +419,7 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
                                                   gpointer                      user_data)
 {
   GbpGitAnnotationProvider *self = GBP_GIT_ANNOTATION_PROVIDER (provider);
-  GTask *task = NULL;
+  g_autoptr(GTask) task = NULL;
   GtkWidget *top_box;
   GtkWidget *bottom_box;
 
@@ -435,7 +435,6 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
   if (self->author_name == NULL || self->commit_message == NULL)
     {
       g_task_return_boolean (task, TRUE);
-      g_object_unref (task);
       IDE_EXIT;
     }
 
@@ -510,7 +509,6 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
   gtk_source_hover_display_append (display, bottom_box);
 
   g_task_return_boolean (task, TRUE);
-  g_object_unref (task);
 
   IDE_EXIT;
 }
