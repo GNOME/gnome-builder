@@ -1368,7 +1368,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
        * within the textarea that we are pretending to look like.
        */
       if (highlight_line &&
-          !self->draw_has_selection &&
+          (!self->draw_has_selection || !self->selection_is_multi_line) &&
           is_cursor)
         gtk_snapshot_append_color (snapshot,
                                    &self->current_line,
