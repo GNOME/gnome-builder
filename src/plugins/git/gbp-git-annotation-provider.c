@@ -372,8 +372,8 @@ gbp_git_annotation_provider_buffer_cursor_moved_cb (GbpGitAnnotationProvider *se
           ide_buffer_change_monitor_get_change (monitor, line_number - 1) == IDE_BUFFER_LINE_CHANGE_NONE &&
           self->content_updated)
         {
-          gbp_git_annotation_provider_query_line (self);
           self->last_line = line_number;
+          gbp_git_annotation_provider_query_line (self);
         }
     }
 
