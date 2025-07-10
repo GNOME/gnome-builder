@@ -829,7 +829,7 @@ count_num_digits (int num_lines)
 static int
 calculate_diagnostics_size (int height)
 {
-  static guint sizes[] = { 64, 48, 32, 24, 16, 8 };
+  static guint sizes[] = { 64, 48, 32, 24, 16, 12, 10, 8 };
 
   for (guint i = 0; i < G_N_ELEMENTS (sizes); i++)
     {
@@ -894,7 +894,7 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
    * Calculate the nearest size for diagnostics so they scale somewhat
    * reasonable with the character size.
    */
-  self->diag_size = calculate_diagnostics_size (MAX (16, self->number_height));
+  self->diag_size = calculate_diagnostics_size (MAX (8, self->number_height));
   g_assert (self->diag_size > 0);
 
   /* Now calculate the size based on enabled features */
@@ -1518,7 +1518,7 @@ get_icon_paintable (GbpOmniGutterRenderer *self,
   paintable = gtk_icon_theme_lookup_icon (icon_theme,
                                           icon_name,
                                           NULL,
-                                          16,
+                                          size,
                                           scale,
                                           direction,
                                           GTK_ICON_LOOKUP_PRELOAD);

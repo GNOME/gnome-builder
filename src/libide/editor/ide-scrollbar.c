@@ -190,6 +190,8 @@ ide_scrollbar_dispose (GObject *object)
   g_clear_object (&self->view_signals);
   g_clear_pointer (&self->chunks, g_array_unref);
 
+  g_clear_pointer ((GtkWidget **)&self->scrollbar, gtk_widget_unparent);
+
   G_OBJECT_CLASS (ide_scrollbar_parent_class)->dispose (object);
 }
 
