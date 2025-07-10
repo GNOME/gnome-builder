@@ -54,6 +54,7 @@ struct _GbpGitAnnotationProvider
   char                       *commit_message;
   char                       *commit_date;
   char                       *natural_time;
+  char                       *precise_date;
 
   guint                       content_updated : 1;
 };
@@ -143,6 +144,31 @@ format_relative_time (char *time_past_str)
   IDE_RETURN (result);
 }
 
+static char *
+format_precise_time (const char *date_string)
+{
+  g_autoptr (GDateTime) commit_datetime = NULL;
+  g_autoptr (GDateTime) local_datetime = NULL;
+  char *result = NULL;
+
+  IDE_ENTRY;
+
+  if (!date_string || !*date_string)
+    IDE_RETURN (NULL);
+
+  commit_datetime = g_date_time_new_from_iso8601 (date_string, NULL);
+  if (!commit_datetime)
+    IDE_RETURN (NULL);
+
+  local_datetime = g_date_time_to_local (commit_datetime);
+  if (!local_datetime)
+    IDE_RETURN (NULL);
+
+  result = g_date_time_format (local_datetime, "%c");
+
+  IDE_RETURN (result);
+}
+
 static void
 gbp_git_annotation_provider_query_line_cb (GObject      *object,
                                            GAsyncResult *result,
@@ -196,7 +222,9 @@ gbp_git_annotation_provider_query_line_cb (GObject      *object,
       self->commit_hash = g_strdup (commit_hash);
       self->short_hash = g_strndup (commit_hash, 8);
 
+      self->precise_date = format_precise_time (self->commit_date);
       self->natural_time = format_relative_time (self->commit_date);
+
       blame_text = g_strdup_printf (_("%s, %s"),
                                     self->author_name,
                                     self->natural_time);
@@ -226,6 +254,8 @@ gbp_git_annotation_provider_query_line (GbpGitAnnotationProvider *self)
   g_clear_pointer (&self->commit_date, g_free);
   g_clear_pointer (&self->commit_hash, g_free);
   g_clear_pointer (&self->short_hash, g_free);
+  g_clear_pointer (&self->natural_time, g_free);
+  g_clear_pointer (&self->precise_date, g_free);
 
   self->blame_cancellable = g_cancellable_new ();
 
@@ -342,6 +372,7 @@ gbp_git_annotation_provider_clear (GbpGitAnnotationProvider *self)
   g_clear_pointer (&self->commit_hash, g_free);
   g_clear_pointer (&self->short_hash, g_free);
   g_clear_pointer (&self->natural_time, g_free);
+  g_clear_pointer (&self->precise_date, g_free);
 }
 
 static void
@@ -474,10 +505,10 @@ gbp_git_annotation_provider_populate_hover_async (GtkSourceAnnotationProvider  *
                                   "xalign", 1.0,
                                   NULL));
 
-  if (self->natural_time != NULL)
+  if (self->precise_date != NULL)
     gtk_box_append (GTK_BOX (bottom_box),
                     g_object_new (GTK_TYPE_LABEL,
-                                  "label", self->natural_time,
+                                  "label", self->precise_date,
                                   "hexpand", TRUE,
                                   "xalign", 0.0,
                                   NULL));
