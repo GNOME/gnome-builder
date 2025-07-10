@@ -1518,7 +1518,7 @@ get_icon_paintable (GbpOmniGutterRenderer *self,
   paintable = gtk_icon_theme_lookup_icon (icon_theme,
                                           icon_name,
                                           NULL,
-                                          16,
+                                          size,
                                           scale,
                                           direction,
                                           GTK_ICON_LOOKUP_PRELOAD);
