@@ -4,8 +4,8 @@
     <child internal-child="vcs_section">
       <object class="IdeTweaksSection">
         <child>
-          <object class="IdeTweaksPage" id="git_page">
-            <property name="hidden-when">app</property>
+          <object class="IdeTweaksPage">
+            <property name="hidden-when">application</property>
             <property name="icon-name">builder-vcs-git-symbolic</property>
             <property name="title" translatable="yes">Version Control</property>
             <child>
@@ -57,3 +57,4 @@
     </child>
   </template>
 </interface>
+

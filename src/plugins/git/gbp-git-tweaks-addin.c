@@ -65,6 +65,9 @@ gbp_git_tweaks_addin_load (IdeTweaksAddin *addin,
       ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                            IDE_STRV_INIT ("/plugins/git/tweaks.ui"));
     }
+  else
+    ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                         IDE_STRV_INIT ("/plugins/git/settings-tweaks.ui"));
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_git_tweaks_addin_parent_class)->load (addin, tweaks);
 }
