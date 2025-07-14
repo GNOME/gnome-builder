@@ -1,6 +1,6 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
-data/appdata/org.gnome.Builder.appdata.xml.in
+data/appdata/org.gnome.Builder.metainfo.xml.in
 data/org.gnome.Builder.desktop.in
 src/libide/tweaks/demo
 src/libide/tweaks/tests
