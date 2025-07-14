@@ -1,7 +1,7 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 data/org.gnome.Builder.desktop.in.in
-data/appdata/org.gnome.Builder.appdata.xml.in.in
+data/appdata/org.gnome.Builder.metainfo.xml.in.in
 data/gsettings/org.gnome.builder.build.gschema.xml
 data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
 data/gsettings/org.gnome.builder.debug.gschema.xml
