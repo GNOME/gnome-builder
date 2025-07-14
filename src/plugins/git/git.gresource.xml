@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/git">
     <file>git.plugin</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
+    <file preprocess="xml-stripblanks">settings-tweaks.ui</file>
   </gresource>
 </gresources>

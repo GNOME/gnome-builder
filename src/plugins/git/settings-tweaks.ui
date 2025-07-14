@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="vcs_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="git_page">
+            <property name="icon-name">builder-vcs-git-symbolic</property>
+            <property name="title" translatable="yes">Version Control</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Git Blame</property>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Show Inline Git Blame</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.git</property>
+                        <property name="schema-key">inline-blame-enabled</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
