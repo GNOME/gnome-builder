@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-05-18 17:17+0000\n"
-"PO-Revision-Date: 2025-05-19 07:26+0200\n"
+"POT-Creation-Date: 2025-07-14 18:02+0000\n"
+"PO-Revision-Date: 2025-07-16 09:57+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-Generator: Poedit 2.2.1\n"
 
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
@@ -59,16 +59,16 @@ msgstr "Kloniraj skladišče"
 msgid "New Editor Workspace"
 msgstr "Nova delovna površina"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:8
 msgid "Create applications for GNOME"
 msgstr "Ustvarite programe za GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -79,7 +79,7 @@ msgstr ""
 "za ključne tehnologije okolja GNOME, kot so GTK+, GLib in GNOME API, z "
 "zmožnostmi, ki bodo močno v pomoč razvijalcem."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -87,113 +87,113 @@ msgstr ""
 "Posodobitve programa Builder bodo na voljo vsakih šest mesecev z objavo nove "
 "različice okolja GNOME."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:26
 msgid "Features:"
 msgstr "Zmožnosti:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr "Vgrajeno poudarjanje skladnje za mnogo programskih jezikov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Dvostrani urejevalniki kode"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:30
 msgid "Multi-monitor support"
 msgstr "Podpora več monitorjem"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:31
 msgid "Code overview mini-map"
 msgstr "Pokaži predogledni zemljevid kode"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Povezljivost z Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 msgstr "Podpora za Autotools, Cargo, CMake, Meson, Maven, Make, PHPize in Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
 "jezik Clang"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Podpora za samodejno dopolnjevanje, poudarjanje skladnje in diagnostiko za "
 "jezik Python"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Podpora za samodejno dopolnjevanje in diagnostiko za jezik Vala"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Samodejno zamikanje kode za jezike C, Python, Vala in XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "Predogled kode v HTML, Markdown, reStructuredText in Sphinx v živo"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Izbirno urejanje v slogu Vim, Emacs in SublimeText"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "Programski profilirnik za izvorne programe"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "Programski razhroščevalnik za izvorne programe"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Podpora za izgradnjo z izvajalnimi programi jhbuil in flatpak"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Podpora za pregled nalog je najdena v kodi"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Hitro iskanje besedila po datotekah in simbolih"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:45
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Integracija Arduina z arduino-cli"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
 msgid "Debug with the GNU debugger"
 msgstr "Izvedi razhroščevanje z razhroščevalnikom GNU"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "Hiter dostop do datotek projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
 msgid "Create new projects from a variety of templates"
 msgstr "Ustvari nov projekt s pomočjo različnih predlog"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
 msgid "Integration with Git to clone your projects"
 msgstr "Povezljivost z Git za kloniranje projektov"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
 msgid "The source code editor"
 msgstr "Urejevalnik izvorne kode"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
 msgid "Fast global fuzzy search"
 msgstr "Hitro ohlapno splošno iskanje"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
 msgid "Use the minimap to see more of the file"
 msgstr "Uporabite mali zemljevid za pregled strukture datoteke"
 
@@ -750,7 +750,7 @@ msgstr "Preveri črkovanje"
 msgid "Automatically check spelling within documents"
 msgstr "Samodejno preveri črkovanje v dokumentih"
 
-#: src/libide/code/ide-buffer.c:3763
+#: src/libide/code/ide-buffer.c:3819
 msgid "The current language lacks a symbol resolver."
 msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
 
@@ -967,18 +967,18 @@ msgid "_Discard…"
 msgstr "_Zavrzi …"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:515
+#: src/libide/editor/ide-editor-page.c:516
 #, c-format
 msgid "Print failed: %s"
 msgstr "Tiskanje je spodletelo: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:591
+#: src/libide/editor/ide-editor-page.c:592
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Oblikovanje izbora ni uspelo: %s"
 
-#: src/libide/editor/ide-editor-page.c:1139
+#: src/libide/editor/ide-editor-page.c:1142
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1514,7 +1514,7 @@ msgstr ""
 "Poizvedbi dodaj predpono z eno od teh možnosti za filtriranje rezultatov"
 
 #: src/libide/gui/ide-search-popover.ui:99
-#: src/plugins/file-search/gbp-file-search-provider.c:342
+#: src/plugins/file-search/gbp-file-search-provider.c:364
 #: src/plugins/menu-search/gtk/menus.ui:149
 #: src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
@@ -1659,7 +1659,7 @@ msgstr "Novo okno terminala"
 msgid "Open application menu (F10)"
 msgstr "Odpri meni programa (F10)"
 
-#: src/libide/gui/ide-marked-view.c:427
+#: src/libide/gui/ide-marked-view.c:516
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Vsebine HTML ni mogoče naložiti. Ni nameščene podpore WebKit."
 
@@ -1727,11 +1727,11 @@ msgstr "Odprti so neshranjeni dokumenti"
 msgid "Appearance"
 msgstr "Videz"
 
-#: src/libide/gui/tweaks.ui:66
+#: src/libide/gui/tweaks.ui:65
 msgid "Configurations"
 msgstr "Nastavitve"
 
-#: src/libide/gui/tweaks.ui:78
+#: src/libide/gui/tweaks.ui:77
 msgid "Plugins"
 msgstr "Vstavki"
 
@@ -2419,7 +2419,7 @@ msgid "Caching build commands"
 msgstr "Polnjenje predpomnilnika z ukazi izgradnje"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:935
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (kopija)"
@@ -4617,7 +4617,7 @@ msgstr "Obnovi položaj kazalke"
 msgid "Jump to the last position when re-opening a file"
 msgstr "Skoči na zadnji položaj ob ponovnem odprtju datoteke"
 
-#: src/plugins/file-search/gbp-file-search-index.c:397
+#: src/plugins/file-search/gbp-file-search-index.c:412
 msgid "Open file or folder"
 msgstr "Odpri datoteko ali mapo"
 
@@ -4809,12 +4809,12 @@ msgid ""
 "repository."
 msgstr "Podajanje ustreznih poveril med kloniranjem skladišča je spodletelo."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:627
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Ni mogoče nastaviti zastavic AMEND in GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:636
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
@@ -4893,6 +4893,16 @@ msgstr "Avtorstvo"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "Elektronski naslov"
+
+#: src/plugins/git/tweaks.ui:40
+#, fuzzy
+msgid "Git Blame"
+msgstr "Git Blame"
+
+#: src/plugins/git/tweaks.ui:43
+#, fuzzy
+msgid "Show Inline Git Blame"
+msgstr "Pokaži vrstične dele Git Blame"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
@@ -5068,7 +5078,7 @@ msgstr "Priročniki"
 msgid "Filter…"
 msgstr "Filtriraj …"
 
-#: src/plugins/manuals/gbp-manuals-search-result.c:215
+#: src/plugins/manuals/gbp-manuals-search-result.c:248
 msgid "Open Documentation"
 msgstr "Odpri dokumentacijo"
 
@@ -5339,35 +5349,35 @@ msgstr "Program GNOME"
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Mesonov projekt za GNOME z uporabo GTK 4 in libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "GTK 4 Application"
 msgstr "Program GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:192
 msgid "A Meson-based project using GTK 4"
 msgstr "Projekt, ki temelji na Mesonu z uporabo GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "Shared Library"
 msgstr "Souporabna knjižnica"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:208
 msgid "A Meson-based project for a shared library"
 msgstr "Mesonov projekt za knjižnico v skupni rabi"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "Command Line Tool"
 msgstr "Orodje ukazne vrstice"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:216
 msgid "An Meson-based project for a command-line program"
 msgstr "Projekt, zasnovan v okolju Mason, za program ukazne vrstice"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:225
 msgid "Empty Meson Project"
 msgstr "Izprazni projekt Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:226
 msgid "An empty Meson project skeleton"
 msgstr "Prazno okostje projekta Meson"
 
@@ -6030,7 +6040,7 @@ msgstr "_Uredi datoteko"
 msgid "Open keybindings.json in editor"
 msgstr "Odpri keybindings.json v urejevalniku"
 
-#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:22
 msgid "Reset shortcut"
 msgstr "Ponastavi tipkovno bližnjico"
 
