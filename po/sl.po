@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-07-14 18:02+0000\n"
-"PO-Revision-Date: 2025-07-16 09:57+0200\n"
+"POT-Creation-Date: 2025-07-16 07:59+0000\n"
+"PO-Revision-Date: 2025-07-19 11:33+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -4895,14 +4895,12 @@ msgid "Email"
 msgstr "Elektronski naslov"
 
 #: src/plugins/git/tweaks.ui:40
-#, fuzzy
 msgid "Git Blame"
 msgstr "Git Blame"
 
 #: src/plugins/git/tweaks.ui:43
-#, fuzzy
 msgid "Show Inline Git Blame"
-msgstr "Pokaži vrstične dele Git Blame"
+msgstr "Pokaži vrstične odseke Git Blame"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
