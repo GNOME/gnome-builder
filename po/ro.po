@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-06-25 09:30+0000\n"
-"PO-Revision-Date: 2025-06-26 15:42+0200\n"
+"POT-Creation-Date: 2025-07-19 09:35+0000\n"
+"PO-Revision-Date: 2025-07-23 11:42+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -22,8 +22,8 @@ msgstr ""
 "X-Generator: Gtranslator 48.0\n"
 "X-Project-Style: gnome\n"
 
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
@@ -32,43 +32,16 @@ msgstr ""
 msgid "Builder"
 msgstr "Builder"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Creează programe pentru GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Build;Develop;Generare;Programează;Creează;Dezvoltă;Compilează;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Deschide un proiect"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Începe un proiect nou"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
-msgid "Clone Repository"
-msgstr "Clonează un depozit"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "Spațiu de lucru nou"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:8
 msgid "Create applications for GNOME"
 msgstr "Creează aplicații pentru GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -80,7 +53,7 @@ msgstr ""
 "caracteristici care vor fi apreciate de orice programator, precum "
 "evidențierea sintaxei și fragmente de cod."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -88,31 +61,31 @@ msgstr ""
 "O nouă versiune de Builder este oferită împreună cu GNOME o dată la șase "
 "luni."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:26
 msgid "Features:"
 msgstr "Caracteristici:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr "Evidențierea sintaxei pentru mai multe limbaje de programare"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Editoare de text alăturate"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:30
 msgid "Multi-monitor support"
 msgstr "Pot fi utilizate mai multe monitoare"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:31
 msgid "Code overview mini-map"
 msgstr "Vedere de ansamblu a codului"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Integrare cu Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -120,83 +93,83 @@ msgstr ""
 "Integrare cu Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, și "
 "Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Completare automată, evidențiere semantică și diagnosticare bazate pe Clang"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
 "Completare automată, evidențierea semanticii, și diagnosticări bazate pe "
 "Python"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Completare automată și diagnosticări bazate pe Vala"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Alineat automat pentru C, Python, Vala, și XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr ""
 "Previzualizare în direct pentru HTML, Markdown, reStructuredText și Sphinx"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Modificare facultativă în stilul Vim, Emacs și SublimeText"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "Un instrument integrat de analiză a performanței aplicațiilor native"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "Un depanator integrat pentru aplicațiile native"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Posibilitatea de a compila cu JHBuild și Flatpak"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Vizualizarea elementelor TODO găsite în baza de cod"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Căutare rapidă și aproximativă a textului în fișiere și simboluri"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:45
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Integrare Arduino cu arduino-cli"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
 msgid "Debug with the GNU debugger"
 msgstr "Depanare cu depanatorul GNU"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "Accesare rapidă a proiectelor"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
 msgid "Create new projects from a variety of templates"
 msgstr "Creare de proiecte noi de la o varietate de modele"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
 msgid "Integration with Git to clone your projects"
 msgstr "Integrare cu Git pentru a clona proiectele"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
 msgid "The source code editor"
 msgstr "Editorul de cod sursă"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
 msgid "Fast global fuzzy search"
 msgstr "Căutare globală rapidă și aproximativă"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
 msgid "Use the minimap to see more of the file"
 msgstr "Folosește vederea de ansamblu pentru a vedea mai mult din fișier"
 
@@ -637,6 +610,39 @@ msgstr "Modul activat"
 msgid "If the plugin should be enabled"
 msgstr "Dacă modulul ar trebui activat"
 
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
+msgid "Show Icons"
+msgstr "Arată iconițele"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "Această configurare este depășită și nu mai este în uz."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
+msgid "Show Ignored Files"
+msgstr "Arată fișierele ignorate"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Dacă este activat, arborele proiectului va afișa fișierele care sunt "
+"ignorate de VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
+msgid "Sort Directories First"
+msgstr "Sortează mai întâi dosarele"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Dacă este activat, arborele proiectului va sorta dosarele înaintea "
+"fișierelor obișnuite."
+
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
 msgstr "Configurarea aleasă pentru compilare"
@@ -715,39 +721,6 @@ msgstr ""
 "Un dosar principal pentru datele cache ale proiectului, cum ar fi dosarele "
 "de compilare și dosarele de pregătire pentru flatpak"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:13
-msgid "Show Icons"
-msgstr "Arată iconițele"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "This setting is deprecated and no longer in use."
-msgstr "Această configurare este depășită și nu mai este în uz."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:25
-msgid "Show Ignored Files"
-msgstr "Arată fișierele ignorate"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-msgid ""
-"If enabled, the project tree will display files that are ignored by the VCS."
-msgstr ""
-"Dacă este activat, arborele proiectului va afișa fișierele care sunt "
-"ignorate de VCS."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:37
-msgid "Sort Directories First"
-msgstr "Sortează mai întâi dosarele"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
-msgstr ""
-"Dacă este activat, arborele proiectului va sorta dosarele înaintea "
-"fișierelor obișnuite."
-
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
@@ -757,15 +730,42 @@ msgstr "Verifică ortografia"
 msgid "Automatically check spelling within documents"
 msgstr "Verifică automat ortografia în cadrul documentelor"
 
-#: src/libide/code/ide-buffer.c:3763
-msgid "The current language lacks a symbol resolver."
-msgstr "Limbajului curent îi lipsește un rezolvator de simbol."
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Creează programe pentru GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;Generare;Programează;Creează;Dezvoltă;Compilează;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Deschide un proiect"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Începe un proiect nou"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Clonează un depozit"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Spațiu de lucru nou"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "fișier nesalvat %u"
+
+#: src/libide/code/ide-buffer.c:3819
+msgid "The current language lacks a symbol resolver."
+msgstr "Limbajului curent îi lipsește un rezolvator de simbol."
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
@@ -915,12 +915,6 @@ msgstr "Selecție"
 msgid "Printing"
 msgstr "Tipărire"
 
-#. translators: %s is replaced with the error message
-#: src/libide/editor/ide-editor.c:121
-#, c-format
-msgid "Failed to open file: %s"
-msgstr "Nu s-a putut deschide fișierul: %s"
-
 #: src/libide/editor/ide-editor-info-bar.c:85
 #: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
@@ -975,18 +969,18 @@ msgid "_Discard…"
 msgstr "_Renunță…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:515
+#: src/libide/editor/ide-editor-page.c:516
 #, c-format
 msgid "Print failed: %s"
 msgstr "Nu s-a putut tipări: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:591
+#: src/libide/editor/ide-editor-page.c:592
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Nu s-a putut formata selecția: %s"
 
-#: src/libide/editor/ide-editor-page.c:1139
+#: src/libide/editor/ide-editor-page.c:1142
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1054,6 +1048,12 @@ msgstr "Caută (Ctrl+Enter)"
 #: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Comută panoul de jos (Ctrl+F9)"
+
+#. translators: %s is replaced with the error message
+#: src/libide/editor/ide-editor.c:121
+#, c-format
+msgid "Failed to open file: %s"
+msgstr "Nu s-a putut deschide fișierul: %s"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1126,6 +1126,10 @@ msgstr "Calculator (%s)"
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Calculator (%s) — %s"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+msgid "Cannot build transfer while on metered connection"
+msgstr "Nu se pot transfera date cu o conexiune limitată"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
@@ -1235,10 +1239,6 @@ msgstr "Se elimină %s"
 msgid "Removing build directories…"
 msgstr "Se elimină dosarele de compilare…"
 
-#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
-msgid "Cannot build transfer while on metered connection"
-msgstr "Nu se pot transfera date cu o conexiune limitată"
-
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
@@ -1297,13 +1297,15 @@ msgstr "Utilizatorul a cerut ca aplicația să ruleze cu instrumentul „%s”"
 msgid "User requested application to stop"
 msgstr "Utilizatorul a cerut ca aplicația să se oprească"
 
-#: src/libide/foundry/ide-runtime.c:395
-#: src/plugins/host/gbp-host-runtime-provider.c:54
-#: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-msgid "Host System"
-msgstr "Sistem gazdă"
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Se forțează subprocesul %s să iasă"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Se trimite semnalul %d la subprocesul %s"
 
 #: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
@@ -1315,15 +1317,13 @@ msgstr "S-a descoperit runtime-ul „%s”"
 msgid "Removing runtime “%s”"
 msgstr "Se elimină runtime-ul „%s”"
 
-#: src/libide/foundry/ide-run-tool.c:68
-#, c-format
-msgid "Forcing subprocess %s to exit"
-msgstr "Se forțează subprocesul %s să iasă"
-
-#: src/libide/foundry/ide-run-tool.c:84
-#, c-format
-msgid "Sending signal %d to subprocess %s"
-msgstr "Se trimite semnalul %d la subprocesul %s"
+#: src/libide/foundry/ide-runtime.c:395
+#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+msgid "Host System"
+msgstr "Sistem gazdă"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1509,40 +1509,6 @@ msgstr "%u din %u"
 msgid "Search"
 msgstr "Caută"
 
-#: src/libide/gui/ide-search-popover.ui:31
-msgid "Search for anything"
-msgstr "Caută orice"
-
-#: src/libide/gui/ide-search-popover.ui:84
-msgid "Type to Search"
-msgstr "Introdu textul de căutat"
-
-#: src/libide/gui/ide-search-popover.ui:85
-msgid "Prefix your query with one of the following to filter results"
-msgstr ""
-"Pentru a filtra rezultatele căutării, adaugă unul dintre următoarele prefixe "
-"la textul căutării"
-
-#: src/libide/gui/ide-search-popover.ui:99
-#: src/plugins/file-search/gbp-file-search-provider.c:364
-#: src/plugins/menu-search/gtk/menus.ui:149
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "Fișiere"
-
-#: src/libide/gui/ide-search-popover.ui:120
-msgid "Symbols"
-msgstr "Simboluri"
-
-#: src/libide/gui/ide-search-popover.ui:141
-msgid "Documentation"
-msgstr "Documentație"
-
-#: src/libide/gui/ide-search-popover.ui:162
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "Acțiuni"
-
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
 #, c-format
@@ -1641,13 +1607,13 @@ msgstr "Mărește detalierea jurnalului (poate fi reperată)"
 msgid "Failed to open project: %s"
 msgstr "Nu s-a putut deschide proiectul: %s"
 
-#: src/libide/gui/ide-environment-editor.c:73
-msgid "New variable…"
-msgstr "Variabilă nouă…"
-
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
 msgstr "Elimină variabila de mediu"
+
+#: src/libide/gui/ide-environment-editor.c:73
+msgid "New variable…"
+msgstr "Variabilă nouă…"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
@@ -1673,7 +1639,7 @@ msgstr "Terminal nou"
 msgid "Open application menu (F10)"
 msgstr "Deschide opțiunile aplicației (F10)"
 
-#: src/libide/gui/ide-marked-view.c:427
+#: src/libide/gui/ide-marked-view.c:516
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Nu se poate încărca HTML. Lipsește suportul WebKit."
 
@@ -1705,6 +1671,40 @@ msgstr "Oprește rularea"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Rulează proiectul"
+
+#: src/libide/gui/ide-search-popover.ui:31
+msgid "Search for anything"
+msgstr "Caută orice"
+
+#: src/libide/gui/ide-search-popover.ui:84
+msgid "Type to Search"
+msgstr "Introdu textul de căutat"
+
+#: src/libide/gui/ide-search-popover.ui:85
+msgid "Prefix your query with one of the following to filter results"
+msgstr ""
+"Pentru a filtra rezultatele căutării, adaugă unul dintre următoarele prefixe "
+"la textul căutării"
+
+#: src/libide/gui/ide-search-popover.ui:99
+#: src/plugins/file-search/gbp-file-search-provider.c:364
+#: src/plugins/menu-search/gtk/menus.ui:149
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Fișiere"
+
+#: src/libide/gui/ide-search-popover.ui:120
+msgid "Symbols"
+msgstr "Simboluri"
+
+#: src/libide/gui/ide-search-popover.ui:141
+msgid "Documentation"
+msgstr "Documentație"
+
+#: src/libide/gui/ide-search-popover.ui:162
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Acțiuni"
 
 #: src/libide/gui/ide-shortcut-window.c:259
 #: src/libide/gui/ide-shortcut-window.c:285
@@ -1741,11 +1741,11 @@ msgstr "Există documente nesalvate"
 msgid "Appearance"
 msgstr "Aspect"
 
-#: src/libide/gui/tweaks.ui:66
+#: src/libide/gui/tweaks.ui:65
 msgid "Configurations"
 msgstr "Configurări"
 
-#: src/libide/gui/tweaks.ui:78
+#: src/libide/gui/tweaks.ui:77
 msgid "Plugins"
 msgstr "Module"
 
@@ -1789,9 +1789,22 @@ msgstr "Serverul de limbaj „%s” a ieșit"
 msgid "Language server “%s” spawned as process %s"
 msgstr "Serverul de limbaj „%s” a apărut ca procesul %s"
 
+#: src/libide/plugins/ide-plugin-view.ui:36
+msgid "Authors"
+msgstr "Autori"
+
+#: src/libide/plugins/ide-plugin-view.ui:68
+msgid "Version"
+msgstr "Versiune"
+
+#: src/libide/plugins/ide-plugin-view.ui:100
+msgid "Website"
+msgstr "Pagină web"
+
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:117
-#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+#: src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10
+#: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Control de versiune"
 
@@ -1847,18 +1860,6 @@ msgstr "Integrare desktop"
 #: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
 msgstr "Adițional"
-
-#: src/libide/plugins/ide-plugin-view.ui:36
-msgid "Authors"
-msgstr "Autori"
-
-#: src/libide/plugins/ide-plugin-view.ui:68
-msgid "Version"
-msgstr "Versiune"
-
-#: src/libide/plugins/ide-plugin-view.ui:100
-msgid "Website"
-msgstr "Pagină web"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
@@ -2050,11 +2051,6 @@ msgstr "Selecționează tot textul din terminal, inclusiv acela care nu se vede"
 msgid "Select _None"
 msgstr "_Nu selecționa nimic"
 
-#: src/libide/terminal/ide-terminal.c:539
-#: src/libide/terminal/ide-terminal.c:572
-msgid "Copied to clipboard"
-msgstr "Copiat"
-
 #: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Salvează conținutul terminalului ca"
@@ -2173,6 +2169,11 @@ msgstr "Mută la potrivirea următoare"
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Continuă de la început"
+
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
+msgid "Copied to clipboard"
+msgstr "Copiat"
 
 #: src/libide/terminal/ide-terminal.ui:154
 msgid "Allow Input"
@@ -3289,6 +3290,10 @@ msgstr ""
 "SDK-ul utilizat pentru a genera aplicația este determinat automat de la "
 "rulare."
 
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr "Reformatează prototipurile de funcție"
+
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
@@ -3306,6 +3311,32 @@ msgstr "Generează proiectul"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Rulare cargo"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:178
+#, c-format
+msgid "Failed to execute clang-format: %s"
+msgstr "Eșec la executarea clang-format: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:189
+#, c-format
+msgid "clang-format failed to format document: %s"
+msgstr "clang-format nu a reușit să formateze documentul: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:201
+msgid "Missing or corrupted data from clang-format"
+msgstr "Datele de la clang-format lipsesc sau sunt deteriorate"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:213
+msgid "Invalid cursor position provided from clang-format"
+msgstr "Poziția cursorului furnizată de clang-format nu este corectă"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Fișierul .clang-format nu a fost găsit, trebuie adăugat unul în proiect. Se "
+"va folosi stilul de formatare GNU de rezervă."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3361,32 +3392,6 @@ msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Include parametrii și informațiile de tip când se completează propunerile "
 "clang"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, c-format
-msgid "Failed to execute clang-format: %s"
-msgstr "Eșec la executarea clang-format: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, c-format
-msgid "clang-format failed to format document: %s"
-msgstr "clang-format nu a reușit să formateze documentul: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:201
-msgid "Missing or corrupted data from clang-format"
-msgstr "Datele de la clang-format lipsesc sau sunt deteriorate"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:213
-msgid "Invalid cursor position provided from clang-format"
-msgstr "Poziția cursorului furnizată de clang-format nu este corectă"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:280
-msgid ""
-"Cannot locate .clang-format, please add one to your project. Using fallback "
-"GNU-style formatter."
-msgstr ""
-"Fișierul .clang-format nu a fost găsit, trebuie adăugat unul în proiect. Se "
-"va folosi stilul de formatare GNU de rezervă."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3617,10 +3622,6 @@ msgstr "Actualizează drepturile de autor"
 msgid "Update copyright headers when saving documents"
 msgstr "Actualizează antetele de drepturi de autor la salvarea documentelor"
 
-#: src/plugins/c-pack/gtk/menus.ui:6
-msgid "Reformat Function Prototypes"
-msgstr "Reformatează prototipurile de funcție"
-
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
 msgstr "Afișează ghidul de creare a unui proiect"
@@ -3706,6 +3707,35 @@ msgstr "Creează proiect nou…"
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "Creează un proiect nou dintr-un șablon"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
+msgid "Angle"
+msgstr "Unghi"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
+msgid "Direction"
+msgstr "Direcție"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:288
+msgid "Shape"
+msgstr "Formă"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
+msgid "Position"
+msgstr "Poziție"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:300
+#: src/plugins/ls/gbp-ls-page.ui:49
+msgid "Size"
+msgstr "Mărime"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:320
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
+msgid "Stops"
+msgstr "Opriri"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -4819,7 +4849,13 @@ msgstr "Utilizator"
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr "(Sistem) de cross-compilatoare GCC %s"
+msgstr "Compilator multiplatformă GCC %s (Sistem)"
+
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:199
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:351
+#, c-format
+msgid "Original error: %s"
+msgstr "Eroare inițială: %s"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
@@ -4846,15 +4882,76 @@ msgstr ""
 "Builder nu a putut furniza certificările adecvate în timpul clonării "
 "depozitului."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:627
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Nu se pot stabili fanioanele AMEND și GPG_SIGN"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:636
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Nu se poate semna comitul fără GPG_KEY_ID"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:101
+msgid "in the future"
+msgstr "în viitor"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:112
+msgid "just now"
+msgstr "chiar acum"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:114
+#, c-format
+msgid "%ld minute ago"
+msgid_plural "%ld minutes ago"
+msgstr[0] "acum %ld minut"
+msgstr[1] "acum %ld minute"
+msgstr[2] "acum %ld de minute"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:119
+#, c-format
+msgid "%ld hour ago"
+msgid_plural "%ld hours ago"
+msgstr[0] "acum %ld oră"
+msgstr[1] "acum %ld ore"
+msgstr[2] "acum %ld de ore"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:124
+#, c-format
+msgid "%ld day ago"
+msgid_plural "%ld days ago"
+msgstr[0] "acum %ld zi"
+msgstr[1] "acum %ld zile"
+msgstr[2] "acum %ld de zile"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:129
+#, c-format
+msgid "%ld week ago"
+msgid_plural "%ld weeks ago"
+msgstr[0] "acum %ld săptămână"
+msgstr[1] "acum %ld săptămâni"
+msgstr[2] "acum %ld de săptămâni"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:134
+#, c-format
+msgid "%ld month ago"
+msgid_plural "%ld months ago"
+msgstr[0] "acum %ld lună"
+msgstr[1] "acum %ld luni"
+msgstr[2] "acum %ld de luni"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:139
+#, c-format
+msgid "%ld year ago"
+msgid_plural "%ld years ago"
+msgstr[0] "acum %ld an"
+msgstr[1] "acum %ld ani"
+msgstr[2] "acum %ld de ani"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:228
+#, c-format
+msgid "%s, %s"
+msgstr "%s, %s"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
@@ -4886,23 +4983,6 @@ msgstr "Inițializează submodulele git"
 msgid "Network is not available, skipping submodule update"
 msgstr "Rețeaua nu este disponibilă, se sare actualizarea submodulelor"
 
-#: src/plugins/git/gbp-git-vcs.c:347
-msgid "Pushed."
-msgstr "Împins."
-
-#: src/plugins/git/gbp-git-vcs.c:385
-#, c-format
-msgid "Pushing ref “%s”"
-msgstr "Se împinge ref „%s”"
-
-#: src/plugins/git/gbp-git-vcs.c:687
-msgid "Directory is not within repository"
-msgstr "Directorul nu este într-un depozit"
-
-#: src/plugins/git/gbp-git-vcs.c:715
-msgid "Git"
-msgstr "Git"
-
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
@@ -4921,13 +5001,38 @@ msgstr "Se clonează depozitul"
 msgid "A valid Git URL is required"
 msgstr "Un URL Git valid este necesar"
 
+#: src/plugins/git/gbp-git-vcs.c:347
+msgid "Pushed."
+msgstr "Împins."
+
+#: src/plugins/git/gbp-git-vcs.c:385
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr "Se împinge ref „%s”"
+
+#: src/plugins/git/gbp-git-vcs.c:687
+msgid "Directory is not within repository"
+msgstr "Directorul nu este într-un depozit"
+
+#: src/plugins/git/gbp-git-vcs.c:715
+msgid "Git"
+msgstr "Git"
+
+#: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
+msgid "Git Blame"
+msgstr "Git Blame"
+
+#: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
+msgid "Show Inline Git Blame"
+msgstr "Afișează Git Blame lângă rând"
+
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
 msgstr "Calitatea de autor"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
@@ -5054,10 +5159,6 @@ msgstr "Deschide previzualizarea…"
 msgid "Failed to load directory: %s"
 msgstr "Nu s-a putut încărca dosarul: %s"
 
-#: src/plugins/ls/gbp-ls-page.ui:49
-msgid "Size"
-msgstr "Mărime"
-
 #: src/plugins/ls/gbp-ls-page.ui:63
 msgid "Modified"
 msgstr "Modificat"
@@ -5074,14 +5175,6 @@ msgstr "Deschide dosarul conținător"
 msgid "With File _Browser…"
 msgstr "Cu navigat_or de fișiere…"
 
-#: src/plugins/make/gbp-make-build-target.c:55
-msgid "Default Make Target"
-msgstr "Țintă Make implicită"
-
-#: src/plugins/make/gbp-make-run-command-provider.c:83
-msgid "Make Run"
-msgstr "Rulare Make"
-
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
 msgstr "Proiect Makefile gol"
@@ -5089,6 +5182,14 @@ msgstr "Proiect Makefile gol"
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Creează un proiect gol nou utilizând un Makefile simplu"
+
+#: src/plugins/make/gbp-make-build-target.c:55
+msgid "Default Make Target"
+msgstr "Țintă Make implicită"
+
+#: src/plugins/make/gbp-make-run-command-provider.c:83
+msgid "Make Run"
+msgstr "Rulare Make"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
@@ -5103,7 +5204,7 @@ msgstr "Manuale"
 msgid "Filter…"
 msgstr "Filtru…"
 
-#: src/plugins/manuals/gbp-manuals-search-result.c:215
+#: src/plugins/manuals/gbp-manuals-search-result.c:248
 msgid "Open Documentation"
 msgstr "Deschide documentația"
 
@@ -5311,6 +5412,46 @@ msgstr "Mută la rezultatul precedent al căutării"
 msgid "Move to and select the previous search result"
 msgstr "Mută la rezultatul precedent al căutării și selecționează-l"
 
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+msgid "GNOME Application"
+msgstr "Aplicație GNOME"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
+msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
+msgstr "Un proiect bazat pe Meson pentru GNOME utilizând GTK 4 și libadwaita"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
+msgid "GTK 4 Application"
+msgstr "Aplicație GTK 4"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:192
+msgid "A Meson-based project using GTK 4"
+msgstr "Un proiect bazat pe Meson utilizând GTK 4"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+msgid "Shared Library"
+msgstr "Bibiotecă partajată"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:208
+msgid "A Meson-based project for a shared library"
+msgstr "Un proiect bazat pe Meson pentru o bibliotecă partajată"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+msgid "Command Line Tool"
+msgstr "Unealtă în linia de comandă"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:216
+msgid "An Meson-based project for a command-line program"
+msgstr "Un proiect bazat pe Meson pentru un program în linie de comandă"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:225
+msgid "Empty Meson Project"
+msgstr "Proiect Meson liber"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:226
+msgid "An empty Meson project skeleton"
+msgstr "Un schelet de proiect Meson liber"
+
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
 msgstr "Meson"
@@ -5327,14 +5468,14 @@ msgstr "Instalează proiectul"
 msgid "Cache development environment"
 msgstr "Trimite în cache mediul de dezvoltare"
 
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "Șterge unealta"
+
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
-
-#: src/plugins/meson/gbp-meson-tool-row.ui:25
-msgid "Delete Tool"
-msgstr "Șterge unealta"
 
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Compiler"
@@ -5363,46 +5504,6 @@ msgstr "Wrapper executabil"
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
 msgstr "Configurare pachete"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
-msgid "GNOME Application"
-msgstr "Aplicație GNOME"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
-msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr "Un proiect bazat pe Meson pentru GNOME utilizând GTK 4 și libadwaita"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
-msgid "GTK 4 Application"
-msgstr "Aplicație GTK 4"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
-msgid "A Meson-based project using GTK 4"
-msgstr "Un proiect bazat pe Meson utilizând GTK 4"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
-msgid "Shared Library"
-msgstr "Bibiotecă partajată"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
-msgid "A Meson-based project for a shared library"
-msgstr "Un proiect bazat pe Meson pentru o bibliotecă partajată"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
-msgid "Command Line Tool"
-msgstr "Unealtă în linia de comandă"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
-msgid "An Meson-based project for a command-line program"
-msgstr "Un proiect bazat pe Meson pentru un program în linie de comandă"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
-msgid "Empty Meson Project"
-msgstr "Proiect Meson liber"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
-msgid "An empty Meson project skeleton"
-msgstr "Un schelet de proiect Meson liber"
 
 #: src/plugins/messages/gbp-messages-panel.c:102
 #: src/plugins/messages/gbp-messages-panel.ui:169
@@ -6065,7 +6166,7 @@ msgstr "_Modifică fișierul"
 msgid "Open keybindings.json in editor"
 msgstr "Deschide keybindings.json în editor"
 
-#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:22
 msgid "Reset shortcut"
 msgstr "Restabilește scurtătura"
 
