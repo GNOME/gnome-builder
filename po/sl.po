@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-07-16 07:59+0000\n"
-"PO-Revision-Date: 2025-07-19 11:33+0200\n"
+"POT-Creation-Date: 2025-07-23 09:46+0000\n"
+"PO-Revision-Date: 2025-07-24 00:08+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,8 +22,8 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.2.1\n"
 
-#: data/org.gnome.Builder.desktop.in.in:3
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
+#: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
@@ -31,33 +31,6 @@ msgstr ""
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Izgrajevalnik"
-
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Orodje za izgradnjo programov za GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Izgradnja;Razvoj;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Odpri projekt"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Začni nov projekt"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
-msgid "Clone Repository"
-msgstr "Kloniraj skladišče"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "Nova delovna površina"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:8
 msgid "Create applications for GNOME"
@@ -633,6 +606,38 @@ msgstr "Vstavek je omogočen"
 msgid "If the plugin should be enabled"
 msgstr "Ali naj bo vstavek omogočen"
 
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
+msgid "Show Icons"
+msgstr "Pokaži ikone"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "Ta nastavitev je opuščena in ni več v uporabi."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
+msgid "Show Ignored Files"
+msgstr "Pokaže prezrte datoteke"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Izbrana možnost določa, da bo v drevesnem pogledu projekta pokazane "
+"datoteke, ki so prezrte s VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
+msgid "Sort Directories First"
+msgstr "Najprej razvrsti mape"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Izbrana možnost določa, da bodo v drevesnem pogledu mape pred datotekami."
+
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
 msgstr "Izbrana nastavitev za izgradnjo"
@@ -709,38 +714,6 @@ msgstr ""
 "Mapa, ki ga lahko uporabite kot korensko mapo za podatke predpomnilnika "
 "projekta, kot so izgradnje in stopenjske mape flatpak"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:13
-msgid "Show Icons"
-msgstr "Pokaži ikone"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "This setting is deprecated and no longer in use."
-msgstr "Ta nastavitev je opuščena in ni več v uporabi."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:25
-msgid "Show Ignored Files"
-msgstr "Pokaže prezrte datoteke"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-msgid ""
-"If enabled, the project tree will display files that are ignored by the VCS."
-msgstr ""
-"Izbrana možnost določa, da bo v drevesnem pogledu projekta pokazane "
-"datoteke, ki so prezrte s VCS."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:37
-msgid "Sort Directories First"
-msgstr "Najprej razvrsti mape"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
-msgstr ""
-"Izbrana možnost določa, da bodo v drevesnem pogledu mape pred datotekami."
-
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
@@ -750,15 +723,42 @@ msgstr "Preveri črkovanje"
 msgid "Automatically check spelling within documents"
 msgstr "Samodejno preveri črkovanje v dokumentih"
 
-#: src/libide/code/ide-buffer.c:3819
-msgid "The current language lacks a symbol resolver."
-msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
+#: data/org.gnome.Builder.desktop.in.in:3
+msgid "Build software for GNOME"
+msgstr "Orodje za izgradnjo programov za GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:13
+msgid "Build;Develop;"
+msgstr "Izgradnja;Razvoj;"
+
+#: data/org.gnome.Builder.desktop.in.in:19
+msgid "Open a Project"
+msgstr "Odpri projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:23
+msgid "Start New Project"
+msgstr "Začni nov projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:27
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Kloniraj skladišče"
+
+#: data/org.gnome.Builder.desktop.in.in:31
+msgid "New Editor Workspace"
+msgstr "Nova delovna površina"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "neshranjena datoteka %u"
+
+#: src/libide/code/ide-buffer.c:3819
+msgid "The current language lacks a symbol resolver."
+msgstr "Trenutno izbrani jezik ne podpira razreševalnikov simbolov."
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
@@ -907,12 +907,6 @@ msgstr "Izbor"
 msgid "Printing"
 msgstr "Tiskanje"
 
-#. translators: %s is replaced with the error message
-#: src/libide/editor/ide-editor.c:121
-#, c-format
-msgid "Failed to open file: %s"
-msgstr "Odpiranje datoteke ni uspelo: %s"
-
 #: src/libide/editor/ide-editor-info-bar.c:85
 #: src/libide/editor/ide-editor-info-bar.c:96
 msgid "_Discard Changes and Reload"
@@ -1047,6 +1041,12 @@ msgstr "Poišči (krmilka+vnašalka)"
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Preklopi spodnji pladenj (krmilka+F9)"
 
+#. translators: %s is replaced with the error message
+#: src/libide/editor/ide-editor.c:121
+#, c-format
+msgid "Failed to open file: %s"
+msgstr "Odpiranje datoteke ni uspelo: %s"
+
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
@@ -1117,6 +1117,10 @@ msgstr "Moj računalnik (%s)"
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Moj računalnik (%s) – %s"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+msgid "Cannot build transfer while on metered connection"
+msgstr "Ni mogoče izgraditi prenosa pri povezavi z omejeno merjeno porabo."
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
@@ -1226,10 +1230,6 @@ msgstr "Poteka odstranjevanje %s"
 msgid "Removing build directories…"
 msgstr "Odstranjevanje map gradnje …"
 
-#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
-msgid "Cannot build transfer while on metered connection"
-msgstr "Ni mogoče izgraditi prenosa pri povezavi z omejeno merjeno porabo."
-
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
@@ -1288,13 +1288,15 @@ msgstr "Uporabnik je zahteval zagon programa z orodjem »%s«"
 msgid "User requested application to stop"
 msgstr "Uporabnik je zahteval ustavitev programa"
 
-#: src/libide/foundry/ide-runtime.c:395
-#: src/plugins/host/gbp-host-runtime-provider.c:54
-#: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-msgid "Host System"
-msgstr "Gostiteljski sistem"
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Siljenje podprocesa %s k zaključku"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Pošiljanje signala %d podprocesu %s"
 
 #: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
@@ -1306,15 +1308,13 @@ msgstr "Zaznan je izvajalnik »%s«"
 msgid "Removing runtime “%s”"
 msgstr "Odstranjevanje izvajalnika »%s«"
 
-#: src/libide/foundry/ide-run-tool.c:68
-#, c-format
-msgid "Forcing subprocess %s to exit"
-msgstr "Siljenje podprocesa %s k zaključku"
-
-#: src/libide/foundry/ide-run-tool.c:84
-#, c-format
-msgid "Sending signal %d to subprocess %s"
-msgstr "Pošiljanje signala %d podprocesu %s"
+#: src/libide/foundry/ide-runtime.c:395
+#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+msgid "Host System"
+msgstr "Gostiteljski sistem"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1500,39 +1500,6 @@ msgstr "%u od %u"
 msgid "Search"
 msgstr "Poišči"
 
-#: src/libide/gui/ide-search-popover.ui:31
-msgid "Search for anything"
-msgstr "Iščite karkoli"
-
-#: src/libide/gui/ide-search-popover.ui:84
-msgid "Type to Search"
-msgstr "Iskana vrsta"
-
-#: src/libide/gui/ide-search-popover.ui:85
-msgid "Prefix your query with one of the following to filter results"
-msgstr ""
-"Poizvedbi dodaj predpono z eno od teh možnosti za filtriranje rezultatov"
-
-#: src/libide/gui/ide-search-popover.ui:99
-#: src/plugins/file-search/gbp-file-search-provider.c:364
-#: src/plugins/menu-search/gtk/menus.ui:149
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "Datoteke"
-
-#: src/libide/gui/ide-search-popover.ui:120
-msgid "Symbols"
-msgstr "Simboli"
-
-#: src/libide/gui/ide-search-popover.ui:141
-msgid "Documentation"
-msgstr "Dokumentacija"
-
-#: src/libide/gui/ide-search-popover.ui:162
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "Dejanja"
-
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
 #, c-format
@@ -1627,13 +1594,13 @@ msgstr "Povečaj podrobnost dnevniškega zapisa (se lahko ponavlja)"
 msgid "Failed to open project: %s"
 msgstr "Odpiranje projekta je spodletelo: %s"
 
-#: src/libide/gui/ide-environment-editor.c:73
-msgid "New variable…"
-msgstr "Nova spremenljivka …"
-
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
 msgstr "Odstrani okoljsko spremenljivko"
+
+#: src/libide/gui/ide-environment-editor.c:73
+msgid "New variable…"
+msgstr "Nova spremenljivka …"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
@@ -1691,6 +1658,39 @@ msgstr "Zaustavi izvajanje"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Zaženi projekt"
+
+#: src/libide/gui/ide-search-popover.ui:31
+msgid "Search for anything"
+msgstr "Iščite karkoli"
+
+#: src/libide/gui/ide-search-popover.ui:84
+msgid "Type to Search"
+msgstr "Iskana vrsta"
+
+#: src/libide/gui/ide-search-popover.ui:85
+msgid "Prefix your query with one of the following to filter results"
+msgstr ""
+"Poizvedbi dodaj predpono z eno od teh možnosti za filtriranje rezultatov"
+
+#: src/libide/gui/ide-search-popover.ui:99
+#: src/plugins/file-search/gbp-file-search-provider.c:364
+#: src/plugins/menu-search/gtk/menus.ui:149
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Datoteke"
+
+#: src/libide/gui/ide-search-popover.ui:120
+msgid "Symbols"
+msgstr "Simboli"
+
+#: src/libide/gui/ide-search-popover.ui:141
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#: src/libide/gui/ide-search-popover.ui:162
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Dejanja"
 
 #: src/libide/gui/ide-shortcut-window.c:259
 #: src/libide/gui/ide-shortcut-window.c:285
@@ -1776,9 +1776,22 @@ msgstr "Jezikovni strežnik »%s« je izstopil"
 msgid "Language server “%s” spawned as process %s"
 msgstr "Jezikovni strežnik »%s«, zagnan kot proces %s"
 
+#: src/libide/plugins/ide-plugin-view.ui:36
+msgid "Authors"
+msgstr "Avtorji"
+
+#: src/libide/plugins/ide-plugin-view.ui:68
+msgid "Version"
+msgstr "Različica"
+
+#: src/libide/plugins/ide-plugin-view.ui:100
+msgid "Website"
+msgstr "Spletišče"
+
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:117
-#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+#: src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10
+#: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Nadzor različic"
 
@@ -1834,18 +1847,6 @@ msgstr "Integracija v namizje"
 #: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
 msgstr "Dodatno"
-
-#: src/libide/plugins/ide-plugin-view.ui:36
-msgid "Authors"
-msgstr "Avtorji"
-
-#: src/libide/plugins/ide-plugin-view.ui:68
-msgid "Version"
-msgstr "Različica"
-
-#: src/libide/plugins/ide-plugin-view.ui:100
-msgid "Website"
-msgstr "Spletišče"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
@@ -2036,11 +2037,6 @@ msgstr "Izbor celotnega besedila s terminala, vključno z drsenjem nazaj"
 msgid "Select _None"
 msgstr "_Brez izbora"
 
-#: src/libide/terminal/ide-terminal.c:539
-#: src/libide/terminal/ide-terminal.c:572
-msgid "Copied to clipboard"
-msgstr "Kopirano na odložišče"
-
 #: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Shrani vsebino terminala kot"
@@ -2160,6 +2156,11 @@ msgstr "Premakni na naslednji zadetek"
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
 msgstr "Prelomi besedilo"
+
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
+msgid "Copied to clipboard"
+msgstr "Kopirano na odložišče"
 
 #: src/libide/terminal/ide-terminal.ui:154
 msgid "Allow Input"
@@ -3266,6 +3267,10 @@ msgid ""
 "runtime."
 msgstr "SDK, uporabljen za izdelavo program, izvajalnik določi samodejno."
 
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr "Preoblikuj prototipe funkcij"
+
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
@@ -3283,6 +3288,32 @@ msgstr "Izgradi projekt"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Zagon Cargo"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:178
+#, c-format
+msgid "Failed to execute clang-format: %s"
+msgstr "Ni bilo mogoče izvesti clang-format: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:189
+#, c-format
+msgid "clang-format failed to format document: %s"
+msgstr "clang-format ni uspel oblikovati dokumenta: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:201
+msgid "Missing or corrupted data from clang-format"
+msgstr "Manjkajoči ali poškodovani podatki iz clang-format"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:213
+msgid "Invalid cursor position provided from clang-format"
+msgstr "Neveljaven položaj kazalca, ki ga podaja clang-format"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Ni mogoče najti .clang-format, dodajte ga v svoj projekt. Uporabljen bo "
+"nadomestni oblikovalnik v slogu GNU."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3337,32 +3368,6 @@ msgstr "Dopolni parametre"
 msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Vključi parametre in informacije o vrsti pri izpolnjevanju predlogov clang"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, c-format
-msgid "Failed to execute clang-format: %s"
-msgstr "Ni bilo mogoče izvesti clang-format: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, c-format
-msgid "clang-format failed to format document: %s"
-msgstr "clang-format ni uspel oblikovati dokumenta: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:201
-msgid "Missing or corrupted data from clang-format"
-msgstr "Manjkajoči ali poškodovani podatki iz clang-format"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:213
-msgid "Invalid cursor position provided from clang-format"
-msgstr "Neveljaven položaj kazalca, ki ga podaja clang-format"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:280
-msgid ""
-"Cannot locate .clang-format, please add one to your project. Using fallback "
-"GNU-style formatter."
-msgstr ""
-"Ni mogoče najti .clang-format, dodajte ga v svoj projekt. Uporabljen bo "
-"nadomestni oblikovalnik v slogu GNU."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3590,10 +3595,6 @@ msgstr "Posodobi avtorske pravice"
 msgid "Update copyright headers when saving documents"
 msgstr "Posodobi glave o avtorski pravici ob shranjevanju"
 
-#: src/plugins/c-pack/gtk/menus.ui:6
-msgid "Reformat Function Prototypes"
-msgstr "Preoblikuj prototipe funkcij"
-
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
 msgstr "Pokaži vodnik ustvarjanja projekta"
@@ -3680,6 +3681,35 @@ msgstr "Ustvari nov projekt …"
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "Ustvari nov projekt iz predloge"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
+msgid "Angle"
+msgstr "Kot"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
+msgid "Direction"
+msgstr "Usmerjenost"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:288
+msgid "Shape"
+msgstr "Oblika"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
+msgid "Position"
+msgstr "Položaj"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:300
+#: src/plugins/ls/gbp-ls-page.ui:49
+msgid "Size"
+msgstr "Velikost"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:320
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
+msgid "Stops"
+msgstr "Tabulatorska mesta"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -4786,6 +4816,12 @@ msgstr "Uporabnik"
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "Kodni prevajalnik GCC %s (Sistem)"
 
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:199
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:351
+#, c-format
+msgid "Original error: %s"
+msgstr "Prvotna napaka: %s"
+
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
@@ -4819,6 +4855,73 @@ msgstr "Ni mogoče nastaviti zastavic AMEND in GPG_SIGN"
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Ni mogoče podpisati uveljavitve brez določenega ključa GPG_KEY_ID"
 
+#: src/plugins/git/gbp-git-annotation-provider.c:101
+msgid "in the future"
+msgstr "v prihodnosti"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:112
+msgid "just now"
+msgstr "pravkar"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:114
+#, c-format
+msgid "%ld minute ago"
+msgid_plural "%ld minutes ago"
+msgstr[0] "Pred %ld minutami"
+msgstr[1] "Pred %ld minuto"
+msgstr[2] "Pred %ld minutama"
+msgstr[3] "Pred %ld minutami"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:119
+#, c-format
+msgid "%ld hour ago"
+msgid_plural "%ld hours ago"
+msgstr[0] "Pred %ld urami"
+msgstr[1] "Pred %ld uro"
+msgstr[2] "Pred %ld urama"
+msgstr[3] "Pred %ld urami"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:124
+#, c-format
+msgid "%ld day ago"
+msgid_plural "%ld days ago"
+msgstr[0] "Pred %ld dnevi"
+msgstr[1] "Pred %ld dnem"
+msgstr[2] "Pred %ld dnevoma"
+msgstr[3] "Pred %ld dnevi"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:129
+#, c-format
+msgid "%ld week ago"
+msgid_plural "%ld weeks ago"
+msgstr[0] "Pred %ld tedni"
+msgstr[1] "Pred %ld tednom"
+msgstr[2] "Pred %ld tednoma"
+msgstr[3] "Pred %ld tedni"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:134
+#, c-format
+msgid "%ld month ago"
+msgid_plural "%ld months ago"
+msgstr[0] "Pred %ld meseci"
+msgstr[1] "Pred %ld mesecem"
+msgstr[2] "Pred %ld mesecema"
+msgstr[3] "Pred %ld meseci"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:139
+#, c-format
+msgid "%ld year ago"
+msgid_plural "%ld years ago"
+msgstr[0] "Pred %ld leti"
+msgstr[1] "Pred %ld letom"
+msgstr[2] "Pred %ld letoma"
+msgstr[3] "Pred %ld leti"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:228
+#, c-format
+msgid "%s, %s"
+msgstr "%s, %s"
+
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
 msgid "Cannot monitor files outside the working directory"
@@ -4851,23 +4954,6 @@ msgstr ""
 "Povezava z omrežjem ni na voljo, posodabljanje podrejenega modela je "
 "ustavljeno"
 
-#: src/plugins/git/gbp-git-vcs.c:347
-msgid "Pushed."
-msgstr "Uspešno obljavljeno."
-
-#: src/plugins/git/gbp-git-vcs.c:385
-#, c-format
-msgid "Pushing ref “%s”"
-msgstr "Poteka objavljanje sklica »%s«"
-
-#: src/plugins/git/gbp-git-vcs.c:687
-msgid "Directory is not within repository"
-msgstr "Mapa ni znotraj predvidenega skladišča"
-
-#: src/plugins/git/gbp-git-vcs.c:715
-msgid "Git"
-msgstr "Git"
-
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
@@ -4886,6 +4972,31 @@ msgstr "Kloniraj skladišče"
 msgid "A valid Git URL is required"
 msgstr "Zahtevan je veljaven naslov URL Git."
 
+#: src/plugins/git/gbp-git-vcs.c:347
+msgid "Pushed."
+msgstr "Uspešno obljavljeno."
+
+#: src/plugins/git/gbp-git-vcs.c:385
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr "Poteka objavljanje sklica »%s«"
+
+#: src/plugins/git/gbp-git-vcs.c:687
+msgid "Directory is not within repository"
+msgstr "Mapa ni znotraj predvidenega skladišča"
+
+#: src/plugins/git/gbp-git-vcs.c:715
+msgid "Git"
+msgstr "Git"
+
+#: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
+msgid "Git Blame"
+msgstr "Git Blame"
+
+#: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
+msgid "Show Inline Git Blame"
+msgstr "Pokaži vrstične odseke Git Blame"
+
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
 msgstr "Avtorstvo"
@@ -4893,14 +5004,6 @@ msgstr "Avtorstvo"
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:205
 msgid "Email"
 msgstr "Elektronski naslov"
-
-#: src/plugins/git/tweaks.ui:40
-msgid "Git Blame"
-msgstr "Git Blame"
-
-#: src/plugins/git/tweaks.ui:43
-msgid "Show Inline Git Blame"
-msgstr "Pokaži vrstične odseke Git Blame"
 
 #: src/plugins/golang/gbp-golang-run-command-provider.c:79
 msgid "go run"
@@ -5027,10 +5130,6 @@ msgstr "Odpri predogled …"
 msgid "Failed to load directory: %s"
 msgstr "Nalaganje datoteke je spodletelo: %s"
 
-#: src/plugins/ls/gbp-ls-page.ui:49
-msgid "Size"
-msgstr "Velikost"
-
 #: src/plugins/ls/gbp-ls-page.ui:63
 msgid "Modified"
 msgstr "Spremenjeno"
@@ -5047,14 +5146,6 @@ msgstr "Odpri vsebujočo mapo"
 msgid "With File _Browser…"
 msgstr "Z _brskalnikom datotek …"
 
-#: src/plugins/make/gbp-make-build-target.c:55
-msgid "Default Make Target"
-msgstr "Privzeti cilj make"
-
-#: src/plugins/make/gbp-make-run-command-provider.c:83
-msgid "Make Run"
-msgstr "Naredi in izvedi"
-
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
 msgstr "Izprazni projekt Makefile"
@@ -5062,6 +5153,14 @@ msgstr "Izprazni projekt Makefile"
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Ustvari nov prazen projekt z uporabo Makefile"
+
+#: src/plugins/make/gbp-make-build-target.c:55
+msgid "Default Make Target"
+msgstr "Privzeti cilj make"
+
+#: src/plugins/make/gbp-make-run-command-provider.c:83
+msgid "Make Run"
+msgstr "Naredi in izvedi"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
@@ -5286,59 +5385,6 @@ msgstr "Premakni se na predhodni zadetek"
 msgid "Move to and select the previous search result"
 msgstr "Premakni se na predhodni zadetek iskanja in ga izberi"
 
-#: src/plugins/meson/gbp-meson-build-system.c:474
-msgid "Meson"
-msgstr "Meson"
-
-#: src/plugins/meson/gbp-meson-introspection.c:643
-msgid "Load Meson Introspection"
-msgstr "Naloži introspekcijo Mesona"
-
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
-msgid "Install project"
-msgstr "Namesti projekt"
-
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
-msgid "Cache development environment"
-msgstr "Predpomni razvojno okolje"
-
-#: src/plugins/meson/gbp-meson-toolchain.c:61
-#, c-format
-msgid "%s (Meson)"
-msgstr "%s (Meson)"
-
-#: src/plugins/meson/gbp-meson-tool-row.ui:25
-msgid "Delete Tool"
-msgstr "Izbriši orodje"
-
-#: src/plugins/meson/gbp-meson-utils.c:98
-msgid "Compiler"
-msgstr "Kodni prevajalnik"
-
-#: src/plugins/meson/gbp-meson-utils.c:100
-msgid "Preprocessor"
-msgstr "Predprocesor"
-
-#: src/plugins/meson/gbp-meson-utils.c:102
-msgid "Archiver"
-msgstr "Arhivirnik"
-
-#: src/plugins/meson/gbp-meson-utils.c:104
-msgid "Linker"
-msgstr "Povezovalnik"
-
-#: src/plugins/meson/gbp-meson-utils.c:106
-msgid "Strip"
-msgstr "Trak"
-
-#: src/plugins/meson/gbp-meson-utils.c:108
-msgid "Executable wrapper"
-msgstr "Izvedljivi ovijalnik"
-
-#: src/plugins/meson/gbp-meson-utils.c:110
-msgid "Package Config"
-msgstr "Nastavitev paketa"
-
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:175
 msgid "GNOME Application"
 msgstr "Program GNOME"
@@ -5378,6 +5424,59 @@ msgstr "Izprazni projekt Meson"
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:226
 msgid "An empty Meson project skeleton"
 msgstr "Prazno okostje projekta Meson"
+
+#: src/plugins/meson/gbp-meson-build-system.c:474
+msgid "Meson"
+msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-introspection.c:643
+msgid "Load Meson Introspection"
+msgstr "Naloži introspekcijo Mesona"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
+msgid "Install project"
+msgstr "Namesti projekt"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:308
+msgid "Cache development environment"
+msgstr "Predpomni razvojno okolje"
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "Izbriši orodje"
+
+#: src/plugins/meson/gbp-meson-toolchain.c:61
+#, c-format
+msgid "%s (Meson)"
+msgstr "%s (Meson)"
+
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "Kodni prevajalnik"
+
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "Predprocesor"
+
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "Arhivirnik"
+
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "Povezovalnik"
+
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "Trak"
+
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "Izvedljivi ovijalnik"
+
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "Nastavitev paketa"
 
 #: src/plugins/messages/gbp-messages-panel.c:102
 #: src/plugins/messages/gbp-messages-panel.ui:169
