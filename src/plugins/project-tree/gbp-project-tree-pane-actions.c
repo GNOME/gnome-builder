@@ -734,6 +734,7 @@ find_terminal_executable (void)
   const gchar *terminals[] = {
     "x-terminal-emulator",    /* Debian's alternative system */
     "ptyxis",
+    "xdg-terminal-exec",
     "gnome-terminal",
     g_getenv ("TERM"),        /* This is generally one of the fallback terminals */
     "nxterm", "color-xterm",
