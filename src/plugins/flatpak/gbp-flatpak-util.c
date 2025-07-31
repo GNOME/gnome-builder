@@ -147,6 +147,12 @@ gbp_flatpak_split_id (const gchar  *str,
 static char *
 _gbp_flatpak_get_default_arch (void)
 {
+  /* Just statically determine the most common ones */
+#if defined(__x86_64__) || defined(_M_X64)
+  return g_strdup ("x86_64");
+#elif defined(__aarch64__) || defined(_M_ARM64)
+  return g_strdup ("aarch64");
+#else
   GbpFlatpakClient *client = gbp_flatpak_client_get_default ();
   IpcFlatpakService *service = gbp_flatpak_client_get_service (client, NULL, NULL);
 
@@ -154,6 +160,7 @@ _gbp_flatpak_get_default_arch (void)
     return g_strdup (ipc_flatpak_service_get_default_arch (service));
 
   return ide_get_system_arch ();
+#endif
 }
 
 const char *
