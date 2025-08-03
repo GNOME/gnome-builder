@@ -21,18 +21,15 @@
 
 #include "config.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 #include "ide-progress-icon.h"
 
 struct _IdeProgressIcon
 {
-  GtkDrawingArea parent_instance;
-  gdouble        progress;
+  GtkWidget parent_instance;
+  gdouble   progress;
 };
 
-G_DEFINE_TYPE (IdeProgressIcon, ide_progress_icon, GTK_TYPE_DRAWING_AREA)
+G_DEFINE_TYPE (IdeProgressIcon, ide_progress_icon, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -43,55 +40,66 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_progress_icon_draw (GtkDrawingArea *area,
-                        cairo_t        *cr,
-                        int             width,
-                        int             height,
-                        gpointer        user_data)
+ide_progress_icon_snapshot (GtkWidget   *widget,
+                            GtkSnapshot *snapshot)
 {
-  IdeProgressIcon *self = (IdeProgressIcon *)area;
-  GtkStyleContext *style_context;
+  IdeProgressIcon *self = (IdeProgressIcon *)widget;
+  GskPathBuilder *builder;
+  GskPath *path;
   GdkRGBA rgba;
-  gdouble alpha;
+  int width, height;
+  float alpha, radius;
 
   g_assert (IDE_IS_PROGRESS_ICON (self));
-  g_assert (cr != NULL);
+  g_assert (snapshot != NULL);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (area));
-  gtk_style_context_get_color (style_context, &rgba);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
+  radius = MIN (width, height) / 2;
 
+  gtk_widget_get_color (widget, &rgba);
   alpha = rgba.alpha;
   rgba.alpha = 0.15;
-  gdk_cairo_set_source_rgba (cr, &rgba);
 
-  cairo_arc (cr,
-             width / 2,
-             height / 2,
-             width / 2,
-             0.0,
-             2 * M_PI);
-  cairo_fill (cr);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2.0, height / 2.0));
+  gtk_snapshot_rotate (snapshot, -90.0);
+
+  /* Background circle */
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder,
+                               &GRAPHENE_POINT_INIT (0, 0),
+                               radius);
+  path = gsk_path_builder_free_to_path (builder);
+  gtk_snapshot_append_fill (snapshot, path, GSK_FILL_RULE_WINDING, &rgba);
+  gsk_path_unref (path);
 
   if (self->progress > 0.0)
     {
+      GskStroke *stroke;
+
       rgba.alpha = alpha;
-      gdk_cairo_set_source_rgba (cr, &rgba);
 
-      cairo_arc (cr,
-                 width / 2,
-                 height / 2,
-                 width / 2,
-                 (-.5 * M_PI),
-                 (2 * self->progress * M_PI) - (.5 * M_PI));
+      /* There is no convenient API to define arcs by their angle,
+       * so use a radius-wide stroke and set its dash length to control the sweep.
+       */
+      stroke = gsk_stroke_new (radius);
+      gsk_stroke_set_dash (stroke,
+                           (float[2]) { radius * G_PI * self->progress, radius * G_PI },
+                           2);
 
-      if (self->progress != 1.0)
-        {
-          cairo_line_to (cr, width / 2, height / 2);
-          cairo_line_to (cr, width / 2, 0);
-        }
+      builder = gsk_path_builder_new ();
+      gsk_path_builder_add_circle (builder,
+                                   &GRAPHENE_POINT_INIT (0, 0),
+                                   radius / 2);
 
-      cairo_fill (cr);
+      path = gsk_path_builder_free_to_path (builder);
+      gtk_snapshot_append_stroke (snapshot, path, stroke, &rgba);
+      gsk_path_unref (path);
+      gsk_stroke_free (stroke);
     }
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
@@ -136,9 +144,11 @@ static void
 ide_progress_icon_class_init (IdeProgressIconClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = ide_progress_icon_get_property;
   object_class->set_property = ide_progress_icon_set_property;
+  widget_class->snapshot = ide_progress_icon_snapshot;
 
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -158,10 +168,6 @@ ide_progress_icon_init (IdeProgressIcon *icon)
   g_object_set (icon, "width-request", 16, "height-request", 16, NULL);
   gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
   gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
-
-  gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (icon),
-                                  ide_progress_icon_draw,
-                                  NULL, NULL);
 }
 
 GtkWidget *
