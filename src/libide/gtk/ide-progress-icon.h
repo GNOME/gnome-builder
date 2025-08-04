@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_PROGRESS_ICON (ide_progress_icon_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeProgressIcon, ide_progress_icon, IDE, PROGRESS_ICON, GtkDrawingArea)
+G_DECLARE_FINAL_TYPE (IdeProgressIcon, ide_progress_icon, IDE, PROGRESS_ICON, GtkWidget)
 
 IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_progress_icon_new          (void);
