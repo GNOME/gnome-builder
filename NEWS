@@ -1,3 +1,7 @@
+# GNOME Builder 48.3
+
+ * Fix a potential stall during startup when communicating with Flatpak
+
 # GNOME Builder 48.2
 
  * Fix CI for release tarballs
