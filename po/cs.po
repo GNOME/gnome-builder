@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-02-12 20:13+0000\n"
-"PO-Revision-Date: 2025-02-21 22:38+0100\n"
+"POT-Creation-Date: 2025-08-15 20:06+0000\n"
+"PO-Revision-Date: 2025-08-22 18:08+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,10 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 "X-DamnedLies-Scope: partial\n"
 
-#: data/org.gnome.Builder.desktop.in.in:3
+#: data/org.gnome.Builder.desktop.in.in:2
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
@@ -31,30 +31,30 @@ msgstr ""
 msgid "Builder"
 msgstr "Builder"
 
-#: data/org.gnome.Builder.desktop.in.in:4
+#: data/org.gnome.Builder.desktop.in.in:3
 msgid "Build software for GNOME"
 msgstr "Sestavujte software pro GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
+#: data/org.gnome.Builder.desktop.in.in:13
 msgid "Build;Develop;"
 msgstr "sestavit;sestavení;vývoj;"
 
-#: data/org.gnome.Builder.desktop.in.in:20
+#: data/org.gnome.Builder.desktop.in.in:19
 msgid "Open a Project"
 msgstr "Otevřít projekt"
 
-#: data/org.gnome.Builder.desktop.in.in:24
+#: data/org.gnome.Builder.desktop.in.in:23
 msgid "Start New Project"
 msgstr "Začít nový projekt"
 
-#: data/org.gnome.Builder.desktop.in.in:28
+#: data/org.gnome.Builder.desktop.in.in:27
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
 msgid "Clone Repository"
 msgstr "Klonovat repozitář"
 
-#: data/org.gnome.Builder.desktop.in.in:32
+#: data/org.gnome.Builder.desktop.in.in:31
 msgid "New Editor Workspace"
 msgstr "Nová pracovní plocha editoru"
 
@@ -2066,7 +2066,7 @@ msgstr "GNOME"
 
 #: src/libide/terminal/ide-terminal-palettes.h:99
 msgid "Solarized"
-msgstr ""
+msgstr "Solarized"
 
 #: src/libide/terminal/ide-terminal-palettes.h:152
 msgid "Tango"
@@ -2095,35 +2095,35 @@ msgstr "RXVT"
 
 #: src/libide/terminal/ide-terminal-palettes.h:458
 msgid "Fishtank"
-msgstr ""
+msgstr "Fishtank"
 
 #: src/libide/terminal/ide-terminal-palettes.h:511
 msgid "Spacedust"
-msgstr ""
+msgstr "Spacedust"
 
 #: src/libide/terminal/ide-terminal-palettes.h:564
 msgid "Catppuccin"
-msgstr ""
+msgstr "Catppuccin"
 
 #: src/libide/terminal/ide-terminal-palettes.h:617
 msgid "Horizon"
-msgstr ""
+msgstr "Horizon"
 
 #: src/libide/terminal/ide-terminal-palettes.h:670
 msgid "Tokyo Night"
-msgstr ""
+msgstr "Tokyo Night"
 
 #: src/libide/terminal/ide-terminal-palettes.h:723
 msgid "VS Code"
-msgstr ""
+msgstr "VS Code"
 
 #: src/libide/terminal/ide-terminal-palettes.h:776
 msgid "Monokai Soda"
-msgstr ""
+msgstr "Monokai Soda"
 
 #: src/libide/terminal/ide-terminal-palettes.h:882
 msgid "Clone of Ubuntu"
-msgstr ""
+msgstr "Clone of Ubuntu"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
@@ -4894,7 +4894,7 @@ msgstr "Vytvořit nový prázdný projekt používající jednoduchý Makefile"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
-#: src/plugins/manuals/manuals-navigatable.c:391
+#: src/plugins/manuals/manuals-navigatable.c:395
 msgid "Manuals"
 msgstr "Manuály"
 
@@ -4930,11 +4930,11 @@ msgstr "Zobrazit v %s"
 msgid "Importing %s…"
 msgstr "Importuje se %s…"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:116
+#: src/plugins/manuals/manuals-jhbuild-importer.c:121
 msgid "Importing JHBuild Documentation"
 msgstr "Import dokumentace JHBuild"
 
-#: src/plugins/manuals/manuals-jhbuild-importer.c:117
+#: src/plugins/manuals/manuals-jhbuild-importer.c:122
 msgid "Scanning jhbuild for new documentation"
 msgstr "Skenování jhbuild pro novou dokumentaci"
 
@@ -5793,7 +5793,7 @@ msgstr ""
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
-msgstr "Nenalezena žádná klavesová zkratka"
+msgstr "Nenalezena žádná klávesová zkratka"
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:53
 msgid "Try a different search"
