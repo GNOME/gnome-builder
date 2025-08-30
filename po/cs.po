@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-15 20:06+0000\n"
-"PO-Revision-Date: 2025-08-22 18:08+0200\n"
+"POT-Creation-Date: 2025-08-22 16:13+0000\n"
+"PO-Revision-Date: 2025-08-30 14:40+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -2225,7 +2225,7 @@ msgstr "Příprava sestavovacího systému"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
-msgstr "Konfigurace projekt"
+msgstr "Konfigurace projektu"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
@@ -3201,7 +3201,7 @@ msgstr "CMake"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
-msgstr "Konfigurace projektu"
+msgstr "Nakonfigurovat projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
 #: src/plugins/make/gbp-make-pipeline-addin.c:155
