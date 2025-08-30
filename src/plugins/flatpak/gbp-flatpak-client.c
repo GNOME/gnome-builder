@@ -403,15 +403,13 @@ gbp_flatpak_client_get_service (GbpFlatpakClient  *self,
   task = ide_task_new (self, cancellable, NULL, NULL);
   ide_task_set_source_tag (task, gbp_flatpak_client_get_service);
 
-  gcontext = g_main_context_new ();
-  g_main_context_push_thread_default (gcontext);
+  gcontext = g_main_context_ref_thread_default ();
   gbp_flatpak_client_get_service_async (self,
                                         cancellable,
                                         gbp_flatpak_client_get_service_cb,
                                         g_object_ref (task));
   while (!ide_task_get_completed (task))
     g_main_context_iteration (gcontext, TRUE);
-  g_main_context_pop_thread_default (gcontext);
 
   return ide_task_propagate_object (task, error);
 }
