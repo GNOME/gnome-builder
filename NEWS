@@ -1,4 +1,13 @@
-# GNOME Builder 49.0
+# GNOME Builder 49.rc
+
+ * Scrollbar improvements
+ * Hover improvements
+ * Port to AdwShortcutsDialog
+ * Support for inline git blame
+ * Interactivity improvements during startup
+ * Translation updates
+
+# GNOME Builder 49.alpha
 
  * Arduino support has landed
  * Improved manuals integration
