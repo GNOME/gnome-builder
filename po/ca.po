@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-02-21 08:31+0000\n"
-"PO-Revision-Date: 2025-03-14 18:41+0100\n"
+"PO-Revision-Date: 2025-09-05 18:41+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "Autosave Enabled"
-msgstr "Habilita el desat automàtic"
+msgstr "Desat automàtic habilitat"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Enable or disable autosave feature."
@@ -482,8 +482,8 @@ msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Si està habilitat, el Constructor ajustarà el text automàticament de forma "
-"que tota la línia de text sigui visible."
+"Si està habilitat, el Constructor mostrarà automàticament les propostes de "
+"compleció mentre escriviu."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Minimum characters for matching selection."
@@ -981,7 +981,7 @@ msgstr "La impressió ha fallat: %s"
 #: src/libide/editor/ide-editor-page.c:591
 #, c-format
 msgid "Failed to format selection: %s"
-msgstr "Ha fallat en formar la selecció %s"
+msgstr "Ha fallat en formatar la selecció %s"
 
 #: src/libide/editor/ide-editor-page.c:1139
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
@@ -1738,7 +1738,7 @@ msgstr "Aparença"
 
 #: src/libide/gui/tweaks.ui:66
 msgid "Configurations"
-msgstr "Configuració"
+msgstr "Configuracions"
 
 #: src/libide/gui/tweaks.ui:78
 msgid "Plugins"
@@ -1874,7 +1874,7 @@ msgstr "Porta-retalls"
 
 #: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut (Ctrl+X)"
-msgstr "C_ut (Ctrl+X)"
+msgstr "_Retalla (Ctrl+X)"
 
 #: src/libide/sourceview/gtk/menus.ui:16
 msgid "_Copy (Ctrl+C)"
@@ -1898,7 +1898,7 @@ msgstr "Desfés (Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:39
 msgid "Redo (Shift+Ctrl+Z)"
-msgstr "Refés (Maj+Ctrl+Espai)"
+msgstr "Refés (Maj+Ctrl+Z)"
 
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom"
@@ -2323,7 +2323,7 @@ msgstr "Sortida de la construcció"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
-msgstr "Sortida de creació (Maj+Ctrl+L)"
+msgstr "Sortida de la construcció (Maj+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
@@ -2599,7 +2599,7 @@ msgstr "_Exporta"
 
 #: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
-msgstr "Projecte d'exportació"
+msgstr "Exporta el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
@@ -4001,7 +4001,7 @@ msgstr "Formata la selecció"
 
 #: src/plugins/editorui/gtk/menus.ui:208
 msgid "Move to Previous Diagnostic"
-msgstr "Anar al diagnòstic anterior"
+msgstr "Mou al diagnòstic anterior"
 
 #: src/plugins/editorui/gtk/menus.ui:209
 msgid "Move the insertion cursor to the previous diagnostic location"
@@ -4009,7 +4009,7 @@ msgstr "Mou el cursor d'inserció a la ubicació de diagnòstic anterior"
 
 #: src/plugins/editorui/gtk/menus.ui:216
 msgid "Move to Next Diagnostic"
-msgstr "Anar al següent diagnòstic"
+msgstr "Mou al següent diagnòstic"
 
 #: src/plugins/editorui/gtk/menus.ui:217
 msgid "Move the insertion cursor to the next diagnostic location"
@@ -4644,7 +4644,7 @@ msgstr "Instal·lació de Flatpak per a nous SDK"
 
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
-msgstr "Instal·lació preferida de Flatpak."
+msgstr "La instal·lació Flatpak que s'utilitzarà per a nous SDKs i extensions SDK."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
@@ -4670,7 +4670,7 @@ msgstr "Usuari"
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr "GCC %s Compilador multisistema (Sistema)"
+msgstr "GCC %s Compilador creuat (sistema)"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
@@ -4719,7 +4719,7 @@ msgstr "La integració de Git ha començat com a procés %s"
 
 #: src/plugins/git/gbp-git-client.c:208
 msgid "Git integration has exited"
-msgstr "Git integration has exited"
+msgstr "La integració del Git ha sortit"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:92
 msgid "Git version control is not in use"
@@ -5092,19 +5092,19 @@ msgstr "Rellegeix el contingut dels fitxers oberts"
 
 #: src/plugins/menu-search/gtk/menus.ui:125
 msgid "Move to next search result"
-msgstr "Anar al següent resultat de la cerca"
+msgstr "Mou al següent resultat de la cerca"
 
 #: src/plugins/menu-search/gtk/menus.ui:126
 msgid "Move to and select the next available search result"
-msgstr "Mou-te i selecciona el següent resultat de cerca disponible"
+msgstr "Mou i selecciona el següent resultat de cerca disponible"
 
 #: src/plugins/menu-search/gtk/menus.ui:132
 msgid "Move to previous search result"
-msgstr "Mou-te i selecciona el resultat de la cerca anterior"
+msgstr "Mou al resultat de la cerca anterior"
 
 #: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move to and select the previous search result"
-msgstr "Mou-te i selecciona el resultat de la cerca anterior"
+msgstr "Mou i selecciona el resultat de la cerca anterior"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -5240,7 +5240,7 @@ msgstr "Severitat"
 
 #: src/plugins/messages/gbp-messages-panel.ui:88
 msgid "Section"
-msgstr "Selecció"
+msgstr "Secció"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
@@ -5383,7 +5383,7 @@ msgstr "Barra de pestanyes"
 
 #: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
-msgstr "Deixa anar"
+msgstr "Llista desplegable"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:675
@@ -6047,7 +6047,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
-msgstr "Detalls del programador"
+msgstr "Detalls del planificador"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Track when processes are scheduled per CPU"
