@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-05 19:03+0000\n"
-"PO-Revision-Date: 2025-09-06 09:33+0800\n"
+"POT-Creation-Date: 2025-09-06 15:30+0000\n"
+"PO-Revision-Date: 2025-09-07 08:54+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -991,7 +991,7 @@ msgstr "搜索（Ctrl+Enter）"
 #: src/libide/editor/ide-editor-workspace.ui:141
 #: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "切换底部面板（Ctrl+F9）"
+msgstr "开关底部面板（Ctrl+F9）"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -1353,7 +1353,7 @@ msgstr "打开工程"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
 msgid "Toggle selection mode"
-msgstr "切换选择模式"
+msgstr "开关选择模式"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:58
 msgid "Search all Builder projects…"
@@ -1587,12 +1587,12 @@ msgstr "无效配置"
 
 #: src/libide/gui/ide-primary-workspace.ui:60
 msgid "Toggle Left Panel (F9)"
-msgstr "切换左侧面板（F9）"
+msgstr "开关左侧面板（F9）"
 
 #: src/libide/gui/ide-primary-workspace.ui:101
 #: src/plugins/menu-search/gtk/menus.ui:37
 msgid "Toggle Right Panel"
-msgstr "切换右侧面板"
+msgstr "开关右侧面板"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -3684,11 +3684,11 @@ msgstr "调试器"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Toggle Breakpoint"
-msgstr "切换断点"
+msgstr "开关断点"
 
 #: src/plugins/debuggerui/gtk/menus.ui:28
 msgid "Toggle breakpoint at current line"
-msgstr "在当前行切换断点"
+msgstr "在当前行开关断点"
 
 #: src/plugins/debuggerui/gtk/menus.ui:34
 msgid "Continue"
@@ -5123,11 +5123,11 @@ msgstr "面板"
 
 #: src/plugins/menu-search/gtk/menus.ui:28
 msgid "Toggle Left Panel"
-msgstr "切换左侧面板"
+msgstr "开关左侧面板"
 
 #: src/plugins/menu-search/gtk/menus.ui:29
 msgid "Toggle the left panel in or out of view"
-msgstr "在视野内外切换左侧面板"
+msgstr "在视野内外开关左侧面板"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:31
@@ -5136,7 +5136,7 @@ msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Toggle the right panel in or out of view"
-msgstr "在视野内外切换右侧面板"
+msgstr "在视野内外开关右侧面板"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
@@ -5145,11 +5145,11 @@ msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:45
 msgid "Toggle Bottom Panel"
-msgstr "切换底部面板"
+msgstr "开关底部面板"
 
 #: src/plugins/menu-search/gtk/menus.ui:46
 msgid "Toggle the bottom panel in or out of view"
-msgstr "在视野内外切换底部面板"
+msgstr "在视野内外开关底部面板"
 
 #: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Dark Mode"
