@@ -113,33 +113,33 @@ format_relative_time (char *time_past_str)
   else if (minutes < 60)
     result = g_strdup_printf (ngettext("%ld minute ago",
                                        "%ld minutes ago",
-                                       minutes),
-                              minutes);
+                                       (long)minutes),
+                              (long)minutes);
   else if (hours < 24)
     result = g_strdup_printf (ngettext("%ld hour ago",
                                        "%ld hours ago",
-                                       hours),
-                              hours);
+                                       (long)hours),
+                              (long)hours);
   else if (days < 7)
     result = g_strdup_printf (ngettext("%ld day ago",
                                        "%ld days ago",
-                                       days),
-                              days);
+                                       (long)days),
+                              (long)days);
   else if (weeks < 4)
     result = g_strdup_printf (ngettext("%ld week ago",
                                        "%ld weeks ago",
-                                       weeks),
-                              weeks);
+                                       (long)weeks),
+                              (long)weeks);
   else if (months < 12)
     result = g_strdup_printf (ngettext("%ld month ago",
                                        "%ld months ago",
-                                       months),
-                              months);
+                                       (long)months),
+                              (long)months);
   else
     result = g_strdup_printf (ngettext("%ld year ago",
                                        "%ld years ago",
-                                       years),
-                              years);
+                                       (long)years),
+                              (long)years);
 
   IDE_RETURN (result);
 }
