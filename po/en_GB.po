@@ -3,31 +3,31 @@
 # This file is distributed under the same license as the gnome-builder package.
 # Abigail Brady <morwen@evilmagic.org>, Bastien Nocera <hadess@hadess.net>, 2016.
 # Zander Brown <zbrown@gnome.org>, 2019-2021.
-# Bruce Cowan <bruce@bcowan.me.uk>, 2017-2024.
 # Andi Chandler <andi@gowling.com>, 2024-2025.
+# Bruce Cowan <bruce@bcowan.me.uk>, 2017-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-03-20 10:40+0000\n"
-"PO-Revision-Date: 2025-03-24 14:11+0000\n"
-"Last-Translator: Andi Chandler <andi@gowling.com>\n"
-"Language-Team: English - United Kingdom <en@li.org>\n"
+"POT-Creation-Date: 2025-08-30 23:43+0000\n"
+"PO-Revision-Date: 2025-09-09 12:24+0100\n"
+"Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
+"Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Gtranslator 48.0\n"
 "X-DL-Team: en_GB\n"
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: master\n"
 "X-DL-Domain: po\n"
 "X-DL-State: Translating\n"
 
-#: data/org.gnome.Builder.desktop.in.in:3
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
+#: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
@@ -36,43 +36,16 @@ msgstr ""
 msgid "Builder"
 msgstr "Builder"
 
-#: data/org.gnome.Builder.desktop.in.in:4
-msgid "Build software for GNOME"
-msgstr "Build software for GNOME"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
-msgid "Build;Develop;"
-msgstr "Build;Develop;"
-
-#: data/org.gnome.Builder.desktop.in.in:20
-msgid "Open a Project"
-msgstr "Open a Project"
-
-#: data/org.gnome.Builder.desktop.in.in:24
-msgid "Start New Project"
-msgstr "Start New Project"
-
-#: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
-msgid "Clone Repository"
-msgstr "Clone Repository"
-
-#: data/org.gnome.Builder.desktop.in.in:32
-msgid "New Editor Workspace"
-msgstr "New Editor Workspace"
-
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:8
 msgid "Create applications for GNOME"
 msgstr "Create applications for GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:16
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -84,7 +57,7 @@ msgstr ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -92,31 +65,31 @@ msgstr ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:26
 msgid "Features:"
 msgstr "Features:"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
 msgstr "Built in syntax highlighting for many languages"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:29
 msgid "Side-by-side code editors"
 msgstr "Side-by-side code editors"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:30
 msgid "Multi-monitor support"
 msgstr "Multi-monitor support"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:31
 msgid "Code overview mini-map"
 msgstr "Code overview mini-map"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:32
 msgid "Integration with Git"
 msgstr "Integration with Git"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:33
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
@@ -124,75 +97,79 @@ msgstr ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Clang based auto-completion, semantic highlighting, and diagnostics"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Python based auto-completion, semantic highlighting, and diagnostics"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Vala based auto-completion and diagnostics"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "Auto indentation support for C, Python, Vala, and XML"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:38
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:39
 msgid "Optional Vim, Emacs, and SublimeText style editing"
 msgstr "Optional Vim, Emacs, and SublimeText style editing"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:40
 msgid "An integrated software profiler for native applications"
 msgstr "An integrated software profiler for native applications"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:41
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:41
 msgid "An integrated debugger for native applications"
 msgstr "An integrated debugger for native applications"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:42
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Support for building with jhbuild and flatpak runtimes"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:43
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
 msgstr "Support for viewing TODOs found within your code-base"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:44
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:44
 msgid "Fast fuzzy text search across files and symbols"
 msgstr "Fast fuzzy text search across files and symbols"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:55
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
+msgid "Arduino integration with arduino-cli"
+msgstr "Arduino integration with arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
 msgid "Debug with the GNU debugger"
 msgstr "Debug with the GNU debugger"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:59
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
 msgid "Quickly access your projects"
 msgstr "Quickly access your projects"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:63
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
 msgid "Create new projects from a variety of templates"
 msgstr "Create new projects from a variety of templates"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:67
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
 msgid "Integration with Git to clone your projects"
 msgstr "Integration with Git to clone your projects"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:71
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
 msgid "The source code editor"
 msgstr "The source code editor"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:75
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
 msgid "Fast global fuzzy search"
 msgstr "Fast global fuzzy search"
 
-#: data/appdata/org.gnome.Builder.appdata.xml.in.in:79
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
 msgid "Use the minimap to see more of the file"
 msgstr "Use the minimap to see more of the file"
 
@@ -370,7 +347,7 @@ msgstr ""
 "lines selected."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/plugins/editorui/tweaks.ui:495
+#: src/plugins/editorui/tweaks.ui:500
 msgid "Smart Backspace"
 msgstr "Smart Backspace"
 
@@ -383,7 +360,7 @@ msgstr ""
 "indentation size."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
-#: src/plugins/editorui/tweaks.ui:507
+#: src/plugins/editorui/tweaks.ui:512
 msgid "Smart Home/End"
 msgstr "Smart Home/End"
 
@@ -399,70 +376,80 @@ msgstr "Show grid lines"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "If enabled, the editor will show grid lines in the document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid "If enabled, the editor will respect the font-name setting."
+msgstr "If enabled, the editor will respect the font-name setting."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"This setting is only respected if the use-custom-font setting is enabled."
+msgstr ""
+"This setting is only respected if the use-custom-font setting is enabled."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
 msgstr "Overview Map Policy"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
 msgid "When the overview map should be displayed."
 msgstr "When the overview map should be displayed."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
-#: src/plugins/editorui/tweaks.ui:278
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:283
 msgid "Draw Spaces"
 msgstr "Draw Spaces"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:97
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The various types of space to draw in the editor."
 msgstr "The various types of space to draw in the editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/plugins/editorui/tweaks.ui:77
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: src/plugins/editorui/tweaks.ui:82
 msgid "Wrap Text"
 msgstr "Wrap Text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "The way to wrap a long line of text for a better visibility."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "Autosave Enabled"
 msgstr "Autosave Enabled"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "Enable or disable autosave feature."
 msgstr "Enable or disable autosave feature."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 msgid "Autosave Frequency"
 msgstr "Autosave Frequency"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 msgid "Completion Row Count"
 msgstr "Completion Row Count"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "The number of completion rows to display to the user."
 msgstr "The number of completion rows to display to the user."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
-#: src/plugins/editorui/tweaks.ui:60
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: src/plugins/editorui/tweaks.ui:65
 msgid "Line Height"
 msgstr "Line Height"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "The line height to use for the selected font."
 msgstr "The line height to use for the selected font."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Interactive Completion"
 msgstr "Interactive Completion"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -470,19 +457,19 @@ msgstr ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
 msgstr "Minimum characters for matching selection."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Specify the minimum number of characters for selection matching."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
 msgid "Enable Snippets"
 msgstr "Enable Snippets"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -490,11 +477,11 @@ msgstr ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:155
 msgid "Select First Completion"
 msgstr "Select First Completion"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:151
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:156
 msgid "Automatically select the first auto-completion entry."
 msgstr "Automatically select the first auto-completion entry."
 
@@ -611,6 +598,37 @@ msgstr "Plug-in enabled"
 msgid "If the plugin should be enabled"
 msgstr "If the plug-in should be enabled"
 
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
+msgid "Show Icons"
+msgstr "Show Icons"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "This setting is deprecated and no longer in use."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
+msgid "Show Ignored Files"
+msgstr "Show Ignored Files"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
+msgid "Sort Directories First"
+msgstr "Sort Directories First"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"If enabled, the project tree will sort directories before regular files."
+
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
 msgstr "Selected configuration for building"
@@ -666,7 +684,7 @@ msgid "What environment to use when running unit tests"
 msgstr "What environment to use when running unit tests"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:325 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Verbose Logging"
 
@@ -688,39 +706,8 @@ msgstr ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
 
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:13
-msgid "Show Icons"
-msgstr "Show Icons"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
-msgid "This setting is deprecated and no longer in use."
-msgstr "This setting is deprecated and no longer in use."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:25
-msgid "Show Ignored Files"
-msgstr "Show Ignored Files"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
-msgid ""
-"If enabled, the project tree will display files that are ignored by the VCS."
-msgstr ""
-"If enabled, the project tree will display files that are ignored by the VCS."
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:37
-msgid "Sort Directories First"
-msgstr "Sort Directories First"
-
-#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid ""
-"If enabled, the project tree will sort directories before regular files."
-msgstr ""
-"If enabled, the project tree will sort directories before regular files."
-
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:387
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
 msgstr "Check Spelling"
 
@@ -728,15 +715,42 @@ msgstr "Check Spelling"
 msgid "Automatically check spelling within documents"
 msgstr "Automatically check spelling within documents"
 
-#: src/libide/code/ide-buffer.c:3763
-msgid "The current language lacks a symbol resolver."
-msgstr "The current language lacks a symbol resolver."
+#: data/org.gnome.Builder.desktop.in.in:3
+msgid "Build software for GNOME"
+msgstr "Build software for GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:13
+msgid "Build;Develop;"
+msgstr "Build;Develop;"
+
+#: data/org.gnome.Builder.desktop.in.in:19
+msgid "Open a Project"
+msgstr "Open a Project"
+
+#: data/org.gnome.Builder.desktop.in.in:23
+msgid "Start New Project"
+msgstr "Start New Project"
+
+#: data/org.gnome.Builder.desktop.in.in:27
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+msgid "Clone Repository"
+msgstr "Clone Repository"
+
+#: data/org.gnome.Builder.desktop.in.in:31
+msgid "New Editor Workspace"
+msgstr "New Editor Workspace"
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:397
 #, c-format
 msgid "unsaved file %u"
 msgstr "unsaved file %u"
+
+#: src/libide/code/ide-buffer.c:3819
+msgid "The current language lacks a symbol resolver."
+msgstr "The current language lacks a symbol resolver."
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
@@ -806,7 +820,7 @@ msgstr "Preferences"
 
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37
 #: src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346
-#: src/plugins/editorui/tweaks.ui:488
+#: src/plugins/editorui/tweaks.ui:493
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
@@ -861,13 +875,13 @@ msgstr "Pages"
 #: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
-#: src/plugins/menu-search/gtk/menus.ui:111
-#: src/plugins/menu-search/gtk/menus.ui:121
+#: src/plugins/menu-search/gtk/menus.ui:148
+#: src/plugins/menu-search/gtk/menus.ui:165
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Text Editor"
 
-#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:122
+#: src/libide/editor/gtk/menus.ui:77 src/plugins/menu-search/gtk/menus.ui:166
 msgid "Search & Replace"
 msgstr "Search & Replace"
 
@@ -884,12 +898,6 @@ msgstr "Selection"
 #: src/libide/editor/gtk/menus.ui:89
 msgid "Printing"
 msgstr "Printing"
-
-#. translators: %s is replaced with the error message
-#: src/libide/editor/ide-editor.c:121
-#, c-format
-msgid "Failed to open file: %s"
-msgstr "Failed to open file: %s"
 
 #: src/libide/editor/ide-editor-info-bar.c:85
 #: src/libide/editor/ide-editor-info-bar.c:96
@@ -945,18 +953,18 @@ msgid "_Discard…"
 msgstr "_Discard…"
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:515
+#: src/libide/editor/ide-editor-page.c:516
 #, c-format
 msgid "Print failed: %s"
 msgstr "Print failed: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:591
+#: src/libide/editor/ide-editor-page.c:592
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Failed to format selection: %s"
 
-#: src/libide/editor/ide-editor-page.c:1139
+#: src/libide/editor/ide-editor-page.c:1142
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1024,6 +1032,12 @@ msgstr "Search (Ctrl+Enter)"
 #: src/libide/gui/ide-primary-workspace.ui:121
 msgid "Toggle Bottom Panel (Ctrl+F9)"
 msgstr "Toggle Bottom Panel (Ctrl+F9)"
+
+#. translators: %s is replaced with the error message
+#: src/libide/editor/ide-editor.c:121
+#, c-format
+msgid "Failed to open file: %s"
+msgstr "Failed to open file: %s"
 
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
@@ -1095,6 +1109,10 @@ msgstr "My Computer (%s)"
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "My Computer (%s) — %s"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+msgid "Cannot build transfer while on metered connection"
+msgstr "Cannot build transfer while on metered connection"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
@@ -1202,10 +1220,6 @@ msgstr "Removing %s"
 msgid "Removing build directories…"
 msgstr "Removing build directories…"
 
-#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
-msgid "Cannot build transfer while on metered connection"
-msgstr "Cannot build transfer while on metered connection"
-
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
@@ -1217,60 +1231,62 @@ msgid "Unit Test"
 msgstr "Unit Test"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:190
+#: src/libide/foundry/ide-run-manager.c:193
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "User requested run tool “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:592
+#: src/libide/foundry/ide-run-manager.c:609
 msgid "Cannot run target, another target is running"
 msgstr "Cannot run target, another target is running"
 
-#: src/libide/foundry/ide-run-manager.c:890
+#: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Application exited with error: %s"
 
-#: src/libide/foundry/ide-run-manager.c:893
+#: src/libide/foundry/ide-run-manager.c:932
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Application exited"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1083
+#: src/libide/foundry/ide-run-manager.c:1123
 #, c-format
 msgid "Running %s…"
 msgstr "Running %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1150
+#: src/libide/foundry/ide-run-manager.c:1190
 msgid "Deploying to device…"
 msgstr "Deploying to device…"
 
-#: src/libide/foundry/ide-run-manager.c:1379
+#: src/libide/foundry/ide-run-manager.c:1419
 msgid "User requested application to run"
 msgstr "User requested application to run"
 
-#: src/libide/foundry/ide-run-manager.c:1411
+#: src/libide/foundry/ide-run-manager.c:1451
 msgid "User requested application to restart"
 msgstr "User requested application to restart"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1441
+#: src/libide/foundry/ide-run-manager.c:1481
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "User requested application to run with tool “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1461
+#: src/libide/foundry/ide-run-manager.c:1501
 msgid "User requested application to stop"
 msgstr "User requested application to stop"
 
-#: src/libide/foundry/ide-runtime.c:395
-#: src/plugins/host/gbp-host-runtime-provider.c:54
-#: src/plugins/host/gbp-host-runtime-provider.c:69
-#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-msgid "Host System"
-msgstr "Host System"
+#: src/libide/foundry/ide-run-tool.c:68
+#, c-format
+msgid "Forcing subprocess %s to exit"
+msgstr "Forcing subprocess %s to exit"
+
+#: src/libide/foundry/ide-run-tool.c:84
+#, c-format
+msgid "Sending signal %d to subprocess %s"
+msgstr "Sending signal %d to subprocess %s"
 
 #: src/libide/foundry/ide-runtime-provider.c:157
 #, c-format
@@ -1282,15 +1298,13 @@ msgstr "Discovered runtime “%s”"
 msgid "Removing runtime “%s”"
 msgstr "Removing runtime “%s”"
 
-#: src/libide/foundry/ide-run-tool.c:68
-#, c-format
-msgid "Forcing subprocess %s to exit"
-msgstr "Forcing subprocess %s to exit"
-
-#: src/libide/foundry/ide-run-tool.c:84
-#, c-format
-msgid "Sending signal %d to subprocess %s"
-msgstr "Sending signal %d to subprocess %s"
+#: src/libide/foundry/ide-runtime.c:395
+#: src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+msgid "Host System"
+msgstr "Host System"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1466,42 +1480,13 @@ msgid "%u of %u"
 msgstr "%u of %u"
 
 #: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:347 src/plugins/grep/gbp-grep-panel.ui:64
-#: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
+#: src/libide/plugins/ide-plugin.c:347
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:95
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:95
+#: src/plugins/grep/gbp-grep-panel.ui:64 src/plugins/manuals/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Search"
-
-#: src/libide/gui/ide-search-popover.ui:31
-msgid "Search for anything"
-msgstr "Search for anything"
-
-#: src/libide/gui/ide-search-popover.ui:84
-msgid "Type to Search"
-msgstr "Type to Search"
-
-#: src/libide/gui/ide-search-popover.ui:85
-msgid "Prefix your query with one of the following to filter results"
-msgstr "Prefix your query with one of the following to filter results"
-
-#: src/libide/gui/ide-search-popover.ui:99
-#: src/plugins/file-search/gbp-file-search-provider.c:342
-#: src/plugins/menu-search/gtk/menus.ui:112
-#: src/plugins/project-tree/gbp-project-tree-addin.c:215
-msgid "Files"
-msgstr "Files"
-
-#: src/libide/gui/ide-search-popover.ui:120
-msgid "Symbols"
-msgstr "Symbols"
-
-#: src/libide/gui/ide-search-popover.ui:141
-msgid "Documentation"
-msgstr "Documentation"
-
-#: src/libide/gui/ide-search-popover.ui:162
-#: src/plugins/menu-search/gbp-menu-search-provider.c:190
-msgid "Actions"
-msgstr "Actions"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:420
@@ -1601,13 +1586,13 @@ msgstr "Increase log verbosity (may be repeated)"
 msgid "Failed to open project: %s"
 msgstr "Failed to open project: %s"
 
-#: src/libide/gui/ide-environment-editor.c:73
-msgid "New variable…"
-msgstr "New variable…"
-
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
 msgstr "Remove environment variable"
+
+#: src/libide/gui/ide-environment-editor.c:73
+msgid "New variable…"
+msgstr "New variable…"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
@@ -1633,7 +1618,7 @@ msgstr "New Terminal"
 msgid "Open application menu (F10)"
 msgstr "Open application menu (F10)"
 
-#: src/libide/gui/ide-marked-view.c:427
+#: src/libide/gui/ide-marked-view.c:516
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Cannot load HTML. Missing WebKit support."
 
@@ -1665,6 +1650,38 @@ msgstr "Stop running"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Run project"
+
+#: src/libide/gui/ide-search-popover.ui:31
+msgid "Search for anything"
+msgstr "Search for anything"
+
+#: src/libide/gui/ide-search-popover.ui:84
+msgid "Type to Search"
+msgstr "Type to Search"
+
+#: src/libide/gui/ide-search-popover.ui:85
+msgid "Prefix your query with one of the following to filter results"
+msgstr "Prefix your query with one of the following to filter results"
+
+#: src/libide/gui/ide-search-popover.ui:99
+#: src/plugins/file-search/gbp-file-search-provider.c:364
+#: src/plugins/menu-search/gtk/menus.ui:149
+#: src/plugins/project-tree/gbp-project-tree-addin.c:215
+msgid "Files"
+msgstr "Files"
+
+#: src/libide/gui/ide-search-popover.ui:120
+msgid "Symbols"
+msgstr "Symbols"
+
+#: src/libide/gui/ide-search-popover.ui:141
+msgid "Documentation"
+msgstr "Documentation"
+
+#: src/libide/gui/ide-search-popover.ui:162
+#: src/plugins/menu-search/gbp-menu-search-provider.c:190
+msgid "Actions"
+msgstr "Actions"
 
 #: src/libide/gui/ide-shortcut-window.c:259
 #: src/libide/gui/ide-shortcut-window.c:285
@@ -1701,11 +1718,11 @@ msgstr "There are unsaved documents"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/libide/gui/tweaks.ui:66
+#: src/libide/gui/tweaks.ui:65
 msgid "Configurations"
 msgstr "Configurations"
 
-#: src/libide/gui/tweaks.ui:78
+#: src/libide/gui/tweaks.ui:77
 msgid "Plugins"
 msgstr "Plug-ins"
 
@@ -1748,9 +1765,22 @@ msgstr "Language server “%s” exited"
 msgid "Language server “%s” spawned as process %s"
 msgstr "Language server “%s” spawned as process %s"
 
+#: src/libide/plugins/ide-plugin-view.ui:36
+msgid "Authors"
+msgstr "Authors"
+
+#: src/libide/plugins/ide-plugin-view.ui:68
+msgid "Version"
+msgstr "Version"
+
+#: src/libide/plugins/ide-plugin-view.ui:100
+msgid "Website"
+msgstr "Website"
+
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:117
-#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+#: src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10
+#: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Version Control"
 
@@ -1806,18 +1836,6 @@ msgstr "Desktop Integration"
 #: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
 msgstr "Additional"
-
-#: src/libide/plugins/ide-plugin-view.ui:36
-msgid "Authors"
-msgstr "Authors"
-
-#: src/libide/plugins/ide-plugin-view.ui:68
-msgid "Version"
-msgstr "Version"
-
-#: src/libide/plugins/ide-plugin-view.ui:100
-msgid "Website"
-msgstr "Website"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
@@ -2008,18 +2026,15 @@ msgstr "Selection all text from terminal including scrollback"
 msgid "Select _None"
 msgstr "Select _None"
 
-#: src/libide/terminal/ide-terminal.c:539
-#: src/libide/terminal/ide-terminal.c:572
-msgid "Copied to clipboard"
-msgstr "Copied to clipboard"
-
 #: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
 msgstr "Save Terminal Content As"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:249
 #: src/plugins/buildui/gbp-buildui-log-pane.c:330
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:132
 #: src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
 msgstr "Save"
@@ -2128,6 +2143,11 @@ msgstr "Move to next match"
 msgid "Wrap around"
 msgstr "Wrap around"
 
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
 #: src/libide/terminal/ide-terminal.ui:154
 msgid "Allow Input"
 msgstr "Allow Input"
@@ -2170,7 +2190,7 @@ msgstr "Projects Directory"
 msgid "Select"
 msgstr "Select"
 
-#: src/libide/tweaks/ide-tweaks-font.c:81
+#: src/libide/tweaks/ide-tweaks-font.c:83
 msgid "Select Font"
 msgstr "Select Font"
 
@@ -2199,6 +2219,162 @@ msgstr "Blank page"
 #: src/main.c:128
 msgid "Run a new instance of Builder"
 msgstr "Run a new instance of Builder"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:929
+msgid "Installing Arduino Library"
+msgstr "Installing Arduino Library"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:930
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1047
+msgid "Downloading and installing"
+msgstr "Downloading and installing"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:982
+msgid "Uninstalling Arduino Library"
+msgstr "Uninstalling Arduino Library"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:983
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1099
+msgid "Uninstalling"
+msgstr "Uninstalling"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1046
+msgid "Installing Arduino Platform"
+msgstr "Installing Arduino Platform"
+
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1098
+msgid "Uninstalling Arduino Platform"
+msgstr "Uninstalling Arduino Platform"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
+msgid "Board Settings"
+msgstr "Board Settings"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
+msgid "Board"
+msgstr "Board"
+
+#: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
+msgid "Programmer"
+msgstr "Programmer"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
+msgid "Libraries"
+msgstr "Libraries"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:40
+msgid "No libraries are present in this profile"
+msgstr "No libraries are present in this profile"
+
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
+msgid "Add _Library"
+msgstr "Add _Library"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:24
+msgid "No libraries installed"
+msgstr "No libraries installed"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
+msgid "Install _Library"
+msgstr "Install _Library"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
+msgid "Search for a Library"
+msgstr "Search for a Library"
+
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
+msgid "No libraries found"
+msgstr "No libraries found"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:220
+msgid "Update Arduino Packages"
+msgstr "Update Arduino Packages"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:227
+msgid "Compile Arduino Sketch"
+msgstr "Compile Arduino Sketch"
+
+#: src/plugins/arduino/gbp-arduino-pipeline-addin.c:245
+msgid "Upload Arduino Sketch"
+msgstr "Upload Arduino Sketch"
+
+#: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35
+#: src/plugins/arduino/gbp-arduino-string-row.ui:23
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+msgid "Remove"
+msgstr "Remove"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:6
+msgid "Platforms"
+msgstr "Platforms"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:40
+msgid "No platforms are present in this profile"
+msgstr "No platforms are present in this profile"
+
+#: src/plugins/arduino/gbp-arduino-platforms-editor.ui:62
+msgid "Add _Platform"
+msgstr "Add _Platform"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:24
+msgid "No platforms installed"
+msgstr "No platforms installed"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
+msgid "Install _Platform"
+msgstr "Install _Platform"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
+msgid "Search for a Platform"
+msgstr "Search for a Platform"
+
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
+msgid "No platforms found"
+msgstr "No platforms found"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:48
+msgid "Arduino Sketch Project"
+msgstr "Arduino Sketch Project"
+
+#: src/plugins/arduino/gbp-arduino-template-provider.c:49
+msgid "An empty arduino sketch project"
+msgstr "An empty arduino sketch project"
+
+#: src/plugins/arduino/gbp-arduino-tweaks-addin.c:77
+msgid "Notes"
+msgstr "Notes"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
+msgid "No additional URL"
+msgstr "No additional URL"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:59
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:65
+msgid "Add URL"
+msgstr "Add URL"
+
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:66
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
+msgid "_Add"
+msgstr "_Add"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:9
+msgid "Arduino"
+msgstr "Arduino"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:12
+msgid "Additional URLs"
+msgstr "Additional URLs"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:22
+msgid "Installed Libraries"
+msgstr "Installed Libraries"
+
+#: src/plugins/arduino/tweaks-arduino-page.ui:32
+msgid "Installed Platforms"
+msgstr "Installed Platforms"
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:204
 msgid "Building cache…"
@@ -2230,7 +2406,7 @@ msgid "Caching build commands"
 msgstr "Caching build commands"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:926
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:935
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Copy)"
@@ -2264,19 +2440,10 @@ msgstr "Add _Variable"
 msgid "Add Variable"
 msgstr "Add Variable"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
-msgid "_Add"
-msgstr "_Add"
-
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:29
 #: src/plugins/project-tree/gtk/menus.ui:56
 msgid "Copy"
 msgstr "Copy"
-
-#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-msgid "Remove"
-msgstr "Remove"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
@@ -2736,83 +2903,91 @@ msgid "Use high contrast theme when running the project"
 msgstr "Use high contrast theme when running the project"
 
 #: src/plugins/buildui/gtk/menus.ui:265
+msgid "Adaptive Preview"
+msgstr "Adaptive Preview"
+
+#: src/plugins/buildui/gtk/menus.ui:268
+msgid "Start the app in adaptive preview"
+msgstr "Start the app in adaptive preview"
+
+#: src/plugins/buildui/gtk/menus.ui:271
 msgid "Text Direction"
 msgstr "Text Direction"
 
-#: src/plugins/buildui/gtk/menus.ui:267
+#: src/plugins/buildui/gtk/menus.ui:273
 msgid "Left-to-Right"
 msgstr "Left-to-Right"
 
-#: src/plugins/buildui/gtk/menus.ui:271
+#: src/plugins/buildui/gtk/menus.ui:277
 msgid "Force left-to-right text when running the project"
 msgstr "Force left-to-right text when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:274
+#: src/plugins/buildui/gtk/menus.ui:280
 msgid "Right-to-Left"
 msgstr "Right-to-Left"
 
-#: src/plugins/buildui/gtk/menus.ui:278
+#: src/plugins/buildui/gtk/menus.ui:284
 msgid "Force right-to-left text when running the project"
 msgstr "Force right-to-left text when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:283
+#: src/plugins/buildui/gtk/menus.ui:289
 msgid "GPU"
 msgstr "GPU"
 
-#: src/plugins/buildui/gtk/menus.ui:285
+#: src/plugins/buildui/gtk/menus.ui:291
 msgid "GTK Renderer"
 msgstr "GTK Renderer"
 
-#: src/plugins/buildui/gtk/menus.ui:287 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
 #: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Default"
 
-#: src/plugins/buildui/gtk/menus.ui:291
+#: src/plugins/buildui/gtk/menus.ui:297
 msgid "Use the default GTK renderer when running the project"
 msgstr "Use the default GTK renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:294
+#: src/plugins/buildui/gtk/menus.ui:300
 msgid "Vulkan"
 msgstr "Vulkan"
 
-#: src/plugins/buildui/gtk/menus.ui:298
+#: src/plugins/buildui/gtk/menus.ui:304
 msgid "Use the Vulkan renderer when running the project"
 msgstr "Use the Vulkan renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:301
+#: src/plugins/buildui/gtk/menus.ui:307
 msgid "GL"
 msgstr "GL"
 
-#: src/plugins/buildui/gtk/menus.ui:305
+#: src/plugins/buildui/gtk/menus.ui:311
 msgid "Use the GL renderer when running the project"
 msgstr "Use the GL renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:308
+#: src/plugins/buildui/gtk/menus.ui:314
 msgid "Legacy GL"
 msgstr "Legacy GL"
 
-#: src/plugins/buildui/gtk/menus.ui:312
+#: src/plugins/buildui/gtk/menus.ui:318
 msgid "Use the legacy GL renderer when running the project"
 msgstr "Use the legacy GL renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:315
+#: src/plugins/buildui/gtk/menus.ui:321
 msgid "Cairo"
 msgstr "Cairo"
 
-#: src/plugins/buildui/gtk/menus.ui:319
+#: src/plugins/buildui/gtk/menus.ui:325
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Use the Cairo software renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:328
+#: src/plugins/buildui/gtk/menus.ui:334
 msgid "Request verbose logging when running the project"
 msgstr "Request verbose logging when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/gtk/menus.ui:338
 msgid "Show Inspector"
 msgstr "Show Inspector"
 
-#: src/plugins/buildui/gtk/menus.ui:335
+#: src/plugins/buildui/gtk/menus.ui:341
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Request the GTK inspector be shown when running the project"
 
@@ -2850,7 +3025,7 @@ msgstr "Show Grid Pattern"
 msgid "Display a grid pattern underneath source code"
 msgstr "Display a grid pattern underneath source code"
 
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
 msgid "Never"
 msgstr "Never"
 
@@ -2977,7 +3152,7 @@ msgstr ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 
-#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:84
+#: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
 msgstr "History"
 
@@ -3082,6 +3257,10 @@ msgstr ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 
+#: src/plugins/c-pack/gtk/menus.ui:6
+msgid "Reformat Function Prototypes"
+msgstr "Reformat Function Prototypes"
+
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146
 #: src/plugins/golang/gbp-golang-pipeline-addin.c:147
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:138
@@ -3099,6 +3278,32 @@ msgstr "Build project"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo Run"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:178
+#, c-format
+msgid "Failed to execute clang-format: %s"
+msgstr "Failed to execute clang-format: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:189
+#, c-format
+msgid "clang-format failed to format document: %s"
+msgstr "clang-format failed to format document: %s"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:201
+msgid "Missing or corrupted data from clang-format"
+msgstr "Missing or corrupted data from clang-format"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:213
+msgid "Invalid cursor position provided from clang-format"
+msgstr "Invalid cursor position provided from clang-format"
+
+#: src/plugins/clang-format/gbp-clang-formatter.c:280
+msgid ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
+msgstr ""
+"Cannot locate .clang-format, please add one to your project. Using fallback "
+"GNU-style formatter."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3153,32 +3358,6 @@ msgstr "Complete Parameters"
 msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Include parameters and type information when completing clang proposals"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:178
-#, c-format
-msgid "Failed to execute clang-format: %s"
-msgstr "Failed to execute clang-format: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:189
-#, c-format
-msgid "clang-format failed to format document: %s"
-msgstr "clang-format failed to format document: %s"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:201
-msgid "Missing or corrupted data from clang-format"
-msgstr "Missing or corrupted data from clang-format"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:213
-msgid "Invalid cursor position provided from clang-format"
-msgstr "Invalid cursor position provided from clang-format"
-
-#: src/plugins/clang-format/gbp-clang-formatter.c:280
-msgid ""
-"Cannot locate .clang-format, please add one to your project. Using fallback "
-"GNU-style formatter."
-msgstr ""
-"Cannot locate .clang-format, please add one to your project. Using fallback "
-"GNU-style formatter."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3404,10 +3583,6 @@ msgstr "Update Copyright"
 msgid "Update copyright headers when saving documents"
 msgstr "Update copyright headers when saving documents"
 
-#: src/plugins/c-pack/gtk/menus.ui:6
-msgid "Reformat Function Prototypes"
-msgstr "Reformat Function Prototypes"
-
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
 msgstr "Display the project creation guide"
@@ -3493,6 +3668,35 @@ msgstr "Create New Project…"
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
 msgstr "Create a new project from template"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
+msgid "Angle"
+msgstr "Angle"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
+msgid "Direction"
+msgstr "Direction"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:288
+msgid "Shape"
+msgstr "Shape"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
+msgid "Position"
+msgstr "Position"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:300
+#: src/plugins/ls/gbp-ls-page.ui:49
+msgid "Size"
+msgstr "Size"
+
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:320
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
+msgid "Stops"
+msgstr "Stops"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -3731,10 +3935,6 @@ msgstr "Binary"
 msgid "Threads"
 msgstr "Threads"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
-msgid "Libraries"
-msgstr "Libraries"
-
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:263
 msgid "Registers"
 msgstr "Registers"
@@ -3825,13 +4025,13 @@ msgstr "Plain Text"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "Spaces"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:299
 msgid "Tabs"
 msgstr "Tabs"
 
@@ -3922,14 +4122,17 @@ msgid "Save _As"
 msgstr "Save _As"
 
 #: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/menu-search/gtk/menus.ui:169
 msgid "Find…"
 msgstr "Find…"
 
 #: src/plugins/editorui/gtk/menus.ui:177
+#: src/plugins/menu-search/gtk/menus.ui:176
 msgid "Find/Replace…"
 msgstr "Find/Replace…"
 
 #: src/plugins/editorui/gtk/menus.ui:185
+#: src/plugins/menu-search/gtk/menus.ui:158
 msgid "Print…"
 msgstr "Print…"
 
@@ -4042,7 +4245,7 @@ msgid "The desired maximum line length"
 msgstr "The desired maximum line length"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:385
 msgid "Behavior"
 msgstr "Behaviour"
 
@@ -4104,130 +4307,126 @@ msgid "Preview"
 msgstr "Preview"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
-msgid "Font"
-msgstr "Font"
+msgid "Custom Font"
+msgstr "Custom Font"
 
-#: src/plugins/editorui/tweaks.ui:49
-msgid "The font used within the source code editor"
-msgstr "The font used within the source code editor"
-
-#: src/plugins/editorui/tweaks.ui:61
+#: src/plugins/editorui/tweaks.ui:66
 msgid "Adjust spacing between lines"
 msgstr "Adjust spacing between lines"
 
-#: src/plugins/editorui/tweaks.ui:78
+#: src/plugins/editorui/tweaks.ui:83
 msgid "How text should be wrapped when wider than the frame"
 msgstr "How text should be wrapped when wider than the frame"
 
-#: src/plugins/editorui/tweaks.ui:93
+#: src/plugins/editorui/tweaks.ui:98
 msgid "At Spaces"
 msgstr "At Spaces"
 
-#: src/plugins/editorui/tweaks.ui:99
+#: src/plugins/editorui/tweaks.ui:104
 msgid "Anywhere"
 msgstr "Anywhere"
 
-#: src/plugins/editorui/tweaks.ui:111
+#: src/plugins/editorui/tweaks.ui:116
 msgid "Background Pattern"
 msgstr "Background Pattern"
 
-#: src/plugins/editorui/tweaks.ui:112
+#: src/plugins/editorui/tweaks.ui:117
 msgid "Show a background pattern underneath source code"
 msgstr "Show a background pattern underneath source code"
 
-#: src/plugins/editorui/tweaks.ui:121
+#: src/plugins/editorui/tweaks.ui:126
 msgid "No Pattern"
 msgstr "No Pattern"
 
-#: src/plugins/editorui/tweaks.ui:127
+#: src/plugins/editorui/tweaks.ui:132
 msgid "Grid Lines"
 msgstr "Grid Lines"
 
-#: src/plugins/editorui/tweaks.ui:137
+#: src/plugins/editorui/tweaks.ui:142
 msgid "Scrollbars"
 msgstr "Scrollbars"
 
-#: src/plugins/editorui/tweaks.ui:140
+#: src/plugins/editorui/tweaks.ui:145
 msgid "Source Code Overview"
 msgstr "Source Code Overview"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:146
 msgid "Display an overview of source code next to the editor"
 msgstr "Display an overview of source code next to the editor"
 
-#: src/plugins/editorui/tweaks.ui:150
+#: src/plugins/editorui/tweaks.ui:155
 msgid "Prefer Scrollbars"
 msgstr "Prefer Scrollbars"
 
-#: src/plugins/editorui/tweaks.ui:156
+#: src/plugins/editorui/tweaks.ui:161
 msgid "Always On"
 msgstr "Always On"
 
-#: src/plugins/editorui/tweaks.ui:162
+#: src/plugins/editorui/tweaks.ui:167
 msgid "Automatic"
 msgstr "Automatic"
 
-#: src/plugins/editorui/tweaks.ui:172
+#: src/plugins/editorui/tweaks.ui:177
 msgid "Line Numbers"
 msgstr "Line Numbers"
 
-#: src/plugins/editorui/tweaks.ui:175
+#: src/plugins/editorui/tweaks.ui:180
 msgid "Show Line Numbers"
 msgstr "Show Line Numbers"
 
-#: src/plugins/editorui/tweaks.ui:176
+#: src/plugins/editorui/tweaks.ui:181
 msgid "Display line numbers next to each line of code"
 msgstr "Display line numbers next to each line of code"
 
-#: src/plugins/editorui/tweaks.ui:187
+#: src/plugins/editorui/tweaks.ui:192
 msgid "Use Relative Line Numbers"
 msgstr "Use Relative Line Numbers"
 
-#: src/plugins/editorui/tweaks.ui:188
+#: src/plugins/editorui/tweaks.ui:193
 msgid "Show line numbers relative to the current line"
 msgstr "Show line numbers relative to the current line"
 
-#: src/plugins/editorui/tweaks.ui:199
+#: src/plugins/editorui/tweaks.ui:204
 msgid "Show Diagnostics"
 msgstr "Show Diagnostics"
 
-#: src/plugins/editorui/tweaks.ui:200
+#: src/plugins/editorui/tweaks.ui:205
 msgid "Display diagnostics next to the line number"
 msgstr "Display diagnostics next to the line number"
 
-#: src/plugins/editorui/tweaks.ui:211
+#: src/plugins/editorui/tweaks.ui:216
 msgid "Show Line Changes"
 msgstr "Show Line Changes"
 
-#: src/plugins/editorui/tweaks.ui:212
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Highlight changed lines next to the line number"
 msgstr "Highlight changed lines next to the line number"
 
-#: src/plugins/editorui/tweaks.ui:223
+#: src/plugins/editorui/tweaks.ui:228
 msgid "Use Line Selection Styling"
 msgstr "Use Line Selection Styling"
 
-#: src/plugins/editorui/tweaks.ui:224
+#: src/plugins/editorui/tweaks.ui:229
 msgid "Use selection styling for line numbers if whole line is selected"
 msgstr "Use selection styling for line numbers if whole line is selected"
 
-#: src/plugins/editorui/tweaks.ui:237
+#: src/plugins/editorui/tweaks.ui:242
 msgid "Highlighting"
 msgstr "Highlighting"
 
-#: src/plugins/editorui/tweaks.ui:240
+#: src/plugins/editorui/tweaks.ui:245
 msgid "Highlight Current Line"
 msgstr "Highlight Current Line"
 
-#: src/plugins/editorui/tweaks.ui:241
+#: src/plugins/editorui/tweaks.ui:246
 msgid "Make the current line stand out with highlights"
 msgstr "Make the current line stand out with highlights"
 
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Highlight Matching Brackets"
 msgstr "Highlight Matching Brackets"
 
-#: src/plugins/editorui/tweaks.ui:253
+#: src/plugins/editorui/tweaks.ui:258
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4235,11 +4434,11 @@ msgstr ""
 "Use cursor position to highlight matching square, curly and round brackets, "
 "and more"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:269
 msgid "Semantic Highlighting"
 msgstr "Semantic Highlighting"
 
-#: src/plugins/editorui/tweaks.ui:265
+#: src/plugins/editorui/tweaks.ui:270
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4247,177 +4446,177 @@ msgstr ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 
-#: src/plugins/editorui/tweaks.ui:282
+#: src/plugins/editorui/tweaks.ui:287
 msgid "Draw a mark representing normal spaces"
 msgstr "Draw a mark representing normal spaces"
 
-#: src/plugins/editorui/tweaks.ui:295
+#: src/plugins/editorui/tweaks.ui:300
 msgid "Draw a mark representing tabs"
 msgstr "Draw a mark representing tabs"
 
-#: src/plugins/editorui/tweaks.ui:307
+#: src/plugins/editorui/tweaks.ui:312
 msgid "Newlines"
 msgstr "Newlines"
 
-#: src/plugins/editorui/tweaks.ui:308
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Draw a mark at the end of lines"
 msgstr "Draw a mark at the end of lines"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:325
 msgid "Non-breaking spaces"
 msgstr "Non-breaking spaces"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Draw a mark at non-breaking space characters"
 
-#: src/plugins/editorui/tweaks.ui:337
+#: src/plugins/editorui/tweaks.ui:342
 msgid "Leading"
 msgstr "Leading"
 
-#: src/plugins/editorui/tweaks.ui:338
+#: src/plugins/editorui/tweaks.ui:343
 msgid "Draw marks for leading spaces only"
 msgstr "Draw marks for leading spaces only"
 
-#: src/plugins/editorui/tweaks.ui:350
+#: src/plugins/editorui/tweaks.ui:355
 msgid "Inside Text"
 msgstr "Inside Text"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Draw marks inside a line of text only"
 msgstr "Draw marks inside a line of text only"
 
-#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/editorui/tweaks.ui:368
 msgid "Trailing"
 msgstr "Trailing"
 
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:369
 msgid "Draw marks for trailing spaces only"
 msgstr "Draw marks for trailing spaces only"
 
-#: src/plugins/editorui/tweaks.ui:384
+#: src/plugins/editorui/tweaks.ui:389
 msgid "Spelling"
 msgstr "Spelling"
 
-#: src/plugins/editorui/tweaks.ui:388
+#: src/plugins/editorui/tweaks.ui:393
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Underline potential spelling mistakes as you type"
 
-#: src/plugins/editorui/tweaks.ui:401
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Selections"
 msgstr "Selections"
 
-#: src/plugins/editorui/tweaks.ui:404
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Minimum Characters to Highlight"
 msgstr "Minimum Characters to Highlight"
 
-#: src/plugins/editorui/tweaks.ui:405
+#: src/plugins/editorui/tweaks.ui:410
 msgid "The minimum selection length before highlighting matches"
 msgstr "The minimum selection length before highlighting matches"
 
-#: src/plugins/editorui/tweaks.ui:418
+#: src/plugins/editorui/tweaks.ui:423
 msgid "Snippets"
 msgstr "Snippets"
 
-#: src/plugins/editorui/tweaks.ui:421
+#: src/plugins/editorui/tweaks.ui:426
 msgid "Expand Snippets"
 msgstr "Expand Snippets"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:427
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "Use “Tab” to expand configured snippets in the editor"
 
-#: src/plugins/editorui/tweaks.ui:437
+#: src/plugins/editorui/tweaks.ui:442
 msgid "Code Completion"
 msgstr "Code Completion"
 
-#: src/plugins/editorui/tweaks.ui:441
+#: src/plugins/editorui/tweaks.ui:446
 msgid "Completion Proposals"
 msgstr "Completion Proposals"
 
-#: src/plugins/editorui/tweaks.ui:444
+#: src/plugins/editorui/tweaks.ui:449
 msgid "Suggest Code Completions"
 msgstr "Suggest Code Completions"
 
-#: src/plugins/editorui/tweaks.ui:445
+#: src/plugins/editorui/tweaks.ui:450
 msgid "Automatically suggest code completions while typing"
 msgstr "Automatically suggest code completions while typing"
 
-#: src/plugins/editorui/tweaks.ui:456
+#: src/plugins/editorui/tweaks.ui:461
 msgid "Select First Completion Proposal"
 msgstr "Select First Completion Proposal"
 
-#: src/plugins/editorui/tweaks.ui:457
+#: src/plugins/editorui/tweaks.ui:462
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Automatically select the first completion proposal when displayed"
 
-#: src/plugins/editorui/tweaks.ui:472
+#: src/plugins/editorui/tweaks.ui:477
 msgid "Maximum Completion Proposals"
 msgstr "Maximum Completion Proposals"
 
-#: src/plugins/editorui/tweaks.ui:473
+#: src/plugins/editorui/tweaks.ui:478
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "The maximum number of completion rows that will be displayed at once"
 
-#: src/plugins/editorui/tweaks.ui:492
+#: src/plugins/editorui/tweaks.ui:497
 msgid "Movements"
 msgstr "Movements"
 
-#: src/plugins/editorui/tweaks.ui:496
+#: src/plugins/editorui/tweaks.ui:501
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 
-#: src/plugins/editorui/tweaks.ui:508
+#: src/plugins/editorui/tweaks.ui:513
 msgid "Navigate to non-space characters"
 msgstr "Navigate to non-space characters"
 
-#: src/plugins/editorui/tweaks.ui:517
+#: src/plugins/editorui/tweaks.ui:522
 msgid "Before line boundaries"
 msgstr "Before line boundaries"
 
-#: src/plugins/editorui/tweaks.ui:523
+#: src/plugins/editorui/tweaks.ui:528
 msgid "After line boundaries"
 msgstr "After line boundaries"
 
-#: src/plugins/editorui/tweaks.ui:529
+#: src/plugins/editorui/tweaks.ui:534
 msgid "Instead of line boundaries"
 msgstr "Instead of line boundaries"
 
-#: src/plugins/editorui/tweaks.ui:535 src/plugins/valgrind/gtk/menus.ui:45
+#: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
 msgstr "Disabled"
 
-#: src/plugins/editorui/tweaks.ui:547
+#: src/plugins/editorui/tweaks.ui:552
 msgid "Session Management"
 msgstr "Session Management"
 
-#: src/plugins/editorui/tweaks.ui:551
+#: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
 msgstr "Save & Restore"
 
-#: src/plugins/editorui/tweaks.ui:554
+#: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
 msgstr "Auto-Save"
 
-#: src/plugins/editorui/tweaks.ui:555
+#: src/plugins/editorui/tweaks.ui:560
 msgid "Regularly save the document as you type"
 msgstr "Regularly save the document as you type"
 
-#: src/plugins/editorui/tweaks.ui:566
+#: src/plugins/editorui/tweaks.ui:571
 msgid "Auto-Save Delay"
 msgstr "Auto-Save Delay"
 
-#: src/plugins/editorui/tweaks.ui:567
+#: src/plugins/editorui/tweaks.ui:572
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "The delay in seconds to wait before auto-saving the document"
 
-#: src/plugins/editorui/tweaks.ui:582
+#: src/plugins/editorui/tweaks.ui:587
 msgid "Format on Save"
 msgstr "Format on Save"
 
-#: src/plugins/editorui/tweaks.ui:583
+#: src/plugins/editorui/tweaks.ui:588
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
@@ -4425,15 +4624,15 @@ msgstr ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 
-#: src/plugins/editorui/tweaks.ui:598
+#: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
 msgstr "Restore Cursor Position"
 
-#: src/plugins/editorui/tweaks.ui:599
+#: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
 msgstr "Jump to the last position when re-opening a file"
 
-#: src/plugins/file-search/gbp-file-search-index.c:397
+#: src/plugins/file-search/gbp-file-search-index.c:412
 msgid "Open file or folder"
 msgstr "Open file or folder"
 
@@ -4449,12 +4648,12 @@ msgstr "Installation failed"
 msgid "Installation complete"
 msgstr "Installation complete"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/flatpak/gbp-flatpak-client.c:458
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "The client has been closed"
 
-#: src/plugins/flatpak/gbp-flatpak-config-provider.c:778
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:806
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Failed to remove flatpak manifest: %s"
@@ -4496,7 +4695,7 @@ msgid ""
 msgstr ""
 "Builder is locating the appropriate SDK extensions to build your project"
 
-#: src/plugins/flatpak/gbp-flatpak-manifest.c:847
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:857
 msgid "Flatpak"
 msgstr "Flatpak"
 
@@ -4603,6 +4802,12 @@ msgstr "User"
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "GCC %s Cross-Compiler (System)"
 
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:199
+#: src/plugins/git/daemon/ipc-git-blame-impl.c:351
+#, c-format
+msgid "Original error: %s"
+msgstr "Original error: %s"
+
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
 msgid "No repository to access file contents"
@@ -4628,15 +4833,70 @@ msgstr ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:575
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:627
 #, c-format
 msgid "Cannot set AMEND and GPG_SIGN flags"
 msgstr "Cannot set AMEND and GPG_SIGN flags"
 
-#: src/plugins/git/daemon/ipc-git-repository-impl.c:584
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:636
 #, c-format
 msgid "Cannot sign commit without GPG_KEY_ID"
 msgstr "Cannot sign commit without GPG_KEY_ID"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:101
+msgid "in the future"
+msgstr "in the future"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:112
+msgid "just now"
+msgstr "just now"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:114
+#, c-format
+msgid "%ld minute ago"
+msgid_plural "%ld minutes ago"
+msgstr[0] "%ld minute ago"
+msgstr[1] "%ld minutes ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:119
+#, c-format
+msgid "%ld hour ago"
+msgid_plural "%ld hours ago"
+msgstr[0] "%ld hour ago"
+msgstr[1] "%ld hours ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:124
+#, c-format
+msgid "%ld day ago"
+msgid_plural "%ld days ago"
+msgstr[0] "%ld day ago"
+msgstr[1] "%ld days ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:129
+#, c-format
+msgid "%ld week ago"
+msgid_plural "%ld weeks ago"
+msgstr[0] "%ld week ago"
+msgstr[1] "%ld weeks ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:134
+#, c-format
+msgid "%ld month ago"
+msgid_plural "%ld months ago"
+msgstr[0] "%ld month ago"
+msgstr[1] "%ld months ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:139
+#, c-format
+msgid "%ld year ago"
+msgid_plural "%ld years ago"
+msgstr[0] "%ld year ago"
+msgstr[1] "%ld years ago"
+
+#: src/plugins/git/gbp-git-annotation-provider.c:228
+#, c-format
+msgid "%s, %s"
+msgstr "%s, %s"
 
 #: src/plugins/git/gbp-git-buffer-change-monitor.c:407
 #, c-format
@@ -4668,23 +4928,6 @@ msgstr "Initialise git submodules"
 msgid "Network is not available, skipping submodule update"
 msgstr "Network is not available, skipping submodule update"
 
-#: src/plugins/git/gbp-git-vcs.c:347
-msgid "Pushed."
-msgstr "Pushed."
-
-#: src/plugins/git/gbp-git-vcs.c:385
-#, c-format
-msgid "Pushing ref “%s”"
-msgstr "Pushing ref “%s”"
-
-#: src/plugins/git/gbp-git-vcs.c:687
-msgid "Directory is not within repository"
-msgstr "Directory is not within repository"
-
-#: src/plugins/git/gbp-git-vcs.c:715
-msgid "Git"
-msgstr "Git"
-
 #: src/plugins/git/gbp-git-vcs-cloner.c:166
 #, c-format
 msgid "A repository could not be found at “%s”."
@@ -4702,6 +4945,31 @@ msgstr "Cloning repository"
 #: src/plugins/git/gbp-git-vcs-cloner.c:279
 msgid "A valid Git URL is required"
 msgstr "A valid Git URL is required"
+
+#: src/plugins/git/gbp-git-vcs.c:347
+msgid "Pushed."
+msgstr "Pushed."
+
+#: src/plugins/git/gbp-git-vcs.c:385
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr "Pushing ref “%s”"
+
+#: src/plugins/git/gbp-git-vcs.c:687
+msgid "Directory is not within repository"
+msgstr "Directory is not within repository"
+
+#: src/plugins/git/gbp-git-vcs.c:715
+msgid "Git"
+msgstr "Git"
+
+#: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
+msgid "Git Blame"
+msgstr "Git Blame"
+
+#: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
+msgid "Show Inline Git Blame"
+msgstr "Show Inline Git Blame"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
@@ -4836,10 +5104,6 @@ msgstr "Open Preview…"
 msgid "Failed to load directory: %s"
 msgstr "Failed to load directory: %s"
 
-#: src/plugins/ls/gbp-ls-page.ui:49
-msgid "Size"
-msgstr "Size"
-
 #: src/plugins/ls/gbp-ls-page.ui:63
 msgid "Modified"
 msgstr "Modified"
@@ -4856,14 +5120,6 @@ msgstr "Open Containing Folder"
 msgid "With File _Browser…"
 msgstr "With File _Browser…"
 
-#: src/plugins/make/gbp-make-build-target.c:55
-msgid "Default Make Target"
-msgstr "Default Make Target"
-
-#: src/plugins/make/gbp-make-run-command-provider.c:83
-msgid "Make Run"
-msgstr "Make Run"
-
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
 msgstr "Empty Makefile Project"
@@ -4871,6 +5127,14 @@ msgstr "Empty Makefile Project"
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Create a new empty project using a simple Makefile"
+
+#: src/plugins/make/gbp-make-build-target.c:55
+msgid "Default Make Target"
+msgstr "Default Make Target"
+
+#: src/plugins/make/gbp-make-run-command-provider.c:83
+msgid "Make Run"
+msgstr "Make Run"
 
 #: src/plugins/manuals/gbp-manuals-page.c:321
 #: src/plugins/manuals/gbp-manuals-panel.ui:5
@@ -4885,7 +5149,7 @@ msgstr "Manuals"
 msgid "Filter…"
 msgstr "Filter…"
 
-#: src/plugins/manuals/gbp-manuals-search-result.c:215
+#: src/plugins/manuals/gbp-manuals-search-result.c:248
 msgid "Open Documentation"
 msgstr "Open Documentation"
 
@@ -5012,29 +5276,126 @@ msgstr "Close Page"
 msgid "Close the current page"
 msgstr "Close the current page"
 
+#: src/plugins/menu-search/gtk/menus.ui:108
+#: src/plugins/project-tree/gtk/menus.ui:99
+msgid "Reveal in Project Tree"
+msgstr "Reveal in Project Tree"
+
+#: src/plugins/menu-search/gtk/menus.ui:109
+msgid "Reveal the current page in the project tree"
+msgstr "Reveal the current page in the project tree"
+
 #: src/plugins/menu-search/gtk/menus.ui:115
+msgid "Save the current page"
+msgstr "Save the current page"
+
+#: src/plugins/menu-search/gtk/menus.ui:121
+msgid "Move Page Down"
+msgstr "Move Page Down"
+
+#: src/plugins/menu-search/gtk/menus.ui:122
+msgid "Move the current page down"
+msgstr "Move the current page down"
+
+#: src/plugins/menu-search/gtk/menus.ui:127
+msgid "Move Page Left"
+msgstr "Move Page Left"
+
+#: src/plugins/menu-search/gtk/menus.ui:128
+msgid "Move the current page left"
+msgstr "Move the current page left"
+
+#: src/plugins/menu-search/gtk/menus.ui:133
+msgid "Move Page Right"
+msgstr "Move Page Right"
+
+#: src/plugins/menu-search/gtk/menus.ui:134
+msgid "Move the current page right"
+msgstr "Move the current page right"
+
+#: src/plugins/menu-search/gtk/menus.ui:139
+msgid "Move Page Up"
+msgstr "Move Page Up"
+
+#: src/plugins/menu-search/gtk/menus.ui:140
+msgid "Move the current page up"
+msgstr "Move the current page up"
+
+#: src/plugins/menu-search/gtk/menus.ui:152
 msgid "Reload Files"
 msgstr "Reload Files"
 
-#: src/plugins/menu-search/gtk/menus.ui:116
+#: src/plugins/menu-search/gtk/menus.ui:153
 msgid "Reload the contents of open files"
 msgstr "Reload the contents of open files"
 
-#: src/plugins/menu-search/gtk/menus.ui:125
+#: src/plugins/menu-search/gtk/menus.ui:159
+msgid "Print the current page"
+msgstr "Print the current page"
+
+#: src/plugins/menu-search/gtk/menus.ui:170
+msgid "Find a string in the current page"
+msgstr "Find a string in the current page"
+
+#: src/plugins/menu-search/gtk/menus.ui:177
+msgid "Find and replace a string in the current page"
+msgstr "Find and replace a string in the current page"
+
+#: src/plugins/menu-search/gtk/menus.ui:183
 msgid "Move to next search result"
 msgstr "Move to next search result"
 
-#: src/plugins/menu-search/gtk/menus.ui:126
+#: src/plugins/menu-search/gtk/menus.ui:184
 msgid "Move to and select the next available search result"
 msgstr "Move to and select the next available search result"
 
-#: src/plugins/menu-search/gtk/menus.ui:132
+#: src/plugins/menu-search/gtk/menus.ui:190
 msgid "Move to previous search result"
 msgstr "Move to previous search result"
 
-#: src/plugins/menu-search/gtk/menus.ui:133
+#: src/plugins/menu-search/gtk/menus.ui:191
 msgid "Move to and select the previous search result"
 msgstr "Move to and select the previous search result"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
+msgid "GNOME Application"
+msgstr "GNOME Application"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
+msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
+msgstr "A Meson-based project for GNOME using GTK 4 and libadwaita"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
+msgid "GTK 4 Application"
+msgstr "GTK 4 Application"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:192
+msgid "A Meson-based project using GTK 4"
+msgstr "A Meson-based project using GTK 4"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:207
+msgid "Shared Library"
+msgstr "Shared Library"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:208
+msgid "A Meson-based project for a shared library"
+msgstr "A Meson-based project for a shared library"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:215
+msgid "Command Line Tool"
+msgstr "Command Line Tool"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:216
+msgid "An Meson-based project for a command-line program"
+msgstr "An Meson-based project for a command-line program"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:225
+msgid "Empty Meson Project"
+msgstr "Empty Meson Project"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:226
+msgid "An empty Meson project skeleton"
+msgstr "An empty Meson project skeleton"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -5052,14 +5413,14 @@ msgstr "Install project"
 msgid "Cache development environment"
 msgstr "Cache development environment"
 
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "Delete Tool"
+
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
-
-#: src/plugins/meson/gbp-meson-tool-row.ui:25
-msgid "Delete Tool"
-msgstr "Delete Tool"
 
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Compiler"
@@ -5088,46 +5449,6 @@ msgstr "Executable wrapper"
 #: src/plugins/meson/gbp-meson-utils.c:110
 msgid "Package Config"
 msgstr "Package Config"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:175
-msgid "GNOME Application"
-msgstr "GNOME Application"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:176
-msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr "A Meson-based project for GNOME using GTK 4 and libadwaita"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:190
-msgid "GTK 4 Application"
-msgstr "GTK 4 Application"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:191
-msgid "A Meson-based project using GTK 4"
-msgstr "A Meson-based project using GTK 4"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:205
-msgid "Shared Library"
-msgstr "Shared Library"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:206
-msgid "A Meson-based project for a shared library"
-msgstr "A Meson-based project for a shared library"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:213
-msgid "Command Line Tool"
-msgstr "Command Line Tool"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:214
-msgid "An Meson-based project for a command-line program"
-msgstr "An Meson-based project for a command-line program"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:223
-msgid "Empty Meson Project"
-msgstr "Empty Meson Project"
-
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:224
-msgid "An empty Meson project skeleton"
-msgstr "An empty Meson project skeleton"
 
 #: src/plugins/messages/gbp-messages-panel.c:102
 #: src/plugins/messages/gbp-messages-panel.ui:169
@@ -5438,10 +5759,6 @@ msgstr "S_how Ignored Files"
 #: src/plugins/project-tree/gtk/menus.ui:87
 msgid "S_ort Directories First"
 msgstr "S_ort Directories First"
-
-#: src/plugins/project-tree/gtk/menus.ui:99
-msgid "Reveal in Project Tree"
-msgstr "Reveal in Project Tree"
 
 #: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
@@ -5789,7 +6106,7 @@ msgstr "_Edit File"
 msgid "Open keybindings.json in editor"
 msgstr "Open keybindings.json in editor"
 
-#: src/plugins/shortcutui/gbp-shortcutui-row.ui:20
+#: src/plugins/shortcutui/gbp-shortcutui-row.ui:22
 msgid "Reset shortcut"
 msgstr "Reset shortcut"
 
@@ -5929,7 +6246,7 @@ msgstr "Energy"
 msgid "Consumption"
 msgstr "Consumption"
 
-#: src/plugins/sysprof/gtk/menus.ui:97
+#: src/plugins/sysprof/gtk/menus.ui:97 src/plugins/sysprof/tweaks.ui:179
 msgid "Battery Charge"
 msgstr "Battery Charge"
 
@@ -6033,10 +6350,6 @@ msgstr "Network Usage"
 msgid "Record statistics about network usage"
 msgstr "Record statistics about network usage"
 
-#: src/plugins/sysprof/tweaks.ui:179
-msgid "Disk Usage"
-msgstr "Disk Usage"
-
 #: src/plugins/sysprof/tweaks.ui:195
 msgid "GNOME Shell Performance"
 msgstr "GNOME Shell Performance"
@@ -6111,61 +6424,57 @@ msgstr "Open a new terminal in project's runtime environment"
 msgid "Split"
 msgstr "Split"
 
-#: src/plugins/terminal/tweaks.ui:14
-msgid "The font used within terminals"
-msgstr "The font used within terminals"
-
-#: src/plugins/terminal/tweaks.ui:29
+#: src/plugins/terminal/tweaks.ui:34
 msgid "Allow Bold"
 msgstr "Allow Bold"
 
-#: src/plugins/terminal/tweaks.ui:30
+#: src/plugins/terminal/tweaks.ui:35
 msgid "Allows the use of bold escape sequences"
 msgstr "Allows the use of bold escape sequences"
 
-#: src/plugins/terminal/tweaks.ui:41
+#: src/plugins/terminal/tweaks.ui:46
 msgid "Allow Hyperlinks"
 msgstr "Allow Hyperlinks"
 
-#: src/plugins/terminal/tweaks.ui:42
+#: src/plugins/terminal/tweaks.ui:47
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Allows the use of hyperlink escape sequences"
 
-#: src/plugins/terminal/tweaks.ui:55
+#: src/plugins/terminal/tweaks.ui:60
 msgid "Scrolling"
 msgstr "Scrolling"
 
-#: src/plugins/terminal/tweaks.ui:58
+#: src/plugins/terminal/tweaks.ui:63
 msgid "Scroll On Output"
 msgstr "Scroll On Output"
 
-#: src/plugins/terminal/tweaks.ui:59
+#: src/plugins/terminal/tweaks.ui:64
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr "Automatically scroll when applications within the terminal output text"
 
-#: src/plugins/terminal/tweaks.ui:70
+#: src/plugins/terminal/tweaks.ui:75
 msgid "Scroll On Keyboard Input"
 msgstr "Scroll On Keyboard Input"
 
-#: src/plugins/terminal/tweaks.ui:71
+#: src/plugins/terminal/tweaks.ui:76
 msgid "Automatically scroll when typing to insert text"
 msgstr "Automatically scroll when typing to insert text"
 
-#: src/plugins/terminal/tweaks.ui:87
+#: src/plugins/terminal/tweaks.ui:92
 msgid "Limit Scrollback"
 msgstr "Limit Scrollback"
 
-#: src/plugins/terminal/tweaks.ui:88
+#: src/plugins/terminal/tweaks.ui:93
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 
-#: src/plugins/terminal/tweaks.ui:99
+#: src/plugins/terminal/tweaks.ui:104
 msgid "Maximum Lines in Scrollback"
 msgstr "Maximum Lines in Scrollback"
 
-#: src/plugins/terminal/tweaks.ui:100
+#: src/plugins/terminal/tweaks.ui:105
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr "The maximum number of lines stored in history when limiting scrollback"
 
@@ -6477,3233 +6786,3 @@ msgstr "Failed to create the XML tree."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "File must be saved locally to parse."
-
-#~ msgid "Cancel"
-#~ msgstr "Cancel"
-
-#~ msgid "Unix/Linux (LF)"
-#~ msgstr "Unix/Linux (LF)"
-
-#~ msgid "Mac OS Classic (CR)"
-#~ msgstr "Mac OS Classic (CR)"
-
-#~ msgid "Windows (CR+LF)"
-#~ msgstr "Windows (CR+LF)"
-
-#~ msgid "Automatically Detected"
-#~ msgstr "Automatically Detected"
-
-#~ msgid "Character Encoding:"
-#~ msgstr "Character Encoding:"
-
-#~ msgid "Line Ending:"
-#~ msgstr "Line Ending:"
-
-#~ msgid "Browse…"
-#~ msgstr "Browse…"
-
-#~ msgid "_Save"
-#~ msgstr "_Save"
-
-#~ msgid "No Provided Tool"
-#~ msgstr "No Provided Tool"
-
-#~ msgid "A name to identify the sysroot."
-#~ msgstr "A name to identify the sysroot."
-
-#~ msgid "The system architecture of the sysroot."
-#~ msgstr "The system architecture of the sysroot."
-
-#~ msgid "Add Tool:"
-#~ msgstr "Add Tool:"
-
-#~ msgid "Any language"
-#~ msgstr "Any language"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "C++"
-#~ msgstr "C++"
-
-#~ msgid "Python"
-#~ msgstr "Python"
-
-#~ msgid "Vala"
-#~ msgstr "Vala"
-
-#~ msgid "Fortran"
-#~ msgstr "Fortran"
-
-#~ msgid "D"
-#~ msgstr "D"
-
-#~ msgid "Add Tool"
-#~ msgstr "Add Tool"
-
-#~ msgid "Delete Toolchain"
-#~ msgstr "Delete Toolchain"
-
-#~ msgid "An IDE for GNOME"
-#~ msgstr "An IDE for GNOME"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "D-Bus Inspector"
-
-#~ msgid "_Everything"
-#~ msgstr "_Everything"
-
-#~ msgid "_Actions"
-#~ msgstr "_Actions"
-
-#~ msgid "_Commands"
-#~ msgstr "_Commands"
-
-#~ msgid "_Files"
-#~ msgstr "_Files"
-
-#~ msgid "Christian Hergert, et al."
-#~ msgstr "Christian Hergert, et al."
-
-#~ msgid "Allow JavaScript"
-#~ msgstr "Allow JavaScript"
-
-#~ msgid "Display D-Bus inspector"
-#~ msgstr "Display D-Bus inspector"
-
-#~ msgid "D-Spy"
-#~ msgstr "D-Spy"
-
-#, c-format
-#~ msgid "The operation has been canceled"
-#~ msgstr "The operation has been cancelled"
-
-#~ msgid "Enchant 2"
-#~ msgstr "Enchant 2"
-
-#~ msgid "Add to Dictionary"
-#~ msgstr "Add to Dictionary"
-
-#~ msgid "Ignore"
-#~ msgstr "Ignore"
-
-#~ msgid "Languages"
-#~ msgstr "Languages"
-
-#~ msgid "Stop Build"
-#~ msgstr "Stop Build"
-
-#~ msgid "Stop building project"
-#~ msgstr "Stop building project"
-
-#~ msgid "Photos"
-#~ msgstr "Photos"
-
-#~ msgid "Access, organize and share your photos on GNOME"
-#~ msgstr "Access, organise and share your photos on GNOME"
-
-#~ msgid "Go back"
-#~ msgstr "Go back"
-
-#~| msgid "Preferences"
-#~ msgid "All Preferences"
-#~ msgstr "All Preferences"
-
-#~| msgctxt "shortcut window"
-#~| msgid "Toggle primary menu"
-#~ msgid "Primary Menu"
-#~ msgstr "Primary Menu"
-
-#~ msgid "Unnamed Symbol"
-#~ msgstr "Unnamed Symbol"
-
-#~| msgid "_Select Symbol…"
-#~ msgid "Filter Symbols…"
-#~ msgstr "Filter Symbols…"
-
-#~ msgid "Open Sysprof Capture…"
-#~ msgstr "Open Sysprof Capture…"
-
-#~ msgid "All Files"
-#~ msgstr "All Files"
-
-#~ msgctxt "menu label"
-#~ msgid "Open _Sysprof Capture…"
-#~ msgstr "Open _Sysprof Capture…"
-
-#~ msgid "Whether or not Home moves to first non-space character."
-#~ msgstr "Whether or not Home moves to first non-space character."
-
-#~ msgid "Show overview map"
-#~ msgstr "Show overview map"
-
-#~ msgid "Automatically Hide Overview Map"
-#~ msgstr "Automatically Hide Overview Map"
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
-#~ msgstr ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
-
-#~ msgid "Overscroll"
-#~ msgstr "Overscroll"
-
-#~ msgid "The number of lines to scroll beyond the end of the buffer."
-#~ msgstr "The number of lines to scroll beyond the end of the buffer."
-
-#~ msgid "The number of pixels to include above and below lines in the editor."
-#~ msgstr ""
-#~ "The number of pixels to include above and below lines in the editor."
-
-#~ msgid "Window position"
-#~ msgstr "Window position"
-
-#~ msgid "Window position (x and y)."
-#~ msgstr "Window position (x and y)."
-
-#~ msgid "Restore Previous Files"
-#~ msgstr "Restore Previous Files"
-
-#~ msgid "Display the open files list in the project sidebar."
-#~ msgstr "Display the open files list in the project sidebar."
-
-#~ msgid "Show Left Panel"
-#~ msgstr "Show Left Panel"
-
-#~ msgid "If enabled, the left panel will be displayed."
-#~ msgstr "If enabled, the left panel will be displayed."
-
-#~ msgid "Left Panel Position"
-#~ msgstr "Left Panel Position"
-
-#~ msgid "The width in pixel units of the left panel."
-#~ msgstr "The width in pixel units of the left panel."
-
-#~ msgid "Show Right Panel"
-#~ msgstr "Show Right Panel"
-
-#~ msgid "Right Panel Position"
-#~ msgstr "Right Panel Position"
-
-#~ msgid "The width in pixel units of the right panel."
-#~ msgstr "The width in pixel units of the right panel."
-
-#~ msgid "Show Bottom Panel"
-#~ msgstr "Show Bottom Panel"
-
-#~ msgid "If enabled, the bottom panel will be displayed."
-#~ msgstr "If enabled, the bottom panel will be displayed."
-
-#~ msgid "Bottom Panel Position"
-#~ msgstr "Bottom Panel Position"
-
-#~ msgid "The height in pixel units of the bottom panel."
-#~ msgstr "The height in pixel units of the bottom panel."
-
-#~ msgid "Palette: "
-#~ msgstr "Palette: "
-
-#~ msgid "Palette"
-#~ msgstr "Palette"
-
-#~ msgid "Color Plane"
-#~ msgstr "Colour Plane"
-
-#~ msgid "Color name"
-#~ msgstr "Colour name"
-
-#~ msgid "Enter a new name for the color"
-#~ msgstr "Enter a new name for the colour"
-
-#, c-format
-#~ msgid "Unsaved palette %u"
-#~ msgstr "Unsaved palette %u"
-
-#, c-format
-#~ msgid "failed to parse line %i\n"
-#~ msgstr "failed to parse line %i\n"
-
-#, c-format
-#~ msgid "%s: palette is empty\n"
-#~ msgstr "%s: palette is empty\n"
-
-#, c-format
-#~ msgid "%s: failed to parse\n"
-#~ msgstr "%s: failed to parse\n"
-
-#, c-format
-#~ msgid "Unable to open %s\n"
-#~ msgstr "Unable to open %s\n"
-
-#, c-format
-#~ msgid "%s: This file format is not supported\n"
-#~ msgstr "%s: This file format is not supported\n"
-
-#, c-format
-#~ msgid "failed to parse\n"
-#~ msgstr "failed to parse\n"
-
-#~ msgid "Generated"
-#~ msgstr "Generated"
-
-#, c-format
-#~ msgid "Unable to save %s\n"
-#~ msgstr "Unable to save %s\n"
-
-#~ msgid "Hue"
-#~ msgstr "Hue"
-
-#~ msgid "Saturation"
-#~ msgstr "Saturation"
-
-#~ msgid "Cielab l"
-#~ msgstr "Cielab l"
-
-#~ msgid "Cielab a"
-#~ msgstr "Cielab a"
-
-#~ msgid "Cielab b"
-#~ msgstr "Cielab b"
-
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "L*"
-#~ msgstr "L*"
-
-#~ msgid "a*"
-#~ msgstr "a*"
-
-#~ msgid "b*"
-#~ msgstr "b*"
-
-#~ msgid "R"
-#~ msgstr "R"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "Color strings"
-#~ msgstr "Colour strings"
-
-#~ msgid "HEX3"
-#~ msgstr "HEX3"
-
-#~ msgid "HEX6"
-#~ msgstr "HEX6"
-
-#~ msgid "RGB"
-#~ msgstr "RGB"
-
-#~ msgid "RGBA"
-#~ msgstr "RGBA"
-
-#~ msgid "HSL"
-#~ msgstr "HSL"
-
-#~ msgid "HSLA"
-#~ msgstr "HSLA"
-
-#~ msgid "Palettes"
-#~ msgstr "Palettes"
-
-#~ msgid "No open palettes"
-#~ msgstr "No open palettes"
-
-#~ msgid "Load or generate a palette using the preferences"
-#~ msgstr "Load or generate a palette using the preferences"
-
-#~ msgid "Rename"
-#~ msgstr "Rename"
-
-#, c-format
-#~ msgid "Failed to load file: %s"
-#~ msgstr "Failed to load file: %s"
-
-#, c-format
-#~ msgid "Failed to save file: %s"
-#~ msgstr "Failed to save file: %s"
-
-#~ msgid "Save a Copy"
-#~ msgstr "Save a Copy"
-
-#~ msgid "Editor shortcuts"
-#~ msgstr "Editor shortcuts"
-
-#~ msgid "Save the document"
-#~ msgstr "Save the document"
-
-#~ msgid "Save the document with a new name"
-#~ msgstr "Save the document with a new name"
-
-#~ msgid "Print the document"
-#~ msgstr "Print the document"
-
-#~ msgid "Find and replace"
-#~ msgstr "Find and replace"
-
-#~ msgid "Move to the next error"
-#~ msgstr "Move to the next error"
-
-#~ msgid "Move to the previous error"
-#~ msgstr "Move to the previous error"
-
-#~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
-#~ msgstr ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
-
-#~ msgid "Regular expressions"
-#~ msgstr "Regular expressions"
-
-#~ msgid "Case sensitive"
-#~ msgstr "Case sensitive"
-
-#~ msgid "Match whole word only"
-#~ msgstr "Match whole word only"
-
-#~ msgid "Switch between Search and Search-and-Replace"
-#~ msgstr "Switch between Search and Search-and-Replace"
-
-#~ msgid "Show or hide search options such as case sensitivity"
-#~ msgstr "Show or hide search options such as case sensitivity"
-
-#~ msgid "_Match whole word only"
-#~ msgstr "_Match whole word only"
-
-#~ msgid "Highlight Mode"
-#~ msgstr "Highlight Mode"
-
-#~ msgid "Display relative line numbers"
-#~ msgstr "Display relative line numbers"
-
-#~ msgid "Display right margin"
-#~ msgstr "Display right margin"
-
-#~ msgid "Automatic indentation"
-#~ msgstr "Automatic indentation"
-
-#~ msgid "Smart backspace"
-#~ msgstr "Smart backspace"
-
-#~ msgid "Enabling smart backspace will treat multiple spaces as a tabs"
-#~ msgstr "Enabling smart backspace will treat multiple spaces as tabs"
-
-#~ msgid "Insert trailing newline"
-#~ msgstr "Insert trailing newline"
-
-#~ msgid "Create a new document"
-#~ msgstr "Create a new document"
-
-#~ msgid "Open a document"
-#~ msgstr "Open a document"
-
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Toggle navigation panel"
-
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Toggle utilities panel"
-
-#~ msgid "Close all files"
-#~ msgstr "Close all files"
-
-#~ msgid "Your previous session will be ready in a moment."
-#~ msgstr "Your previous session will be ready in a moment."
-
-#~ msgid "Switch surface"
-#~ msgstr "Switch surface"
-
-#~ msgid "Failed to locate runtime"
-#~ msgstr "Failed to locate runtime"
-
-#, c-format
-#~ msgid "The build target failed to build: %s"
-#~ msgstr "The build target failed to build: %s"
-
-#~ msgid "Workbench shortcuts"
-#~ msgstr "Workbench shortcuts"
-
-#~ msgid "Build and Run"
-#~ msgstr "Build and Run"
-
-#~ msgid "Process quit unexpectedly"
-#~ msgstr "Process quit unexpectedly"
-
-#, c-format
-#~ msgid "The directory “%s” already exists. Please choose another directory."
-#~ msgstr "The directory “%s” already exists. Please choose another directory."
-
-#, c-format
-#~ msgid "Your project will be created at %s"
-#~ msgstr "Your project will be created at %s"
-
-#~ msgid ""
-#~ "Enter the repository of the project you would like to clone. The URL "
-#~ "should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
-#~ msgstr ""
-#~ "Enter the repository of the project you would like to clone. The URL "
-#~ "should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
-
-#~ msgid "user@host:repository.git"
-#~ msgstr "user@host:repository.git"
-
-#~ msgid "Select branch and other options."
-#~ msgstr "Select branch and other options."
-
-#~ msgid "Repository Kind"
-#~ msgstr "Repository Kind"
-
-#~ msgid "Project Destination"
-#~ msgstr "Project Destination"
-
-#~ msgid "Clone _Project"
-#~ msgstr "Clone _Project"
-
-#~ msgctxt "title"
-#~ msgid "Clone Repository"
-#~ msgstr "Clone Repository"
-
-#~ msgid "Switch Surface"
-#~ msgstr "Switch Surface"
-
-#~ msgid "Run Options"
-#~ msgstr "Run Options"
-
-#~ msgid "Learn more about GNOME Builder"
-#~ msgstr "Learn more about GNOME Builder"
-
-#~ msgid "Show the help window"
-#~ msgstr "Show the help window"
-
-#~ msgid "Show the preferences window"
-#~ msgstr "Show the preferences window"
-
-#~ msgid "Show the shortcuts window"
-#~ msgstr "Show the shortcuts window"
-
-#~ msgid ""
-#~ "GNOME Builder requires a session with D-Bus which was not found. Please "
-#~ "set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
-#~ msgstr ""
-#~ "GNOME Builder requires a session with D-Bus which was not found. Please "
-#~ "set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
-
-#~ msgid "Command failed"
-#~ msgstr "Command failed"
-
-#, c-format
-#~ msgid "Failed to locate command “%s”"
-#~ msgstr "Failed to locate command “%s”"
-
-#~ msgid "File chooser"
-#~ msgstr "File chooser"
-
-#~ msgid "New terminal"
-#~ msgstr "New terminal"
-
-#~ msgid "Move document to the right"
-#~ msgstr "Move document to the right"
-
-#~ msgid "Move document to the left"
-#~ msgstr "Move document to the left"
-
-#~ msgid "Switch to the previous document"
-#~ msgstr "Switch to the previous document"
-
-#~ msgid "Switch to the next document"
-#~ msgstr "Switch to the next document"
-
-#~ msgid "Close the document"
-#~ msgstr "Close the document"
-
-#~ msgid "No Open Pages"
-#~ msgstr "No Open Pages"
-
-#~ msgid "Uh oh, something went wrong"
-#~ msgstr "Uh oh, something went wrong"
-
-#~ msgid "There was a failure while trying to perform the operation."
-#~ msgstr "There was a failure while trying to perform the operation."
-
-#~ msgid "Window shortcuts"
-#~ msgstr "Window shortcuts"
-
-#~ msgid "Show window menu"
-#~ msgstr "Show window menu"
-
-#~ msgid "Toggle window to fullscreen"
-#~ msgstr "Toggle window to fullscreen"
-
-#~ msgid "Extensions"
-#~ msgstr "Extensions"
-
-#~ msgctxt "Keywords"
-#~ msgid "editor font monospace"
-#~ msgstr "editor font monospace"
-
-#~ msgid "Number of pixels above and below editor lines"
-#~ msgstr "Number of pixels above and below editor lines"
-
-#~ msgctxt "Keywords"
-#~ msgid "editor line spacing font monospace"
-#~ msgstr "editor line spacing font monospace"
-
-#~ msgid "Color Scheme"
-#~ msgstr "Colour Scheme"
-
-#~ msgid "Emulation"
-#~ msgstr "Emulation"
-
-#~ msgid "Default keybinding mode which mimics gedit"
-#~ msgstr "Default keybinding mode which mimics gedit"
-
-#~ msgid "Display list of open files"
-#~ msgstr "Display list of open files"
-
-#~ msgid "Display the list of all open files in the project sidebar"
-#~ msgstr "Display the list of all open files in the project sidebar"
-
-#~ msgid "Cursor"
-#~ msgstr "Cursor"
-
-#~ msgid "Restore cursor position when a file is reopened"
-#~ msgstr "Restore cursor position when a file is reopened"
-
-#~ msgid "Scroll Offset"
-#~ msgstr "Scroll Offset"
-
-#~ msgid "Minimum number of lines to keep above and below the cursor"
-#~ msgstr "Minimum number of lines to keep above and below the cursor"
-
-#~ msgid "Allow the editor to scroll past the end of the buffer"
-#~ msgstr "Allow the editor to scroll past the end of the buffer"
-
-#~ msgid "Text Wrapping"
-#~ msgstr "Text Wrapping"
-
-#~ msgid "In Between Words"
-#~ msgstr "In Between Words"
-
-#~ msgid "Line Information"
-#~ msgstr "Line Information"
-
-#~ msgid "Show line number at beginning of each line"
-#~ msgstr "Show line number at beginning of each line"
-
-#~ msgid "Show if a line was added or modified next to line number"
-#~ msgstr "Show if a line was added or modified next to line number"
-
-#~ msgid "Show an icon next to line numbers indicating type of diagnostic"
-#~ msgstr "Show an icon next to line numbers indicating type of diagnostic"
-
-#~ msgid "Highlight"
-#~ msgstr "Highlight"
-
-#~ msgid "Matching brackets"
-#~ msgstr "Matching brackets"
-
-#~ msgid "Highlight matching brackets based on cursor position"
-#~ msgstr "Highlight matching brackets based on cursor position"
-
-#~ msgid "A zoomed out view to enhance navigating source code"
-#~ msgstr "A zoomed out view to enhance navigating source code"
-
-#~ msgid "Automatically hide overview map"
-#~ msgstr "Automatically hide overview map"
-
-#~ msgid "Visible Whitespace Characters"
-#~ msgstr "Visible Whitespace Characters"
-
-#~ msgid "New line and carriage return"
-#~ msgstr "New line and carriage return"
-
-#~ msgid "Spaces inside of text"
-#~ msgstr "Spaces inside of text"
-
-#~ msgid "Enable or disable autosave feature"
-#~ msgstr "Enable or disable autosave feature"
-
-#~ msgid "Code Insight"
-#~ msgstr "Code Insight"
-
-#~ msgid ""
-#~ "Use code insight to highlight additional information discovered in source "
-#~ "file"
-#~ msgstr ""
-#~ "Use code insight to highlight additional information discovered in source "
-#~ "file"
-
-#~ msgid "Completions Display Size"
-#~ msgstr "Completions Display Size"
-
-#~ msgid "Number of completions to display"
-#~ msgstr "Number of completions to display"
-
-#~ msgid "Display code suggestions interactively as you type"
-#~ msgstr "Display code suggestions interactively as you type"
-
-#~ msgid "Overwrite closing braces"
-#~ msgstr "Overwrite closing braces"
-
-#~ msgid "Position in spaces for the right margin"
-#~ msgstr "Position in spaces for the right margin"
-
-#~ msgid "Width of a tab character in spaces"
-#~ msgstr "Width of a tab character in spaces"
-
-#~ msgid "Insert spaces instead of tabs"
-#~ msgstr "Insert spaces instead of tabs"
-
-#~ msgid "Prefer spaces over use of tabs"
-#~ msgstr "Prefer spaces over use of tabs"
-
-#~ msgid "Spacing"
-#~ msgstr "Spacing"
-
-#~ msgid "Number of parallel build workers"
-#~ msgstr "Number of parallel build workers"
-
-#~ msgid "Clear build cache at startup"
-#~ msgstr "Clear build cache at startup"
-
-#~ msgid ""
-#~ "Allow the use of metered network connections when automatically "
-#~ "downloading dependencies"
-#~ msgstr ""
-#~ "Allow the use of metered network connections when automatically "
-#~ "downloading dependencies"
-
-#~ msgid "Insert Breakpoint at Start of Application"
-#~ msgstr "Insert Breakpoint at Start of Application"
-
-#~ msgid "Workspace"
-#~ msgstr "Workspace"
-
-#~ msgid "A place for all your projects"
-#~ msgstr "A place for all your projects"
-
-#~ msgid "Restore previously opened files"
-#~ msgstr "Restore previously opened files"
-
-#~ msgid "The project cannot be run while the build pipeline is being set up"
-#~ msgstr "The project cannot be run while the build pipeline is being set up"
-
-#~ msgid "Change run options"
-#~ msgstr "Change run options"
-
-#~ msgid "Workspace shortcuts"
-#~ msgstr "Workspace shortcuts"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Editor Shortcuts"
-#~ msgstr "Editor Shortcuts"
-
-#~ msgctxt "shortcut window"
-#~ msgid "General"
-#~ msgstr "General"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show help"
-#~ msgstr "Show help"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Preferences"
-#~ msgstr "Preferences"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Command Bar"
-#~ msgstr "Command Bar"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal"
-#~ msgstr "Terminal"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal in Build Runtime"
-#~ msgstr "Terminal in Build Runtime"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Keyboard Shortcuts"
-#~ msgstr "Keyboard Shortcuts"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle Focus Mode"
-#~ msgstr "Toggle Focus Mode"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Panels"
-#~ msgstr "Panels"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show Find in Project panel"
-#~ msgstr "Show Find in Project panel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Files"
-#~ msgstr "Files"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Create new document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Open a document"
-#~ msgstr "Open a document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save the document"
-#~ msgstr "Save the document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save a copy of the document"
-#~ msgstr "Save a copy of the document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all documents"
-#~ msgstr "Save all documents"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Print the document"
-#~ msgstr "Print the document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Close the document"
-#~ msgstr "Close the document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Close all documents"
-#~ msgstr "Close all documents"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the next document"
-#~ msgstr "Switch to the next document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Switch to the previous document"
-#~ msgstr "Switch to the previous document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show list of open documents"
-#~ msgstr "Show list of open documents"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show document outline or symbol tree"
-#~ msgstr "Show document outline or symbol tree"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find and replace"
-#~ msgstr "Find and replace"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Goto Line"
-#~ msgstr "Goto Line"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find"
-#~ msgstr "Find"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the next match"
-#~ msgstr "Find the next match"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Find the previous match"
-#~ msgstr "Find the previous match"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Clear highlight"
-#~ msgstr "Clear highlight"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Duplicate current line or selection"
-#~ msgstr "Duplicate current line or selection"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo previous command"
-#~ msgstr "Undo previous command"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Redo previous command"
-#~ msgstr "Redo previous command"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Editing"
-#~ msgstr "Editing"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Increment number at cursor"
-#~ msgstr "Increment number at cursor"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Decrement number at cursor"
-#~ msgstr "Decrement number at cursor"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Join selected lines"
-#~ msgstr "Join selected lines"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Sort selected lines"
-#~ msgstr "Sort selected lines"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Show completion window"
-#~ msgstr "Show completion window"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle opacity of completion window"
-#~ msgstr "Toggle opacity of completion window"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle overwrite"
-#~ msgstr "Toggle overwrite"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Reindent line"
-#~ msgstr "Reindent line"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename symbol"
-#~ msgstr "Rename symbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Requires semantic language support"
-#~ msgstr "Requires semantic language support"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Comment code"
-#~ msgstr "Comment code"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Uncomment code"
-#~ msgstr "Uncomment code"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Beautify selected code"
-#~ msgstr "Beautify selected code"
-
-#~ msgctxt "shortcut window"
-#~ msgid "(LSP only) Format selected code or whole document"
-#~ msgstr "(LSP only) Format selected code or whole document"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to next error in file"
-#~ msgstr "Move to next error in file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to previous error in file"
-#~ msgstr "Move to previous error in file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Jump to definition of symbol"
-#~ msgstr "Jump to definition of symbol"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport up within the file"
-#~ msgstr "Move viewport up within the file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport down within the file"
-#~ msgstr "Move viewport down within the file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to end of file"
-#~ msgstr "Move viewport to end of file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move viewport to beginning of file"
-#~ msgstr "Move viewport to beginning of file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move to matching bracket"
-#~ msgstr "Move to matching bracket"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Select all"
-#~ msgstr "Select all"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Unselect all"
-#~ msgstr "Unselect all"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build and Run"
-#~ msgstr "Build and Run"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Build"
-#~ msgstr "Build"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rebuild"
-#~ msgstr "Rebuild"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Run"
-#~ msgstr "Run"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Profile"
-#~ msgstr "Profile"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Terminal Shortcuts"
-#~ msgstr "Terminal Shortcuts"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Search"
-#~ msgstr "Search"
-
-#~ msgid "_Undo"
-#~ msgstr "_Undo"
-
-#~ msgid "_Redo"
-#~ msgstr "_Redo"
-
-#~ msgid "C_ut"
-#~ msgstr "C_ut"
-
-#~ msgid "_Delete"
-#~ msgstr "_Delete"
-
-#~ msgid "_Highlighting"
-#~ msgstr "_Highlighting"
-
-#~ msgid "_Zoom"
-#~ msgstr "_Zoom"
-
-#~ msgid "Zoom _In"
-#~ msgstr "Zoom _In"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "Zoom _Out"
-
-#, c-format
-#~ msgid "Insert “%s”"
-#~ msgstr "Insert “%s”"
-
-#, c-format
-#~ msgid "Replace “%s” with “%s”"
-#~ msgstr "Replace “%s” with “%s”"
-
-#~ msgid "Apply Fix-It"
-#~ msgstr "Apply Fix-It"
-
-#, c-format
-#~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
-#~ msgstr "<b>%s</b> — <small>Line %u, Column %u</small>"
-
-#~ msgid "Requested runtime is not installed"
-#~ msgstr "Requested runtime is not installed"
-
-#, c-format
-#~ msgid "Failed to create shell within runtime “%s”"
-#~ msgstr "Failed to create shell within runtime “%s”"
-
-#~ msgid "Regex"
-#~ msgstr "Regex"
-
-#~ msgid "Match whole word"
-#~ msgstr "Match whole word"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-#~ msgstr ""
-#~ "Beautifier plug-in: error copying the gresource config file for “%s”: %s"
-
-#, c-format
-#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
-#~ msgstr "Beautifier plug-in: error creating temporary config file for “%s”"
-
-#, c-format
-#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
-#~ msgstr "Beautifier plug-in: Can’t read .ini file: %s"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
-#~ "“%s” disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: neither command nor command-pattern keys found: entry "
-#~ "“%s” disabled"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: both command and command-pattern keys found: entry "
-#~ "“%s” disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: both command and command-pattern keys found: entry "
-#~ "“%s” disabled"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: config path “%s” does not exist, entry “%s” disabled"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: command key out of possible values: entry “%s” "
-#~ "disabled"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
-#~ "set: entry “%s” disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: @c@ in “%s” command-pattern key but no config file "
-#~ "set: entry “%s” disabled"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
-#~ "disabled"
-#~ msgstr ""
-#~ "Beautifier plug-in: can’t create temporary file for “%s”: entry “%s” "
-#~ "disabled"
-
-#, c-format
-#~ msgid "Beautifier plugin: “%s”"
-#~ msgstr "Beautifier plug-in: “%s”"
-
-#, c-format
-#~ msgid "Beautifier plugin: %s"
-#~ msgstr "Beautifier plug-in: %s"
-
-#, c-format
-#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-#~ msgstr "Beautifier plug-in: can’t read the following resource file: “%s”"
-
-#~ msgid "beautifier program missing, you must install it: "
-#~ msgstr "beautifier program missing, you must install it: "
-
-#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
-#~ msgstr "Beautifier plug-in: the view is not a GtkSourceView"
-
-#~ msgid "Beautifier Plugin: no default beautifier found"
-#~ msgstr "Beautifier plug-in: no default beautifier found"
-
-#~ msgid "Beautifier Plugin: the buffer is not writable"
-#~ msgstr "Beautifier plug-in: the buffer is not writable"
-
-#~ msgid "Beautifier Plugin: Nothing selected"
-#~ msgstr "Beautifier plug-in: Nothing selected"
-
-#, c-format
-#~ msgid "No beautifier available for “%s”"
-#~ msgstr "No beautifier available for “%s”"
-
-#, c-format
-#~ msgid "No beautifier available"
-#~ msgstr "No beautifier available"
-
-#~ msgid "Beautify the code"
-#~ msgstr "Beautify the code"
-
-#~ msgid "Trigger the default entry"
-#~ msgstr "Trigger the default entry"
-
-#, c-format
-#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
-#~ msgstr "Beautifier plug-in: no valid entries, disabling: %s"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-#~ "temporary directory: “%s”"
-#~ msgstr ""
-#~ "Beautifier plug-in: blocked attempt to remove a file outside of the “%s” "
-#~ "temporary directory: “%s”"
-
-#, c-format
-#~ msgid ""
-#~ "Beautifier plugin: command error output:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Beautifier plug-in: command error output:\n"
-#~ "%s"
-
-#~ msgid "Beautifier plugin: the command output is empty"
-#~ msgstr "Beautifier plug-in: the command output is empty"
-
-#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
-#~ msgstr "Beautify plug-in: the output is not a valid UTF-8 text"
-
-#~ msgid "_Beautify"
-#~ msgstr "_Beautify"
-
-#~ msgid "Select a build configuration from the sidebar to modify."
-#~ msgstr "Select a build configuration from the sidebar to modify."
-
-#~ msgid "All Runtimes"
-#~ msgstr "All Runtimes"
-
-#~ msgid "Select this configuration as the active configuration."
-#~ msgstr "Select this configuration as the active configuration."
-
-#~ msgid ""
-#~ "Duplicating the configuration allows making changes without modifying "
-#~ "this configuration."
-#~ msgstr ""
-#~ "Duplicating the configuration allows making changes without modifying "
-#~ "this configuration."
-
-#~ msgid "_Remove"
-#~ msgstr "_Remove"
-
-#~ msgid "Removes the configuration and cannot be undone."
-#~ msgstr "Removes the configuration and cannot be undone."
-
-#~ msgid "Runtime Environment"
-#~ msgstr "Runtime Environment"
-
-#~ msgid "Configure build preferences"
-#~ msgstr "Configure build preferences"
-
-#~ msgid "View build console contents"
-#~ msgstr "View build console contents"
-
-#~ msgid "True"
-#~ msgstr "True"
-
-#~ msgid "Build pipeline is empty"
-#~ msgstr "Build pipeline is empty"
-
-#~ msgid "Build Preferences"
-#~ msgstr "Build Preferences"
-
-#~ msgid "R_ebuild"
-#~ msgstr "R_ebuild"
-
-#~ msgid "_Run"
-#~ msgstr "_Run"
-
-#~ msgid "R_un With…"
-#~ msgstr "R_un With…"
-
-#~ msgid "Show errors and warnings provided by Clang"
-#~ msgstr "Show errors and warnings provided by Clang"
-
-#~ msgid "clang diagnostics warnings errors"
-#~ msgstr "clang diagnostics warnings errors"
-
-#~ msgid "Suggest completions using Clang"
-#~ msgstr "Suggest completions using Clang"
-
-#~ msgid "Use Clang to suggest completions for C and C++ languages"
-#~ msgstr "Use Clang to suggest completions for C and C++ languages"
-
-#~ msgid "Clang Options"
-#~ msgstr "Clang Options"
-
-#~ msgid "Palette name"
-#~ msgstr "Palette name"
-
-#~ msgid "Enter a new name for the palette"
-#~ msgstr "Enter a new name for the palette"
-
-#, c-format
-#~ msgid "Save changes to palette “%s” before closing?"
-#~ msgstr "Save changes to palette “%s” before closing?"
-
-#~ msgid "Close without Saving"
-#~ msgstr "Close without Saving"
-
-#~ msgid "Save As…"
-#~ msgstr "Save As…"
-
-#~ msgid "Load palette"
-#~ msgstr "Load palette"
-
-#~ msgid "All files"
-#~ msgstr "All files"
-
-#~ msgid "All supported palettes formats"
-#~ msgstr "All supported palettes formats"
-
-#~ msgid "GIMP palette"
-#~ msgstr "GIMP palette"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME Builder palette"
-
-#~ msgid "HSV visibility"
-#~ msgstr "HSV visibility"
-
-#~ msgid "If the HSV components are visible."
-#~ msgstr "If the HSV components are visible."
-
-#~ msgid "LAB visibility"
-#~ msgstr "LAB visibility"
-
-#~ msgid "If the LAB components are visible."
-#~ msgstr "If the LAB components are visible."
-
-#~ msgid "RGB visibility"
-#~ msgstr "RGB visibility"
-
-#~ msgid "If the RGB components are visible."
-#~ msgstr "If the RGB components are visible."
-
-#~ msgid "RGB unit"
-#~ msgstr "RGB unit"
-
-#~ msgid "The unit used by RGB component and strings."
-#~ msgstr "The unit used by RGB component and strings."
-
-#~ msgid "Selected palette ID"
-#~ msgstr "Selected palette ID"
-
-#~ msgid "The selected palette ID among the loaded ones."
-#~ msgstr "The selected palette ID among the loaded ones."
-
-#~ msgid "Color strings visibility"
-#~ msgstr "Colour strings visibility"
-
-#~ msgid "The visible color strings."
-#~ msgstr "The visible colour strings."
-
-#~ msgid "Color filter"
-#~ msgstr "Colour filter"
-
-#~ msgid "The filter used on the color scales and color plane."
-#~ msgstr "The filter used on the colour scales and colour plane."
-
-#~ msgid "Color components"
-#~ msgstr "Colour components"
-
-#~ msgid "Visibility:"
-#~ msgstr "Visibility:"
-
-#~ msgid ""
-#~ "Select the color spaces for which you want to see sliders in the panel."
-#~ msgstr ""
-#~ "Select the colour spaces for which you want to see sliders in the panel."
-
-#~ msgid "HSV"
-#~ msgstr "HSV"
-
-#~ msgid "Hue Saturation Value"
-#~ msgstr "Hue Saturation Value"
-
-#~ msgid "L*a*b*"
-#~ msgstr "L*a*b*"
-
-#~ msgid "CIE L*a*b* 1976"
-#~ msgstr "CIE L*a*b* 1976"
-
-#~ msgid "Red Green Blue"
-#~ msgstr "Red Green Blue"
-
-#~ msgid "Units:"
-#~ msgstr "Units:"
-
-#~ msgid ""
-#~ "Select the type of unit you want to use for RGB components and strings in "
-#~ "the panel."
-#~ msgstr ""
-#~ "Select the type of unit you want to use for RGB components and strings in "
-#~ "the panel."
-
-#~ msgid "Percent"
-#~ msgstr "Percent"
-
-#~ msgid "Select a filter that act on the colors or “None”."
-#~ msgstr "Select a filter that act on the colours or “None”."
-
-#~ msgid "Achromatopsia (monochromacy)"
-#~ msgstr "Achromatopsia (monochromacy)"
-
-#~ msgid "Achromatomaly (blue cone monochromacy)"
-#~ msgstr "Achromatomaly (blue cone monochromacy)"
-
-#~ msgid "Deuteranopia (green-blind)"
-#~ msgstr "Deuteranopia (green-blind)"
-
-#~ msgid "Deuteranomaly (green-weak)"
-#~ msgstr "Deuteranomaly (green-weak)"
-
-#~ msgid "Protanopia (red-blind)"
-#~ msgstr "Protanopia (red-blind)"
-
-#~ msgid "Protanomaly (red-weak)"
-#~ msgstr "Protanomaly (red-weak)"
-
-#~ msgid "Tritanopia (blue-blind)"
-#~ msgstr "Tritanopia (blue-blind)"
-
-#~ msgid "Tritanomaly (blue-weak)"
-#~ msgstr "Tritanomaly (blue-weak)"
-
-#~ msgid "Select the color strings you want to see in the panel."
-#~ msgstr "Select the colour strings you want to see in the panel."
-
-#~ msgid "Palettes options"
-#~ msgstr "Palettes options"
-
-#~ msgid "Palette view mode:"
-#~ msgstr "Palette view mode:"
-
-#~ msgid "List"
-#~ msgstr "List"
-
-#~ msgid "Swatches"
-#~ msgstr "Swatches"
-
-#~ msgid "Load"
-#~ msgstr "Load"
-
-#~ msgid "From current document"
-#~ msgstr "From current document"
-
-#~ msgid "Select the palette you want to see in the panel or close one."
-#~ msgstr "Select the palette you want to see in the panel or close one."
-
-#~ msgid "No loaded palettes"
-#~ msgstr "No loaded palettes"
-
-#~ msgid "No selected palettes"
-#~ msgstr "No selected palettes"
-
-#~ msgid "Select a palette file"
-#~ msgstr "Select a palette file"
-
-#~ msgid "Try loading or generating a palette using the menu"
-#~ msgstr "Try loading or generating a palette using the menu"
-
-#~ msgid "Highlight _colors"
-#~ msgstr "Highlight _colours"
-
-#~ msgid "Workspace Shortcuts"
-#~ msgstr "Workspace Shortcuts"
-
-#~ msgid "Command Bar"
-#~ msgstr "Command Bar"
-
-#~ msgid "Show the workspace command bar"
-#~ msgstr "Show the workspace command bar"
-
-#~ msgid "Comment the code"
-#~ msgstr "Comment the code"
-
-#~ msgid "Uncomment the code"
-#~ msgstr "Uncomment the code"
-
-#~ msgid ""
-#~ "When saving a file Builder will automatically update copyright "
-#~ "information for you"
-#~ msgstr ""
-#~ "When saving a file Builder will automatically update copyright "
-#~ "information for you"
-
-#~ msgid "update copyright save"
-#~ msgstr "update copyright save"
-
-#~ msgid ""
-#~ "Characters were used which might cause technical issues as a project name"
-#~ msgstr ""
-#~ "Characters were used which might cause technical issues as a project name"
-
-#~ msgid "Directory already exists with that name"
-#~ msgstr "Directory already exists with that name"
-
-#, c-format
-#~ msgid "Your project will be created within %s."
-#~ msgstr "Your project will be created within %s."
-
-#~ msgid "Application ID is not valid."
-#~ msgstr "Application ID is not valid."
-
-#~ msgctxt "title"
-#~ msgid "Start New Project"
-#~ msgstr "Start New Project"
-
-#~ msgid "GPLv3+"
-#~ msgstr "GPLv3+"
-
-#~ msgid "LGPLv3+"
-#~ msgstr "LGPLv3+"
-
-#~ msgid "AGPLv3+"
-#~ msgstr "AGPLv3+"
-
-#~ msgid "MIT/X11"
-#~ msgstr "MIT/X11"
-
-#~ msgid "Apache 2.0"
-#~ msgstr "Apache 2.0"
-
-#~ msgid "GPLv2+"
-#~ msgstr "GPLv2+"
-
-#~ msgid "LGPLv2.1+"
-#~ msgstr "LGPLv2.1+"
-
-#~ msgid "Uses the Git version control system"
-#~ msgstr "Uses the Git version control system"
-
-#~ msgid "Suggest completions using Ctags"
-#~ msgstr "Suggest completions using Ctags"
-
-#~ msgid "Use Ctags to suggest completions for a variety of languages"
-#~ msgstr "Use Ctags to suggest completions for a variety of languages"
-
-#~ msgid "Run with _Debugger"
-#~ msgstr "Run with _Debugger"
-
-#~ msgid "Failed to start the debugger"
-#~ msgstr "Failed to start the debugger"
-
-#~ msgid "Devhelp"
-#~ msgstr "Devhelp"
-
-#~ msgid "_Select Documentation…"
-#~ msgstr "_Select Documentation…"
-
-#~ msgid "Reveal search bar with Ctrl+F"
-#~ msgstr "Reveal search bar with Ctrl+F"
-
-#~ msgid "Close search bar (Escape key)"
-#~ msgstr "Close search bar (Escape key)"
-
-#~ msgid "Object Path"
-#~ msgstr "Object Path"
-
-#~ msgid "Method"
-#~ msgstr "Method"
-
-#~ msgid "Result"
-#~ msgstr "Result"
-
-#~ msgid "Elapsed Time"
-#~ msgstr "Elapsed Time"
-
-#~ msgid "Bus Address"
-#~ msgstr "Bus Address"
-
-#~ msgid "Owner"
-#~ msgstr "Owner"
-
-#~ msgid "Process ID"
-#~ msgstr "Process ID"
-
-#, c-format
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "Activatable"
-#~ msgstr "Activatable"
-
-#~ msgid "Yes"
-#~ msgstr "Yes"
-
-#~ msgid "No"
-#~ msgstr "No"
-
-#, c-format
-#~ msgid "%s: %u"
-#~ msgstr "%s: %u"
-
-#~ msgid "PID"
-#~ msgstr "PID"
-
-#~ msgid "read/write"
-#~ msgstr "read/write"
-
-#~ msgid "write-only"
-#~ msgstr "write-only"
-
-#~ msgid "read-only"
-#~ msgstr "read-only"
-
-#~ msgid "Interfaces"
-#~ msgstr "Interfaces"
-
-#~ msgid "Methods"
-#~ msgstr "Methods"
-
-#~ msgid "Properties"
-#~ msgstr "Properties"
-
-#, c-format
-#~ msgid "Array of [%s]"
-#~ msgstr "Array of [%s]"
-
-#~ msgid "Access Denied by Peer"
-#~ msgstr "Access Denied by Peer"
-
-#~ msgid "Authentication Failed"
-#~ msgstr "Authentication Failed"
-
-#~ msgid "Operation Timed Out"
-#~ msgstr "Operation Timed Out"
-
-#~ msgid "Connect"
-#~ msgstr "Connect"
-
-#~ msgid "Provide the address of the message bus"
-#~ msgstr "Provide the address of the message bus"
-
-#~ msgid "Connect to Other Bus"
-#~ msgstr "Connect to Other Bus"
-
-#~ msgid "Bus Names"
-#~ msgstr "Bus Names"
-
-#~ msgid "Select a Bus Name"
-#~ msgstr "Select a Bus Name"
-
-#~ msgid "Select a bus name to introspect the peer."
-#~ msgstr "Select a bus name to introspect the peer."
-
-#~ msgid "There is a file with unsaved changes. Save changes before closing?"
-#~ msgid_plural ""
-#~ "There are files with unsaved changes. Save changes before closing?"
-#~ msgstr[0] ""
-#~ "There is a file with unsaved changes. Save changes before closing?"
-#~ msgstr[1] ""
-#~ "There are files with unsaved changes. Save changes before closing?"
-
-#~ msgid "Select the files to save:"
-#~ msgstr "Select the files to save:"
-
-#~ msgid ""
-#~ "If you close without saving, all your changes will be permanently lost."
-#~ msgstr ""
-#~ "If you close without saving, all your changes will be permanently lost."
-
-#, c-format
-#~ msgid "Provide a number between 1 and %u"
-#~ msgstr "Provide a number between 1 and %u"
-
-#~ msgid "Go to line number"
-#~ msgstr "Go to line number"
-
-#~ msgid "Move Page Left"
-#~ msgstr "Move Page Left"
-
-#~ msgid "Move Page Right"
-#~ msgstr "Move Page Right"
-
-#~ msgid "Emacs"
-#~ msgstr "Emacs"
-
-#~ msgid "Emulates the Emacs text editor"
-#~ msgstr "Emulates the Emacs text editor"
-
-#~ msgid "ESlint"
-#~ msgstr "ESlint"
-
-#~ msgid "Enable the use of ESLint, which may execute code in your project"
-#~ msgstr "Enable the use of ESLint, which may execute code in your project"
-
-#~ msgid "eslint javascript lint code execute execution"
-#~ msgstr "eslint javascript lint code execute execution"
-
-#~ msgid ""
-#~ "Enable the use of eslint to find additional diagnostics in JavaScript "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Enable the use of eslint to find additional diagnostics in JavaScript "
-#~ "files. This may result in the execution of code in your project."
-
-#, c-format
-#~ msgid "%s <b>%s</b>"
-#~ msgstr "%s <b>%s</b>"
-
-#, c-format
-#~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-#~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-
-#~ msgid "_Select Widget…"
-#~ msgstr "_Select Widget…"
-
-#~ msgid "_View Design"
-#~ msgstr "_View Design"
-
-#~ msgid "Switch to UI designer"
-#~ msgstr "Switch to UI designer"
-
-#~ msgid "Designer"
-#~ msgstr "Designer"
-
-#~ msgid "Save the interface design"
-#~ msgstr "Save the interface design"
-
-#~ msgid "Preview the interface design"
-#~ msgstr "Preview the interface design"
-
-#~ msgid "Undo the last command"
-#~ msgstr "Undo the last command"
-
-#~ msgid "Redo the next command"
-#~ msgstr "Redo the next command"
-
-#~ msgid "Switch to drag-resize mode"
-#~ msgstr "Switch to drag-resize mode"
-
-#~ msgid "Switch to alignment editor"
-#~ msgstr "Switch to alignment editor"
-
-#~ msgid "Unnamed Glade project"
-#~ msgstr "Unnamed Glade project"
-
-#~ msgid "Unnamed Glade Project"
-#~ msgstr "Unnamed Glade Project"
-
-#~ msgid "Widget specific properties"
-#~ msgstr "Widget specific properties"
-
-#~ msgid "Container child properties"
-#~ msgstr "Container child properties"
-
-#~ msgid "Styling, alignment, and other common properties"
-#~ msgstr "Styling, alignment, and other common properties"
-
-#~ msgid "Glade"
-#~ msgstr "Glade"
-
-#~ msgid "Open _Preview"
-#~ msgstr "Open _Preview"
-
-#~ msgid "Cut"
-#~ msgstr "Cut"
-
-#~ msgid "Paste"
-#~ msgstr "Paste"
-
-#~ msgid "Redo"
-#~ msgstr "Redo"
-
-#~ msgid "UI Designer"
-#~ msgstr "UI Designer"
-
-#~ msgid "_UI Designer"
-#~ msgstr "_UI Designer"
-
-#~ msgid "Code assistance requires a local file."
-#~ msgstr "Code assistance requires a local file."
-
-#~ msgid "Pylint"
-#~ msgstr "Pylint"
-
-#~ msgid "Enable the use of pylint, which may execute code in your project"
-#~ msgstr "Enable the use of pylint, which may execute code in your project"
-
-#~ msgid "pylint python lint code execute execution"
-#~ msgstr "pylint python lint code execute execution"
-
-#~ msgid "No language specified"
-#~ msgstr "No language specified"
-
-#~ msgid "Enable Pylint"
-#~ msgstr "Enable Pylint"
-
-#~ msgid ""
-#~ "Enable the use of pylint to find additional diagnostics in Python "
-#~ "programs. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Enable the use of pylint to find additional diagnostics in Python "
-#~ "programs. This may result in the execution of code in your project."
-
-#~ msgid "Gradle Wrapper"
-#~ msgstr "Gradle Wrapper"
-
-#~ msgid "Quit"
-#~ msgstr "Quit"
-
-#~ msgid "Show Find in Project panel"
-#~ msgstr "Show Find in Project panel"
-
-#~ msgid "R_ecursive"
-#~ msgstr "R_ecursive"
-
-#~ msgid "Match _Case"
-#~ msgstr "Match _Case"
-
-#~ msgid "Match _Words"
-#~ msgstr "Match _Words"
-
-#~ msgid "Your computer is missing python3-docutils"
-#~ msgstr "Your computer is missing python3-docutils"
-
-#~ msgid ""
-#~ "This package is necessary to provide previews of markup-based documents."
-#~ msgstr ""
-#~ "This package is necessary to provide previews of markup-based documents."
-
-#~ msgid "Install Package"
-#~ msgstr "Install Package"
-
-#~ msgid "Your computer is missing python3-sphinx"
-#~ msgstr "Your computer is missing python3-sphinx"
-
-#~ msgid "Indexing php code…"
-#~ msgstr "Indexing php code…"
-
-#, c-format
-#~ msgid "%s — Directory"
-#~ msgstr "%s — Directory"
-
-#~ msgid "_Browse Folder"
-#~ msgstr "_Browse Folder"
-
-#~ msgid "GTK Application (Legacy)"
-#~ msgstr "GTK Application (Legacy)"
-
-#~ msgid "Create a GTK application with GTK 3"
-#~ msgstr "Create a GTK application with GTK 3"
-
-#~ msgid "Create a GTK application"
-#~ msgstr "Create a GTK application"
-
-#~ msgid "Create a GNOME application"
-#~ msgstr "Create a GNOME application"
-
-#~ msgid "Create a new empty project"
-#~ msgstr "Create a new empty project"
-
-#~ msgid "Create a new command line project"
-#~ msgstr "Create a new command line project"
-
-#~ msgid "Meson Options"
-#~ msgstr "Meson Options"
-
-#~ msgid "Add toolchain"
-#~ msgstr "Add toolchain"
-
-#~ msgid "Define a new custom toolchain targeting a specific platform"
-#~ msgstr "Define a new custom toolchain targeting a specific platform"
-
-#~ msgid "Open in _Terminal"
-#~ msgstr "Open in _Terminal"
-
-#~ msgid "Reveal File in Project _Tree"
-#~ msgstr "Reveal File in Project _Tree"
-
-#~ msgid "Words matching selection"
-#~ msgstr "Words matching selection"
-
-#~ msgid "Highlight all occurrences of words matching the current selection"
-#~ msgstr "Highlight all occurrences of words matching the current selection"
-
-#~ msgid "quick highlight words matching current selection"
-#~ msgstr "quick highlight words matching current selection"
-
-#~ msgid "Highlight words matching at least this number of characters"
-#~ msgstr "Highlight words matching at least this number of characters"
-
-#~ msgid "quick highlight words matching current selection minimum length"
-#~ msgstr "quick highlight words matching current selection minimum length"
-
-#~ msgid "Rust Analyzer: Cargo command for diagnostics"
-#~ msgstr "Rust Analyser: Cargo command for diagnostics"
-
-#~ msgid ""
-#~ "clippy adds additional lints to catch common mistakes but is in general "
-#~ "slower"
-#~ msgstr ""
-#~ "clippy adds additional lints to catch common mistakes but is in general "
-#~ "slower"
-
-#~ msgid "Shell command"
-#~ msgstr "Shell command"
-
-#~ msgid ""
-#~ "Cannot spawn terminal in runtime environment because build pipeline is "
-#~ "not initialized"
-#~ msgstr ""
-#~ "Cannot spawn terminal in runtime environment because build pipeline is "
-#~ "not initialised"
-
-#~ msgid "Cannot spawn process because build pipeline is not yet available"
-#~ msgstr "Cannot spawn process because build pipeline is not yet available"
-
-#~ msgid "Title"
-#~ msgstr "Title"
-
-#~ msgid ""
-#~ "The command will be executed using a shell like “/bin/sh -c\". You may "
-#~ "use variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
-#~ "automatically set for the command."
-#~ msgstr ""
-#~ "The command will be executed using a shell like “/bin/sh -c\". You may "
-#~ "use variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
-#~ "automatically set for the command."
-
-#~ msgid "On Host"
-#~ msgstr "On Host"
-
-#~ msgid "In Build Environment"
-#~ msgstr "In Build Environment"
-
-#~ msgid "In Runtime Environment"
-#~ msgstr "In Runtime Environment"
-
-#~ msgid ""
-#~ "If the directory is not an absolute-path, it will be relative to the "
-#~ "source or build directory depending on the command locality."
-#~ msgstr ""
-#~ "If the directory is not an absolute-path, it will be relative to the "
-#~ "source or build directory depending on the command locality."
-
-#~ msgid "Close on Exit"
-#~ msgstr "Close on Exit"
-
-#~ msgid "If enabled, the terminal page will close after the command executes."
-#~ msgstr ""
-#~ "If enabled, the terminal page will close after the command executes."
-
-#~ msgid "Run in host environment"
-#~ msgstr "Run in host environment"
-
-#~ msgid "New command"
-#~ msgstr "New command"
-
-#~ msgid "Click + to add an external command"
-#~ msgstr "Click + to add an external command"
-
-#~ msgid "External Commands"
-#~ msgstr "External Commands"
-
-#, c-format
-#~ msgid "Failed to parse snippet “%s”"
-#~ msgstr "Failed to parse snippet “%s”"
-
-#~ msgid "Show the spellchecker panel"
-#~ msgstr "Show the spellchecker panel"
-
-#~ msgid "Failed to initialize spellchecking, disabling"
-#~ msgstr "Failed to initialise spellchecking, disabling"
-
-#~ msgid "No language selected"
-#~ msgstr "No language selected"
-
-#~ msgid "No language set. Check your dictionary installation."
-#~ msgstr "No language set. Check your dictionary installation."
-
-#~ msgid "No suggestions"
-#~ msgstr "No suggestions"
-
-#~ msgid "Completed spell checking"
-#~ msgstr "Completed spell checking"
-
-#~ msgid "This word is already in the personal dictionary"
-#~ msgstr "This word is already in the personal dictionary"
-
-#, c-format
-#~ msgid "This word is already in the %s dictionary"
-#~ msgstr "This word is already in the %s dictionary"
-
-#~ msgid "Misspelled"
-#~ msgstr "Misspelt"
-
-#~ msgid "Ignore _All"
-#~ msgstr "Ignore _All"
-
-#~ msgid "Change _to"
-#~ msgstr "Change _to"
-
-#~ msgid "Cha_nge"
-#~ msgstr "Cha_nge"
-
-#~ msgid "Change A_ll"
-#~ msgstr "Change A_ll"
-
-#~ msgid "_Suggestions"
-#~ msgstr "_Suggestions"
-
-#~ msgid "Add Word"
-#~ msgstr "Add Word"
-
-#~ msgid "A_dd"
-#~ msgstr "A_dd"
-
-#~ msgid "_Language"
-#~ msgstr "_Language"
-
-#~ msgid "_Underline misspelled words"
-#~ msgstr "_Underline misspelt words"
-
-#~ msgid "Enable Stylelint"
-#~ msgstr "Enable Stylelint"
-
-#~ msgid ""
-#~ "Enable the use of stylelint to find additional diagnostics in stylesheet "
-#~ "files. This may result in the execution of code in your project."
-#~ msgstr ""
-#~ "Enable the use of stylelint to find additional diagnostics in stylesheet "
-#~ "files. This may result in the execution of code in your project."
-
-#~ msgid "Stylelint"
-#~ msgstr "Stylelint"
-
-#~ msgid "Enable the use of Stylelint, which may execute code in your project"
-#~ msgstr "Enable the use of Stylelint, which may execute code in your project"
-
-#~ msgid "stylelint stylesheet lint code execute execution"
-#~ msgstr "stylelint stylesheet lint code execute execution"
-
-#~ msgid "Emulates the Sublime Text editor"
-#~ msgstr "Emulates the Sublime Text editor"
-
-#~ msgid "Generate Support Log"
-#~ msgstr "Generate Support Log"
-
-#, c-format
-#~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file "
-#~ "as an attachment on your bug report or support request."
-#~ msgstr ""
-#~ "The support log file has been written to “%s”. Please provide this file "
-#~ "as an attachment on your bug report or support request."
-
-#~ msgid "Search symbols within document"
-#~ msgstr "Search symbols within document"
-
-#~ msgid "Symbol"
-#~ msgstr "Symbol"
-
-#~ msgid "Document Outline"
-#~ msgstr "Document Outline"
-
-#~ msgid "_Document Outline"
-#~ msgstr "_Document Outline"
-
-#~ msgid "Add sysroot"
-#~ msgstr "Add sysroot"
-
-#~ msgid "Define a new sysroot target to build against a different target"
-#~ msgstr "Define a new sysroot target to build against a different target"
-
-#~ msgid "Sysroots"
-#~ msgstr "Sysroots"
-
-#~ msgid "An absolute file-system path to the sysroot."
-#~ msgstr "An absolute file-system path to the sysroot."
-
-#~ msgid "Package Config Path"
-#~ msgstr "Package Config Path"
-
-#~ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
-#~ msgstr "An optional comma-separated path to specify PKG_CONFIG_PATH."
-
-#, c-format
-#~ msgid "%s (Sysroot SDK)"
-#~ msgstr "%s (Sysroot SDK)"
-
-#~ msgid "Use terminal interface"
-#~ msgstr "Use terminal interface"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal font monospace"
-#~ msgstr "terminal font monospace"
-
-#~ msgid "Bold text in terminals"
-#~ msgstr "Bold text in terminals"
-
-#~ msgid "If terminals are allowed to display bold text"
-#~ msgstr "If terminals are allowed to display bold text"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal allow bold"
-#~ msgstr "terminal allow bold"
-
-#~ msgid ""
-#~ "When enabled hyperlinks (OSC 8 escape sequences) are recognized and "
-#~ "displayed"
-#~ msgstr ""
-#~ "When enabled hyperlinks (OSC 8 escape sequences) are recognised and "
-#~ "displayed"
-
-#~ msgctxt "Keywords"
-#~ msgid "terminal show hyperlinks links urls"
-#~ msgstr "terminal show hyperlinks links urls"
-
-#~ msgid ""
-#~ "When enabled the terminal will scroll to the bottom when new output is "
-#~ "displayed"
-#~ msgstr ""
-#~ "When enabled the terminal will scroll to the bottom when new output is "
-#~ "displayed"
-
-#~ msgctxt "Keywords"
-#~ msgid "scroll on output"
-#~ msgstr "scroll on output"
-
-#~ msgid "Scroll on keystroke"
-#~ msgstr "Scroll on keystroke"
-
-#~ msgid "When enabled the terminal will scroll to the bottom when typing"
-#~ msgstr "When enabled the terminal will scroll to the bottom when typing"
-
-#~ msgctxt "Keywords"
-#~ msgid "scroll on keystroke"
-#~ msgstr "scroll on keystroke"
-
-#~ msgid ""
-#~ "When enabled terminal scrollback will be limited to the number of lines "
-#~ "specified below"
-#~ msgstr ""
-#~ "When enabled terminal scrollback will be limited to the number of lines "
-#~ "specified below"
-
-#~ msgctxt "Keywords"
-#~ msgid "scrollback limit"
-#~ msgstr "scrollback limit"
-
-#~ msgid "Scrollback Lines"
-#~ msgstr "Scrollback Lines"
-
-#~ msgid "The number of lines to keep available for scrolling"
-#~ msgstr "The number of lines to keep available for scrolling"
-
-#~ msgctxt "Keywords"
-#~ msgid "scrollback lines"
-#~ msgstr "scrollback lines"
-
-#~ msgid "Terminal in Build Runtime"
-#~ msgstr "Terminal in Build Runtime"
-
-#~ msgid "Terminal in Runtime"
-#~ msgstr "Terminal in Runtime"
-
-#, c-format
-#~ msgid "Running test “%s”…"
-#~ msgstr "Running test “%s”…"
-
-#~ msgid "Please wait while we scan your project"
-#~ msgstr "Please wait while we scan your project"
-
-#~ msgid "Vagrant"
-#~ msgstr "Vagrant"
-
-#, c-format
-#~ msgid "Number required"
-#~ msgstr "Number required"
-
-#, c-format
-#~ msgid "%s is invalid for %s"
-#~ msgstr "%s is invalid for %s"
-
-#, c-format
-#~ msgid "Cannot find language “%s”"
-#~ msgstr "Cannot find language “%s”"
-
-#, c-format
-#~ msgid "This command requires a GtkSourceView to be focused"
-#~ msgstr "This command requires a GtkSourceView to be focused"
-
-#, c-format
-#~ msgid "Unknown option: %s"
-#~ msgstr "Unknown option: %s"
-
-#, c-format
-#~ msgid "Cannot find colorscheme “%s”"
-#~ msgstr "Cannot find colourscheme “%s”"
-
-#, c-format
-#~ msgid "Failed to locate working directory"
-#~ msgstr "Failed to locate working directory"
-
-#, c-format
-#~ msgid "Invalid :syntax subcommand: %s"
-#~ msgstr "Invalid :syntax subcommand: %s"
-
-#, c-format
-#~ msgid "Invalid search and replace request"
-#~ msgstr "Invalid search and replace request"
-
-#~ msgid "Change the pages colorscheme"
-#~ msgstr "Change the pages colourscheme"
-
-#~ msgid "Clear search highlighting"
-#~ msgstr "Clear search highlighting"
-
-#~ msgid "Open a file by path"
-#~ msgstr "Open a file by path"
-
-#~ msgid "Close the page"
-#~ msgstr "Close the page"
-
-#~ msgid "Set various buffer options"
-#~ msgstr "Set various buffer options"
-
-#~ msgid "Sort the selected lines"
-#~ msgstr "Sort the selected lines"
-
-#~ msgid "Toggle syntax highlighting"
-#~ msgstr "Toggle syntax highlighting"
-
-#~ msgid "Save and close the current page"
-#~ msgstr "Save and close the current page"
-
-#, c-format
-#~ msgid "Not a command: %s"
-#~ msgstr "Not a command: %s"
-
-#~ msgid "Emulates the Vim text editor"
-#~ msgstr "Emulates the Vim text editor"
-
-#~ msgid "Building project…"
-#~ msgstr "Building project…"
-
-#~ msgid "Installing project…"
-#~ msgstr "Installing project…"
-
-#~ msgid ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
-#~ msgstr ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
-
-#~ msgid "Night Mode"
-#~ msgstr "Night Mode"
-
-#~ msgid "Prefer dark application chrome."
-#~ msgstr "Prefer dark application chrome."
-
-#~ msgid "Use GNOME night light setting to activate night-mode."
-#~ msgstr "Use GNOME night light setting to activate night-mode."
-
-#~ msgid "Adwaita Dark"
-#~ msgstr "Adwaita Dark"
-
-#~ msgid "The default color scheme for TextEditor"
-#~ msgstr "The default colour scheme for TextEditor"
-
-#~ msgid "Adwaita"
-#~ msgstr "Adwaita"
-
-#~ msgid "Builder Dark"
-#~ msgstr "Builder Dark"
-
-#~ msgid "Dark color scheme for Builder using the Tango color palette"
-#~ msgstr "Dark colour scheme for Builder using the Tango colour palette"
-
-#~ msgid "Basic"
-#~ msgstr "Basic"
-
-#~ msgid "Themes"
-#~ msgstr "Themes"
-
-#~ msgid "Whether Builder should use a dark theme"
-#~ msgstr "Whether Builder should use a dark theme"
-
-#~ msgid "dark theme"
-#~ msgstr "dark theme"
-
-#~ msgid "follow night light"
-#~ msgstr "follow night light"
-
-#~ msgid "Wrap text that is too wide to display"
-#~ msgstr "Wrap text that is too wide to display"
-
-#~ msgid "Create a GNOME application with GTK 4"
-#~ msgstr "Create a GNOME application with GTK 4"
-
-#~ msgid "Games"
-#~ msgstr "Games"
-
-#~ msgid "Simple game launcher for GNOME"
-#~ msgstr "Simple game launcher for GNOME"
-
-#~ msgid "Save File As"
-#~ msgstr "Save File As"
-
-#~ msgid "Save As"
-#~ msgstr "Save As"
-
-#~ msgid "Subprocess launcher failed"
-#~ msgstr "Subprocess launcher failed"
-
-#~ msgid "true"
-#~ msgstr "true"
-
-#~ msgid "Clone a project using flatpak manifest"
-#~ msgstr "Clone a project using flatpak manifest"
-
-#~ msgid "MANIFEST"
-#~ msgstr "MANIFEST"
-
-#~ msgid "Install"
-#~ msgstr "Install"
-
-#~ msgid "flatpak %s %s %s"
-#~ msgstr "flatpak %s %s %s"
-
-#~ msgid "Show %u more runtime"
-#~ msgid_plural "show %u more runtimes"
-#~ msgstr[0] "Show %u more runtime"
-#~ msgstr[1] "Show %u more runtimes"
-
-#~ msgid "Flatpak Runtimes"
-#~ msgstr "Flatpak Runtimes"
-
-#~ msgid "Updated %s"
-#~ msgstr "Updated %s"
-
-#~ msgid "Updating %s"
-#~ msgstr "Updating %s"
-
-#~ msgid "Installing %s"
-#~ msgstr "Installing %s"
-
-#~ msgid "Failed to install runtime"
-#~ msgstr "Failed to install runtime"
-
-#~ msgid "Runtime has been updated"
-#~ msgstr "Runtime has been updated"
-
-#~ msgid "Runtime has been installed"
-#~ msgstr "Runtime has been installed"
-
-#~ msgid "Missing system dependencies"
-#~ msgstr "Missing system dependencies"
-
-#~ msgid ""
-#~ "The “flatpak-builder” program is necessary for building Flatpak-based "
-#~ "applications. Builder can install it for you."
-#~ msgstr ""
-#~ "The “flatpak-builder” program is necessary for building Flatpak-based "
-#~ "applications. Builder can install it for you."
-
-#~ msgid "Suggest completions from Python"
-#~ msgstr "Suggest completions from Python"
-
-#~ msgid "Use Jedi to provide completions for the Python language"
-#~ msgstr "Use Jedi to provide completions for the Python language"
-
-#~ msgctxt "menu label"
-#~ msgid "Open Sysprof Capture…"
-#~ msgstr "Open Sysprof Capture…"
-
-#~ msgid "Podman"
-#~ msgstr "Podman"
-
-#~ msgid "Your computer is missing the Rust Analyzer Language Server"
-#~ msgstr "Your computer is missing the Rust Analyser Language Server"
-
-#~ msgid ""
-#~ "The Language Server is necessary to provide IDE features like completion "
-#~ "or diagnostic"
-#~ msgstr ""
-#~ "The Language Server is necessary to provide IDE features like completion "
-#~ "or diagnostic"
-
-#~ msgid "Installation of Rust Analyzer finished"
-#~ msgstr "Installation of Rust Analyser finished"
-
-#~ msgid "Installing Rust Analyzer..."
-#~ msgstr "Installing Rust Analyser..."
-
-#~ msgid "Cannot download Rust Analyzer: %s"
-#~ msgstr "Cannot download Rust Analyser: %s"
-
-#~ msgid "Installing rustup"
-#~ msgstr "Installing rustup"
-
-#~ msgid "Updating rustup"
-#~ msgstr "Updating rustup"
-
-#~ msgid "Installing rust "
-#~ msgstr "Installing rust "
-
-#~ msgid "Checking system"
-#~ msgstr "Checking system"
-
-#~ msgid "Downloading rustup-init"
-#~ msgstr "Downloading rustup-init"
-
-#~ msgid "Syncing channel updates"
-#~ msgstr "Syncing channel updates"
-
-#~ msgid "Checking for rustup updates"
-#~ msgstr "Checking for rustup updates"
-
-#~ msgid "Downloading rustup update"
-#~ msgstr "Downloading rustup update"
-
-#~ msgid "Error installing "
-#~ msgstr "Error installing "
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "Cancelled"
-#~ msgstr "Cancelled"
-
-#~ msgid "Finished"
-#~ msgstr "Finished"
-
-#~ msgid "Rustup"
-#~ msgstr "Rustup"
-
-#~ msgid "Rustup Toolchains"
-#~ msgstr "Rustup Toolchains"
-
-#~ msgid "Updating"
-#~ msgstr "Updating"
-
-#~ msgid "Make default"
-#~ msgstr "Make default"
-
-#~ msgid "Makes the selected toolchain the default rust installation"
-#~ msgstr "Makes the selected toolchain the default rust installation"
-
-#~ msgid "Install Rust Channel"
-#~ msgstr "Install Rust Channel"
-
-#~ msgid "Enter name of rust channel"
-#~ msgstr "Enter name of rust channel"
-
-#~ msgid ""
-#~ "Standard release channel toolchain names have the following form:\n"
-#~ "                        <channel>[-<date>][-<host>]\n"
-#~ "\n"
-#~ "                        <channel>    = stable|beta|nightly|<version>\n"
-#~ "                        <date>          = YYYY-MM-DD\n"
-#~ "                        <host>          = <target-triple>"
-#~ msgstr ""
-#~ "Standard release channel toolchain names have the following form:\n"
-#~ "                        <channel>[-<date>][-<host>]\n"
-#~ "\n"
-#~ "                        <channel>    = stable|beta|nightly|<version>\n"
-#~ "                        <date>          = YYYY-MM-DD\n"
-#~ "                        <host>          = <target-triple>"
-
-#~ msgid "Install Rustup to manage toolchains here!"
-#~ msgstr "Install Rustup to manage toolchains here!"
-
-#~ msgid "No toolchain installed. Click"
-#~ msgstr "No toolchain installed. Click"
-
-#~ msgid "to add a new toolchain!"
-#~ msgstr "to add a new toolchain!"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Touchpad gestures"
-#~ msgstr "Touchpad gestures"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the right"
-#~ msgstr "Move page to the right"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe right"
-#~ msgstr "Three finger swipe right"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move page to the left"
-#~ msgstr "Move page to the left"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Three finger swipe left"
-#~ msgstr "Three finger swipe left"
-
-#~ msgid "Directory Browser"
-#~ msgstr "Directory Browser"
-
-#~ msgid "Log"
-#~ msgstr "Log"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle navigation panel"
-#~ msgstr "Toggle navigation panel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle utilities panel"
-#~ msgstr "Toggle utilities panel"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Help"
-#~ msgstr "Help"
-
-#~ msgid "vala diagnostics warnings errors"
-#~ msgstr "vala diagnostics warnings errors"
-
-#~ msgid "Clone Repository…"
-#~ msgstr "Clone Repository…"
-
-#~| msgid "New Workspace…"
-#~ msgid "New Terminal Workspace…"
-#~ msgstr "New Terminal Workspace…"
-
-#~ msgid "org.gnome.Builder"
-#~ msgstr "org.gnome.Builder"
-
-#~ msgid "Press Ctrl+. to search"
-#~ msgstr "Press Ctrl+. to search"
-
-#~ msgid "Open file"
-#~ msgstr "Open file"
-
-#~ msgid "New file"
-#~ msgstr "New file"
-
-#~ msgid ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-#~ msgstr ""
-#~ "There was a failure while calculating line changes from git. The exact "
-#~ "error was: %s"
-
-#~ msgid "File is not under control of git working directory."
-#~ msgstr "File is not under control of git working directory."
-
-#~ msgid "The requested file does not exist within the git index."
-#~ msgstr "The requested file does not exist within the git index."
-
-#~ msgid "Todo"
-#~ msgstr "Todo"
-
-#~ msgid "Task manager for GNOME"
-#~ msgstr "Task manager for GNOME"
-
-#~ msgid "Failure"
-#~ msgstr "Failure"
-
-#~ msgid ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-#~ msgstr ""
-#~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
-#~ "with profiler</a> from the run menu to begin"
-
-#~ msgid "Abstract"
-#~ msgstr "Abstract"
-
-#~ msgid "Compact"
-#~ msgstr "Compact"
-
-#~ msgid "Immutable"
-#~ msgstr "Immutable"
-
-#~ msgid "If enabled, the project tree will display icons next to each item."
-#~ msgstr "If enabled, the project tree will display icons next to each item."
-
-#~ msgid "List available subcommands"
-#~ msgstr "List available subcommands"
-
-#~ msgid "Run Builder in standalone mode"
-#~ msgstr "Run Builder in standalone mode"
-
-#~ msgid "Increase verbosity, may be specified multiple times"
-#~ msgstr "Increase verbosity, may be specified multiple times"
-
-#~ msgid "Enter GApplication Service mode"
-#~ msgstr "Enter GApplication Service mode"
-
-#~ msgid "Opens the project specified by PATH"
-#~ msgstr "Opens the project specified by PATH"
-
-#~ msgid "PATH"
-#~ msgstr "PATH"
-
-#~ msgid "Clones the project specified by MANIFEST"
-#~ msgstr "Clones the project specified by MANIFEST"
-
-#~ msgid "COMMAND"
-#~ msgstr "COMMAND"
-
-#~ msgid "Please provide a command"
-#~ msgstr "Please provide a command"
-
-#~ msgid "No such tool"
-#~ msgstr "No such tool"
-
-#~ msgid "Please provide a worker plugin"
-#~ msgstr "Please provide a worker plugin"
-
-#~ msgid "Please provide a D-Bus address"
-#~ msgstr "Please provide a D-Bus address"
-
-#~ msgid "No such worker"
-#~ msgstr "No such worker"
-
-#~ msgid "Failed to establish a monitor for background changes: %s"
-#~ msgstr "Failed to establish a monitor for background changes: %s"
-
-#~| msgid "Print failed: %s"
-#~ msgid "Buffer failed: %s"
-#~ msgstr "Buffer failed: %s"
-
-#~ msgid "File too large to be opened."
-#~ msgstr "File too large to be opened."
-
-#~ msgid "_Wrap Around"
-#~ msgstr "_Wrap Around"
-
-#~ msgid "Tabs and Indentation"
-#~ msgstr "Tabs and Indentation"
-
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-
-#~ msgid "Click an item to select"
-#~ msgstr "Click an item to select"
-
-#~ msgid "Open…"
-#~ msgstr "Open…"
-
-#~ msgid "Select projects for removal"
-#~ msgstr "Select projects for removal"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Preferences"
-
-#~ msgid "Keyboard _Shortcuts"
-#~ msgstr "Keyboard _Shortcuts"
-
-#~ msgid "_Help"
-#~ msgstr "_Help"
-
-#~ msgid "_About"
-#~ msgstr "_About"
-
-#~ msgid "Save _All"
-#~ msgstr "Save _All"
-
-#~| msgid "Clear _All"
-#~ msgid "Close _All"
-#~ msgstr "Close _All"
-
-#~ msgid "You must call %s() before using libide."
-#~ msgstr "You must call %s() before using libide."
-
-#~ msgid "An unload request is already pending"
-#~ msgstr "An unload request is already pending"
-
-#~| msgid "Context has already been restored."
-#~ msgid "Context already unloading, cannot restore."
-#~ msgstr "Context already unloading, cannot restore."
-
-#~ msgid "No implementations of extension point “%s”."
-#~ msgstr "No implementations of extension point “%s”."
-
-#~ msgid "Failed to locate %s plugin."
-#~ msgstr "Failed to locate %s plugin."
-
-#~ msgid "No such extension point."
-#~ msgstr "No such extension point."
-
-#~ msgid "No implementations of extension point."
-#~ msgstr "No implementations of extension point."
-
-#~ msgid "Tests will be loaded after building."
-#~ msgstr "Tests will be loaded after building."
-
-#~ msgid "Clear _All"
-#~ msgstr "Clear _All"
-
-#~ msgid "Invalid %-encoding in URI"
-#~ msgstr "Invalid %-encoding in URI"
-
-#~ msgid "Non-UTF-8 characters in URI"
-#~ msgstr "Non-UTF-8 characters in URI"
-
-#~ msgid "Invalid IP literal “%s” in URI"
-#~ msgstr "Invalid IP literal “%s” in URI"
-
-#~ msgid "Invalid encoded IP literal “%s” in URI"
-#~ msgstr "Invalid encoded IP literal “%s” in URI"
-
-#~ msgid "Invalid non-ASCII hostname “%s” in URI"
-#~ msgstr "Invalid non-ASCII hostname “%s” in URI"
-
-#~ msgid "Non-ASCII hostname “%s” forbidden in this URI"
-#~ msgstr "Non-ASCII hostname “%s” forbidden in this URI"
-
-#~ msgid "Could not parse port “%s” in URI"
-#~ msgstr "Could not parse port “%s” in URI"
-
-#~ msgid "Port “%s” in URI is out of range"
-#~ msgstr "Port “%s” in URI is out of range"
-
-#~ msgid "Base URI is not absolute"
-#~ msgstr "Base URI is not absolute"
-
-#~ msgid "URI is not absolute, and no base URI was provided"
-#~ msgstr "URI is not absolute, and no base URI was provided"
-
-#~ msgid "Could not parse “%s” as absolute URI"
-#~ msgstr "Could not parse “%s” as absolute URI"
-
-#~ msgid "URI “%s” has no host component"
-#~ msgstr "URI “%s” has no host component"
-
-#~ msgctxt "button"
-#~ msgid "Build"
-#~ msgstr "Build"
-
-#~ msgid "The project cannot be built while the build pipeline is being set up"
-#~ msgstr ""
-#~ "The project cannot be built while the build pipeline is being set up"
-
-#~ msgid "Builder Statistics"
-#~ msgstr "Builder Statistics"
-
-#~ msgid "Transfers"
-#~ msgstr "Transfers"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Trigger a build"
-#~ msgstr "Trigger a build"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Save all files"
-#~ msgstr "Save all files"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Perspectives"
-#~ msgstr "Perspectives"
-
-#~ msgid "Shared Library (Autotools)"
-#~ msgstr "Shared Library (Autotools)"
-
-#~ msgid "Create a new autotools project with a shared library"
-#~ msgstr "Create a new autotools project with a shared library"
-
-#~ msgid "Empty Project (Autotools)"
-#~ msgstr "Empty Project (Autotools)"
-
-#~ msgid "Create a new empty autotools project"
-#~ msgstr "Create a new empty autotools project"
-
-#~ msgid "GNOME Application (Autotools)"
-#~ msgstr "GNOME Application (Autotools)"
-
-#~ msgid "Create a new flatpak-ready GNOME application"
-#~ msgstr "Create a new flatpak-ready GNOME application"
-
-#~ msgid "Command not found: %s"
-#~ msgstr "Command not found: %s"
-
-#~ msgid "Use the entry below to execute a command"
-#~ msgstr "Use the entry below to execute a command"
-
-#~ msgid "New…"
-#~ msgstr "New…"
-
-#~ msgid "Create"
-#~ msgstr "Create"
-
-#~ msgid "List available templates"
-#~ msgstr "List available templates"
-
-#~ msgid "Project template to generate"
-#~ msgstr "Project template to generate"
-
-#~ msgid "The target language (if supported)"
-#~ msgstr "The target language (if supported)"
-
-#~ msgid "The version control to use or “none” to disable"
-#~ msgstr "The version control to use or “none” to disable"
-
-#~ msgid "git"
-#~ msgstr "git"
-
-#~ msgid "create-project [OPTION...] PROJECT_NAME"
-#~ msgstr "create-project [OPTION...] PROJECT_NAME"
-
-#~ msgid "Filename must be ASCII and may not contain : or ="
-#~ msgstr "Filename must be ASCII and may not contain : or ="
-
-#~ msgid "Please specify a project name.\n"
-#~ msgstr "Please specify a project name.\n"
-
-#~ msgid "Please specify a project template with --template=\n"
-#~ msgstr "Please specify a project template with --template=\n"
-
-#~ msgid "Clone App"
-#~ msgstr "Clone App"
-
-#~ msgid "Clone"
-#~ msgstr "Clone"
-
-#~ msgid "Cannot provide diff, no backing file provided."
-#~ msgstr "Cannot provide diff, no backing file provided."
-
-#~ msgid "Remote Branch to Clone"
-#~ msgstr "Remote Branch to Clone"
-
-#~ msgid "Use Git to create a local copy of a remotely hosted project."
-#~ msgstr "Use Git to create a local copy of a remotely hosted project."
-
-#~ msgid "Enter the URL of your project’s source code repository"
-#~ msgstr "Enter the URL of your project’s source code repository"
-
-#~ msgid "Clone…"
-#~ msgstr "Clone…"
-
-#~ msgid "Failed to establish git file monitor: %s"
-#~ msgstr "Failed to establish git file monitor: %s"
-
-#~ msgid "Contribute to an existing project"
-#~ msgstr "Contribute to an existing project"
-
-#~ msgid "Cannot load a non-native file in terminal"
-#~ msgstr "Cannot load a non-native file in terminal"
-
-#~ msgid "Failed to spawn terminal: %s"
-#~ msgstr "Failed to spawn terminal: %s"
-
-#~ msgid "Failed to trash file: %s"
-#~ msgstr "Failed to move file to wastebasket: %s"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Project tree"
-#~ msgstr "Project tree"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Rename a file"
-#~ msgstr "Rename a file"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Move a file to the trash"
-#~ msgstr "Move a file to the wastebasket"
-
-#~ msgid "_New"
-#~ msgstr "_New"
-
-#~ msgid "_Collapse All Nodes"
-#~ msgstr "_Collapse All Nodes"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Refresh"
-
-#~ msgid "Updated"
-#~ msgstr "Updated"
-
-#~ msgid "Canonical"
-#~ msgstr "Canonical"
-
-#~ msgid "System Monitor"
-#~ msgstr "System Monitor"
-
-#~ msgid "Open Profile"
-#~ msgstr "Open Profile"
-
-#~ msgid "Buffer loaded but not in the buffer manager."
-#~ msgstr "Buffer loaded but not in the buffer manager."
-
-#~ msgid "Allow snippets to be inserted into the document."
-#~ msgstr "Allow snippets to be inserted into the document."
-
-#~ msgid "Clang based autocompletion (Experimental)"
-#~ msgstr "Clang based autocompletion (Experimental)"
-
-#~ msgid "Use Clang for autocompletion in the C and C++ languages."
-#~ msgstr "Use Clang for autocompletion in the C and C++ languages."
-
-#~ msgid "Enable auto-completion of words in document"
-#~ msgstr "Enable auto-completion of words in document"
-
-#~ msgid ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-#~ msgstr ""
-#~ "If enabled, words within the current document will be available for auto-"
-#~ "completion."
-
-#~ msgid "Suggest words found in open files"
-#~ msgstr "Suggest words found in open files"
-
-#~ msgid ""
-#~ "Suggests completions as you type based on words found in any open document"
-#~ msgstr ""
-#~ "Suggests completions as you type based on words found in any open document"
-
-#~ msgid "Minimum word size"
-#~ msgstr "Minimum word size"
-
-#~ msgid "Minimum word size for word completion"
-#~ msgstr "Minimum word size for word completion"
-
-#~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-#~ msgstr ""
-#~ "Create and manages a Ctags database for completing class names, "
-#~ "functions, and more"
-
-#~ msgid "Suggest completions using Clang (Experimental)"
-#~ msgstr "Suggest completions using Clang (Experimental)"
-
-#~ msgid "Code snippets"
-#~ msgstr "Code snippets"
-
-#~ msgid "Use code fragments to increase typing efficiency"
-#~ msgstr "Use code fragments to increase typing efficiency"
-
-#~ msgid "Failed to load file: %s: %s"
-#~ msgstr "Failed to load file: %s: %s"
-
-#~ msgid "Click to toggle breakpoint"
-#~ msgstr "Click to toggle breakpoint"
-
-#~ msgid "Builder Word Completion"
-#~ msgstr "Builder Word Completion"
-
-#~ msgid "Unknown failure"
-#~ msgstr "Unknown failure"
-
-#~ msgid "Clang crashed"
-#~ msgstr "Clang crashed"
-
-#~ msgid "Invalid arguments"
-#~ msgstr "Invalid arguments"
-
-#~ msgid "AST read error"
-#~ msgstr "AST read error"
-
-#~ msgid "Failed to create translation unit: %s"
-#~ msgstr "Failed to create translation unit: %s"
-
-#~ msgid "clang_codeCompleteAt() only works on local files"
-#~ msgstr "clang_codeCompleteAt() only works on local files"
-
-#~ msgid "Mine projects"
-#~ msgstr "Mine projects"
-
-#~ msgid "Search directories for projects."
-#~ msgstr "Search directories for projects."
-
-#~ msgid "_Fullscreen"
-#~ msgstr "_Fullscreen"
-
-#~ msgid "Failed to save buffer, ignoring reclamation."
-#~ msgstr "Failed to save buffer, ignoring reclamation."
-
-#~ msgid "========================\n"
-#~ msgstr "========================\n"
-
-#~ msgid "           Project Name: %s\n"
-#~ msgstr "           Project Name: %s\n"
-
-#~ msgid " Version Control System: %s\n"
-#~ msgstr " Version Control System: %s\n"
-
-#~ msgid "           Build System: %s\n"
-#~ msgstr "           Build System: %s\n"
-
-#~ msgid "    Build Date and Time: %s\n"
-#~ msgstr "    Build Date and Time: %s\n"
-
-#~ msgid "    Building for Device: %s (%s)\n"
-#~ msgstr "    Building for Device: %s (%s)\n"
-
-#~ msgid "            Environment: %s\n"
-#~ msgstr "            Environment: %s\n"
-
-#~ msgid "===============\n"
-#~ msgstr "===============\n"
-
-#~ msgid " Build Failure: %s\n"
-#~ msgstr " Build Failure: %s\n"
-
-#~ msgid " Build ran for: %"
-#~ msgstr " Build ran for: %"
-
-#~ msgid "=================\n"
-#~ msgstr "=================\n"
-
-#~ msgid " Build Successful\n"
-#~ msgstr " Build Successful\n"
-
-#~ msgid "   Build ran for: %"
-#~ msgstr "   Build ran for: %"
-
-#~ msgid "The ID of the device to build for"
-#~ msgstr "The ID of the device to build for"
-
-#~ msgid "local"
-#~ msgstr "local"
-
-#~ msgid "The runtime to use for building"
-#~ msgstr "The runtime to use for building"
-
-#~ msgid "host"
-#~ msgstr "host"
-
-#~ msgid "CONFIG_ID"
-#~ msgstr "CONFIG_ID"
-
-#~ msgid "Path to project file, defaults to current directory"
-#~ msgstr "Path to project file, defaults to current directory"
-
-#~| msgid "The device \"%s\" could not be found."
-#~ msgid "The device “%s” could not be found."
-#~ msgstr "The device “%s” could not be found."
-
-#~ msgid "Other Projects"
-#~ msgstr "Other Projects"
-
-#~ msgid "Project Discovery"
-#~ msgstr "Project Discovery"
-
-#~ msgid "Discover projects on my computer"
-#~ msgstr "Discover projects on my computer"
-
-#~ msgid "%s() may only be executed once"
-#~ msgstr "%s() may only be executed once"
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW 64-bit"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW 32-bit"
-
-#~ msgid "Failed to find property %s in %s or parent %s"
-#~ msgstr "Failed to find property %s in %s or parent %s"
-
-#~ msgid "Traversal order %u is not supported on Trie."
-#~ msgstr "Traversal order %u is not supported on Trie."
-
-#~ msgid "%s() may only be called once"
-#~ msgstr "%s() may only be called once"
-
-#~ msgid "Parser does not contain an input stream"
-#~ msgstr "Parser does not contain an input stream"
-
-#~ msgid "Must parse template before expanding"
-#~ msgstr "Must parse template before expanding"
-
-#~ msgid "If enabled, the sidebar will be visible in the editor workspace."
-#~ msgstr "If enabled, the sidebar will be visible in the editor workspace."
-
-#~ msgid "Show bottom panel"
-#~ msgstr "Show bottom panel"
-
-#~ msgid "Split Left"
-#~ msgstr "Split Left"
-
-#~ msgid "Split Right"
-#~ msgstr "Split Right"
-
-#~ msgid "Move"
-#~ msgstr "Move"
-
-#~ msgid "HTML/Markdown live preview"
-#~ msgstr "HTML/Markdown live preview"
-
-#~ msgid "Support for building with jhbuild"
-#~ msgstr "Support for building with jhbuild"
-
-#~ msgid "Integrated project tree"
-#~ msgstr "Integrated project tree"
-
-#~ msgid "%s does not support building"
-#~ msgstr "%s does not support building"
-
-#~ msgid "A build is already in progress"
-#~ msgstr "A build is already in progress"
-
-#~ msgid "Failed to open stderr stream."
-#~ msgstr "Failed to open stderr stream."
-
-#~ msgid "Failed to open stdout stream."
-#~ msgstr "Failed to open stdout stream."
-
-#~ msgid "%s() is not supported on %s build system."
-#~ msgstr "%s() is not supported on %s build system."
-
-#~ msgid "OVR"
-#~ msgstr "OVR"
-
-#~ msgid "Change editor settings and language"
-#~ msgstr "Change editor settings and language"
-
-#~ msgid "Try opening a file by typing in the search box at the top"
-#~ msgstr "Try opening a file by typing in the search box at the top"
-
-#~ msgid "Search highlight mode…"
-#~ msgstr "Search highlight mode…"
-
-#~ msgid "Save Document As"
-#~ msgstr "Save Document As"
-
-#~ msgid "_Select"
-#~ msgstr "_Select"
-
-#~ msgid "Attempt to load a PyGObject script with no filename."
-#~ msgstr "Attempt to load a PyGObject script with no filename."
-
-#~ msgid "The filename for the script was not provided."
-#~ msgstr "The filename for the script was not provided."
-
-#~ msgid "The script must be on a local filesystem."
-#~ msgstr "The script must be on a local filesystem."
-
-#~ msgid "The script \"%s\" is not a PyGObject file."
-#~ msgstr "The script \"%s\" is not a PyGObject file."
-
-#~ msgid "%s has not implemented GAsyncInitable."
-#~ msgstr "%s has not implemented GAsyncInitable."
-
-#~ msgid "Cannot add provider more than once."
-#~ msgstr "Cannot add provider more than once."
-
-#~ msgid "Chunk does not belong to snippet."
-#~ msgstr "Chunk does not belong to snippet."
-
-#~ msgid "Connecting to org.freedesktop.FileManager1 failed: "
-#~ msgstr "Connecting to org.freedesktop.FileManager1 failed: "
-
-#~ msgid "Calling ShowItems failed: "
-#~ msgstr "Calling ShowItems failed: "
-
-#~ msgid "Jump to previous location"
-#~ msgstr "Jump to previous location"
-
-#~ msgid "Jump to next location"
-#~ msgstr "Jump to next location"
-
-#~ msgid "untitled document"
-#~ msgstr "untitled document"
-
-#~ msgid "Target"
-#~ msgstr "Target"
-
-#~ msgid "Project"
-#~ msgstr "Project"
-
-#~ msgid "View Output"
-#~ msgstr "View Output"
-
-#~ msgid "Failed to locate configure.ac"
-#~ msgstr "Failed to locate configure.ac"
-
-#~ msgid "Directory must be on a locally mounted filesystem."
-#~ msgstr "Directory must be on a locally mounted filesystem."
-
-#~ msgid "Failed to locate device"
-#~ msgstr "Failed to locate device"
-
-#~ msgid "Build Failed: "
-#~ msgstr "Build Failed: "
-
-#~ msgid "Cannot execute build task more than once"
-#~ msgstr "Cannot execute build task more than once"
-
-#~ msgid "'%s' is not a directory."
-#~ msgstr "'%s' is not a directory."
-
-#~ msgid "autogen.sh is missing from project directory (%s)."
-#~ msgstr "autogen.sh is missing from project directory (%s)."
-
-#~ msgid "autogen.sh is not executable."
-#~ msgstr "autogen.sh is not executable."
-
-#~ msgid "autogen.sh failed to create configure (%s)"
-#~ msgstr "autogen.sh failed to create configure (%s)"
-
-#~ msgid "Running configure…"
-#~ msgstr "Running configure…"
-
-#~ msgid "Invalid makefile provided, ignoring."
-#~ msgstr "Invalid makefile provided, ignoring."
-
-#~ msgid "%d warning"
-#~ msgid_plural "%d warnings"
-#~ msgstr[0] "%d warning"
-#~ msgstr[1] "%d warnings"
-
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "%d error"
-#~ msgstr[1] "%d errors"
-
-#~ msgid "Notes"
-#~ msgstr "Notes"
-
-#~ msgid "Unknown file"
-#~ msgstr "Unknown file"
-
-#~ msgid "Running Time:"
-#~ msgstr "Running Time:"
-
-#~ msgid "Warnings:"
-#~ msgstr "Warnings:"
-
-#~ msgid "Errors:"
-#~ msgstr "Errors:"
-
-#~ msgid "Enable color picker"
-#~ msgstr "Enable colour picker"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-#~ msgstr ""
-#~ "Usage:\n"
-#~ "  %(prgname) %(command) OPTIONS\n"
-
-#~ msgid "Missing project name"
-#~ msgstr "Missing project name"
-
-#~ msgid ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Usage:\n"
-#~ "  ide contribute PROJECT_NAME\n"
-#~ "\n"
-#~ "  This command will bootstrap your system to begin contributing to the "
-#~ "project\n"
-#~ "  denoted by PROJECT_NAME. This includes fetching the sources, ensuring "
-#~ "that\n"
-#~ "  you have the required dependencies to build, and bootstraps the first "
-#~ "build\n"
-#~ "  of the project.\n"
-#~ "\n"
-#~ "Examples:\n"
-#~ "  ide contribute gnome-builder\n"
-#~ "  ide contribute gnome-maps\n"
-#~ "\n"
-
-#~ msgid "Send to Fpaste.org"
-#~ msgstr "Send to Fpaste.org"
-
-#~ msgid "The following URL has been copied to the clipboard"
-#~ msgstr "The following URL has been copied to the clipboard"
-
-#~ msgid "Wow! You've spent with Builder %d second!\n"
-#~ msgid_plural "Wow! You've spent with Builder %d seconds!\n"
-#~ msgstr[0] "Wow! You've spent with Builder %d second!\n"
-#~ msgstr[1] "Wow! You've spent with Builder %d seconds!\n"
-
-#~ msgid "Preview as HTML"
-#~ msgstr "Preview as HTML"
-
-#~ msgid "Current language does not support symbol resolvers"
-#~ msgstr "Current language does not support symbol resolvers"
