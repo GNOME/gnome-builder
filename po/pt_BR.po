@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the gnome-builder package.
 # Gustavo Marques <gutodisse@gmail.com>, 2015.
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
-# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2021.
 # Henrique Machado Campos <henriquecamposrj@gmail.com>, 2021.
 # Matheus Barbosa <mdpb.matheus@gmail.com>, 2022.
 # Leônidas Araújo <leorusvellt@hotmail.com>, 2022.
@@ -12,21 +11,22 @@
 # Leôndias Araújo <leorusvellt@hotmail.com>, 2022.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2016-2025.
 # Juliano de Souza Camargo <julianosc@pm.me>, 2025.
+# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-08 06:34+0000\n"
-"PO-Revision-Date: 2025-09-08 15:50-0300\n"
-"Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
+"POT-Creation-Date: 2025-09-11 09:09+0000\n"
+"PO-Revision-Date: 2025-09-11 04:35-0300\n"
+"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Poedit 3.7\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: pt_BR\n"
@@ -1938,7 +1938,7 @@ msgstr "Aproximar (Ctrl++)"
 
 #: src/libide/sourceview/gtk/menus.ui:71
 msgid "Insert Emoji"
-msgstr "Inserir Emoji"
+msgstr "Inserir emoji"
 
 #: src/libide/sourceview/gtk/menus.ui:78
 msgid "_Selection"
@@ -1951,7 +1951,7 @@ msgstr "_Selecionar tudo"
 
 #: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
-msgstr "Formatando"
+msgstr "Formatação"
 
 #: src/libide/sourceview/gtk/menus.ui:91
 msgid "All _Upper Case"
@@ -1959,7 +1959,7 @@ msgstr "Todas as letras em m_aiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:92
 msgid "Convert the text selection to upper case"
-msgstr "Converte o texto selecionado para maiúsculo"
+msgstr "Converte o texto selecionado para maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:98
 msgid "All _Lower Case"
@@ -1967,7 +1967,7 @@ msgstr "Todas as letras em mi_núsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:99
 msgid "Convert the text selection to lower case"
-msgstr "Converte o texto selecionado para minúsculo"
+msgstr "Converte o texto selecionado para minúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:105
 msgid "In_vert Case"
@@ -1975,7 +1975,7 @@ msgstr "_Inverter caixa"
 
 #: src/libide/sourceview/gtk/menus.ui:106
 msgid "Invert case of the text selection"
-msgstr "Inverte maiúsculo com minúsculo na seleção de texto"
+msgstr "Inverte maiúsculas e minúsculas no texto selecionado"
 
 #: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Title Case"
@@ -1983,15 +1983,15 @@ msgstr "Ini_ciais em maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:113
 msgid "Convert the text selection to title case"
-msgstr "Converte o texto selecionado para iniciais maiúsculas (title case)"
+msgstr "Converte o texto selecionado para iniciais maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
-msgstr "Selecionar _Linha"
+msgstr "Selecionar _linha"
 
 #: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
-msgstr "E_xcluir Linha"
+msgstr "E_xcluir linha"
 
 #: src/libide/sourceview/gtk/menus.ui:132
 msgid "_Join Lines"
@@ -2003,11 +2003,11 @@ msgstr "_Ordenar linhas"
 
 #: src/libide/sourceview/gtk/menus.ui:143
 msgid "D_uplicate Line"
-msgstr "D_uplicar Linha"
+msgstr "D_uplicar linha"
 
 #: src/libide/sourceview/gtk/menus.ui:150
 msgid "_Formatting"
-msgstr "_Formatando"
+msgstr "_Formatação"
 
 #: src/libide/sourceview/gtk/menus.ui:161
 #: src/libide/sourceview/gtk/menus.ui:165
@@ -2771,7 +2771,7 @@ msgstr "Exporta o projeto"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
-msgstr "Mostrar saída do build_ld"
+msgstr "Mostrar _saída de compilação"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
@@ -4200,7 +4200,7 @@ msgstr "Formatar documento"
 
 #: src/plugins/editorui/gtk/menus.ui:200
 msgid "Format Selection"
-msgstr "Seleção de formato"
+msgstr "Formatar seleção"
 
 #: src/plugins/editorui/gtk/menus.ui:208
 msgid "Move to Previous Diagnostic"
@@ -5140,7 +5140,7 @@ msgstr "Pesquisar _recursivamente pelas pastas"
 
 #: src/plugins/grep/gbp-grep-popover.ui:65
 msgid "Match _case when searching"
-msgstr "_Corresponder maiúsculo/minúsculo ao pesquisar"
+msgstr "_Corresponder maiúsculas/minúsculas ao pesquisar"
 
 #: src/plugins/grep/gbp-grep-popover.ui:73
 msgid "Match _whole words"
