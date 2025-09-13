@@ -279,9 +279,11 @@
               <object class="AdwShortcutLabel">
                 <property name="valign">center</property>
                 <binding name="accelerator">
-                  <lookup name="accelerator" type="IdeSearchResult">
-                    <lookup name="item">GtkListItem</lookup>
-                  </lookup>
+                  <closure function="null_to_empty" type="gchararray">
+                    <lookup name="accelerator" type="IdeSearchResult">
+                      <lookup name="item">GtkListItem</lookup>
+                    </lookup>
+                  </closure>
                 </binding>
               </object>
             </child>

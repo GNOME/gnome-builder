@@ -552,6 +552,16 @@ ide_search_popover_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (GTK_WIDGET (self->text));
 }
 
+static char *
+null_to_empty (gpointer    instance,
+               const char *string)
+{
+  if (string != NULL)
+    return g_strdup (string);
+
+  return g_strdup ("");
+}
+
 static void
 ide_search_popover_dispose (GObject *object)
 {
@@ -654,6 +664,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_selection_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, null_to_empty);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
   gtk_widget_class_install_action (widget_class, "search.move", "i", ide_search_popover_move_action);
