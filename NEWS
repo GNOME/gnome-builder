@@ -1,3 +1,9 @@
+# GNOME Builder 49.0
+
+ * Fix various 32-bit builds
+ * Fix a warning with AdwShortcutLabel being assigned a NULL value
+ * Translation updates
+
 # GNOME Builder 49.rc
 
  * Scrollbar improvements
