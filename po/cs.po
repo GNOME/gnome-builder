@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-22 16:13+0000\n"
-"PO-Revision-Date: 2025-08-30 14:40+0200\n"
+"POT-Creation-Date: 2025-09-10 15:56+0000\n"
+"PO-Revision-Date: 2025-09-19 22:52+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -4903,7 +4903,7 @@ msgstr "Manuály"
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 #: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter…"
-msgstr "Filtr…"
+msgstr "filtrovat…"
 
 #: src/plugins/manuals/gbp-manuals-search-result.c:215
 msgid "Open Documentation"
