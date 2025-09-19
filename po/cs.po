@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-12 10:49+0000\n"
-"PO-Revision-Date: 2025-08-30 14:44+0200\n"
+"POT-Creation-Date: 2025-09-19 05:50+0000\n"
+"PO-Revision-Date: 2025-09-19 22:46+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -4672,7 +4672,7 @@ msgstr "Instalace selhala"
 msgid "Installation complete"
 msgstr "Instalace je dokončena"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/flatpak/gbp-flatpak-client.c:458
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "Klient byl uzavřen"
@@ -5174,7 +5174,7 @@ msgstr "Manuály"
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 #: src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter…"
-msgstr "Filtr…"
+msgstr "filtrovat…"
 
 #: src/plugins/manuals/gbp-manuals-search-result.c:248
 msgid "Open Documentation"
