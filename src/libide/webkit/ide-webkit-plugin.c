@@ -40,13 +40,15 @@ load_page_in_idle (gpointer user_data)
   IdeWorkspace *workspace = user_data;
   IdeWebkitPage *page;
 
-  g_assert (IDE_IS_WEBKIT_WORKSPACE (workspace));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   page = ide_webkit_page_new ();
   position = panel_position_new ();
   ide_workspace_add_page (workspace, IDE_PAGE (page), position);
 
   ide_webkit_page_load_uri (page, "file://" PACKAGE_DOCDIR "/en/index.html");
+
+  panel_widget_raise (PANEL_WIDGET (page));
 
   return G_SOURCE_REMOVE;
 }
@@ -75,8 +77,15 @@ ide_webkit_plugin_show_help_cb (IdeApplication *app,
 
   workbench = IDE_WORKBENCH (group);
 
-  workspace = ide_webkit_workspace_new ();
-  ide_workbench_add_workspace (workbench, workspace);
+  if (IDE_IS_WORKSPACE (window))
+    {
+      workspace = IDE_WORKSPACE (window);
+    }
+  else
+    {
+      workspace = ide_webkit_workspace_new ();
+      ide_workbench_add_workspace (workbench, workspace);
+    }
 
   gtk_window_present (GTK_WINDOW (workspace));
 
