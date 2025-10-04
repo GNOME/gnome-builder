@@ -525,8 +525,6 @@ ide_marked_view_new (IdeMarkedContent *content)
 
         parsed = parse_markdown (markup, markup_len);
 
-        g_print (" ----- MARKDOWN -----\n%s\n", parsed);
-
         if (parsed != NULL)
           child = g_object_new (GTK_TYPE_LABEL,
                                 "max-width-chars", 80,
