@@ -179,6 +179,7 @@ _ide_text_edit_apply (IdeTextEdit *self,
                       IdeBuffer   *buffer)
 {
   IdeTextEditPrivate *priv = ide_text_edit_get_instance_private (self);
+  g_autofree char *title = NULL;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -187,10 +188,21 @@ _ide_text_edit_apply (IdeTextEdit *self,
 
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &begin, priv->begin_mark);
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &end, priv->end_mark);
+
+  title = ide_buffer_dup_title (buffer);
+
+  g_debug ("Applying edit in %s at %u:%u replacing with %u characters",
+           title,
+           gtk_text_iter_get_offset (&begin),
+           gtk_text_iter_get_offset (&end),
+           (guint) (priv->text ? g_utf8_strlen (priv->text, -1) : 0));
+
   gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
+
   /* Refetch insert mark incase signal handlers modified things */
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &begin, priv->begin_mark);
   gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, priv->text, -1);
+
   gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer), priv->begin_mark);
   gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer), priv->end_mark);
 }

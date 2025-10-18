@@ -907,6 +907,8 @@ ide_buffer_manager_do_apply_edits (IdeBufferManager *self,
   g_assert (buffers != NULL);
   g_assert (edits != NULL);
 
+  g_debug ("Applying %u edits", edits->len);
+
   /* Allow each project edit to stage its GtkTextMarks */
   for (guint i = 0; i < edits->len; i++)
     {

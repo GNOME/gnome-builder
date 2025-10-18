@@ -152,12 +152,22 @@ ide_formatter_format_range_async (IdeFormatter        *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
+  g_autofree char *title = NULL;
+
   g_return_if_fail (IDE_IS_FORMATTER (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (IDE_IS_FORMATTER_OPTIONS (options));
   g_return_if_fail (begin != NULL);
   g_return_if_fail (end != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  title = ide_buffer_dup_title (buffer);
+
+  g_debug ("Formatting document \"%s\" using %s with range %u-%u",
+           title,
+           G_OBJECT_TYPE_NAME (self),
+           gtk_text_iter_get_offset (begin),
+           gtk_text_iter_get_offset (end));
 
   IDE_FORMATTER_GET_IFACE (self)->format_range_async (self, buffer, options, begin, end, cancellable, callback, user_data);
 }
