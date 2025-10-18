@@ -301,33 +301,36 @@ notify_bridge_commit_notify (GtkTextBuffer            *buffer,
     }
   else if (flags == GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE)
     {
-      g_autofree char *uri = NULL;
-      g_autoptr(GBytes) content = NULL;
-      g_autoptr(GVariant) params = NULL;
-      const char *text;
-      gint64 version;
+      if (priv->text_document_sync == TEXT_DOCUMENT_SYNC_FULL)
+        {
+          g_autofree char *uri = NULL;
+          g_autoptr(GBytes) content = NULL;
+          g_autoptr(GVariant) params = NULL;
+          const char *text;
+          gint64 version;
 
-      uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
-      version = (gint)ide_buffer_get_change_count (IDE_BUFFER (buffer));
+          uri = ide_buffer_dup_uri (IDE_BUFFER (buffer));
+          version = (gint)ide_buffer_get_change_count (IDE_BUFFER (buffer));
 
-      content = ide_buffer_dup_content (IDE_BUFFER (buffer));
-      text = (const gchar *)g_bytes_get_data (content, NULL);
+          content = ide_buffer_dup_content (IDE_BUFFER (buffer));
+          text = (const gchar *)g_bytes_get_data (content, NULL);
 
-      params = JSONRPC_MESSAGE_NEW (
-        "textDocument", "{",
-          "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-          "version", JSONRPC_MESSAGE_PUT_INT64 (version),
-        "}",
-        "contentChanges", "[",
-          "{",
-            "text", JSONRPC_MESSAGE_PUT_STRING (text),
-          "}",
-        "]");
+          params = JSONRPC_MESSAGE_NEW (
+            "textDocument", "{",
+              "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+              "version", JSONRPC_MESSAGE_PUT_INT64 (version),
+            "}",
+            "contentChanges", "[",
+              "{",
+                "text", JSONRPC_MESSAGE_PUT_STRING (text),
+              "}",
+            "]");
 
-      ide_lsp_client_send_notification_async (client,
-                                              "textDocument/didChange",
-                                              params,
-                                              NULL, NULL, NULL);
+          ide_lsp_client_send_notification_async (client,
+                                                  "textDocument/didChange",
+                                                  params,
+                                                  NULL, NULL, NULL);
+        }
     }
 
   IDE_EXIT;
