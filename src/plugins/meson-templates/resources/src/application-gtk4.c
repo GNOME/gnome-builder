@@ -120,5 +120,5 @@ static void
 	                                 self);
 	gtk_application_set_accels_for_action (GTK_APPLICATION (self),
 	                                       "app.quit",
-	                                       (const char *[]) { "<primary>q", NULL });
+	                                       (const char *[]) { "<control>q", NULL });
 }

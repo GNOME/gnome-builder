@@ -16,7 +16,7 @@ public class {{PreFix}}.Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.App
             { "quit", this.quit }
         };
         this.add_action_entries (action_entries, this);
-        this.set_accels_for_action ("app.quit", {"<primary>q"});
+        this.set_accels_for_action ("app.quit", {"<control>q"});
     }
 
     public override void activate () {
