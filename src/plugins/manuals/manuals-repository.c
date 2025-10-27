@@ -321,7 +321,12 @@ manuals_repository_list_fetch_cb (DexFuture *completed,
   guint count = gom_resource_group_get_count (group);
 
   for (guint i = 0; i < count; i++)
-    g_list_store_append (store, gom_resource_group_get_index (group, i));
+    {
+      GomResource *value = gom_resource_group_get_index (group, i);
+
+      if (value)
+        g_list_store_append (store, value);
+    }
 
   return dex_future_new_take_object (store);
 }
