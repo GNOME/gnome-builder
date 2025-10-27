@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-14 11:36+0000\n"
-"PO-Revision-Date: 2025-09-19 00:10+0200\n"
+"POT-Creation-Date: 2025-10-27 07:46+0000\n"
+"PO-Revision-Date: 2025-10-27 15:45+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -24,8 +24,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-DamnedLies-Scope: partial\n"
 "X-Generator: Poedit 3.6\n"
+"X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -1764,19 +1764,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "S'està instal·lant el paquet %u"
 msgstr[1] "S'estan instal·lant els paquets %u"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "L'operació ha estat cancel·lada"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Ha fallat iniciar el servidor de llenguatge: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "No hi ha connexió amb el servidor d'idiomes"
 
@@ -2255,35 +2255,30 @@ msgid "Run a new instance of Builder"
 msgstr "Executa una instància nova del Constructor"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
-#, fuzzy
 msgid "Installing Arduino Library"
-msgstr "Instal·lació de la biblioteca de l'Arduino"
+msgstr "S'està instal·lant la biblioteca de l'Arduino"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:930
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1047
-#, fuzzy
 msgid "Downloading and installing"
-msgstr "Baixada i instal·lació"
+msgstr "S'està baixant i instal·lant"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:982
-#, fuzzy
 msgid "Uninstalling Arduino Library"
-msgstr "Desinstal·lar la biblioteca de l'Arduino"
+msgstr "S'està desinstal·lant la biblioteca de l'Arduino"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:983
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1099
 msgid "Uninstalling"
-msgstr ""
+msgstr "S'està desinstal·lant"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1046
-#, fuzzy
 msgid "Installing Arduino Platform"
-msgstr "Instal·lació de la plataforma de l'Arduino"
+msgstr "S'està instal·lant la plataforma de l'Arduino"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1098
-#, fuzzy
 msgid "Uninstalling Arduino Platform"
-msgstr "Desinstal·lació de la plataforma de l'Arduino"
+msgstr "S'està desinstal·lant la plataforma de l'Arduino"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
 msgid "Board Settings"
@@ -2294,10 +2289,8 @@ msgid "Board"
 msgstr "Placa"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
-#, fuzzy
-#| msgid "Stop Program"
 msgid "Programmer"
-msgstr "Atura el programa"
+msgstr "Programador"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
