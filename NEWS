@@ -1,3 +1,11 @@
+# GNOME Builder 49.1
+
+ * Improve opening help documentation in workspace
+ * Fix notification of deletions when in sync-full LSP state
+ * Various manuals fixes
+ * Remove use of <primary> in templates
+ * Translation updates
+
 # GNOME Builder 49.0
 
  * Fix various 32-bit builds
