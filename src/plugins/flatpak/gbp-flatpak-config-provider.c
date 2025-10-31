@@ -802,7 +802,7 @@ gbp_flatpak_config_provider_delete (IdeConfigProvider *provider,
   if (g_ptr_array_remove (self->configs, hold))
     {
       ide_config_provider_emit_removed (provider, hold);
-      if (!g_file_delete (file, NULL, &error))
+      if (!g_file_trash (file, NULL, &error))
         ide_object_warning (provider, _("Failed to remove flatpak manifest: %s"), name);
     }
 }
