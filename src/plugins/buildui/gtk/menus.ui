@@ -326,6 +326,44 @@
           </item>
         </section>
       </submenu>
+      <submenu id="run-menu-save-restore">
+        <attribute name="label" translatable="yes">Save/Restore</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Default</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">context.run-manager.save-restore-reason</attribute>
+          <attribute name="target" type="s">'default'</attribute>
+          <attribute name="description" translatable="yes">Use default restore reason when running the project</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Pristine</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">context.run-manager.save-restore-reason</attribute>
+          <attribute name="target" type="s">'pristine'</attribute>
+          <attribute name="description" translatable="yes">Use pristine as restore reason when running the project</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Normal Launch</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">context.run-manager.save-restore-reason</attribute>
+          <attribute name="target" type="s">'launch'</attribute>
+          <attribute name="description" translatable="yes">Use normal launch as restore reason when running the project</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Recover</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">context.run-manager.save-restore-reason</attribute>
+          <attribute name="target" type="s">'recover'</attribute>
+          <attribute name="description" translatable="yes">Use recover as restore reason when running the project</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Restore</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">context.run-manager.save-restore-reason</attribute>
+          <attribute name="target" type="s">'restore'</attribute>
+          <attribute name="description" translatable="yes">Use full session restore as restore reason when running the project</attribute>
+        </item>
+      </submenu>
       <item>
         <attribute name="id">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Verbose Logging</attribute>
