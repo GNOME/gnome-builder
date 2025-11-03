@@ -103,6 +103,8 @@ static void ide_run_manager_actions_interactive         (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_renderer            (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_save_restore_reason (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "restart", ide_run_manager_actions_restart },
@@ -116,6 +118,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
   { "interactive", ide_run_manager_actions_interactive, NULL, "false" },
+  { "save-restore-reason", ide_run_manager_actions_save_restore_reason, "s", "'default'" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -315,6 +318,27 @@ ide_run_manager_actions_renderer (IdeRunManager *self,
 
   ide_run_manager_set_action_state (self,
                                     "renderer",
+                                    g_variant_new_string (str));
+}
+
+static void
+ide_run_manager_actions_save_restore_reason (IdeRunManager *self,
+                                             GVariant      *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (!g_strv_contains (IDE_STRV_INIT ("default", "pristine", "launch", "recover", "restore"), str))
+    {
+      str = "default";
+    }
+
+  ide_run_manager_set_action_state (self,
+                                    "save-restore-reason",
                                     g_variant_new_string (str));
 }
 
@@ -786,6 +810,25 @@ apply_gtk_debug (IdeRunContext *run_context,
   IDE_EXIT;
 }
 
+static void
+apply_save_restore_reason (IdeRunContext *run_context,
+                           const char    *reason)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (reason != NULL);
+
+  g_debug ("Applying save/restore reason \"%s\"", reason);
+
+  if (ide_str_equal0 (reason, "default"))
+    ide_run_context_unsetenv (run_context, "GTK_OVERRIDE_RESTORE_REASON");
+  else
+    ide_run_context_setenv (run_context, "GTK_OVERRIDE_RESTORE_REASON", reason);
+
+  IDE_EXIT;
+}
+
 static inline const char *
 get_action_state_string (IdeRunManager *self,
                          const char    *action_name)
@@ -1014,6 +1057,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   apply_adaptive_preview (run_context, get_action_state_bool (self, "adaptive-preview"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
   apply_renderer (run_context, get_action_state_string (self, "renderer"));
+  apply_save_restore_reason (run_context, get_action_state_string (self, "save-restore-reason"));
   apply_gtk_debug (run_context,
                    get_action_state_string (self, "text-direction"),
                    get_action_state_bool (self, "interactive"));
