@@ -31,6 +31,9 @@
     <property name="variant">dark</property>
     <property name="light-variant">builder</property>
     <property name="accent_bg_color">#4186A8</property>
+    <property name="accent_fg_color">#eeeeec</property>
+    <property name="window_fg_color">#eeeeec</property>
+    <property name="headerbar_fg_color">#eeeeec</property>
   </metadata>
 
   <!-- Tango Palette -->
@@ -65,13 +68,13 @@
   <color name="pink1"                       value="#dd4a68"/>
   <color name="red1"                        value="#ff0000"/>
 
-  <color name="dark1"                       value="#1e1e1e"/>
-  <color name="dark2"                       value="#303030"/>
+  <color name="dark1"                       value="#1d1d20"/>
+  <color name="dark2"                       value="#242428"/>
 
   <color name="transparent"                 value="#rgba(0,0,0,0)"/>
 
   <!-- Global Settings -->
-  <style name="text"                        foreground="aluminium1" background="dark1"/>
+  <style name="text"                        foreground="aluminium3" background="dark1"/>
   <style name="selection"                   background="#rgba(136,138,133,1)" foreground="white"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark2"/>
@@ -104,7 +107,7 @@
   <style name="bracket-mismatch"            foreground="aluminium1" background="scarletred2" bold="true"/>
 
   <!-- Right Margin -->
-  <style name="right-margin"                foreground="#484749" background="#484749"/>
+  <style name="right-margin"                foreground="#777777" background="#777777"/>
 
   <!-- Search Matching -->
   <style name="search-match"                foreground="aluminium1" background="chameleon3"/>
@@ -215,7 +218,7 @@
   <style name="latex:include"               use-style="def:preprocessor"/>
 
   <style name="xml:comment"                 foreground="#8b9eab"/>
-  <style name="xml:attribute-name"          foreground="orange2" bold="false"/>
+  <style name="xml:attribute-name"          foreground="orange3" bold="false"/>
   <style name="xml:attribute-value"         foreground="#669900"/>
   <style name="xml:tag-match"               background="#rgba(114,159,207,.20)"/>
 
