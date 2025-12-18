@@ -1142,7 +1142,7 @@ register_post_install_commands_stage (IdePipeline *self,
 
       run_command = ide_run_command_new ();
       ide_run_command_set_argv (run_command, IDE_STRV_INIT ("/bin/sh", "-c", post_install_commands[i]));
-      ide_run_command_set_cwd (run_command, ide_pipeline_get_builddir (self));
+      ide_run_command_set_cwd (run_command, ide_pipeline_get_srcdir (self));
 
       /* translators: %s is replaced with the post-install shell command */
       title = g_strdup_printf (_("Post-install (%s)"), post_install_commands[i]);
