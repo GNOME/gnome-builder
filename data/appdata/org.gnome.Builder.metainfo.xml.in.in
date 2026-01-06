@@ -46,6 +46,60 @@
     </ul>
   </description>
 
+  <!-- These allow us to be found in GNOME Software, as it ignores the description for searching: -->
+  <keywords>
+    <keyword>IDE</keyword>
+    <keyword>integrated development environment</keyword>
+    <keyword>code editor</keyword>
+    <keyword>coding</keyword>
+    <keyword>programming</keyword>
+    <keyword>software developers</keyword>
+    <keyword>software development</keyword>
+    <keyword>compiling</keyword>
+    <keyword>building</keyword>
+    <keyword>runtimes</keyword>
+    <keyword>SDKs</keyword>
+    <keyword>GTK inspector</keyword>
+    <keyword>D-Bus inspector</keyword>
+    <keyword>debugger</keyword>
+    <keyword>debugging</keyword>
+    <keyword translate="no">gdb</keyword>
+    <keyword>memory leaks detector</keyword>
+    <keyword translate="no">valgrind</keyword>
+    <keyword>unit tests</keyword>
+    <keyword>automated testing</keyword>
+    <keyword>documentation</keyword>
+    <keyword>autocompletion</keyword>
+    <keyword>profiler</keyword>
+    <keyword>profiling</keyword>
+    <keyword translate="no">sysprof</keyword>
+    <keyword translate="no">Arduino</keyword>
+    <keyword translate="no">Python</keyword>
+    <keyword translate="no">C</keyword>
+    <keyword translate="no">Vala</keyword>
+    <keyword translate="no">Rust</keyword>
+    <keyword translate="no">XML</keyword>
+    <keyword translate="no">HTML</keyword>
+    <keyword translate="no">Markdown</keyword>
+    <keyword translate="no">reStructuredText</keyword>
+    <keyword translate="no">Sphinx</keyword>
+    <keyword translate="no">Vim</keyword>
+    <keyword translate="no">Emacs</keyword>
+    <keyword translate="no">SublimeText</keyword>
+    <keyword translate="no">jhbuild</keyword>
+    <keyword translate="no">Flatpak</keyword>
+    <keyword translate="no">Autotools</keyword>
+    <keyword translate="no">Clang</keyword>
+    <keyword translate="no">Cargo</keyword>
+    <keyword translate="no">CMake</keyword>
+    <keyword translate="no">Gradle</keyword>
+    <keyword translate="no">Meson</keyword>
+    <keyword translate="no">Maven</keyword>
+    <keyword translate="no">Make</keyword>
+    <keyword translate="no">PHPize</keyword>
+    <keyword translate="no">Waf</keyword>
+  </keywords>
+
   <branding>
     <color type="primary" scheme_preference="light">#ffa348</color>
     <color type="primary" scheme_preference="dark">#e66100</color>
