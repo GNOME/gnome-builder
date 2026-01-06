@@ -29,7 +29,7 @@ public class {{PreFix}}.Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.App
 {{if is_adwaita}}
         string[] developers = { "{{author}}" };
         var about = new Adw.AboutDialog () {
-            application_name = "{{name}}",
+            application_name = "{{Title}}",
             application_icon = "{{appid}}",
             developer_name = "{{author}}",
             translator_credits = _("translator-credits"),
@@ -43,7 +43,7 @@ public class {{PreFix}}.Application : {{if is_adwaita}}Adw{{else}}Gtk{{end}}.App
         string[] authors = { "{{author}}" };
         Gtk.show_about_dialog (
             this.active_window,
-           "program-name", "{{name}}",
+           "program-name", "{{Title}}",
            "logo-icon-name", "{{appid}}",
            "authors", authors,
            "translator-credits", _("translator-credits"),

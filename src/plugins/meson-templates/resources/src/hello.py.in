@@ -16,7 +16,8 @@ sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 locale.bindtextdomain('{{name}}', localedir)
 locale.textdomain('{{name}}')
-gettext.install('{{name}}', localedir)
+gettext.bindtextdomain('{{name}}', localedir)
+gettext.textdomain('{{name}}')
 
 if __name__ == '__main__':
     import gi
