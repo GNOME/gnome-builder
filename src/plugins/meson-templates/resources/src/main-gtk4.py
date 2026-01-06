@@ -3,6 +3,8 @@
 import sys
 import gi
 
+from gettext import gettext as _
+
 gi.require_version('Gtk', '4.0')
 {{if is_adwaita}}
 gi.require_version('Adw', '1')
@@ -38,23 +40,25 @@ class {{PreFix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
     def on_about_action(self, *args):
         """Callback for the app.about action."""
 {{if is_adwaita}}
-        about = Adw.AboutDialog(application_name='{{name}}',
+        about = Adw.AboutDialog(application_name='{{Title}}',
                                 application_icon='{{appid}}',
                                 developer_name='{{author_escape}}',
                                 version='{{project_version}}',
+                                # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+                                translator_credits = _('translator-credits'),
                                 developers=['{{author_escape}}'],
                                 copyright='© {{year}} {{author_escape}}')
 {{else}}
         about = Gtk.AboutDialog(transient_for=self.props.active_window,
                                 modal=True,
-                                program_name='{{name}}',
+                                program_name='{{Title}}',
                                 logo_icon_name='{{appid}}',
                                 version='{{project_version}}',
                                 authors=['{{author_escape}}'],
+                                # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+                                translator_credits = _('translator-credits'),
                                 copyright='© {{year}} {{author_escape}}')
 {{end}}
-        # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
-        about.set_translator_credits(_('translator-credits'))
 {{if is_adwaita}}
         about.present(self.props.active_window)
 {{else}}

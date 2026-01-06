@@ -74,7 +74,7 @@ static void
 
 {{if is_adwaita}}
 	adw_show_about_dialog (GTK_WIDGET (window),
-	                       "application-name", "{{name}}",
+	                       "application-name", "{{Title}}",
 	                       "application-icon", "{{appid}}",
 	                       "developer-name", "{{author}}",
 	                       "translator-credits", _("translator-credits"),
@@ -84,7 +84,7 @@ static void
 	                       NULL);
 {{else}}
 	gtk_show_about_dialog (window,
-	                       "program-name", "{{name}}",
+	                       "program-name", "{{Title}}",
 	                       "logo-icon-name", "{{appid}}",
 	                       "authors", authors,
 	                       "translator-credits", _("translator-credits"),

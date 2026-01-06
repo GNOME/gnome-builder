@@ -89,7 +89,7 @@ impl {{PreFix}}Application {
         let window = self.active_window().unwrap();
 {{if is_adwaita}}
         let about = adw::AboutDialog::builder()
-            .application_name("{{name}}")
+            .application_name("{{Title}}")
             .application_icon("{{appid}}")
             .developer_name("{{author}}")
             .version(VERSION)
@@ -104,7 +104,7 @@ impl {{PreFix}}Application {
         let about = gtk::AboutDialog::builder()
             .transient_for(&window)
             .modal(true)
-            .program_name("{{name}}")
+            .program_name("{{Title}}")
             .logo_icon_name("{{appid}}")
             .version(VERSION)
             .authors(vec!["{{author}}"])
