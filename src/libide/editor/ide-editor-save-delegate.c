@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include <libide-gui.h>
 #include <libide-threading.h>
 
 #include "ide-editor-save-delegate.h"
@@ -139,6 +142,52 @@ ide_editor_save_delegate_save_cb (GObject      *object,
 }
 
 static void
+ide_editor_save_delegate_file_dialog_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (object);
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeNotification) notif = NULL;
+  IdeEditorSaveDelegate *self;
+  IdeBuffer *buffer;
+
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_FILE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  buffer = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_EDITOR_SAVE_DELEGATE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (!(file = gtk_file_dialog_save_finish (dialog, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  ide_buffer_save_file_async (buffer,
+                              file,
+                              ide_task_get_cancellable (task),
+                              &notif,
+                              ide_editor_save_delegate_save_cb,
+                              g_object_ref (task));
+
+  g_object_bind_property (notif, "progress", self, "progress", G_BINDING_SYNC_CREATE);
+
+  if (self->page != NULL)
+    ide_page_set_progress (IDE_PAGE (self->page), notif);
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_save_delegate_save_async (PanelSaveDelegate   *delegate,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
@@ -156,9 +205,56 @@ ide_editor_save_delegate_save_async (PanelSaveDelegate   *delegate,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_editor_save_delegate_save_async);
 
+  /* If this is a draft, show a file dialog to get the filename */
+  if (panel_save_delegate_get_is_draft (delegate))
+    {
+      g_autoptr(GtkFileDialog) dialog = NULL;
+      GFile *initial_file = NULL;
+      IdeWorkspace *workspace;
+      GtkWidget *widget;
+
+      if (self->page == NULL)
+        {
+          ide_task_return_new_error (task,
+                                     G_IO_ERROR,
+                                     G_IO_ERROR_FAILED,
+                                     "Cannot save draft: page is NULL");
+          IDE_EXIT;
+        }
+
+      widget = GTK_WIDGET (self->page);
+      workspace = ide_widget_get_workspace (widget);
+      if (workspace == NULL)
+        {
+          ide_task_return_new_error (task,
+                                     G_IO_ERROR,
+                                     G_IO_ERROR_FAILED,
+                                     "Cannot save draft: workspace is NULL");
+          IDE_EXIT;
+        }
+
+      initial_file = ide_buffer_get_file (self->buffer);
+
+      dialog = gtk_file_dialog_new ();
+      gtk_file_dialog_set_accept_label (dialog, _("Save File"));
+      gtk_file_dialog_set_modal (dialog, TRUE);
+      if (initial_file != NULL)
+        gtk_file_dialog_set_initial_file (dialog, initial_file);
+
+      ide_task_set_task_data (task, ide_buffer_hold (self->buffer), ide_buffer_release);
+
+      gtk_file_dialog_save (dialog,
+                            GTK_WINDOW (workspace),
+                            cancellable,
+                            ide_editor_save_delegate_file_dialog_cb,
+                            g_steal_pointer (&task));
+
+      IDE_EXIT;
+    }
+
   ide_buffer_save_file_async (self->buffer,
                               NULL,
-                              NULL,
+                              cancellable,
                               &notif,
                               ide_editor_save_delegate_save_cb,
                               g_steal_pointer (&task));

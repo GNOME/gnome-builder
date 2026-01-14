@@ -26,6 +26,7 @@ src/libide/editor/gtk/menus.ui
 src/libide/editor/ide-editor-info-bar.c
 src/libide/editor/ide-editor-info-bar.ui
 src/libide/editor/ide-editor-page.c
+src/libide/editor/ide-editor-save-delegate.c
 src/libide/editor/ide-editor-search-bar.ui
 src/libide/editor/ide-editor-utils.c
 src/libide/editor/ide-editor-workspace.ui
