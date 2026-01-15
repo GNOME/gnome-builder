@@ -169,6 +169,7 @@
   </supports>
 
   <releases>
+    <release version="50.alpha" date="2026-01-14"/>
     <release version="49.1" date="2025-10-28"/>
     <release version="49.0" date="2025-09-12"/>
   </releases>

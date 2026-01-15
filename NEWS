@@ -1,3 +1,16 @@
+# GNOME Builder 50.alpha
+
+ * Editor improvements for handling drafts via save delegate
+ * Improved dark theme colors to match Adwaita
+ * Better integration with help documentation in workspace
+ * Flatpak integration now uses trash instead of permanent deletion
+ * Run manager improvements with save/restore reason settings
+ * Meson template improvements and papercut fixes
+ * LSP client improvements for delete notifications
+ * Improved appdata keywords for better discoverability
+ * Pipeline improvements for post-install commands
+ * Translation updates
+
 # GNOME Builder 49.1
 
  * Improve opening help documentation in workspace
