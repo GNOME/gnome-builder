@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-10-31 20:54+0000\n"
-"PO-Revision-Date: 2025-12-06 00:32+0100\n"
+"PO-Revision-Date: 2025-12-19 23:13+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -157,10 +157,9 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "Schnelle fehlertolerante Textsuche in Dateien und Symbolen"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#, fuzzy
 #| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
-msgstr "Integration von Git"
+msgstr "Arduino-Integration mit arduino-cli"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
 msgid "Debug with the GNU debugger"
@@ -404,10 +403,15 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Legt fest, ob der Editor Gitterlinien im Dokument anzeigt."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-#, fuzzy
-#| msgid "If enabled, the editor will show line numbers."
 msgid "If enabled, the editor will respect the font-name setting."
-msgstr "Legt fest, ob der Editor Zeilennummern anzeigt."
+msgstr "Legt fest, ob der Editor die Einstellung »Schriftname« beachtet."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"This setting is only respected if the use-custom-font setting is enabled."
+msgstr ""
+"Diese Einstellung wird nur befolgt, wenn die Einstellung »eigene Schrift "
+"verwenden« eingeschaltet ist."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
@@ -2294,21 +2298,17 @@ msgid "Run a new instance of Builder"
 msgstr "Neue Instanz von Builder starten"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
-#, fuzzy
-#| msgid "Installing rustup"
 msgid "Installing Arduino Library"
-msgstr "Rustup wird installiert"
+msgstr "Arduino-Bibliothek wird installiert"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:930
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1047
-#, fuzzy
-#| msgid "Downloading rustup-init"
 msgid "Downloading and installing"
-msgstr "rustup-init wird heruntergeladen"
+msgstr "Herunterladen und installieren"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:982
 msgid "Uninstalling Arduino Library"
-msgstr ""
+msgstr "Arduino-Bibliothek wird deinstalliert"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:983
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1099
@@ -2316,24 +2316,20 @@ msgid "Uninstalling"
 msgstr "Deinstallieren"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1046
-#, fuzzy
-#| msgid "Installing rustup"
 msgid "Installing Arduino Platform"
-msgstr "Rustup wird installiert"
+msgstr "Arduino-Platform wird installiert"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1098
 msgid "Uninstalling Arduino Platform"
-msgstr ""
+msgstr "Arduino-Platform wird deinstalliert"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
-#, fuzzy
-#| msgid "Settings"
 msgid "Board Settings"
-msgstr "Einstellungen"
+msgstr "Platinen-Einstellungen"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
 msgid "Board"
-msgstr ""
+msgstr "Platine"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
 msgid "Programmer"
@@ -2346,7 +2342,7 @@ msgstr "Bibliotheken"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:40
 msgid "No libraries are present in this profile"
-msgstr ""
+msgstr "In diesem Profil sind keine Bibliotheken vorhanden"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
 msgid "Add _Library"
@@ -2370,15 +2366,15 @@ msgstr "Keine Bibliotheken gefunden"
 
 #: src/plugins/arduino/gbp-arduino-pipeline-addin.c:220
 msgid "Update Arduino Packages"
-msgstr ""
+msgstr "Arduino-Pakete aktualisieren"
 
 #: src/plugins/arduino/gbp-arduino-pipeline-addin.c:227
 msgid "Compile Arduino Sketch"
-msgstr ""
+msgstr "Arduino Sketch übersetzen"
 
 #: src/plugins/arduino/gbp-arduino-pipeline-addin.c:245
 msgid "Upload Arduino Sketch"
-msgstr ""
+msgstr "Arduino Sketch hochladen"
 
 #: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35
 #: src/plugins/arduino/gbp-arduino-string-row.ui:23
@@ -2392,53 +2388,43 @@ msgstr "Platformen"
 
 #: src/plugins/arduino/gbp-arduino-platforms-editor.ui:40
 msgid "No platforms are present in this profile"
-msgstr ""
+msgstr "In diesem Profil sind keine Plattformen vorhanden"
 
 #: src/plugins/arduino/gbp-arduino-platforms-editor.ui:62
 msgid "Add _Platform"
-msgstr ""
+msgstr "Plattform _hizufügen"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:24
 msgid "No platforms installed"
-msgstr ""
+msgstr "Es sind keine Plattformen installiert"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
-#, fuzzy
-#| msgid "Install Package"
 msgid "Install _Platform"
-msgstr "Paket installieren"
+msgstr "_Plattform installieren"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
 msgid "Search for a Platform"
-msgstr "Nach einer Platform suchen"
+msgstr "Nach einer Plattform suchen"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
-#, fuzzy
-#| msgid "No references found"
 msgid "No platforms found"
-msgstr "Keine Referenzen gefunden"
+msgstr "Keine Plattform gefunden"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:48
-#, fuzzy
-#| msgid "Run the project"
 msgid "Arduino Sketch Project"
-msgstr "Das Projekt ausführen"
+msgstr "Arduino Sketch-Projekt"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:49
-#, fuzzy
-#| msgid "Stop running the project"
 msgid "An empty arduino sketch project"
-msgstr "Das laufende Projekt anhalten"
+msgstr "Ein leeres Arduino Sketch-Projekt"
 
 #: src/plugins/arduino/gbp-arduino-tweaks-addin.c:77
 msgid "Notes"
 msgstr "Notizen"
 
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
-#, fuzzy
-#| msgid "Additional"
 msgid "No additional URL"
-msgstr "Zusätzlich"
+msgstr "Keine zusätzliche Adresse"
 
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:59
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:65
@@ -3797,10 +3783,8 @@ msgid "Angle"
 msgstr "Winkel"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
-#, fuzzy
-#| msgid "Text Direction"
 msgid "Direction"
-msgstr "Textrichtung"
+msgstr "Ausrichtung"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:288
 msgid "Shape"
@@ -4956,7 +4940,7 @@ msgstr "GCC %s Cross-Compiler (System)"
 #: src/plugins/git/daemon/ipc-git-blame-impl.c:351
 #, c-format
 msgid "Original error: %s"
-msgstr ""
+msgstr "Ursprünglicher Fehler: %s"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
@@ -4999,7 +4983,7 @@ msgstr "in der Zukunft"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:112
 msgid "just now"
-msgstr "Gerade eben"
+msgstr "gerade eben"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:114
 #, c-format
@@ -5436,60 +5420,44 @@ msgid "Reveal in Project Tree"
 msgstr "Im Projektbaum aufdecken"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
-#, fuzzy
-#| msgid "File must be within the project tree."
 msgid "Reveal the current page in the project tree"
-msgstr "Die Datei muss innerhalb des Projektbaums sein."
+msgstr "Die aktuelle Seite innerhalb des Projektbaums zeigen"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Save the current page"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die aktuelle Seite speichern"
 
 #: src/plugins/menu-search/gtk/menus.ui:121
-#, fuzzy
-#| msgid "Move Page Left"
 msgid "Move Page Down"
-msgstr "Seite nach links verschieben"
+msgstr "Seite nach unten verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:122
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Move the current page down"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die Aktuelle Seite nach unten verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:127
 msgid "Move Page Left"
 msgstr "Seite nach links verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:128
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Move the current page left"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die aktuelle Seite nach links verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:133
 msgid "Move Page Right"
 msgstr "Seite nach rechts verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:134
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Move the current page right"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die aktuelle Seite nach rechts verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:139
-#, fuzzy
-#| msgid "Move Page Left"
 msgid "Move Page Up"
-msgstr "Seite nach links verschieben"
+msgstr "Seite nach oben verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:140
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Move the current page up"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die aktuelle Seite nach oben verschieben"
 
 #: src/plugins/menu-search/gtk/menus.ui:152
 msgid "Reload Files"
@@ -5500,22 +5468,16 @@ msgid "Reload the contents of open files"
 msgstr "Den Inhalt der offenen Dateien neu laden"
 
 #: src/plugins/menu-search/gtk/menus.ui:159
-#, fuzzy
-#| msgid "Close the current page"
 msgid "Print the current page"
-msgstr "Die aktuelle Seite schließen"
+msgstr "Die aktuelle Seite drucken"
 
 #: src/plugins/menu-search/gtk/menus.ui:170
-#, fuzzy
-#| msgid "Save and close the current page"
 msgid "Find a string in the current page"
-msgstr "Die aktuelle Seite speichern und schließen"
+msgstr "Eine Zeichenkette in der aktuellen Seite finden"
 
 #: src/plugins/menu-search/gtk/menus.ui:177
-#, fuzzy
-#| msgid "Save and close the current page"
 msgid "Find and replace a string in the current page"
-msgstr "Die aktuelle Seite speichern und schließen"
+msgstr "Eine Zeichenkette in der aktuellen Seite finden und ersetzen"
 
 #: src/plugins/menu-search/gtk/menus.ui:183
 msgid "Move to next search result"
