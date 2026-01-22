@@ -2,14 +2,14 @@
 # Copyright (C) 2024 twlvnn kraftwerk <kraft_werk@tutanota.com>.
 # Copyright (C) 2025 Alexander Shopov <ash@kambanaria.org>.
 # This file is distributed under the same license as the gnome-builder package.
-# twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024.
+# twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024, 2026.
 # Alexander Shopov <ash@kambanaria.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-10-06 16:53+0000\n"
-"PO-Revision-Date: 2025-10-08 10:00+0200\n"
+"POT-Creation-Date: 2025-10-31 20:53+0000\n"
+"PO-Revision-Date: 2026-01-22 11:13+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50 src/libide/editor/ide-editor-workspace.ui:92
@@ -1627,18 +1627,18 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Инсталиране на %u пакет"
 msgstr[1] "Инсталиране на %u пакета"
 
-#: src/libide/lsp/ide-lsp-client.c:437 src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
+#: src/libide/lsp/ide-lsp-client.c:440 src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "Операцията е отменена"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Сървърът за езика не може да се стартира: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Няма връзка със сървъра за езика"
 
@@ -2777,14 +2777,12 @@ msgid "Use high contrast theme when running the project"
 msgstr "Използване на висок контраст при стартиране"
 
 #: src/plugins/buildui/gtk/menus.ui:265
-#, fuzzy
-#| msgid "Open Preview…"
 msgid "Adaptive Preview"
-msgstr "Отваряне на предварителния преглед…"
+msgstr "Адаптивен преглед"
 
 #: src/plugins/buildui/gtk/menus.ui:268
 msgid "Start the app in adaptive preview"
-msgstr ""
+msgstr "Стартиране на програмата в адаптивен преглед"
 
 #: src/plugins/buildui/gtk/menus.ui:271
 msgid "Text Direction"
@@ -3545,7 +3543,7 @@ msgstr "Размер"
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
 msgid "Stops"
-msgstr ""
+msgstr "Цветови точки"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -4782,13 +4780,11 @@ msgstr "Git"
 
 #: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
 msgid "Git Blame"
-msgstr ""
+msgstr "Git Blame"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
-msgstr "Показване на номерата на редовете"
+msgstr "Показване на Git информация в реда"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
