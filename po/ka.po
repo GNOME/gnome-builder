@@ -1,22 +1,22 @@
 # Georgian translation for gnome-builder.
 # Copyright (C) 2023, gnome-builder authors
 # This file is distributed under the same license as the gnome-builder package.
-# Ekaterine Papava <papava.e@gtu.ge>, 2023-2025.
+# Ekaterine Papava <papava.e@gtu.ge>, 2023-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-30 23:43+0000\n"
-"PO-Revision-Date: 2025-09-04 11:57+0200\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-01-25 11:00+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.8\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -142,35 +142,34 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "სწრაფი არაზუსტი ტექსტის ძებნა ფაილებში და სიმბოლოებში"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino-ის ინტეგრაცია arduino-cli-ით"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU debugger-ით გამართვა"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "სწრაფი წვდომა თქვენს პროექტებთან"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "შექმენით ახალი პროექტები სხვადასხვა ნიმუშებიდან"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "ინტეგრაცია Git-თან თქვენი პროექტების დასაკლონად"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "საწყისი კოდის რედაქტორი"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "სწრაფი გლობალური ბუნდოვანი ძებნა"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "ფაილის მეტი ნაწილის სანახავად მინირუკის გამოყენება შეგიძლიათ"
 
@@ -688,7 +687,7 @@ msgid "What environment to use when running unit tests"
 msgstr "ერთეულის ტესტის გაშვებისას გამოყენებული გარემო"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "ჟურნალში დამატებითი ჩანაწერების ჩართვა"
 
@@ -970,6 +969,7 @@ msgid "Failed to format selection: %s"
 msgstr "მონიშნულის ფორმატის შეცდომა: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1238,50 +1238,50 @@ msgid "Unit Test"
 msgstr "ერთეულის ტესტი"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "მომხმარებელმა მოითხოვა ხელსაწყოს \"%s\" გაშვება"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "სამიზნის გაშვება შეუძლებელია, რადგან გაშვებულია სხვა სამიზნე"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "აპლიკაცია დასრულდა შეცდომით: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "აპლიკაცია დასრულდა"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s გაშვებულია…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "მოწყობილობაზე გაშლა…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "მომხმარებელმა აპლიკაციის გაშვება მოითხოვა"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "მომხმარებელმა აპლიკაციის გადატვირთვა მოითხოვა"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "მომხმარებელმა მოსთხოვა აპლიკაციას, რომ გაეშვას პროგრამით \"%s\""
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "მომხმარებელმა აპლიკაციის გაჩერება მოითხოვა"
 
@@ -1473,6 +1473,7 @@ msgstr "დაახლოებით ერთ წლის წინ"
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "დაახლოებით %u წლის წინ"
+msgstr[1] "დაახლოებით %u წლის წინ"
 
 #: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
@@ -1733,20 +1734,21 @@ msgstr "დამატებები"
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u პაკეტის დაყენება"
+msgstr[1] "%u პაკეტის დაყენება"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "ოპერაცია გაუქმდა"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "ენის სერვერის ინიციალიზაცია ჩავარდა: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "ენის სერვერთან მიერთება არ არსებობს"
 
@@ -2950,8 +2952,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "GTK-ის რენდერერი"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "სტანდარტული"
 
@@ -2991,15 +2993,55 @@ msgstr "ქაირო"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "პროგრამული რენდერერი Cairo-ის გამოყენება პროექტის გაშვებისას"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "შენახვა/აღდგენა"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "ნაგულისხმევი აღდგენის მიზეზის გამოყენება პროექტის გაშვებისას"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "ხელუხლებელი"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "ხელუხლებლის გამოყენება აღდგენის მიზეზად პროექტის გაშვებისას"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "ნორმალური გაშვება"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr "ნორმალური გაშვების გამოყენება აღდგენის მიზეზად პროექტის გაშვებისას"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "აღდგენა"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "აღდგენის გამოყენება აღდგენის მიზეზად პროექტის გაშვებისას"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "აღდგენა"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr "სრული სესიის აღდგენის გამოყენება აღდგენის მიზეზად პროექტის გაშვებისას"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "დამატებითი შეტყობინებების გამოტანის მოთხოვნა პროექტის გაშვებისას"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "ინსპექტორის ჩვენება"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "GTK-ის ინსპექტორის ჩვენების მოთხოვნა პროექტის გაშვებისას"
 
@@ -4874,39 +4916,42 @@ msgstr "ახლახან"
 msgid "%ld minute ago"
 msgid_plural "%ld minutes ago"
 msgstr[0] "%ld წუთის წინ"
+msgstr[1] "%ld წუთის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:119
 #, c-format
-#| msgid "An hour ago"
 msgid "%ld hour ago"
 msgid_plural "%ld hours ago"
 msgstr[0] "%ld საათის წინ"
+msgstr[1] "%ld საათის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:124
 #, c-format
 msgid "%ld day ago"
 msgid_plural "%ld days ago"
 msgstr[0] "%ld დღის წინ"
+msgstr[1] "%ld დღის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:129
 #, c-format
 msgid "%ld week ago"
 msgid_plural "%ld weeks ago"
 msgstr[0] "%ld კვირის წინ"
+msgstr[1] "%ld კვირის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:134
 #, c-format
 msgid "%ld month ago"
 msgid_plural "%ld months ago"
 msgstr[0] "%ld თვის წინ"
+msgstr[1] "%ld თვის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
 #, c-format
-#| msgid "About %u year ago"
-#| msgid_plural "About %u years ago"
 msgid "%ld year ago"
 msgid_plural "%ld years ago"
 msgstr[0] "%ld წლის წინ"
+msgstr[1] "%ld წლის წინ"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:228
 #, c-format
@@ -5711,6 +5756,7 @@ msgstr "ფაილი დაკოპირდა"
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
 msgstr[0] "%s ფაილი დაკოპირდა"
+msgstr[1] "%s ფაილი დაკოპირდა"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:944
 msgid "Copying files…"
