@@ -1,13 +1,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2015, 2016.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-06 01:42+0000\n"
-"PO-Revision-Date: 2025-09-06 18:29+0300\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-01-26 03:08+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -144,35 +144,34 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "Швидкий нечіткий пошук тексту у файлах та символах"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
 msgstr "Інтеграція з Arduino за допомогою arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Діагностика за допомогою GNU debugger"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Швидкий доступ до ваших проєктів"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Створення проєктів на основі широкого діапазону шаблонів"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Інтеграція із Git для клонування ваших проєктів"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "Редактор коду"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Швидкий загальний нечіткий пошук"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Використання мінікарти для повнішого перегляду вмісту файла"
 
@@ -702,7 +701,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Яке середовище слід використати для виконання перевірки модулів"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Докладний журнал"
 
@@ -984,6 +983,7 @@ msgid "Failed to format selection: %s"
 msgstr "Не вдалося форматувати позначене: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1254,52 +1254,52 @@ msgid "Unit Test"
 msgstr "Перевірка модулів"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Користувачем надіслано запит на запуск інструмента «%s»"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Програма завершила роботу із помилкою: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "Користувачем надіслано запит щодо запуску програми"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "Користувачем надіслано запит щодо перезапуску програми"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 "Користувачем надіслано запит щодо запуску програми за допомогою інструмента "
 "«%s»"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "Користувачем надіслано запит щодо припинення роботи програми"
 
@@ -1764,19 +1764,19 @@ msgstr[1] "Встановлюємо %u пакунки"
 msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "Виконання дії було скасовано"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Немає з'єднання із мовним сервером"
 
@@ -2257,13 +2257,11 @@ msgid "Run a new instance of Builder"
 msgstr "Запустити новий екземпляр «Будівника»"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
-#| msgid "Installing rustup"
 msgid "Installing Arduino Library"
 msgstr "Встановлюємо бібліотеку Arduino"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:930
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1047
-#| msgid "Downloading rustup-init"
 msgid "Downloading and installing"
 msgstr "Отримання і встановлення"
 
@@ -2273,12 +2271,10 @@ msgstr "Вилучаємо бібліотеку Arduino"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:983
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1099
-#| msgid "Installing…"
 msgid "Uninstalling"
 msgstr "Вилучення"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1046
-#| msgid "Installing rustup"
 msgid "Installing Arduino Platform"
 msgstr "Встановлюємо платформу Arduino"
 
@@ -2287,17 +2283,14 @@ msgid "Uninstalling Arduino Platform"
 msgstr "Вилучаємо платформу Arduino"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
-#| msgid "Settings"
 msgid "Board Settings"
 msgstr "Параметри плати"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:13
-#| msgid "Keyboard"
 msgid "Board"
 msgstr "Плата"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
-#| msgid "Stop Program"
 msgid "Programmer"
 msgstr "Програматор"
 
@@ -2311,27 +2304,22 @@ msgid "No libraries are present in this profile"
 msgstr "У цьому профілі немає бібліотек"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
-#| msgid "Library"
 msgid "Add _Library"
 msgstr "Додати _бібліотеку"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:24
-#| msgid "No toolchain installed. Click"
 msgid "No libraries installed"
 msgstr "Не встановлено жодної бібліотеки"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
-#| msgid "Library"
 msgid "Install _Library"
 msgstr "Встановити _бібліотеку"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Library"
 msgstr "Шукати бібліотеку"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
-#| msgid "No references found"
 msgid "No libraries found"
 msgstr "Бібліотек не знайдено"
 
@@ -2370,27 +2358,22 @@ msgid "No platforms installed"
 msgstr "Не встановлено жодної платформи"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
-#| msgid "Install Prefix"
 msgid "Install _Platform"
 msgstr "Встановити п_латформу"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Platform"
 msgstr "Шукати платформи"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
-#| msgid "No references found"
 msgid "No platforms found"
 msgstr "Не знайдено жодної платформи"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:48
-#| msgid "Run the project"
 msgid "Arduino Sketch Project"
 msgstr "Проєкт ескізу Arduino"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:49
-#| msgid "Stop running the project"
 msgid "An empty arduino sketch project"
 msgstr "Порожній проєкт ескізу arduino"
 
@@ -2399,7 +2382,6 @@ msgid "Notes"
 msgstr "Нотатки"
 
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
-#| msgid "Additional"
 msgid "No additional URL"
 msgstr "Немає додаткової адреси"
 
@@ -2419,17 +2401,14 @@ msgid "Arduino"
 msgstr "Arduino"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:12
-#| msgid "Additional"
 msgid "Additional URLs"
 msgstr "Додаткові адреси"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:22
-#| msgid "Libraries"
 msgid "Installed Libraries"
 msgstr "Встановлені бібліотеки"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:32
-#| msgid "Install Prefix"
 msgid "Installed Platforms"
 msgstr "Встановлені платформи"
 
@@ -2967,7 +2946,6 @@ msgid "Use high contrast theme when running the project"
 msgstr "Використовувати висококонтрастну тему при запуску цього проєкту"
 
 #: src/plugins/buildui/gtk/menus.ui:265
-#| msgid "Open _Preview"
 msgid "Adaptive Preview"
 msgstr "Адаптивний перегляд"
 
@@ -3007,8 +2985,8 @@ msgstr "ГП"
 msgid "GTK Renderer"
 msgstr "Обробник GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Типовий"
 
@@ -3048,15 +3026,66 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Використовувати програмний засіб обробки Cairo при запуску проєкту"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+#| msgid "Save & Restore"
+msgid "Save/Restore"
+msgstr "Збереження/Відновлення"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+#| msgid "Use the default GTK renderer when running the project"
+msgid "Use default restore reason when running the project"
+msgstr "Використати типову причину відновлення при запуску проєкту"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Первинна версія"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+#| msgid "Use the GL renderer when running the project"
+msgid "Use pristine as restore reason when running the project"
+msgstr ""
+"Використовувати первинну версію як причину відновлення при запуску проєкту"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Звичайний запуск"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+#| msgid "Use orange accent color when running the project"
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"Використовувати звичайний запуск як причину відновлення при запуску проєкту"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Відбудова"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+#| msgid "Use the GL renderer when running the project"
+msgid "Use recover as restore reason when running the project"
+msgstr "Використовувати відбудову як причину відновлення при запуску проєкту"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+#| msgid "Save & Restore"
+msgid "Restore"
+msgstr "Відновлення"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+#| msgid "Use the Cairo software renderer when running the project"
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"Використовувати повне відновлення сеансу як причину відновлення при запуску"
+" проєкту"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Вимагати ведення докладного журналу під час запуску проєкту"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Показати інспектор"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Надсилати запит щодо показу інспектора GTK при запуску проєкту"
 
@@ -3751,7 +3780,6 @@ msgid "Angle"
 msgstr "Кут"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Напрямок"
 
@@ -3761,7 +3789,6 @@ msgstr "Форма"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
-#| msgid "Consumption"
 msgid "Position"
 msgstr "Позиція"
 
@@ -4938,7 +4965,6 @@ msgid "in the future"
 msgstr "у майбутньому"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:112
-#| msgid "Just now"
 msgid "just now"
 msgstr "просто зараз"
 
@@ -4953,7 +4979,6 @@ msgstr[3] "%ld хвилину тому"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:119
 #, c-format
-#| msgid "An hour ago"
 msgid "%ld hour ago"
 msgid_plural "%ld hours ago"
 msgstr[0] "%ld годину тому"
@@ -4990,8 +5015,6 @@ msgstr[3] "%ld місяць тому"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
 #, c-format
-#| msgid "About %u year ago"
-#| msgid_plural "About %u years ago"
 msgid "%ld year ago"
 msgid_plural "%ld years ago"
 msgstr[0] "%ld рік тому"
@@ -5074,7 +5097,6 @@ msgid "Git Blame"
 msgstr "Git Blame"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
 msgstr "Показувати вбудовані дані щодо внесків git"
 
@@ -5389,22 +5411,18 @@ msgid "Reveal in Project Tree"
 msgstr "Розкрити в ієрархії проєкту"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
-#| msgid "File must be within the project tree."
 msgid "Reveal the current page in the project tree"
 msgstr "Показати поточну сторінку в ієрархії проєкту"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#| msgid "Close the current page"
 msgid "Save the current page"
 msgstr "Зберегти поточну сторінку"
 
 #: src/plugins/menu-search/gtk/menus.ui:121
-#| msgid "Move Page Left"
 msgid "Move Page Down"
 msgstr "Пересунути сторінку нижче"
 
 #: src/plugins/menu-search/gtk/menus.ui:122
-#| msgid "Close the current page"
 msgid "Move the current page down"
 msgstr "Пересунути поточну сторінку нижче"
 
@@ -5413,7 +5431,6 @@ msgid "Move Page Left"
 msgstr "Пересунути сторінку ліворуч"
 
 #: src/plugins/menu-search/gtk/menus.ui:128
-#| msgid "Close the current page"
 msgid "Move the current page left"
 msgstr "Пересунути поточну сторінку ліворуч"
 
@@ -5422,17 +5439,14 @@ msgid "Move Page Right"
 msgstr "Пересунути сторінку праворуч"
 
 #: src/plugins/menu-search/gtk/menus.ui:134
-#| msgid "Close the current page"
 msgid "Move the current page right"
 msgstr "Пересунути поточну сторінку праворуч"
 
 #: src/plugins/menu-search/gtk/menus.ui:139
-#| msgid "Move Page Left"
 msgid "Move Page Up"
 msgstr "Пересунути сторінку вище"
 
 #: src/plugins/menu-search/gtk/menus.ui:140
-#| msgid "Close the current page"
 msgid "Move the current page up"
 msgstr "Пересунути поточну сторінку вище"
 
@@ -5445,17 +5459,14 @@ msgid "Reload the contents of open files"
 msgstr "Перезавантажити вміст відкритих файлів"
 
 #: src/plugins/menu-search/gtk/menus.ui:159
-#| msgid "Close the current page"
 msgid "Print the current page"
 msgstr "Надрукувати поточну сторінку"
 
 #: src/plugins/menu-search/gtk/menus.ui:170
-#| msgid "Save and close the current page"
 msgid "Find a string in the current page"
 msgstr "Знайти рядок на поточній сторінці"
 
 #: src/plugins/menu-search/gtk/menus.ui:177
-#| msgid "Save and close the current page"
 msgid "Find and replace a string in the current page"
 msgstr "Знайти і замінити рядок на поточній сторінці"
 
