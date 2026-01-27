@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the gnome-builder package.
 # Floren <>, 2018.
 # Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
-# Antonio Marin <gnmer.6qxyg@slmail.me>, 2025.
+# Antonio Marin <gnmer.6qxyg@slmail.me>, 2025-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-07-19 09:35+0000\n"
-"PO-Revision-Date: 2025-07-23 11:42+0200\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-01-27 18:55+0100\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-Project-Style: gnome\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
-#: data/org.gnome.Builder.desktop.in.in:3
+#: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
@@ -67,7 +67,7 @@ msgstr "Caracteristici:"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:28
 msgid "Built in syntax highlighting for many languages"
-msgstr "Evidențierea sintaxei pentru mai multe limbaje de programare"
+msgstr "Evidențierea elementelor pentru mai multe limbaje de programare"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:29
 msgid "Side-by-side code editors"
@@ -145,31 +145,31 @@ msgstr "Căutare rapidă și aproximativă a textului în fișiere și simboluri
 msgid "Arduino integration with arduino-cli"
 msgstr "Integrare Arduino cu arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Depanare cu depanatorul GNU"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Accesare rapidă a proiectelor"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Creare de proiecte noi de la o varietate de modele"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Integrare cu Git pentru a clona proiectele"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "Editorul de cod sursă"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Căutare globală rapidă și aproximativă"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Folosește vederea de ansamblu pentru a vedea mai mult din fișier"
 
@@ -554,11 +554,11 @@ msgstr "Dosar pentru toate proiectele Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
-msgstr "Recuperează sesiunea"
+msgstr "Restabilește sesiunea"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr "Recuperează sesiunea anterioară a proiectelor la încărcare."
+msgstr "Recuperează sesiunea precedentă a proiectelor la încărcare."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -652,12 +652,12 @@ msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
 msgstr ""
-"Configurarea care a fost aleasă și care va fi recuperată data viitoare când "
-"se încarcă proiectul."
+"Configurarea care a fost aleasă și care va fi folosită data viitoare când se "
+"încarcă proiectul."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
-msgstr "Instalează proiectul înainte de executare"
+msgstr "Instalează proiectul înainte de execuție"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
@@ -695,10 +695,10 @@ msgstr "Localitate test unitate"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr "Ce mediu să se utilizeze la rularea testelor unitate"
+msgstr "Ce mediu să se utilizeze la executarea testelor unitate"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Jurnalizare detaliată"
 
@@ -706,8 +706,8 @@ msgstr "Jurnalizare detaliată"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
-"Dacă G_MESSAGES_DEBUG=all ar trebui să fie utilizat la rularea aplicației "
-"țintă"
+"Dacă G_MESSAGES_DEBUG=all ar trebui să fie utilizat în timpul execuției "
+"aplicației țintă"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
@@ -730,30 +730,30 @@ msgstr "Verifică ortografia"
 msgid "Automatically check spelling within documents"
 msgstr "Verifică automat ortografia în cadrul documentelor"
 
-#: data/org.gnome.Builder.desktop.in.in:4
+#: data/org.gnome.Builder.desktop.in.in:3
 msgid "Build software for GNOME"
 msgstr "Creează programe pentru GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.Builder.desktop.in.in:14
+#: data/org.gnome.Builder.desktop.in.in:13
 msgid "Build;Develop;"
 msgstr "Build;Develop;Generare;Programează;Creează;Dezvoltă;Compilează;"
 
-#: data/org.gnome.Builder.desktop.in.in:20
+#: data/org.gnome.Builder.desktop.in.in:19
 msgid "Open a Project"
 msgstr "Deschide un proiect"
 
-#: data/org.gnome.Builder.desktop.in.in:24
+#: data/org.gnome.Builder.desktop.in.in:23
 msgid "Start New Project"
 msgstr "Începe un proiect nou"
 
-#: data/org.gnome.Builder.desktop.in.in:28
+#: data/org.gnome.Builder.desktop.in.in:27
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
 msgid "Clone Repository"
 msgstr "Clonează un depozit"
 
-#: data/org.gnome.Builder.desktop.in.in:32
+#: data/org.gnome.Builder.desktop.in.in:31
 msgid "New Editor Workspace"
 msgstr "Spațiu de lucru nou"
 
@@ -958,11 +958,11 @@ msgstr "Deschide ca _administrator"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
 msgid "Document Restored"
-msgstr "Document restaurat"
+msgstr "Document recuperat"
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
 msgid "Unsaved document has been restored."
-msgstr "Documentul nesalvat a fost restaurat."
+msgstr "Documentul nesalvat a fost recuperat."
 
 #: src/libide/editor/ide-editor-info-bar.ui:81
 msgid "_Discard…"
@@ -981,6 +981,7 @@ msgid "Failed to format selection: %s"
 msgstr "Nu s-a putut formata selecția: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1250,50 +1251,50 @@ msgid "Unit Test"
 msgstr "Test unitate"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Utilizatorul a cerut unealta de rulare „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
-msgstr "Nu se poate rula ținta, altă țintă rulează"
+msgstr "Nu se poate rula ținta, altă țintă este în execuție"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplicația a ieșit cu eroarea: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Aplicația a ieșit"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
-msgstr "Se rulează %s…"
+msgstr "În execuție %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Se transferă în aparat…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "Utilizatorul a cerut ca aplicația să ruleze"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "Utilizatorul a cerut ca aplicația să repornească"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Utilizatorul a cerut ca aplicația să ruleze cu instrumentul „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "Utilizatorul a cerut ca aplicația să se oprească"
 
@@ -1662,11 +1663,11 @@ msgstr "Rulează proiectul (Shift+Ctrl+Space)"
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
-msgstr "Oprește rularea proiectului"
+msgstr "Oprește execuția proiectului"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
-msgstr "Oprește rularea"
+msgstr "Oprește execuția"
 
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
@@ -1757,19 +1758,19 @@ msgstr[0] "Se instalează %u pachet"
 msgstr[1] "Se instalează %u pachete"
 msgstr[2] "Se instalează %u de pachete"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "Operația a fost anulată"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nu s-a putut inițializa serverul de limbaj: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Nu există conexiune la serverul de limbaj"
 
@@ -2766,7 +2767,7 @@ msgstr "Afișează panoul care conține jurnalul compilării"
 
 #: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
-msgstr "Se execută"
+msgstr "În execuție"
 
 #: src/plugins/buildui/gtk/menus.ui:112
 msgid "Select Run Command…"
@@ -2794,7 +2795,7 @@ msgstr "Oprește programul"
 
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
-msgstr "Oprește executarea proiectului"
+msgstr "Oprește execuția proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
@@ -2816,7 +2817,7 @@ msgstr "Folosește stilul sistemului"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
-msgstr "Urmează stilul sistemului la executarea proiectului"
+msgstr "Urmează stilul sistemului în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
@@ -2824,7 +2825,7 @@ msgstr "Forțează luminos"
 
 #: src/plugins/buildui/gtk/menus.ui:173
 msgid "Force light theme when running the project"
-msgstr "Impune aspectul luminos la executarea proiectului"
+msgstr "Impune aspectul luminos în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
@@ -2832,7 +2833,7 @@ msgstr "Forțează întunecos"
 
 #: src/plugins/buildui/gtk/menus.ui:180
 msgid "Force dark theme when running the project"
-msgstr "Impune aspectul întunecos la executarea proiectului"
+msgstr "Impune aspectul întunecos în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
@@ -2845,7 +2846,8 @@ msgstr "Sistem"
 #: src/plugins/buildui/gtk/menus.ui:189
 msgid "Use system accent color when running the project"
 msgstr ""
-"Folosește culoarea de evidențiere a sistemului la executarea proiectului"
+"Folosește culoarea de evidențiere a sistemului în timpul execuției "
+"proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
@@ -2853,7 +2855,8 @@ msgstr "Albastru"
 
 #: src/plugins/buildui/gtk/menus.ui:196
 msgid "Use blue accent color when running the project"
-msgstr "Folosește culoarea albastră de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea albastră de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
@@ -2861,7 +2864,8 @@ msgstr "Turcoaz"
 
 #: src/plugins/buildui/gtk/menus.ui:203
 msgid "Use teal accent color when running the project"
-msgstr "Folosește culoarea turcoaz de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea turcoaz de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
@@ -2869,7 +2873,8 @@ msgstr "Verde"
 
 #: src/plugins/buildui/gtk/menus.ui:210
 msgid "Use green accent color when running the project"
-msgstr "Folosește culoarea verde de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea verde de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
@@ -2877,7 +2882,8 @@ msgstr "Galben"
 
 #: src/plugins/buildui/gtk/menus.ui:217
 msgid "Use yellow accent color when running the project"
-msgstr "Folosește culoarea galbenă de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea galbenă de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
@@ -2885,7 +2891,8 @@ msgstr "Portocaliu"
 
 #: src/plugins/buildui/gtk/menus.ui:224
 msgid "Use orange accent color when running the project"
-msgstr "Folosește culoarea portocalie de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea portocalie de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
@@ -2893,7 +2900,8 @@ msgstr "Roșu"
 
 #: src/plugins/buildui/gtk/menus.ui:231
 msgid "Use red accent color when running the project"
-msgstr "Folosește culoarea roșie de evidențiere la executarea proiectului"
+msgstr ""
+"Folosește culoarea roșie de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
@@ -2901,7 +2909,7 @@ msgstr "Roz"
 
 #: src/plugins/buildui/gtk/menus.ui:238
 msgid "Use pink accent color when running the project"
-msgstr "Folosește culoarea roz de evidențiere la executarea proiectului"
+msgstr "Folosește culoarea roz de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
@@ -2909,7 +2917,7 @@ msgstr "Mov"
 
 #: src/plugins/buildui/gtk/menus.ui:245
 msgid "Use purple accent color when running the project"
-msgstr "Folosește culoarea mov de evidențiere la executarea proiectului"
+msgstr "Folosește culoarea mov de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:248
 msgid "Slate"
@@ -2917,7 +2925,7 @@ msgstr "Gri"
 
 #: src/plugins/buildui/gtk/menus.ui:252
 msgid "Use slate accent color when running the project"
-msgstr "Folosește culoarea gri de evidențiere la executarea proiectului"
+msgstr "Folosește culoarea gri de evidențiere în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
@@ -2929,7 +2937,7 @@ msgstr "Contrast mărit"
 
 #: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
-msgstr "Folosește contrastul mărit la executarea proiectului"
+msgstr "Folosește contrastul mărit în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:265
 msgid "Adaptive Preview"
@@ -2949,7 +2957,7 @@ msgstr "De la stânga la dreapta"
 
 #: src/plugins/buildui/gtk/menus.ui:277
 msgid "Force left-to-right text when running the project"
-msgstr "Impune de la stânga la dreapta la executarea proiectului"
+msgstr "Impune de la stânga la dreapta în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:280
 msgid "Right-to-Left"
@@ -2957,7 +2965,7 @@ msgstr "De la dreapta la stânga"
 
 #: src/plugins/buildui/gtk/menus.ui:284
 msgid "Force right-to-left text when running the project"
-msgstr "Impune de la dreapta la stânga la executarea proiectului"
+msgstr "Impune de la dreapta la stânga în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:289
 msgid "GPU"
@@ -2967,14 +2975,14 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "Redare GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Prestabilită"
 
 #: src/plugins/buildui/gtk/menus.ui:297
 msgid "Use the default GTK renderer when running the project"
-msgstr "Impune redarea GTK prestabilită la executarea proiectului"
+msgstr "Impune redarea GTK prestabilită în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:300
 msgid "Vulkan"
@@ -2982,7 +2990,7 @@ msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:304
 msgid "Use the Vulkan renderer when running the project"
-msgstr "Folosește redarea Vulkan la executarea proiectului"
+msgstr "Folosește redarea Vulkan în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:307
 msgid "GL"
@@ -2990,7 +2998,7 @@ msgstr "GL"
 
 #: src/plugins/buildui/gtk/menus.ui:311
 msgid "Use the GL renderer when running the project"
-msgstr "Folosește redarea GL la executarea proiectului"
+msgstr "Folosește redarea GL în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:314
 msgid "Legacy GL"
@@ -2998,7 +3006,7 @@ msgstr "GL vechi"
 
 #: src/plugins/buildui/gtk/menus.ui:318
 msgid "Use the legacy GL renderer when running the project"
-msgstr "Folosește redarea veche GL la executarea proiectului"
+msgstr "Folosește redarea veche GL în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:321
 msgid "Cairo"
@@ -3006,19 +3014,68 @@ msgstr "Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:325
 msgid "Use the Cairo software renderer when running the project"
-msgstr "Folosește redarea programului Cairo la executarea proiectului"
+msgstr "Folosește redarea programului Cairo în timpul execuției proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "Salvează/Restabilește"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr ""
+"Folosește motivul prestabilit de restabilire în timpul execuției proiectului"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Starea inițială"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr ""
+"Folosește starea inițială drept motiv de restabilire în timpul execuției "
+"proiectului"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Pornire normală"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"Folosește pornirea normală drept motiv de restabilire în timpul execuției "
+"proiectului"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Recuperează"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr ""
+"Folosește recuperarea drept motiv de restabilire în timpul execuției "
+"proiectului"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "Restabilește"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"Folosește restabilirea întregii sesiuni drept motiv de restabilire în timpul "
+"execuției proiectului"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
-msgstr "Solicită un jurnal detaliat la executarea proiectului"
+msgstr "Solicită un jurnal detaliat în timpul execuției proiectului"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Arată inspectorul"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
-msgstr "Solicită afișarea inspectorului GTK la executarea proiectului"
+msgstr "Solicită afișarea inspectorului GTK în timpul execuției proiectului"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -3104,28 +3161,28 @@ msgstr "Comenzi"
 
 #: src/plugins/buildui/tweaks.ui:16
 msgid "Run Command"
-msgstr "Rulează comanda"
+msgstr "Execută comanda"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr "Această comandă este utilizată pentru a rula proiectul"
+msgstr "Această comandă este utilizată pentru a porni proiectul"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr "Pornire și oprire"
+msgstr "Pornire și Oprire"
 
 #: src/plugins/buildui/tweaks.ui:58
 msgid "Install Before Running"
-msgstr "Instalează înainte de rulare"
+msgstr "Instalează înainte de execuție"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"Instalează aplicația înainte de a rula. Acest lucru este necesar pentru "
-"majoritatea proiectelor, decât dacă sunt utilizate comenzi de rulare "
-"personalizate."
+"Instalează aplicația înainte de execuție. Acest lucru este necesar pentru "
+"majoritatea proiectelor, doar dacă sunt utilizate comenzi personalizate de "
+"pornire."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -3891,7 +3948,7 @@ msgstr "Pauzează programul (F6)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:27
 msgid "Continue running the program (F5)"
-msgstr "Continuă rularea programul (F5)"
+msgstr "Continuă execuția programului (F5)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:59
 msgid "Execute the current line, stepping into any function calls (F8)"
@@ -4643,7 +4700,7 @@ msgstr "Administrarea sesiunii"
 
 #: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
-msgstr "Salvează & restaurează"
+msgstr "Salvează și Restabilește"
 
 #: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
@@ -4677,11 +4734,11 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
-msgstr "Restaurează poziția cursorului"
+msgstr "Restabilește poziția cursorului"
 
 #: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
-msgstr "Sari la ultima poziție la redeschiderea unui fișier"
+msgstr "Revenire la ultima poziție la redeschiderea unui fișier"
 
 #: src/plugins/file-search/gbp-file-search-index.c:412
 msgid "Open file or folder"
@@ -4699,7 +4756,7 @@ msgstr "Instalarea a eșuat"
 msgid "Installation complete"
 msgstr "Instalare completă"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/flatpak/gbp-flatpak-client.c:458
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "Clientul a fost închis"
@@ -5838,7 +5895,7 @@ msgstr "Nu există controlul versiunii"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
-msgstr "Restaurează sesiunea anterioară"
+msgstr "Restabilește sesiunea precedentă"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
@@ -5850,7 +5907,7 @@ msgstr "Crearea proiectului"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
-msgstr "Proiectele create cu Builder vor fi plasate în acest director"
+msgstr "Proiectele create cu Builder vor fi puse în acest dosar"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
@@ -6568,7 +6625,7 @@ msgstr "Salvează rezultatul testului"
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
 #, c-format
 msgid "Running all unit tests at %s"
-msgstr "Rulează toate testele unitate la %s"
+msgstr "Execută toate testele unitate la %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 msgid "Unit tests completed in %lf seconds"
