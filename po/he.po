@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-12 10:49+0000\n"
-"PO-Revision-Date: 2025-08-29 17:41+0300\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-02-01 07:49+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
 "3);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -87,7 +87,7 @@ msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
 "and Waf"
 msgstr ""
-"משתלב עם Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize ו־Waf"
+"משתלב עם Autotools,‏ Cargo,‏ CMake,‏ Gradle,‏ Meson,‏ Maven,‏ Make,‏ PHPize ו־Waf"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -137,31 +137,31 @@ msgstr "חיפוש מקיף מהיר בכל הקבצים והסמלים"
 msgid "Arduino integration with arduino-cli"
 msgstr "‏Arduino משולב עם arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "ניפוי שגיאות באמצעות מנפה השגיאות של גנו (gdb)"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "גישה מהיר למיזמים שלך"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "יצירת מיזם חדש ממנעד של תבניות"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "שילוב עם Git לשיבוט המיזם שלך"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "עורך קוד המקור"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "חיפוש מקיף מהיר"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "שימוש במפת סקירה כדי לראות עוד מהקובץ"
 
@@ -683,7 +683,7 @@ msgid "What environment to use when running unit tests"
 msgstr "What environment to use when running unit tests"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "רישום יומנים מורחב"
 
@@ -962,6 +962,7 @@ msgid "Failed to format selection: %s"
 msgstr "נכשל בעיצוב הבחירה: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1224,52 +1225,52 @@ msgid "Unit Test"
 msgstr "יחידת בדיקה"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "דרישת משתמש להרצת הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "לא ניתן להריץ את המטרה, מטרה נוספת בריצה"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "היישום יצא עם שגיאה: %s"
 
 # שורת פקודה
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "היישום יצא"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "מריץ %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "פורס להתקן…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "דרישת משתמש להרצת היישום"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "דרישת משתמש להפעלה מחדש את היישום"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "דרישת משתמש להרצת היישום עם הכלי „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "דרישת משתמש לעצירת היישום"
 
@@ -1735,19 +1736,19 @@ msgstr[1] "מותקנות שתי חבילות"
 msgstr[2] "מותקנות %u חבילות"
 msgstr[3] "מותקנות %u חבילות"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "הפעולה בוטלה"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "ארע כשל באתחול שרת השפה: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "אין חיבור לשרת השפה"
 
@@ -2942,8 +2943,8 @@ msgstr "מעבד גרפי (GPU)"
 msgid "GTK Renderer"
 msgstr "עיבוד GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "ברירת מחדל"
 
@@ -2984,15 +2985,55 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "שימוש ב־Cairo כמנוע העיבוד בזמן הרצת המיזם"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "שמירה/שחזור"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "להשתמש בסיבת השחזור כברירת מחדל בעת הרצת המיזם"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "ראשוני"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "להשתמש בראשוני כסיבת שחזור בעת הרצת מיזם"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "הפעלה רגילה"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr "להשתמש בהפעלה רגילה כסיבת שחזור בעת הרצת מיזם"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "שחזור"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "להשתמש בשחזור כסיבת שחזור בעת הרצת מיזם"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "שחזור"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr "להשתמש בשחזור הפעלה מלאה כסיבת שחזור בעת הרצת מיזם"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "דרישת רישום יומנים מפורט בזמן הרצת המיזם"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "הצגת מפקח"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "להציג את מפקח GTK בזמן הרצת המיזם"
 
@@ -4649,7 +4690,7 @@ msgstr "ההתקנה נכשלה"
 msgid "Installation complete"
 msgstr "ההתקנה הושלמה"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/flatpak/gbp-flatpak-client.c:458
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "הלקוח נסגר"
