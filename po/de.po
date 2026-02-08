@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2025-10-31 20:53+0000\n"
-"PO-Revision-Date: 2026-02-01 20:21+0100\n"
+"PO-Revision-Date: 2026-02-06 22:41+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -3803,7 +3803,7 @@ msgstr "Größe"
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
 msgid "Stops"
-msgstr ""
+msgstr "Stopps"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -5099,13 +5099,11 @@ msgstr "Git"
 
 #: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
 msgid "Git Blame"
-msgstr ""
+msgstr "Git Blame"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
-msgstr "Zeilennummern anzeigen"
+msgstr "»Git Blame« in der Zeile anzeigen"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
