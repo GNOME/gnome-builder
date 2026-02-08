@@ -13,23 +13,23 @@
 # Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
 # Serdar Sağlam <teknomobil@yandex.com>, 2019.
 # Muhammet Kara <muhammetk@gmail.com>, 2015-2021.
-# Sabri Ünal <yakushabb@gmail.com>, 2019, 2022-2024.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2024.
+# Sabri Ünal <yakushabb@gmail.com>, 2019, 2022-2026.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-12 10:49+0000\n"
-"PO-Revision-Date: 2025-08-28 15:03+0300\n"
-"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-02-08 08:00+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
@@ -151,31 +151,31 @@ msgstr "Dosyalar ve simgeler arası hızlı bulanık metin arama"
 msgid "Arduino integration with arduino-cli"
 msgstr "arduino-cli ile Arduino tümleşimi"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU hata ayıklayıcıyla hata ayıklayın"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Projelerinize hızlıca erişin"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Çeşitli şablonlardan yeni projeler oluşturun"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Projelerinizi klonlamak için Git tümleşmesi"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "Kaynak kod düzenleyici"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Hızlı genel bulanık arama"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Dosyanın daha çoğunu görmek için küçük haritayı kullan"
 
@@ -688,7 +688,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Birim sınamaları çalıştırırken hangi ortamın kullanılacağı"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Ayrıntılı Günlük Kaydı"
 
@@ -969,6 +969,7 @@ msgid "Failed to format selection: %s"
 msgstr "Biçim seçimi başarısız: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1235,50 +1236,50 @@ msgid "Unit Test"
 msgstr "Birim Sınama"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Kullanıcı, “%s” aracının çalıştırılmasını istedi"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "Hedef çalıştırılamıyor, başka hedef çalışıyor"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Uygulama hata ile çıktı: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Uygulama çıktı"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s çalışıyor…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Aygıta konuşlandırılıyor…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "Kullanıcı, uygulamanın çalıştırılmasını istedi"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "Kullanıcı, uygulamanın yeniden başlatılmasını istedi"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Kullanıcı, uygulamanın “%s” aracıyla çalıştırılmasını istedi"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "Kullanıcı, uygulamanın durdurulmasını istedi"
 
@@ -1737,19 +1738,19 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "%u paket kuruluyor"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "İşlem iptal edildi"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirilemedi: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Dil sunucusuna bağlantı yok"
 
@@ -2327,7 +2328,6 @@ msgid "No platforms installed"
 msgstr "Kurulu platform yok"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
-#| msgid "Installation Prefix"
 msgid "Install _Platform"
 msgstr "_Platform Kur"
 
@@ -2944,8 +2944,8 @@ msgstr "Ekran Kartı"
 msgid "GTK Renderer"
 msgstr "GTK Oluşturucu"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Öntanımlı"
 
@@ -2985,15 +2985,58 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Projeyi çalıştırırken Cairo yazılım gerçekleyiciyi kullan"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "Kaydet ve Geri Yükle"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "Projeyi çalıştırırken öntanımlı geri yükleme nedenini kullan"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "El Değmemiş"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "Projeyi çalıştırırken el değmemişi geri yükleme nedeni olarak kullan"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Normal Başlat"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"Projeyi çalıştırırken normal başlatmayı geri yükleme nedeni olarak kullan"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Kurtar"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "Projeyi çalıştırırken kurtarmayı geri yükleme nedeni olarak kullan"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "Geri Yükle"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"Projeyi çalıştırırken geri yükleme nedeni olarak tam oturum geri yüklemeyi "
+"kullan"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Projeyi çalıştırırken ayrıntılı günlük kaydı iste"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "İnceleyiciyi Göster"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Proje çalıştırılırken GTK denetçisinin gösterilmesini iste"
 
@@ -4459,11 +4502,11 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:287
 msgid "Draw a mark representing normal spaces"
-msgstr "Normal boşlukları temsil eden işaret çiz"
+msgstr "Olağan boşlukları yansıtan im çiz"
 
 #: src/plugins/editorui/tweaks.ui:300
 msgid "Draw a mark representing tabs"
-msgstr "Sekmeleri temsil eden işaret çiz"
+msgstr "Sekmeleri yansıtan im çiz"
 
 #: src/plugins/editorui/tweaks.ui:312
 msgid "Newlines"
@@ -4471,7 +4514,7 @@ msgstr "Yeni satırlar"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Draw a mark at the end of lines"
-msgstr "Satırların sonunda işaret çiz"
+msgstr "Satırların sonunda im çiz"
 
 #: src/plugins/editorui/tweaks.ui:325
 msgid "Non-breaking spaces"
@@ -4479,7 +4522,7 @@ msgstr "Bölünmez boşluklar"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Draw a mark at non-breaking space characters"
-msgstr "Bölünemez boşluk karakterlerinde işaret çiz"
+msgstr "Bölünemez boşluk karakterlerinde im çiz"
 
 #: src/plugins/editorui/tweaks.ui:342
 msgid "Leading"
@@ -4487,7 +4530,7 @@ msgstr "Baştaki"
 
 #: src/plugins/editorui/tweaks.ui:343
 msgid "Draw marks for leading spaces only"
-msgstr "Yalnızca baştaki boşluklar için işaretler çiz"
+msgstr "Yalnızca baştaki boşluklar için im çiz"
 
 #: src/plugins/editorui/tweaks.ui:355
 msgid "Inside Text"
@@ -4495,7 +4538,7 @@ msgstr "Metin İçine"
 
 #: src/plugins/editorui/tweaks.ui:356
 msgid "Draw marks inside a line of text only"
-msgstr "Yalnızca metin satırının içine işaretler çiz"
+msgstr "Yalnızca metin satırının içine im çiz"
 
 #: src/plugins/editorui/tweaks.ui:368
 msgid "Trailing"
@@ -4503,7 +4546,7 @@ msgstr "Sondaki"
 
 #: src/plugins/editorui/tweaks.ui:369
 msgid "Draw marks for trailing spaces only"
-msgstr "Yalnızca sondaki boşluklar için işaretler çiz"
+msgstr "Yalnızca sondaki boşluklar için im çiz"
 
 #: src/plugins/editorui/tweaks.ui:389
 msgid "Spelling"
@@ -4660,7 +4703,7 @@ msgstr "Kurulum başarısız"
 msgid "Installation complete"
 msgstr "Kurulum bitti"
 
-#: src/plugins/flatpak/gbp-flatpak-client.c:460
+#: src/plugins/flatpak/gbp-flatpak-client.c:458
 #: src/plugins/git/gbp-git-client.c:411
 msgid "The client has been closed"
 msgstr "İstemci kapatıldı"
@@ -4868,7 +4911,6 @@ msgstr[0] "%ld dakika önce"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:119
 #, c-format
-#| msgid "An hour ago"
 msgid "%ld hour ago"
 msgid_plural "%ld hours ago"
 msgstr[0] "%ld saat önce"
@@ -4893,8 +4935,6 @@ msgstr[0] "%ld ay önce"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
 #, c-format
-#| msgid "About %u year ago"
-#| msgid_plural "About %u years ago"
 msgid "%ld year ago"
 msgid_plural "%ld years ago"
 msgstr[0] "%ld yıl önce"
