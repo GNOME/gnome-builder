@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-10-27 19:04+0000\n"
-"PO-Revision-Date: 2025-10-27 21:21+0100\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-02-06 19:17+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -149,31 +149,31 @@ msgstr "Cerca ràpida de text difusa entre fitxers i símbols"
 msgid "Arduino integration with arduino-cli"
 msgstr "Integració d'Arduino amb «arduino-cli»"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Depura amb el depurador de GNU"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Accés ràpid als teus projectes"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Creeu projectes nous a partir d'una varietat de plantilles"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Integració amb Git per a clonar els vostres projectes"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "L'editor de codi font"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Cerca difusa global ràpida"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Utilitza el minimapa per a veure més del fitxer"
 
@@ -712,7 +712,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Quin entorn s'ha d'utilitzar quan s'executen proves unitàries"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Registre loquaç"
 
@@ -995,6 +995,7 @@ msgid "Failed to format selection: %s"
 msgstr "Ha fallat en formatar la selecció %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1266,50 +1267,50 @@ msgid "Unit Test"
 msgstr "Prova unitària"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "L'usuari ha sol·licitat l'execució de l'eina «%s»"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "No es pot executar l'objectiu, un altre objectiu s'està executant"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "L'aplicació s'ha sortit amb un error: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "L'aplicació s'ha tancat"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "S'està executant %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Desplegament a dispositiu…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "L'usuari ha sol·licitat l'execució de l'aplicació"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "L'usuari ha sol·licitat reiniciar l'aplicació"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "L'usuari ha sol·licitat que l'aplicació s'executi amb l'eina «%s»"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "L'usuari ha sol·licitat que l'aplicació s'aturi"
 
@@ -1590,7 +1591,7 @@ msgstr ""
 "Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019-2023\n"
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>, 2020\n"
 "Maite Guix i Ribé <maite.guix@gmail.com>, 2022\n"
-"Victor Dargallo <victordargallo@disroot.org>, 2025"
+"Victor Dargallo <victordargallo@disroot.org>, 2025-2026"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -2981,8 +2982,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "Renderitzador GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Predeterminat"
 
@@ -3022,15 +3023,58 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Usa el renderitzador de programari Cairo quan s'executi el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "Desa/restaura"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "Usa el motiu de restauració per defecte en executar el projecte"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Pristine"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "Usa pristine com a motiu de restauració en executar el projecte"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Llançament normal"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"Usa el llançament normal com a motiu de restauració en executar el projecte"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Recupera"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "Usa el motiu de recuperació com a restauració en executar el projecte"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "Restaura"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"Usa la restauració completa de la sessió com a motiu de restauració en "
+"executar el projecte"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Reclama un registre detallat quan s'executi el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Mostra l'Inspector"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr ""
 "Reclama que es mostri l'inspeccionador de GTK quan s'executi el projecte"
