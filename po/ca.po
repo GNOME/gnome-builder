@@ -4877,7 +4877,7 @@ msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"El Constructor està instal·lant els paquets de desenvolupament de programari "
+"El Constructor està actualitzant els paquets de desenvolupament de programari "
 "necessaris per a construir l'aplicació."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
@@ -5152,7 +5152,7 @@ msgstr "Cerca als fitxers (Maj+Ctrl+Alt+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:87
 msgid "_Recurse into Directories"
-msgstr "_Recurs als directoris"
+msgstr "_Recórrer els directoris recursivament"
 
 #: src/plugins/grep/gbp-grep-panel.ui:100
 msgid "Match Whole _Words"
