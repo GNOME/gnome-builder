@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-06 19:17+0100\n"
+"PO-Revision-Date: 2026-02-14 19:17+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -1900,7 +1900,7 @@ msgstr "_Retalla (Ctrl+X)"
 
 #: src/libide/sourceview/gtk/menus.ui:16
 msgid "_Copy (Ctrl+C)"
-msgstr "_Còpia (Ctrl+C)"
+msgstr "_Copia (Ctrl+C)"
 
 #: src/libide/sourceview/gtk/menus.ui:22
 msgid "_Paste (Ctrl+V)"
@@ -2175,11 +2175,11 @@ msgstr "Cerca per entorns d'execució"
 
 #: src/libide/terminal/ide-terminal-search.ui:34
 msgid "Move to previous match"
-msgstr "Mou a la coincidència anterior (Ctrl+Maj+G)"
+msgstr "Mou a la coincidència anterior"
 
 #: src/libide/terminal/ide-terminal-search.ui:44
 msgid "Move to next match"
-msgstr "Mou a la coincidència següent (Ctrl+G)"
+msgstr "Mou a la coincidència següent"
 
 #: src/libide/terminal/ide-terminal-search.ui:107
 msgid "Wrap around"
@@ -2466,7 +2466,7 @@ msgstr "Utilitzeu KEY=VALUE per establir una variable d'entorn"
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:157
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
-msgstr "És possible que les claus no comencin amb un número"
+msgstr "Les claus no poden començar amb un nombre"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:167
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
@@ -2685,7 +2685,7 @@ msgstr "Configurar paràmetres relacionats amb el projecte"
 #: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118
 #: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
-msgstr "Fundació del codi"
+msgstr "Forja de codi"
 
 #: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20
 #: src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
