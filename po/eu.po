@@ -2,13 +2,13 @@
 # Copyright (C) 2019 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Asier Saratsua Garmendia <asier.sarasua@ni.eus>, 2019, 2020, 2021, 2022, 2023, 2024.
-# Asier Saratsua Garmendia <asier.sarasua@ni.eus>, 2025.
+# Asier Saratsua Garmendia <asier.sarasua@ni.eus>, 2025, 2026.
 #
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-30 23:43+0000\n"
-"PO-Revision-Date: 2025-09-04 10:00+0100\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-02-16 10:00+0100\n"
 "Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -125,35 +125,34 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "Testuen bilaketa lauso azkarra fitxategietan eta ikurretan"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integrazioa arduino-cli bidez"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU araztailearekin araztea"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Proiektuen atzipen azkarra"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Proiektu berriak txantiloien multzo handi batetik abiatuta sortzea"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Integrazio Git sistemarekin zure proiektuak klonatzeko"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "Iturburu-kodearen editorea"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Bilaketa lauso global azkarra"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Erabili minimapa fitxategiko gehiago ikusteko"
 
@@ -345,7 +344,6 @@ msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Gaituta badago, editoreak dokumentuko sareta-marrak erakutsiko ditu."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
-#| msgid "If enabled, the editor will show line numbers."
 msgid "If enabled, the editor will respect the font-name setting."
 msgstr "Gaituta badago, editoreak letra-izenen ezarpenari kasu egingo dio."
 
@@ -636,7 +634,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Zein ingurune erabiliko den unitate-probak exekutatzean"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Egunkari xehea"
 
@@ -912,6 +910,7 @@ msgid "Failed to format selection: %s"
 msgstr "Huts egin du hautapenaren formatuak: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1176,50 +1175,50 @@ msgid "Unit Test"
 msgstr "Unitate-proba"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Erabiltzaileak eskatutako exekuzio-tresna: “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "Ezin da helburua exekutatu, beste helburu bat exekutatzen ari da"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Aplikazioa amaitu da honako errorearekin: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Aplikazioa amaitu da"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s exekutatzen…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Gailuan instalatzen…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "Erabiltzaileak aplikazioa exekutatzea eskatu du"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "Erabiltzaileak aplikazioa berrabiaraztea eskatu du"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "Erabiltzaileak aplikazioa \"%s\" tresnarekin exekutatzea eskatu du"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "Erabiltzaileak aplikazioa gelditzea eskatu du"
 
@@ -1674,19 +1673,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Pakete %u instalatzen"
 msgstr[1] "%u paketa instalatzen"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "Eragiketa bertan behera utzi da"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Huts egin du lengoaia-zerbitzariak hasieratzeak: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Ez dago konexiorik hizkuntza-zerbitzariarekin"
 
@@ -2162,13 +2161,11 @@ msgid "Run a new instance of Builder"
 msgstr "Exekutatu Builder-en instantzia berria"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
-#| msgid "Installing rustup"
 msgid "Installing Arduino Library"
 msgstr "Arduino liburutegia instalatzen"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:930
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1047
-#| msgid "Downloading rustup-init"
 msgid "Downloading and installing"
 msgstr "Deskargatzen eta instalatzen"
 
@@ -2178,12 +2175,10 @@ msgstr "Arduino liburutegia desinstalatzen"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:983
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1099
-#| msgid "Installing…"
 msgid "Uninstalling"
 msgstr "Desinstalatzen"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1046
-#| msgid "Installing rustup"
 msgid "Installing Arduino Platform"
 msgstr "Arduino plataforma instalatzen"
 
@@ -2192,7 +2187,6 @@ msgid "Uninstalling Arduino Platform"
 msgstr "Arduino plataforma desinstalatzen"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
-#| msgid "Settings"
 msgid "Board Settings"
 msgstr "Plaka-ezarpenak"
 
@@ -2201,7 +2195,6 @@ msgid "Board"
 msgstr "Plaka"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
-#| msgid "Stop Program"
 msgid "Programmer"
 msgstr "Programatzailea"
 
@@ -2215,27 +2208,22 @@ msgid "No libraries are present in this profile"
 msgstr "Profil honek ez du liburutegirik"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
-#| msgid "Library"
 msgid "Add _Library"
 msgstr "Gehitu _liburutegia"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:24
-#| msgid "No toolchain installed. Click"
 msgid "No libraries installed"
 msgstr "Ez dago liburutegirik instalatuta"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
-#| msgid "Library"
 msgid "Install _Library"
 msgstr "Instalatu _liburutegia"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Library"
 msgstr "Bilatu liburutegia"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
-#| msgid "No references found"
 msgid "No libraries found"
 msgstr "Ez da liburutegirik aurkitu"
 
@@ -2274,27 +2262,22 @@ msgid "No platforms installed"
 msgstr "Ez dago plataformarik instalatuta"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
-#| msgid "Install Package"
 msgid "Install _Platform"
 msgstr "Instalatu _plataforma"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Platform"
 msgstr "Bilatu plataforma"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
-#| msgid "No references found"
 msgid "No platforms found"
 msgstr "Ez da plataformarik aurkitu"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:48
-#| msgid "Run the project"
 msgid "Arduino Sketch Project"
 msgstr "Arduino Sketch proiektua"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:49
-#| msgid "Stop running the project"
 msgid "An empty arduino sketch project"
 msgstr "Arduino Sketch proiektu hutsa"
 
@@ -2303,7 +2286,6 @@ msgid "Notes"
 msgstr "Oharrak"
 
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
-#| msgid "Additional"
 msgid "No additional URL"
 msgstr "Ez dago URL gehigarririk"
 
@@ -2323,12 +2305,10 @@ msgid "Arduino"
 msgstr "Arduino"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:12
-#| msgid "Additional"
 msgid "Additional URLs"
 msgstr "URL gehigarriak"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:22
-#| msgid "Libraries"
 msgid "Installed Libraries"
 msgstr "Instalatutako liburutegiak"
 
@@ -2862,7 +2842,6 @@ msgid "Use high contrast theme when running the project"
 msgstr "Erabili kontraste handiko gaia proiektua exekutatzean"
 
 #: src/plugins/buildui/gtk/menus.ui:265
-#| msgid "Open _Preview"
 msgid "Adaptive Preview"
 msgstr "Aurrebista moldakorra"
 
@@ -2898,8 +2877,8 @@ msgstr "PUZa"
 msgid "GTK Renderer"
 msgstr "GTK errendatzailea"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Lehenetsia"
 
@@ -2939,15 +2918,62 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Erabili Cairo software errendatzailea proiektua exekutatzean"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+#| msgid "Save & Restore"
+msgid "Save/Restore"
+msgstr "Gorde/Leheneratu"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+#| msgid "Use the default GTK renderer when running the project"
+msgid "Use default restore reason when running the project"
+msgstr "Erabili leheneratze-arrazoi lehenetsia proiektua exekutatzean"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Aratza"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+#| msgid "Use the GL renderer when running the project"
+msgid "Use pristine as restore reason when running the project"
+msgstr "Erabili aratza leheneratze-arrazoi gisa proiektua exekutatzean"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Abio normala"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+#| msgid "Use orange accent color when running the project"
+msgid "Use normal launch as restore reason when running the project"
+msgstr "Erabili abio normala leheneratze-arrazoi gisa proiektua exekutatzean"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Berreskuratu"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+#| msgid "Use the GL renderer when running the project"
+msgid "Use recover as restore reason when running the project"
+msgstr "Use berreskuratzea as restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+#| msgid "Save & Restore"
+msgid "Restore"
+msgstr "Leheneratu"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+#| msgid "Use the Cairo software renderer when running the project"
+msgid "Use full session restore as restore reason when running the project"
+msgstr "Use saioaren leheneratze osoa leheneratze-arrazoi gisa proiektua exekutatzean"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Eskatu egunkari xehea proiektua exekutatzean"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Erakutsi ikuskatzailea"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Eskatu GTK ikuskatzailea erakutsi dadin proiektua exekutatzean"
 
@@ -3610,7 +3636,6 @@ msgid "Angle"
 msgstr "Angelua"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Norabidea"
 
@@ -3620,7 +3645,6 @@ msgstr "Forma"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
-#| msgid "Consumption"
 msgid "Position"
 msgstr "Kokalekua"
 
@@ -4762,7 +4786,6 @@ msgid "in the future"
 msgstr "etorkizunean"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:112
-#| msgid "Just now"
 msgid "just now"
 msgstr "oraintxe"
 
@@ -4775,7 +4798,6 @@ msgstr[1] "duela %ld minutu"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:119
 #, c-format
-#| msgid "An hour ago"
 msgid "%ld hour ago"
 msgid_plural "%ld hours ago"
 msgstr[0] "duela ordu %ld"
@@ -4804,8 +4826,6 @@ msgstr[1] "duela %ld hilabete"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
 #, c-format
-#| msgid "About %u year ago"
-#| msgid_plural "About %u years ago"
 msgid "%ld year ago"
 msgid_plural "%ld years ago"
 msgstr[0] "duela urte %ld"
@@ -4886,7 +4906,6 @@ msgid "Git Blame"
 msgstr "Git Blame"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
 msgstr "Erakutsi lineako Git Blame"
 
@@ -5201,22 +5220,18 @@ msgid "Reveal in Project Tree"
 msgstr "Nabarmendu proiektuaren zuhaitzean"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
-#| msgid "File must be within the project tree."
 msgid "Reveal the current page in the project tree"
 msgstr "Erakutsi uneko orria proiektu-zuhaitzean"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#| msgid "Close the current page"
 msgid "Save the current page"
 msgstr "Gorde uneko orria"
 
 #: src/plugins/menu-search/gtk/menus.ui:121
-#| msgid "Move Page Left"
 msgid "Move Page Down"
 msgstr "Eraman orria behera"
 
 #: src/plugins/menu-search/gtk/menus.ui:122
-#| msgid "Close the current page"
 msgid "Move the current page down"
 msgstr "Eraman uneko orria behera"
 
@@ -5225,7 +5240,6 @@ msgid "Move Page Left"
 msgstr "Eraman orria ezkerrera"
 
 #: src/plugins/menu-search/gtk/menus.ui:128
-#| msgid "Close the current page"
 msgid "Move the current page left"
 msgstr "Eraman uneko orria ezkerrera"
 
@@ -5234,17 +5248,14 @@ msgid "Move Page Right"
 msgstr "Eraman orria eskuinera"
 
 #: src/plugins/menu-search/gtk/menus.ui:134
-#| msgid "Close the current page"
 msgid "Move the current page right"
 msgstr "Eraman uneko orria eskuinera"
 
 #: src/plugins/menu-search/gtk/menus.ui:139
-#| msgid "Move Page Left"
 msgid "Move Page Up"
 msgstr "Eraman orria gora"
 
 #: src/plugins/menu-search/gtk/menus.ui:140
-#| msgid "Close the current page"
 msgid "Move the current page up"
 msgstr "Eraman uneko orria gora"
 
@@ -5257,17 +5268,14 @@ msgid "Reload the contents of open files"
 msgstr "Birkargatu fitxategi irekien edukiak"
 
 #: src/plugins/menu-search/gtk/menus.ui:159
-#| msgid "Close the current page"
 msgid "Print the current page"
 msgstr "Inprimatu uneko orria"
 
 #: src/plugins/menu-search/gtk/menus.ui:170
-#| msgid "Save and close the current page"
 msgid "Find a string in the current page"
 msgstr "Bilatu kate bat uneko orrian"
 
 #: src/plugins/menu-search/gtk/menus.ui:177
-#| msgid "Save and close the current page"
 msgid "Find and replace a string in the current page"
 msgstr "Bilatu eta ordeztu kate bat uneko orrian"
 
