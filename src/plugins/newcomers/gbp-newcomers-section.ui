@@ -64,15 +64,6 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Gitg</property>
-                    <property name="description" translatable="yes">Gitg is a graphical Git client</property>
-                    <property name="icon-name">org.gnome.gitg-symbolic</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gitg.git</property>
-                    <property name="languages">Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Maps</property>
                     <property name="description" translatable="yes">A GNOME maps application</property>
                     <property name="icon-name">org.gnome.Maps-symbolic</property>
