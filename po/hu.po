@@ -1,16 +1,16 @@
 # Hungarian translation for gnome-builder.
-# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Free Software Foundation, Inc.
+# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-09 05:52+0000\n"
-"PO-Revision-Date: 2025-09-09 14:23+0200\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-02-22 11:04+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -139,35 +139,34 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "Gyors közelítő szövegkeresés a fájlok és szimbólumok között"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integráció arduino-cli használatával"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Hibakeresés a GNU hibakeresővel"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "A projektek gyors elérése"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Új projekt létrehozása számos sablonból"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Git integráció a projektek klónozásához"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "A forráskódszerkesztő"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Gyors általános fuzzy keresés"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Használja a minitérképet, hogy többet lásson a fájlból"
 
@@ -700,7 +699,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Milyen környezet legyen használva az egységtesztek futtatásakor"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Kibővített naplózás"
 
@@ -981,6 +980,7 @@ msgid "Failed to format selection: %s"
 msgstr "A kijelölés formázása sikertelen: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1251,50 +1251,50 @@ msgid "Unit Test"
 msgstr "Egységteszt"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Felhasználó által kért futtatási eszköz: „%s”"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "A cél nem futtatható, egy másik cél már fut"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Az alkalmazás hibával lépett ki: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Az alkalmazás kilépett"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s futtatása…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Telepítés az eszközre…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "A felhasználó az alkalmazás futtatását kérte"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "A felhasználó az alkalmazás újraindítását kérte"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "A felhasználó az alkalmazás „%s” eszközzel történő futtatását kérte"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "A felhasználó az alkalmazás leállítását kérte"
 
@@ -1755,19 +1755,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "%u csomag telepítése"
 msgstr[1] "%u csomag telepítése"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "A művelet meg lett szakítva"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "A nyelvi kiszolgáló előkészítése sikertelen: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "Nincs kapcsolat a nyelvi kiszolgálóhoz"
 
@@ -2250,7 +2250,6 @@ msgstr "Arduino-programkönyvtár telepítése"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:930
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1047
-#| msgid "Downloading dependencies"
 msgid "Downloading and installing"
 msgstr "Letöltés és telepítés"
 
@@ -2260,12 +2259,10 @@ msgstr "Arduino-programkönyvtár eltávolítása"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:983
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1099
-#| msgid "Installing…"
 msgid "Uninstalling"
 msgstr "Eltávolítás"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:1046
-#| msgid "Installing project"
 msgid "Installing Arduino Platform"
 msgstr "Arduino-platform telepítése"
 
@@ -2274,7 +2271,6 @@ msgid "Uninstalling Arduino Platform"
 msgstr "Arduino-platform eltávolítása"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:10
-#| msgid "Settings"
 msgid "Board Settings"
 msgstr "Tábla beállításai"
 
@@ -2283,7 +2279,6 @@ msgid "Board"
 msgstr "Tábla"
 
 #: src/plugins/arduino/gbp-arduino-board-options-widget.ui:22
-#| msgid "Stop Program"
 msgid "Programmer"
 msgstr "Programozó"
 
@@ -2297,7 +2292,6 @@ msgid "No libraries are present in this profile"
 msgstr "Nincsenek programkönyvtárak ebben a profilban"
 
 #: src/plugins/arduino/gbp-arduino-libraries-editor.ui:62
-#| msgid "Library"
 msgid "Add _Library"
 msgstr "_Programkönyvtár hozzáadása"
 
@@ -2306,17 +2300,14 @@ msgid "No libraries installed"
 msgstr "Nincsenek programkönyvtárak telepítve"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:59
-#| msgid "Library"
 msgid "Install _Library"
 msgstr "_Programkönyvtár telepítése"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Library"
 msgstr "Programkönyvtár keresése"
 
 #: src/plugins/arduino/gbp-arduino-libraries-manager.ui:135
-#| msgid "No references found"
 msgid "No libraries found"
 msgstr "Nem találhatók programkönyvtárak"
 
@@ -2355,27 +2346,22 @@ msgid "No platforms installed"
 msgstr "Nincsenek platformok telepítve"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:59
-#| msgid "Installation Prefix"
 msgid "Install _Platform"
 msgstr "_Platform telepítése"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:75
-#| msgid "Search for anything"
 msgid "Search for a Platform"
 msgstr "Platform keresése"
 
 #: src/plugins/arduino/gbp-arduino-platforms-manager.ui:135
-#| msgid "No references found"
 msgid "No platforms found"
 msgstr "Nem találhatók platformok"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:48
-#| msgid "Run the project"
 msgid "Arduino Sketch Project"
 msgstr "Arduino-vázlat projekt"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:49
-#| msgid "Stop running the project"
 msgid "An empty arduino sketch project"
 msgstr "Egy üres Arduino-vázlat projekt"
 
@@ -2384,7 +2370,6 @@ msgid "Notes"
 msgstr "Jegyzetek"
 
 #: src/plugins/arduino/gbp-arduino-urls-editor.ui:37
-#| msgid "Additional"
 msgid "No additional URL"
 msgstr "Nincs további URL"
 
@@ -2404,12 +2389,10 @@ msgid "Arduino"
 msgstr "Arduino"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:12
-#| msgid "Additional"
 msgid "Additional URLs"
 msgstr "További URL-ek"
 
 #: src/plugins/arduino/tweaks-arduino-page.ui:22
-#| msgid "Libraries"
 msgid "Installed Libraries"
 msgstr "Telepített programkönyvtárak"
 
@@ -2949,7 +2932,6 @@ msgid "Use high contrast theme when running the project"
 msgstr "Nagy kontrasztú téma használata a projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:265
-#| msgid "Open Preview…"
 msgid "Adaptive Preview"
 msgstr "Alkalmazkodó előnézet"
 
@@ -2985,8 +2967,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "GTK-megjelenítő"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -3026,15 +3008,66 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "A Cairo szoftveres megjelenítő használata a projekt futtatásakor"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+#| msgid "Save & Restore"
+msgid "Save/Restore"
+msgstr "Mentés és helyreállítás"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+#| msgid "Use the default GTK renderer when running the project"
+msgid "Use default restore reason when running the project"
+msgstr "Alapértelmezett helyreállítási indok használata a projekt futtatásakor"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Sértetlen"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+#| msgid "Use the GL renderer when running the project"
+msgid "Use pristine as restore reason when running the project"
+msgstr "Sértetlen használata helyreállítási indokként a projekt futtatásakor"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Normál indítás"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+#| msgid "Use orange accent color when running the project"
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"Normál indítás használata helyreállítási indokként a projekt futtatásakor"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Visszaállítás"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+#| msgid "Use the GL renderer when running the project"
+msgid "Use recover as restore reason when running the project"
+msgstr ""
+"Visszaállítás használata helyreállítási indokként a projekt futtatásakor"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+#| msgid "Save & Restore"
+msgid "Restore"
+msgstr "Helyreállítás"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+#| msgid "Use the Cairo software renderer when running the project"
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"Teljes munkamenet-helyreállítás használata helyreállítási indokként a projekt "
+"futtatásakor"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Részletes naplózás kérése a projekt futtatásakor"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Vizsgáló megjelenítése"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "A GTK-vizsgáló megjelenítésének kérése a projekt futtatásakor"
 
@@ -3733,7 +3766,6 @@ msgid "Angle"
 msgstr "Szög"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:280
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Irány"
 
@@ -3743,7 +3775,6 @@ msgstr "Alak"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
-#| msgid "Consumption"
 msgid "Position"
 msgstr "Pozíció"
 
@@ -4913,7 +4944,6 @@ msgid "in the future"
 msgstr "a jövőben"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:112
-#| msgid "Just now"
 msgid "just now"
 msgstr "épp most"
 
@@ -4926,7 +4956,6 @@ msgstr[1] "%ld perccel ezelőtt"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:119
 #, c-format
-#| msgid "An hour ago"
 msgid "%ld hour ago"
 msgid_plural "%ld hours ago"
 msgstr[0] "%ld órával ezelőtt"
@@ -4955,8 +4984,6 @@ msgstr[1] "%ld hónappal ezelőtt"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
 #, c-format
-#| msgid "About %u year ago"
-#| msgid_plural "About %u years ago"
 msgid "%ld year ago"
 msgid_plural "%ld years ago"
 msgstr[0] "%ld évvel ezelőtt"
@@ -5037,7 +5064,6 @@ msgid "Git Blame"
 msgstr "Git-hibáztatás"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
 msgstr "Sorközi Git-hibáztatás megjelenítése"
 
@@ -5352,12 +5378,10 @@ msgid "Reveal in Project Tree"
 msgstr "Megjelenítés a projektfában"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
-#| msgid "File must be within the project tree."
 msgid "Reveal the current page in the project tree"
 msgstr "A jelenlegi oldal felfedése a projektfában"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
-#| msgid "Close the current page"
 msgid "Save the current page"
 msgstr "A jelenlegi oldal mentése"
 
@@ -5366,7 +5390,6 @@ msgid "Move Page Down"
 msgstr "Oldal mozgatása le"
 
 #: src/plugins/menu-search/gtk/menus.ui:122
-#| msgid "Close the current page"
 msgid "Move the current page down"
 msgstr "A jelenlegi oldal lefelé mozgatása"
 
@@ -5375,7 +5398,6 @@ msgid "Move Page Left"
 msgstr "Oldal mozgatása balra"
 
 #: src/plugins/menu-search/gtk/menus.ui:128
-#| msgid "Close the current page"
 msgid "Move the current page left"
 msgstr "A jelenlegi oldal balra mozgatása"
 
@@ -5384,17 +5406,14 @@ msgid "Move Page Right"
 msgstr "Oldal mozgatása jobbra"
 
 #: src/plugins/menu-search/gtk/menus.ui:134
-#| msgid "Close the current page"
 msgid "Move the current page right"
 msgstr "A jelenlegi oldal jobbra mozgatása"
 
 #: src/plugins/menu-search/gtk/menus.ui:139
-#| msgid "Close Page"
 msgid "Move Page Up"
 msgstr "Oldal mozgatása fel"
 
 #: src/plugins/menu-search/gtk/menus.ui:140
-#| msgid "Close the current page"
 msgid "Move the current page up"
 msgstr "A jelenlegi oldal felfelé mozgatása"
 
@@ -5407,17 +5426,14 @@ msgid "Reload the contents of open files"
 msgstr "A megnyitott fájlok tartalmának újratöltése"
 
 #: src/plugins/menu-search/gtk/menus.ui:159
-#| msgid "Close the current page"
 msgid "Print the current page"
 msgstr "A jelenlegi oldal nyomtatása"
 
 #: src/plugins/menu-search/gtk/menus.ui:170
-#| msgid "Close the current page"
 msgid "Find a string in the current page"
 msgstr "Karakterlánc keresése a jelenlegi oldalon"
 
 #: src/plugins/menu-search/gtk/menus.ui:177
-#| msgid "Navigate to a symbol within the current page"
 msgid "Find and replace a string in the current page"
 msgstr "Karakterlánc keresése és cseréje a jelenlegi oldalon"
 
