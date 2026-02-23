@@ -1,3 +1,8 @@
+# GNOME Builder 50.rc
+
+ * Meson templates: Update Freedesktop runtime version
+ * Translation updates
+
 # GNOME Builder 50.alpha
 
  * Editor improvements for handling drafts via save delegate
