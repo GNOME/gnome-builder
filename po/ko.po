@@ -1,7 +1,7 @@
 # Korean translation for gnome-builder.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Changwoo Ryu <cwryu@debian.org>, 2015-2025.
+# Changwoo Ryu <cwryu@debian.org>, 2015-2026.
 #
 # 용어
 # - "Night Light" - "야간 모드" (gnome-control-center 번역과 일관성 유지)
@@ -11,13 +11,14 @@
 # - container - gtk의 컨테이너 위젯을 가리킬 수도 있고, docker와 같은 컨테이너를 가리킬 수도 있다.
 #               위젯은 위젯이라고 명시해서 구분.
 # - scheme - 양식 (테마의 하위 분류, 다크 버전 등을 말함. gtksourceview와 통일)
+# - restore - 복원, recover - 복구
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-11 18:20+0000\n"
-"PO-Revision-Date: 2025-09-14 08:02+0900\n"
+"POT-Creation-Date: 2026-02-23 19:53+0000\n"
+"PO-Revision-Date: 2026-02-28 01:38+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -141,31 +142,31 @@ msgstr "파일 및 심볼에 대해 빠른 퍼지 텍스트 검색 기능"
 msgid "Arduino integration with arduino-cli"
 msgstr "arduino-cli를 이용한 아두이노 연동"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU 디버거로 실행"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "프로젝트에 빠르게 접근"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "여러가지 서식에서 새 프로젝트를 만듭니다"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "프로젝트 복제하는데 깃 연동"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "소스 코드 편집기"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "빠른 전체 퍼지 검색"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "미니맵을 이용해 파일의 개요 보기"
 
@@ -265,7 +266,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
-msgstr "마지막 위치 복구"
+msgstr "마지막 위치 복원"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
@@ -527,11 +528,11 @@ msgstr "모든 빌더 프로젝트가 들어갈 디렉터리."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
-msgstr "세션 복구"
+msgstr "세션 복원"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Restores the projects previous session when loading."
-msgstr "프로젝트를 읽어들일 때 이전 세션을 복구합니다."
+msgstr "프로젝트를 읽어들일 때 이전 세션을 복원합니다."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
@@ -616,8 +617,7 @@ msgstr "빌드에 사용하도록 선택한 구성"
 msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
-msgstr ""
-"선택한 빌드 구성, 다음 번에 프로젝트를 읽어들일 때 이 구성을 복구합니다."
+msgstr "선택한 빌드 구성, 다음 번에 프로젝트를 읽어들일 때 이 구성을 복원합니다."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
@@ -661,7 +661,7 @@ msgid "What environment to use when running unit tests"
 msgstr "단위 검사를 실행할 때 사용할 환경"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "자세히 로그 남기기"
 
@@ -918,11 +918,11 @@ msgstr "관리자 권한으로 열기(_A)"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
 msgid "Document Restored"
-msgstr "문서 복구됨"
+msgstr "문서 복원됨"
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
 msgid "Unsaved document has been restored."
-msgstr "저장하지 않은 문서를 복구했습니다."
+msgstr "저장하지 않은 문서를 복원했습니다."
 
 #: src/libide/editor/ide-editor-info-bar.ui:81
 msgid "_Discard…"
@@ -941,6 +941,7 @@ msgid "Failed to format selection: %s"
 msgstr "선택 내용 형식 재설정에 실패했습니다: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1206,50 +1207,50 @@ msgid "Unit Test"
 msgstr "단위 검사"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "사용자가 “%s” 실행 도구를 요청했습니다"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "타겟을 실행할 수 없습니다. 이미 또 다른 타겟이 실행 중입니다."
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "앱이 오류로 끝났습니다: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "앱이 끝났습니다"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s 실행 중…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "장치에 배포…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "사용자가 앱 실행을 요청했습니다"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "사용자가 앱 다시 실행을 요청했습니다"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "사용자가 “%s” 도구로 앱 실행을 요청했습니다"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "사용자가 앱 중지를 요청했습니다"
 
@@ -1706,19 +1707,19 @@ msgid "Installing %u package"
 msgid_plural "Installing %u packages"
 msgstr[0] "패키지 %u개 설치 중"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "작업이 취소되었습니다"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "언어 서버 초기화에 실패했습니다: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "언어 서버에 연결이 없습니다"
 
@@ -2936,8 +2937,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "GTK 렌더러"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "기본값"
 
@@ -2977,16 +2978,58 @@ msgstr "카이로"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "프로젝트 실행에 카이로 소프트웨어 렌더러를 사용합니다"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "저장/복원"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "프로젝트 실행에 기본 복원 이유를 사용합니다."
+
+# 저장 내용 없음
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "새로움"
+
+# 저장 내용 없음
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "프로젝트 실행에 복원 이유로 새로움을 사용합니다."
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "일반 실행"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr "프로젝트 실행에 복원 이유로 일반 실행을 사용합니다."
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "복구"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "프로젝트 실행에 복원 이유로 복구를 사용합니다."
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "복원"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr "프로젝트 실행에 복원 이유로 전체 세션 복원을 사용합니다."
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "프로젝트 실행에 자세한 로그 기록을 요청합니다"
 
 # GtkInspector를 가리킴
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "인스펙터 표시"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "프로젝트 실행에 GTK 인스펙터 표시를 요청합니다"
 
@@ -4597,7 +4640,7 @@ msgstr "세션 관리"
 
 #: src/plugins/editorui/tweaks.ui:556
 msgid "Save & Restore"
-msgstr "저장 및 복구"
+msgstr "저장 및 복원"
 
 #: src/plugins/editorui/tweaks.ui:559
 msgid "Auto-Save"
@@ -4629,7 +4672,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
-msgstr "커서 위치 복구"
+msgstr "커서 위치 복원"
 
 #: src/plugins/editorui/tweaks.ui:604
 msgid "Jump to the last position when re-opening a file"
@@ -5788,11 +5831,11 @@ msgstr "버전 컨트롤 없음"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
-msgstr "이전 세션 복구"
+msgstr "이전 세션 복원"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
-msgstr "프로젝트를 읽어들일 때 이전에 열었던 파일 복구"
+msgstr "프로젝트를 읽어들일 때 이전에 열었던 파일 열기"
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
