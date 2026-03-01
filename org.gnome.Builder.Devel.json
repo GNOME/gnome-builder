@@ -413,51 +413,6 @@
             ]
         },
         {
-            "name" : "libyaml",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/yaml/libyaml.git",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
-            "name" : "libxmlb",
-            "config-opts" : [
-                "--buildtype=debugoptimized",
-                "-Dgtkdoc=false",
-                "-Dintrospection=false",
-                "-Dtests=false",
-                "-Dcli=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/hughsie/libxmlb.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
-            "name" : "libstemmer",
-            "buildsystem" : "cmake-ninja",
-            "config-opts" : [
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
-                "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/zvelo/libstemmer",
-                    "branch" : "master"
-                }
-            ]
-        },
-        {
             "name" : "polkit",
             "buildsystem": "meson",
             "config-opts" : [
@@ -681,17 +636,6 @@
                     "type" : "git",
                     "url" : "https://github.com/commonmark/cmark",
                     "branch" : "master"
-                }
-            ]
-        },
-        {
-            "name" : "blueprint-compiler",
-            "buildsystem" : "meson",
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/jwestman/blueprint-compiler.git",
-                    "branch" : "main"
                 }
             ]
         },
