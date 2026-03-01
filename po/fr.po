@@ -18,9 +18,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-21 13:22+0000\n"
-"Last-Translator: Mathis Joussemet <joussemetmathis@gmail.com>\n"
+"POT-Creation-Date: 2026-02-23 19:53+0000\n"
+"PO-Revision-Date: 2026-03-01 11:16+0100\n"
+"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -3059,7 +3059,9 @@ msgstr "Enregistrer ou restaurer"
 
 #: src/plugins/buildui/gtk/menus.ui:336
 msgid "Use default restore reason when running the project"
-msgstr "Utiliser le paramètre de restauration par défaut lors de l’exécution du projet"
+msgstr ""
+"Utiliser le paramètre de restauration par défaut lors de l’exécution du "
+"projet"
 
 #: src/plugins/buildui/gtk/menus.ui:339
 msgid "Pristine"
@@ -3067,7 +3069,8 @@ msgstr "Vierge"
 
 #: src/plugins/buildui/gtk/menus.ui:343
 msgid "Use pristine as restore reason when running the project"
-msgstr "Utiliser vierge comme paramètre de restauration lors de l’exécution du projet"
+msgstr ""
+"Utiliser vierge comme paramètre de restauration lors de l’exécution du projet"
 
 #: src/plugins/buildui/gtk/menus.ui:346
 msgid "Normal Launch"
@@ -3075,7 +3078,9 @@ msgstr "Lancement normal"
 
 #: src/plugins/buildui/gtk/menus.ui:350
 msgid "Use normal launch as restore reason when running the project"
-msgstr "Utiliser lancement normal comme paramètre de restauration lors de l’exécution du projet"
+msgstr ""
+"Utiliser lancement normal comme paramètre de restauration lors de "
+"l’exécution du projet"
 
 #: src/plugins/buildui/gtk/menus.ui:353
 msgid "Recover"
@@ -3083,7 +3088,9 @@ msgstr "Récupérer"
 
 #: src/plugins/buildui/gtk/menus.ui:357
 msgid "Use recover as restore reason when running the project"
-msgstr "Utiliser récupérer comme paramètre de restauration lors de l’exécution du projet"
+msgstr ""
+"Utiliser récupérer comme paramètre de restauration lors de l’exécution du "
+"projet"
 
 #: src/plugins/buildui/gtk/menus.ui:360
 msgid "Restore"
@@ -3091,7 +3098,9 @@ msgstr "Restaurer"
 
 #: src/plugins/buildui/gtk/menus.ui:364
 msgid "Use full session restore as restore reason when running the project"
-msgstr "Utiliser la restauration complète de session comme raison de restauration lors de l'exécution du projet"
+msgstr ""
+"Utiliser la restauration complète de session comme raison de restauration "
+"lors de l'exécution du projet"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
@@ -5454,10 +5463,8 @@ msgid "Reveal in Project Tree"
 msgstr "Révéler dans l’arborescence du projet"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
-#, fuzzy
-#| msgid "File must be within the project tree."
 msgid "Reveal the current page in the project tree"
-msgstr ""
+msgstr "Révéler la page courante dans l’arborescence du projet"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
 msgid "Save the current page"
