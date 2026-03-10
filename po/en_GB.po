@@ -4,14 +4,14 @@
 # Abigail Brady <morwen@evilmagic.org>, Bastien Nocera <hadess@hadess.net>, 2016.
 # Zander Brown <zbrown@gnome.org>, 2019-2021.
 # Andi Chandler <andi@gowling.com>, 2024-2025.
-# Bruce Cowan <bruce@bcowan.me.uk>, 2017-2025.
+# Bruce Cowan <bruce@bcowan.me.uk>, 2017-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-08-30 23:43+0000\n"
-"PO-Revision-Date: 2025-09-09 12:24+0100\n"
+"POT-Creation-Date: 2026-02-23 19:53+0000\n"
+"PO-Revision-Date: 2026-03-09 11:29+0000\n"
 "Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Gtranslator 49.0\n"
 "X-DL-Team: en_GB\n"
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: master\n"
@@ -145,31 +145,31 @@ msgstr "Fast fuzzy text search across files and symbols"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integration with arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Debug with the GNU debugger"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Quickly access your projects"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Create new projects from a variety of templates"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Integration with Git to clone your projects"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "The source code editor"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Fast global fuzzy search"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Use the minimap to see more of the file"
 
@@ -684,7 +684,7 @@ msgid "What environment to use when running unit tests"
 msgstr "What environment to use when running unit tests"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Verbose Logging"
 
@@ -965,6 +965,7 @@ msgid "Failed to format selection: %s"
 msgstr "Failed to format selection: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1231,50 +1232,50 @@ msgid "Unit Test"
 msgstr "Unit Test"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "User requested run tool “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "Cannot run target, another target is running"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Application exited with error: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Application exited"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "Running %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Deploying to device…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "User requested application to run"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "User requested application to restart"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "User requested application to run with tool “%s”"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "User requested application to stop"
 
@@ -1733,19 +1734,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Installing %u package"
 msgstr[1] "Installing %u packages"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "The operation has been cancelled"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Failed to initialise language server: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "No connection to language server"
 
@@ -2938,8 +2939,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "GTK Renderer"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Default"
 
@@ -2979,15 +2980,55 @@ msgstr "Cairo"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "Use the Cairo software renderer when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "Save/Restore"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "Use default restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Pristine"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "Use pristine as restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Normal Launch"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr "Use normal launch as restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Recover"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "Use recover as restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "Restore"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr "Use full session restore as restore reason when running the project"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Request verbose logging when running the project"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Show Inspector"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Request the GTK inspector be shown when running the project"
 
