@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-02-23 19:53+0000\n"
-"PO-Revision-Date: 2026-03-01 11:16+0100\n"
+"PO-Revision-Date: 2026-03-11 22:22+0100\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -2278,7 +2278,7 @@ msgstr "Page vierge"
 
 #: src/main.c:128
 msgid "Run a new instance of Builder"
-msgstr "Lancer une nouvelle instance de Builder"
+msgstr "Exécuter une nouvelle instance de Builder"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
 msgid "Installing Arduino Library"
@@ -3878,11 +3878,11 @@ msgstr "Chemin vers l’exécutable ctags"
 
 #: src/plugins/debuggerui/gtk/menus.ui:11
 msgid "Run with Debugger"
-msgstr "Lancer avec le débogueur"
+msgstr "Exécuter avec le débogueur"
 
 #: src/plugins/debuggerui/gtk/menus.ui:14
 msgid "Run the project with debugger"
-msgstr "Lancer le projet avec le débogueur"
+msgstr "Exécuter le projet avec le débogueur"
 
 #: src/plugins/debuggerui/gtk/menus.ui:20
 #: src/plugins/debuggerui/gtk/menus.ui:81
@@ -6361,11 +6361,11 @@ msgstr "Le décodage des symboles commencera après la sortie de l’application
 
 #: src/plugins/sysprof/gtk/menus.ui:10
 msgid "Run with Profiler"
-msgstr "Lancer avec le profileur"
+msgstr "Exécuter avec le profileur"
 
 #: src/plugins/sysprof/gtk/menus.ui:13
 msgid "Run the project with profiler"
-msgstr "Lancer le projet avec le profileur"
+msgstr "Exécuter le projet avec le profileur"
 
 #: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
@@ -6453,7 +6453,7 @@ msgstr "Autoriser le throttling du CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:121
 msgid "Run with _Profiler"
-msgstr "Lancer avec le _profileur"
+msgstr "Exécuter avec le _profileur"
 
 #: src/plugins/sysprof/gtk/menus.ui:139
 msgid "Record Again…"
@@ -6716,7 +6716,7 @@ msgstr "Tests unitaires terminés"
 
 #: src/plugins/testui/gtk/menus.ui:8
 msgid "Run all Unit Tests"
-msgstr "Lancer tous les tests unitaires"
+msgstr "Exécuter tous les tests unitaires"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
@@ -6777,11 +6777,11 @@ msgstr "Installer les mises à jour en attente pour Builder"
 
 #: src/plugins/valgrind/gtk/menus.ui:11
 msgid "Run with Leak Detector"
-msgstr "Lancer avec le détecteur de fuite"
+msgstr "Exécuter avec le détecteur de fuite"
 
 #: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
-msgstr "Lancer le projet avec Valgrind"
+msgstr "Exécuter le projet avec Valgrind"
 
 #: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
