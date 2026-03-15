@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-vim-editor-page-addin"
 
 #include "config.h"
+#include "math.h"
 
 #include <libide-gui.h>
 #include <libide-editor.h>
@@ -69,6 +70,89 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVimEditorPageAddin, gbp_vim_editor_page_addin, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
+
+static guint
+gbp_vim_editor_page_addin_get_recent_column_index (IdeGrid *grid)
+{
+  PanelGridColumn *recent_column = panel_grid_get_most_recent_column (PANEL_GRID (grid));
+  guint n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint i = 0; i < n_columns; i++)
+    {
+      if (panel_grid_get_column (PANEL_GRID (grid), i) == recent_column)
+        return i;
+    }
+  g_assert_not_reached ();
+}
+
+static guint
+gbp_vim_editor_page_addin_get_recent_row_index (IdeGrid *grid)
+{
+  PanelGridColumn *recent_column = panel_grid_get_most_recent_column (PANEL_GRID (grid));
+  PanelFrame *recent_frame = panel_grid_get_most_recent_frame (PANEL_GRID (grid));
+  guint n_rows = panel_grid_column_get_n_rows (recent_column);
+
+  for (guint i = 0; i < n_rows; i++)
+    {
+      if (panel_grid_column_get_row (recent_column, i) == recent_frame)
+        return i;
+    }
+  g_assert_not_reached ();
+}
+
+static void
+gbp_vim_editor_page_addin_focus_column_index (GbpVimEditorPageAddin *self,
+                                              gint                   column_offest)
+{
+  IdeGrid *grid = IDE_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self->page), IDE_TYPE_GRID));
+
+  PanelGridColumn *column;
+  PanelGridColumn *recent_column = panel_grid_get_most_recent_column (PANEL_GRID (grid));
+  PanelFrame *recent_frame = panel_grid_get_most_recent_frame (PANEL_GRID (grid));
+  guint new_column_n_rows = 0, new_row_index = 0;
+  
+  guint n_rows = panel_grid_column_get_n_rows (recent_column);
+  guint n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+  gint column_index = gbp_vim_editor_page_addin_get_recent_column_index (grid) + column_offest;
+
+  if (column_index < 0 || column_index >= n_columns)
+    return;
+  
+  column = panel_grid_get_column (PANEL_GRID (grid), column_index);
+  new_column_n_rows = panel_grid_column_get_n_rows (column);  
+
+  /* Ensure we go to the same relative row position in the new column.*/
+  for (guint j = 0; j < n_rows; j++)
+    {
+      if (panel_grid_column_get_row (recent_column, j) == recent_frame)
+        {
+          /* If there are more or equal number of rows in the new column, focus row that is
+           * in the same relative position as the currently focused row of the current column.
+           * If there are less rows in the new column, either focus on the first row if
+           * there is only one row in the new column, or focus the exact same row index. */
+          new_row_index = (guint) new_column_n_rows <= n_rows ? 
+            ceil ((new_column_n_rows * ((gfloat) (j + 1) / n_rows))) - 1 : j;
+        }
+    }
+
+  gtk_widget_grab_focus (GTK_WIDGET (panel_grid_column_get_row (column, new_row_index)));
+}
+
+static void
+gbp_vim_editor_page_addin_focus_row_index (GbpVimEditorPageAddin *self,
+                                           gint                   row_offest)
+{
+  IdeGrid *grid = IDE_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self->page), IDE_TYPE_GRID));
+
+  PanelGridColumn *recent_column = panel_grid_get_most_recent_column (PANEL_GRID (grid));
+  guint n_rows = panel_grid_column_get_n_rows (recent_column);
+  gint row_index = gbp_vim_editor_page_addin_get_recent_row_index (grid) + row_offest;
+  
+  if (row_index < 0 || row_index == n_rows)
+    return;
+  
+  gtk_widget_grab_focus (GTK_WIDGET (panel_grid_column_get_row (recent_column, row_index)));
+}
 
 static void
 gbp_vim_editor_page_addin_class_init (GbpVimEditorPageAddinClass *klass)
@@ -489,6 +573,34 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
                                   "page.codeui.goto-definition",
                                   NULL);
 
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "^Wh"))
+    {
+      gbp_vim_editor_page_addin_focus_column_index (self, -1);
+
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "^Wl"))
+    {
+      gbp_vim_editor_page_addin_focus_column_index (self, 1);
+      
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "^Wj"))
+    {
+      gbp_vim_editor_page_addin_focus_row_index (self, 1);
+      
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "^Wk"))
+    {
+      gbp_vim_editor_page_addin_focus_row_index (self, -1);
+      
       IDE_RETURN (TRUE);
     }
 
