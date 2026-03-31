@@ -4,10 +4,10 @@
 #
 # Jordi Serratosa <jordis@softcatala.cat>, 2017.
 # Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018.
-# Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019 - 2023
+# Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019 - 2026
 #
 #
-#  «Runtime» ho traduïm per «temps d'execució» o  «entorn d'execució» segons el context
+#  «Runtime» ho traduïm per «entorn d'execució»
 #  «build» -> construcció
 #  «Toolchain» -> cadena d'eines
 #
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-14 19:17+0100\n"
+"PO-Revision-Date: 2026-03-31 19:17+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -1279,7 +1279,7 @@ msgstr "No es pot executar l'objectiu, un altre objectiu s'està executant"
 #: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
-msgstr "L'aplicació s'ha sortit amb un error: %s"
+msgstr "L'aplicació ha sortit amb un error: %s"
 
 #: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
@@ -1332,7 +1332,7 @@ msgstr "Descobert entorn d'execució «%s»"
 #: src/libide/foundry/ide-runtime-provider.c:180
 #, c-format
 msgid "Removing runtime “%s”"
-msgstr "S'està eliminant el temps d'execució «%s»"
+msgstr "S'està eliminant l'entorn d'execució «%s»"
 
 #: src/libide/foundry/ide-runtime.c:395
 #: src/plugins/host/gbp-host-runtime-provider.c:54
@@ -1453,7 +1453,7 @@ msgstr "Suprimeix projectes i fonts…"
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
 msgid "Cannot locate property %s in class %s"
-msgstr "No es poden localitzar propietats %s a la classe %s"
+msgstr "No es pot localitzar la propietat %s a la classe %s"
 
 #: src/libide/gtk/ide-animation.c:997
 #, c-format
@@ -2081,7 +2081,7 @@ msgstr "Desa"
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
-"No s'ha pogut iniciar el subprocés. És possible que hagis de construir denou "
+"No s'ha pogut iniciar el subprocés. És possible que hagis de construir de nou "
 "el projecte."
 
 #: src/libide/terminal/ide-terminal-page.c:125
@@ -3347,7 +3347,7 @@ msgid ""
 "runtime."
 msgstr ""
 "El SDK utilitzat per a construir l'aplicació es determina automàticament a "
-"partir del temps d'execució."
+"partir de l'entorn d'execució."
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
