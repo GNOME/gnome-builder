@@ -194,12 +194,16 @@ class ${1:ClassName} extends ${2:GObject.Object} {
 	}
 
 });]]></text>
-    <text languages="python;"><![CDATA[class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
+    <text languages="python;"><![CDATA[from gi.repository import GObject
+
+class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		$2.__init__(self)
 $0]]></text>
-    <text languages="python3;"><![CDATA[class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
+    <text languages="python3;"><![CDATA[from gi.repository import GObject
+
+class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		super().__init__()
