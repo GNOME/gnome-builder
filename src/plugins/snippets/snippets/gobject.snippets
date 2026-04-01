@@ -77,6 +77,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -153,6 +155,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -270,6 +274,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -366,6 +372,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
