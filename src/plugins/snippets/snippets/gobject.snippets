@@ -34,7 +34,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	$2Private *priv = $3_get_instance_private (self);
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
@@ -111,7 +111,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
 
@@ -227,7 +227,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
@@ -322,7 +322,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	$2Private *priv = $3_get_instance_private (self);
 
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
