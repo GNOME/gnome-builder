@@ -34,7 +34,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	$2Private *priv = $3_get_instance_private (self);
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
@@ -77,6 +77,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -111,7 +113,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
 
@@ -153,6 +155,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -190,12 +194,16 @@ class ${1:ClassName} extends ${2:GObject.Object} {
 	}
 
 });]]></text>
-    <text languages="python;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
+    <text languages="python;"><![CDATA[from gi.repository import GObject
+
+class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		$2.__init__(self)
 $0]]></text>
-    <text languages="python3;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
+    <text languages="python3;"><![CDATA[from gi.repository import GObject
+
+class ${1:$filename|stripsuffix|camelize}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		super().__init__()
@@ -227,7 +235,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
 }
@@ -270,6 +278,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -322,7 +332,7 @@ $3_new (void)
 static void
 $3_finalize (GObject *object)
 {
-	$2 *self = ($2 *)object;
+	$2 *self = ${$3|upper} (object);
 	$2Private *priv = $3_get_instance_private (self);
 
 	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
@@ -366,6 +376,8 @@ $3_class_init ($2Class *klass)
 	object_class->finalize = $3_finalize;
 	object_class->get_property = $3_get_property;
 	object_class->set_property = $3_set_property;
+
+	g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
