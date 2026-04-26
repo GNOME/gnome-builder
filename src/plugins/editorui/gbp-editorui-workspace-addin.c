@@ -324,6 +324,7 @@ go_to_line_activate_cb (GbpEditoruiWorkspaceAddin *self,
   column--;
 
   ide_editor_page_scroll_to_visual_position (self->page, MAX (0, line), MAX (0, column));
+  gtk_popover_popdown (GTK_POPOVER (entry));
   gtk_widget_grab_focus (GTK_WIDGET (self->page));
 
   IDE_EXIT;
