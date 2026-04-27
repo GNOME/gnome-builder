@@ -1,14 +1,15 @@
 # Persian translation for gnome-builder.
 # Copyright (C) 2023 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2023-2025.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2023-2026.
+# Goudarz Jafari <me@goudarzjafari.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-09-04 10:04+0000\n"
-"PO-Revision-Date: 2025-09-05 17:01+0330\n"
+"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"PO-Revision-Date: 2026-04-27 23:36+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.9\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2 src/libide/editor/ide-editor-workspace.ui:50
@@ -132,31 +133,31 @@ msgstr "جست‌وجوی مبهم سریع در پرونده‌ها"
 msgid "Arduino integration with arduino-cli"
 msgstr "یکپارچگی آردوینو با arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "اشکال‌زدایی با اشکال‌زدای گنو"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "دسترسی سریع به پروژه‌هایتان"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "ایجاد پروژه‌های جدید از قالب‌های متنوّع"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "یکپارچگی با گیت برای شبیه‌سازی پروژه‌هایتان"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "ویرایشگر کد مبدأ"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "جست‌وجوی فازی جهانی سریع"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "استفاده از نقشهٔ کوچک برای دیدن بخش بیش‌تری از پرونده"
 
@@ -650,7 +651,7 @@ msgid "What environment to use when running unit tests"
 msgstr "محیطی که میخواهید در آن آزمون‌های واحد اجرا شوند"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "گزارش گرفتن پرگو"
 
@@ -921,6 +922,7 @@ msgid "Failed to format selection: %s"
 msgstr "شکست در قالب بندی گزیده: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1181,50 +1183,50 @@ msgid "Unit Test"
 msgstr "آزمون واحد"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "کاربر درخواست اجرای فرمان «%s» داده است"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr "نمی‌توان هدف را اجرا کرد، هدف دیگری در حال اجرا شدن است"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "برنامه با خطای %s خارج شد"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "برنامه خارج شد"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "در حال اجرای %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "نصب کردن بر روی افزاره…"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "کاربر درخواست اجرای برنامه داده است"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "کاربر درخواست راه‌اندازی دوباره برنامه داده است"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr "کاربر درخواست اجرای برنامه با %s داده است"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "کاربر درخواست ایست برنامه داده است"
 
@@ -1497,7 +1499,10 @@ msgstr "پایانه‌های جدید"
 
 #: src/libide/gui/ide-application-actions.c:174
 msgid "translator-credits"
-msgstr "دانیال بهزادی <dani.behzi@ubuntu.com>، اشکان عربی <ashkan.arabim@gmail.com>"
+msgstr ""
+"دانیال بهزادی <dani.behzi@ubuntu.com>\n"
+"گودرز جعفری <me@goudarzjafari.com>\n"
+"اشکان عربی <ashkan.arabim@gmail.com>"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -1675,19 +1680,19 @@ msgid_plural "Installing %u packages"
 msgstr[0] "نصب کردن %Iu بسته"
 msgstr[1] "نصب کردن %Iu بسته"
 
-#: src/libide/lsp/ide-lsp-client.c:437
+#: src/libide/lsp/ide-lsp-client.c:440
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:102
 #, c-format
 msgid "The operation has been cancelled"
 msgstr "عملیات لغو شده‌است"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1734
+#: src/libide/lsp/ide-lsp-client.c:1737
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "شکست در آغاز کارساز زبان: %s"
 
-#: src/libide/lsp/ide-lsp-client.c:2166 src/libide/lsp/ide-lsp-client.c:2276
+#: src/libide/lsp/ide-lsp-client.c:2169 src/libide/lsp/ide-lsp-client.c:2279
 msgid "No connection to language server"
 msgstr "بدون اتصال به کارساز زبان"
 
@@ -2873,8 +2878,8 @@ msgstr "شتاب‌دهندهٔ گرافیکی"
 msgid "GTK Renderer"
 msgstr "پرداختگر GTK"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "پیش‌گزیده"
 
@@ -2914,15 +2919,55 @@ msgstr "کایرو"
 msgid "Use the Cairo software renderer when running the project"
 msgstr "استفاده از پرداختگر نرم‌افزاری کایرو هنگام اجرای پروژه"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "ذخیره/بازیابی"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "استفاده از دلیل پیش‌گزیده بازیابی هنگام اجرای پروژه"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "دست‌نخورده"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr "استفاده از دست‌نخورده به عنوان دلیل بازیابی هنگام اجرای پروژه"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "اجرای عادی"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr "استفاده از اجرای عادی به عنوان دلیل بازیابی هنگام اجرای پروژه"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "بازیابی"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr "استفاده از بازیابی به عنوان دلیل بازیابی هنگام اجرای پروژه"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "بازیابی"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr "استفاده از بازیابی کامل نشست به عنوان دلیل بازیابی هنگام اجرای پروژه"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "درخواست گزارش دادن پرگو هنگام اجرای پروژه"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "نمایش بازرس"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "درخواست نمایش بازرس GTK هنگام اجرای پروژه"
 
