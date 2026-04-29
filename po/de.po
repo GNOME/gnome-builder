@@ -11,23 +11,24 @@
 # Tim Sabsch <tim@sabsch.com>, 2017-2019, 2021, 2023-2025.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2020-2021, 2023.
 # Christian Kirbach <christian.kirbach@gmail.com>, 2015-2022.
-# Jürgen Benvenuti <gastornis@posteo.org>, 2022-2024.
+# Jürgen Benvenuti <gastornis@posteo.org>, 2022-2024, 2026.
 # Patrick Zacharias <littlefighter1996@googlemail.com>, 2024.
+# George <gk_coder@icloud.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2025-10-31 20:54+0000\n"
-"PO-Revision-Date: 2025-12-19 23:13+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
-"Language-Team: German <gnome-de@gnome.org>\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-04-21 21:41+0200\n"
+"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
+"Language-Team: German\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-DamnedLies-Scope: partial\n"
 "X-DL-Team: de\n"
 "X-DL-Module: gnome-builder\n"
@@ -157,35 +158,34 @@ msgid "Fast fuzzy text search across files and symbols"
 msgstr "Schnelle fehlertolerante Textsuche in Dateien und Symbolen"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
-#| msgid "Integration with Git"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino-Integration mit arduino-cli"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Fehlerdiagnose mit dem GNU Debugger"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
 msgstr "Schneller Zugriff auf alle Ihre Projekte"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
 msgstr "Ein neues Projekt aus einer Reihe von Vorlagen anlegen"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:68
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
 msgstr "Integration von Git zum Klonen Ihrer Projekte"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
 msgstr "Der Quellcode-Editor"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:76
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:130
 msgid "Fast global fuzzy search"
 msgstr "Schnelle, globale, fehlertolerante Suche"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:80
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:134
 msgid "Use the minimap to see more of the file"
 msgstr "Nutzen Sie die Übersichtskarte, um mehr von der Datei zu sehen"
 
@@ -721,7 +721,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Welche Umgebung bei Ausführung der Unit-Tests verwendet wird"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:331 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Ausführliche Protokollierung"
 
@@ -1006,6 +1006,7 @@ msgid "Failed to format selection: %s"
 msgstr "Auswahl konnte nicht formatiert werden: %s"
 
 #: src/libide/editor/ide-editor-page.c:1142
+#: src/libide/editor/ide-editor-save-delegate.c:239
 #: src/plugins/buildui/gbp-buildui-log-pane.c:329
 #: src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
@@ -1277,52 +1278,52 @@ msgid "Unit Test"
 msgstr "Unit-Test"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
-#: src/libide/foundry/ide-run-manager.c:193
+#: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
 msgstr "Benutzer hat Ausführungswerkzeug »%s« angefragt"
 
-#: src/libide/foundry/ide-run-manager.c:609
+#: src/libide/foundry/ide-run-manager.c:633
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: src/libide/foundry/ide-run-manager.c:929
+#: src/libide/foundry/ide-run-manager.c:972
 #, c-format
 msgid "Application exited with error: %s"
 msgstr "Anwendung beendet mit Fehler: %s"
 
-#: src/libide/foundry/ide-run-manager.c:932
+#: src/libide/foundry/ide-run-manager.c:975
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:212
 msgid "Application exited"
 msgstr "Anwendung beendet"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:1123
+#: src/libide/foundry/ide-run-manager.c:1167
 #, c-format
 msgid "Running %s…"
 msgstr "%s wird ausgeführt …"
 
-#: src/libide/foundry/ide-run-manager.c:1190
+#: src/libide/foundry/ide-run-manager.c:1234
 msgid "Deploying to device…"
 msgstr "Wird auf Gerät installiert …"
 
-#: src/libide/foundry/ide-run-manager.c:1419
+#: src/libide/foundry/ide-run-manager.c:1463
 msgid "User requested application to run"
 msgstr "Benutzer hat angefragt, die Anwendung auszuführen"
 
-#: src/libide/foundry/ide-run-manager.c:1451
+#: src/libide/foundry/ide-run-manager.c:1495
 msgid "User requested application to restart"
 msgstr "Benutzer hat angefragt, die Anwendung neu zu starten"
 
 #. translators: %s is replaced with the name of the tool
-#: src/libide/foundry/ide-run-manager.c:1481
+#: src/libide/foundry/ide-run-manager.c:1525
 #, c-format
 msgid "User requested application to run with tool “%s”"
 msgstr ""
 "Benutzer hat angefragt, die Anwendung mit dem Werkzeug »%s« auszuführen"
 
-#: src/libide/foundry/ide-run-manager.c:1501
+#: src/libide/foundry/ide-run-manager.c:1545
 msgid "User requested application to stop"
 msgstr "Benutzer hat angefragt, die Anwendung zu beenden"
 
@@ -3022,8 +3023,8 @@ msgstr "GPU"
 msgid "GTK Renderer"
 msgstr "GTK-Renderer"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/tweaks.ui:274
-#: src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332
+#: src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Vorgabe"
 
@@ -3065,15 +3066,62 @@ msgstr ""
 "Softwaregestütztes Rendering durch Cairo beim Ausführen des Projekts "
 "verwenden"
 
-#: src/plugins/buildui/gtk/menus.ui:334
+#: src/plugins/buildui/gtk/menus.ui:330
+msgid "Save/Restore"
+msgstr "Speichern und Wiederherstellen"
+
+#: src/plugins/buildui/gtk/menus.ui:336
+msgid "Use default restore reason when running the project"
+msgstr "Standard-Wiederherstellungsgrund beim Ausführen des Projekts verwenden"
+
+#: src/plugins/buildui/gtk/menus.ui:339
+msgid "Pristine"
+msgstr "Unberührt"
+
+#: src/plugins/buildui/gtk/menus.ui:343
+msgid "Use pristine as restore reason when running the project"
+msgstr ""
+"»Unberührt« als Wiederherstellungsgrund beim Ausführen des Projekts verwenden"
+
+#: src/plugins/buildui/gtk/menus.ui:346
+msgid "Normal Launch"
+msgstr "Normaler Start"
+
+#: src/plugins/buildui/gtk/menus.ui:350
+msgid "Use normal launch as restore reason when running the project"
+msgstr ""
+"»Normaler Start« als Wiederherstellungsgrund beim Ausführen des Projekts "
+"verwenden"
+
+#: src/plugins/buildui/gtk/menus.ui:353
+msgid "Recover"
+msgstr "Zurückerlangen"
+
+#: src/plugins/buildui/gtk/menus.ui:357
+msgid "Use recover as restore reason when running the project"
+msgstr ""
+"»Zurückerlangen« als Wiederherstellungsgrund beim Ausführen des Projekts "
+"verwenden"
+
+#: src/plugins/buildui/gtk/menus.ui:360
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+#: src/plugins/buildui/gtk/menus.ui:364
+msgid "Use full session restore as restore reason when running the project"
+msgstr ""
+"»Wiederherstellen der vollständigen Sitzung« als Wiederherstellungsgrund "
+"beim Ausführen des Projekts verwenden"
+
+#: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
 msgstr "Ausführliche Ausgaben beim Ausführen des Projekts anfordern"
 
-#: src/plugins/buildui/gtk/menus.ui:338
+#: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
 msgstr "Inspektor anzeigen"
 
-#: src/plugins/buildui/gtk/menus.ui:341
+#: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
 msgstr "Anzeige des GTK-Inspektors beim Ausführen des Projekts anfordern"
 
@@ -3804,7 +3852,7 @@ msgstr "Größe"
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
 msgid "Stops"
-msgstr ""
+msgstr "Stopps"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -5100,13 +5148,11 @@ msgstr "Git"
 
 #: src/plugins/git/settings-tweaks.ui:12 src/plugins/git/tweaks.ui:40
 msgid "Git Blame"
-msgstr ""
+msgstr "Git Blame"
 
 #: src/plugins/git/settings-tweaks.ui:15 src/plugins/git/tweaks.ui:43
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Inline Git Blame"
-msgstr "Zeilennummern anzeigen"
+msgstr "»Git Blame« in der Zeile anzeigen"
 
 #: src/plugins/git/tweaks.ui:13
 msgid "Authorship"
