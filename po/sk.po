@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-03-17 17:20+0000\n"
-"PO-Revision-Date: 2025-04-29 15:31+0200\n"
+"PO-Revision-Date: 2026-04-30 11:36+0200\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 "Stavbár je aktívne vyvíjané integrované vývojové prostredie pre GNOME. "
 "Kombinuje podporu základných technológií prostredia GNOME ako sú GTK+, GLib "
-"a rozhrania GNOME API s funkcionalitami, ktoré  ocení každý vývojár, ako "
+"a rozhrania GNOME API s funkcionalitami, ktoré ocení každý vývojár, ako "
 "napríklad zvýrazňovanie syntaxe či úryvky."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
@@ -688,7 +688,7 @@ msgstr "Podrobné zaznamenávanie"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
-"Či má byť použité G_MESSAGES_DEBUG=all  pri spustení cieľovej aplikácie"
+"Či má byť použité G_MESSAGES_DEBUG=all pri spustení cieľovej aplikácie"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
@@ -1308,7 +1308,7 @@ msgstr "Hostiteľský systém"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
-msgstr "Predvolené  (Hosťujúci operačný systém)"
+msgstr "Predvolené (Hosťujúci operačný systém)"
 
 #: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66
 #: src/libide/greeter/gtk/menus.ui:86
@@ -1751,7 +1751,7 @@ msgstr "Zásuvné moduly"
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
-msgstr[0] "Inštaluje sa  %u balíčkov"
+msgstr[0] "Inštaluje sa %u balíčkov"
 msgstr[1] "Inštaluje sa %u balíček"
 msgstr[2] "Inštalujú sa %u balíčky"
 
