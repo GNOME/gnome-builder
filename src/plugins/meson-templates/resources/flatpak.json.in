@@ -77,8 +77,8 @@
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "file://{{project_path}}"
+                    "type" : "dir",
+                    "path" : "."
                 }
             ]
         }
