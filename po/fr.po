@@ -13,21 +13,22 @@
 # Alexandre Franke <afranke@gnome.org>, 2015-2024.
 # Mathis Joussemet <joussemetmathis@gmail.com>, 2025.
 # Lucien Ouoba <luiz01luciano04@gmail.com>, 2026.
+# Julien Humbert <julroy67@gmail.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-02-23 19:53+0000\n"
-"PO-Revision-Date: 2026-03-11 22:22+0100\n"
-"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-05-17 12:23+0900\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Gtranslator 50.0\n"
 "X-DL-Lang: fr\n"
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: main\n"
@@ -1949,7 +1950,7 @@ msgstr "Zoom arrière (Ctrl+-)"
 
 #: src/libide/sourceview/gtk/menus.ui:57
 msgid "Reset Zoom (Ctrl+0)"
-msgstr "Réinitialiser le zoom (Ctrl+O)"
+msgstr "Réinitialiser le zoom (Ctrl+0)"
 
 #: src/libide/sourceview/gtk/menus.ui:63
 msgid "Zoom In (Ctrl++)"
@@ -6993,6 +6994,3 @@ msgstr "Échec lors de la création de l’arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Le fichier doit être enregistré localement pour l’analyse."
-
-#~ msgid "Disk Usage"
-#~ msgstr "Utilisation du disque"
