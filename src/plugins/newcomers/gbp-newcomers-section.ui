@@ -55,6 +55,15 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Contacts</property>
+                    <property name="description" translatable="yes">A GNOME contacts application</property>
+                    <property name="icon-name">org.gnome.Contacts-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-contacts.git</property>
+                    <property name="languages">Vala</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Maps</property>
                     <property name="description" translatable="yes">A GNOME maps application</property>
                     <property name="icon-name">org.gnome.Maps-symbolic</property>
