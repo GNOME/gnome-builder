@@ -64,6 +64,15 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Image Viewer</property>
+                    <property name="description" translatable="yes">A GNOME image viewer</property>
+                    <property name="icon-name">org.gnome.Loupe-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/loupe.git</property>
+                    <property name="languages">Rust</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Maps</property>
                     <property name="description" translatable="yes">A GNOME maps application</property>
                     <property name="icon-name">org.gnome.Maps-symbolic</property>
