@@ -64,6 +64,15 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Fractal</property>
+                    <property name="description" translatable="yes">A Matrix client for GNOME</property>
+                    <property name="icon-name">org.gnome.Fractal-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/World/fractal.git</property>
+                    <property name="languages">Rust</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Image Viewer</property>
                     <property name="description" translatable="yes">A GNOME image viewer</property>
                     <property name="icon-name">org.gnome.Loupe-symbolic</property>
