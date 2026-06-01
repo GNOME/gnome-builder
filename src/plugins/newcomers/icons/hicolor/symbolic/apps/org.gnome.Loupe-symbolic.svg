@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix color-interpolation-filters="sRGB" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <rect fill-opacity="0.768678" height="19.2" width="19.2" x="-1.6" y="-1.6"/>
+        </g>
+    </mask>
+    <linearGradient id="c" gradientTransform="matrix(0 1.428571 -1.428571 0 427.285698 12.714308)" gradientUnits="userSpaceOnUse" x1="24" x2="38" y1="238" y2="238">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="d">
+        <rect height="152" width="192"/>
+    </clipPath>
+    <mask id="e">
+        <g filter="url(#a)">
+            <rect fill-opacity="0.154" height="19.2" width="19.2" x="-1.6" y="-1.6"/>
+        </g>
+    </mask>
+    <clipPath id="f">
+        <rect height="152" width="192"/>
+    </clipPath>
+    <mask id="g">
+        <g filter="url(#a)">
+            <rect fill-opacity="0.154" height="19.2" width="19.2" x="-1.6" y="-1.6"/>
+        </g>
+    </mask>
+    <clipPath id="h">
+        <rect height="152" width="192"/>
+    </clipPath>
+    <g mask="url(#b)">
+        <g clip-path="url(#d)" transform="matrix(1 0 0 1 -168 -16)">
+            <path d="m 93 67 c -5.523438 0 -10 -4.476562 -10 -10 s 4.476562 -10 10 -10 s 10 4.476562 10 10 s -4.476562 10 -10 10 z m 0 0" fill="url(#c)"/>
+        </g>
+    </g>
+    <g mask="url(#e)">
+        <g clip-path="url(#f)" transform="matrix(1 0 0 1 -168 -16)">
+            <path d="m 11.89061 268.550766 l 15.457031 -15.457031" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="1.63784" transform="matrix(1 0 0 1 2.000015 -135.999985)"/>
+        </g>
+    </g>
+    <g mask="url(#g)">
+        <g clip-path="url(#h)" transform="matrix(1 0 0 1 -168 -16)">
+            <path d="m 258.199921 407.5177 l 16 -16" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="2" transform="matrix(1 0 0 1 -245.199921 -274.5177)"/>
+        </g>
+    </g>
+    <g fill="#241f31">
+        <path d="m 13 1 c 1.644531 0 3 1.355469 3 3 v 8 c 0 1.644531 -1.355469 3 -3 3 h -6.5 c 2.066406 0 3.957031 -1.160156 4.898438 -3 h 1.601562 c 0.570312 0 1 -0.429688 1 -1 v -7 c 0 -0.570312 -0.429688 -1 -1 -1 h -8 c -0.570312 0 -1 0.429688 -1 1 v 0.605469 c -0.796875 0.40625 -1.484375 1 -2 1.730469 v -2.335938 c 0 -1.644531 1.355469 -3 3 -3 z m 0 0"/>
+        <path d="m 6.5 5 c 2.484375 0 4.5 2.015625 4.5 4.5 s -2.015625 4.5 -4.5 4.5 c -0.847656 0 -1.675781 -0.242188 -2.394531 -0.695312 l -2.398438 2.402343 c -0.390625 0.390625 -1.023437 0.390625 -1.414062 0 c -0.3906252 -0.390625 -0.3906252 -1.023437 0 -1.414062 l 2.398437 -2.398438 c -0.449218 -0.71875 -0.691406 -1.546875 -0.691406 -2.394531 c 0 -2.484375 2.015625 -4.5 4.5 -4.5 z m 0 2 c -1.382812 0 -2.5 1.121094 -2.5 2.5 s 1.117188 2.5 2.5 2.5 c 1.378906 0 2.5 -1.121094 2.5 -2.5 s -1.121094 -2.5 -2.5 -2.5 z m 0 0"/>
+    </g>
+</svg>

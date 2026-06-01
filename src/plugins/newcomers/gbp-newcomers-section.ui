@@ -27,15 +27,6 @@
                 </style>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Boxes</property>
-                    <property name="description" translatable="yes">A GNOME application to access remote or virtual systems</property>
-                    <property name="icon-name">org.gnome.Boxes-symbolic</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-boxes.git</property>
-                    <property name="languages">Vala</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GbpNewcomersProject">
                     <property name="name" translatable="yes">Builder</property>
                     <property name="description" translatable="yes">An IDE for writing GNOME-based software</property>
                     <property name="icon-name">org.gnome.Builder-symbolic</property>
@@ -64,11 +55,29 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Gitg</property>
-                    <property name="description" translatable="yes">Gitg is a graphical Git client</property>
-                    <property name="icon-name">org.gnome.gitg-symbolic</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gitg.git</property>
+                    <property name="name" translatable="yes">Contacts</property>
+                    <property name="description" translatable="yes">A GNOME contacts application</property>
+                    <property name="icon-name">org.gnome.Contacts-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-contacts.git</property>
                     <property name="languages">Vala</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Fractal</property>
+                    <property name="description" translatable="yes">A Matrix client for GNOME</property>
+                    <property name="icon-name">org.gnome.Fractal-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/World/fractal.git</property>
+                    <property name="languages">Rust</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GbpNewcomersProject">
+                    <property name="name" translatable="yes">Image Viewer</property>
+                    <property name="description" translatable="yes">A GNOME image viewer</property>
+                    <property name="icon-name">org.gnome.Loupe-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/loupe.git</property>
+                    <property name="languages">Rust</property>
                   </object>
                 </child>
                 <child>
@@ -111,11 +120,11 @@
                 </child>
                 <child>
                   <object class="GbpNewcomersProject">
-                    <property name="name" translatable="yes">Sound Recorder</property>
-                    <property name="description" translatable="yes">A modern sound recorder for GNOME</property>
-                    <property name="icon-name">org.gnome.SoundRecorder-symbolic</property>
-                    <property name="uri">https://gitlab.gnome.org/GNOME/gnome-sound-recorder.git</property>
-                    <property name="languages">JavaScript</property>
+                    <property name="name" translatable="yes">Video Player</property>
+                    <property name="description" translatable="yes">A GNOME video player</property>
+                    <property name="icon-name">org.gnome.Showtime-symbolic</property>
+                    <property name="uri">https://gitlab.gnome.org/GNOME/showtime.git</property>
+                    <property name="languages">Python</property>
                   </object>
                 </child>
               </object>
