@@ -2009,11 +2009,50 @@ ide_lsp_client_close_cb (GObject      *object,
   g_autoptr(IdeLspClient) self = user_data;
   JsonrpcClient *client = (JsonrpcClient *)object;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (JSONRPC_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_LSP_CLIENT (self));
 
   jsonrpc_client_close_finish (client, result, NULL);
+
+  ide_object_destroy (IDE_OBJECT (self));
+
+  IDE_EXIT;
+}
+
+static void
+ide_lsp_client_exit_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  g_autoptr(IdeLspClient) self = user_data;
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_LSP_CLIENT (self));
+
+  if (!jsonrpc_client_send_notification_finish (client, result, &error))
+    {
+      g_debug ("%s", error->message);
+      ide_object_destroy (IDE_OBJECT (self));
+    }
+  else
+    {
+      jsonrpc_client_close_async (client,
+                                  NULL,
+                                  ide_lsp_client_close_cb,
+                                  g_steal_pointer (&self));
+    }
+
+  IDE_EXIT;
 }
 
 static void
@@ -2033,12 +2072,19 @@ ide_lsp_client_shutdown_cb (GObject      *object,
   g_assert (IDE_IS_LSP_CLIENT (self));
 
   if (!jsonrpc_client_call_finish (client, result, NULL, &error))
-    g_debug ("%s", error->message);
+    {
+      g_debug ("%s", error->message);
+      ide_object_destroy (IDE_OBJECT (self));
+    }
   else
-    jsonrpc_client_close_async (client,
-                                NULL,
-                                ide_lsp_client_close_cb,
-                                g_steal_pointer (&self));
+    {
+      jsonrpc_client_send_notification_async (client,
+                                              "exit",
+                                              NULL,
+                                              NULL,
+                                              ide_lsp_client_exit_cb,
+                                              g_steal_pointer (&self));
+    }
 
   IDE_EXIT;
 }

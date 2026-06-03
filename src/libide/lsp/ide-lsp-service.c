@@ -75,7 +75,6 @@ ide_lsp_service_stop (IdeLspService *self)
   if (priv->client != NULL)
     {
       ide_lsp_client_stop (priv->client);
-      ide_object_destroy (IDE_OBJECT (priv->client));
       priv->client = NULL;
       notify_client = TRUE;
     }
