@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-04-27 23:36+0330\n"
+"POT-Creation-Date: 2026-06-01 23:15+0000\n"
+"PO-Revision-Date: 2026-06-03 23:36+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:2 src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "سازنده"
@@ -3993,11 +3993,11 @@ msgstr "فاصله‌ها"
 msgid "Tabs"
 msgstr "زبانه‌ها"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "رفتن"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "رفتن به خط"
@@ -5424,81 +5424,89 @@ msgstr "بخش"
 msgid "Suggested GNOME Projects"
 msgstr "پروژه‌های گنوم پیشنهادی"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "جعبه‌ها"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "برنامه‌ای گنومی برای دسترسی به سامانه‌های دوردست یا مجازی"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "محیط توسعه‌ای یکپارچه برای نوشتن نرم‌افزارهای بر پایهٔ گنوم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "تقویم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "برنامهٔ تقویمی برای گنوم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "ساعت‌ها"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "برنامهٔ ساعتی برای گنوم"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "آشنایان"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "برنامهٔ آشنایان برای گنوم"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "برخال"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "کارخواهی گرافیکی برای گیت"
+msgid "A Matrix client for GNOME"
+msgstr "کارخواه ماتریکسی برای گنوم"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "نمایشگر تصویر"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "نمایشگر تصویر گنوم"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "نقشه‌ها"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "برنامهٔ نقشه‌ای برای گنوم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "آهنگ"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "برنامه پخش و مدیریت آهنگ‌ها"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "ناتیلوس"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "مدیر پروندهٔ پیش‌گزیده برای گنوم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "پولاری"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "یک کارخواه IRC برای گنوم"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "ضبط صوت"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "پخش‌کنندهٔ ویدیو"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "ضبط صوتی مدرن برای گنوم"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "پخش‌کنندهٔ ویدیوی گنوم"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6699,6 +6707,24 @@ msgstr "شکست در ایجاد درخت XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "برای تجزبه، پرونده باید به طور محلی ذخیره شود."
+
+#~ msgid "Boxes"
+#~ msgstr "جعبه‌ها"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "برنامه‌ای گنومی برای دسترسی به سامانه‌های دوردست یا مجازی"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "کارخواهی گرافیکی برای گیت"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "ضبط صوت"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "ضبط صوتی مدرن برای گنوم"
 
 #~ msgid "Font"
 #~ msgstr "قلم"
