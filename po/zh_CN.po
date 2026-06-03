@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-14 17:26+0800\n"
+"POT-Creation-Date: 2026-06-01 23:15+0000\n"
+"PO-Revision-Date: 2026-06-03 12:58+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -21,14 +21,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 49.0\n"
+"X-Generator: Gtranslator 50.0\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "构建器"
@@ -4013,11 +4013,11 @@ msgstr "空格"
 msgid "Tabs"
 msgstr "制表符"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "前往"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "前往指定行"
@@ -5448,81 +5448,89 @@ msgstr "章节"
 msgid "Suggested GNOME Projects"
 msgstr "建议的 GNOME 工程"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Boxes"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "用于访问远程或虚拟系统的 GNOME 应用程序"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "用于编写基于 GNOME 的软件的集成开发环境"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "日历"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "GNOME 的日历应用程序"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "时钟"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "GNOME 的时钟应用程序"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "联系人"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "GNOME 的联系人应用程序"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Gitg 是一个 Git 的图形客户端"
+msgid "A Matrix client for GNOME"
+msgstr "GNOME 的 Matrix 客户端"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "图像查看器"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "GNOME 的图像查看器"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "地图"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "GNOME 的地图应用程序"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "音乐"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "音乐播放器和管理应用程序"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "文件"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "GNOME 的默认文件管理器"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "GNOME 的 IRC 客户端"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "录音器"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "视频播放器"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "GNOME 的现代声音录制器"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "GNOME 的视频播放器"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6720,6 +6728,24 @@ msgstr "无法创建 XML 树。"
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
 
+#~ msgid "Boxes"
+#~ msgstr "Boxes"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "用于访问远程或虚拟系统的 GNOME 应用程序"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Gitg 是一个 Git 的图形客户端"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "录音器"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "GNOME 的现代声音录制器"
+
 #~ msgid "Font"
 #~ msgstr "字体"
 
@@ -7173,9 +7199,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "GIMP palette"
 #~ msgstr "GIMP 调色板"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME 构建器调色板"
 
 #~ msgid "Palette name"
 #~ msgstr "调色板名称"
