@@ -7,8 +7,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-16 10:00+0100\n"
+"POT-Creation-Date: 2026-06-01 23:15+0000\n"
+"PO-Revision-Date: 2026-06-05 10:00+0100\n"
 "Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -22,7 +22,7 @@ msgstr "Project-Id-Version: gnome-builder master\n"
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
 #: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
@@ -2919,12 +2919,10 @@ msgid "Use the Cairo software renderer when running the project"
 msgstr "Erabili Cairo software errendatzailea proiektua exekutatzean"
 
 #: src/plugins/buildui/gtk/menus.ui:330
-#| msgid "Save & Restore"
 msgid "Save/Restore"
 msgstr "Gorde/Leheneratu"
 
 #: src/plugins/buildui/gtk/menus.ui:336
-#| msgid "Use the default GTK renderer when running the project"
 msgid "Use default restore reason when running the project"
 msgstr "Erabili leheneratze-arrazoi lehenetsia proiektua exekutatzean"
 
@@ -2933,7 +2931,6 @@ msgid "Pristine"
 msgstr "Aratza"
 
 #: src/plugins/buildui/gtk/menus.ui:343
-#| msgid "Use the GL renderer when running the project"
 msgid "Use pristine as restore reason when running the project"
 msgstr "Erabili aratza leheneratze-arrazoi gisa proiektua exekutatzean"
 
@@ -2942,7 +2939,6 @@ msgid "Normal Launch"
 msgstr "Abio normala"
 
 #: src/plugins/buildui/gtk/menus.ui:350
-#| msgid "Use orange accent color when running the project"
 msgid "Use normal launch as restore reason when running the project"
 msgstr "Erabili abio normala leheneratze-arrazoi gisa proiektua exekutatzean"
 
@@ -2951,17 +2947,14 @@ msgid "Recover"
 msgstr "Berreskuratu"
 
 #: src/plugins/buildui/gtk/menus.ui:357
-#| msgid "Use the GL renderer when running the project"
 msgid "Use recover as restore reason when running the project"
 msgstr "Use berreskuratzea as restore reason when running the project"
 
 #: src/plugins/buildui/gtk/menus.ui:360
-#| msgid "Save & Restore"
 msgid "Restore"
 msgstr "Leheneratu"
 
 #: src/plugins/buildui/gtk/menus.ui:364
-#| msgid "Use the Cairo software renderer when running the project"
 msgid "Use full session restore as restore reason when running the project"
 msgstr "Use saioaren leheneratze osoa leheneratze-arrazoi gisa proiektua exekutatzean"
 
@@ -3994,11 +3987,11 @@ msgstr "Zuriuneak"
 msgid "Tabs"
 msgstr "Fitxak"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Joan"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Joan lerrora"
@@ -5434,81 +5427,92 @@ msgstr "Atala"
 msgid "Suggested GNOME Projects"
 msgstr "Iradokitako GNOME proiektuak"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Makinak"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Urruneko sistemetara edo sistema birtualetara sartzeko GNOME 3 aplikazioa"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "GNOMEn oinarritutako softwarea idazteko IDE bat"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Egutegia"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "GNOMErako egutegi-aplikazio bat"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Ordulariak"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "GNOMErako ordulari-aplikazio bat"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Kontaktuak"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#| msgid "A GNOME maps application"
+msgid "A GNOME contacts application"
+msgstr "Kontaktuen aplikazio bat GNOMErako"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Gitg Git bezero grafiko bat da"
+#| msgid "An IRC Client for GNOME"
+msgid "A Matrix client for GNOME"
+msgstr "Matrix bezero bat GNOMErako"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Irudi-ikustailea"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "Irudi-ikustaile bat GNOMErako"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Mapak"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "GNOMErako mapa-aplikazio bat"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Musika"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Musika erreproduzitu eta kudeatzeko aplikazioa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Fitxategi-kudeatzaile lehenetsia GNOMErako"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "GNOMEren IRC bezeroa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Soinu grabatzailea"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Bideo-erreproduzigailua"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "GNOMEren interfaze modernoa duen soinu-grabatzailea"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#| msgid "GNOME Builder palette"
+msgid "A GNOME video player"
+msgstr "Bideo-erreproduzigailua GNOMErako"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6703,6 +6707,25 @@ msgstr "Huts egin du XML zuhaitza sortzeak."
 msgid "File must be saved locally to parse."
 msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
+#~ msgid "Boxes"
+#~ msgstr "Makinak"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr ""
+#~ "Urruneko sistemetara edo sistema birtualetara sartzeko GNOME 3 aplikazioa"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Gitg Git bezero grafiko bat da"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Soinu grabatzailea"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "GNOMEren interfaze modernoa duen soinu-grabatzailea"
+
 #~ msgid "Font"
 #~ msgstr "Letra-tipoa"
 
@@ -7184,9 +7207,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "GIMP palette"
 #~ msgstr "GIMP paleta"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME Builder paleta"
 
 #~ msgid "Palette name"
 #~ msgstr "Paletaren izena"
