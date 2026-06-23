@@ -36,6 +36,8 @@
 # include <sysprof-capture.h>
 #endif
 
+#include <libdex.h>
+
 #include <libide-core.h>
 #include <libide-code.h>
 #include <libide-gui.h>
@@ -199,6 +201,8 @@ main (gint   argc,
    */
   messages_debug = g_strdup (getenv ("G_MESSAGES_DEBUG"));
   unsetenv ("G_MESSAGES_DEBUG");
+
+  dex_init ();
 
   /* Setup our gdb fork()/exec() helper if we're in a terminal */
   if (is_running_in_shell ())
