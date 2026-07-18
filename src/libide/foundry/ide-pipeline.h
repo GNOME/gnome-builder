@@ -53,7 +53,7 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePipeline, ide_pipeline, IDE, PIPELINE, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-GQuark                 ide_build_error_quark                 (void) G_GNUC_CONST;
+GQuark                 ide_build_error_quark                 (void);
 IDE_AVAILABLE_IN_44
 char                  *ide_pipeline_dup_arch                 (IdePipeline            *self);
 IDE_AVAILABLE_IN_ALL
