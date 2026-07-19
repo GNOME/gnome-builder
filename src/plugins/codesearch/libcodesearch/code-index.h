@@ -88,8 +88,8 @@ typedef DexFuture *(*CodeIndexDocumentLoader) (CodeIndex  *index,
                                                const char *path,
                                                gpointer    user_data);
 
-GType             code_index_get_type                (void) G_GNUC_CONST;
-GType             code_index_builder_get_type        (void) G_GNUC_CONST;
+GType             code_index_get_type                (void);
+GType             code_index_builder_get_type        (void);
 CodeIndexBuilder *code_index_builder_new             (void);
 CodeIndexBuilder *code_index_builder_ref             (CodeIndexBuilder   *builder);
 void              code_index_builder_unref           (CodeIndexBuilder   *builder);

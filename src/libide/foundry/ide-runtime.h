@@ -72,7 +72,7 @@ struct _IdeRuntimeClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GQuark                  ide_runtime_error_quark              (void) G_GNUC_CONST;
+GQuark                  ide_runtime_error_quark              (void);
 IDE_AVAILABLE_IN_ALL
 gboolean                ide_runtime_contains_program_in_path (IdeRuntime      *self,
                                                               const gchar     *program,

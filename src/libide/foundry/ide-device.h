@@ -60,7 +60,7 @@ struct _IdeDeviceClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GQuark         ide_device_error_quark           (void) G_GNUC_CONST;
+GQuark         ide_device_error_quark           (void);
 IDE_AVAILABLE_IN_ALL
 const gchar   *ide_device_get_display_name      (IdeDevice            *self);
 IDE_AVAILABLE_IN_ALL
