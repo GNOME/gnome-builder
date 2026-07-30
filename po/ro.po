@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-06-01 23:15+0000\n"
-"PO-Revision-Date: 2026-06-02 11:37+0200\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-07-30 19:14+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -19,14 +19,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Gtranslator 50.0\n"
 "X-Project-Style: gnome\n"
+"X-DL-VCS-Web: https://gitlab.gnome.org/GNOME/gnome-builder/\n"
+"X-DL-Lang: ro\n"
+"X-DL-Module: gnome-builder\n"
+"X-DL-Branch: main\n"
+"X-DL-Domain: po\n"
+"X-DL-State: Translating\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -38,6 +44,7 @@ msgstr "Creează aplicații pentru GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -51,7 +58,7 @@ msgstr ""
 "Builder este un mediu de dezvoltare integrat pentru GNOME. Acesta unește "
 "tehnologii GNOME esențiale cum ar fi GTK+, GLib și API-uri GNOME cu "
 "caracteristici care vor fi apreciate de orice programator, precum "
-"evidențierea sintaxei și fragmente de cod."
+"evidențierea elementelor și fragmente de cod."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
@@ -131,7 +138,7 @@ msgstr "Un depanator integrat pentru aplicațiile native"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:42
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Posibilitatea de a compila cu JHBuild și Flatpak"
+msgstr "Posibilitatea de a construi cu JHBuild și Flatpak"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:43
 msgid "Support for viewing TODOs found within your code base"
@@ -144,6 +151,95 @@ msgstr "Căutare rapidă și aproximativă a textului în fișiere și simboluri
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Integrare Arduino cu arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "mediu de dezvoltare integrat"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "editor de cod"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "cod"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "programare"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "dezvoltare software"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "dezvoltare aplicații"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "compilare"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "construire"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "runtime"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "inspector GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "inspector D-Bus"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "debugger"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "depanare"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "detector de scurgeri de memorie"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "teste unitare"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "testare automatizată"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "documentație"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "autocompletare"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "profiler"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "performanță"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -176,32 +272,34 @@ msgstr "Folosește vederea de ansamblu pentru a vedea mai mult din fișier"
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 #: src/plugins/buildui/tweaks.ui:264
 msgid "Build Parallelism"
-msgstr "Compilare paralelă"
+msgstr "Construire în paralel"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
-"Numărul de procesoare care să fie utilizate la compilare. -1 pentru o "
+"Numărul de procesoare care să fie utilizate la construire. -1 pentru o "
 "valoare optimă. 0 pentru a utiliza toate procesoarele CPU disponibile."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
-msgstr "Șterge jurnalele de compilare"
+msgstr "Șterge jurnalele de construire"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr "Dacă este activată, jurnalul de compilare va fi șters la recompilare."
+msgstr ""
+"Dacă este activată, jurnalul de construire va fi șters la reconstruire."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Show Log When Building"
-msgstr "Arată jurnalul în timpul compilării"
+msgstr "Arată jurnalul în timpul construirii"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "If enabled, the build log will be raised when a build starts"
 msgstr ""
-"Dacă este activată, jurnalul compilării va fi deschis la pornirea compilării"
+"Dacă este activată, jurnalul construirii va fi deschis la pornirea "
+"construirii"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -212,9 +310,9 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"Activează transferurile automate în timpul compilării, cum ar fi descărcarea "
-"SDK-urilor și a dependențelor, chiar și atunci când conexiunea la internet "
-"este plătită în funcție de consum."
+"Activează transferurile automate în timpul construirii, cum ar fi "
+"descărcarea SDK-urilor și a dependențelor, chiar și atunci când conexiunea "
+"la internet este plătită în funcție de consum."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -562,12 +660,12 @@ msgstr "Recuperează sesiunea precedentă a proiectelor la încărcare."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Clear build caches at startup"
-msgstr "Șterge cache-urile de compilare la pornire"
+msgstr "Șterge cache-urile de construire la pornire"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
-"Dacă este activată, Builder va șterge cache-urile de compilare la pornire."
+"Dacă este activată, Builder va șterge cache-urile de construire la pornire."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
@@ -645,7 +743,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
-msgstr "Configurarea aleasă pentru compilare"
+msgstr "Configurarea aleasă pentru construire"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:8
 msgid ""
@@ -691,11 +789,11 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
-msgstr "Localitate test unitate"
+msgstr "Locul testelor unitare"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr "Ce mediu să se utilizeze la executarea testelor unitate"
+msgstr "Ce mediu să se utilizeze la executarea testelor unitare"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
@@ -719,7 +817,7 @@ msgid ""
 "flatpak staging directories"
 msgstr ""
 "Un dosar principal pentru datele cache ale proiectului, cum ar fi dosarele "
-"de compilare și dosarele de pregătire pentru flatpak"
+"de construire și dosarele de pregătire pentru flatpak"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:392
@@ -732,12 +830,12 @@ msgstr "Verifică automat ortografia în cadrul documentelor"
 
 #: data/org.gnome.Builder.desktop.in.in:3
 msgid "Build software for GNOME"
-msgstr "Creează programe pentru GNOME"
+msgstr "Construiește programe pentru GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:13
 msgid "Build;Develop;"
-msgstr "Build;Develop;Generare;Programează;Creează;Dezvoltă;Compilează;"
+msgstr "Build;Develop;Generare;Programează;Creează;Dezvoltă;Compilează;Construiește;"
 
 #: data/org.gnome.Builder.desktop.in.in:19
 msgid "Open a Project"
@@ -1059,7 +1157,7 @@ msgstr "Nu s-a putut deschide fișierul: %s"
 #: src/libide/foundry/ide-build-manager.c:482
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
-msgstr "Nu s-a putut inițializa linia de asamblare a generării: %s"
+msgstr "Eșec la inițializarea etapelor de construire: %s"
 
 #: src/libide/foundry/ide-build-manager.c:623
 #, c-format
@@ -1082,8 +1180,8 @@ msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
 msgstr ""
-"Nu s-a putut localiza configurarea de generare „%s”. Aceasta poate să nu fie "
-"validă sau corect formatată."
+"Nu s-a putut localiza configurarea de construire „%s”. Aceasta poate să nu "
+"fie valabilă sau corect formatată."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1069
@@ -1109,7 +1207,8 @@ msgstr "Dispozitiv stabilit la %s"
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
-"Nu se poate transfera în aparat, canalul de compilare nu este inițializat"
+"Nu se poate instala și porni aplicația în aparat, etapele de construire nu "
+"au fost inițializate"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
@@ -1134,15 +1233,15 @@ msgstr "Nu se pot transfera date cu o conexiune limitată"
 
 #: src/libide/foundry/ide-pipeline.c:839
 msgid "The build pipeline is in a failed state"
-msgstr "Canalul de compilare este într-o stare de eroare"
+msgstr "Etapele de construire sunt într-o stare de eroare"
 
 #: src/libide/foundry/ide-pipeline.c:849
 msgid "The build configuration has errors"
-msgstr "Configurarea compilării are erori"
+msgstr "Configurarea construirii are erori"
 
 #: src/libide/foundry/ide-pipeline.c:952
 msgid "Pipeline started to clean build tree"
-msgstr "Canalul de compilare a început să șteargă arborele de compilare"
+msgstr "S-a început ștergerea fișierelor de construire"
 
 #: src/libide/foundry/ide-pipeline.c:954
 msgid "Pipeline started"
@@ -1156,7 +1255,7 @@ msgstr "Canal de compilare terminat"
 #: src/libide/foundry/ide-pipeline.c:1107
 #, c-format
 msgid "Build (%s)"
-msgstr "Generare (%s)"
+msgstr "Construire (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1148
@@ -1168,12 +1267,12 @@ msgstr "Post-instalare (%s)"
 #: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
-"Crearea terminalului pseudo a eșuat. Funcționalitățile terminalului vor fi "
+"Nu s-a putut crea un terminal virtual. Funcțiile terminalului vor fi "
 "limitate."
 
 #: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
-msgstr "Se curăță…"
+msgstr "Se șterge…"
 
 #: src/libide/foundry/ide-pipeline.c:3353
 #: src/libide/foundry/ide-pipeline.c:3410
@@ -1192,11 +1291,11 @@ msgstr "Se descarcă…"
 
 #: src/libide/foundry/ide-pipeline.c:3374
 msgid "Building dependencies…"
-msgstr "Se compilează dependențele…"
+msgstr "Se construiesc dependențele…"
 
 #: src/libide/foundry/ide-pipeline.c:3378
 msgid "Bootstrapping…"
-msgstr "Se trece prin procesul de bootstrap…"
+msgstr "Se inițializează…"
 
 #: src/libide/foundry/ide-pipeline.c:3382
 msgid "Configuring…"
@@ -1206,7 +1305,7 @@ msgstr "Se configurează…"
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
-msgstr "Se compilează…"
+msgstr "Se construiește…"
 
 #: src/libide/foundry/ide-pipeline.c:3390
 msgid "Installing…"
@@ -1238,7 +1337,7 @@ msgstr "Se elimină %s"
 
 #: src/libide/foundry/ide-pipeline.c:3833
 msgid "Removing build directories…"
-msgstr "Se elimină dosarele de compilare…"
+msgstr "Se elimină dosarele de construire…"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
@@ -1248,7 +1347,7 @@ msgstr "Comandă fără titlu"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
-msgstr "Test unitate"
+msgstr "Test unitar"
 
 #. translators: %s is replaced with the name of the run tool such as "valgrind"
 #: src/libide/foundry/ide-run-manager.c:196
@@ -1357,11 +1456,11 @@ msgstr "Creează un proiect nou prin clonarea unui depozit"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "Selectați un _dosar…"
+msgstr "Alege un _dosar…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
-msgstr "Director"
+msgstr "Dosar"
 
 #: src/libide/greeter/ide-greeter-workspace.c:223
 #: src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
@@ -1800,18 +1899,14 @@ msgstr "Versiune"
 
 #: src/libide/plugins/ide-plugin-view.ui:100
 msgid "Website"
-msgstr "Pagină web"
+msgstr "Pagina web"
 
 #: src/libide/plugins/ide-plugin.c:336
 #: src/plugins/create-project/gbp-create-project-widget.ui:117
 #: src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10
 #: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
-msgstr "Control de versiune"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK-uri"
+msgstr "Controlul versiunii"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -1828,7 +1923,7 @@ msgstr "Diagnosticare"
 
 #: src/libide/plugins/ide-plugin.c:341
 msgid "Build Systems"
-msgstr "Sisteme de generare"
+msgstr "Sisteme de construire"
 
 #: src/libide/plugins/ide-plugin.c:342
 msgid "Compilers"
@@ -1840,11 +1935,11 @@ msgstr "Depanatori"
 
 #: src/libide/plugins/ide-plugin.c:344
 msgid "Templates"
-msgstr "Șabloane"
+msgstr "Modele"
 
 #: src/libide/plugins/ide-plugin.c:345
 msgid "Editing & Formatting"
-msgstr "Editare și formatare"
+msgstr "Modificare și formatare"
 
 #: src/libide/plugins/ide-plugin.c:348
 msgid "Web"
@@ -1860,7 +1955,7 @@ msgstr "Integrare desktop"
 
 #: src/libide/plugins/ide-plugin.c:351
 msgid "Additional"
-msgstr "Adițional"
+msgstr "Altele"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
@@ -1873,7 +1968,7 @@ msgstr "Fișierul trebuie să fie în arborele proiectului."
 #: src/libide/projects/xml-reader.c:329
 #, c-format
 msgid "Could not parse XML from stream"
-msgstr "Nu s-a putut parsa XML de la flux"
+msgstr "Nu s-a putut analiza XML din flux"
 
 #: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
 #: src/libide/terminal/gtk/menus.ui:35
@@ -2068,7 +2163,7 @@ msgstr "Salvează"
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
-"Nu s-a putut lansa subprocesul. Ar putea fi necesară recompilarea "
+"Nu s-a putut lansa subprocesul. Ar putea fi necesară reconstruirea "
 "proiectului."
 
 #: src/libide/terminal/ide-terminal-page.c:125
@@ -2244,9 +2339,9 @@ msgstr "Nimic"
 msgid "Blank page"
 msgstr "Pagină liberă"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
-msgstr "Rulează o instanță nouă a Builder"
+msgstr "Pornește o nouă instanță de Builder"
 
 #: src/plugins/arduino/gbp-arduino-application-addin.c:929
 msgid "Installing Arduino Library"
@@ -2410,7 +2505,7 @@ msgstr "Se generează cache…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
 msgid "Bootstrapping build system"
-msgstr "Se pornește sistemul de compilare"
+msgstr "Se inițializează sistemul de construire"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
@@ -2427,11 +2522,11 @@ msgstr "Se configurează proiectul"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr "Se compilează proiectul"
+msgstr "Se construiește proiectul"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
-msgstr "Se salvează în cache comenzile de compilare"
+msgstr "Se salvează în cache comenzile de construire"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:935
@@ -2476,23 +2571,23 @@ msgstr "Copiază"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:397
 msgid "Build Output"
-msgstr "Rezultatul compilării"
+msgstr "Rezultatul construirii"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:398
 msgid "Build Output (Shift+Ctrl+L)"
-msgstr "Rezultatul compilării (Shift+Ctrl+L)"
+msgstr "Rezultatul construirii (Shift+Ctrl+L)"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:44
 msgid "Clear build log"
-msgstr "Șterge jurnalul compilării"
+msgstr "Șterge jurnalul construirii"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:60
 msgid "Cancel build"
-msgstr "Anulează compilarea"
+msgstr "Anulează construirea"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:76
 msgid "Save build log"
-msgstr "Salvează jurnalul compilării"
+msgstr "Salvează jurnalul construirii"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
@@ -2505,7 +2600,7 @@ msgstr "Ramură"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:60
 msgid "Build Profile"
-msgstr "Profilul compilării"
+msgstr "Profilul construirii"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
@@ -2518,19 +2613,19 @@ msgstr "Dispozitiv"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr "Configurarea compilării actuale conține erori."
+msgstr "Configurarea construirii actuale conține erori."
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
-msgstr "Starea compilării"
+msgstr "Starea construirii"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:186
 msgid "Last build"
-msgstr "Ultima compilare"
+msgstr "Ultima construire"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
 msgid "Build result"
-msgstr "Rezultatul compilării"
+msgstr "Rezultatul construirii"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
 msgid "Errors"
@@ -2544,15 +2639,15 @@ msgstr "Avertizări"
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
-msgstr "Canal de compilare"
+msgstr "Etapele construirii"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:4
 msgid "Build Issues"
-msgstr "Probleme de compilare"
+msgstr "Probleme construirii"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:21
 msgid "Build status:"
-msgstr "Starea compilării:"
+msgstr "Starea construirii:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
@@ -2591,15 +2686,15 @@ msgstr "Executabil"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Lista obiectivelor compilării a eșuat: %s"
+msgstr "Nu s-au putut afișa obiectivele construirii: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr "Alege obiectivul compilării"
+msgstr "Alege obiectivul construirii"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:17
 msgid "Available Build Targets"
-msgstr "Obiective de compilare disponibile"
+msgstr "Obiective de construire disponibile"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
@@ -2618,7 +2713,7 @@ msgstr "Această selecție permite ca Builder să aleagă cel mai bun candidat."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr "Container-ul utilizat pentru a compila și porni aplicația"
+msgstr "Containerul utilizat pentru a construi și porni aplicația"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2634,7 +2729,7 @@ msgstr "Face activă"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:219
 msgid "Make configuration active and reload build pipeline"
-msgstr "Face configurarea activă și reîncarcă canalul de compilare"
+msgstr "Face configurarea activă și reîncarcă etapele construirii"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:232
 msgid "Delete"
@@ -2646,15 +2741,15 @@ msgstr "Șterge configurarea"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
-msgstr "Oprește compilarea proiectului (Shift+Ctrl+Alt+C)"
+msgstr "Oprește construirea proiectului (Shift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr "Compilează proiectul (Shift+Ctrl+Alt+B)"
+msgstr "Construiește proiectul (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
-msgstr "Afișează diagnoza de compilare (Ctrl+Alt+?)"
+msgstr "Afișează diagnoza construirii (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
@@ -2687,31 +2782,31 @@ msgstr "Reîncarcă configurarea proiectului"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
-msgstr "Alege obiectivul compilării…"
+msgstr "Alege obiectivul construirii…"
 
 #: src/plugins/buildui/gtk/menus.ui:28
 msgid "Change default build target"
-msgstr "Schimbă obiectivul prestabilit al compilării"
+msgstr "Schimbă obiectivul prestabilit al construirii"
 
 #: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:96
 msgid "Building"
-msgstr "Se compilează"
+msgstr "Se construiește"
 
 #: src/plugins/buildui/gtk/menus.ui:36
 msgid "_Build"
-msgstr "_Compilează"
+msgstr "_Construiește"
 
 #: src/plugins/buildui/gtk/menus.ui:37
 msgid "Build the project"
-msgstr "Compilează proiectul"
+msgstr "Construiește proiectul"
 
 #: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
-msgstr "_Recompilează"
+msgstr "_Reconstruiește"
 
 #: src/plugins/buildui/gtk/menus.ui:45
 msgid "Rebuild the project"
-msgstr "Recompilează proiectul"
+msgstr "Reconstruiește proiectul"
 
 #: src/plugins/buildui/gtk/menus.ui:51
 msgid "_Clean"
@@ -2723,11 +2818,11 @@ msgstr "Șterge proiectul"
 
 #: src/plugins/buildui/gtk/menus.ui:58
 msgid "Stop Building"
-msgstr "Oprește compilarea"
+msgstr "Oprește construirea"
 
 #: src/plugins/buildui/gtk/menus.ui:59
 msgid "Cancel the current build operation"
-msgstr "Anulează compilarea în curs"
+msgstr "Anulează construirea în curs"
 
 #: src/plugins/buildui/gtk/menus.ui:67
 msgid "Install & Deployment"
@@ -2763,7 +2858,7 @@ msgstr "Arată rezu_ltatul compilării"
 
 #: src/plugins/buildui/gtk/menus.ui:101
 msgid "Display panel containing the build log"
-msgstr "Afișează panoul care conține jurnalul compilării"
+msgstr "Afișează panoul care conține jurnalul construirii"
 
 #: src/plugins/buildui/gtk/menus.ui:110 src/plugins/buildui/gtk/menus.ui:119
 msgid "Running"
@@ -2805,7 +2900,7 @@ msgstr "Depanare"
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
-msgstr "Teste unitate"
+msgstr "Teste unitare"
 
 #: src/plugins/buildui/gtk/menus.ui:158 src/plugins/web-browser/gtk/menus.ui:83
 msgid "Settings"
@@ -3208,7 +3303,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
-msgstr "Rulează testele de unitate din interiorul mediului de generare."
+msgstr "Execută testele unitare din interiorul mediului de construire."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -3222,7 +3317,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
-msgstr "Compilare și instrumente"
+msgstr "Construire și instrumente"
 
 #: src/plugins/buildui/tweaks.ui:185
 msgid "Storage"
@@ -3238,8 +3333,7 @@ msgid ""
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
 "Dosarul utilizat pentru stocarea fișierelor cache și a fișierele generate de "
-"procesul de compilare. Pentru a avea efect trebuie repornită aplicația "
-"Builder."
+"etapele construirii. Pentru a avea efect trebuie repornită aplicația Builder."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -3256,19 +3350,19 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:218
 msgid "Clear Build Logs"
-msgstr "Șterge jurnalul de compilare"
+msgstr "Șterge jurnalul construirii"
 
 #: src/plugins/buildui/tweaks.ui:219
 msgid "Clear the build log history when a new build begins"
-msgstr "Șterge cronologia jurnalului de compilare când începe o nouă compilare"
+msgstr "Șterge cronologia jurnalului construirii când începe o nouă construire"
 
 #: src/plugins/buildui/tweaks.ui:230
 msgid "Show Build Logs"
-msgstr "Arată jurnalul compilării"
+msgstr "Arată jurnalul construirii"
 
 #: src/plugins/buildui/tweaks.ui:231
 msgid "Show the build log when a new build begins"
-msgstr "Arată jurnalul compilării când începe o nouă compilare"
+msgstr "Arată jurnalul construirii când începe o nouă construire"
 
 #: src/plugins/buildui/tweaks.ui:247
 msgid "Log to Console"
@@ -3284,7 +3378,7 @@ msgstr "Lucrători"
 
 #: src/plugins/buildui/tweaks.ui:265
 msgid "Number of workers to use when performing builds"
-msgstr "Numărul de lucrători de utilizat când se efectuează generări"
+msgstr "Numărul de lucrători de utilizat când se efectuează construiri"
 
 #: src/plugins/buildui/tweaks.ui:280
 msgid "1 per CPU"
@@ -3303,8 +3397,8 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
-"Proiectul va fi instalat în acest director în timpul fazei de instalare a "
-"conductei de generare."
+"Proiectul va fi instalat în acest dosar în timpul fazei de instalare din "
+"cadrul etapelor de construire."
 
 #: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
@@ -3315,37 +3409,38 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
-"Aceste opțiuni sunt utilizate de către sistemul de generare pentru a "
-"configura proiectul în timpul fazei de configurare a conductei de generare"
+"Aceste opțiuni sunt utilizate de către sistemul de construire pentru a "
+"configura proiectul în timpul fazei de configurare din cadrul etapelor de "
+"construire"
 
 #: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
-msgstr "Mediu de generare"
+msgstr "Mediu de construire"
 
 #: src/plugins/buildui/tweaks.ui:449
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:126
 msgid "Locality"
-msgstr "Localizare"
+msgstr "Locul"
 
 #: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
-msgstr "Unde se generează proiectul"
+msgstr "Unde se construiește proiectul"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
-msgstr "Arbore sursă de interior"
+msgstr "În dosarul surselor"
 
 #: src/plugins/buildui/tweaks.ui:473
 msgid "Outside Source Tree"
-msgstr "Arbore sursă de exterior"
+msgstr "În afara dosarului surselor"
 
 #: src/plugins/buildui/tweaks.ui:494
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
-"SDK-ul utilizat pentru a genera aplicația este determinat automat de la "
-"rulare."
+"SDK-ul utilizat pentru a construi aplicația este stabilit automat în funcție "
+"de mediul de execuție."
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
@@ -3363,7 +3458,7 @@ msgstr "Preia dependențele"
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
-msgstr "Generează proiectul"
+msgstr "Construiește proiectul"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
@@ -3716,15 +3811,16 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID"
-msgstr "ID aplicație"
+msgstr "ID-ul aplicației"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"Un identificator invers al numelui de domeniu utilizat pentru a identifica "
-"aplicația, precum „org.gnome.Builder”. Nu trebuie să conțină liniuțe."
+"Un identificator în format de nume de domeniu inversat, utilizat pentru a "
+"identifica aplicația, cum ar fi „org.gnome.Builder”. Acesta nu poate conține "
+"cratime."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -4768,19 +4864,18 @@ msgstr "Nu s-a putut elimina manifestul flatpak: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
 msgid "Network is not available, skipping downloads"
-msgstr "Rețeaua nu este disponibilă, se sare peste descărcări"
+msgstr "Rețeaua nu este disponibilă, se omit descărcările"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:15
 msgid "Install or Update SDK?"
-msgstr "Instalați sau actualizați SDK-ul?"
+msgstr "Se instalează sau se actualizează SDK-ul?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
 msgstr ""
-"Builder are nevoie să instaleze următoarele kit-uri de dezvoltare software "
-"pentru a compila proiectul."
+"Builder trebuie să instaleze următoarele SDK-uri pentru a construi proiectul."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
@@ -4800,7 +4895,8 @@ msgstr "Se rezolvă extensiile SDK"
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
-msgstr "Builder localizează extensiile SDK potrivite pentru a genera proiectul"
+msgstr ""
+"Builder caută extensiile SDK corespunzătoare pentru a construi proiectul"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:857
 msgid "Flatpak"
@@ -4813,11 +4909,11 @@ msgstr "Se creează spațiul de lucru flatpak"
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:284
 #, c-format
 msgid "Removing stale flatpak staging directory: %s"
-msgstr "Se elimină directorul de staging flatpak învechit: %s"
+msgstr "Se elimină dosarul temporar de pregătire flatpak: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:427
 msgid "Preparing build directory"
-msgstr "Se pregătește dosarul de generare"
+msgstr "Se pregătește dosarul pentru construire"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:487
 msgid "Downloading dependencies"
@@ -4825,15 +4921,15 @@ msgstr "Se descarcă dependențele"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Building dependencies"
-msgstr "Se generează dependențele"
+msgstr "Se construiesc dependențele"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:623
 msgid "Finalizing flatpak build"
-msgstr "Se finalizează generarea flatpak"
+msgstr "Se finalizează construirea flatpak-ului"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:673
 msgid "Exporting staging directory"
-msgstr "Se exportă dosarul de introducere"
+msgstr "Se exportă dosarul de pregătire"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:763
 msgid "Creating flatpak bundle"
@@ -4852,7 +4948,8 @@ msgid ""
 "Builder is installing Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Builder instalează Kit-uri de Dezvoltare Software pentru a genera aplicația."
+"Builder instalează pachetele de dezvoltare software necesare pentru a "
+"construi aplicația."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
 #, c-format
@@ -4868,8 +4965,8 @@ msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"Builder instalează Kit-urile de Dezvoltare Software necesare pentru a genera "
-"aplicația."
+"Builder actualizează pachetele de dezvoltare software necesare pentru a "
+"construi aplicația."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
@@ -4936,8 +5033,8 @@ msgid ""
 "Builder failed to provide appropriate credentials when cloning the "
 "repository."
 msgstr ""
-"Builder nu a putut furniza certificările adecvate în timpul clonării "
-"depozitului."
+"Builder nu a putut furniza datele de autentificare corespunzătoare în timpul "
+"clonării depozitului"
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:627
 #, c-format
@@ -5203,7 +5300,7 @@ msgstr "Sistemul de operare gazdă"
 #. translators: Bundled means a runtime "bundled" with Builder
 #: src/plugins/host/gbp-host-runtime-provider.c:68
 msgid "Bundled with Builder"
-msgstr "Grupat cu Builder"
+msgstr "Inclus în Builder"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -5370,11 +5467,11 @@ msgstr "Comută schema de stil la varianta luminoasă"
 
 #: src/plugins/menu-search/gtk/menus.ui:79
 msgid "Display Build Diagnostics"
-msgstr "Afișează diagnosticele de generare"
+msgstr "Afișează diagnosticul de construire"
 
 #: src/plugins/menu-search/gtk/menus.ui:80
 msgid "Display errors and warnings found during build"
-msgstr "Afișează erorile și avertismentele găsite în timpul generării"
+msgstr "Afișează erorile și avertismentele găsite în timpul construirii"
 
 #: src/plugins/menu-search/gtk/menus.ui:88
 msgid "Jump to a specific line or column"
@@ -5694,34 +5791,34 @@ msgstr "O aplicație GNOME de redare video"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
-msgstr "Generare cu succes"
+msgstr "Construire reușită"
 
 #: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr "Proiectul „%s” a completat generarea"
+msgstr "Proiectul „%s” a fost construit"
 
 #: src/plugins/notification/ide-notification-addin.c:128
 #: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
-msgstr "Generarea a eșuat"
+msgstr "Construire nereușită"
 
 #: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr "Proiectul „%s” a eșuat la generare"
+msgstr "Proiectul „%s” nu a putut fi construit"
 
 #: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
-msgstr "Generare reușită"
+msgstr "Construire reușită"
 
 #: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
-msgstr "Generare configurată"
+msgstr "Construire configurată"
 
 #: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
-msgstr "Generare inițializată"
+msgstr "Construire inițializată"
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
@@ -5939,15 +6036,15 @@ msgid ""
 "directories, and cached information."
 msgstr ""
 "Acest identificator este utilizat când se face referire la configurările "
-"proiectului, directoarele de generare și informațiile din cache."
+"proiectului, dosarele construirii și informațiile din cache."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
-msgstr "Sistem de generare"
+msgstr "Sistemul de construire"
 
 #: src/plugins/projectui/tweaks.ui:140
 msgid "Source Directory"
-msgstr "Dosar sursă"
+msgstr "Dosarul sursă"
 
 #: src/plugins/projectui/tweaks.ui:160
 msgid "Current Configuration"
@@ -5958,8 +6055,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
-"Configurarea este utilizată pentru a stabili canalele de compilare, sistemul "
-"de compilare și pentru a executa propriul proiect."
+"Configurarea este utilizată pentru a stabili etapele de construire, sistemul "
+"de construire și pentru a porni propriul proiect."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5968,17 +6065,17 @@ msgstr "Furnizat de"
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
-msgstr "Emulare Aarch64"
+msgstr "Simulare Aarch64"
 
 #: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
-msgstr "Emulare Arm"
+msgstr "Simulare Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
-msgstr "Calculator (%s) %s"
+msgstr "Calculatorul (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
@@ -6005,7 +6102,7 @@ msgstr "Proiecte recente"
 
 #: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat Tabs"
-msgstr "_Reformatează tab-urile"
+msgstr "_Realiniere text"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -6114,8 +6211,8 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
-"Builder poate să ruleze comanda de la un număr de localități inclusiv "
-"sistemul gazdă sau containerele de generare."
+"Builder poate executa comanda din mai multe locuri, inclusiv din sistemul "
+"gazdă sau din containerele de construire"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
@@ -6127,15 +6224,15 @@ msgstr "Subproces"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:252
 msgid "Runs the command as a subprocess of Builder."
-msgstr "Rulează comanda ca un subproces al Builder."
+msgstr "Execută comanda ca un subproces Builder."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command on the host system."
-msgstr "Rulează comanda pe sistemul gazdă."
+msgstr "Execută comanda în sistemul gazdă."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command within the build pipeline."
-msgstr "Rulează comanda în cadrul conductei de generare."
+msgstr "Execută comanda în cadrul etapelor de construire."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "As Target Application"
@@ -6143,12 +6240,12 @@ msgstr "Ca aplicație țintă"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command as if it were the target application."
-msgstr "Rulează comanda ca și cum ar fi aplicația țintă."
+msgstr "Execută comanda ca și cum ar fi aplicația țintă."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr ""
-"Comenzile pot fi utilizate pentru a genera, rula sau modifica proiectele"
+"Comenzile pot fi utilizate pentru a construi, porni sau modifica proiectele"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:118
 msgid "These commands are specific to this project."
@@ -6156,7 +6253,7 @@ msgstr "Aceste comenzi sunt specifice acestui proiect."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:119
 msgid "These commands are shared across all projects."
-msgstr "Aceste comenzi sunt partajate în toate proiectele."
+msgstr "Aceste comenzi sunt comune pentru toate proiectele."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -6180,7 +6277,7 @@ msgstr "Mediu de comandă"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
-msgstr "Localizarea comenzii"
+msgstr "Locul comenzii"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
@@ -6193,8 +6290,8 @@ msgstr "Execută comenzi"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr ""
-"O listă de id-uri de comandă de rulare de încărcat pentru aplicație sau "
-"proiect."
+"O listă de ID-uri de comenzi de execuție care trebuie încărcate pentru "
+"aplicație sau proiect."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -6202,10 +6299,10 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
-"Utilizați comenzi pentru a rula instrumente de generare, aplicații sau "
-"scripturi shell și le mapați la o scurtătură de tastatură. Acestea pot rula "
-"din diverse medii cum ar fi conducta de generare, mediul de rulare sau "
-"sistemul de operare gazdă."
+"Folosește o comandă pentru a porni un instrument de construire, o aplicație "
+"sau un script de shell și asociaz-o cu o scurtătură de tastatură. Aceasta "
+"poate fi executată din diverse medii, cum ar fi etapele de construire, "
+"mediul de execuție sau sistemul gazdă."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
@@ -6406,8 +6503,8 @@ msgstr "Mostre de stive de apeluri"
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
-"Înregistrează urme de stive la un interval regulat și generează un grafic de "
-"apeluri"
+"Înregistrează secvențele de apeluri la intervale regulate și construiește un "
+"grafic de apeluri"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Scheduler Details"
@@ -6537,19 +6634,19 @@ msgstr "Deschide un terminal nou pe sistemul de operare gazdă"
 
 #: src/plugins/terminal/gtk/menus.ui:16
 msgid "New _Build Terminal"
-msgstr "Terminal de _generare nou"
+msgstr "_Nou terminal de construire"
 
 #: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
-msgstr "Deschide un terminal nou în conducta de generare a proiectului"
+msgstr "Deschide un terminal nou în etapele de construire a proiectului"
 
 #: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
-msgstr "Terminal de executare nou"
+msgstr "Nou terminal de _execuție"
 
 #: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
-msgstr "Deschide un terminal nou în mediul de runtime al proiectului"
+msgstr "Deschide un terminal nou în mediul de execuție al proiectului"
 
 #: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
@@ -6615,7 +6712,7 @@ msgstr ""
 
 #: src/plugins/testui/gbp-testui-output-panel.c:138
 msgid "Unit Test Output"
-msgstr "Rezultate teste unitate"
+msgstr "Rezultate teste unitare"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:39
 msgid "Clear test output"
@@ -6633,23 +6730,23 @@ msgstr "Salvează rezultatul testului"
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
 #, c-format
 msgid "Running all unit tests at %s"
-msgstr "Execută toate testele unitate la %s"
+msgstr "Execută toate testele unitare la %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 msgid "Unit tests completed in %lf seconds"
-msgstr "Testele de unitate completate în %lf secunde"
+msgstr "Teste unitare completate în %lf secunde"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
 msgid "Unit tests completed"
-msgstr "Teste unitate completate"
+msgstr "Teste unitare completate"
 
 #: src/plugins/testui/gtk/menus.ui:8
 msgid "Run all Unit Tests"
-msgstr "Rulează toate testele de unitate"
+msgstr "Execută toate testele unitare"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr "Cere ca toate testele de unitate să fie rulate"
+msgstr "Cere ca toate testele unitare să fie executate"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:142
