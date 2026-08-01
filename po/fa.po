@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-06-01 23:15+0000\n"
-"PO-Revision-Date: 2026-06-03 23:36+0330\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-01 23:33+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2 src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -30,10 +30,11 @@ msgstr "سازنده"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:8
 msgid "Create applications for GNOME"
-msgstr "ساخت برنامه‌هایی برای گنوم"
+msgstr "ایجاد برنامه‌هایی برای گنوم"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "کریستین هرگرت"
 
@@ -132,6 +133,95 @@ msgstr "جست‌وجوی مبهم سریع در پرونده‌ها"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "یکپارچگی آردوینو با arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "محیط توسعه"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "محیط توسعهٔ یکپارچه"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "ویرایشگر کد"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "کد نویسی"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "برنامه نویسی"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "توسعه‌دهندگان نرم‌افزار"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "توسعهٔ نرم‌افزار"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "ترجمه کردن"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "ساختن"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "سامانه‌های زمان اجرا"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK‌ها"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "بازرس GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "بازرس دی‌باس"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "اشکال‌زدا"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "اشکال‌زدایی"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "تشخیص دهندهٔ نشت حافظه"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "آزمون‌های واحد"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "آزمون گرفتن خودکار"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "مستندات"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "تکمیل خودکار"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "نمایه‌گر"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "نمایه‌گری"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1731,10 +1821,6 @@ msgstr "پایگاه وب"
 msgid "Version Control"
 msgstr "واپایش نگارش"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK‌ها"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "کارساز‌های زبان"
@@ -2159,7 +2245,7 @@ msgstr "هیچ‌"
 msgid "Blank page"
 msgstr "صفحهٔ سفید"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "اجرای نمونهٔ سازندهٔ جدید"
 
@@ -6740,9 +6826,6 @@ msgstr "برای تجزبه، پرونده باید به طور محلی ذخی
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "محیط توسعهٔ یکپارچه‌ای برای گنوم"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "بازرس D-Bus"
 
 #~ msgid "Cancel"
 #~ msgstr "لغو"
