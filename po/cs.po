@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-11 15:48+0100\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-08-01 12:24+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
@@ -3338,20 +3338,20 @@ msgstr "Run z konfigurace Cargo"
 #: src/plugins/clang-format/gbp-clang-formatter.c:178
 #, c-format
 msgid "Failed to execute clang-format: %s"
-msgstr ""
+msgstr "Selhalo spuštění clang-format: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:189
 #, c-format
 msgid "clang-format failed to format document: %s"
-msgstr ""
+msgstr "Selhalo naformátování přes clang-format: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr ""
+msgstr "Chybějící nebo porušená data z clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
-msgstr ""
+msgstr "Pozice kurzoru poskytnuta z clang-format je neplatná"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
