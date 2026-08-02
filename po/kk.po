@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-01-30 20:54+0500\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-08-02 07:28+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -34,25 +34,26 @@ msgstr "GNOME үшін қолданбаларды жасау"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
-"Builder is an actively developed Integrated Development Environment for GNOME. "
-"It combines integrated support for essential GNOME technologies such as GTK+, "
-"GLib, and GNOME APIs with features that any developer will appreciate, like "
-"syntax highlighting and snippets."
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
 msgstr ""
-"Құрастырушы – GNOME үшін белсенді жасалып келе жатқан интеграцияланған әзірлеу "
-"ортасы. Оның GTK+, GLib, and GNOME API сияқты маңызды GNOME технологияларына "
-"қолдауы бар және синтаксистік ерекшелеу және фрагменттер сияқты кез келген "
-"әзірлеуші бағалайтын мүмкіндіктері бар."
+"Құрастырушы – GNOME үшін белсенді жасалып келе жатқан интеграцияланған "
+"әзірлеу ортасы. Оның GTK+, GLib, and GNOME API сияқты маңызды GNOME "
+"технологияларына қолдауы бар және синтаксистік ерекшелеу және фрагменттер "
+"сияқты кез келген әзірлеуші бағалайтын мүмкіндіктері бар."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
-"You can rely on predictable releases of Builder with each new release of GNOME "
-"every six months."
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
 msgstr ""
 "Builder бағдарламасының әр алты ай сайынғы GNOME-ның жаңа шығарылымдарымен "
 "бірге шығатын болжамды шығарылымдарына сене аласыз."
@@ -83,8 +84,8 @@ msgstr "Git жүйесімен интеграция"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:33
 msgid ""
-"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
-"and Waf"
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
 msgstr ""
 "Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize және Waf-пен "
 "интеграциялану"
@@ -92,7 +93,8 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
-"Clang негізіндегі автотолықтыру, семантикалық түспен ерекшелеу және диагностика"
+"Clang негізіндегі автотолықтыру, семантикалық түспен ерекшелеу және "
+"диагностика"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:35
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
@@ -103,7 +105,8 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:36
 msgid "Vala based auto-completion and diagnostics"
 msgstr ""
-"Vala негізіндегі автотолықтыру, семантикалық түспен ерекшелеу және диагностика"
+"Vala негізіндегі автотолықтыру, семантикалық түспен ерекшелеу және "
+"диагностика"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:37
 msgid "Auto indentation support for C, Python, Vala, and XML"
@@ -142,6 +145,96 @@ msgstr "Файлдар мен таңбалар бойынша жылдам дә�
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "arduino-cli арқылы Arduino-мен үйлестіру"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+#| msgid "ID"
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "интеграцияланған әзірлеу ортасы"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "код редакторы"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "код жазу"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "бағдарламалау"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "бағдарламалық қамтама әзірлеушілері"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "бағдарламалық қамтаманы әзірлеу"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "компиляция"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "құрастыру"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "орындалу орталары"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK-лар"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "GTK инспекторы"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "D-Bus инспекторы"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "жөндеуші"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "жөндеу"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "жадтың ағып кету детекторы"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "юнит тесттер"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "автоматтандырылған тестілеу"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "құжаттама"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "автоматты толықтыру"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "профильдеуші"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "профильдеу"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -200,7 +293,8 @@ msgstr "Құрастыру кезінде логты көрсету"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "If enabled, the build log will be raised when a build starts"
-msgstr "Егер іске қосылса, құрастыру басталған кезде құрастыру логы көрсетіледі"
+msgstr ""
+"Егер іске қосылса, құрастыру басталған кезде құрастыру логы көрсетіледі"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -211,8 +305,8 @@ msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
-"Қосылым өлшеулі кезде SDK жүктеп алу және тәуелділіктер сияқты жинау кезіндегі "
-"автоматты тасымалдауларды іске қосу."
+"Қосылым өлшеулі кезде SDK жүктеп алу және тәуелділіктер сияқты жинау "
+"кезіндегі автоматты тасымалдауларды іске қосу."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -256,7 +350,8 @@ msgid "Debugger Breakpoint at Criticals"
 msgstr "Критикалық қателердегі жөндеушінің тоқтау нүктесі"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-msgid "Debugger should automatically insert breakpoint at g_critical() function."
+msgid ""
+"Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
 "Жөндеуші g_critical() функциясына тоқтау нүктесін автоматты түрде кірістіруі "
 "керек."
@@ -267,8 +362,8 @@ msgstr "Ескертулер мен критикалық қателердегі 
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
-"Debugger should automatically insert breakpoint at g_warning() and g_critical "
-"function."
+"Debugger should automatically insert breakpoint at g_warning() and "
+"g_critical function."
 msgstr ""
 "Жөндеуші g_warning() және g_critical функцияларына тоқтау нүктесін автоматты "
 "түрде кірістіруі керек."
@@ -287,8 +382,8 @@ msgstr "Өзгертілген жолдарды көрсету"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
-"If enabled, the editor will show line additions and changes next to the source "
-"code."
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
 msgstr ""
 "Егер іске қосылса, редактор бастапқы кодтың жанында жолдардың қосылуы мен "
 "өзгертілуін көрсетеді."
@@ -359,8 +454,8 @@ msgstr "Ақылды Backspace"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
-"Backspace will remove additional spaces to keep you aligned to the indentation "
-"size."
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
 msgstr ""
 "Backspace батырмасы шегіну шектеріне сәйкестеу үшін қосымша бос аралықтарды "
 "өшіретін болады."
@@ -387,7 +482,8 @@ msgid "If enabled, the editor will respect the font-name setting."
 msgstr "Егер іске қосылса, редактор font-name параметрін ескереді."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
-msgid "This setting is only respected if the use-custom-font setting is enabled."
+msgid ""
+"This setting is only respected if the use-custom-font setting is enabled."
 msgstr ""
 "Бұл параметр тек use-custom-font параметрі іске қосулы болса ғана ескеріледі."
 
@@ -583,8 +679,10 @@ msgid "Inherit Language Server stderr"
 msgstr "Тіл серверінің stderr мұралау"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
-msgid "If enabled, stderr of language servers will be redirected to the console."
-msgstr "Егер іске қосулы болса, тіл серверлерінің stderr консольге бағытталады."
+msgid ""
+"If enabled, stderr of language servers will be redirected to the console."
+msgstr ""
+"Егер іске қосулы болса, тіл серверлерінің stderr консольге бағытталады."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -592,7 +690,8 @@ msgstr "Іздеу нәтижелерін алдын ала қарау"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:75
 msgid "If previews for search results should be automatically displayed"
-msgstr "Іздеу нәтижелерін алдын ала қарау автоматты түрде көрсетілуі тиіс болса"
+msgstr ""
+"Іздеу нәтижелерін алдын ала қарау автоматты түрде көрсетілуі тиіс болса"
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -629,7 +728,8 @@ msgid "Sort Directories First"
 msgstr "Алдымен бумаларды сұрыптау"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
-msgid "If enabled, the project tree will sort directories before regular files."
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
 msgstr "Іске қосылған болса, жоба ағашы бумаларды файлдарға дейін көрсетеді."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
@@ -652,8 +752,8 @@ msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
-"Жобаны орындау алдында конвейерлерді орнату кезеңін іске қосыңыз. Бұл опцияны "
-"жобаңызбен не істеп жатқаныңызды білсеңіз ғана қолданыңыз."
+"Жобаны орындау алдында конвейерлерді орнату кезеңін іске қосыңыз. Бұл "
+"опцияны жобаңызбен не істеп жатқаныңызды білсеңіз ғана қолданыңыз."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -721,8 +821,7 @@ msgstr "Құжаттардағы емлені автоматты түрде те
 msgid "Build software for GNOME"
 msgstr "GNOME үшін құрастыру бағдарламалық қамтамасы"
 
-#. Translators: Search terms to find this application. Do NOT translate or
-#. localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:13
 msgid "Build;Develop;"
 msgstr "Құрастыру;Өндіру;"
@@ -872,8 +971,10 @@ msgstr "Беттер"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
 #: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
-#: src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160
-#: src/libide/sourceview/gtk/menus.ui:164 src/libide/sourceview/gtk/menus.ui:170
+#: src/libide/sourceview/gtk/menus.ui:152
+#: src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164
+#: src/libide/sourceview/gtk/menus.ui:170
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:148
@@ -922,8 +1023,8 @@ msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
 msgstr ""
-"Файлды жүктеу үшін пайдаланылған кодтауда қателер табылды. Қалып-күй жолағынан "
-"басқа кодтауды таңдап, қайта жүктей аласыз."
+"Файлды жүктеу үшін пайдаланылған кодтауда қателер табылды. Қалып-күй "
+"жолағынан басқа кодтауды таңдап, қайта жүктей аласыз."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1093,7 +1194,8 @@ msgstr "Құрылғы %s етіп орнатылды"
 
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr "Құрылғыға орналастыру мүмкін емес, жинау конвейері инициализацияланбаған"
+msgstr ""
+"Құрылғыға орналастыру мүмкін емес, жинау конвейері инициализацияланбаған"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
@@ -1106,8 +1208,7 @@ msgstr "Резервті"
 msgid "My Computer (%s)"
 msgstr "Менің компьютерім (%s)"
 
-#. translators: first %s is replaced with the host name, second with CPU
-#. architecture
+#. translators: first %s is replaced with the host name, second with CPU architecture
 #: src/libide/foundry/ide-local-device.c:150
 #, c-format
 msgid "My Computer (%s) — %s"
@@ -1149,21 +1250,25 @@ msgstr "Құрастыру (%s)"
 msgid "Post-install (%s)"
 msgstr "Құрастырудан кейінгі әрекеттер (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3113 src/libide/foundry/ide-pipeline.c:3152
+#: src/libide/foundry/ide-pipeline.c:3113
+#: src/libide/foundry/ide-pipeline.c:3152
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
-"Псевдотерминалды жасау сәтсіз аяқталды. Терминал мүмкіндіктері шектеулі болады."
+"Псевдотерминалды жасау сәтсіз аяқталды. Терминал мүмкіндіктері шектеулі "
+"болады."
 
 #: src/libide/foundry/ide-pipeline.c:3349
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410
+#: src/libide/foundry/ide-pipeline.c:3353
+#: src/libide/foundry/ide-pipeline.c:3410
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: src/libide/foundry/ide-pipeline.c:3355 src/libide/foundry/ide-pipeline.c:3418
+#: src/libide/foundry/ide-pipeline.c:3355
+#: src/libide/foundry/ide-pipeline.c:3418
 msgid "Ready"
 msgstr "Дайын"
 
@@ -1201,7 +1306,8 @@ msgstr "Коммит жасалуда…"
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406
+#: src/libide/foundry/ide-pipeline.c:3402
+#: src/libide/foundry/ide-pipeline.c:3406
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Сәтті аяқталды"
@@ -1230,8 +1336,7 @@ msgstr "Атаусыз команда"
 msgid "Unit Test"
 msgstr "Юниттест"
 
-#. translators: %s is replaced with the name of the run tool such as
-#. "valgrind"
+#. translators: %s is replaced with the name of the run tool such as "valgrind"
 #: src/libide/foundry/ide-run-manager.c:196
 #, c-format
 msgid "User requested run tool “%s”"
@@ -1367,7 +1472,8 @@ msgstr "Жобаның бастапқы кодтарын өшіру керек �
 #: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
 msgstr ""
-"Жобаның бастапқы кодтарын компьютерден өшіру әрекетін кері қайтару мүмкін емес."
+"Жобаның бастапқы кодтарын компьютерден өшіру әрекетін кері қайтару мүмкін "
+"емес."
 
 #: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
@@ -1474,8 +1580,7 @@ msgstr[0] "Шамамен %u жыл бұрын"
 msgid "_Install"
 msgstr "_Орнату"
 
-#. translators: the first %u is replaced with the current position, the second
-#. with the number of search results
+#. translators: the first %u is replaced with the current position, the second with the number of search results
 #: src/libide/gtk/ide-search-entry.c:184
 #, c-format
 msgid "%u of %u"
@@ -1570,6 +1675,7 @@ msgstr "FILE"
 
 #. The following are handled in main(), but needed here so that --help
 #. * will display them to the user (which is handled later on).
+#.
 #: src/libide/gui/ide-application-command-line.c:68
 msgid "Print version information and exit"
 msgstr "Нұсқа ақпаратын шығару және шығу"
@@ -1755,8 +1861,7 @@ msgstr "LSP клиентінің байланысы қолжетімді еме�
 msgid "Language server “%s” exited"
 msgstr "“%s” тіл сервері жұмысын аяқтады"
 
-#. translators: the first %s is replaced with the language server name, second
-#. %s with PID
+#. translators: the first %s is replaced with the language server name, second %s with PID
 #: src/libide/lsp/ide-lsp-service.c:555
 #, c-format
 msgid "Language server “%s” spawned as process %s"
@@ -1780,10 +1885,6 @@ msgstr "Веб сайт"
 #: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Нұсқаларды басқару"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK-лар"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -1969,22 +2070,22 @@ msgstr "Жолды к_осарлау"
 msgid "_Formatting"
 msgstr "_Пішімдеу"
 
-#: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165
-#: src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:161
+#: src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171
+#: src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Код навигациясы"
 
-#. translators: the first %u is replaced with the line number and the second
-#. with the column.
+#. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1720
 #: src/plugins/editorui/gbp-editorui-position-label.c:79
 #, c-format
 msgid "Ln %u, Col %u"
 msgstr "Жол %u, Бағ %u"
 
-#. translators: the first %u is replaced with the line number, the second with
-#. the column and the third one with the number of selected characters.
+#. translators: the first %u is replaced with the line number, the second with the column and the third one with the number of selected characters.
 #: src/libide/sourceview/ide-source-view.c:1722
 #: src/plugins/editorui/gbp-editorui-position-label.c:82
 #, c-format
@@ -2029,7 +2130,8 @@ msgstr "Терминал құрамасын қалайша сақтау"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:249
 #: src/plugins/buildui/gbp-buildui-log-pane.c:330
-#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/editorui/gtk/menus.ui:157
+#: src/plugins/menu-search/gtk/menus.ui:114
 #: src/plugins/sysprof/gtk/menus.ui:132
 #: src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
@@ -2054,7 +2156,8 @@ msgstr "Аяқталды"
 
 #: src/libide/terminal/ide-terminal-page.c:147
 msgid "Subprocess launcher failed too quickly, will not respawn."
-msgstr "Ішкі процесті іске қосқыш тым жылдам істен шықты, қайта іске қосылмайды."
+msgstr ""
+"Ішкі процесті іске қосқыш тым жылдам істен шықты, қайта іске қосылмайды."
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
@@ -2141,7 +2244,8 @@ msgstr "Келесі сәйкестікке өту"
 msgid "Wrap around"
 msgstr "Соңына жеткенде басына өту"
 
-#: src/libide/terminal/ide-terminal.c:539 src/libide/terminal/ide-terminal.c:572
+#: src/libide/terminal/ide-terminal.c:539
+#: src/libide/terminal/ide-terminal.c:572
 msgid "Copied to clipboard"
 msgstr "Алмасу буферіне көшірілді"
 
@@ -2410,7 +2514,8 @@ msgstr "%s (Көшірме)"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
-msgstr "BuildStream жобасы қолданылуда, бірақ “bst” орындалатын файлы табылмады."
+msgstr ""
+"BuildStream жобасы қолданылуда, бірақ “bst” орындалатын файлы табылмады."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
@@ -2570,8 +2675,10 @@ msgid "Available Build Targets"
 msgstr "Қолжетімді құрастыру нысаналары"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-msgid "Some targets may not be available until the project has been configured."
-msgstr "Жоба конфигурацияланбайынша кейбір нысаналар қолжетімді болмауы мүмкін."
+msgid ""
+"Some targets may not be available until the project has been configured."
+msgstr ""
+"Жоба конфигурацияланбайынша кейбір нысаналар қолжетімді болмауы мүмкін."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
@@ -3020,8 +3127,8 @@ msgstr "Қалпына келтіру"
 #: src/plugins/buildui/gtk/menus.ui:364
 msgid "Use full session restore as restore reason when running the project"
 msgstr ""
-"Жобаны іске қосқан кезде қалпына келтіру себебі ретінде сессияны толық қалпына "
-"келтіруді қолдану"
+"Жобаны іске қосқан кезде қалпына келтіру себебі ретінде сессияны толық "
+"қалпына келтіруді қолдану"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
@@ -3040,7 +3147,8 @@ msgstr "Жобаны іске қосқан кезде GTK инспекторын
 msgid "Style"
 msgstr "Стиль"
 
-#: src/plugins/buildui/gtk/preferences.ui:40 src/plugins/platformui/tweaks.ui:10
+#: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:10
 msgid "Interface"
 msgstr "Интерфейс"
 
@@ -3145,7 +3253,8 @@ msgstr "Тоқтату сигналы"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
-"Send the signal to the target application when requesting the application stop."
+"Send the signal to the target application when requesting the application "
+"stop."
 msgstr "Қолданбаны тоқтатуды сұраған кезде нысаналы қолданбаға сигнал жіберу."
 
 #: src/plugins/buildui/tweaks.ui:130
@@ -3157,8 +3266,8 @@ msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
-"Ақаулықтарды іздеу үшін <tt>G_MESSAGES_DEBUG=all</tt> орта айнымалысымен іске "
-"қосылады"
+"Ақаулықтарды іздеу үшін <tt>G_MESSAGES_DEBUG=all</tt> орта айнымалысымен "
+"іске қосылады"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
@@ -3191,8 +3300,9 @@ msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
-"Құрастыру пайплайнынан алынған құрастыру артефакттары мен кэштелген файлдарды "
-"сақтауға арналған бума. Күшіне енуі үшін Құрастырғышты қайта іске қосу қажет."
+"Құрастыру пайплайнынан алынған құрастыру артефакттары мен кэштелген "
+"файлдарды сақтауға арналған бума. Күшіне енуі үшін Құрастырғышты қайта іске "
+"қосу қажет."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -3252,8 +3362,8 @@ msgstr "Орнату префиксі"
 
 #: src/plugins/buildui/tweaks.ui:408
 msgid ""
-"The project will be installed to this directory during the installation phase "
-"of the build pipeline."
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
 msgstr "Жоба құрастыру пайплайнының орнату кезеңінде осы бумаға орнатылады."
 
 #: src/plugins/buildui/tweaks.ui:426
@@ -3262,11 +3372,11 @@ msgstr "Баптау опциялары"
 
 #: src/plugins/buildui/tweaks.ui:439
 msgid ""
-"These options are used by the build system to configure the project during the "
-"configure phase of the build pipeline"
+"These options are used by the build system to configure the project during "
+"the configure phase of the build pipeline"
 msgstr ""
-"Бұл опцияларды құрастыру жүйесі құрастыру конвейерінің баптау кезеңінде жобаны "
-"баптау үшін пайдаланады"
+"Бұл опцияларды құрастыру жүйесі құрастыру конвейерінің баптау кезеңінде "
+"жобаны баптау үшін пайдаланады"
 
 #: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
@@ -3460,9 +3570,9 @@ msgid "Search, diagnostics, and autocompletion may be limited until complete."
 msgstr ""
 "Аяқталғанға дейін іздеу, диагностика және автоаяқтау шектеулі болуы мүмкін."
 
-#. translators: "Declaration" is describing a function that is defined in a
-#. header
+#. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
+#.
 #: src/plugins/code-index/ide-code-index-index.c:340
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
@@ -3652,7 +3762,8 @@ msgstr "Бұл атаумен ішкі бума әлдеқашан бар"
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
-"name should be in lower case without spaces and should not start with a number."
+"name should be in lower case without spaces and should not start with a "
+"number."
 msgstr ""
 "Жоба бумасы мен басқа ресурстар үшін пайдаланылатын бірегей атау. Атау бос "
 "орынсыз, кіші әріптермен жазылуы және саннан басталмауы керек."
@@ -3777,7 +3888,8 @@ msgstr "Жөндеушімен жөнелту"
 msgid "Run the project with debugger"
 msgstr "Жобаны жөндеушімен іске қосу"
 
-#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/gtk/menus.ui:20
+#: src/plugins/debuggerui/gtk/menus.ui:81
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
@@ -3899,7 +4011,8 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:69
 msgid "Execute the current line, stepping over any function calls (F7)"
-msgstr "Кез келген функция шақыруларынан аттап өтіп, ағымдағы жолды орындау (F7)"
+msgstr ""
+"Кез келген функция шақыруларынан аттап өтіп, ағымдағы жолды орындау (F7)"
 
 #: src/plugins/debuggerui/ide-debugger-controls.ui:79
 msgid "Run until the end of the function (Shift+F8)"
@@ -4004,7 +4117,8 @@ msgstr "Критикалық қателерде тоқтау"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr "Критикалық қате журналдарында үзіліс нүктесін автоматты түрде кірістіру"
+msgstr ""
+"Критикалық қате журналдарында үзіліс нүктесін автоматты түрде кірістіру"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
@@ -4063,7 +4177,8 @@ msgstr "Ашық мәтін"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
-#: src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:286
+#: src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "Бос аралықтар"
 
@@ -4159,15 +4274,18 @@ msgstr "Жаңа жұмыс кеңістігінде ашу…"
 msgid "Save _As"
 msgstr "Қала_йша сақтау"
 
-#: src/plugins/editorui/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:169
+#: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/menu-search/gtk/menus.ui:169
 msgid "Find…"
 msgstr "Табу…"
 
-#: src/plugins/editorui/gtk/menus.ui:177 src/plugins/menu-search/gtk/menus.ui:176
+#: src/plugins/editorui/gtk/menus.ui:177
+#: src/plugins/menu-search/gtk/menus.ui:176
 msgid "Find/Replace…"
 msgstr "Табу/алмастыру…"
 
-#: src/plugins/editorui/gtk/menus.ui:185 src/plugins/menu-search/gtk/menus.ui:158
+#: src/plugins/editorui/gtk/menus.ui:185
+#: src/plugins/menu-search/gtk/menus.ui:158
 msgid "Print…"
 msgstr "Баспаға шығару…"
 
@@ -4279,7 +4397,8 @@ msgstr "Оң жақ шет өрісінің орны"
 msgid "The desired maximum line length"
 msgstr "Жолдың қажетті максималды ұзындығы"
 
-#: src/plugins/editorui/tweaks-language.ui:203 src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks-language.ui:203
+#: src/plugins/editorui/tweaks.ui:385
 msgid "Behavior"
 msgstr "Мінез-құлығы"
 
@@ -4654,8 +4773,8 @@ msgstr "Сақтау кезінде пішімдеу"
 
 #: src/plugins/editorui/tweaks.ui:588
 msgid ""
-"Reformat sources when saving to disk. Requires a registered formatter for the "
-"source language."
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
 msgstr ""
 "Дискіге сақтау кезінде бастапқы кодты қайта пішімдеу. Бастапқы тіл үшін "
 "тіркелген пішімдеушіні қажет етеді."
@@ -4704,8 +4823,8 @@ msgstr "SDK орнату немесе жаңарту керек пе?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
-"Builder needs to install the following software development kits to build your "
-"project."
+"Builder needs to install the following software development kits to build "
+"your project."
 msgstr ""
 "Құрастырушы жобаңызды құрастыру үшін келесі бағдарламалық қамтаманы әзірлеу "
 "жинақтарын (SDK) орнатуы керек."
@@ -4726,7 +4845,8 @@ msgid "Resolving SDK Extensions"
 msgstr "SDK кеңейтулерін анықтау"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
-msgid "Builder is locating the appropriate SDK extensions to build your project"
+msgid ""
+"Builder is locating the appropriate SDK extensions to build your project"
 msgstr "Builder жобаңызды жинау үшін сәйкес SDK кеңейтулерін іздеуде"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:857
@@ -4810,7 +4930,8 @@ msgstr "Жаңа SDK жинақтары үшін Flatpak орнатылымы"
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
 msgstr ""
-"Жаңа SDK жинақтары мен SDK кеңейтулері үшін пайдаланылатын Flatpak орнатылымы."
+"Жаңа SDK жинақтары мен SDK кеңейтулері үшін пайдаланылатын Flatpak "
+"орнатылымы."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
@@ -4818,11 +4939,11 @@ msgstr "Таңдаулы Flatpak орнатылымы"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
-"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak "
-"installation which contains the extension."
+"When installing SDKs and SDK extensions, Builder may prefer a specific "
+"Flatpak installation which contains the extension."
 msgstr ""
-"SDK жинақтарын мен SDK кеңейтулерін орнату кезінде Builder құрамында кеңейтуі "
-"бар белгілі бір Flatpak орнатылымын таңдауы мүмкін."
+"SDK жинақтарын мен SDK кеңейтулерін орнату кезінде Builder құрамында "
+"кеңейтуі бар белгілі бір Flatpak орнатылымын таңдауы мүмкін."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -4862,9 +4983,11 @@ msgstr "Операция сәтсіз аяқталды. Түпнұсқа қат�
 #: src/plugins/git/daemon/ipc-git-remote-callbacks.c:135
 #, c-format
 msgid ""
-"Builder failed to provide appropriate credentials when cloning the repository."
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
 msgstr ""
-"Builder репозиторийді клондау кезінде сәйкес тіркелгі деректерін ұсына алмады."
+"Builder репозиторийді клондау кезінде сәйкес тіркелгі деректерін ұсына "
+"алмады."
 
 #: src/plugins/git/daemon/ipc-git-repository-impl.c:627
 #, c-format
@@ -5031,15 +5154,13 @@ msgstr "Сәйкес"
 msgid "Path"
 msgstr "Орналасу"
 
-#. TRANSLATORS: %s is the directory or file from where the search was started
-#. from the project tree.
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:835
 #, c-format
 msgid "_Find in %s"
 msgstr "%s ішінен _табу"
 
-#. TRANSLATORS: %s is the directory or file from where the search was started
-#. from the project tree.
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
 #: src/plugins/grep/gbp-grep-panel.c:837
 #, c-format
 msgid "_Replace in %s"
@@ -5247,8 +5368,7 @@ msgstr "Сол жақ панельді ауыстыру"
 msgid "Toggle the left panel in or out of view"
 msgstr "Сол жақ панельді көрсету не жасыру"
 
-#. translators: valid values are "panel-left-symbolic" and "panel-right-
-#. symbolic". Choose "panel-right-symbolic" for RTL
+#. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:31
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
@@ -5257,8 +5377,7 @@ msgstr "panel-left-symbolic"
 msgid "Toggle the right panel in or out of view"
 msgstr "Оң жақ панельді көрсету не жасыру"
 
-#. translators: valid values are "panel-right-symbolic" and "panel-left-
-#. symbolic". Choose "panel-left-symbolic" for RTL
+#. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:40
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
@@ -5667,14 +5786,12 @@ msgstr "Беттер панелі"
 msgid "Drop Down"
 msgstr "Ашылмалы тізім"
 
-#. translators: this is a path to browse to the runtime, likely only
-#. "containers" should be translated
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:675
 msgid "Containers/Toolbox"
 msgstr "Контейнерлер/Toolbox"
 
-#. translators: this is a path to browse to the runtime, likely only
-#. "containers" should be translated
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Podman"
 msgstr "Контейнерлер/Podman"
@@ -5711,8 +5828,7 @@ msgstr "Жа_сау"
 msgid "Copying 1 file"
 msgstr "1 файлды көшіру"
 
-#. translators: first %s is replaced with completed number of files, second %s
-#. with total number of files
+#. translators: first %s is replaced with completed number of files, second %s with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:703
 #, c-format
 msgid "Copying %s of %s files"
@@ -5851,8 +5967,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
-"Бұл идентификатор жобаңыздың баптауларына, құрастыру бумаларына және кэштелген "
-"ақпаратқа сілтеме жасау үшін қолданылады."
+"Бұл идентификатор жобаңыздың баптауларына, құрастыру бумаларына және "
+"кэштелген ақпаратқа сілтеме жасау үшін қолданылады."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5871,8 +5987,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
-"Конфигурация құрастыру конвейерлерін баптау, құрастыру жүйесін конфигурациялау "
-"және жобаңызды іске қосу үшін қолданылады."
+"Конфигурация құрастыру конвейерлерін баптау, құрастыру жүйесін "
+"конфигурациялау және жобаңызды іске қосу үшін қолданылады."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5887,8 +6003,7 @@ msgstr "Aarch64 эмуляциясы"
 msgid "Arm Emulation"
 msgstr "Arm эмуляциясы"
 
-#. translators: first %s is replaced with hostname, second %s with the CPU
-#. architecture
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
@@ -5898,8 +6013,7 @@ msgstr "Менің компьютерім (%s) %s"
 msgid "Removed Files"
 msgstr "Өшірілген файлдар"
 
-#. translators: %s is replaced with the path of the file to be deleted and \n
-#. for a new line
+#. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:289
 #: src/plugins/recent/gbp-recent-section.c:296
 #, c-format
@@ -5943,8 +6057,8 @@ msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
 msgstr ""
-"Трафигі есептелетін интернет қосылымдарында SDK-лар мен тәуелділіктерді жүктеп "
-"алуға рұқсат ету"
+"Трафигі есептелетін интернет қосылымдарында SDK-лар мен тәуелділіктерді "
+"жүктеп алуға рұқсат ету"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Sources"
@@ -6013,8 +6127,8 @@ msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"Команда осы жерден орындалады. Салыстырмалы жолды анықтау үшін <tt>$BUILDDIR</"
-"tt>, <tt>$SRCDIR</tt> немесе <tt>$HOME</tt> қолданыңыз."
+"Команда осы жерден орындалады. Салыстырмалы жолды анықтау үшін "
+"<tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> немесе <tt>$HOME</tt> қолданыңыз."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
@@ -6063,8 +6177,8 @@ msgstr "Команданы мақсатты қолданба сияқты оры
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr ""
-"Командаларды жобаларыңызды құрастыру, орындау немесе өзгерту үшін пайдалануға "
-"болады"
+"Командаларды жобаларыңызды құрастыру, орындау немесе өзгерту үшін "
+"пайдалануға болады"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:118
 msgid "These commands are specific to this project."
@@ -6113,9 +6227,9 @@ msgstr ""
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
-"Use commands to run build tooling, applications, or shell scripts and map them "
-"to a keyboard shortcut. They can run from various environments such as the "
-"build pipeline, runtime environment, or host operating system."
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
 msgstr ""
 "Жинау құралдарын, қолданбаларды немесе қоршам скрипттерін іске қосу үшін "
 "командаларды қолданыңыз және оларды пернетақта жарлығына тағайындаңыз. Олар "
@@ -6160,7 +6274,8 @@ msgstr "Пернетақта темасы"
 
 #: src/plugins/shortcutui/tweaks.ui:16
 msgid ""
-"Shortcut themes provide a keyboard experience similar to other IDEs and editors"
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
 msgstr ""
 "Жарлық тақырыптары басқа IDE және редакторларға ұқсас пернетақта тәжірибесін "
 "ұсынады"
@@ -6173,8 +6288,7 @@ msgstr "swift run"
 msgid "Symbols in File"
 msgstr "Файлдағы таңбалар"
 
-#. translators: "In Page" refers to the title of the page which contains the
-#. search result
+#. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:290
 msgid "In Page"
 msgstr "Парақта"
@@ -6380,7 +6494,8 @@ msgstr "Батареяны пайдалану"
 
 #: src/plugins/sysprof/tweaks.ui:152 src/plugins/sysprof/tweaks.ui:180
 msgid "Record statistics about battery charge and discharge rates"
-msgstr "Батареяның зарядталу және разрядталу жылдамдығы туралы статистиканы жазу"
+msgstr ""
+"Батареяның зарядталу және разрядталу жылдамдығы туралы статистиканы жазу"
 
 #: src/plugins/sysprof/tweaks.ui:167
 msgid "Network Usage"
@@ -6416,7 +6531,8 @@ msgstr "Қолданбаны трассировкалау"
 
 #: src/plugins/sysprof/tweaks.ui:225
 msgid ""
-"Provide TRACE_FD environment variable for applications to deliver custom events"
+"Provide TRACE_FD environment variable for applications to deliver custom "
+"events"
 msgstr ""
 "Қолданбаларға пайдаланушы оқиғаларын жеткізу үшін TRACE_FD орта айнымалысын "
 "ұсыну"
@@ -6490,7 +6606,8 @@ msgstr "Шығыс кезінде айналдыру"
 #: src/plugins/terminal/tweaks.ui:64
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
-"Терминал ішіндегі қолданбалар мәтінді шығарған кезде автоматты түрде айналдыру"
+"Терминал ішіндегі қолданбалар мәтінді шығарған кезде автоматты түрде "
+"айналдыру"
 
 #: src/plugins/terminal/tweaks.ui:75
 msgid "Scroll On Keyboard Input"
@@ -6591,7 +6708,8 @@ msgstr "Жаңарту қолжетімді"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
-"An update to Builder is available. Builder can download and install it for you."
+"An update to Builder is available. Builder can download and install it for "
+"you."
 msgstr "Builder жаңартуы қол жетімді. Builder оны сізге жүктеп, орната алады."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
@@ -6716,10 +6834,11 @@ msgstr "Бұтақтар"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
-"Enter the URL of the source code repository for the project you would like to "
-"clone."
+"Enter the URL of the source code repository for the project you would like "
+"to clone."
 msgstr ""
-"Клондағыңыз келетін жобаның бастапқы код репозиторийінің URL адресін енгізіңіз."
+"Клондағыңыз келетін жобаның бастапқы код репозиторийінің URL адресін "
+"енгізіңіз."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
@@ -6828,9 +6947,6 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "GNOME үшін IDE"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "D-Bus инспекторы"
 
 #~ msgid "Cancel"
 #~ msgstr "Бас тарту"
@@ -7193,8 +7309,8 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ "Builder has discovered that this file has been modified externally. Would "
 #~ "you like to reload the file?"
 #~ msgstr ""
-#~ "Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл файлды "
-#~ "қайта жүктеуді қалайсыз ба?"
+#~ "Құрастырушы бұл файл сыртқы қолданбамен өзгертілгенін анықтады. Бұл "
+#~ "файлды қайта жүктеуді қалайсыз ба?"
 
 #~ msgid "Regular expressions"
 #~ msgstr "Тұрақты өрнек"
@@ -8055,8 +8171,8 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 
 #, c-format
 #~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file as "
-#~ "an attachment on your bug report or support request."
+#~ "The support log file has been written to “%s”. Please provide this file "
+#~ "as an attachment on your bug report or support request."
 #~ msgstr ""
 #~ "Қолдау көрсету журналы \"%s\" файлына жазылды. Бұл файлды сіздің ақаулық "
 #~ "жөніндегі хабарламаға немесе қолдау көрсету сұранымыңызға қосып жіберіңіз."
@@ -8342,8 +8458,10 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgid "Tabs and Indentation"
 #~ msgstr "Табуляция және шегіну"
 
-#~ msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
-#~ msgstr "<a href=\"action://app.new-project\">Жаңа жобаны</a> неге жасамасқа?"
+#~ msgid ""
+#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+#~ msgstr ""
+#~ "<a href=\"action://app.new-project\">Жаңа жобаны</a> неге жасамасқа?"
 
 #~ msgid "Click an item to select"
 #~ msgstr "Нәрсені таңдау үшін оның үстіне шертіңіз"
@@ -8474,8 +8592,8 @@ msgstr "Файлды талдау үшін ол жергілікті сақта�
 #~ msgstr "Ашық файлдардан табылған сөздерді ұсыну"
 
 #~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, functions, "
-#~ "and more"
+#~ "Create and manages a Ctags database for completing class names, "
+#~ "functions, and more"
 #~ msgstr ""
 #~ "Кластар атауларын, функцияларды және т.б. толықтыру үшін Ctags дерекқорын "
 #~ "жасау және басқару"
