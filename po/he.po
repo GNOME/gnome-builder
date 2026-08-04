@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-01 07:49+0200\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-04 17:17+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -19,14 +19,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
 "3);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
@@ -37,26 +37,26 @@ msgstr "יישום יישומים עבור GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "כריסטיאן הרגרט"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
-"Builder is an actively developed Integrated Development Environment for "
-"GNOME. It combines integrated support for essential GNOME technologies such "
-"as GTK+, GLib, and GNOME APIs with features that any developer will "
-"appreciate, like syntax highlighting and snippets."
+"Builder is an actively developed Integrated Development Environment for GNOME. "
+"It combines integrated support for essential GNOME technologies such as GTK+, "
+"GLib, and GNOME APIs with features that any developer will appreciate, like "
+"syntax highlighting and snippets."
 msgstr ""
-"‏Builder היא סביבת פיתוח משולבת עבור GNOME בשלבי פיתוח פעיל. מאחדת תמיכה "
-"משולבת עבור טכנולוגיות GNOME חיוניות כגון GTK+, GLib וממשקי תכנות יישומים "
-"(API) של GNOME עם תכונות אותן יעריך כל מפתח, כמו הדגשת תחביר וקטעי קוד."
+"‏Builder היא סביבת פיתוח משולבת עבור GNOME בשלבי פיתוח פעיל. מאחדת תמיכה משולבת "
+"עבור טכנולוגיות GNOME חיוניות כגון GTK+, GLib וממשקי תכנות יישומים (API) של "
+"GNOME עם תכונות אותן יעריך כל מפתח, כמו הדגשת תחביר וקטעי קוד."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
-"You can rely on predictable releases of Builder with each new release of "
-"GNOME every six months."
-msgstr ""
-"ניתן לבנות על שחרור צפוי של Builder עם כל שחרור של GNOME מדי שישה חודשים."
+"You can rely on predictable releases of Builder with each new release of GNOME "
+"every six months."
+msgstr "ניתן לבנות על שחרור צפוי של Builder עם כל שחרור של GNOME מדי שישה חודשים."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:26
 msgid "Features:"
@@ -86,8 +86,7 @@ msgstr "שילוב עם Git"
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize, "
 "and Waf"
-msgstr ""
-"משתלב עם Autotools,‏ Cargo,‏ CMake,‏ Gradle,‏ Meson,‏ Maven,‏ Make,‏ PHPize ו־Waf"
+msgstr "משתלב עם Autotools,‏ Cargo,‏ CMake,‏ Gradle,‏ Meson,‏ Maven,‏ Make,‏ PHPize ו־Waf"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:34
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
@@ -137,6 +136,95 @@ msgstr "חיפוש מקיף מהיר בכל הקבצים והסמלים"
 msgid "Arduino integration with arduino-cli"
 msgstr "‏Arduino משולב עם arduino-cli"
 
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "סביבת פיתוח משולבת"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "סביבת פיתוח משולבת"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "עורך קוד"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "כתיבת קוד"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "תכנות"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "מפתחי תוכנה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "פיתוח תוכנה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "הידור"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "בנייה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "זמני ריצה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "ספריות תכנה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "חוקר GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "חוקר D-Bus"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "מנפה שגיאות"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "ניפוי שגיאות"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "מגלה דליפות זיכרון"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "בדיקות יחידה"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "בדיקות אוטומטיות"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "תיעוד"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "השלמה אוטומטית"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "מאפיין"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "אפיון"
+
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "ניפוי שגיאות באמצעות מנפה השגיאות של גנו (gdb)"
@@ -173,11 +261,11 @@ msgstr "בנייה מקבילית"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
-"Number of workers to use when performing builds. -1 for sensible default. 0 "
-"for number of CPU."
+"Number of workers to use when performing builds. -1 for sensible default. 0 for "
+"number of CPU."
 msgstr ""
-"Number of workers to use when performing builds. -1 for sensible default. 0 "
-"for number of CPU."
+"Number of workers to use when performing builds. -1 for sensible default. 0 for "
+"number of CPU."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -201,11 +289,11 @@ msgstr "Allow network when metered"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
 msgid ""
-"Enable automated transfers upon building such as SDK downloads and "
-"dependencies when connection is metered."
+"Enable automated transfers upon building such as SDK downloads and dependencies "
+"when connection is metered."
 msgstr ""
-"Enable automated transfers upon building such as SDK downloads and "
-"dependencies when connection is metered."
+"Enable automated transfers upon building such as SDK downloads and dependencies "
+"when connection is metered."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -248,10 +336,8 @@ msgid "Debugger Breakpoint at Criticals"
 msgstr "Debugger Breakpoint at Criticals"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-msgid ""
-"Debugger should automatically insert breakpoint at g_critical() function."
-msgstr ""
-"Debugger should automatically insert breakpoint at g_critical() function."
+msgid "Debugger should automatically insert breakpoint at g_critical() function."
+msgstr "Debugger should automatically insert breakpoint at g_critical() function."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at Warnings and Criticals"
@@ -279,11 +365,11 @@ msgstr "Show modified lines"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
-"If enabled, the editor will show line additions and changes next to the "
-"source code."
+"If enabled, the editor will show line additions and changes next to the source "
+"code."
 msgstr ""
-"If enabled, the editor will show line additions and changes next to the "
-"source code."
+"If enabled, the editor will show line additions and changes next to the source "
+"code."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
@@ -339,11 +425,11 @@ msgstr "Use line selection styling"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
-"If enabled, the editor will use selected style for line numbers for whole "
-"lines selected."
+"If enabled, the editor will use selected style for line numbers for whole lines "
+"selected."
 msgstr ""
-"If enabled, the editor will use selected style for line numbers for whole "
-"lines selected."
+"If enabled, the editor will use selected style for line numbers for whole lines "
+"selected."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
 #: src/plugins/editorui/tweaks.ui:500
@@ -352,11 +438,11 @@ msgstr "מקש Backspace חכם"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid ""
-"Backspace will remove additional spaces to keep you aligned to the "
-"indentation size."
+"Backspace will remove additional spaces to keep you aligned to the indentation "
+"size."
 msgstr ""
-"Backspace will remove additional spaces to keep you aligned to the "
-"indentation size."
+"Backspace will remove additional spaces to keep you aligned to the indentation "
+"size."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 #: src/plugins/editorui/tweaks.ui:512
@@ -380,10 +466,8 @@ msgid "If enabled, the editor will respect the font-name setting."
 msgstr "If enabled, the editor will respect the font-name setting."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
-msgid ""
-"This setting is only respected if the use-custom-font setting is enabled."
-msgstr ""
-"This setting is only respected if the use-custom-font setting is enabled."
+msgid "This setting is only respected if the use-custom-font setting is enabled."
+msgstr "This setting is only respected if the use-custom-font setting is enabled."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
@@ -450,11 +534,9 @@ msgstr "השלמה אוטומטית הדודית"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid ""
-"If enabled, Builder will automatically display completion proposals as you "
-"type."
+"If enabled, Builder will automatically display completion proposals as you type."
 msgstr ""
-"If enabled, Builder will automatically display completion proposals as you "
-"type."
+"If enabled, Builder will automatically display completion proposals as you type."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
@@ -522,11 +604,9 @@ msgstr "הגוון סגנון"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid ""
-"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
-"scheme."
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme."
 msgstr ""
-"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
-"scheme."
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme."
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
@@ -576,10 +656,8 @@ msgid "Inherit Language Server stderr"
 msgstr "Inherit Language Server stderr"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:70
-msgid ""
-"If enabled, stderr of language servers will be redirected to the console."
-msgstr ""
-"If enabled, stderr of language servers will be redirected to the console."
+msgid "If enabled, stderr of language servers will be redirected to the console."
+msgstr "If enabled, stderr of language servers will be redirected to the console."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -624,8 +702,7 @@ msgstr "סידור תיקיות לפני קבצים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid "If enabled, the project tree will sort directories before regular files."
-msgstr ""
-"If enabled, the project tree will sort directories before regular files."
+msgstr "If enabled, the project tree will sort directories before regular files."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
@@ -633,11 +710,11 @@ msgstr "Selected configuration for building"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:8
 msgid ""
-"The configuration that has been selected and will be restored the next time "
-"the project loads."
+"The configuration that has been selected and will be restored the next time the "
+"project loads."
 msgstr ""
-"The configuration that has been selected and will be restored the next time "
-"the project loads."
+"The configuration that has been selected and will be restored the next time the "
+"project loads."
 
 # כריית מיזמים
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
@@ -646,11 +723,11 @@ msgstr "Install Project Before Running"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
-"Run the pipelines install phase before running the project. Only use this if "
-"you know what you're doing with your project."
+"Run the pipelines install phase before running the project. Only use this if you "
+"know what you're doing with your project."
 msgstr ""
-"Run the pipelines install phase before running the project. Only use this if "
-"you know what you're doing with your project."
+"Run the pipelines install phase before running the project. Only use this if you "
+"know what you're doing with your project."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -666,13 +743,11 @@ msgstr "The signal to send the app to stop"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
-"This allows sending something other than sigkill to stop the target "
-"application. That might be useful when you want to gracefully shutdown a "
-"server process."
+"This allows sending something other than sigkill to stop the target application. "
+"That might be useful when you want to gracefully shutdown a server process."
 msgstr ""
-"This allows sending something other than sigkill to stop the target "
-"application. That might be useful when you want to gracefully shutdown a "
-"server process."
+"This allows sending something other than sigkill to stop the target application. "
+"That might be useful when you want to gracefully shutdown a server process."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -688,10 +763,8 @@ msgid "Verbose Logging"
 msgstr "רישום יומנים מורחב"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
-msgid ""
-"If G_MESSAGES_DEBUG=all should be used when running the target application"
-msgstr ""
-"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgid "If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr "If G_MESSAGES_DEBUG=all should be used when running the target application"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:56
 msgid "Cache Root"
@@ -851,10 +924,8 @@ msgstr "מסמך"
 #: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79
 #: src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
 #: src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9
-#: src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:24
-#: src/plugins/menu-search/gtk/menus.ui:56
-#: src/plugins/menu-search/gtk/menus.ui:97
+#: src/plugins/menu-search/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56 src/plugins/menu-search/gtk/menus.ui:97
 #: src/plugins/web-browser/gtk/menus.ui:15
 msgid "Application"
 msgstr "יישום"
@@ -871,11 +942,9 @@ msgstr "דפים"
 #: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
 #: src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160
 #: src/libide/sourceview/gtk/menus.ui:164 src/libide/sourceview/gtk/menus.ui:170
-#: src/plugins/comment-code/gtk/menus.ui:6
-#: src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
 #: src/plugins/menu-search/gtk/menus.ui:148
-#: src/plugins/menu-search/gtk/menus.ui:165
-#: src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/plugins/menu-search/gtk/menus.ui:165 src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "עורך טקסט"
 
@@ -916,8 +985,8 @@ msgstr "קובץ מכיל שגיאות קידוד"
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid ""
-"The encoding used to load the file detected errors. You may select an "
-"alternate encoding from the statusbar and reload."
+"The encoding used to load the file detected errors. You may select an alternate "
+"encoding from the statusbar and reload."
 msgstr ""
 "הקידוד ששימש לטעינת הקובץ זיהה שגיאות. אפשר לבחור קידוד אחר משורת המצב ולרענן."
 
@@ -1063,8 +1132,7 @@ msgstr "התצורה %s שונתה"
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
-msgstr ""
-"איתור תצורת הבנייה „%s” נכשל. יתכן והוא אינו תקין או כתוב בצורה לא טובה."
+msgstr "איתור תצורת הבנייה „%s” נכשל. יתכן והוא אינו תקין או כתוב בצורה לא טובה."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1069
@@ -1787,10 +1855,6 @@ msgstr "אתר אינטרנט"
 msgid "Version Control"
 msgstr "בקרת גרסות"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "ספריות תכנה"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "שרתי שפה"
@@ -1976,8 +2040,7 @@ msgid "_Formatting"
 msgstr "_עיצוב"
 
 #: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165
-#: src/libide/sourceview/gtk/menus.ui:171
-#: src/plugins/menu-search/gtk/menus.ui:76
+#: src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "ניווט בקוד"
@@ -2034,8 +2097,8 @@ msgstr "שמירת תוכן המסוף בשם"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:249
 #: src/plugins/buildui/gbp-buildui-log-pane.c:330
-#: src/plugins/editorui/gtk/menus.ui:157
-#: src/plugins/menu-search/gtk/menus.ui:114 src/plugins/sysprof/gtk/menus.ui:132
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:132
 #: src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
 msgstr "שמירה"
@@ -2216,7 +2279,7 @@ msgstr "כלום"
 msgid "Blank page"
 msgstr "דף ריק"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "הרצת מופע חדש של Builder"
 
@@ -2778,8 +2841,7 @@ msgid "Debugging"
 msgstr "מנפה שגיאות"
 
 #: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147
-#: src/plugins/testui/gbp-testui-item.c:84
-#: src/plugins/testui/gbp-testui-panel.ui:4
+#: src/plugins/testui/gbp-testui-item.c:84 src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "יחידת בדיקות"
 
@@ -3146,8 +3208,7 @@ msgstr "אות עצירה"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
-"Send the signal to the target application when requesting the application "
-"stop."
+"Send the signal to the target application when requesting the application stop."
 msgstr "שליחת האות ליישום המטרה עם דרישה לעצירת היישום."
 
 #: src/plugins/buildui/tweaks.ui:130
@@ -3156,8 +3217,7 @@ msgstr "כתיבת יומן"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
-"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
-"troubleshooting"
+"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for troubleshooting"
 msgstr "הרצה עם משתנה סביבתי <tt>G_MESSAGES_DEBUG=all</tt>‎ ‏לפתרון תקלות"
 
 #: src/plugins/buildui/tweaks.ui:151
@@ -3189,8 +3249,8 @@ msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
 msgstr ""
-"התיקייה שמשמשת לאחסון תוצרי הבניה וקבצים במטמון מצינורית הבניה. נדרש להפעיל "
-"מחדש את Builder כדי שהשינויים ייכנסו לתוקף."
+"התיקייה שמשמשת לאחסון תוצרי הבניה וקבצים במטמון מצינורית הבניה. נדרש להפעיל מחדש "
+"את Builder כדי שהשינויים ייכנסו לתוקף."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -3251,8 +3311,8 @@ msgstr "תחילית התקנה"
 
 #: src/plugins/buildui/tweaks.ui:408
 msgid ""
-"The project will be installed to this directory during the installation phase "
-"of the build pipeline."
+"The project will be installed to this directory during the installation phase of "
+"the build pipeline."
 msgstr "המיזם יותקן לתיקייה זו במהלך שלב ההתקנה בצינור הבנייה."
 
 #: src/plugins/buildui/tweaks.ui:426
@@ -3261,8 +3321,8 @@ msgstr "אפשרויות תצורה"
 
 #: src/plugins/buildui/tweaks.ui:439
 msgid ""
-"These options are used by the build system to configure the project during "
-"the configure phase of the build pipeline"
+"These options are used by the build system to configure the project during the "
+"configure phase of the build pipeline"
 msgstr ""
 "אפשרויות אלו משמשות על ידי מערכת הבנייה להגדרת המיזם במהלך שלב ההגדרה בצינור "
 "הבנייה"
@@ -3293,8 +3353,7 @@ msgstr "מחוץ לעץ הקוד"
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
-msgstr ""
-"ערכת פיתוח התכנה המשתמשת לבניית היישום שלך נקבעת באופן אוטומטי מזמן הריצה."
+msgstr "ערכת פיתוח התכנה המשתמשת לבניית היישום שלך נקבעת באופן אוטומטי מזמן הריצה."
 
 #: src/plugins/c-pack/gtk/menus.ui:6
 msgid "Reformat Function Prototypes"
@@ -3338,11 +3397,11 @@ msgstr "סופק מ־clang-format מיקום סמן לא תקף"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid ""
-"Cannot locate .clang-format, please add one to your project. Using fallback "
-"GNU-style formatter."
+"Cannot locate .clang-format, please add one to your project. Using fallback GNU-"
+"style formatter."
 msgstr ""
-"לא ניתן למצוא את הקובץ ‎.clang-format‏, נא להוסיף אחד למיזם שלך. עושה שימוש "
-"בסגנון GNU לסידור תבנית המסמך."
+"לא ניתן למצוא את הקובץ ‎.clang-format‏, נא להוסיף אחד למיזם שלך. עושה שימוש בסגנון "
+"GNU לסידור תבנית המסמך."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3371,11 +3430,9 @@ msgstr "Complete parameters"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
-"If parameters should be included when completing. Requires complete-"
-"parentheses."
+"If parameters should be included when completing. Requires complete-parentheses."
 msgstr ""
-"If parameters should be included when completing. Requires complete-"
-"parentheses."
+"If parameters should be included when completing. Requires complete-parentheses."
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
@@ -3650,9 +3707,8 @@ msgstr "תת־תיקייה בשם זה כבר קיימת"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
-"A unique name that is used for the project folder and other resources. The "
-"name should be in lower case without spaces and should not start with a "
-"number."
+"A unique name that is used for the project folder and other resources. The name "
+"should be in lower case without spaces and should not start with a number."
 msgstr ""
 "שם ייחודי המשמש עבור תיקיית המיזם ומשאבים נוספים. עליו להכיל אותיות קטנות ללא "
 "רווחים, וכן לא יכול להתחיל במספר."
@@ -3742,8 +3798,8 @@ msgid ""
 "Search, autocompletion, and symbol information may be limited until Ctags "
 "indexing is complete."
 msgstr ""
-"חיפוש, השלמה אוטומטית ומידע על סמלים עשויים להיות מוגבלים עד השלמת המפתוח על "
-"ידי Ctags."
+"חיפוש, השלמה אוטומטית ומידע על סמלים עשויים להיות מוגבלים עד השלמת המפתוח על ידי "
+"Ctags."
 
 #: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
@@ -4063,8 +4119,7 @@ msgstr "טקסט פשוט"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
-#: src/plugins/editorui/tweaks-language.ui:242
-#: src/plugins/editorui/tweaks.ui:286
+#: src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "רווחים"
 
@@ -4074,11 +4129,11 @@ msgstr "רווחים"
 msgid "Tabs"
 msgstr "טאב"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "מעבר"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "מעבר לשורה"
@@ -4115,8 +4170,7 @@ msgstr "5"
 msgid "8"
 msgstr "8"
 
-#: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:145
+#: src/plugins/editorui/gtk/menus.ui:41 src/plugins/editorui/tweaks-language.ui:145
 msgid "Indentation Size"
 msgstr "גודל הזחה"
 
@@ -4162,19 +4216,16 @@ msgid "Save _As"
 msgstr "שמירה _בשם"
 
 # מציאה
-#: src/plugins/editorui/gtk/menus.ui:171
-#: src/plugins/menu-search/gtk/menus.ui:169
+#: src/plugins/editorui/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:169
 msgid "Find…"
 msgstr "חיפוש…"
 
 # מציאה והחלפה
-#: src/plugins/editorui/gtk/menus.ui:177
-#: src/plugins/menu-search/gtk/menus.ui:176
+#: src/plugins/editorui/gtk/menus.ui:177 src/plugins/menu-search/gtk/menus.ui:176
 msgid "Find/Replace…"
 msgstr "חיפוש/החלפה…"
 
-#: src/plugins/editorui/gtk/menus.ui:185
-#: src/plugins/menu-search/gtk/menus.ui:158
+#: src/plugins/editorui/gtk/menus.ui:185 src/plugins/menu-search/gtk/menus.ui:158
 msgid "Print…"
 msgstr "הדפסה…"
 
@@ -4289,8 +4340,7 @@ msgstr "מיקום שוליים ימניים"
 msgid "The desired maximum line length"
 msgstr "אורך שורה מרבי רצוי"
 
-#: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks-language.ui:203 src/plugins/editorui/tweaks.ui:385
 msgid "Behavior"
 msgstr "התנהגות"
 
@@ -4475,11 +4525,9 @@ msgstr "הדגשת סוגרים מתאימים"
 
 #: src/plugins/editorui/tweaks.ui:258
 msgid ""
-"Use cursor position to highlight matching brackets, braces, parenthesis, and "
-"more"
+"Use cursor position to highlight matching brackets, braces, parenthesis, and more"
 msgstr ""
-"שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים "
-"ועוד"
+"שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים ועוד"
 
 #: src/plugins/editorui/tweaks.ui:269
 msgid "Semantic Highlighting"
@@ -4487,8 +4535,8 @@ msgstr "הדגשה תחבירית"
 
 #: src/plugins/editorui/tweaks.ui:270
 msgid ""
-"Use symbol information to highlight namespaces, functions, and variables "
-"within source code"
+"Use symbol information to highlight namespaces, functions, and variables within "
+"source code"
 msgstr "שימוש במידע על סמלים להדגשת שמות מתחם, פונקציות ומשתנים בתוך קוד המקור"
 
 #: src/plugins/editorui/tweaks.ui:287
@@ -4608,8 +4656,7 @@ msgid "Movements"
 msgstr "מעברים"
 
 #: src/plugins/editorui/tweaks.ui:501
-msgid ""
-"Backspace will remove extra space to keep you aligned with your indentation"
+msgid "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור את היישור עם רוחב ההזחה שלך"
 
 #: src/plugins/editorui/tweaks.ui:513
@@ -4710,8 +4757,8 @@ msgstr "התקנה או עדכון ערכת פיתוח תכנה?"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:55
 msgid ""
-"Builder needs to install the following software development kits to build "
-"your project."
+"Builder needs to install the following software development kits to build your "
+"project."
 msgstr "על Builder להתקין את ערכת פיתוח תכנה הבאה על מנת לבנות את המיזם שלך."
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
@@ -4810,8 +4857,7 @@ msgstr "התקנת Flatpak עבור ערכות פיתוח (SDK) תכנה חדש�
 #: src/plugins/flatpak/org.gnome.builder.flatpak.gschema.xml:12
 msgid "The Flatpak installation to use for new SDKs and SDK extensions."
 msgstr ""
-"התקנת Flatpak לשימוש עבור ערכות פיתוח תכנה (SDK) והרחבות לערכות פיתוח תכנה "
-"חדשות."
+"התקנת Flatpak לשימוש עבור ערכות פיתוח תכנה (SDK) והרחבות לערכות פיתוח תכנה חדשות."
 
 #: src/plugins/flatpak/tweaks.ui:12
 msgid "Preferred Flatpak Installation"
@@ -4819,11 +4865,11 @@ msgstr "התקנת Flatpak מועדפת"
 
 #: src/plugins/flatpak/tweaks.ui:13
 msgid ""
-"When installing SDKs and SDK extensions, Builder may prefer a specific "
-"Flatpak installation which contains the extension."
+"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak "
+"installation which contains the extension."
 msgstr ""
-"בעת התקנת ערכות פיתוח תכנה (SDK) והרחבות להן, Builder עשוי להעדיף התקנת "
-"Flatpak מסוימת המכילה את ההרחבה."
+"בעת התקנת ערכות פיתוח תכנה (SDK) והרחבות להן, Builder עשוי להעדיף התקנת Flatpak "
+"מסוימת המכילה את ההרחבה."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -5217,8 +5263,7 @@ msgid "Search documentation for installed SDKs"
 msgstr "חיפוש תיעוד עבור ערכות פיתוח (SDK) מותקנות"
 
 # מציאה והחלפה
-#: src/plugins/manuals/manuals-book.c:505
-#: src/plugins/manuals/manuals-heading.c:501
+#: src/plugins/manuals/manuals-book.c:505 src/plugins/manuals/manuals-heading.c:501
 #: src/plugins/manuals/manuals-keyword.c:526
 #, c-format
 msgid "View in %s"
@@ -5553,81 +5598,89 @@ msgstr "אזור"
 msgid "Suggested GNOME Projects"
 msgstr "הצעות למיזמי GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "קופסאות"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "יישום GNOME לגישה מרחוק או למערכות וירטואליות"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "סביבת פיתוח משולבת עבור כתיבת תכנה מבוססת GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "לוח שנה"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "יישום לוח שנה עבור GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "שעונים"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "יישום שעונים עבור GNOME"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "אנשי קשר"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "יישום אנשי קשר מבית GNOME"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "‏Gitg הוא לקוח Git גרפי"
+msgid "A Matrix client for GNOME"
+msgstr "לקוח Matrix מבית GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "מציג תמונות"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "מציג תמונות מבית GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "מפות"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "יישום מפות עבור GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "מוזיקה"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "נגן מוזיקה ויישום ניהול"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "יישום ברירת המחדל לניהול קבצים עבור GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "לקוח IRC לסביבת GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "רשמקול"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "נגן וידאו"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "רשמקול פשוט וחדיש עבור GNOME"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "נגן וידאו מבית GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -5891,8 +5944,8 @@ msgstr "תצורה נוכחית"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
-"The configuration is used to setup build pipelines, configure your build "
-"system, and run your project."
+"The configuration is used to setup build pipelines, configure your build system, "
+"and run your project."
 msgstr "התצורה משמשת להגדרת צינור הבנייה, הגדרת מערכת הבנייה והרצת המיזם שלך."
 
 #: src/plugins/projectui/tweaks.ui:228
@@ -5960,8 +6013,7 @@ msgstr "הורדה בחיבורים מדודים"
 
 #: src/plugins/sdkui/tweaks.ui:16
 msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
+"Allow the download of SDKs and dependencies when on metered internet connections"
 msgstr "לאפשר הורדה של ערכות פיתוח תכנה ותלויות עם חיבורי רשת מדודים"
 
 #: src/plugins/sdkui/tweaks.ui:29
@@ -6029,8 +6081,8 @@ msgstr "תיקיית עבודה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</"
+"tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "הפקודה תרוץ ממיקום זה. יש להשתמש ב־<tt>$BUILDDIR</tt>‎, <tt>$SRCDIR</tt>‎ ‏או "
 "<tt>$HOME</tt>‎ על מנת להגדיר נתיב יחסי."
@@ -6128,13 +6180,13 @@ msgstr "A list of run-command ids to load for the application or project."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
-"Use commands to run build tooling, applications, or shell scripts and map "
-"them to a keyboard shortcut. They can run from various environments such as "
-"the build pipeline, runtime environment, or host operating system."
+"Use commands to run build tooling, applications, or shell scripts and map them "
+"to a keyboard shortcut. They can run from various environments such as the build "
+"pipeline, runtime environment, or host operating system."
 msgstr ""
-"שימוש בפקודות להרצת כלי בנייה, יישומים או תסריטי מעטפת ומיפוי צירופי מקשים "
-"להם. הן ניתנות להרצה ממנעד של סביבות כמו צינורית הבנייה, סביבת סמן הריצה או "
-"מערכת הפעלה מארחת."
+"שימוש בפקודות להרצת כלי בנייה, יישומים או תסריטי מעטפת ומיפוי צירופי מקשים להם. "
+"הן ניתנות להרצה ממנעד של סביבות כמו צינורית הבנייה, סביבת סמן הריצה או מערכת "
+"הפעלה מארחת."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
@@ -6175,8 +6227,7 @@ msgstr "ערכת מקלדת"
 
 #: src/plugins/shortcutui/tweaks.ui:16
 msgid ""
-"Shortcut themes provide a keyboard experience similar to other IDEs and "
-"editors"
+"Shortcut themes provide a keyboard experience similar to other IDEs and editors"
 msgstr ""
 "ערכת צירופי מקשים מספקת חוויית הקלדה דומה לסביבות פיתוח משולבות ועורכים אחרים"
 
@@ -6430,8 +6481,7 @@ msgstr "מעקב יישום"
 
 #: src/plugins/sysprof/tweaks.ui:225
 msgid ""
-"Provide TRACE_FD environment variable for applications to deliver custom "
-"events"
+"Provide TRACE_FD environment variable for applications to deliver custom events"
 msgstr "אספקת המשתנה הסביבתי TRACE_FD ליישום כדי להעביר אירועים בהתאמה אישית"
 
 #. translators: %s is replaced with the current local time of day
@@ -6517,8 +6567,7 @@ msgid "Limit Scrollback"
 msgstr "הגבלת שורות פלט לגלילה"
 
 #: src/plugins/terminal/tweaks.ui:93
-msgid ""
-"Limit the number of lines that are stored in memory for terminal scrollback"
+msgid "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr "הגבלת מספר השורות המאוחסנות בזיכרון לגלילה במסוף"
 
 #: src/plugins/terminal/tweaks.ui:104
@@ -6602,8 +6651,7 @@ msgstr "עדכון Builder"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
-"An update to Builder is available. Builder can download and install it for "
-"you."
+"An update to Builder is available. Builder can download and install it for you."
 msgstr "קיים עדכון זמין ל־Builder. ניתן להוריד את Builder ולהתקין אותו בשבילך."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
@@ -6776,8 +6824,7 @@ msgstr "דף _דפדפן חדש"
 msgid "Open a web browser in a new page"
 msgstr "פתיחת דפדפן רשת בדף חדש"
 
-#: src/plugins/web-browser/gtk/menus.ui:18
-#: src/plugins/web-browser/gtk/menus.ui:24
+#: src/plugins/web-browser/gtk/menus.ui:18 src/plugins/web-browser/gtk/menus.ui:24
 msgid "Reload Page"
 msgstr "טעינת הדף מחדש"
 
@@ -6833,6 +6880,24 @@ msgstr "ארע כשל ביצירת עץ ה־XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
+
+#~ msgid "Boxes"
+#~ msgstr "קופסאות"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "יישום GNOME לגישה מרחוק או למערכות וירטואליות"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "‏Gitg הוא לקוח Git גרפי"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "רשמקול"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "רשמקול פשוט וחדיש עבור GNOME"
 
 #~ msgid "Font"
 #~ msgstr "גופן"
@@ -6926,9 +6991,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "סביבת פיתוח משולבת עבור GNOME"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "מפקח D-Bus"
 
 #~ msgid "_Everything"
 #~ msgstr "ה_כול"
@@ -7257,12 +7319,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "ניתוח קוד"
 
 #~ msgid ""
-#~ "Use code insight to highlight additional information discovered in source "
-#~ "file"
+#~ "Use code insight to highlight additional information discovered in source file"
 #~ msgstr "שימוש בבחינת הקוד להדגשת מידע נוסף שהתגלה בקובץ המקור"
-
-#~ msgid "Completion"
-#~ msgstr "השלמה"
 
 #~ msgid "Completions Display Size"
 #~ msgstr "גודל תצוגת ההשלמה"
@@ -7319,8 +7377,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "רשת"
 
 #~ msgid ""
-#~ "Allow the use of metered network connections when automatically "
-#~ "downloading dependencies"
+#~ "Allow the use of metered network connections when automatically downloading "
+#~ "dependencies"
 #~ msgstr "לאפשר שימוש בחיבור רשת מוגבל בעת הורדה אוטומטית של תלויות בנייה"
 
 #~ msgid "Insert Breakpoint at Start of Application"
@@ -7435,9 +7493,6 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "GIMP palette"
 #~ msgstr "לוח צבעים של GIMP"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "לוח צבעים של GNOME Builder"
 
 #~ msgid "Palette name"
 #~ msgstr "שם לוח הצבעים"
@@ -7620,8 +7675,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "יחידות:"
 
 #~ msgid ""
-#~ "Select the type of unit you want to use for RGB components and strings in "
-#~ "the panel."
+#~ "Select the type of unit you want to use for RGB components and strings in the "
+#~ "panel."
 #~ msgstr "יש לבחור את סוג היחידה לשימוש עבור מרכיבי RGB ומחרוזות בלוח."
 
 #~ msgid "Percent"
@@ -7709,8 +7764,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "Suggest Completions While Typing"
 #~ msgstr "הצעת השלמות בזמן הקלדה"
 
-#~| msgid ""
-#~| "Upon saving, trailing whitespace from modified lines will be trimmed."
+#~| msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 #~ msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 #~ msgstr "בעת שמירה, יתוקנו הרווחים הלבנים הנגררים מהשורות שהשתנו"
 
@@ -7850,11 +7904,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "Automatically Hide Overview Map"
 
 #~ msgid ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
+#~ "If enabled, Builder will automatically hide the overview map when mouse focus "
+#~ "leaves the editor, or a timeout occurs."
 #~ msgstr ""
-#~ "If enabled, Builder will automatically hide the overview map when mouse "
-#~ "focus leaves the editor, or a timeout occurs."
+#~ "If enabled, Builder will automatically hide the overview map when mouse focus "
+#~ "leaves the editor, or a timeout occurs."
 
 #~ msgid "Overscroll"
 #~ msgstr "גלילת יתר"
@@ -8217,8 +8271,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "איתור הפקודה „%s” נכשל."
 
 #~ msgid ""
-#~ "Some run commands may not be available until the project has been "
-#~ "configured."
+#~ "Some run commands may not be available until the project has been configured."
 #~ msgstr "יתכן וחלק מפקודות ההרצה לא תהיינה זמינות עד להגדרת התצורה של המיזם."
 
 #~| msgid "Project Destination"
@@ -8298,8 +8351,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "מעבר לשגיאה הקודמת"
 
 #~ msgid ""
-#~ "Builder has discovered that this file has been modified externally. Would "
-#~ "you like to reload the file?"
+#~ "Builder has discovered that this file has been modified externally. Would you "
+#~ "like to reload the file?"
 #~ msgstr "‏Builder זיהה כי קובץ זה שונה באופן חיצוני. האם לטעון מחדש את הקובץ?"
 
 # לבדוק  – ביטוי סדיר
@@ -8386,8 +8439,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "המיזם שלך יווצר בשם %s"
 
 #~ msgid ""
-#~ "Enter the repository of the project you would like to clone. The URL "
-#~ "should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
+#~ "Enter the repository of the project you would like to clone. The URL should "
+#~ "look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
 #~ msgstr ""
 #~ "יש להזין את מאגר המיזם שברצונך לשבט. הכתובת צריכה להיראות כמו „https://"
 #~ "gitlab.gnome.org/GNOME/gnome-builder.git”."
@@ -8424,8 +8477,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "חלון צירופי המקשים"
 
 #~ msgid ""
-#~ "GNOME Builder requires a session with D-Bus which was not found. Please "
-#~ "set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
+#~ "GNOME Builder requires a session with D-Bus which was not found. Please set "
+#~ "DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
 #~ msgstr ""
 #~ "‏GNOME Builder דורש הפעלת שולחן עבודה עם D-Bus. נא להגדיר את "
 #~ "DBUS_SESSION_BUS_ADDRESS. יתכן ומספר תכונות לא תהיינה זמינות."
@@ -8750,8 +8803,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "Select the files to save:"
 #~ msgstr "בחירץ קבצים לשמירה:"
 
-#~ msgid ""
-#~ "If you close without saving, all your changes will be permanently lost."
+#~ msgid "If you close without saving, all your changes will be permanently lost."
 #~ msgstr "אם לא תתבצע שמירה, כל השינויים יאבדו לצמיתות."
 
 #, c-format
@@ -8774,11 +8826,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "לאפשר שימוש ב־ESLint, שמאפשר הרצת קוד בתוך המיזם שלך"
 
 #~ msgid ""
-#~ "Enable the use of eslint to find additional diagnostics in JavaScript "
-#~ "files. This may result in the execution of code in your project."
+#~ "Enable the use of eslint to find additional diagnostics in JavaScript files. "
+#~ "This may result in the execution of code in your project."
 #~ msgstr ""
-#~ "מאפשר להשתמש ב־ESLint על מנת למצוא אבחונים נוספים בקובצי JavaScript. זה "
-#~ "ישפיע על הרצת הקוד במיזם שלך."
+#~ "מאפשר להשתמש ב־ESLint על מנת למצוא אבחונים נוספים בקובצי JavaScript. זה ישפיע "
+#~ "על הרצת הקוד במיזם שלך."
 
 #~ msgid "Downloading application sources…"
 #~ msgstr "מוריד מקורות יישום…"
@@ -8859,11 +8911,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "לאפשר Pylint"
 
 #~ msgid ""
-#~ "Enable the use of pylint to find additional diagnostics in Python "
-#~ "programs. This may result in the execution of code in your project."
+#~ "Enable the use of pylint to find additional diagnostics in Python programs. "
+#~ "This may result in the execution of code in your project."
 #~ msgstr ""
-#~ "לאפשר שימוש ב־Pylint על מנת למצוא אבחונים נוספים בתכנית Python. התוצאה "
-#~ "תהיה הרצת קוד במיזם שלך."
+#~ "לאפשר שימוש ב־Pylint על מנת למצוא אבחונים נוספים בתכנית Python. התוצאה תהיה "
+#~ "הרצת קוד במיזם שלך."
 
 #~ msgid "Gradle Wrapper"
 #~ msgstr "מעטפת Gradle"
@@ -8877,10 +8929,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "Your computer is missing python3-docutils"
 #~ msgstr "חסר python3-docutils במחשב שלך"
 
-#~ msgid ""
-#~ "This package is necessary to provide previews of markup-based documents."
-#~ msgstr ""
-#~ "החבילה הכרחית על מנת לספק תצוגה מקדימה של מסמכים מבוססי סימון (markup)."
+#~ msgid "This package is necessary to provide previews of markup-based documents."
+#~ msgstr "החבילה הכרחית על מנת לספק תצוגה מקדימה של מסמכים מבוססי סימון (markup)."
 
 #~ msgid "Your computer is missing python3-sphinx"
 #~ msgstr "חסר python3-sphinx במחשב"
@@ -8916,8 +8966,8 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #~ msgid "quick highlight words matching current selection"
 #~ msgstr ""
-#~ "quick highlight words matching current selection חיפוש מהיר הדגשה מילה "
-#~ "מילים נוכחי בחירה תואם מתאים מתאימה תואמת"
+#~ "quick highlight words matching current selection חיפוש מהיר הדגשה מילה מילים "
+#~ "נוכחי בחירה תואם מתאים מתאימה תואמת"
 
 #~ msgid "quick highlight words matching current selection minimum length"
 #~ msgstr ""
@@ -8944,11 +8994,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "בסביבת ההרצה"
 
 #~ msgid ""
-#~ "If the directory is not an absolute-path, it will be relative to the "
-#~ "source or build directory depending on the command locality."
+#~ "If the directory is not an absolute-path, it will be relative to the source "
+#~ "or build directory depending on the command locality."
 #~ msgstr ""
-#~ "אם התיקייה אינה נתיב מוחלט, היא תתייחס למקור או לתיקייה הבנייה בהתאם "
-#~ "למיקום בפקודה."
+#~ "אם התיקייה אינה נתיב מוחלט, היא תתייחס למקור או לתיקייה הבנייה בהתאם למיקום "
+#~ "בפקודה."
 
 #~ msgid "Close on Exit"
 #~ msgstr "סגירה ביציאה"
@@ -9060,11 +9110,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 
 #, c-format
 #~ msgid ""
-#~ "The support log file has been written to “%s”. Please provide this file as "
-#~ "an attachment on your bug report or support request."
+#~ "The support log file has been written to “%s”. Please provide this file as an "
+#~ "attachment on your bug report or support request."
 #~ msgstr ""
-#~ "קובץ יומן התמיכה נכתב אל „%s”. נא לספק קובץ זה כנספח בדיווח הבאג שלך או "
-#~ "בבקשת תמיכה."
+#~ "קובץ יומן התמיכה נכתב אל „%s”. נא לספק קובץ זה כנספח בדיווח הבאג שלך או בבקשת "
+#~ "תמיכה."
 
 #~ msgid "Search symbols within document"
 #~ msgstr "חיפש סמלים במסמך"
@@ -9184,11 +9234,11 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "יצירת יישום GNOME עם GTK 4"
 
 #~ msgid ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
+#~ "If enabled, Builder will automatically wrap text so all of the line text is "
+#~ "visible."
 #~ msgstr ""
-#~ "If enabled, Builder will automatically wrap text so all of the line text "
-#~ "is visible."
+#~ "If enabled, Builder will automatically wrap text so all of the line text is "
+#~ "visible."
 
 #~ msgid "Night Mode"
 #~ msgstr "Night Mode"
@@ -9298,11 +9348,10 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgstr "חסר במחשב שלך כלי ניתוח שפת Rust"
 
 #~ msgid ""
-#~ "The Language Server is necessary to provide IDE features like completion "
-#~ "or diagnostic"
+#~ "The Language Server is necessary to provide IDE features like completion or "
+#~ "diagnostic"
 #~ msgstr ""
-#~ "שרת השפה הכרחי על מנת לספק תכונות סביבת פיתוח משולבת כמו השלמה אוטומטית "
-#~ "וניתוח"
+#~ "שרת השפה הכרחי על מנת לספק תכונות סביבת פיתוח משולבת כמו השלמה אוטומטית וניתוח"
 
 #~ msgid "Installation of Rust Analyzer finished"
 #~ msgstr "הסתיימה התקנת מנתח עבור Rust"
@@ -9507,8 +9556,7 @@ msgstr "הקובץ חייב להישמר באופן מקומי לניתוח."
 #~ msgid "Save Document As"
 #~ msgstr "שמירת מסמך בשם"
 
-#~ msgid ""
-#~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+#~ msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 #~ msgstr "מדוע לא <a href=\"action://app.new-project\">ליצור מיזם חדש</a>?"
 
 #~ msgid "Other Projects"
