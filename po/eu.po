@@ -7,8 +7,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-06-01 23:15+0000\n"
-"PO-Revision-Date: 2026-06-05 10:00+0100\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-05 10:00+0100\n"
 "Last-Translator: Asier Saratsua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -21,7 +21,7 @@ msgstr "Project-Id-Version: gnome-builder master\n"
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
@@ -33,6 +33,7 @@ msgstr "Sortu GNOMErako aplikazioak"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -42,7 +43,7 @@ msgid ""
 "GNOME. It combines integrated support for essential GNOME technologies such "
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
-msgstr "Builder aktiboki garatzen ari den IDE (Integrated Development Environment) bat da GNOMErako. Funtsezko GNOME teknologien (GTK+, GLib, GNOME APIak)  euskarri integratua eskaintzen du, eta horrekin konbinatuta, edozein garatzailek gustura erabiliko dituen eginbideak, adibidez sintaxiaren nabarmentzea eta kode-zatiak."
+msgstr "Builder GNOMErako IDE (Integrated Development Environment) bat da, aktiboki garatzen ari dena. GNOMEren funtsezko teknologiak diren GTK+, GLib eta GNOMEren APIen euskarri integratua eskaintzen du, eta aldi berean garatzaileen lana errazteko sintaxi-nabarmentzea, kode-zatiak eta beste hainbat eginbide ditu."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid ""
@@ -128,6 +129,95 @@ msgstr "Testuen bilaketa lauso azkarra fitxategietan eta ikurretan"
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integrazioa arduino-cli bidez"
 
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "IDEa"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "garapen-ingurune integratua"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "kode-editorea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "kodetzea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "programatzea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "software-garatzaileak"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "software-garapena"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "konpilatzea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "eraikitzea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "exekuzio-denborak"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDKak"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "GTK ikuskatzailea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "D-Bus ikuskatzailea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "araztailea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "araztea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "memoria-galeren detekzioa"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "unitate-probak"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "proba automatikoak"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "dokumentazioa"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "osatze automatikoa"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "profilatzailea"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "profilatzea"
+
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU araztailearekin araztea"
@@ -165,7 +255,7 @@ msgstr "Eraikitze-paralelismoa"
 msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
-msgstr "Eraikuntza gauzatzean erabiliko den langile kopurua. -1 zentzuzko lehenespen baterako. 0 PUZ kopururako."
+msgstr "Eraikuntza gauzatzean erabiliko den langile kopurua. -1 lehenespen zentzudunetarako. 0 PUZ kopururako."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -604,7 +694,7 @@ msgstr "Instalatu proiektua exekutatu baino lehen"
 msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
-msgstr "Exekutatu kanalizazioen instalazio-fasea proiektua exekutatu baino lehen. Proiektuarekin zer egiten ari bazara soilik erabili aukera hori."
+msgstr "Exekutatu kanalizazioen instalazio-fasea proiektua exekutatu baino lehen. Erabili hau zure proiektuan zer egiten ari zaren ondo badakizu soilik."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -623,7 +713,7 @@ msgid ""
 "This allows sending something other than sigkill to stop the target "
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
-msgstr "Honen bidez, sigkill ez den beste zenbait agindu bidali daitezke helburuko aplikazioa gelditzeko. Hori erabilgarria izan daiteke zerbitzari-prozesu bat behar den moduan itxi nahi baduzu."
+msgstr "Honen bidez, sigkill ez den zerbait bidali daiteke helburuko aplikazioak gelditzeko. Erabilgarria izan daiteke zerbitzari-prozesu bat modu egokian itxi nahi duzunean."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -867,7 +957,7 @@ msgstr "Fitxategiak kodeketa-erroreak ditu"
 msgid ""
 "The encoding used to load the file detected errors. You may select an "
 "alternate encoding from the statusbar and reload."
-msgstr "Fitxategia kargatzeko erabili den kodeketak erroreak detektatu ditu. Ordezko kodeketa bat aukeratu eta kargatu daiteke egoera-barratik."
+msgstr "Fitxategia kargatzeko erabili den kodeketak erroreak detektatu ditu. Ordezko kodeketa bat hautatu dezakezu egoera-barran eta proiektua birkargatu."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -1010,7 +1100,7 @@ msgstr "%s konfigurazioa aldatu da"
 msgid ""
 "Failed to locate build configuration “%s”. It may be invalid or incorrectly "
 "formatted."
-msgstr "Huts egin du “%s” eraikuntza-konfigurazioa aurkitzeak. Agian baliogabea da edo ez du formatu zuzena."
+msgstr "Ez da “%s” eraikuntza-konfigurazioa aurkitu. Baliogabea edo gaizki formateatutakoa izan daiteke."
 
 #. translators: %s is set to the identifier of the build configuration
 #: src/libide/foundry/ide-config-manager.c:1069
@@ -1540,7 +1630,7 @@ msgstr "Ireki fitxategi edo terminal bat"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
-msgstr "Erabili goian dagoen orri-txandakatzailea edo erabili hauetako bat:"
+msgstr "Erabili goian dagoen orri-aldatzailea edo erabili hauetako bat:"
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
@@ -1723,10 +1813,6 @@ msgstr "Webgunea"
 #: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Bertsio-kontrola"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDKak"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -1981,7 +2067,7 @@ msgstr "Gorde"
 
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
-msgstr "Huts egin du azpiprozesua abiarazteak. Beharbada proiektua berreraiki beharko duzu."
+msgstr "Azpiprozesua abiarazteak huts egin du. Beharbada zure proiektua berreraiki beharko duzu."
 
 #: src/libide/terminal/ide-terminal-page.c:125
 #: src/libide/terminal/ide-terminal-page.c:160
@@ -2156,7 +2242,7 @@ msgstr "Bat ere ez"
 msgid "Blank page"
 msgstr "Orri hutsa"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Exekutatu Builder-en instantzia berria"
 
@@ -3070,7 +3156,7 @@ msgstr "Instalatu exekutatu baino lehen"
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
-msgstr "Aplikazioa exekutatu baino lehen instalatzen du. Hori beharrezkoa da proiektu gehienetarako, exekuzio-komando pertsonalizatuak erabiltzen badira salbu."
+msgstr "Aplikazioa instalatzen du hura exekutatu baino lehen. Beharrezkoa proiektu gehienetan, exekuzio-komando pertsonalizatuak erabiltzen ez badira."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -3120,7 +3206,7 @@ msgstr "Artefaktuak eta cacheko fitxategiak"
 msgid ""
 "Directory used for storing build artifacts and cached files from the build "
 "pipeline. Requires restarting Builder to take effect."
-msgstr "Eraikuntza-kanalizazioko eraikuntza-artefaktuak eta cacheko fitxategiak biltegiratzeko erabilitako direktorioa."
+msgstr "Eraikuntza-kanalizazioaren eraikuntza-artefaktuak eta cahe-fitxategiak biltegiratzeko erabiliko den direktorioa. Builder berrabiarazi behar da indarrean sar dadin."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -3265,7 +3351,7 @@ msgstr "clang-format funtzioak kurtsore-posizio baliogabea eman du"
 msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
-msgstr "Ezin da .clang-format aurkitu, gehitu bat zure proiektuari. Ordezko GNU estiloko formateatzailea erabiltzen."
+msgstr "Ez da .clang-format aurkitu, gehitu bat zure proiektuari. GNU estiloko ordezko formateatzailea erabiltzen."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3296,7 +3382,7 @@ msgstr "Osatu parametroak"
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
-msgstr "Parametroak sartuko diren ala ez osatzean. Parentesiak osatzea behar du."
+msgstr "Konpilatzean parametroak gehituko diren ala ez. Parentesiak osatzea behar du."
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
@@ -3402,7 +3488,7 @@ msgstr "Kopiatu hautatutako testua irudi gisa"
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:119
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
-msgstr "Agian akats bat dago hemen: “%s”. Honakoa esan nahi al zenuen: “%s”?"
+msgstr "Balizko akatsa “%s” katean. “%s” esan nahi zenuen?"
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
@@ -3572,7 +3658,7 @@ msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
 "number."
-msgstr "Proiektuaren karpetarako eta beste baliabide batzuetarako erabiliko den izen bakarra. Minuskuletan egon behar du, zuriunerik gabe eta ez du zenbaki batekin hasi behar."
+msgstr "Proiektuaren karpetarako eta beste baliabide batzuetarako erabiliko den izen bakarra. Izenak minuskuletan egon behar du, zuriunerik gabe, eta ez da zenbaki batekin hasi behar."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID"
@@ -3582,7 +3668,7 @@ msgstr "Aplikazioaren IDa"
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
-msgstr "Alderantzizko domeinu-izenaren identifikatzaile bat aplikazioa identifikatzeko, adibidez \"org.gnome.Builder\". Ez du marrarik eduki behar."
+msgstr "Aplikazioa identifikatzeko erabiliko den identifikatzaile bat, domeinu izenen alderantzizkoa irudikatzen duena, adibidez \"org.gnome.Builder\". Ezin ditu marratxoak eduki."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:70
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -4564,7 +4650,7 @@ msgstr "Formatua gordetzean"
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
-msgstr "Aldatu iturburuen formatua diskoan gordetzean. Formateatzaile erregistratu bat behar du iturburu-hizkuntzarako."
+msgstr "Birformateatu iturburuak diskoan gordetzean. Iturburu-lengoaiarako formateatzaile erregistratu bat behar du."
 
 #: src/plugins/editorui/tweaks.ui:603
 msgid "Restore Cursor Position"
@@ -5452,7 +5538,6 @@ msgid "Contacts"
 msgstr "Kontaktuak"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
-#| msgid "A GNOME maps application"
 msgid "A GNOME contacts application"
 msgstr "Kontaktuen aplikazio bat GNOMErako"
 
@@ -5461,7 +5546,6 @@ msgid "Fractal"
 msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-#| msgid "An IRC Client for GNOME"
 msgid "A Matrix client for GNOME"
 msgstr "Matrix bezero bat GNOMErako"
 
@@ -5510,7 +5594,6 @@ msgid "Video Player"
 msgstr "Bideo-erreproduzigailua"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
-#| msgid "GNOME Builder palette"
 msgid "A GNOME video player"
 msgstr "Bideo-erreproduzigailua GNOMErako"
 
@@ -6009,7 +6092,7 @@ msgid ""
 "Use commands to run build tooling, applications, or shell scripts and map "
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
-msgstr "Erabili komandoak eraikuntza-tresnak, aplikazioak edo shell scriptak exekutatzeko eta haiek lasterbide batekin mapatzeko. Hainbat ingurunetatik exekutatu daitezke, adibidez eraikuntza-kanalizaziotik, exekuzio-denborako ingurunetik edo sistema eragile ostalaritik."
+msgstr "Erabili komandoak eraikuntza-tresnak, aplikazioak edo shell script-ak exekutatzeko eta haiek laster-teklekin mapatzeko. Ingurune desberdinetatik exekutatu daitezke, adibidez eraikuntza-kanalizaziotik, exekuzio-denborako ingurunetik edo sistema eragile ostalaritik."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
@@ -6477,7 +6560,7 @@ msgstr "Eguneraketa eskuragarri"
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
-msgstr "Builder-en eguneraketa bat eskuragarri dago. Builder-ek hura deskargatu eta instalatu dezake."
+msgstr "Eguneraketa bat dago Builder aplikaziorako. Builderrek hura deskargatu eta instalatu dezake, nahi baduzu."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
@@ -6806,9 +6889,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "IDE bat GNOMErako"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "D-Bus ikuskatzailea"
 
 #~ msgid "_Everything"
 #~ msgstr "_Dena"
@@ -7603,9 +7683,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgstr ""
 #~ "Erabili kode-ezagutza iturburu-fitxategian aurkitutako informazio "
 #~ "gehigarria nabarmentzeko"
-
-#~ msgid "Completion"
-#~ msgstr "Osatzea"
 
 #~ msgid "Completions Display Size"
 #~ msgstr "Osatzeen bistaratze-tamaina"
