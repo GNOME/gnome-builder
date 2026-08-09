@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-03-31 19:17+0100\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-09 11:07+0000\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -24,15 +24,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Minairó 0.1.0\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Constructor"
@@ -43,6 +43,7 @@ msgstr "Crea aplicacions per al GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -148,6 +149,113 @@ msgstr "Cerca ràpida de text difusa entre fitxers i símbols"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Integració d'Arduino amb «arduino-cli»"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+#| msgid "ID"
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+#| msgid "Cache development environment"
+msgid "integrated development environment"
+msgstr "entorn de desenvolupament integrat"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+#| msgid "The source code editor"
+msgid "code editor"
+msgstr "editor de codi"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+#| msgid "Loading…"
+msgid "coding"
+msgstr "codificació"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+#| msgid "Programmer"
+msgid "programming"
+msgstr "programació"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "desenvolupadors de programari"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "desenvolupament de programari"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+#| msgid "Scrolling"
+msgid "compiling"
+msgstr "compilació"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+#| msgid "Building"
+msgid "building"
+msgstr "s'està construint"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#| msgid "Runtime"
+msgid "runtimes"
+msgstr "entorns d'execució"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDKs"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+#| msgid "Show Inspector"
+msgid "GTK inspector"
+msgstr "Inspector GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+#| msgid "D-Bus Inspector"
+msgid "D-Bus inspector"
+msgstr "Inspector de D-Bus"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#| msgid "Debugger"
+msgid "debugger"
+msgstr "depurador"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+#| msgid "Debugging"
+msgid "debugging"
+msgstr "depuració"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+#| msgid "Leak Detector"
+msgid "memory leaks detector"
+msgstr "detector de fuites de memòria"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+#| msgid "Unit Tests"
+msgid "unit tests"
+msgstr "proves unitàries"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "proves automatitzades"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+#| msgid "Documentation"
+msgid "documentation"
+msgstr "documentació"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#| msgid "Ctags based autocompletion"
+msgid "autocompletion"
+msgstr "compleció automàtica"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+#| msgid "Profiler"
+msgid "profiler"
+msgstr "perfilador"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+#| msgid "Trailing"
+msgid "profiling"
+msgstr "perfil"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1823,10 +1931,6 @@ msgstr "Lloc web"
 msgid "Version Control"
 msgstr "Control de versions"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDKs"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Servidors d'idiomes"
@@ -2081,8 +2185,8 @@ msgstr "Desa"
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
-"No s'ha pogut iniciar el subprocés. És possible que hagis de construir de nou "
-"el projecte."
+"No s'ha pogut iniciar el subprocés. És possible que hagis de construir de "
+"nou el projecte."
 
 #: src/libide/terminal/ide-terminal-page.c:125
 #: src/libide/terminal/ide-terminal-page.c:160
@@ -2258,7 +2362,7 @@ msgstr "Cap"
 msgid "Blank page"
 msgstr "Pàgina en blanc"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Executa una instància nova del Constructor"
 
@@ -4140,11 +4244,11 @@ msgstr "Espais"
 msgid "Tabs"
 msgstr "Tabuladors"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Ves"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Ves a la línia"
@@ -4877,8 +4981,8 @@ msgid ""
 "Builder is updating Software Development Kits necessary for building your "
 "application."
 msgstr ""
-"El Constructor està actualitzant els paquets de desenvolupament de programari "
-"necessaris per a construir l'aplicació."
+"El Constructor està actualitzant els paquets de desenvolupament de "
+"programari necessaris per a construir l'aplicació."
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
@@ -5615,81 +5719,92 @@ msgstr "Secció"
 msgid "Suggested GNOME Projects"
 msgstr "Projectes GNOME suggerits"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Caixes"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Una aplicació del GNOME per a accedir a sistemes remots o virtuals"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "Un IDE per a escriure programari basat en GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Calendari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Una aplicació de calendari per al GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Rellotges"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Una aplicació de rellotge per al GNOME"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Contactes"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#| msgid "A GNOME maps application"
+msgid "A GNOME contacts application"
+msgstr "Una aplicació de contactes del GNOME"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "El Gitg és un client de Git gràfic"
+#| msgid "An IRC Client for GNOME"
+msgid "A Matrix client for GNOME"
+msgstr "Un client Matrix per al GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Visualitzador d'imatges"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "Un visor d'imatges del GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Mapes"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "Una aplicació de mapes GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Aplicació de reproducció i gestió de música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Gestor de fitxers predeterminat per al GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "Un client IRC per al GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Enregistradora de so"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Reproductor de vídeo"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "Un gravador de so modern pel GNOME"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#| msgid "GNOME Builder"
+msgid "A GNOME video player"
+msgstr "Un reproductor de vídeo GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6925,147 +7040,3 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
-
-#~ msgid "Font"
-#~ msgstr "Tipus de lletra"
-
-#~ msgid "The font used within the source code editor"
-#~ msgstr "El tipus de lletra utilitzat dins de l'editor de codi font"
-
-#~ msgid "Disk Usage"
-#~ msgstr "Ús del disc"
-
-#~ msgid "The font used within terminals"
-#~ msgstr "El tipus de lletra utilitzat als terminals"
-
-#~ msgid "An IDE for GNOME"
-#~ msgstr "Un IDE per al GNOME"
-
-#~ msgid "D-Bus Inspector"
-#~ msgstr "Inspector D-Bus"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancel·la"
-
-#~ msgid "Unix/Linux (LF)"
-#~ msgstr "Unix/Linux (LF)"
-
-#~ msgid "Mac OS Classic (CR)"
-#~ msgstr "Mac OS Classic (CR)"
-
-#~ msgid "Windows (CR+LF)"
-#~ msgstr "Windows (CR+LF)"
-
-#~ msgid "Automatically Detected"
-#~ msgstr "Detectat automàticament"
-
-#~ msgid "Character Encoding:"
-#~ msgstr "Codificació de caràcters:"
-
-#~ msgid "Line Ending:"
-#~ msgstr "Final de línia:"
-
-#~ msgid "Browse…"
-#~ msgstr "Navega…"
-
-#~ msgid "_Everything"
-#~ msgstr "_Tot"
-
-#~ msgid "_Actions"
-#~ msgstr "_Accions"
-
-#~ msgid "_Commands"
-#~ msgstr "_Ordres"
-
-#~ msgid "_Files"
-#~ msgstr "_Fitxers"
-
-#~ msgid "Christian Hergert, et al."
-#~ msgstr "Christian Hergert, et al."
-
-#~ msgid "Allow JavaScript"
-#~ msgstr "Permet JavaScript"
-
-#~ msgid "_Save"
-#~ msgstr "_Desa"
-
-#~ msgid "Display D-Bus inspector"
-#~ msgstr "Mostra l'inspector de D-Bus"
-
-#~ msgid "D-Spy"
-#~ msgstr "D-Spy"
-
-#, c-format
-#~ msgid "The operation has been canceled"
-#~ msgstr "S'ha cancel·lat l'operació"
-
-#~ msgid "No Provided Tool"
-#~ msgstr "No s'ha proporcionat cap eina"
-
-#~ msgid "A name to identify the sysroot."
-#~ msgstr "Un nom per a identificar el sysroot."
-
-#~ msgid "The system architecture of the sysroot."
-#~ msgstr "L'arquitectura de sistema del sysroot."
-
-#~ msgid "Add Tool:"
-#~ msgstr "Afegeix eina:"
-
-#~ msgid "Any language"
-#~ msgstr "Qualsevol llenguatge"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "C++"
-#~ msgstr "C++"
-
-#~ msgid "Python"
-#~ msgstr "Python"
-
-#~ msgid "Vala"
-#~ msgstr "Vala"
-
-#~ msgid "Fortran"
-#~ msgstr "Fortran"
-
-#~ msgid "D"
-#~ msgstr "D"
-
-#~ msgid "Add Tool"
-#~ msgstr "Afegeix una eina"
-
-#~ msgid "Delete Toolchain"
-#~ msgstr "Suprimeix la toolchain"
-
-#~ msgid "Enchant 2"
-#~ msgstr "Enchant 2"
-
-#~ msgid "Add to Dictionary"
-#~ msgstr "Afegeix al diccionari"
-
-#~ msgid "Ignore"
-#~ msgstr "Ignora"
-
-#~ msgid "Languages"
-#~ msgstr "Idiomes"
-
-#~ msgid "Stop Build"
-#~ msgstr "Atura la construcció"
-
-#~ msgid "Stop building project"
-#~ msgstr "Atura el projecte de construcció"
-
-#~ msgid "Photos"
-#~ msgstr "Fotos"
-
-#~ msgid "Access, organize and share your photos on GNOME"
-#~ msgstr ""
-#~ "Accediu, organitzeu i compartiu les vostres fotografies amb el GNOME"
-
-#~ msgid "Filter Symbols…"
-#~ msgstr "Filtrar símbols…"
-
-#~ msgctxt "menu label"
-#~ msgid "Open _Sysprof Capture…"
-#~ msgstr "O_bre la captura Sysprof…"
