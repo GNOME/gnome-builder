@@ -4,15 +4,15 @@
 #
 # Marek Černocký <marek@manet.cz>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Vojtěch Perník <translations@pervoj.cz>, 2023.
-# Patrik Sivek <sivekpatrik@gmail.com>, 2026.
+# Patrik Sivek <patriksivek@gnome.org>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-06-23 15:32+0000\n"
-"PO-Revision-Date: 2026-07-28 19:34+0200\n"
-"Last-Translator: Patrik Sivek <sivekpatrik@gmail.com>\n"
+"PO-Revision-Date: 2026-08-10 09:13+0200\n"
+"Last-Translator: Patrik Sivek <patriksivek@gnome.org>\n"
 "Language-Team: Czech\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -4359,7 +4359,7 @@ msgstr "Automaticky odsazovat"
 
 #: src/plugins/editorui/tweaks-language.ui:112
 msgid "Automatically indent source code as you type"
-msgstr "Automaticky odsazovat zdrojový během psaní"
+msgstr "Automaticky odsazovat zdrojový kód během psaní"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
