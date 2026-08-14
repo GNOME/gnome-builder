@@ -5,26 +5,27 @@
 # Jordi Serratosa <jordis@softcatala.cat>, 2017.
 # Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018.
 # Jordi Mas i Hernàndez <jmas@softcatala.org>, 2019 - 2026
+# Xavi Ivars <xavi.ivars@gmail.com>, 2026.
 #
 #
-#  «Runtime» ho traduïm per «entorn d'execució»
-#  «build» -> construcció
-#  «Toolchain» -> cadena d'eines
+# «Runtime» ho traduïm per «entorn d'execució»
+# «build» -> construcció
+# «Toolchain» -> cadena d'eines
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-06-23 15:32+0000\n"
-"PO-Revision-Date: 2026-08-09 11:07+0000\n"
-"Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
+"PO-Revision-Date: 2026-08-14 17:05+0000\n"
+"Last-Translator: Xavi Ivars <xavi.ivars@gmail.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Minairó 0.1.0\n"
+"X-Generator: Minairó 1.0.0\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
@@ -151,27 +152,22 @@ msgid "Arduino integration with arduino-cli"
 msgstr "Integració d'Arduino amb «arduino-cli»"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
-#| msgid "ID"
 msgid "IDE"
 msgstr "IDE"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
-#| msgid "Cache development environment"
 msgid "integrated development environment"
 msgstr "entorn de desenvolupament integrat"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
-#| msgid "The source code editor"
 msgid "code editor"
 msgstr "editor de codi"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
-#| msgid "Loading…"
 msgid "coding"
 msgstr "codificació"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
-#| msgid "Programmer"
 msgid "programming"
 msgstr "programació"
 
@@ -184,17 +180,14 @@ msgid "software development"
 msgstr "desenvolupament de programari"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
-#| msgid "Scrolling"
 msgid "compiling"
 msgstr "compilació"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
-#| msgid "Building"
 msgid "building"
 msgstr "s'està construint"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
-#| msgid "Runtime"
 msgid "runtimes"
 msgstr "entorns d'execució"
 
@@ -204,32 +197,26 @@ msgid "SDKs"
 msgstr "SDKs"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
-#| msgid "Show Inspector"
 msgid "GTK inspector"
 msgstr "Inspector GTK"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
-#| msgid "D-Bus Inspector"
 msgid "D-Bus inspector"
 msgstr "Inspector de D-Bus"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
-#| msgid "Debugger"
 msgid "debugger"
 msgstr "depurador"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
-#| msgid "Debugging"
 msgid "debugging"
 msgstr "depuració"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
-#| msgid "Leak Detector"
 msgid "memory leaks detector"
 msgstr "detector de fuites de memòria"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
-#| msgid "Unit Tests"
 msgid "unit tests"
 msgstr "proves unitàries"
 
@@ -238,22 +225,18 @@ msgid "automated testing"
 msgstr "proves automatitzades"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
-#| msgid "Documentation"
 msgid "documentation"
 msgstr "documentació"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
-#| msgid "Ctags based autocompletion"
 msgid "autocompletion"
 msgstr "compleció automàtica"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
-#| msgid "Profiler"
 msgid "profiler"
 msgstr "perfilador"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
-#| msgid "Trailing"
 msgid "profiling"
 msgstr "perfil"
 
@@ -962,7 +945,7 @@ msgstr "Preferències"
 #: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65
 #: src/plugins/shortcutui/tweaks.ui:8 src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
-msgstr "Dreceres del teclat"
+msgstr "Dreceres de teclat"
 
 #: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:43
 #: src/libide/gui/gtk/menus.ui:45
@@ -5744,7 +5727,6 @@ msgid "Contacts"
 msgstr "Contactes"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
-#| msgid "A GNOME maps application"
 msgid "A GNOME contacts application"
 msgstr "Una aplicació de contactes del GNOME"
 
@@ -5753,7 +5735,6 @@ msgid "Fractal"
 msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-#| msgid "An IRC Client for GNOME"
 msgid "A Matrix client for GNOME"
 msgstr "Un client Matrix per al GNOME"
 
@@ -5802,7 +5783,6 @@ msgid "Video Player"
 msgstr "Reproductor de vídeo"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
-#| msgid "GNOME Builder"
 msgid "A GNOME video player"
 msgstr "Un reproductor de vídeo GNOME"
 
@@ -6042,7 +6022,7 @@ msgstr "Sense llicència"
 
 #: src/plugins/projectui/tweaks.ui:109
 msgid "Overview"
-msgstr "Descripció general"
+msgstr "Vista general"
 
 #: src/plugins/projectui/tweaks.ui:115
 msgid "Project Identifier"
