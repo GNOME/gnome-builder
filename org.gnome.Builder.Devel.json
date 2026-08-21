@@ -4,7 +4,7 @@
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm20"
+        "org.freedesktop.Sdk.Extension.llvm22"
     ],
     "command" : "gnome-builder",
     "tags" : [
@@ -58,8 +58,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm20/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm20/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm22/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm22/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -733,11 +733,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm20/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm20/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm20/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm20/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm20/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm22/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm22/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm22/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm22/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm22/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }
