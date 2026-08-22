@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-03-17 17:20+0000\n"
-"PO-Revision-Date: 2026-08-10 22:14+0300\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-22 16:36+0300\n"
 "Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -23,8 +23,8 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Kūrėjas"
@@ -2293,7 +2293,7 @@ msgstr "Nėra"
 msgid "Blank page"
 msgstr "Tuščias puslapis"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Vykdyti naują Kūrėjo vienetą"
 
@@ -4151,11 +4151,11 @@ msgstr "Tarpai"
 msgid "Tabs"
 msgstr "Tabuliacija"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Eiti"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Eiti į eilutę"
@@ -5615,81 +5615,89 @@ msgstr "Skiltis"
 msgid "Suggested GNOME Projects"
 msgstr "Siūlomi GNOME projektai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Dėžės"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "GNOME programa nuotolinėms ir virtualioms sistemoms pasiekti"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "Integruota aplinka GNOME pagrindo programinei įrangai kurti"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Kalendorius"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Kalendoriaus programa GNOME aplinkai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Laikrodžiai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Laikrodžio programa GNOME aplinkai"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Kontaktai"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "GNOME kontaktų programa"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fraktalas"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Gitg yra grafinis Git klientas"
+msgid "A Matrix client for GNOME"
+msgstr "Matrix klientas GNOME aplinkai"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Paveikslėlių žiūryklė"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "GNOME paveikslėlių žiūryklė"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Žemėlapiai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "GNOME žemėlapių programa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Muzika"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Muzikos grotuvas ir tvarkymo programa"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Numatytoji GNOME failų tvarkyklė"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "IRC klientas GNOME aplinkai"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Garso įrašymas"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Video grotuvas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "Modernus garso įrašymo įrankis GNOME aplinkai"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "GNOME vaizdo įrašų grotuvas"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6903,6 +6911,24 @@ msgstr "Nepavyko sukurti XML medžio."
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
+#~ msgid "Boxes"
+#~ msgstr "Dėžės"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "GNOME programa nuotolinėms ir virtualioms sistemoms pasiekti"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Gitg yra grafinis Git klientas"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Garso įrašymas"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "Modernus garso įrašymo įrankis GNOME aplinkai"
+
 #~ msgid "Font"
 #~ msgstr "Šriftas"
 
@@ -7389,9 +7415,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "GIMP palette"
 #~ msgstr "GIMP paletė"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME Kūrėjo paletė"
 
 #~ msgid "Palette name"
 #~ msgstr "Paletės pavadinimas"
@@ -10913,9 +10936,6 @@ msgstr "Failas turi būti įrašytas vietoje skaitymui."
 
 #~ msgid "If the file has changed on disk and the buffer is not in sync."
 #~ msgstr "Jei failas buvo pakeistas diske ir buferis nėra sinchronizuotas."
-
-#~ msgid "Context"
-#~ msgstr "Kontekstas"
 
 #~ msgid "The IdeContext for the buffer."
 #~ msgstr "Buferio IdeContext."
