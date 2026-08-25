@@ -676,7 +676,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gom.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/gom.git",
+                    "branch" : "main"
                 }
             ]
         },
