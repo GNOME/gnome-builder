@@ -4,15 +4,15 @@
 # Tiago Santos <tiagofsantos81@sapo.pt>, 2015, 2016.
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
 # Bruno Ramalhete <bram.512@gmail.com>, 2016.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022, 2023, 2024, 2025.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # João Carvalhinho <joao.carvalhinho@gmail.com>, 2024, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-02-23 19:53+0000\n"
-"PO-Revision-Date: 2026-03-01 22:39+0000\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-08-25 19:05+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-DamnedLies-Scope: partial\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
@@ -39,6 +39,7 @@ msgstr "Crie aplicações para o GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -146,6 +147,96 @@ msgstr "Pesquisa de texto rápida e flexível em ficheiros e símbolos"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Integração de Arduino com Arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+#| msgid "ID"
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "ambiente de desenvolvimento integrado"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "O editor de código"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "programação"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "programação"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "programadores de software"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "desenvolvimento de software"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "compilação"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "criação"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "tempos de execução"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDKs"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "Inspetor GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "Inspetor D-Bus"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "depurador"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "depuração"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "detetor de fugas de memória"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "testes de unidade"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "testes automatizados"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "documentação"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "Conclusão automática"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "perfilador"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "elaboração de perfis"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1806,10 +1897,6 @@ msgstr "Site"
 #: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Controlo de versões"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDKs"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -6900,9 +6987,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgid "An IDE for GNOME"
 #~ msgstr "Um IDE para o GNOME"
 
-#~ msgid "D-Bus Inspector"
-#~ msgstr "Inspetor D-Bus"
-
 #~ msgid "Cancel"
 #~ msgstr "Cancelar"
 
@@ -7768,9 +7852,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 #~ msgstr ""
 #~ "Utilizar o interpretação do código para realçar informação adicional "
 #~ "descoberta no ficheiro de código"
-
-#~ msgid "Completion"
-#~ msgstr "Conclusão"
 
 #~ msgid "Completions Display Size"
 #~ msgstr "Tamanho da lista de sugestões"
