@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-06-23 15:32+0000\n"
-"PO-Revision-Date: 2026-08-10 09:13+0200\n"
+"PO-Revision-Date: 2026-08-26 16:51+0200\n"
 "Last-Translator: Patrik Sivek <patriksivek@gnome.org>\n"
 "Language-Team: Czech\n"
 "Language: cs\n"
@@ -1604,7 +1604,7 @@ msgstr "Na_stavit"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:72
 msgid "Press Escape to cancel or Backspace to disable."
-msgstr "Zmáčkněte Esc pro zrušení nebo BackSpace pro zakázání."
+msgstr "Zmáčkněte Escape pro zrušení nebo Backspace pro zakázání."
 
 #: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
@@ -3236,7 +3236,7 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"Před spuštěním aplikaci nainstalovat. Pro většinu projektů je to nutné, "
+"Nainstalovat aplikaci před spuštěním. Pro většinu projektů je to nutné, "
 "pokud není ke spouštění používán vlastní příkaz."
 
 #: src/plugins/buildui/tweaks.ui:74
@@ -4571,7 +4571,7 @@ msgstr "Zvýrazňovat aktuální řádek"
 
 #: src/plugins/editorui/tweaks.ui:246
 msgid "Make the current line stand out with highlights"
-msgstr "Aktuální řádek odlišit pomocí zvýraznění"
+msgstr "Odlišit aktuální řádek pomocí zvýraznění"
 
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Highlight Matching Brackets"
@@ -4695,7 +4695,7 @@ msgstr "Během psaní automaticky navrhovat dokončení kódu"
 
 #: src/plugins/editorui/tweaks.ui:461
 msgid "Select First Completion Proposal"
-msgstr "Vybírat první z návrhovaných dokončení"
+msgstr "Vybírat první z navrhovaných dokončení"
 
 #: src/plugins/editorui/tweaks.ui:462
 msgid "Automatically select the first completion proposal when displayed"
@@ -5203,7 +5203,7 @@ msgstr "Používat r_egulární výrazy"
 
 #: src/plugins/grep/gbp-grep-panel.ui:115
 msgid "Close the panel (Escape key)"
-msgstr "Zavřít panel (Esc)"
+msgstr "Zavřít panel (Escape)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
@@ -6602,7 +6602,7 @@ msgstr "Povolit tučné"
 
 #: src/plugins/terminal/tweaks.ui:35
 msgid "Allows the use of bold escape sequences"
-msgstr "Povolit používání unikové sekvence pro tučné písmo"
+msgstr "Povolit používání escape sekvence pro tučné písmo"
 
 #: src/plugins/terminal/tweaks.ui:46
 msgid "Allow Hyperlinks"
@@ -6610,7 +6610,7 @@ msgstr "Povolit hypertextové odkazy"
 
 #: src/plugins/terminal/tweaks.ui:47
 msgid "Allows the use of hyperlink escape sequences"
-msgstr "Povolit používání unikové sekvence pro hypertextové odkazy"
+msgstr "Povolit používání escape sekvence pro hypertextové odkazy"
 
 #: src/plugins/terminal/tweaks.ui:60
 msgid "Scrolling"
