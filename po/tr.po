@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-08 08:00+0300\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-28 08:00+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -36,8 +36,8 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
@@ -48,6 +48,7 @@ msgstr "GNOME için uygulama oluştur"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -151,6 +152,95 @@ msgstr "Dosyalar ve simgeler arası hızlı bulanık metin arama"
 msgid "Arduino integration with arduino-cli"
 msgstr "arduino-cli ile Arduino tümleşimi"
 
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "tümleşik geliştirme ortamı"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "kod düzenleyici"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "kodlama"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "programlama"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "yazılım geliştiriciler"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "yazılım geliştirme"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "derleme"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "inşa etme"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "çalışma zamanları"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "Yazılım Geliştirme Kitleri"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "GTK inceleyici"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "D-Bus inceleyici"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "hata ayıklayıcı"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "hata ayıklama"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "bellek sızıntısı algılayıcı"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "birim sınamaları"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "kendiliğindenleştirilmiş sınama"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "belgelendirme"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "kendiliğinden tamamlama"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "profilleyici"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "profilleme"
+
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "GNU hata ayıklayıcıyla hata ayıklayın"
@@ -161,7 +251,7 @@ msgstr "Projelerinize hızlıca erişin"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
-msgstr "Çeşitli şablonlardan yeni projeler oluşturun"
+msgstr "Türlü şablonlardan yeni projeler oluşturun"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
@@ -1789,10 +1879,6 @@ msgstr "Web sitesi"
 msgid "Version Control"
 msgstr "Sürüm Denetimi"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "Yazılım Geliştirme Kitleri"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Dil Sunucuları"
@@ -2222,7 +2308,7 @@ msgstr "Hiçbiri"
 msgid "Blank page"
 msgstr "Boş sayfa"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Yeni bir Builder örneği çalıştır"
 
@@ -4084,11 +4170,11 @@ msgstr "Boşluklar"
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Git"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Satıra Git"
@@ -5547,81 +5633,89 @@ msgstr "Bölüm"
 msgid "Suggested GNOME Projects"
 msgstr "Önerilen GNOME Projeleri"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Kutular"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Uzak veya sanal sistemlere erişmek için basit bir GNOME uygulaması"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "GNOME tabanlı yazılım yazmak için bir IDE"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Takvim"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "GNOME için takvim uygulaması"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Saatler"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "GNOME için saat uygulaması"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Kişiler"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "GNOME kişiler uygulaması"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Gitg, grafiksel Git istemcisidir"
+msgid "A Matrix client for GNOME"
+msgstr "GNOME için Matrix istemcisi"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Resim Görüntüleyici"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "GNOME resim görüntüleyicisi"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Haritalar"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "GNOME harita uygulaması"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Müzik"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Müzik çalar ve yönetim uygulaması"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "GNOME için öntanımlı dosya yöneticisi"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "GNOME için bir IRC istemcisi"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Ses Kaydedici"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Video Oynatıcı"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "GNOME için çağdaş ses kaydedici"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "GNOME video oynatıcısı"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6836,3 +6930,21 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Boxes"
+#~ msgstr "Kutular"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "Uzak veya sanal sistemlere erişmek için basit bir GNOME uygulaması"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Gitg, grafiksel Git istemcisidir"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Ses Kaydedici"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "GNOME için çağdaş ses kaydedici"
