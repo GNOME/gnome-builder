@@ -12,20 +12,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-02-23 19:53+0000\n"
-"PO-Revision-Date: 2026-03-15 23:46+0100\n"
-"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-08-30 11:31+0200\n"
+"Last-Translator: Марко Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: Serbian <gnome-sr@googlegroups.com>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || "
+"n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 "X-Generator: Poedit 3.9\n"
 
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:2 src/libide/editor/ide-editor-workspace.ui:50 src/libide/editor/ide-editor-workspace.ui:92 src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39 src/plugins/shortcutui/tweaks.ui:25
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:2
+#: src/libide/editor/ide-editor-workspace.ui:50 src/libide/editor/ide-editor-workspace.ui:92
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:218 src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Градитељ"
 
@@ -34,14 +37,19 @@ msgid "Create applications for GNOME"
 msgstr "Стварајте програме за Гном"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10 data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Кристијан Хергерт"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:16
 msgid ""
-"Builder is an actively developed Integrated Development Environment for GNOME. It combines integrated support for essential GNOME technologies such as GTK+, GLib, and GNOME APIs with features that any developer will appreciate, like syntax highlighting and snippets."
-msgstr "Градитељ је активно развијано интегрисано развојно окружење за Гном. Оно обједињује уграђену подршку за кључне Гномове технологије као што су ГТК+, Глиб и Гномове АПИ-је са могућностима које ће сваки програмер ценити, као што су истицање синтаксе и исечци кода."
+"Builder is an actively developed Integrated Development Environment for GNOME. It combines integrated support "
+"for essential GNOME technologies such as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Градитељ је активно развијано интегрисано развојно окружење за Гном. Оно обједињује уграђену подршку за кључне "
+"Гномове технологије као што су ГТК+, Глиб и Гномове АПИ-је са могућностима које ће сваки програмер ценити, као "
+"што су истицање синтаксе и исечци кода."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:22
 msgid "You can rely on predictable releases of Builder with each new release of GNOME every six months."
@@ -123,6 +131,95 @@ msgstr "Брза приближна претрага текста кроз да�
 msgid "Arduino integration with arduino-cli"
 msgstr "Интеграција Ардуина преко arduino-cli"
 
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "ИДЕ"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "уграђено окружење за развој"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "уређивач кода"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "програмирање"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "програмирање"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "програмери"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "развој програма"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "компилирање"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "изградња"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "извршна окружења"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61 src/libide/plugins/ide-plugin.c:337
+#: src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "СДК-ови"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "ГТК инспектор"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "Испитивач Д-сабирнице"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "дебагер"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "отклањање грешака"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "откривач цурења меморије"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "тестови јединица"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "аутоматизовано тестирање"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "документација"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "самодовршавање"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "профилатор"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "профилисање"
+
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
 msgstr "Исправљање помоћу ГНУ исправљача грешака"
@@ -157,7 +254,9 @@ msgstr "Упоредна изградња"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid "Number of workers to use when performing builds. -1 for sensible default. 0 for number of CPU."
-msgstr "Број радника које треба користити за изградњу. Вредност -1 је за разумну подразумевану вредност. 0 за број процесора."
+msgstr ""
+"Број радника које треба користити за изградњу. Вредност -1 је за разумну подразумевану вредност. 0 за број "
+"процесора."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
@@ -180,7 +279,8 @@ msgid "Allow network when metered"
 msgstr "Допусти мрежу када је веза мерена"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:22
-msgid "Enable automated transfers upon building such as SDK downloads and dependencies when connection is metered."
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and dependencies when connection is metered."
 msgstr "Омогући самосталне преносе након изградње као што су СДК преузимања и зависности када је веза мерена."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
@@ -196,8 +296,12 @@ msgid "Enable semantic highlighting"
 msgstr "Омогући семантичко истицање"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
-msgid "If enabled, additional highlighting will be provided in supported languages based on information extracted from the source code."
-msgstr "Ако је омогућено, додатно истицање ће бити обезбеђено у подржаним језицима на основу података извучених из изворног кода."
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages based on information extracted "
+"from the source code."
+msgstr ""
+"Ако је омогућено, додатно истицање ће бити обезбеђено у подржаним језицима на основу података извучених из "
+"изворног кода."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -536,7 +640,8 @@ msgstr "Прикажи занемарене датотеке"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid "If enabled, the project tree will display files that are ignored by the VCS."
-msgstr "Ако је омогућено, у стаблу пројекта ће бити приказане датотеке које систем за контролу верзија занемарује."
+msgstr ""
+"Ако је омогућено, у стаблу пројекта ће бити приказане датотеке које систем за контролу верзија занемарује."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15 src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
@@ -559,8 +664,12 @@ msgid "Install Project Before Running"
 msgstr "Инсталирај пројекат пре покретања"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
-msgid "Run the pipelines install phase before running the project. Only use this if you know what you're doing with your project."
-msgstr "Покрени фазу инсталирања проточне обраде пре покретања пројекта. Користите ово само ако знате шта радите са својим пројектом."
+msgid ""
+"Run the pipelines install phase before running the project. Only use this if you know what you're doing with "
+"your project."
+msgstr ""
+"Покрени фазу инсталирања проточне обраде пре покретања пројекта. Користите ово само ако знате шта радите са "
+"својим пројектом."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -575,8 +684,12 @@ msgid "The signal to send the app to stop"
 msgstr "Сигнал који се шаље апликацији да се заустави"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
-msgid "This allows sending something other than sigkill to stop the target application. That might be useful when you want to gracefully shutdown a server process."
-msgstr "Ово омогућава слање нечега другог осим sigkill да се заустави циљна апликација. Може бити корисно ако желите да правилно зауставите серверски процес."
+msgid ""
+"This allows sending something other than sigkill to stop the target application. That might be useful when you "
+"want to gracefully shutdown a server process."
+msgstr ""
+"Ово омогућава слање нечега другог осим sigkill да се заустави циљна апликација. Може бити корисно ако желите "
+"да правилно зауставите серверски процес."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -586,7 +699,8 @@ msgstr "Локалитет јединичног теста"
 msgid "What environment to use when running unit tests"
 msgstr "Које ће се окружење користити при извршавању јединичних тестова"
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:50 src/plugins/buildui/gtk/menus.ui:369 src/plugins/buildui/tweaks.ui:133
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50 src/plugins/buildui/gtk/menus.ui:369
+#: src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Опширно записивање"
 
@@ -600,7 +714,9 @@ msgstr "Корен кеша"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:57
 msgid "A directory to use as the root for cache data of the project like builds and flatpak staging directories"
-msgstr "Директоријум који ће се користити као корен за кеш податке пројекта, као што су изградње и флетпек директоријуми за припрему"
+msgstr ""
+"Директоријум који ће се користити као корен за кеш податке пројекта, као што су изградње и флетпек "
+"директоријуми за припрему"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5 src/plugins/editorui/tweaks.ui:392
 msgid "Check Spelling"
@@ -627,7 +743,8 @@ msgstr "Отвори пројекат"
 msgid "Start New Project"
 msgstr "Покрени нови пројекат"
 
-#: data/org.gnome.Builder.desktop.in.in:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6 src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
+#: data/org.gnome.Builder.desktop.in.in:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:286
 msgid "Clone Repository"
 msgstr "Клонирај ризницу"
 
@@ -673,12 +790,16 @@ msgstr "Не могу да сачувам нацрт: %s"
 msgid "Untitled"
 msgstr "Неименовани"
 
-#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
+#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11 src/libide/gui/gtk/menus.ui:11
+#: src/plugins/create-project/gtk/menus.ui:6 src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
 msgstr "Пројекти"
 
-#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:525 src/libide/greeter/ide-greeter-workspace.c:663 src/libide/gtk/ide-install-button.ui:31 src/libide/gtk/ide-shortcut-accel-dialog.ui:24
-#: src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9 src/plugins/codeui/gbp-codeui-range-dialog.ui:7 src/plugins/codeui/gbp-codeui-rename-dialog.ui:9 src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24 src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
+#: src/libide/core/ide-transfer.c:545 src/libide/greeter/ide-greeter-workspace.c:525
+#: src/libide/greeter/ide-greeter-workspace.c:663 src/libide/gtk/ide-install-button.ui:31
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:24 src/plugins/codeui/gbp-codeui-code-action-dialog.ui:9
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7 src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:24 src/plugins/flatpak/gbp-flatpak-runtime-provider.c:335
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:15
 msgid "_Cancel"
 msgstr "_Откажи"
@@ -695,11 +816,14 @@ msgstr "_Отвори датотеку…"
 msgid "Open a file in the workspace"
 msgstr "Отвори датотеку у радном простору"
 
-#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31 src/libide/gui/gtk/menus.ui:29 src/libide/tweaks/ide-tweaks-window.c:202
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:31 src/libide/gui/gtk/menus.ui:29
+#: src/libide/tweaks/ide-tweaks-window.c:202
 msgid "Preferences"
 msgstr "Поставке"
 
-#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37 src/libide/gui/gtk/menus.ui:37 src/libide/plugins/ide-plugin.c:346 src/plugins/editorui/tweaks.ui:493 src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65 src/plugins/shortcutui/tweaks.ui:8
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:37 src/libide/gui/gtk/menus.ui:37
+#: src/libide/plugins/ide-plugin.c:346 src/plugins/editorui/tweaks.ui:493
+#: src/plugins/shortcutui/gbp-shortcutui-tweaks-addin.c:65 src/plugins/shortcutui/tweaks.ui:8
 #: src/plugins/shortcutui/tweaks.ui:12
 msgid "Keyboard Shortcuts"
 msgstr "Пречице на тастатури"
@@ -720,9 +844,14 @@ msgstr "_Изађи"
 msgid "Document"
 msgstr "Документ"
 
-#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71 src/libide/editor/gtk/menus.ui:80 src/libide/greeter/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25 src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71
-#: src/libide/gui/gtk/menus.ui:75 src/libide/gui/gtk/menus.ui:79 src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5 src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9 src/plugins/menu-search/gtk/menus.ui:10
-#: src/plugins/menu-search/gtk/menus.ui:24 src/plugins/menu-search/gtk/menus.ui:56 src/plugins/menu-search/gtk/menus.ui:97 src/plugins/web-browser/gtk/menus.ui:15
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71 src/libide/editor/gtk/menus.ui:80
+#: src/libide/greeter/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:10 src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:71 src/libide/gui/gtk/menus.ui:75
+#: src/libide/gui/gtk/menus.ui:79 src/plugins/buildui/tweaks.ui:9 src/plugins/create-project/gtk/menus.ui:5
+#: src/plugins/editorui/gtk/menus.ui:153 src/plugins/manuals/gtk/menus.ui:9
+#: src/plugins/menu-search/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:24
+#: src/plugins/menu-search/gtk/menus.ui:56 src/plugins/menu-search/gtk/menus.ui:97
+#: src/plugins/web-browser/gtk/menus.ui:15
 msgid "Application"
 msgstr "Програм"
 
@@ -730,9 +859,15 @@ msgstr "Програм"
 msgid "Pages"
 msgstr "Странице"
 
-#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84 src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:26 src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30 src/libide/sourceview/gtk/menus.ui:48
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119 src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160 src/libide/sourceview/gtk/menus.ui:164
-#: src/libide/sourceview/gtk/menus.ui:170 src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75 src/plugins/menu-search/gtk/menus.ui:148 src/plugins/menu-search/gtk/menus.ui:165 src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84 src/libide/editor/gtk/menus.ui:88
+#: src/libide/gui/tweaks.ui:26 src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:48 src/libide/sourceview/gtk/menus.ui:79
+#: src/libide/sourceview/gtk/menus.ui:87 src/libide/sourceview/gtk/menus.ui:119
+#: src/libide/sourceview/gtk/menus.ui:152 src/libide/sourceview/gtk/menus.ui:160
+#: src/libide/sourceview/gtk/menus.ui:164 src/libide/sourceview/gtk/menus.ui:170
+#: src/plugins/comment-code/gtk/menus.ui:6 src/plugins/menu-search/gtk/menus.ui:75
+#: src/plugins/menu-search/gtk/menus.ui:148 src/plugins/menu-search/gtk/menus.ui:165
+#: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Уређивач текста"
 
@@ -740,7 +875,8 @@ msgstr "Уређивач текста"
 msgid "Search & Replace"
 msgstr "Нађи и замени"
 
-#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76 src/plugins/editorui/gtk/menus.ui:154
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:72 src/libide/gui/gtk/menus.ui:76
+#: src/plugins/editorui/gtk/menus.ui:154
 msgid "Documents"
 msgstr "Документа"
 
@@ -769,8 +905,12 @@ msgid "File Contains Encoding Errors"
 msgstr "Датотека садржи грешке у кодирању"
 
 #: src/libide/editor/ide-editor-info-bar.c:100
-msgid "The encoding used to load the file detected errors. You may select an alternate encoding from the statusbar and reload."
-msgstr "Кодирање употребљено за учитавање датотеке је открило грешке. Можете изабрати друго кодирање из траке стања и поново учитати."
+msgid ""
+"The encoding used to load the file detected errors. You may select an alternate encoding from the statusbar "
+"and reload."
+msgstr ""
+"Кодирање употребљено за учитавање датотеке је открило грешке. Можете изабрати друго кодирање из траке стања и "
+"поново учитати."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -812,7 +952,8 @@ msgstr "Штампање није успело: %s"
 msgid "Failed to format selection: %s"
 msgstr "Не могу да форматирам избор: %s"
 
-#: src/libide/editor/ide-editor-page.c:1142 src/libide/editor/ide-editor-save-delegate.c:239 src/plugins/buildui/gbp-buildui-log-pane.c:329 src/plugins/testui/gbp-testui-output-panel.c:96
+#: src/libide/editor/ide-editor-page.c:1142 src/libide/editor/ide-editor-save-delegate.c:239
+#: src/plugins/buildui/gbp-buildui-log-pane.c:329 src/plugins/testui/gbp-testui-output-panel.c:96
 msgid "Save File"
 msgstr "Сачувај датотеку"
 
@@ -848,7 +989,8 @@ msgstr "Замени _све"
 msgid "Use Re_gular Expressions"
 msgstr "Користи ре_гуларне изразе"
 
-#: src/libide/editor/ide-editor-search-bar.ui:152 src/libide/terminal/ide-terminal-search.ui:99 src/plugins/grep/gbp-grep-panel.ui:94
+#: src/libide/editor/ide-editor-search-bar.ui:152 src/libide/terminal/ide-terminal-search.ui:99
+#: src/plugins/grep/gbp-grep-panel.ui:94
 msgid "_Case Sensitive"
 msgstr "Разли_куј велика и мала слова"
 
@@ -860,7 +1002,8 @@ msgstr "Нађи по_дударања за цео појам"
 msgid "Language"
 msgstr "Језик"
 
-#: src/libide/editor/ide-editor-workspace.ui:57 src/libide/editor/ide-editor-workspace.ui:87 src/libide/gui/ide-primary-workspace.ui:48 src/libide/gui/ide-primary-workspace.ui:137
+#: src/libide/editor/ide-editor-workspace.ui:57 src/libide/editor/ide-editor-workspace.ui:87
+#: src/libide/gui/ide-primary-workspace.ui:48 src/libide/gui/ide-primary-workspace.ui:137
 msgid "Search (Ctrl+Enter)"
 msgstr "Тражи (Ctrl+Enter)"
 
@@ -984,7 +1127,8 @@ msgstr "Стварање псеудо-терминала није успело. 
 msgid "Cleaning…"
 msgstr "Чистим…"
 
-#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410 src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
+#: src/libide/foundry/ide-pipeline.c:3353 src/libide/foundry/ide-pipeline.c:3410
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Неуспех"
 
@@ -1008,7 +1152,8 @@ msgstr "Припремам…"
 msgid "Configuring…"
 msgstr "Подешавам…"
 
-#: src/libide/foundry/ide-pipeline.c:3386 src/plugins/buildui/gbp-buildui-omni-bar-section.c:200 src/plugins/notification/ide-notification-addin.c:62
+#: src/libide/foundry/ide-pipeline.c:3386 src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Изграђујем…"
 
@@ -1024,7 +1169,8 @@ msgstr "Уписујем…"
 msgid "Exporting…"
 msgstr "Извозим…"
 
-#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406 src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
+#: src/libide/foundry/ide-pipeline.c:3402 src/libide/foundry/ide-pipeline.c:3406
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Успех"
 
@@ -1042,7 +1188,8 @@ msgstr "Уклањам %s"
 msgid "Removing build directories…"
 msgstr "Уклањам директоријуме изградње…"
 
-#: src/libide/foundry/ide-run-command.c:177 src/plugins/shellcmd/gbp-shellcmd-search-result.c:67 src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
+#: src/libide/foundry/ide-run-command.c:177 src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:75
 msgid "Untitled command"
 msgstr "Неименована наредба"
 
@@ -1117,7 +1264,9 @@ msgstr "Откривено извршно окружење „%s“"
 msgid "Removing runtime “%s”"
 msgstr "Уклањам извршно окружење „%s“"
 
-#: src/libide/foundry/ide-runtime.c:395 src/plugins/host/gbp-host-runtime-provider.c:54 src/plugins/host/gbp-host-runtime-provider.c:69 src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+#: src/libide/foundry/ide-runtime.c:395 src/plugins/host/gbp-host-runtime-provider.c:54
+#: src/plugins/host/gbp-host-runtime-provider.c:69 src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:118
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Host System"
 msgstr "Систем домаћина"
 
@@ -1125,11 +1274,13 @@ msgstr "Систем домаћина"
 msgid "Default (Host operating system)"
 msgstr "Подразумевано (оперативни систем домаћина)"
 
-#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66 src/libide/greeter/gtk/menus.ui:86 src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
+#: src/libide/greeter/gtk/menus.ui:14 src/libide/greeter/gtk/menus.ui:66 src/libide/greeter/gtk/menus.ui:86
+#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:93
 msgid "_Clone Repository…"
 msgstr "_Клонирај ризницу…"
 
-#: src/libide/greeter/gtk/menus.ui:22 src/plugins/codeui/gbp-codeui-editor-page-addin.c:218 src/plugins/codeui/gbp-codeui-editor-page-addin.c:426 src/plugins/sysprof/gtk/menus.ui:147
+#: src/libide/greeter/gtk/menus.ui:22 src/plugins/codeui/gbp-codeui-editor-page-addin.c:218
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:426 src/plugins/sysprof/gtk/menus.ui:147
 msgid "Close"
 msgstr "Затвори"
 
@@ -1153,7 +1304,8 @@ msgstr "Изабери _фасциклу…"
 msgid "Directory"
 msgstr "Фасцикла"
 
-#: src/libide/greeter/ide-greeter-workspace.c:223 src/libide/gui/ide-workbench.c:363 src/libide/gui/ide-workbench.c:887
+#: src/libide/greeter/ide-greeter-workspace.c:223 src/libide/gui/ide-workbench.c:363
+#: src/libide/gui/ide-workbench.c:887
 #, c-format
 msgid "Builder — %s"
 msgstr "Градитељ — %s"
@@ -1162,7 +1314,8 @@ msgstr "Градитељ — %s"
 msgid "Failed to load the project"
 msgstr "Нисам успео да учитам пројекат"
 
-#: src/libide/greeter/ide-greeter-workspace.c:336 src/plugins/create-project/gbp-create-project-widget.c:259 src/plugins/recent/gbp-recent-section.c:433
+#: src/libide/greeter/ide-greeter-workspace.c:336 src/plugins/create-project/gbp-create-project-widget.c:259
+#: src/plugins/recent/gbp-recent-section.c:433
 msgid "_Close"
 msgstr "_Затвори"
 
@@ -1276,7 +1429,8 @@ msgstr[1] "Пре отприлике %u година"
 msgstr[2] "Пре отприлике %u године"
 msgstr[3] "Пре отприлике %u година"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70 src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:70
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:31
 msgid "_Install"
 msgstr "_Инсталирај"
 
@@ -1286,7 +1440,9 @@ msgstr "_Инсталирај"
 msgid "%u of %u"
 msgstr "%u од %u"
 
-#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16 src/libide/plugins/ide-plugin.c:347 src/plugins/arduino/gbp-arduino-libraries-manager.ui:95 src/plugins/arduino/gbp-arduino-platforms-manager.ui:95 src/plugins/grep/gbp-grep-panel.ui:64
+#: src/libide/gtk/ide-search-entry.ui:14 src/libide/gui/ide-frame.ui:16 src/libide/plugins/ide-plugin.c:347
+#: src/plugins/arduino/gbp-arduino-libraries-manager.ui:95
+#: src/plugins/arduino/gbp-arduino-platforms-manager.ui:95 src/plugins/grep/gbp-grep-panel.ui:64
 #: src/plugins/manuals/gtk/menus.ui:10 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Тражи"
@@ -1309,7 +1465,8 @@ msgstr "Притисните „Esc“ за отказивање или „Backs
 msgid "Close Project"
 msgstr "Затвори пројекат"
 
-#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59 src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
+#: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59 src/plugins/buildui/tweaks.ui:182
+#: src/plugins/buildui/tweaks.ui:404
 msgid "General"
 msgstr "Опште"
 
@@ -1337,7 +1494,9 @@ msgstr "Изађите без чувања измена"
 msgid "Web Browsing"
 msgstr "Прегледање веба"
 
-#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32 src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34 src/plugins/terminal/gbp-terminal-workspace-addin.c:277 src/plugins/terminal/gtk/menus.ui:36
+#: src/libide/gui/gtk/menus.ui:83 src/libide/gui/tweaks.ui:32 src/libide/terminal/gtk/menus.ui:12
+#: src/libide/terminal/gtk/menus.ui:34 src/plugins/terminal/gbp-terminal-workspace-addin.c:277
+#: src/plugins/terminal/gtk/menus.ui:36
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -1349,10 +1508,9 @@ msgstr "Нови терминали"
 msgid "translator-credits"
 msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
-"Марко М. Костић <marko.m.kostic@gmail.com>\n"
+"Марко Костић <marko.m.kostic@gmail.com>\n"
 "Борисав Живановић <borisavzivanovic@gmail.com>\n"
-"\n"
-"https://гном.срб — превод Гнома на српски језик"
+"Превод на српски језик https://гном.срб"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -1462,7 +1620,8 @@ msgstr "Куцајте за претрагу"
 msgid "Prefix your query with one of the following to filter results"
 msgstr "Додајте префикс упиту неким од следећих за филтрирање резултата"
 
-#: src/libide/gui/ide-search-popover.ui:99 src/plugins/file-search/gbp-file-search-provider.c:364 src/plugins/menu-search/gtk/menus.ui:149 src/plugins/project-tree/gbp-project-tree-addin.c:215
+#: src/libide/gui/ide-search-popover.ui:99 src/plugins/file-search/gbp-file-search-provider.c:364
+#: src/plugins/menu-search/gtk/menus.ui:149 src/plugins/project-tree/gbp-project-tree-addin.c:215
 msgid "Files"
 msgstr "Датотеке"
 
@@ -1478,8 +1637,10 @@ msgstr "Документација"
 msgid "Actions"
 msgstr "Радње"
 
-#: src/libide/gui/ide-shortcut-window.c:259 src/libide/gui/ide-shortcut-window.c:285 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388
-#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
+#: src/libide/gui/ide-shortcut-window.c:259 src/libide/gui/ide-shortcut-window.c:285
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:373 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:381
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:388 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:389
+#: src/plugins/shortcutui/gbp-shortcutui-shortcut.c:390 src/plugins/shortcutui/gbp-shortcutui-shortcut.c:391
 msgid "Other"
 msgstr "Остало"
 
@@ -1501,7 +1662,8 @@ msgstr "Отвори"
 msgid "There are unsaved documents"
 msgstr "Постоје несачувани документи"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160 src/plugins/buildui/gtk/preferences.ui:25 src/plugins/buildui/gtk/preferences.ui:32
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:160 src/plugins/buildui/gtk/preferences.ui:25
+#: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Изглед"
 
@@ -1566,13 +1728,10 @@ msgstr "Издање"
 msgid "Website"
 msgstr "Веб страница"
 
-#: src/libide/plugins/ide-plugin.c:336 src/plugins/create-project/gbp-create-project-widget.ui:117 src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+#: src/libide/plugins/ide-plugin.c:336 src/plugins/create-project/gbp-create-project-widget.ui:117
+#: src/plugins/git/settings-tweaks.ui:9 src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Управљање верзијама"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "СДК-ови"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -1582,7 +1741,8 @@ msgstr "Језички сервери"
 msgid "Devices & Simulators"
 msgstr "Уређаји и симулатори"
 
-#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167 src/plugins/codeui/gbp-codeui-hover-provider.c:83
+#: src/libide/plugins/ide-plugin.c:340 src/libide/sourceview/gtk/menus.ui:167
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:83
 msgid "Diagnostics"
 msgstr "Дијагностика"
 
@@ -1692,7 +1852,8 @@ msgstr "Уметни емоџи"
 msgid "_Selection"
 msgstr "_Избор"
 
-#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37 src/libide/terminal/ide-terminal.ui:140
+#: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
+#: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
 msgstr "Изабери _све"
 
@@ -1756,7 +1917,9 @@ msgstr "У_двостручи ред"
 msgid "_Formatting"
 msgstr "_Форматирање"
 
-#: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165 src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76 src/plugins/symbol-tree/gtk/menus.ui:6
+#: src/libide/sourceview/gtk/menus.ui:161 src/libide/sourceview/gtk/menus.ui:165
+#: src/libide/sourceview/gtk/menus.ui:171 src/plugins/menu-search/gtk/menus.ui:76
+#: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Кретање кроз код"
 
@@ -1808,7 +1971,9 @@ msgstr "Поништи о_дабир"
 msgid "Save Terminal Content As"
 msgstr "Сачувај садржај терминала као"
 
-#: src/libide/terminal/ide-terminal-page-actions.c:249 src/plugins/buildui/gbp-buildui-log-pane.c:330 src/plugins/editorui/gtk/menus.ui:157 src/plugins/menu-search/gtk/menus.ui:114 src/plugins/sysprof/gtk/menus.ui:132 src/plugins/testui/gbp-testui-output-panel.c:97
+#: src/libide/terminal/ide-terminal-page-actions.c:249 src/plugins/buildui/gbp-buildui-log-pane.c:330
+#: src/plugins/editorui/gtk/menus.ui:157 src/plugins/menu-search/gtk/menus.ui:114
+#: src/plugins/sysprof/gtk/menus.ui:132 src/plugins/testui/gbp-testui-output-panel.c:97
 msgid "Save"
 msgstr "Сачувај"
 
@@ -1816,7 +1981,8 @@ msgstr "Сачувај"
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr "Не могу да покренем потпроцес. Можда би требало да поново изградите ваш пројекат."
 
-#: src/libide/terminal/ide-terminal-page.c:125 src/libide/terminal/ide-terminal-page.c:160 src/libide/terminal/ide-terminal-page.c:273
+#: src/libide/terminal/ide-terminal-page.c:125 src/libide/terminal/ide-terminal-page.c:160
+#: src/libide/terminal/ide-terminal-page.c:273
 msgid "Untitled terminal"
 msgstr "Неименовани терминал"
 
@@ -1951,7 +2117,8 @@ msgstr "Празно"
 msgid "Projects Directory"
 msgstr "Фасцикла са пројектима"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:177 src/plugins/create-project/gbp-create-project-widget.c:224 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476 src/plugins/vcsui/gbp-vcsui-clone-page.c:114
+#: src/libide/tweaks/ide-tweaks-directory.c:177 src/plugins/create-project/gbp-create-project-widget.c:224
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:476 src/plugins/vcsui/gbp-vcsui-clone-page.c:114
 msgid "Select"
 msgstr "Изабери"
 
@@ -1989,7 +2156,8 @@ msgstr "Покрени нови примерак Градитеља"
 msgid "Installing Arduino Library"
 msgstr "Инсталирам Ардуино библиотеку"
 
-#: src/plugins/arduino/gbp-arduino-application-addin.c:930 src/plugins/arduino/gbp-arduino-application-addin.c:1047
+#: src/plugins/arduino/gbp-arduino-application-addin.c:930
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1047
 msgid "Downloading and installing"
 msgstr "Преузимам и инсталирам"
 
@@ -1997,7 +2165,8 @@ msgstr "Преузимам и инсталирам"
 msgid "Uninstalling Arduino Library"
 msgstr "Уклањам Ардуино библиотеку"
 
-#: src/plugins/arduino/gbp-arduino-application-addin.c:983 src/plugins/arduino/gbp-arduino-application-addin.c:1099
+#: src/plugins/arduino/gbp-arduino-application-addin.c:983
+#: src/plugins/arduino/gbp-arduino-application-addin.c:1099
 msgid "Uninstalling"
 msgstr "Уклањам"
 
@@ -2021,7 +2190,8 @@ msgstr "Плоча"
 msgid "Programmer"
 msgstr "Програмер"
 
-#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6 src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
+#: src/plugins/arduino/gbp-arduino-libraries-editor.ui:6
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:258
 msgid "Libraries"
 msgstr "Библиотеке"
 
@@ -2061,7 +2231,8 @@ msgstr "Компајлирај Ардуино скицу"
 msgid "Upload Arduino Sketch"
 msgstr "Отпреми Ардуино скицу"
 
-#: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35 src/plugins/arduino/gbp-arduino-string-row.ui:23 src/plugins/buildui/gbp-buildui-environment-row.ui:42
+#: src/plugins/arduino/gbp-arduino-platform-editor-row.ui:35 src/plugins/arduino/gbp-arduino-string-row.ui:23
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
 msgid "Remove"
 msgstr "Уклони"
 
@@ -2113,7 +2284,8 @@ msgstr "Нема додатних адреса"
 msgid "Add URL"
 msgstr "Додај адресу"
 
-#: src/plugins/arduino/gbp-arduino-urls-editor.ui:66 src/plugins/buildui/gbp-buildui-environment-editor.ui:30 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
+#: src/plugins/arduino/gbp-arduino-urls-editor.ui:66 src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:203
 msgid "_Add"
 msgstr "Дод_ај"
 
@@ -2141,12 +2313,16 @@ msgstr "Изграђујем кеш…"
 msgid "Bootstrapping build system"
 msgstr "Вршим почетно подизање система изградње"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290 src/plugins/phpize/gbp-phpize-pipeline-addin.c:113 src/plugins/waf/gbp-waf-pipeline-addin.c:116
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290 src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "Подешавам пројекат"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340 src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86 src/plugins/cmake/gbp-cmake-pipeline-addin.c:230 src/plugins/gradle/gbp-gradle-pipeline-addin.c:113 src/plugins/make/gbp-make-pipeline-addin.c:142
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:91 src/plugins/phpize/gbp-phpize-pipeline-addin.c:124 src/plugins/waf/gbp-waf-pipeline-addin.c:131
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86 src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:113 src/plugins/make/gbp-make-pipeline-addin.c:142
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:91 src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "Градим пројекат"
 
@@ -2164,23 +2340,28 @@ msgstr "%s (копија)"
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr "Користи се BuildStream пројекат али не могу наћи извршну датотеку „bst“."
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.c:151 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:151
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
 msgid "Use KEY=VALUE to set an environment variable"
 msgstr "Користите КЉУЧ=ВРЕДНОСТ да поставите променљиву окружења"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.c:157 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:157
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:167
 msgid "Keys may not start with a number"
 msgstr "Кључеви не смеју почињати бројем"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.c:167 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
+#: src/plugins/buildui/gbp-buildui-environment-editor.c:167
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:177
 msgid "Keys may only contain alpha-numerics or underline."
 msgstr "Кључеви смеју садржати само слова, бројеве или доњу црту."
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.ui:23 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:196
 msgid "Add _Variable"
 msgstr "Додај п_роменљиву"
 
-#: src/plugins/buildui/gbp-buildui-environment-editor.ui:29 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:202
 msgid "Add Variable"
 msgstr "Додај променљиву"
 
@@ -2252,7 +2433,8 @@ msgstr "Грешке"
 msgid "Warnings"
 msgstr "Упозорења"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:367 src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+#: src/plugins/buildui/gbp-buildui-pane.c:367 src/plugins/buildui/gbp-buildui-pane.ui:81
+#: src/plugins/buildui/tweaks.ui:150 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Build Pipeline"
 msgstr "Проточна обрада изградње"
 
@@ -2370,12 +2552,15 @@ msgstr "Подеси пројекат…"
 msgid "Configure settings related to the project"
 msgstr "Подеси подешавања везана за пројекат"
 
-#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19 src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32 src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95 src/plugins/buildui/gtk/menus.ui:109
-#: src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/gtk/menus.ui:154
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19 src/plugins/buildui/gtk/menus.ui:23
+#: src/plugins/buildui/gtk/menus.ui:32 src/plugins/buildui/gtk/menus.ui:66 src/plugins/buildui/gtk/menus.ui:95
+#: src/plugins/buildui/gtk/menus.ui:109 src/plugins/buildui/gtk/menus.ui:118 src/plugins/buildui/gtk/menus.ui:150
+#: src/plugins/buildui/gtk/menus.ui:154
 msgid "Code Foundry"
 msgstr "Ливница кода"
 
-#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20 src/plugins/buildui/gtk/menus.ui:24 src/plugins/projectui/tweaks.ui:218
+#: src/plugins/buildui/gtk/menus.ui:12 src/plugins/buildui/gtk/menus.ui:20 src/plugins/buildui/gtk/menus.ui:24
+#: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Конфигурација"
 
@@ -2503,7 +2688,8 @@ msgstr "Заустави извршавање пројекта"
 msgid "Debugging"
 msgstr "Поправљање грешака"
 
-#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147 src/plugins/testui/gbp-testui-item.c:84 src/plugins/testui/gbp-testui-panel.ui:4
+#: src/plugins/buildui/gtk/menus.ui:155 src/plugins/buildui/tweaks.ui:147 src/plugins/testui/gbp-testui-item.c:84
+#: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Тестови јединица"
 
@@ -2667,7 +2853,8 @@ msgstr "ГПУ"
 msgid "GTK Renderer"
 msgstr "ГТК исцртавач"
 
-#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332 src/plugins/buildui/tweaks.ui:274 src/plugins/buildui/tweaks.ui:461
+#: src/plugins/buildui/gtk/menus.ui:293 src/plugins/buildui/gtk/menus.ui:332 src/plugins/buildui/tweaks.ui:274
+#: src/plugins/buildui/tweaks.ui:461
 msgid "Default"
 msgstr "Подразумевано"
 
@@ -2831,7 +3018,8 @@ msgstr "Крећи се помоћу искока"
 msgid "Switch documents using a popover"
 msgstr "Пребацуј се између докумената помоћу искока"
 
-#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184 src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
+#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/gbp-shellcmd-search-provider.c:184
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Наредбе"
 
@@ -2852,8 +3040,12 @@ msgid "Install Before Running"
 msgstr "Инсталирај пре покретања"
 
 #: src/plugins/buildui/tweaks.ui:59
-msgid "Installs the application before running. This is necessary for most projects unless custom run commands are used."
-msgstr "Инсталира апликацију пре покретања. Ово је неопходно за већину пројеката осим ако се не користе прилагођене наредбе покретања."
+msgid ""
+"Installs the application before running. This is necessary for most projects unless custom run commands are "
+"used."
+msgstr ""
+"Инсталира апликацију пре покретања. Ово је неопходно за већину пројеката осим ако се не користе прилагођене "
+"наредбе покретања."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2896,8 +3088,12 @@ msgid "Artifacts and Cached Files"
 msgstr "Артефакти и кеширане датотеке"
 
 #: src/plugins/buildui/tweaks.ui:189
-msgid "Directory used for storing build artifacts and cached files from the build pipeline. Requires restarting Builder to take effect."
-msgstr "Директоријум који се користи за складиштење артефаката изградње и кешираних датотека из спојнице изградње. Захтева поновно покретање Градитеља како би ступило на снагу."
+msgid ""
+"Directory used for storing build artifacts and cached files from the build pipeline. Requires restarting "
+"Builder to take effect."
+msgstr ""
+"Директоријум који се користи за складиштење артефаката изградње и кешираних датотека из спојнице изградње. "
+"Захтева поновно покретање Градитеља како би ступило на снагу."
 
 #: src/plugins/buildui/tweaks.ui:203 src/plugins/terminal/tweaks.ui:89
 msgid "History"
@@ -2964,7 +3160,9 @@ msgid "Configure Options"
 msgstr "Опције конфигурисања"
 
 #: src/plugins/buildui/tweaks.ui:439
-msgid "These options are used by the build system to configure the project during the configure phase of the build pipeline"
+msgid ""
+"These options are used by the build system to configure the project during the configure phase of the build "
+"pipeline"
 msgstr "Ове опције користи систем изградње за подешавање пројекта током фазе подешавања у спојници изградње"
 
 #: src/plugins/buildui/tweaks.ui:446
@@ -2995,11 +3193,14 @@ msgstr "СДК који се користи за изградњу вашег п�
 msgid "Reformat Function Prototypes"
 msgstr "Поново форматирај прототипе функција"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146 src/plugins/golang/gbp-golang-pipeline-addin.c:147 src/plugins/swift/gbp-swift-pipeline-addin.c:138
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:146 src/plugins/golang/gbp-golang-pipeline-addin.c:147
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:138
 msgid "Fetch dependencies"
 msgstr "Добави зависности"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174 src/plugins/dub/gbp-dub-pipeline-addin.c:157 src/plugins/golang/gbp-golang-pipeline-addin.c:156 src/plugins/meson/gbp-meson-pipeline-addin.c:286 src/plugins/swift/gbp-swift-pipeline-addin.c:143
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174 src/plugins/dub/gbp-dub-pipeline-addin.c:157
+#: src/plugins/golang/gbp-golang-pipeline-addin.c:156 src/plugins/meson/gbp-meson-pipeline-addin.c:286
+#: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
 msgstr "Изгради пројекат"
 
@@ -3027,7 +3228,8 @@ msgstr "Достављен је неисправан положај курсор
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:280
 msgid "Cannot locate .clang-format, please add one to your project. Using fallback GNU-style formatter."
-msgstr "Не могу да пронађем „.clang-format“, додајте га у свој пројекат. Користим резервни обликовач у ГНУ стилу."
+msgstr ""
+"Не могу да пронађем „.clang-format“, додајте га у свој пројекат. Користим резервни обликовач у ГНУ стилу."
 
 #: src/plugins/clang/ide-clang-client.c:166
 msgid "Clang integration server has exited"
@@ -3086,7 +3288,9 @@ msgstr "CMake"
 msgid "Configure project"
 msgstr "Подеси пројекат"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245 src/plugins/make/gbp-make-pipeline-addin.c:155 src/plugins/maven/gbp-maven-pipeline-addin.c:103 src/plugins/phpize/gbp-phpize-pipeline-addin.c:132 src/plugins/waf/gbp-waf-pipeline-addin.c:142
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245 src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103 src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "Инсталирам пројекат"
 
@@ -3124,7 +3328,8 @@ msgid "Failed to load project: %s"
 msgstr "Не могу да учитам пројекат: %s"
 
 #. Now we can drop our paused state
-#: src/plugins/code-index/gbp-code-index-service.c:209 src/plugins/ctags/ide-ctags-service.c:131 src/plugins/ctags/ide-ctags-service.c:1025
+#: src/plugins/code-index/gbp-code-index-service.c:209 src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:1025
 msgid "Indexing Source Code"
 msgstr "Пописујем изворни код"
 
@@ -3210,7 +3415,8 @@ msgstr "Неуспех при преименовању симбола: %s"
 msgid "Rename Symbol"
 msgstr "Преименуј симбол"
 
-#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10 src/plugins/project-tree/gbp-rename-file-popover.ui:34 src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10 src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Rename"
 msgstr "П_реименуј"
 
@@ -3315,18 +3521,28 @@ msgid "A subdirectory with this name already exists"
 msgstr "Поддиректоријум са овим називом већ постоји"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
-msgid "A unique name that is used for the project folder and other resources. The name should be in lower case without spaces and should not start with a number."
-msgstr "Јединствени назив који се користи за фасциклу пројекта и друге ресурсе. Назив треба да буде малим словима без размака и не би требало да почиње бројем."
+msgid ""
+"A unique name that is used for the project folder and other resources. The name should be in lower case "
+"without spaces and should not start with a number."
+msgstr ""
+"Јединствени назив који се користи за фасциклу пројекта и друге ресурсе. Назив треба да буде малим словима без "
+"размака и не би требало да почиње бројем."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID"
 msgstr "ИБ програма"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:54
-msgid "A reverse domain-name identifier used to identify the application, such as \"org.gnome.Builder\". It may not contain dashes."
-msgstr "Обрнути идентификатор назива домена који се користи за идентификацију програма, као што је „org.gnome.Builder“. Не сме да садржи цртице."
+msgid ""
+"A reverse domain-name identifier used to identify the application, such as \"org.gnome.Builder\". It may not "
+"contain dashes."
+msgstr ""
+"Обрнути идентификатор назива домена који се користи за идентификацију програма, као што је "
+"„org.gnome.Builder“. Не сме да садржи цртице."
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:70 src/plugins/debuggerui/ide-debugger-threads-view.ui:95 src/plugins/grep/gbp-grep-panel.c:747 src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78 src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+#: src/plugins/create-project/gbp-create-project-widget.ui:70
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95 src/plugins/grep/gbp-grep-panel.c:747
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78 src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
 msgid "Location"
 msgstr "Место"
 
@@ -3350,7 +3566,8 @@ msgstr "Направите пројекат"
 msgid "Create _New Project…"
 msgstr "Направите _нови пројекат…"
 
-#: src/plugins/create-project/gtk/menus.ui:9 src/plugins/create-project/gtk/menus.ui:21 src/plugins/create-project/gtk/menus.ui:34
+#: src/plugins/create-project/gtk/menus.ui:9 src/plugins/create-project/gtk/menus.ui:21
+#: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
 msgstr "Направите нови пројекат…"
 
@@ -3358,7 +3575,8 @@ msgstr "Направите нови пројекат…"
 msgid "Create a new project from template"
 msgstr "Направите нови пројекат из шаблона"
 
-#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276 src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
 msgid "Angle"
 msgstr "Угао"
 
@@ -3370,7 +3588,8 @@ msgstr "Смер"
 msgid "Shape"
 msgstr "Облик"
 
-#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292 src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:292
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:311
 msgid "Position"
 msgstr "Положај"
 
@@ -3379,13 +3598,17 @@ msgid "Size"
 msgstr "Величина"
 
 # bug(slobo):nesigurno: da li su ovo jezicci ili tabulatori?
-#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:320 src/plugins/css-preview/gbp-css-preview-hover-provider.c:331 src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:320
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:331
+#: src/plugins/css-preview/gbp-css-preview-hover-provider.c:335
 msgid "Stops"
 msgstr "Тачке прекида"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid "Search, autocompletion, and symbol information may be limited until Ctags indexing is complete."
-msgstr "Могућности претраживања, самодовршавања и приказа података о симболима могу бити ограничене док се пописивање Це-ознака (Ctags) не заврши."
+msgstr ""
+"Могућности претраживања, самодовршавања и приказа података о симболима могу бити ограничене док се пописивање "
+"Це-ознака (Ctags) не заврши."
 
 #: src/plugins/ctags/ide-ctags-service.c:982
 msgid "Indexing Source Code (Paused)"
@@ -3419,7 +3642,8 @@ msgstr "Покрени са поправљачем грешака"
 msgid "Run the project with debugger"
 msgstr "Покрени пројекат са поправљачем грешака"
 
-#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81 src/plugins/debuggerui/ide-debugger-workspace-addin.c:219 src/plugins/debuggerui/tweaks.ui:12
+#: src/plugins/debuggerui/gtk/menus.ui:20 src/plugins/debuggerui/gtk/menus.ui:81
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:219 src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Исправљач грешака"
 
@@ -3471,7 +3695,8 @@ msgstr "Изађи из"
 msgid "Run until the end of the function"
 msgstr "Извршавај до краја функције"
 
-#: src/plugins/debuggerui/gtk/menus.ui:83 src/plugins/debuggerui/ide-debugger-workspace-addin.c:253 src/plugins/debuggerui/tweaks.ui:16
+#: src/plugins/debuggerui/gtk/menus.ui:83 src/plugins/debuggerui/ide-debugger-workspace-addin.c:253
+#: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Тачке прекида"
 
@@ -3487,7 +3712,8 @@ msgstr "Самостално прекини код упозорења"
 msgid "Automatically Break at Criticals"
 msgstr "Самостално прекини код критичних грешака"
 
-#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22 src/plugins/debuggerui/ide-debugger-registers-view.ui:13
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
 msgid "ID"
 msgstr "ИБ"
 
@@ -3499,7 +3725,8 @@ msgstr "Датотека"
 msgid "Line"
 msgstr "Ред"
 
-#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58 src/plugins/debuggerui/ide-debugger-threads-view.ui:70
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:70
 msgid "Function"
 msgstr "Функција"
 
@@ -3507,7 +3734,8 @@ msgstr "Функција"
 msgid "Address"
 msgstr "Адреса"
 
-#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81 src/plugins/debuggerui/ide-debugger-locals-view.ui:28
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:28
 msgid "Type"
 msgstr "Врста"
 
@@ -3693,11 +3921,14 @@ msgstr "Враћа поставке језика на подразумеване
 msgid "Plain Text"
 msgstr "Обичан текст"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196 src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks-language.ui:65 src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:286
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks-language.ui:65
+#: src/plugins/editorui/tweaks-language.ui:242 src/plugins/editorui/tweaks.ui:286
 msgid "Spaces"
 msgstr "Размаци"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196 src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks.ui:299
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200 src/plugins/editorui/tweaks.ui:299
 msgid "Tabs"
 msgstr "Језичци"
 
@@ -3827,7 +4058,8 @@ msgstr "Програмски језици"
 
 #: src/plugins/editorui/tweaks-language.ui:34
 msgid "Settings provided by .editorconfig and modelines take precedence over those below."
-msgstr "Подешавања из датотеке „.editorconfig“ и линија режима (modelines) имају предност над доњим подешавањима."
+msgstr ""
+"Подешавања из датотеке „.editorconfig“ и линија режима (modelines) имају предност над доњим подешавањима."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -4310,7 +4542,9 @@ msgstr "Да инсталирам или ажурирам СДК?"
 msgid "Builder needs to install the following software development kits to build your project."
 msgstr "Градитељ мора инсталирати следеће комплете за развој софтвера за изградњу вашег пројекта."
 
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80 src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38 src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80 src/plugins/git/tweaks.ui:16
+#: src/plugins/ls/gbp-ls-page.ui:17 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:38
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:199
 msgid "Name"
 msgstr "Назив"
 
@@ -4405,8 +4639,12 @@ msgid "Preferred Flatpak Installation"
 msgstr "Пожељна флетпек инсталација"
 
 #: src/plugins/flatpak/tweaks.ui:13
-msgid "When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation which contains the extension."
-msgstr "Приликом инсталирања СДК-ова и СДК проширења, Градитељ може дати предност одређеној флетпек инсталацији која садржи проширење."
+msgid ""
+"When installing SDKs and SDK extensions, Builder may prefer a specific Flatpak installation which contains the "
+"extension."
+msgstr ""
+"Приликом инсталирања СДК-ова и СДК проширења, Градитељ може дати предност одређеној флетпек инсталацији која "
+"садржи проширење."
 
 #: src/plugins/flatpak/tweaks.ui:22
 msgid "GNOME Builder"
@@ -4717,7 +4955,8 @@ msgstr "Оперативни систем домаћина"
 msgid "Bundled with Builder"
 msgstr "Испоручено уз Градитеља"
 
-#: src/plugins/html-preview/gtk/menus.ui:7 src/plugins/markdown-preview/gtk/menus.ui:7 src/plugins/sphinx-preview/gtk/menus.ui:7
+#: src/plugins/html-preview/gtk/menus.ui:7 src/plugins/markdown-preview/gtk/menus.ui:7
+#: src/plugins/sphinx-preview/gtk/menus.ui:7
 msgid "Open Preview…"
 msgstr "Отвори претпреглед…"
 
@@ -4758,11 +4997,13 @@ msgstr "Подразумевани „Make“ циљ"
 msgid "Make Run"
 msgstr "„Make“ покретање"
 
-#: src/plugins/manuals/gbp-manuals-page.c:321 src/plugins/manuals/gbp-manuals-panel.ui:5 src/plugins/manuals/manuals-navigatable.c:395
+#: src/plugins/manuals/gbp-manuals-page.c:321 src/plugins/manuals/gbp-manuals-panel.ui:5
+#: src/plugins/manuals/manuals-navigatable.c:395
 msgid "Manuals"
 msgstr "Упутства"
 
-#: src/plugins/manuals/gbp-manuals-panel.ui:174 src/plugins/project-tree/gbp-project-tree-pane.ui:116 src/plugins/symbol-tree/gbp-symbol-popover.ui:38 src/plugins/todo/gbp-todo-panel.ui:99
+#: src/plugins/manuals/gbp-manuals-panel.ui:174 src/plugins/project-tree/gbp-project-tree-pane.ui:116
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38 src/plugins/todo/gbp-todo-panel.ui:99
 msgid "Filter…"
 msgstr "Филтер…"
 
@@ -4778,7 +5019,8 @@ msgstr "Претражи _упутства…"
 msgid "Search documentation for installed SDKs"
 msgstr "Претражи документацију за инсталиране СДК-ове (SDK)"
 
-#: src/plugins/manuals/manuals-book.c:505 src/plugins/manuals/manuals-heading.c:501 src/plugins/manuals/manuals-keyword.c:526
+#: src/plugins/manuals/manuals-book.c:505 src/plugins/manuals/manuals-heading.c:501
+#: src/plugins/manuals/manuals-keyword.c:526
 #, c-format
 msgid "View in %s"
 msgstr "Прегледај у: %s"
@@ -5072,7 +5314,8 @@ msgstr "Прочишћавање"
 msgid "Info"
 msgstr "Инфо"
 
-#: src/plugins/messages/gbp-messages-panel.c:106 src/plugins/messages/gbp-messages-panel.ui:116 src/plugins/messages/gbp-messages-panel.ui:163
+#: src/plugins/messages/gbp-messages-panel.c:106 src/plugins/messages/gbp-messages-panel.ui:116
+#: src/plugins/messages/gbp-messages-panel.ui:163
 msgid "Message"
 msgstr "Порука"
 
@@ -5418,8 +5661,11 @@ msgid "Project Identifier"
 msgstr "Идентификатор пројекта"
 
 #: src/plugins/projectui/tweaks.ui:123
-msgid "This identifier is used when referencing your project's settings, build directories, and cached information."
-msgstr "Овај идентификатор се користи када се упућује на подешавања вашег пројекта, директоријуме изградње и кеширане податке."
+msgid ""
+"This identifier is used when referencing your project's settings, build directories, and cached information."
+msgstr ""
+"Овај идентификатор се користи када се упућује на подешавања вашег пројекта, директоријуме изградње и кеширане "
+"податке."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5435,7 +5681,9 @@ msgstr "Тренутна конфигурација"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid "The configuration is used to setup build pipelines, configure your build system, and run your project."
-msgstr "Конфигурација се користи за подешавање цевовода изградње, подешавање система изградње и покретање вашег пројекта."
+msgstr ""
+"Конфигурација се користи за подешавање цевовода изградње, подешавање система изградње и покретање вашег "
+"пројекта."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5563,8 +5811,12 @@ msgid "Working Directory"
 msgstr "Радни директоријум"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:103
-msgid "The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
-msgstr "Наредба ће бити покренута са ове локације. Користите <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> или <tt>$HOME</tt> да дефинишете релативну путању."
+msgid ""
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt>, or <tt>$HOME</tt> to "
+"define a relative path."
+msgstr ""
+"Наредба ће бити покренута са ове локације. Користите <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> или <tt>$HOME</tt> "
+"да дефинишете релативну путању."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:120
 msgid "Use Subshell"
@@ -5576,7 +5828,8 @@ msgstr "Покрени програм из потљуске као што је <
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:127
 msgid "Builder can run your command from a number of localities including the host system or build containers."
-msgstr "Градитељ може покренути вашу наредбу са бројних локација укључујући систем домаћина или контејнере за изградњу."
+msgstr ""
+"Градитељ може покренути вашу наредбу са бројних локација укључујући систем домаћина или контејнере за изградњу."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:223
 msgid "_Delete Command"
@@ -5655,8 +5908,13 @@ msgid "A list of run-command ids to load for the application or project."
 msgstr "Списак ИД-ова наредби покретања за учитавање за програм или пројекат."
 
 #: src/plugins/shellcmd/tweaks.ui:14
-msgid "Use commands to run build tooling, applications, or shell scripts and map them to a keyboard shortcut. They can run from various environments such as the build pipeline, runtime environment, or host operating system."
-msgstr "Користите наредбе за покретање алата за изградњу, програма или скрипти шкољке и доделите им пречицу на тастатури. Оне се могу покретати из различитих окружења као што су цевовод изградње, извршно окружење или оперативни систем домаћина."
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map them to a keyboard shortcut. They "
+"can run from various environments such as the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"Користите наредбе за покретање алата за изградњу, програма или скрипти шкољке и доделите им пречицу на "
+"тастатури. Оне се могу покретати из различитих окружења као што су цевовод изградње, извршно окружење или "
+"оперативни систем домаћина."
 
 #: src/plugins/shortcutui/gbp-shortcutui-dialog.ui:52
 msgid "No keyboard shortcut found"
@@ -5711,7 +5969,8 @@ msgstr "Симболи у датотеци"
 msgid "In Page"
 msgstr "На страници"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368 src/plugins/symbol-tree/gtk/menus.ui:8
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:99
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:368 src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Изабери симбол…"
 
