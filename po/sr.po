@@ -7,14 +7,15 @@
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2021.
 # Момчило Медић <fedorauser@fedoraproject.org>, 2024.
+# aceydot <aceydot@proton.me>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-03-17 17:20+0000\n"
-"PO-Revision-Date: 2026-08-30 11:31+0200\n"
-"Last-Translator: Марко Костић <marko.m.kostic@gmail.com>\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-08-31 10:56+0200\n"
+"Last-Translator: aceydot <aceydot@proton.me>\n"
 "Language-Team: Serbian <gnome-sr@googlegroups.com>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7 data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50 src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218 src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222 src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Градитељ"
@@ -1510,6 +1511,7 @@ msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Марко Костић <marko.m.kostic@gmail.com>\n"
 "Борисав Живановић <borisavzivanovic@gmail.com>\n"
+"aceydot <aceydot@proton.me>\n"
 "Превод на српски језик https://гном.срб"
 
 #: src/libide/gui/ide-application-actions.c:179
@@ -2148,7 +2150,7 @@ msgstr "Ништа"
 msgid "Blank page"
 msgstr "Празна страница"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Покрени нови примерак Градитеља"
 
@@ -3932,11 +3934,11 @@ msgstr "Размаци"
 msgid "Tabs"
 msgstr "Језичци"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Иди"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541 src/plugins/menu-search/gtk/menus.ui:87
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542 src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Иди на линију"
 
@@ -5347,81 +5349,89 @@ msgstr "Одељак"
 msgid "Suggested GNOME Projects"
 msgstr "Предложени Гном пројекти"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Кутије"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Гном програм за приступ удаљеним или виртуелним системима"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "ИДЕ за писање Гном програма"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Календар"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Гном календар"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Сатови"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Гном сат"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Контакти"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "Гном апликација за контакте"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Гитг"
+msgid "Fractal"
+msgstr "Фрактал"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Гитг је графички Гит клијент"
+msgid "A Matrix client for GNOME"
+msgstr "Матрикс клијент за Гном"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Прегледач слика"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "Гном апликација за преглед слика"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Карте"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "Гном апликација за карте"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Музика"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Програм за пуштање и управљање музиком"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Наутилус"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Подразумевани управник датотека за Гном"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Полари"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "ИРЦ клијент за Гном"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Снимач звука"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Видео плејер"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "Савремени Гномов снимач звука"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "Гном апликација за пуштање видео записа"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6598,3 +6608,21 @@ msgstr "Нисам успео да направим ИксМЛ стабло."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Датотека мора бити сачувана локално ради обраде."
+
+#~ msgid "Boxes"
+#~ msgstr "Кутије"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "Гном програм за приступ удаљеним или виртуелним системима"
+
+#~ msgid "Gitg"
+#~ msgstr "Гитг"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Гитг је графички Гит клијент"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Снимач звука"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "Савремени Гномов снимач звука"
