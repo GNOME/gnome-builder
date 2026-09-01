@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-22 11:04+0100\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-09-01 20:42+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Építő"
@@ -36,6 +36,7 @@ msgstr "Alkalmazások létrehozása a GNOME-hoz"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -141,6 +142,113 @@ msgstr "Gyors közelítő szövegkeresés a fájlok és szimbólumok között"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integráció arduino-cli használatával"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+#| msgid "ID"
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+#| msgid "Cache development environment"
+msgid "integrated development environment"
+msgstr "integrált fejlesztői környezet"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+#| msgid "The source code editor"
+msgid "code editor"
+msgstr "kódszerkesztő"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+#| msgid "Loading…"
+msgid "coding"
+msgstr "kódolás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+#| msgid "Programmer"
+msgid "programming"
+msgstr "programozás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "szoftverfejlesztők"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "szoftverfejlesztés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+#| msgid "Scrolling"
+msgid "compiling"
+msgstr "fordítás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+#| msgid "Building"
+msgid "building"
+msgstr "összeállítás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#| msgid "Runtime"
+msgid "runtimes"
+msgstr "futtatókörnyezetek"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK-k"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+#| msgid "Show Inspector"
+msgid "GTK inspector"
+msgstr "GTK-vizsgáló"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+#| msgid "D-Bus Inspector…"
+msgid "D-Bus inspector"
+msgstr "D-Bus-vizsgáló"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#| msgid "Debugger"
+msgid "debugger"
+msgstr "hibakereső"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+#| msgid "Debugging"
+msgid "debugging"
+msgstr "hibakeresés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+#| msgid "Leak Detector"
+msgid "memory leaks detector"
+msgstr "memóriaszivárgás-észlelő"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+#| msgid "Unit Tests"
+msgid "unit tests"
+msgstr "egységtesztek"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "automatizált tesztelés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+#| msgid "Documentation"
+msgid "documentation"
+msgstr "dokumentáció"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#| msgid "Ctags based autocompletion"
+msgid "autocompletion"
+msgstr "automatikus kiegészítés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+#| msgid "Profiler"
+msgid "profiler"
+msgstr "profilozó"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+#| msgid "Trailing"
+msgid "profiling"
+msgstr "profilozás"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1806,10 +1914,6 @@ msgstr "Weboldal"
 msgid "Version Control"
 msgstr "Verziókövetés"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK-k"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Nyelvi kiszolgálók"
@@ -2240,7 +2344,7 @@ msgstr "Semmi"
 msgid "Blank page"
 msgstr "Üres oldal"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Az Építő új példányának futtatása"
 
@@ -3009,12 +3113,10 @@ msgid "Use the Cairo software renderer when running the project"
 msgstr "A Cairo szoftveres megjelenítő használata a projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:330
-#| msgid "Save & Restore"
 msgid "Save/Restore"
 msgstr "Mentés és helyreállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:336
-#| msgid "Use the default GTK renderer when running the project"
 msgid "Use default restore reason when running the project"
 msgstr "Alapértelmezett helyreállítási indok használata a projekt futtatásakor"
 
@@ -3023,7 +3125,6 @@ msgid "Pristine"
 msgstr "Sértetlen"
 
 #: src/plugins/buildui/gtk/menus.ui:343
-#| msgid "Use the GL renderer when running the project"
 msgid "Use pristine as restore reason when running the project"
 msgstr "Sértetlen használata helyreállítási indokként a projekt futtatásakor"
 
@@ -3032,7 +3133,6 @@ msgid "Normal Launch"
 msgstr "Normál indítás"
 
 #: src/plugins/buildui/gtk/menus.ui:350
-#| msgid "Use orange accent color when running the project"
 msgid "Use normal launch as restore reason when running the project"
 msgstr ""
 "Normál indítás használata helyreállítási indokként a projekt futtatásakor"
@@ -3042,22 +3142,19 @@ msgid "Recover"
 msgstr "Visszaállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:357
-#| msgid "Use the GL renderer when running the project"
 msgid "Use recover as restore reason when running the project"
 msgstr ""
 "Visszaállítás használata helyreállítási indokként a projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:360
-#| msgid "Save & Restore"
 msgid "Restore"
 msgstr "Helyreállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:364
-#| msgid "Use the Cairo software renderer when running the project"
 msgid "Use full session restore as restore reason when running the project"
 msgstr ""
-"Teljes munkamenet-helyreállítás használata helyreállítási indokként a projekt "
-"futtatásakor"
+"Teljes munkamenet-helyreállítás használata helyreállítási indokként a "
+"projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
@@ -4126,11 +4223,11 @@ msgstr "Szóközök"
 msgid "Tabs"
 msgstr "Tabulátorok"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Ugrás"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Ugrás sorra"
@@ -5592,81 +5689,92 @@ msgstr "Szakasz"
 msgid "Suggested GNOME Projects"
 msgstr "Javasolt GNOME projektek"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Gépek"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Egy GNOME alkalmazás távoli vagy virtuális rendszerek eléréséhez"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "Egy IDE GNOME-alapú szoftverek írásához"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Naptár"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Egy naptár alkalmazás a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Órák"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Egy óra alkalmazás a GNOME-hoz"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Névjegyek"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#| msgid "A GNOME maps application"
+msgid "A GNOME contacts application"
+msgstr "Egy GNOME névjegyalkalmazás"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fraktál"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "A Gitg egy grafikus Git kliens"
+#| msgid "An IRC Client for GNOME"
+msgid "A Matrix client for GNOME"
+msgstr "Egy Matrix-ügyfélprogram a GNOME-hoz"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Képmegjelenítő"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "Egy GNOME képmegjelenítő"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Térképek"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "Egy GNOME térképalkalmazás"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Zene"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Zenelejátszó és -kezelő alkalmazás"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Alapértelmezett fájlrendszer a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
-msgid "An IRC Client for GNOME"
-msgstr "Egy IRC kliens a GNOME-hoz"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Hangrögzítő"
+msgid "An IRC Client for GNOME"
+msgstr "Egy IRC-ügyfélprogram a GNOME-hoz"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "Egy modern hangrögzítő a GNOME-hoz"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Videolejátszó"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+#| msgid "GNOME Builder"
+msgid "A GNOME video player"
+msgstr "Egy GNOME videolejátszó"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
