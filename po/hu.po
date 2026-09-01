@@ -2,23 +2,23 @@
 # Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Balázs Meskó <mesko.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2026.
 # Balázs Úr <ur.balazs at fsf dot hu>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Gabor Kelemen <kelemeng at ubuntu dot com>, 2015, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
-"PO-Revision-Date: 2026-02-22 11:04+0100\n"
-"Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
+"POT-Creation-Date: 2026-03-17 17:20+0000\n"
+"PO-Revision-Date: 2026-09-01 20:37+0200\n"
+"Last-Translator: Balázs Meskó <mesko.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Poedit 3.9\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -36,6 +36,7 @@ msgstr "Alkalmazások létrehozása a GNOME-hoz"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -141,6 +142,113 @@ msgstr "Gyors közelítő szövegkeresés a fájlok és szimbólumok között"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino integráció arduino-cli használatával"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+#| msgid "ID"
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+#| msgid "Cache development environment"
+msgid "integrated development environment"
+msgstr "integrált fejlesztői környezet"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+#| msgid "The source code editor"
+msgid "code editor"
+msgstr "kódszerkesztő"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+#| msgid "Loading…"
+msgid "coding"
+msgstr "kódolás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+#| msgid "Programmer"
+msgid "programming"
+msgstr "programozás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "szoftverfejlesztők"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "szoftverfejlesztés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+#| msgid "Scrolling"
+msgid "compiling"
+msgstr "fordítás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+#| msgid "Building"
+msgid "building"
+msgstr "összeállítás"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+#| msgid "Runtime"
+msgid "runtimes"
+msgstr "futtatókörnyezetek"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK-k"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+#| msgid "Show Inspector"
+msgid "GTK inspector"
+msgstr "GTK-vizsgáló"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+#| msgid "D-Bus Inspector…"
+msgid "D-Bus inspector"
+msgstr "D-Bus-vizsgáló"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+#| msgid "Debugger"
+msgid "debugger"
+msgstr "hibakereső"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+#| msgid "Debugging"
+msgid "debugging"
+msgstr "hibakeresés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+#| msgid "Leak Detector"
+msgid "memory leaks detector"
+msgstr "memóriaszivárgás-észlelő"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+#| msgid "Unit Tests"
+msgid "unit tests"
+msgstr "egységtesztek"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "automatizált tesztelés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+#| msgid "Documentation"
+msgid "documentation"
+msgstr "dokumentáció"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+#| msgid "Ctags based autocompletion"
+msgid "autocompletion"
+msgstr "automatikus kiegészítés"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+#| msgid "Profiler"
+msgid "profiler"
+msgstr "profilozó"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+#| msgid "Trailing"
+msgid "profiling"
+msgstr "profilozás"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1806,10 +1914,6 @@ msgstr "Weboldal"
 msgid "Version Control"
 msgstr "Verziókövetés"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK-k"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Nyelvi kiszolgálók"
@@ -3009,12 +3113,10 @@ msgid "Use the Cairo software renderer when running the project"
 msgstr "A Cairo szoftveres megjelenítő használata a projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:330
-#| msgid "Save & Restore"
 msgid "Save/Restore"
 msgstr "Mentés és helyreállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:336
-#| msgid "Use the default GTK renderer when running the project"
 msgid "Use default restore reason when running the project"
 msgstr "Alapértelmezett helyreállítási indok használata a projekt futtatásakor"
 
@@ -3023,7 +3125,6 @@ msgid "Pristine"
 msgstr "Sértetlen"
 
 #: src/plugins/buildui/gtk/menus.ui:343
-#| msgid "Use the GL renderer when running the project"
 msgid "Use pristine as restore reason when running the project"
 msgstr "Sértetlen használata helyreállítási indokként a projekt futtatásakor"
 
@@ -3032,7 +3133,6 @@ msgid "Normal Launch"
 msgstr "Normál indítás"
 
 #: src/plugins/buildui/gtk/menus.ui:350
-#| msgid "Use orange accent color when running the project"
 msgid "Use normal launch as restore reason when running the project"
 msgstr ""
 "Normál indítás használata helyreállítási indokként a projekt futtatásakor"
@@ -3042,22 +3142,19 @@ msgid "Recover"
 msgstr "Visszaállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:357
-#| msgid "Use the GL renderer when running the project"
 msgid "Use recover as restore reason when running the project"
 msgstr ""
 "Visszaállítás használata helyreállítási indokként a projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:360
-#| msgid "Save & Restore"
 msgid "Restore"
 msgstr "Helyreállítás"
 
 #: src/plugins/buildui/gtk/menus.ui:364
-#| msgid "Use the Cairo software renderer when running the project"
 msgid "Use full session restore as restore reason when running the project"
 msgstr ""
-"Teljes munkamenet-helyreállítás használata helyreállítási indokként a projekt "
-"futtatásakor"
+"Teljes munkamenet-helyreállítás használata helyreállítási indokként a "
+"projekt futtatásakor"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
