@@ -3,9 +3,9 @@
 # This file is distributed under the same license as the gnome-builder package.
 #
 # Kris Thomsen <lakristho@gmail.com>, 2015-2016.
-# Ask Hjorth Larsen <asklarsen@gmail.com>, 2015-2024, 2026.
+# Ask Hjorth Larsen <askhl@proton.me>, 2015-2024, 2026.
 # Fuld gennemlæsning Joe Dalton <joedalton2@yahoo.dk>, 2016.
-# Alan Mortensen <alanmortensen.am@gmail.com>, 2020.
+# Alan Mortensen <over.tackiness223@passinbox.com>, 2020.
 # Kasper Agentoft Lind <kasperalind@gmail.com>, 2025.
 #
 # Husk at føje navn til translator-credits.
@@ -27,10 +27,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-02-23 19:53+0000\n"
-"PO-Revision-Date: 2026-03-10 18:30+0100\n"
-"Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
-"Language-Team: Danish\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
+"PO-Revision-Date: 2026-09-08 00:37+0200\n"
+"Last-Translator: Ask Hjorth Larsen <askhl@proton.me>\n"
+"Language-Team: Danish <danskgruppen@groups.io>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,8 +42,8 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Builder"
@@ -54,6 +54,7 @@ msgstr "Lav programmer til GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -156,6 +157,97 @@ msgstr "Hurtig uskarp (fuzzy) tekstsøgning over filer og symboler"
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Arduino-integration med arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "integreret udviklingsmiljø"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "koderedigeringsprogram"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "koder"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "programmering"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "softwareudviklere"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "softwareudvikling"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "kompilering"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "bygning"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "runtime"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK'er"
+
+# MS oversætter til inspektion
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "GTK-inpektør"
+
+# MS oversætter til inspektion
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "D-Bus-inspektion"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "fejlsøger"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "fejlsøgning"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "detektering af hukommelseslæk"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "enhedstest"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "automatiseret test"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "dokumentation"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "autofuldførelse"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "profileringsprogram"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "profilering"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -395,7 +487,9 @@ msgstr "Hvis slået til vil redigeringen benytte indstillingen font-name."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
 "This setting is only respected if the use-custom-font setting is enabled."
-msgstr "Denne indstilling gælder kun, hvis indstillingen use-custom-font er slået til."
+msgstr ""
+"Denne indstilling gælder kun, hvis indstillingen use-custom-font er slået "
+"til."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "Overview Map Policy"
@@ -1574,8 +1668,8 @@ msgstr ""
 "Alan Mortensen\n"
 "\n"
 "Dansk-gruppen\n"
-"Websted http://dansk-gruppen.dk\n"
-"E-mail <dansk@dansk-gruppen.dk>"
+"Websted https://l10n.gnome.org/teams/da/\n"
+"E-mail <danskgruppen@groups.io>"
 
 #: src/libide/gui/ide-application-actions.c:179
 msgid "Funded By"
@@ -1809,10 +1903,6 @@ msgstr "Websted"
 #: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Versionsstyring"
-
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDK'er"
 
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
@@ -2246,7 +2336,7 @@ msgstr "Intet"
 msgid "Blank page"
 msgstr "Tom side"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Kør en ny instans af Builder"
 
@@ -3054,7 +3144,8 @@ msgstr "Gendan"
 
 #: src/plugins/buildui/gtk/menus.ui:364
 msgid "Use full session restore as restore reason when running the project"
-msgstr "Brug fuld sessionsgendannelse som gendannelsesårsag ved kørsel af projektet"
+msgstr ""
+"Brug fuld sessionsgendannelse som gendannelsesårsag ved kørsel af projektet"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
@@ -4119,11 +4210,11 @@ msgstr "Mellemrum"
 msgid "Tabs"
 msgstr "Tabulatorer"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Flyt"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Gå til linje"
@@ -5586,81 +5677,89 @@ msgstr "Sektion"
 msgid "Suggested GNOME Projects"
 msgstr "Foreslåede GNOME-projekter"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Boxes"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Et GNOME-program til at tilgå netværks- eller virtuelle systemer"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "Et integreret udviklingsmiljø til at skrive GNOME-baseret software"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Kalender"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Kalenderprogram til GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Ure"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Et urprogram til GNOME"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Kontaktpersoner"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "Et GNOME-program til kontaktpersoner"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Gitg er en grafisk Git-klient"
+msgid "A Matrix client for GNOME"
+msgstr "En Matrix-klient til GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Billedfremviser"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "En billedfremviser til GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Kort"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "Et kortprogram til GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Musik"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Musikafspiller og -håndteringsprogram"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Standardfilhåndtering til GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "En IRC-klient til GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Lydoptagelse"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Videoafspiller"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "En moderne lydoptager til GNOME"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "En videoafspiller til GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6887,6 +6986,24 @@ msgstr "Kunne ikke oprette XML-træet."
 msgid "File must be saved locally to parse."
 msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
+#~ msgid "Boxes"
+#~ msgstr "Boxes"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "Et GNOME-program til at tilgå netværks- eller virtuelle systemer"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Gitg er en grafisk Git-klient"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Lydoptagelse"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "En moderne lydoptager til GNOME"
+
 #~ msgid "Font"
 #~ msgstr "Skrifttype"
 
@@ -6901,10 +7018,6 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
 #~ msgid "An IDE for GNOME"
 #~ msgstr "Et IDE til GNOME"
-
-# MS oversætter til inspektion
-#~ msgid "D-Bus Inspector"
-#~ msgstr "D-Bus-inspektion"
 
 #~ msgid "Cancel"
 #~ msgstr "Annullér"
@@ -7290,9 +7403,6 @@ msgstr "Filen skal gemmes lokalt for at kunne fortolkes."
 
 #~ msgid "GIMP palette"
 #~ msgstr "GIMP-palet"
-
-#~ msgid "GNOME Builder palette"
-#~ msgstr "GNOME Builder-palet"
 
 #~ msgid "Palette name"
 #~ msgstr "Paletnavn"
