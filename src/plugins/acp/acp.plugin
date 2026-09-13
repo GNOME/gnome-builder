@@ -1,0 +1,10 @@
+[Plugin]
+Authors=GNOME Builder contributors
+Builtin=true
+Copyright=Copyright © 2026 GNOME Builder contributors
+Description=Agentic coding assistant powered by the Agent Client Protocol (ACP)
+Embedded=_gbp_acp_register_types
+Hidden=true
+Module=acp
+Name=ACP Agent
+X-Workspace-Kind=primary;editor;

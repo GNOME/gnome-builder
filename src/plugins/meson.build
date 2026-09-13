@@ -34,6 +34,7 @@ if get_option('webkit').enabled()
   plugins_deps += [libide_webkit_dep]
 endif
 
+subdir('acp')
 subdir('arduino')
 subdir('astro-language-server')
 subdir('auto-save')
@@ -177,6 +178,7 @@ plugins = static_library('plugins', plugins_sources,
 status += [
   'Plugins:',
   '',
+  'ACP Agent ............................ : @0@'.format(get_option('plugin_acp')),
   'Arduino .............................. : @0@'.format(get_option('plugin_arduino')),
   'Autotools ............................ : @0@'.format(get_option('plugin_autotools')),
   'BuildStream .......................... : @0@'.format(get_option('plugin_buildstream')),
