@@ -1072,6 +1072,41 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
   return IDE_WORKSPACE_ADDIN (ret);
 }
 
+static void
+ide_workspace_enforce_max_tabs (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GList *link;
+  gint max_tabs;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder");
+
+  max_tabs = g_settings_get_int (settings, "max-tabs");
+
+  if (max_tabs == 0)
+    return;
+
+  /* The tail of the MRU is the least recently used page. Never close a
+   * modified page automatically so that unsaved work is not lost; if all
+   * remaining pages are modified the limit may be exceeded temporarily.
+   */
+  link = priv->page_mru.tail;
+
+  while (link != NULL && g_queue_get_length (&priv->page_mru) >= (guint)max_tabs)
+    {
+      IdePage *candidate = link->data;
+      GList *prev = link->prev;
+
+      if (!panel_widget_get_modified (PANEL_WIDGET (candidate)))
+        ide_page_destroy (candidate);
+
+      link = prev;
+    }
+}
+
 /**
  * ide_workspace_add_page:
  * @self: a #IdeWorkspace
@@ -1091,6 +1126,8 @@ ide_workspace_add_page (IdeWorkspace  *self,
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_PAGE (page));
   g_return_if_fail (position != NULL);
+
+  ide_workspace_enforce_max_tabs (self);
 
   if (IDE_WORKSPACE_GET_CLASS (self)->add_page)
     IDE_WORKSPACE_GET_CLASS (self)->add_page (self, page, position);

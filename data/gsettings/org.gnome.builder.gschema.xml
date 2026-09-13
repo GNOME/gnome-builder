@@ -49,6 +49,12 @@
       </choices>
       <summary>The interface style to change pages</summary>
     </key>
+    <key name="max-tabs" type="i">
+      <default>0</default>
+      <range min="0" max="999"/>
+      <summary>Maximum number of open tabs</summary>
+      <description>The maximum number of document tabs to keep open. When the limit is reached, the least recently used unmodified tab is closed automatically. A value of 0 disables the limit.</description>
+    </key>
     <key name="default-license" type="s">
       <choices>
         <choice value="AGPL-3.0-or-later"/>

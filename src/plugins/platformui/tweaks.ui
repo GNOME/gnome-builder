@@ -40,6 +40,18 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="IdeTweaksSpin">
+                    <property name="title" translatable="yes">Maximum Open Tabs</property>
+                    <property name="subtitle" translatable="yes">The maximum number of document tabs to keep open. The least recently used unmodified tab is closed automatically. Set to 0 for no limit.</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder</property>
+                        <property name="schema-key">max-tabs</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
