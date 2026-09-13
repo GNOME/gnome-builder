@@ -414,7 +414,7 @@
         },
         {
             "name" : "polkit",
-            "buildsystem": "meson",
+            "buildsystem" : "meson",
             "config-opts" : [
                 "-Dlibs-only=true",
                 "-Dintrospection=false",
@@ -439,33 +439,33 @@
             ]
         },
         {
-            "name": "bubblewrap",
-            "buildsystem": "meson",
-            "config-opts": [
+            "name" : "bubblewrap",
+            "buildsystem" : "meson",
+            "config-opts" : [
                 "-Dman=disabled",
                 "-Dselinux=disabled",
                 "-Dtests=false"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/projectatomic/bubblewrap/archive/refs/tags/v0.11.0.tar.gz",
-                    "sha256": "cfeeb15fcc47d177d195f06fdf0847e93ee3aa6bf46f6ac0a141fa142759e2c3"
+                    "type" : "archive",
+                    "url" : "https://github.com/projectatomic/bubblewrap/archive/refs/tags/v0.11.0.tar.gz",
+                    "sha256" : "cfeeb15fcc47d177d195f06fdf0847e93ee3aa6bf46f6ac0a141fa142759e2c3"
                 }
             ]
         },
         {
-            "name": "xdg-dbus-proxy",
-            "buildsystem": "meson",
-            "config-opts": [
+            "name" : "xdg-dbus-proxy",
+            "buildsystem" : "meson",
+            "config-opts" : [
                 "-Dman=disabled",
                 "-Dtests=false"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/flatpak/xdg-dbus-proxy/archive/refs/tags/0.1.6.tar.gz",
-                    "sha256": "ee9c1d665f4e3b025a83d522d478ff7930070f2817fc2cb446db0dca93c990b1"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/xdg-dbus-proxy/archive/refs/tags/0.1.6.tar.gz",
+                    "sha256" : "ee9c1d665f4e3b025a83d522d478ff7930070f2817fc2cb446db0dca93c990b1"
                 }
             ]
         },
@@ -524,7 +524,7 @@
                 {
                     "type" : "archive",
                     "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.4.4/flatpak-builder-1.4.4.tar.xz",
-		    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
+                    "sha256" : "dc27159394baaa2cb523f52f874472ff50d161983233264ca2a22e850741ec7a"
                 }
             ]
         },
@@ -708,7 +708,8 @@
                 "-Dhelp=true",
                 "-Dchannel=flatpak-nightly",
                 "-Dnetwork_tests=false",
-                "-Dplugin_deviced=true"
+                "-Dplugin_deviced=true",
+                "--libdir=lib"
             ],
             "run-tests" : true,
             "build-options" : {
