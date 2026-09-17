@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2026-06-23 15:32+0000\n"
-"PO-Revision-Date: 2026-07-30 09:09+0200\n"
+"PO-Revision-Date: 2026-09-17 19:58+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -147,7 +147,6 @@ msgid "Arduino integration with arduino-cli"
 msgstr "Arduino-integration med arduino-cli"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
-#| msgid "ID"
 msgid "IDE"
 msgstr "IDE"
 
@@ -242,7 +241,7 @@ msgstr "Felsök med GNU debugger"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
-msgstr "Kom snabbt åt dina dina projekt"
+msgstr "Kom snabbt åt dina projekt"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
