@@ -55,7 +55,7 @@ msgid ""
 "GNOME every six months."
 msgstr ""
 "Du kan stole på føreseielege utgjevingar av Builder med kvar ny utgjeving av"
-" GNOME sju månader."
+" GNOME sju månadar."
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:26
 msgid "Features:"
@@ -274,7 +274,7 @@ msgstr "Tømm byggloggar"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr "Viss aktivert, vert byggeloggvindauget tømt ved nybygging."
+msgstr "Viss dette er slått på, vert byggeloggvindauget tømt ved nybygging."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Show Log When Building"
@@ -282,7 +282,7 @@ msgstr "Vis logg når du byggjer"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid "If enabled, the build log will be raised when a build starts"
-msgstr "Viss det er aktivert, vert byggloggen heva når eit bygg byrjar"
+msgstr "Viss dette er slått på, vert byggloggen heva når eit bygg byrjar"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:21
 msgid "Allow network when metered"
@@ -313,8 +313,8 @@ msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
-"Viss det er aktivert, vert det lagt til ekstra utheva tekst i støtta språk "
-"basert på informasjon henta frå kjeldekoden."
+"Viss dette er slått på, vert det lagt til ekstra utheva tekst i støtta språk"
+" basert på informasjon henta frå kjeldekoden."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
@@ -392,7 +392,8 @@ msgstr "Uthev gjeldande linje"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr "Viss aktivert, vil redigeringa markere linja der markøren står."
+msgstr ""
+"Viss dette er slått på, vil redigeringa markere linja der markøren står."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -400,7 +401,7 @@ msgstr "Marker samsvarande klammepar"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr "Viss aktivert, vil redigeringa markere samsvarande klammer."
+msgstr "Viss dette er slått på, vil redigeringa markere samsvarande klammer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
@@ -408,7 +409,7 @@ msgstr "Vis linjenummer"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr "Viss aktivert, vil redigeringa vise linjenummer."
+msgstr "Viss dette er slått på, vil redigeringa vise linjenummer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
@@ -427,7 +428,7 @@ msgid ""
 "If enabled, the editor will use selected style for line numbers for whole "
 "lines selected."
 msgstr ""
-"Viss det er aktivert, vil redigeringa bruke valt stil for linjenummer for "
+"Viss dette er slått på, vil redigeringa bruke valt stil for linjenummer for "
 "heile linjene som er valde."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:59
@@ -463,7 +464,8 @@ msgstr "Dersom det er aktivert, vil redigeringa vise rutenett i dokumentet."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid "If enabled, the editor will respect the font-name setting."
 msgstr ""
-"Viss aktivert, vil redigeringa ta omsyn til innstillinga for font-namn."
+"Viss dette er slått på, vil redigeringa ta omsyn til innstillinga for font-"
+"namn."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid ""
@@ -540,8 +542,8 @@ msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Viss det er aktivert, vil Builder automatisk vise fullføringsforslag medan "
-"du skriv."
+"Viss dette er slått på, vil Builder automatisk vise fullføringsforslag medan"
+" du skriv."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Minimum characters for matching selection."
@@ -581,7 +583,7 @@ msgstr "Slik legg du inn mellomrom når du formaterer tekst på nytt."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
-msgstr "Aktivert"
+msgstr "Slått på"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
@@ -620,7 +622,7 @@ msgstr ""
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:27
 msgid "\"Projects\""
-msgstr "«Prosjekt»"
+msgstr "\"Prosjekt\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
 msgid "Projects directory"
@@ -665,7 +667,9 @@ msgstr "Arv språstenar stderr"
 #: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid ""
 "If enabled, stderr of language servers will be redirected to the console."
-msgstr "Viss aktivert, vert stderr til språktenarar omdirigert til konsollen."
+msgstr ""
+"Viss dette er slått på, vert stderr til språktenarar omdirigert til "
+"konsollen."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:74
 msgid "Preview Search Results"
@@ -701,7 +705,7 @@ msgstr "Vis skjulte filer"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Viss aktivert, vil prosjektet vise filer som er ignorerte av "
+"Viss dette er slått på, vil prosjektet vise filer som er ignorerte av "
 "versjonskontrollen."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
@@ -713,7 +717,8 @@ msgstr "Sorter mapper først"
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
 msgstr ""
-"Viss aktivert, vil prosjektstrukturen sortere mapper før vanlege filer."
+"Viss dette er slått på, vil prosjektstrukturen sortere mapper før vanlege "
+"filer."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
@@ -1174,7 +1179,8 @@ msgstr "Eining sett til %s"
 
 #: src/libide/foundry/ide-device-manager.c:711
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr "Kan ikkje rulle ut til eininga, byggjepipeline er ikkje initialisert"
+msgstr ""
+"Kan ikkje distribuere til eininga, byggjepipeline er ikkje initialisert"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
@@ -1421,7 +1427,7 @@ msgstr "Opprett eit nytt prosjekt ved å klone eit depot"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "_Velg ei mappe …"
+msgstr "_Vel ei mappe …"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
@@ -1987,7 +1993,7 @@ msgstr "_Utval"
 #: src/libide/sourceview/gtk/menus.ui:82 src/libide/terminal/gtk/menus.ui:37
 #: src/libide/terminal/ide-terminal.ui:140
 msgid "Select _All"
-msgstr "_Velg alle"
+msgstr "_Vel alle"
 
 #: src/libide/sourceview/gtk/menus.ui:88 src/libide/sourceview/gtk/menus.ui:153
 msgid "Formatting"
@@ -2027,7 +2033,7 @@ msgstr "Gjer om tekstutvalet til tittelskap"
 
 #: src/libide/sourceview/gtk/menus.ui:122
 msgid "Select _Line"
-msgstr "_Velg linje"
+msgstr "_Vel linje"
 
 #: src/libide/sourceview/gtk/menus.ui:127
 msgid "_Delete Line"
@@ -2101,7 +2107,7 @@ msgstr "Vel all tekst frå terminalen, inkludert tilbaketolking"
 
 #: src/libide/terminal/gtk/menus.ui:44 src/libide/terminal/ide-terminal.ui:147
 msgid "Select _None"
-msgstr "_Velg ingen"
+msgstr "_Vel ingen"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:248
 msgid "Save Terminal Content As"
@@ -3358,7 +3364,7 @@ msgstr "Lægje"
 
 #: src/plugins/buildui/tweaks.ui:450
 msgid "Where your project builds"
-msgstr "Der prosjektet ditt vert bygt"
+msgstr "Der prosjektet ditt vert bygd"
 
 #: src/plugins/buildui/tweaks.ui:467
 msgid "Inside Source Tree"
@@ -3410,7 +3416,7 @@ msgstr "clang-format klarte ikkje formatere dokumentet: %s"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:201
 msgid "Missing or corrupted data from clang-format"
-msgstr "Mangler eller øydelagde data frå clang-format"
+msgstr "Manglande eller øydelagde data frå clang-format"
 
 #: src/plugins/clang-format/gbp-clang-formatter.c:213
 msgid "Invalid cursor position provided from clang-format"
@@ -3447,7 +3453,7 @@ msgstr "Om parentesar skal takast med når du fullfører."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
-msgstr "Fullfør parameterar"
+msgstr "Fullfør parametrar"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
@@ -3607,8 +3613,7 @@ msgstr "Ingen referansar funne"
 #: src/plugins/codeui/gbp-codeui-range-dialog.c:169
 msgid "The programming language tooling may not support finding references"
 msgstr ""
-"Programvaren for programmeringsspråket støttar kanskje ikkje å finne "
-"referansar"
+"Verktøya for programmeringsspråket støttar kanskje ikkje å finne referansar"
 
 #: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
@@ -4334,7 +4339,7 @@ msgstr "Tabstorleik"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr "Talet på teikn å innrykke for Tab"
+msgstr "Talet på teikn Tab skal rykkje inn"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
@@ -4683,7 +4688,7 @@ msgstr "Navigasjon"
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
-"Tilbake tast vil fjerne ekstra mellomrom for å halde innrykket ditt på linje"
+"Rettetasten vil fjerne ekstra mellomrom for å halde innrykket ditt på linje"
 
 #: src/plugins/editorui/tweaks.ui:513
 msgid "Navigate to non-space characters"
@@ -4703,7 +4708,7 @@ msgstr "I staden for linjegrenser"
 
 #: src/plugins/editorui/tweaks.ui:540 src/plugins/valgrind/gtk/menus.ui:45
 msgid "Disabled"
-msgstr "Deaktivert"
+msgstr "Slått av"
 
 #: src/plugins/editorui/tweaks.ui:552
 msgid "Session Management"
@@ -5000,7 +5005,7 @@ msgstr[1] "%ld veker sidan"
 #, c-format
 msgid "%ld month ago"
 msgid_plural "%ld months ago"
-msgstr[0] "%ld månader sidan"
+msgstr[0] "%ld månadar sidan"
 msgstr[1] "%ld månader sidan"
 
 #: src/plugins/git/gbp-git-annotation-provider.c:139
