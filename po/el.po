@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-01-15 00:21+0000\n"
+"POT-Creation-Date: 2026-06-23 15:32+0000\n"
 "PO-Revision-Date: 2025-10-17 00:30+0300\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
@@ -22,8 +22,8 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:2
 #: src/libide/editor/ide-editor-workspace.ui:50
 #: src/libide/editor/ide-editor-workspace.ui:92
-#: src/libide/gui/ide-application-actions.c:163 src/main.c:218
-#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+#: src/libide/gui/ide-application-actions.c:163 src/main.c:222
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
 #: src/plugins/shortcutui/tweaks.ui:25
 msgid "Builder"
 msgstr "Κατασκευαστής"
@@ -34,6 +34,7 @@ msgstr "Δημιουργία εφαρμογών για το GNOME"
 
 #. developer_name tag deprecated with Appstream 1.0
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:10
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:12
 msgid "Christian Hergert"
 msgstr "Christian Hergert"
 
@@ -140,6 +141,95 @@ msgstr "Γρήγορη ασαφής αναζήτηση κειμένου σε α�
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:45
 msgid "Arduino integration with arduino-cli"
 msgstr "Ενσωμάτωση Arduino με arduino-cli"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:51
+msgid "IDE"
+msgstr "IDE"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:52
+msgid "integrated development environment"
+msgstr "ολοκληρωμένο περιβάλλον ανάπτυξης"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:53
+msgid "code editor"
+msgstr "επεξεργαστής κώδικα"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:54
+msgid "coding"
+msgstr "συγγραφή κώδικα"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:55
+msgid "programming"
+msgstr "προγραμματισμός"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:56
+msgid "software developers"
+msgstr "προγραμματιστές λογισμικού"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:57
+msgid "software development"
+msgstr "ανάπτυξη λογισμικού"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:58
+msgid "compiling"
+msgstr "μεταγλώττιση"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:59
+msgid "building"
+msgstr "δόμηση"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:60
+msgid "runtimes"
+msgstr "περιβάλλοντα εκτέλεσης"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:61
+#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:62
+msgid "GTK inspector"
+msgstr "επιθεωρητής GTK"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:63
+msgid "D-Bus inspector"
+msgstr "επιθεωρητής D-Bus"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:64
+msgid "debugger"
+msgstr "αποσφαλματωτής"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:65
+msgid "debugging"
+msgstr "αποσφαλμάτωση"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:67
+msgid "memory leaks detector"
+msgstr "ανιχνευτής διαρροών μνήμης"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:69
+msgid "unit tests"
+msgstr "μοναδιαίες δοκιμές"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:70
+msgid "automated testing"
+msgstr "αυτοματοποιημένες δοκιμές"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:71
+msgid "documentation"
+msgstr "τεκμηρίωση"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:72
+msgid "autocompletion"
+msgstr "αυτόματη συμπλήρωση"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:73
+msgid "profiler"
+msgstr "αναλυτής επιδόσεων"
+
+#: data/appdata/org.gnome.Builder.metainfo.xml.in.in:74
+msgid "profiling"
+msgstr "ανάλυση επιδόσεων"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:110
 msgid "Debug with the GNU debugger"
@@ -1816,10 +1906,6 @@ msgstr "Ιστότοπος"
 msgid "Version Control"
 msgstr "Έλεγχος Εκδόσεων"
 
-#: src/libide/plugins/ide-plugin.c:337 src/plugins/sdkui/tweaks.ui:9
-msgid "SDKs"
-msgstr "SDKs"
-
 #: src/libide/plugins/ide-plugin.c:338 src/plugins/buildui/tweaks.ui:244
 msgid "Language Servers"
 msgstr "Διακομιστές Γλώσσας"
@@ -2250,7 +2336,7 @@ msgstr "Κανένα"
 msgid "Blank page"
 msgstr "Κενή σελίδα"
 
-#: src/main.c:128
+#: src/main.c:130
 msgid "Run a new instance of Builder"
 msgstr "Εκτέλεση νέας εμφάνισης του Builder"
 
@@ -3031,7 +3117,9 @@ msgstr "Αρχική (Pristine)"
 
 #: src/plugins/buildui/gtk/menus.ui:343
 msgid "Use pristine as restore reason when running the project"
-msgstr "Χρήση της κατάστασης «Pristine» ως αιτία επαναφοράς κατά την εκτέλεση του έργου"
+msgstr ""
+"Χρήση της κατάστασης «Pristine» ως αιτία επαναφοράς κατά την εκτέλεση του "
+"έργου"
 
 #: src/plugins/buildui/gtk/menus.ui:346
 msgid "Normal Launch"
@@ -3039,7 +3127,8 @@ msgstr "Κανονική εκκίνηση"
 
 #: src/plugins/buildui/gtk/menus.ui:350
 msgid "Use normal launch as restore reason when running the project"
-msgstr "Χρήση κανονικής εκκίνησης ως αιτία επαναφοράς κατά την εκτέλεση του έργου"
+msgstr ""
+"Χρήση κανονικής εκκίνησης ως αιτία επαναφοράς κατά την εκτέλεση του έργου"
 
 #: src/plugins/buildui/gtk/menus.ui:353
 msgid "Recover"
@@ -3055,7 +3144,9 @@ msgstr "Επαναφορά"
 
 #: src/plugins/buildui/gtk/menus.ui:364
 msgid "Use full session restore as restore reason when running the project"
-msgstr "Χρήση πλήρους επαναφοράς συνεδρίας ως αιτία επαναφοράς κατά την εκτέλεση του έργου"
+msgstr ""
+"Χρήση πλήρους επαναφοράς συνεδρίας ως αιτία επαναφοράς κατά την εκτέλεση του "
+"έργου"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
@@ -4130,11 +4221,11 @@ msgstr "Διαστήματα"
 msgid "Tabs"
 msgstr "Στηλοθέτες"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go"
 msgstr "Μετάβαση"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:542
 #: src/plugins/menu-search/gtk/menus.ui:87
 msgid "Go to Line"
 msgstr "Μετάβαση στη Γραμμή"
@@ -5596,81 +5687,89 @@ msgstr "Ενότητα"
 msgid "Suggested GNOME Projects"
 msgstr "Προτεινόμενα έργα GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:30
-msgid "Boxes"
-msgstr "Boxes"
-
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-msgid "A GNOME application to access remote or virtual systems"
-msgstr "Εφαρμογή GNOME για πρόσβαση σε απομακρυσμένα ή εικονικά συστήματα"
-
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
 msgstr "IDE για σύνταξη λογισμικού βασισμένου στο GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "Calendar"
 msgstr "Ημερολόγιο"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+#: src/plugins/newcomers/gbp-newcomers-section.ui:41
 msgid "A calendar application for GNOME"
 msgstr "Εφαρμογή ημερολογίου για GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Clocks"
 msgstr "Ρολόγια"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A clock application for GNOME"
 msgstr "Εφαρμογή ρολογιού για GNOME"
 
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Contacts"
+msgstr "Επαφές"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A GNOME contacts application"
+msgstr "Εφαρμογή επαφών GNOME"
+
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
-msgid "Gitg"
-msgstr "Gitg"
+msgid "Fractal"
+msgstr "Fractal"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
-msgid "Gitg is a graphical Git client"
-msgstr "Το Gitg είναι ένας γραφικός πελάτης Git"
+msgid "A Matrix client for GNOME"
+msgstr "Εφαρμογή-πελάτης Matrix για το GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Image Viewer"
+msgstr "Προβολή εικόνων"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME image viewer"
+msgstr "Εφαρμογή προβολής εικόνων του GNOME"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:85
 msgid "Maps"
 msgstr "Χάρτες"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "A GNOME maps application"
 msgstr "Εφαρμογή χαρτών GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Music"
 msgstr "Μουσική"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Music player and management application"
 msgstr "Εφαρμογή αναπαραγωγής και διαχείρισης μουσικής"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
 msgid "Default file manager for GNOME"
 msgstr "Προεπιλεγμένος διαχειριστής αρχείων για GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
 msgstr "Πελάτης IRC για GNOME"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:114
-msgid "Sound Recorder"
-msgstr "Εγγραφή ήχου"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Video Player"
+msgstr "Αναπαραγωγή βίντεο"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:115
-msgid "A modern sound recorder for GNOME"
-msgstr "Μια σύγχρονη εφαρμογή εγγραφής ήχου για GNOME"
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A GNOME video player"
+msgstr "Εφαρμογή αναπαραγωγής βίντεο του GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
@@ -6906,6 +7005,24 @@ msgstr "Αποτυχία δημιουργίας δέντρου XML."
 msgid "File must be saved locally to parse."
 msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά για να αναλυθεί."
 
+#~ msgid "Boxes"
+#~ msgstr "Boxes"
+
+#~ msgid "A GNOME application to access remote or virtual systems"
+#~ msgstr "Εφαρμογή GNOME για πρόσβαση σε απομακρυσμένα ή εικονικά συστήματα"
+
+#~ msgid "Gitg"
+#~ msgstr "Gitg"
+
+#~ msgid "Gitg is a graphical Git client"
+#~ msgstr "Το Gitg είναι ένας γραφικός πελάτης Git"
+
+#~ msgid "Sound Recorder"
+#~ msgstr "Εγγραφή ήχου"
+
+#~ msgid "A modern sound recorder for GNOME"
+#~ msgstr "Μια σύγχρονη εφαρμογή εγγραφής ήχου για GNOME"
+
 #~ msgid "An IDE for GNOME"
 #~ msgstr "Ένα IDE για το GNOME"
 
@@ -7354,10 +7471,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Command failed"
 #~ msgstr "Η εντολή απέτυχε"
 
-#, fuzzy, c-format
-#~| msgid "Failed to parse integer from \"%s\""
+#, c-format
 #~ msgid "Failed to locate command “%s”"
-#~ msgstr "Αποτυχία ανάλυσης ακέραιου από το \"%s\""
+#~ msgstr "Αποτυχία εντοπισμού της εντολής «%s»"
 
 #~ msgid "File chooser"
 #~ msgstr "Επιλογέας αρχείου"
@@ -7372,34 +7488,25 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Μετακίνηση του εγγράφου προς τα αριστερά"
 
 #~ msgid "Switch to the previous document"
-#~ msgstr "Μετακίνηση στο προηγούμενο έγγραφο"
+#~ msgstr "Μετάβαση στο προηγούμενο έγγραφο"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Switch to the next document"
 #~ msgid "Switch to the next document"
 #~ msgstr "Μετάβαση στο επόμενο έγγραφο"
 
 #~ msgid "Close the document"
-#~ msgstr "Κλείσιμο εγγράφου"
+#~ msgstr "Κλείσιμο του εγγράφου"
 
-#, fuzzy
-#~| msgid "No open files"
 #~ msgid "No Open Pages"
-#~ msgstr "Κανένα ανοιχτό αρχείο"
+#~ msgstr "Δεν υπάρχουν ανοιχτές σελίδες"
 
-#, fuzzy
-#~| msgid "The directory to perform the build within."
 #~ msgid "There was a failure while trying to perform the operation."
-#~ msgstr "Ο κατάλογος που θα εκτελεστεί η διαδικασία της δόμησης."
+#~ msgstr "Παρουσιάστηκε σφάλμα κατά την προσπάθεια εκτέλεσης της λειτουργίας."
 
 #~ msgid "Window shortcuts"
 #~ msgstr "Συντομεύσεις παραθύρου"
 
-#, fuzzy
-#~| msgid "Show workbench menu"
 #~ msgid "Show window menu"
-#~ msgstr "Εμφάνιση μενού χώρου εργασίας"
+#~ msgstr "Εμφάνιση μενού παραθύρου"
 
 #~ msgid "Toggle window to fullscreen"
 #~ msgstr "Εναλλαγή παραθύρου σε πλήρη οθόνη"
@@ -7411,37 +7518,31 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Θέματα"
 
 #~ msgid "Whether Builder should use a dark theme"
-#~ msgstr "Εάν ο Κατασκευαστής θα χρησιμοποιεί σκούρο θέμα"
+#~ msgstr "Αν το Builder θα χρησιμοποιεί σκούρο θέμα"
 
 #~ msgid "dark theme"
 #~ msgstr "σκούρο θέμα"
 
 #~ msgid "Night Light"
-#~ msgstr "Φωτάκι νυκτός"
+#~ msgstr "Νυχτερινός φωτισμός"
 
 #~ msgid "follow night light"
-#~ msgstr "ακολουθείται ο φωτισμός νυκτός"
+#~ msgstr "ακολουθεί τον νυχτερινό φωτισμό"
 
 #~ msgctxt "Keywords"
 #~ msgid "editor font monospace"
-#~ msgstr "font editor monospace γραμματοσειρά επεξεργαστής"
+#~ msgstr "editor font monospace γραμματοσειρά επεξεργαστής σταθερού πλάτους"
 
-#, fuzzy
-#~| msgid "Minimum number of lines to keep above and below the cursor"
 #~ msgid "Number of pixels above and below editor lines"
-#~ msgstr ""
-#~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
+#~ msgstr "Αριθμός εικονοστοιχείων πάνω και κάτω από τις γραμμές του επεξεργαστή"
 
-#, fuzzy
-#~| msgctxt "Keywords"
-#~| msgid "editor font monospace"
 #~ msgctxt "Keywords"
 #~ msgid "editor line spacing font monospace"
-#~ msgstr "font editor monospace γραμματοσειρά επεξεργαστής"
+#~ msgstr "editor line spacing font monospace διάστιχο γραμμών γραμματοσειρά επεξεργαστής"
 
 #~ msgctxt "Keywords"
 #~ msgid "terminal font monospace"
-#~ msgstr "terminal font monospace τερματικό γραμματοσειρά"
+#~ msgstr "terminal font monospace τερματικό γραμματοσειρά σταθερού πλάτους"
 
 #~ msgid "Bold text in terminals"
 #~ msgstr "Έντονο κείμενο στα τερματικά"
@@ -7465,18 +7566,16 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Επαναφορά θέσης δρομέα"
 
 #~ msgid "Restore cursor position when a file is reopened"
-#~ msgstr ""
-#~ "Επαναφέρει τον δρομέα στην τελευταία θέση κατά το άνοιγμα του αρχείου"
+#~ msgstr "Επαναφορά της θέσης του δρομέα κατά το εκ νέου άνοιγμα ενός αρχείου"
 
 #~ msgid "Enable text wrapping"
 #~ msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
 
 #~ msgid "Wrap text that is too wide to display"
-#~ msgstr "Αναδίπλωση κειμένου που είναι πολύ ευρύ για προβολή"
+#~ msgstr "Αναδίπλωση κειμένου που είναι πολύ πλατύ για να εμφανιστεί"
 
 #~ msgid "Minimum number of lines to keep above and below the cursor"
-#~ msgstr ""
-#~ "Ελάχιστος αριθμός γραμμών που θα διατηρηθούν πάνω και κάτω από τον δρομέα"
+#~ msgstr "Ελάχιστος αριθμός γραμμών που θα διατηρούνται πάνω και κάτω από τον δρομέα"
 
 #~ msgid "Allow the editor to scroll past the end of the buffer"
 #~ msgstr "Επιτρέπει στον επεξεργαστή να κυλιθεί στο τέλος του αρχείου"
@@ -7495,9 +7594,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ "Επισημαίνει τον αριθμό γραμμής, για το αν επεξεργάστηκε ή τροποποιήθηκε "
 #~ "μια γραμμή"
 
-#, fuzzy
 #~ msgid "Line diagnostics"
-#~ msgstr "Επισήμανση διαγνωστικών"
+#~ msgstr "Διαγνωστικά γραμμής"
 
 #~ msgid "Show an icon next to line numbers indicating type of diagnostic"
 #~ msgstr ""
@@ -7511,18 +7609,16 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Αντιστοίχιση αγκυλών"
 
 #~ msgid "Highlight matching brackets based on cursor position"
-#~ msgstr "Επισημαίνει τις αγκύλες με βάση τη θέση του δρομέα"
+#~ msgstr "Επισήμανση αγκυλών που ταιριάζουν με βάση τη θέση του δρομέα"
 
 #~ msgid "A zoomed out view to enhance navigating source code"
-#~ msgstr "Μια προβολή που σας βοηθά να περιηγηθείτε στον πηγαίο κώδικα"
+#~ msgstr "Μια προβολή σμίκρυνσης για τη βελτίωση της περιήγησης στον πηγαίο κώδικα"
 
 #~ msgid "Automatically hide overview map"
 #~ msgstr "Αυτόματη απόκρυψη του χάρτη επισκόπησης"
 
-#, fuzzy
-#~| msgid "Whitespace Characters"
 #~ msgid "Visible Whitespace Characters"
-#~ msgstr "Χαρακτήρες κενού διαστήματος"
+#~ msgstr "Ορατοί χαρακτήρες κενού διαστήματος"
 
 #~ msgid "New line and carriage return"
 #~ msgstr "Νέα γραμμή και χαρακτήρας επιστροφής"
@@ -7534,66 +7630,59 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Ενεργοποίηση ή απενεργοποίηση της δυνατότητας αυτόματης αποθήκευσης"
 
 #~ msgid "Code Insight"
-#~ msgstr "Επιλογές κώδικα"
+#~ msgstr "Ενόραση κώδικα"
 
 #~ msgid ""
 #~ "Use code insight to highlight additional information discovered in source "
 #~ "file"
 #~ msgstr ""
-#~ "Χρησιμοποιεί τις επιλογές κώδικα για να επισημαίνει επιπρόσθετες "
-#~ "πληροφορίες που βρέθηκαν στο πηγαίο αρχείο"
+#~ "Χρήση της ενόρασης κώδικα για την επισήμανση πρόσθετων "
+#~ "πληροφοριών που εντοπίστηκαν στο πηγαίο αρχείο"
 
 #~ msgid "Overwrite closing braces"
-#~ msgstr "Αντικαθιστά τα άγκιστρα κλεισίματος"
+#~ msgstr "Αντικατάσταση των αγκίστρων κλεισίματος"
 
-#, fuzzy
 #~ msgid "Insert matching character for { [ ( or \""
-#~ msgstr "Εισαγωγή αγκύλων, εισαγωγικών και παρενθέσεων που αντιστοιχούν."
+#~ msgstr "Εισαγωγή αντίστοιχου χαρακτήρα για { [ ( ή \""
 
 #~ msgid "Position in spaces for the right margin"
-#~ msgstr "Η θέση εκφρασμένο σε διαστήματα του δεξιού περιθωρίου"
+#~ msgstr "Η θέση εκφρασμένη σε διαστήματα για το δεξιό περιθώριο"
 
 #~ msgid "Tab width"
 #~ msgstr "Πλάτος στηλοθέτη"
 
 #~ msgid "Width of a tab character in spaces"
-#~ msgstr "Το πλάτος ενός στηλοθέτη εκφρασμένο σε διαστήματα"
+#~ msgstr "Το πλάτος ενός χαρακτήρα στηλοθέτη εκφρασμένο σε διαστήματα"
 
 #~ msgid "Insert spaces instead of tabs"
 #~ msgstr "Εισαγωγή κενών αντί για στηλοθέτες"
 
 #~ msgid "Prefer spaces over use of tabs"
-#~ msgstr "Χρήση κενών αντί αντιλοθετών"
+#~ msgstr "Προτίμηση διαστημάτων αντί για χρήση στηλοθετών"
 
-#, fuzzy
-#~| msgid "Spaces"
 #~ msgid "Spacing"
-#~ msgstr "Διαστήματα"
+#~ msgstr "Διάστιχο"
 
 #~ msgid "Number of parallel build workers"
-#~ msgstr "Αριθμός εργατών για παράλληλη δόμηση"
+#~ msgstr "Αριθμός εργατών παράλληλης δόμησης"
 
 #~ msgid "Clear build cache at startup"
-#~ msgstr "Εκκαθάριση προσωρινής μνήμης της κατασκευής κατά την εκκίνηση"
+#~ msgstr "Εκκαθάριση προσωρινής μνήμης δόμησης κατά την εκκίνηση"
 
 #~ msgid "Workspace"
 #~ msgstr "Χώρος εργασίας"
 
 #~ msgid "A place for all your projects"
-#~ msgstr "Ένα μέρος για όλα σας τα έργα"
+#~ msgstr "Ένας χώρος για όλα σας τα έργα"
 
 #~ msgid "Restore previously opened files"
-#~ msgstr "Επαναφορά προηγούμενων ανοιχτών αρχείων"
+#~ msgstr "Επαναφορά προηγουμένως ανοιχτών αρχείων"
 
-#, fuzzy
-#~| msgid "Configure Options"
 #~ msgid "Change run options"
-#~ msgstr "Επιλογές Configure"
+#~ msgstr "Αλλαγή επιλογών εκτέλεσης"
 
-#, fuzzy
-#~| msgid "Search Shortcuts"
 #~ msgid "Workspace shortcuts"
-#~ msgstr "Συντομεύσεις αναζήτησης"
+#~ msgstr "Συντομεύσεις χώρου εργασίας"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Editor Shortcuts"
@@ -7645,7 +7734,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Save the document"
-#~ msgstr "Αποθήκευση εγγράφου"
+#~ msgstr "Αποθήκευση του εγγράφου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Save all documents"
@@ -7653,11 +7742,11 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Print the document"
-#~ msgstr "Εκτύπωση εγγράφου"
+#~ msgstr "Εκτύπωση του εγγράφου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Close the document"
-#~ msgstr "Κλείσιμο εγγράφου"
+#~ msgstr "Κλείσιμο του εγγράφου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Close all documents"
@@ -7673,7 +7762,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Show list of open documents"
-#~ msgstr "Εμφάνιση λίστας ανοιχτών αρχείων"
+#~ msgstr "Εμφάνιση λίστας ανοιχτών εγγράφων"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Find and replace"
@@ -7711,10 +7800,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Paste text from clipboard"
 #~ msgstr "Επικόλληση κειμένου από το πρόχειρο"
 
-#, fuzzy
 #~ msgctxt "shortcut window"
 #~ msgid "Duplicate current line or selection"
-#~ msgstr "Τρέχουσα επιλογή"
+#~ msgstr "Διπλασιασμός τρέχουσας γραμμής ή επιλογής"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Undo and Redo"
@@ -7752,12 +7840,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Show completion window"
 #~ msgstr "Εμφάνιση παραθύρου ολοκλήρωσης"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Show completion window"
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle opacity of completion window"
-#~ msgstr "Εμφάνιση παραθύρου ολοκλήρωσης"
+#~ msgstr "Εναλλαγή αδιαφάνειας του παραθύρου συμπλήρωσης"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle overwrite"
@@ -7765,17 +7850,15 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Reindent line"
-#~ msgstr "Στυλ επανεσοχής"
+#~ msgstr "Επανεσοχή γραμμής"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Rename symbol"
 #~ msgstr "Μετονομασία συμβόλου"
 
-#, fuzzy
-#~| msgid "The target language (if supported)"
 #~ msgctxt "shortcut window"
 #~ msgid "Requires semantic language support"
-#~ msgstr "Η γλώσσα προορισμού (αν υποστηρίζεται)"
+#~ msgstr "Απαιτεί σημασιολογική υποστήριξη γλώσσας"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Navigation"
@@ -7799,23 +7882,23 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Jump to definition of symbol"
-#~ msgstr "Μετάβαση στον ορισμό συμβόλου"
+#~ msgstr "Μετάβαση στον ορισμό του συμβόλου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move viewport up within the file"
-#~ msgstr "Μετακίνηση προβολής πάνω μέσα στο αρχείο"
+#~ msgstr "Μετακίνηση της περιοχής προβολής πάνω μέσα στο αρχείο"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move viewport down within the file"
-#~ msgstr "Μετακίνηση προβολής κάτω μέσα στο αρχείο"
+#~ msgstr "Μετακίνηση της περιοχής προβολής κάτω μέσα στο αρχείο"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move viewport to end of file"
-#~ msgstr "Μετακίνηση προβολής στο τέλος του αρχείου"
+#~ msgstr "Μετακίνηση της περιοχής προβολής στο τέλος του αρχείου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move viewport to beginning of file"
-#~ msgstr "Μετακίνηση προβολής στην αρχή του αρχείου"
+#~ msgstr "Μετακίνηση της περιοχής προβολής στην αρχή του αρχείου"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move to matching bracket"
@@ -7841,11 +7924,9 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Build"
 #~ msgstr "Δόμηση"
 
-#, fuzzy
-#~| msgid "Rebuild"
 #~ msgctxt "shortcut window"
 #~ msgid "Rebuild"
-#~ msgstr "Αναδόμηση"
+#~ msgstr "Επαναδόμηση"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Run"
@@ -7853,27 +7934,23 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgctxt "shortcut window"
 #~ msgid "Profile"
-#~ msgstr "Προφίλ"
+#~ msgstr "Ανάλυση επιδόσεων"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Touchpad gestures"
-#~ msgstr "Xειρονομίες πινακίδας αφής"
+#~ msgstr "Χειρονομίες επιφάνειας αφής"
 
-#, fuzzy
-#~| msgid "Two finger swipe right"
 #~ msgctxt "shortcut window"
 #~ msgid "Three finger swipe right"
-#~ msgstr "Πέρασμα με δύο δάχτυλα δεξιά"
+#~ msgstr "Σύρσιμο με τρία δάχτυλα δεξιά"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move page to the left"
 #~ msgstr "Μετακίνηση σελίδας αριστερά"
 
-#, fuzzy
-#~| msgid "Two finger swipe left"
 #~ msgctxt "shortcut window"
 #~ msgid "Three finger swipe left"
-#~ msgstr "Πέρασμα με δύο δάχτυλα αριστερά"
+#~ msgstr "Σύρσιμο με τρία δάχτυλα αριστερά"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Terminal Shortcuts"
@@ -7912,66 +7989,52 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Apply Fix-It"
 #~ msgstr "Εφαρμογή Fix-It"
 
-#, fuzzy, c-format
-#~| msgid "Failed to create translation unit: %s"
+#, c-format
 #~ msgid "Failed to create shell within runtime “%s”"
-#~ msgstr "Αποτυχία δημιουργίας μονάδας μετάφρασης: %s"
+#~ msgstr "Αποτυχία δημιουργίας κελύφους εντός του περιβάλλοντος εκτέλεσης «%s»"
 
 #~ msgid "Regex"
-#~ msgstr "Regex"
+#~ msgstr "Κανονική έκφραση"
 
 #~ msgid "Match whole word"
 #~ msgstr "Ταίριασμα ολόκληρης λέξης"
 
-#, fuzzy, c-format
-#~| msgid "No commands available"
+#, c-format
 #~ msgid "No beautifier available"
-#~ msgstr "Δεν υπάρχουν διαθέσιμες εντολές"
+#~ msgstr "Δεν υπάρχει διαθέσιμο εργαλείο μορφοποίησης"
 
 #~ msgid "Editing"
 #~ msgstr "Επεξεργασία"
 
-#, fuzzy
-#~| msgid "Comment code"
 #~ msgid "Beautify the code"
-#~ msgstr "Σχολιασμός κώδικα"
+#~ msgstr "Μορφοποίηση του κώδικα"
 
 #~ msgid "Beautify"
-#~ msgstr "Καλλωπισμός"
+#~ msgstr "Μορφοποίηση"
 
-#, fuzzy
-#~| msgid "The configuration for the build."
 #~ msgid "Select a build configuration from the sidebar to modify."
-#~ msgstr "Οι ρυθμίσεις για την δόμηση."
+#~ msgstr "Επιλέξτε μια διαμόρφωση δόμησης από την πλευρική στήλη για τροποποίηση."
 
-#, fuzzy
-#~| msgid "Runtime"
 #~ msgid "All Runtimes"
-#~ msgstr "Περιβάλλον εκτέλεσης"
+#~ msgstr "Όλα τα περιβάλλοντα εκτέλεσης"
 
 #~ msgid "_Remove"
 #~ msgstr "Αφαί_ρεση"
 
-#, fuzzy
-#~| msgid "The configuration for the build."
 #~ msgid "Removes the configuration and cannot be undone."
-#~ msgstr "Οι ρυθμίσεις για την δόμηση."
+#~ msgstr "Αφαιρεί τη διαμόρφωση και η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#, fuzzy
-#~| msgid "Build Preferences"
 #~ msgid "Configure build preferences"
-#~ msgstr "Προτιμήσεις δόμησης"
+#~ msgstr "Διαμόρφωση προτιμήσεων δόμησης"
 
 #~ msgid "View build console contents"
-#~ msgstr "Προβολή περιεχομένων κονσόλας χτισίματος"
+#~ msgstr "Προβολή περιεχομένων κονσόλας δόμησης"
 
 #~ msgid "Rebuild"
-#~ msgstr "Αναδόμηση"
+#~ msgstr "Επαναδόμηση"
 
-#, fuzzy
-#~| msgid "Export"
 #~ msgid "Export Bundle"
-#~ msgstr "Εξαγωγή"
+#~ msgstr "Εξαγωγή δέσμης"
 
 #~ msgid "Build Preferences"
 #~ msgstr "Προτιμήσεις δόμησης"
@@ -7980,24 +8043,19 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Εκτέλεση με…"
 
 #~ msgid "Show errors and warnings provided by Clang"
-#~ msgstr "Εμφάνιση σφλαμάτων και προειδοποιήσεων από το Clang"
+#~ msgstr "Εμφάνιση σφαλμάτων και προειδοποιήσεων από το Clang"
 
 #~ msgid "clang diagnostics warnings errors"
-#~ msgstr ""
-#~ "clang diagnostics warnings errors διαγνωστικά προειδοποιήσεις σφάλματα"
+#~ msgstr "clang diagnostics warnings errors διαγνωστικά προειδοποιήσεις σφάλματα"
 
-#, fuzzy
-#~| msgid "Suggest completions using Ctags"
 #~ msgid "Suggest completions using Clang"
-#~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Ctags"
+#~ msgstr "Πρόταση συμπληρώσεων με χρήση του Clang"
 
 #~ msgid "Use Clang to suggest completions for C and C++ languages"
-#~ msgstr "Χρησιμοποιεί Clang για αυτόματη συμπλήρωση στις γλώσσες C και C++"
+#~ msgstr "Χρήση του Clang για υπόδειξη συμπληρώσεων στις γλώσσες C και C++"
 
-#, fuzzy
-#~| msgid "Configure Options"
 #~ msgid "Clang Options"
-#~ msgstr "Επιλογές Configure"
+#~ msgstr "Επιλογές Clang"
 
 #~ msgid "Palette name"
 #~ msgstr "Όνομα παλέτας"
@@ -8005,12 +8063,12 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Enter a new name for the palette"
 #~ msgstr "Εισάγετε όνομα για την παλέτα"
 
-#, fuzzy, c-format
+#, c-format
 #~ msgid "Save changes to palette “%s” before closing?"
-#~ msgstr "Αποθήκευση των αλλαγών στο έγγραφο “%s” πριν το κλείσιμο;"
+#~ msgstr "Αποθήκευση των αλλαγών στην παλέτα «%s» πριν το κλείσιμο;"
 
 #~ msgid "Close without Saving"
-#~ msgstr "Έξοδος χωρίς αποθήκευση"
+#~ msgstr "Κλείσιμο χωρίς αποθήκευση"
 
 #~ msgid "Save As…"
 #~ msgstr "Αποθήκευση ως…"
@@ -8027,32 +8085,29 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "GIMP palette"
 #~ msgstr "Παλέτα GIMP"
 
-#~ msgid "GNOME Builder palette"
-#~ msgstr "Παλέτα GNOME Builder"
-
 #~ msgid "HSV visibility"
 #~ msgstr "Ορατότητα HSV"
 
 #~ msgid "If the HSV components are visible."
-#~ msgstr "Αν τα στοιχεία HSV είναι ο ορατά."
+#~ msgstr "Αν τα στοιχεία HSV είναι ορατά."
 
 #~ msgid "If the LAB components are visible."
-#~ msgstr "Αν τα στοιχεία LAB είναι ο ορατά."
+#~ msgstr "Αν τα στοιχεία LAB είναι ορατά."
 
 #~ msgid "RGB visibility"
 #~ msgstr "Ορατότητα RGB"
 
 #~ msgid "If the RGB components are visible."
-#~ msgstr "Αν τα στοιχεία RGB είναι ο ορατά."
+#~ msgstr "Αν τα στοιχεία RGB είναι ορατά."
 
 #~ msgid "RGB unit"
 #~ msgstr "Μονάδα RGB"
 
 #~ msgid "Selected palette ID"
-#~ msgstr "Επιλεγμένο ανωγνωριστικό παλέτας"
+#~ msgstr "Αναγνωριστικό επιλεγμένης παλέτας"
 
 #~ msgid "The selected palette ID among the loaded ones."
-#~ msgstr "Τα επιλεγμένα αναγνωριστικά παλέτας μεταξύ των φορτωμένων."
+#~ msgstr "Το αναγνωριστικό της επιλεγμένης παλέτας μεταξύ των φορτωμένων."
 
 #~ msgid "Color strings visibility"
 #~ msgstr "Ορατότητα συμβολοσειρών χρώματος"
@@ -8072,10 +8127,8 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "HSV"
 #~ msgstr "HSV"
 
-#, fuzzy
-#~| msgid "Saturation"
 #~ msgid "Hue Saturation Value"
-#~ msgstr "Κορεσμός"
+#~ msgstr "Απόχρωση Κορεσμός Τιμή"
 
 #~ msgid "L*a*b*"
 #~ msgstr "L*a*b*"
@@ -8084,7 +8137,7 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "CIE L*a*b* 1976"
 
 #~ msgid "Red Green Blue"
-#~ msgstr "Κόκκινο Πράσινο Μπλέ"
+#~ msgstr "Κόκκινο Πράσινο Μπλε"
 
 #~ msgid "Units:"
 #~ msgstr "Μονάδες:"
@@ -8093,18 +8146,16 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Ποσοστό"
 
 #~ msgid "Achromatopsia (monochromacy)"
-#~ msgstr "Αχρωματοψία (μονοχρωματικότητα)"
+#~ msgstr "Αχρωματοψία (μονοχρωματισμός)"
 
-#, fuzzy
 #~ msgid "Select the color strings you want to see in the panel."
-#~ msgstr "Επι_λέξτε τα έγγραφα που θέλετε να αποθηκεύσετε:"
+#~ msgstr "Επιλέξτε τις συμβολοσειρές χρώματος που θέλετε να βλέπετε στον πίνακα."
 
 #~ msgid "Palettes options"
-#~ msgstr "Επιλογές παλέτας"
+#~ msgstr "Επιλογές παλετών"
 
-#, fuzzy
 #~ msgid "Palette view mode:"
-#~ msgstr "Μέγεθος της παλέτας σε λειτουργία 8 bit"
+#~ msgstr "Λειτουργία προβολής παλέτας:"
 
 #~ msgid "List"
 #~ msgstr "Λίστα"
@@ -8116,62 +8167,48 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr "Από το τρέχον έγγραφο"
 
 #~ msgid "Select the palette you want to see in the panel or close one."
-#~ msgstr "Επιλέξτε την παλέτα που θέλετε να δείτε στον πίνακα ή κλείστε την ."
+#~ msgstr "Επιλέξτε την παλέτα που θέλετε να βλέπετε στον πίνακα ή κλείστε μία."
 
 #~ msgid "No loaded palettes"
-#~ msgstr "Καμία φορτωμένη παλέτα"
+#~ msgstr "Δεν υπάρχουν φορτωμένες παλέτες"
 
 #~ msgid "No selected palettes"
-#~ msgstr "Καμία επιλεγμένη παλέτα"
+#~ msgstr "Δεν υπάρχουν επιλεγμένες παλέτες"
 
 #~ msgid "Select a palette file"
-#~ msgstr "Επιλογή αρχείου παλέτας"
+#~ msgstr "Επιλέξτε ένα αρχείο παλέτας"
 
-#, fuzzy
 #~ msgid "Highlight colors"
-#~ msgstr "Επ_ισήμανση"
+#~ msgstr "Επισήμανση χρωμάτων"
 
-#, fuzzy
-#~| msgid "Search Shortcuts"
 #~ msgid "Workspace Shortcuts"
-#~ msgstr "Συντομεύσεις αναζήτησης"
+#~ msgstr "Συντομεύσεις χώρου εργασίας"
 
 #~ msgid "Command Bar"
 #~ msgstr "Γραμμή εντολών"
 
-#, fuzzy
-#~| msgid "Comment code"
 #~ msgid "Comment the code"
-#~ msgstr "Σχολιασμός κώδικα"
+#~ msgstr "Σχολιασμός του κώδικα"
 
-#, fuzzy
-#~| msgid "Uncomment code"
 #~ msgid "Uncomment the code"
-#~ msgstr "Αποσχολιασμός κώδικα"
+#~ msgstr "Αποσχολιασμός του κώδικα"
 
-#, fuzzy
-#~| msgid ""
-#~| "If enabled, Builder will automatically hide the overview map when mouse "
-#~| "focus leaves the editor, or a timeout occurs."
 #~ msgid ""
 #~ "When saving a file Builder will automatically update copyright "
 #~ "information for you"
 #~ msgstr ""
-#~ "Αν είναι ενεργό, ο Κατασκευαστής θα κρύψει αυτόματα τον χάρτη επισκόπησης "
-#~ "όταν η εστίαση του ποντικιού αφήσει τον επεξεργαστή, ή όταν λήξει το "
-#~ "χρονικό όριο."
+#~ "Κατά την αποθήκευση ενός αρχείου, το Builder θα ενημερώνει αυτόματα τις "
+#~ "πληροφορίες πνευματικών δικαιωμάτων για εσάς"
 
 #~ msgid "Directory already exists with that name"
-#~ msgstr "Ένας κατάλογος με αυτό το όνομα υπάρχει ήδη"
+#~ msgstr "Υπάρχει ήδη κατάλογος με αυτό το όνομα"
 
 #~ msgid "Application ID is not valid."
-#~ msgstr "Μη έγκυρο ID της εφαρμογής."
+#~ msgstr "Το αναγνωριστικό της εφαρμογής δεν είναι έγκυρο."
 
-#, fuzzy
-#~| msgid "New Project"
 #~ msgctxt "title"
 #~ msgid "Start New Project"
-#~ msgstr "Νέο έργο"
+#~ msgstr "Έναρξη νέου έργου"
 
 #~ msgid "GPLv3+"
 #~ msgstr "GPLv3+"
@@ -8200,15 +8237,11 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Suggest completions using Ctags"
 #~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Ctags"
 
-#, fuzzy
-#~| msgid "Failed to initialize defaults."
 #~ msgid "Failed to start the debugger"
-#~ msgstr "Αποτυχία αρχικοποίησης των προεπιλεγμένων."
+#~ msgstr "Αποτυχία εκκίνησης του αποσφαλματωτή"
 
-#, fuzzy
-#~| msgid "Documentation"
 #~ msgid "New Documentation Page"
-#~ msgstr "Τεκμηρίωση"
+#~ msgstr "Νέα σελίδα τεκμηρίωσης"
 
 #~ msgid "Object Path"
 #~ msgstr "Διαδρομή αντικειμένου"
@@ -8280,15 +8313,13 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Select a Bus Name"
 #~ msgstr "Επιλογή ονόματος διαύλου"
 
-#, fuzzy
-#~| msgid "Select a palette file"
 #~ msgid "Select the files to save:"
-#~ msgstr "Επιλογή αρχείου παλέτας"
+#~ msgstr "Επιλέξτε τα αρχεία προς αποθήκευση:"
 
-#, fuzzy
 #~ msgid ""
 #~ "If you close without saving, all your changes will be permanently lost."
-#~ msgstr "Αν δεν αποθηκεύσετε, όλες οι αλλαγές σας θα χαθούν μόνιμα."
+#~ msgstr ""
+#~ "Αν κλείσετε χωρίς αποθήκευση, όλες οι αλλαγές σας θα χαθούν οριστικά."
 
 #, c-format
 #~ msgid "Provide a number between 1 and %u"
@@ -8306,25 +8337,21 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "ESlint"
 #~ msgstr "ESlint"
 
-#, fuzzy
-#~| msgid "Enable the use of pylint, which may execute code in your project"
 #~ msgid "Enable the use of ESLint, which may execute code in your project"
 #~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Ενεργοποίηση της χρήσης του ESLint, το οποίο μπορεί να εκτελέσει κώδικα "
+#~ "στο έργο σας"
 
-#, fuzzy
-#~| msgid "pylint python lint code execute execution"
 #~ msgid "eslint javascript lint code execute execution"
-#~ msgstr "pylint python lint code execute execution κώδικας εκτέλεση δόμηση"
+#~ msgstr "eslint javascript lint code execute execution κώδικας εκτέλεση"
 
-#, fuzzy
 #~ msgid ""
 #~ "Enable the use of eslint to find additional diagnostics in JavaScript "
 #~ "files. This may result in the execution of code in your project."
 #~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Ενεργοποίηση της χρήσης του eslint για την εύρεση πρόσθετων διαγνωστικών "
+#~ "σε αρχεία JavaScript. Αυτό μπορεί να οδηγήσει στην εκτέλεση κώδικα στο "
+#~ "έργο σας."
 
 #~ msgid "MANIFEST"
 #~ msgstr "ΜΑΝΙΦΕΣΤΟ"
@@ -8355,67 +8382,41 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Installing %s"
 #~ msgstr "Εγκαθίσταται το %s"
 
-#, fuzzy
-#~| msgid "Failed to locate runtime"
 #~ msgid "Failed to install runtime"
-#~ msgstr "Αποτυχία εντοπισμού περιβάλλοντος εκτέλεσης"
+#~ msgstr "Αποτυχία εγκατάστασης περιβάλλοντος εκτέλεσης"
 
-#, fuzzy
-#~| msgid "Build Preferences"
 #~ msgid "Missing system dependencies"
-#~ msgstr "Προτιμήσεις δόμησης"
+#~ msgstr "Λείπουν εξαρτήσεις συστήματος"
 
 #~ msgid "Designer"
 #~ msgstr "Σχεδιαστής"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Save the interface design"
 #~ msgid "Save the interface design"
-#~ msgstr "Αποθήκευση διεπαφής σχεδίασης"
+#~ msgstr "Αποθήκευση του σχεδιασμού διεπαφής"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Preview the interface design"
 #~ msgid "Preview the interface design"
-#~ msgstr "Προεπισκόπηση διεπαφής σχεδίασης"
+#~ msgstr "Προεπισκόπηση του σχεδιασμού διεπαφής"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Undo previous command"
 #~ msgid "Undo the last command"
-#~ msgstr "Αναίρεση προηγούμενης εντολής"
+#~ msgstr "Αναίρεση της τελευταίας εντολής"
 
-#, fuzzy
-#~| msgctxt "shortcut window"
-#~| msgid "Redo previous command"
 #~ msgid "Redo the next command"
-#~ msgstr "Επανάληψη προηγούμενης εντολής"
+#~ msgstr "Επανάληψη της επόμενης εντολής"
 
-#, fuzzy
-#~| msgid "Switch to source or header"
 #~ msgid "Switch to drag-resize mode"
-#~ msgstr "Εναλλαγή στην πηγή ή κεφαλίδα."
+#~ msgstr "Εναλλαγή σε λειτουργία αλλαγής μεγέθους με σύρσιμο"
 
-#, fuzzy
-#~| msgid "Switch to the next document"
 #~ msgid "Switch to alignment editor"
-#~ msgstr "Μετακίνηση στο επόμενο έγγραφο"
+#~ msgstr "Εναλλαγή στον επεξεργαστή στοίχισης"
 
-#, fuzzy
-#~| msgid "Failed to load the project"
 #~ msgid "Unnamed Glade project"
-#~ msgstr "Αποτυχία φόρτωσης του έργου"
+#~ msgstr "Ανώνυμο έργο Glade"
 
-#, fuzzy
-#~| msgid "Failed to load the project"
 #~ msgid "Unnamed Glade Project"
-#~ msgstr "Αποτυχία φόρτωσης του έργου"
+#~ msgstr "Ανώνυμο έργο Glade"
 
-#, fuzzy
-#~| msgid "Build Preferences"
 #~ msgid "Container child properties"
-#~ msgstr "Προτιμήσεις δόμησης"
+#~ msgstr "Ιδιότητες θυγατρικού στοιχείου υποδοχέα"
 
 #~ msgid "Cut"
 #~ msgstr "Αποκοπή"
@@ -8446,29 +8447,25 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Enable Pylint"
 #~ msgstr "Ενεργοποίηση Pylint"
 
-#, fuzzy
 #~ msgid ""
 #~ "Enable the use of pylint to find additional diagnostics in Python "
 #~ "programs. This may result in the execution of code in your project."
 #~ msgstr ""
-#~ "Ενεργοποιεί τη χρήση του pylint, το οποίο μπορεί να εκτελέσει κώδικα στο "
-#~ "έργο σας"
+#~ "Ενεργοποίηση της χρήσης του pylint για την εύρεση πρόσθετων διαγνωστικών "
+#~ "σε προγράμματα Python. Αυτό μπορεί να οδηγήσει στην εκτέλεση κώδικα στο "
+#~ "έργο σας."
 
 #~ msgid "Quit"
 #~ msgstr "Έξοδος"
 
-#, fuzzy
-#~| msgid "Scan your computer for existing projects"
 #~ msgid "Your computer is missing python3-docutils"
-#~ msgstr "Σαρώνει τον υπολογιστή σας για υπάρχοντα έργα"
+#~ msgstr "Από τον υπολογιστή σας λείπει το python3-docutils"
 
 #~ msgid "(Preview)"
 #~ msgstr "(Προεπισκόπηση)"
 
-#, fuzzy
-#~| msgid "Suggest completions using Ctags"
 #~ msgid "Suggest completions from Python"
-#~ msgstr "Υποδείξεις συμπληρώσεων χρησιμοποιώντας Ctags"
+#~ msgstr "Πρόταση συμπληρώσεων από την Python"
 
 #~ msgid "Use Jedi to provide completions for the Python language"
 #~ msgstr "Χρησιμοποιεί Jedi για αυτόματη συμπλήρωση στη γλώσσα Python"
@@ -10161,9 +10158,6 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgid "Value Min"
 #~ msgstr "Ελάχιστη τιμή"
 
-#~ msgid "Encoding"
-#~ msgstr "Κωδικοποίηση"
-
 #~ msgid "URI"
 #~ msgstr "URI"
 
@@ -10221,9 +10215,6 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 #~ msgstr ""
 #~ "Αν το αρχείο άλλαξε στον δίσκο και η ενδιάμεση μνήμη δεν είναι "
 #~ "συγχρονισμένη."
-
-#~ msgid "Context"
-#~ msgstr "Περιεχόμενο"
 
 #~ msgid "The IdeContext for the buffer."
 #~ msgstr "Το IdeContext για την ενδιάμεση μνήμη."
@@ -11082,9 +11073,6 @@ msgstr "Το αρχείο πρέπει να αποθηκευτεί τοπικά 
 
 #~ msgid "Display a grid patten in the document."
 #~ msgstr "Εμφανίζει ένα μοτίβο πλέγματος στο έγγραφο."
-
-#~ msgid "Clang Auto-Completion"
-#~ msgstr "Αυτόματη συμπλήρωση Clang"
 
 #~ msgid "Language Settings"
 #~ msgstr "Ρυθμίσεις γλώσσας"
