@@ -322,16 +322,17 @@ _ide_trace_log (GLogLevelFlags  log_level,
 static gchar **
 get_environ_from_stdout (GSubprocess *subprocess)
 {
-  g_autofree gchar *stdout_buf = NULL;
+  g_autoptr(GBytes) stdout_bytes = NULL;
 
-  if (g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, NULL))
+  if (g_subprocess_communicate (subprocess, NULL, NULL, &stdout_bytes, NULL, NULL))
     {
-      g_auto(GStrv) lines = g_strsplit (stdout_buf, "\n", 0);
       g_autoptr(GPtrArray) env = g_ptr_array_new_with_free_func (g_free);
+      const char *data = g_bytes_get_data (stdout_bytes, NULL);
+      gsize len = g_bytes_get_size (stdout_bytes);
 
-      for (guint i = 0; lines[i]; i++)
+      for (gsize pos = 0; pos < len; pos += strlen (data + pos) + 1)
         {
-          const char *line = lines[i];
+          const char *line = data + pos;
 
           if (!g_ascii_isalpha (*line) && *line != '_')
             continue;
@@ -374,7 +375,7 @@ _ide_host_environ (void)
 
           launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
           subprocess = g_subprocess_launcher_spawn (launcher, &error,
-                                                    "flatpak-spawn", "--host", "printenv", NULL);
+                                                    "flatpak-spawn", "--host", "env", "-0", NULL);
           if (subprocess != NULL)
             host_environ = get_environ_from_stdout (subprocess);
         }
