@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2026-06-23 15:32+0000\n"
-"PO-Revision-Date: 2026-08-05 08:14+0800\n"
+"POT-Creation-Date: 2026-10-23 14:17+0000\n"
+"PO-Revision-Date: 2026-11-10 08:55+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 50.0\n"
+"X-Generator: Gtranslator 51.0\n"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:2
@@ -234,15 +234,15 @@ msgstr "使用 GNU debugger 调试"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:114
 msgid "Quickly access your projects"
-msgstr "快速访问您的工程"
+msgstr "快速访问您的项目"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:118
 msgid "Create new projects from a variety of templates"
-msgstr "使用多种模版新建工程"
+msgstr "使用多种模版新建项目"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:122
 msgid "Integration with Git to clone your projects"
-msgstr "与 Git 集成以克隆您的工程"
+msgstr "与 Git 集成以克隆您的项目"
 
 #: data/appdata/org.gnome.Builder.metainfo.xml.in.in:126
 msgid "The source code editor"
@@ -594,15 +594,15 @@ msgstr "使用 GTK 主题和/或 GtkSourceView 样式方案的亮色或暗色变
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:27
 msgid "\"Projects\""
-msgstr "\"工程\""
+msgstr "\"项目\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
 msgid "Projects directory"
-msgstr "工程目录"
+msgstr "项目目录"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:29
 msgid "Directory for all Builder projects."
-msgstr "所有构建器工程的存放目录。"
+msgstr "所有构建器项目的存放目录。"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 msgid "Restore Session"
@@ -630,7 +630,7 @@ msgstr "默认许可证"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
-msgstr "用于新工程的默认许可证"
+msgstr "用于新项目的默认许可证"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Inherit Language Server stderr"
@@ -674,7 +674,7 @@ msgstr "显示忽略的文件"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
-msgstr "如果启用，工程树将显示由 VCS 忽略的文件。"
+msgstr "如果启用，项目树将显示由 VCS 忽略的文件。"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/tweaks.ui:37
@@ -684,7 +684,7 @@ msgstr "优先排列文件夹"
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid ""
 "If enabled, the project tree will sort directories before regular files."
-msgstr "如果启用，工程树将把文件夹排列在普通文件前面。"
+msgstr "如果启用，项目树将把文件夹排列在普通文件前面。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
 msgid "Selected configuration for building"
@@ -694,18 +694,18 @@ msgstr "选中的构建配置"
 msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
-msgstr "已经被选中并将在下次该工程加载时恢复的配置。"
+msgstr "已经被选中并将在下次该项目加载时恢复的配置。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:13
 msgid "Install Project Before Running"
-msgstr "运行前安装工程"
+msgstr "运行前安装项目"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:14
 msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
-"运行工程前执行管道中的安装阶段。仅在您明确知道自己在做什么的情况下使用该选"
+"运行项目前执行管道中的安装阶段。仅在您明确知道自己在做什么的情况下使用该选"
 "项。"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
@@ -755,7 +755,7 @@ msgstr "缓存根目录"
 msgid ""
 "A directory to use as the root for cache data of the project like builds and "
 "flatpak staging directories"
-msgstr "作为如构建和 flatpak 阶段目录等工程缓存数据根目录使用的目录"
+msgstr "作为如构建和 flatpak 阶段目录等项目缓存数据根目录使用的目录"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
 #: src/plugins/editorui/tweaks.ui:392
@@ -777,11 +777,11 @@ msgstr "构建;开发;Build;Develop;"
 
 #: data/org.gnome.Builder.desktop.in.in:19
 msgid "Open a Project"
-msgstr "打开工程"
+msgstr "打开项目"
 
 #: data/org.gnome.Builder.desktop.in.in:23
 msgid "Start New Project"
-msgstr "开始新工程"
+msgstr "开始新项目"
 
 #: data/org.gnome.Builder.desktop.in.in:27
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:6
@@ -831,11 +831,11 @@ msgstr "无法保存草稿：%s"
 msgid "Untitled"
 msgstr "无标题"
 
-#: src/libide/core/ide-global.c:499 src/libide/greeter/gtk/menus.ui:11
+#: src/libide/core/ide-global.c:500 src/libide/greeter/gtk/menus.ui:11
 #: src/libide/gui/gtk/menus.ui:11 src/plugins/create-project/gtk/menus.ui:6
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
-msgstr "工程"
+msgstr "项目"
 
 #: src/libide/core/ide-transfer.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:525
@@ -1374,15 +1374,15 @@ msgstr "关闭"
 
 #: src/libide/greeter/gtk/menus.ui:58 src/libide/greeter/gtk/menus.ui:79
 msgid "Open a _Project…"
-msgstr "打开工程(_P)…"
+msgstr "打开项目(_P)…"
 
 #: src/libide/greeter/gtk/menus.ui:61
 msgid "Open a new or existing project"
-msgstr "打开新的或现有工程"
+msgstr "打开新的或现有项目"
 
 #: src/libide/greeter/gtk/menus.ui:69
 msgid "Create a new project by cloning a repository"
-msgstr "通过克隆仓库创建新的工程"
+msgstr "通过克隆仓库创建新的项目"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
@@ -1400,7 +1400,7 @@ msgstr "构建器 — %s"
 
 #: src/libide/greeter/ide-greeter-workspace.c:334
 msgid "Failed to load the project"
-msgstr "无法加载该工程"
+msgstr "无法加载该项目"
 
 #: src/libide/greeter/ide-greeter-workspace.c:336
 #: src/plugins/create-project/gbp-create-project-widget.c:259
@@ -1410,24 +1410,24 @@ msgstr "关闭(_C)"
 
 #: src/libide/greeter/ide-greeter-workspace.c:522
 msgid "Delete Project Sources?"
-msgstr "删除工程源代码吗？"
+msgstr "删除项目源代码吗？"
 
 #: src/libide/greeter/ide-greeter-workspace.c:523
 msgid "Deleting the project source code from your computer cannot be undone."
-msgstr "从您的计算机删除该工程源代码将无法撤销。"
+msgstr "从您的计算机删除该项目源代码将无法撤销。"
 
 #: src/libide/greeter/ide-greeter-workspace.c:526
 msgid "_Delete Project Sources"
-msgstr "删除工程源代码(_D)"
+msgstr "删除项目源代码(_D)"
 
 #: src/libide/greeter/ide-greeter-workspace.c:620
 #: src/libide/greeter/ide-greeter-workspace.c:659
 msgid "Select Project Folder"
-msgstr "选择工程文件夹"
+msgstr "选择项目文件夹"
 
 #: src/libide/greeter/ide-greeter-workspace.c:625
 msgid "Select Project File"
-msgstr "选择工程文件"
+msgstr "选择项目文件"
 
 #: src/libide/greeter/ide-greeter-workspace.c:664
 msgid "_Open"
@@ -1435,12 +1435,12 @@ msgstr "打开(_O)"
 
 #: src/libide/greeter/ide-greeter-workspace.c:675
 msgid "All Project Types"
-msgstr "所有工程类型"
+msgstr "所有项目类型"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:11
 msgctxt "title"
 msgid "Open a Project"
-msgstr "打开工程"
+msgstr "打开项目"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
 msgid "Toggle selection mode"
@@ -1448,19 +1448,19 @@ msgstr "开关选择模式"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:58
 msgid "Search all Builder projects…"
-msgstr "搜索所有构建器工程…"
+msgstr "搜索所有构建器项目…"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:80
 msgid "No Projects Found"
-msgstr "没有发现工程"
+msgstr "没有发现项目"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:113
 msgid "_Remove Projects"
-msgstr "移除工程(_R)"
+msgstr "移除项目(_R)"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:124
 msgid "Remove Projects and Sources…"
-msgstr "移除工程和源…"
+msgstr "移除项目和源…"
 
 #: src/libide/gtk/ide-animation.c:685
 #, c-format
@@ -1552,7 +1552,7 @@ msgstr "按 Esc 以取消或 Backspace 以禁用。"
 
 #: src/libide/gui/gtk/menus.ui:17
 msgid "Close Project"
-msgstr "关闭工程"
+msgstr "关闭项目"
 
 #: src/libide/gui/gtk/menus.ui:26 src/libide/gui/gtk/menus.ui:59
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:404
@@ -1614,7 +1614,7 @@ msgstr "显示应用程序配置"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "Open project in new workbench"
-msgstr "在新工作台打开工程"
+msgstr "在新工作台打开项目"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
@@ -1634,7 +1634,7 @@ msgstr "增加日志信息（可能会有重复）"
 #: src/libide/gui/ide-application-command-line.c:119
 #, c-format
 msgid "Failed to open project: %s"
-msgstr "打开工程失败：%s"
+msgstr "打开项目失败：%s"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
@@ -1654,7 +1654,7 @@ msgstr "使用上边的页面切换器或下列的一种："
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
-msgstr "工程侧边栏"
+msgstr "项目侧边栏"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
@@ -1687,11 +1687,11 @@ msgstr "开关右侧面板"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
-msgstr "运行工程（Shift+Ctrl+Space）"
+msgstr "运行项目（Shift+Ctrl+Space）"
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
-msgstr "停止运行中的工程"
+msgstr "停止运行中的项目"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
@@ -1699,7 +1699,7 @@ msgstr "停止运行"
 
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
-msgstr "运行工程"
+msgstr "运行项目"
 
 #: src/libide/gui/ide-search-popover.ui:31
 msgid "Search for anything"
@@ -1746,13 +1746,13 @@ msgstr "其他"
 
 #: src/libide/gui/ide-workbench.c:1109
 msgid "Project loaded"
-msgstr "工程已加载"
+msgstr "项目已加载"
 
 #. translators: %s is replaced with the project name
 #: src/libide/gui/ide-workbench.c:1296
 #, c-format
 msgid "Loading project “%s”"
-msgstr "正在加载工程 %s"
+msgstr "正在加载项目 %s"
 
 #: src/libide/gui/ide-workbench.c:1615
 msgid "Open"
@@ -1884,11 +1884,11 @@ msgstr "附加"
 
 #: src/libide/projects/ide-project.c:216
 msgid "Destination file must be within the project tree."
-msgstr "目标文件必须在工程树内。"
+msgstr "目标文件必须在项目树内。"
 
 #: src/libide/projects/ide-project.c:453
 msgid "File must be within the project tree."
-msgstr "文件必须在工程树内。"
+msgstr "文件必须在项目树内。"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
@@ -2086,7 +2086,7 @@ msgstr "保存"
 
 #: src/libide/terminal/ide-terminal-page.c:120
 msgid "Failed to launch subprocess. You may need to rebuild your project."
-msgstr "启动子进程失败。您可能需要重新构建您的工程。"
+msgstr "启动子进程失败。您可能需要重新构建您的项目。"
 
 #: src/libide/terminal/ide-terminal-page.c:125
 #: src/libide/terminal/ide-terminal-page.c:160
@@ -2226,7 +2226,7 @@ msgstr "（空）"
 #. FIXME? Shouldn't title come from a tweak property?
 #: src/libide/tweaks/ide-tweaks-directory.c:176
 msgid "Projects Directory"
-msgstr "工程目录"
+msgstr "项目目录"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:177
 #: src/plugins/create-project/gbp-create-project-widget.c:224
@@ -2380,11 +2380,11 @@ msgstr "未找到平台"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:48
 msgid "Arduino Sketch Project"
-msgstr "Arduino 草图工程"
+msgstr "Arduino 草图项目"
 
 #: src/plugins/arduino/gbp-arduino-template-provider.c:49
 msgid "An empty arduino sketch project"
-msgstr "空白的 Arduino 草图工程"
+msgstr "空白的 Arduino 草图项目"
 
 #: src/plugins/arduino/gbp-arduino-tweaks-addin.c:77
 msgid "Notes"
@@ -2433,7 +2433,7 @@ msgstr "自举构建系统"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
-msgstr "正在配置工程"
+msgstr "正在配置项目"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
@@ -2444,7 +2444,7 @@ msgstr "正在配置工程"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr "正在构建工程"
+msgstr "正在构建项目"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
@@ -2458,7 +2458,7 @@ msgstr "%s（副本）"
 
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
-msgstr "正在使用 BuildStream 工程但未找到“bst”可执行文件。"
+msgstr "正在使用 BuildStream 项目但未找到“bst”可执行文件。"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.c:151
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:161
@@ -2620,7 +2620,7 @@ msgstr "可用构建目标"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid ""
 "Some targets may not be available until the project has been configured."
-msgstr "部分目标可能不可用直到该工程获得配置。"
+msgstr "在该项目被配置前部分目标可能不可用。"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:26
 #: src/plugins/buildui/tweaks.ui:26
@@ -2661,11 +2661,11 @@ msgstr "删除配置"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project (Shift+Ctrl+Alt+C)"
-msgstr "停止构建工程 (Shift+Ctrl+Alt+C)"
+msgstr "停止构建项目 (Shift+Ctrl+Alt+C)"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr "构建工程（Shift+Ctrl+Alt+B）"
+msgstr "构建项目（Shift+Ctrl+Alt+B）"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:288
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
@@ -2673,11 +2673,11 @@ msgstr "显示构建诊断 (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:6
 msgid "Configure Project…"
-msgstr "配置工程…"
+msgstr "配置项目…"
 
 #: src/plugins/buildui/gtk/menus.ui:9
 msgid "Configure settings related to the project"
-msgstr "配置与工程相关的设置"
+msgstr "配置与项目相关的设置"
 
 #: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:19
 #: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:32
@@ -2698,7 +2698,7 @@ msgstr "重新加载配置"
 
 #: src/plugins/buildui/gtk/menus.ui:18
 msgid "Reload project configuration"
-msgstr "重新加载工程配置"
+msgstr "重新加载项目配置"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "Select Build Target…"
@@ -2718,7 +2718,7 @@ msgstr "构建(_B)"
 
 #: src/plugins/buildui/gtk/menus.ui:37
 msgid "Build the project"
-msgstr "构建工程"
+msgstr "构建项目"
 
 #: src/plugins/buildui/gtk/menus.ui:44
 msgid "_Rebuild"
@@ -2726,7 +2726,7 @@ msgstr "重新构建(_R)"
 
 #: src/plugins/buildui/gtk/menus.ui:45
 msgid "Rebuild the project"
-msgstr "重新构建工程"
+msgstr "重新构建项目"
 
 #: src/plugins/buildui/gtk/menus.ui:51
 msgid "_Clean"
@@ -2734,7 +2734,7 @@ msgstr "清理(_C)"
 
 #: src/plugins/buildui/gtk/menus.ui:52
 msgid "Clean the project"
-msgstr "清理工程"
+msgstr "清理项目"
 
 #: src/plugins/buildui/gtk/menus.ui:58
 msgid "Stop Building"
@@ -2750,7 +2750,7 @@ msgstr "安装和部署"
 
 #: src/plugins/buildui/gtk/menus.ui:72
 msgid "Install the project"
-msgstr "安装工程"
+msgstr "安装项目"
 
 #: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy to Device…"
@@ -2758,7 +2758,7 @@ msgstr "部署至设备…"
 
 #: src/plugins/buildui/gtk/menus.ui:79
 msgid "Deploy project to current device"
-msgstr "部署工程至当前设备"
+msgstr "部署项目至当前设备"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -2770,7 +2770,7 @@ msgstr "导出(_E)"
 
 #: src/plugins/buildui/gtk/menus.ui:90
 msgid "Export project"
-msgstr "导出工程"
+msgstr "导出项目"
 
 #: src/plugins/buildui/gtk/menus.ui:98
 msgid "Show Bui_ld Output"
@@ -2794,7 +2794,7 @@ msgstr "运行"
 
 #: src/plugins/buildui/gtk/menus.ui:128
 msgid "Run the project"
-msgstr "运行工程"
+msgstr "运行项目"
 
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Restart Program"
@@ -2810,7 +2810,7 @@ msgstr "停止程序"
 
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Stop running the project"
-msgstr "停止运行中的工程"
+msgstr "停止运行中的项目"
 
 #: src/plugins/buildui/gtk/menus.ui:151
 msgid "Debugging"
@@ -2832,7 +2832,7 @@ msgstr "跟随系统样式"
 
 #: src/plugins/buildui/gtk/menus.ui:166
 msgid "Follow the system style when running the project"
-msgstr "运行工程时跟随系统样式"
+msgstr "运行项目时跟随系统样式"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Light"
@@ -2840,7 +2840,7 @@ msgstr "强制亮色"
 
 #: src/plugins/buildui/gtk/menus.ui:173
 msgid "Force light theme when running the project"
-msgstr "运行工程时强制使用亮色主题"
+msgstr "运行项目时强制使用亮色主题"
 
 #: src/plugins/buildui/gtk/menus.ui:176
 msgid "Force Dark"
@@ -2848,7 +2848,7 @@ msgstr "强制暗色"
 
 #: src/plugins/buildui/gtk/menus.ui:180
 msgid "Force dark theme when running the project"
-msgstr "运行工程时强制使用暗色主题"
+msgstr "运行项目时强制使用暗色主题"
 
 #: src/plugins/buildui/gtk/menus.ui:183
 msgid "Accent Color"
@@ -2860,7 +2860,7 @@ msgstr "系统"
 
 #: src/plugins/buildui/gtk/menus.ui:189
 msgid "Use system accent color when running the project"
-msgstr "运行工程时使用系统强调色"
+msgstr "运行项目时使用系统强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:192
 msgid "Blue"
@@ -2868,7 +2868,7 @@ msgstr "蓝色"
 
 #: src/plugins/buildui/gtk/menus.ui:196
 msgid "Use blue accent color when running the project"
-msgstr "运行工程时使用蓝色强调色"
+msgstr "运行项目时使用蓝色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:199
 msgid "Teal"
@@ -2876,7 +2876,7 @@ msgstr "蓝绿"
 
 #: src/plugins/buildui/gtk/menus.ui:203
 msgid "Use teal accent color when running the project"
-msgstr "运行工程时使用蓝绿强调色"
+msgstr "运行项目时使用蓝绿强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:206
 msgid "Green"
@@ -2884,7 +2884,7 @@ msgstr "绿色"
 
 #: src/plugins/buildui/gtk/menus.ui:210
 msgid "Use green accent color when running the project"
-msgstr "运行工程时使用绿色强调色"
+msgstr "运行项目时使用绿色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:213
 msgid "Yellow"
@@ -2892,7 +2892,7 @@ msgstr "黄色"
 
 #: src/plugins/buildui/gtk/menus.ui:217
 msgid "Use yellow accent color when running the project"
-msgstr "运行工程时使用黄色强调色"
+msgstr "运行项目时使用黄色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:220
 msgid "Orange"
@@ -2900,7 +2900,7 @@ msgstr "橙色"
 
 #: src/plugins/buildui/gtk/menus.ui:224
 msgid "Use orange accent color when running the project"
-msgstr "运行工程时使用橙色强调色"
+msgstr "运行项目时使用橙色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:227
 msgid "Red"
@@ -2908,7 +2908,7 @@ msgstr "红色"
 
 #: src/plugins/buildui/gtk/menus.ui:231
 msgid "Use red accent color when running the project"
-msgstr "运行工程时使用红色强调色"
+msgstr "运行项目时使用红色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:234
 msgid "Pink"
@@ -2916,7 +2916,7 @@ msgstr "粉红"
 
 #: src/plugins/buildui/gtk/menus.ui:238
 msgid "Use pink accent color when running the project"
-msgstr "运行工程时使用粉红强调色"
+msgstr "运行项目时使用粉红强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:241
 msgid "Purple"
@@ -2924,7 +2924,7 @@ msgstr "紫色"
 
 #: src/plugins/buildui/gtk/menus.ui:245
 msgid "Use purple accent color when running the project"
-msgstr "运行工程时使用紫色强调色"
+msgstr "运行项目时使用紫色强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:248
 msgid "Slate"
@@ -2932,7 +2932,7 @@ msgstr "岩灰"
 
 #: src/plugins/buildui/gtk/menus.ui:252
 msgid "Use slate accent color when running the project"
-msgstr "运行工程时使用岩灰强调色"
+msgstr "运行项目时使用岩灰强调色"
 
 #: src/plugins/buildui/gtk/menus.ui:257
 msgid "Accessibility"
@@ -2944,7 +2944,7 @@ msgstr "高对比度"
 
 #: src/plugins/buildui/gtk/menus.ui:262
 msgid "Use high contrast theme when running the project"
-msgstr "运行工程时使用高对比度主题"
+msgstr "运行项目时使用高对比度主题"
 
 #: src/plugins/buildui/gtk/menus.ui:265
 msgid "Adaptive Preview"
@@ -2964,7 +2964,7 @@ msgstr "左至右"
 
 #: src/plugins/buildui/gtk/menus.ui:277
 msgid "Force left-to-right text when running the project"
-msgstr "运行工程时强制使用左至右文本"
+msgstr "运行项目时强制使用左至右文本"
 
 #: src/plugins/buildui/gtk/menus.ui:280
 msgid "Right-to-Left"
@@ -2972,7 +2972,7 @@ msgstr "右至左"
 
 #: src/plugins/buildui/gtk/menus.ui:284
 msgid "Force right-to-left text when running the project"
-msgstr "运行工程时强制使用右至左文本"
+msgstr "运行项目时强制使用右至左文本"
 
 #: src/plugins/buildui/gtk/menus.ui:289
 msgid "GPU"
@@ -2989,7 +2989,7 @@ msgstr "默认"
 
 #: src/plugins/buildui/gtk/menus.ui:297
 msgid "Use the default GTK renderer when running the project"
-msgstr "运行工程时使用默认 GTK 渲染器"
+msgstr "运行项目时使用默认 GTK 渲染器"
 
 #: src/plugins/buildui/gtk/menus.ui:300
 msgid "Vulkan"
@@ -2997,7 +2997,7 @@ msgstr "Vulkan"
 
 #: src/plugins/buildui/gtk/menus.ui:304
 msgid "Use the Vulkan renderer when running the project"
-msgstr "运行工程时使用 Vulkan 渲染器"
+msgstr "运行项目时使用 Vulkan 渲染器"
 
 #: src/plugins/buildui/gtk/menus.ui:307
 msgid "GL"
@@ -3005,7 +3005,7 @@ msgstr "GL"
 
 #: src/plugins/buildui/gtk/menus.ui:311
 msgid "Use the GL renderer when running the project"
-msgstr "运行工程时使用 GL 渲染器"
+msgstr "运行项目时使用 GL 渲染器"
 
 #: src/plugins/buildui/gtk/menus.ui:314
 msgid "Legacy GL"
@@ -3013,7 +3013,7 @@ msgstr "过时 GL"
 
 #: src/plugins/buildui/gtk/menus.ui:318
 msgid "Use the legacy GL renderer when running the project"
-msgstr "运行工程时使用过时 GL 渲染器"
+msgstr "运行项目时使用过时 GL 渲染器"
 
 #: src/plugins/buildui/gtk/menus.ui:321
 msgid "Cairo"
@@ -3021,7 +3021,7 @@ msgstr "Cairo"
 
 #: src/plugins/buildui/gtk/menus.ui:325
 msgid "Use the Cairo software renderer when running the project"
-msgstr "运行工程时使用 Cairo 软件渲染器"
+msgstr "运行项目时使用 Cairo 软件渲染器"
 
 #: src/plugins/buildui/gtk/menus.ui:330
 msgid "Save/Restore"
@@ -3029,7 +3029,7 @@ msgstr "保存/恢复"
 
 #: src/plugins/buildui/gtk/menus.ui:336
 msgid "Use default restore reason when running the project"
-msgstr "运行工程时使用默认恢复原因"
+msgstr "运行项目时使用默认恢复原因"
 
 #: src/plugins/buildui/gtk/menus.ui:339
 msgid "Pristine"
@@ -3037,7 +3037,7 @@ msgstr "崭新的"
 
 #: src/plugins/buildui/gtk/menus.ui:343
 msgid "Use pristine as restore reason when running the project"
-msgstr "运行工程时使用崭新作为恢复原因"
+msgstr "运行项目时使用崭新作为恢复原因"
 
 #: src/plugins/buildui/gtk/menus.ui:346
 msgid "Normal Launch"
@@ -3045,7 +3045,7 @@ msgstr "正常启动"
 
 #: src/plugins/buildui/gtk/menus.ui:350
 msgid "Use normal launch as restore reason when running the project"
-msgstr "运行工程时使用正常启动作为恢复原因"
+msgstr "运行项目时使用正常启动作为恢复原因"
 
 #: src/plugins/buildui/gtk/menus.ui:353
 msgid "Recover"
@@ -3053,7 +3053,7 @@ msgstr "复原"
 
 #: src/plugins/buildui/gtk/menus.ui:357
 msgid "Use recover as restore reason when running the project"
-msgstr "运行工程时使用复原作为恢复原因"
+msgstr "运行项目时使用复原作为恢复原因"
 
 #: src/plugins/buildui/gtk/menus.ui:360
 msgid "Restore"
@@ -3061,11 +3061,11 @@ msgstr "恢复"
 
 #: src/plugins/buildui/gtk/menus.ui:364
 msgid "Use full session restore as restore reason when running the project"
-msgstr "运行工程时使用完整会话恢复作为恢复原因"
+msgstr "运行项目时使用完整会话恢复作为恢复原因"
 
 #: src/plugins/buildui/gtk/menus.ui:372
 msgid "Request verbose logging when running the project"
-msgstr "运行工程时请求详尽日志"
+msgstr "运行项目时请求详尽日志"
 
 #: src/plugins/buildui/gtk/menus.ui:376
 msgid "Show Inspector"
@@ -3073,7 +3073,7 @@ msgstr "显示检查器"
 
 #: src/plugins/buildui/gtk/menus.ui:379
 msgid "Request the GTK inspector be shown when running the project"
-msgstr "运行工程时请求显示 GTK 检查器"
+msgstr "运行项目时请求显示 GTK 检查器"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/menu-search/gtk/menus.ui:57
@@ -3161,7 +3161,7 @@ msgstr "运行命令"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr "该命令是用来运行您的工程的"
+msgstr "该命令是用来运行您的项目的"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -3176,7 +3176,7 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"在运行应用程序前先安装它。这对大部分工程是必要的除非使用了自定义运行命令。"
+"在运行应用程序前先安装它。这对大部分项目是必要的除非使用了自定义运行命令。"
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -3288,7 +3288,7 @@ msgstr "安装前置"
 msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
-msgstr "工程将会在构建管道的安装阶段被安装在该目录。"
+msgstr "项目将会在构建管道的安装阶段被安装在该目录。"
 
 #: src/plugins/buildui/tweaks.ui:426
 msgid "Configure Options"
@@ -3298,7 +3298,7 @@ msgstr "配置选项"
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
-msgstr "这些选项会被构建系统用来在构建管道的配置阶段配置工程"
+msgstr "这些选项会被构建系统用来在构建管道的配置阶段配置项目"
 
 #: src/plugins/buildui/tweaks.ui:446
 msgid "Build Environment"
@@ -3343,7 +3343,7 @@ msgstr "获取依赖"
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:286
 #: src/plugins/swift/gbp-swift-pipeline-addin.c:143
 msgid "Build project"
-msgstr "构建工程"
+msgstr "构建项目"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
@@ -3372,7 +3372,7 @@ msgid ""
 "Cannot locate .clang-format, please add one to your project. Using fallback "
 "GNU-style formatter."
 msgstr ""
-"无法定位 .clang-format，请向您的工程添加一个。正在使用后备的 GNU-style 格式化"
+"无法定位 .clang-format，请向您的项目添加一个。正在使用后备的 GNU-style 格式化"
 "器。"
 
 #: src/plugins/clang/ide-clang-client.c:166
@@ -3433,7 +3433,7 @@ msgstr "CMake"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:276
 msgid "Configure project"
-msgstr "配置工程"
+msgstr "配置项目"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
 #: src/plugins/make/gbp-make-pipeline-addin.c:155
@@ -3441,7 +3441,7 @@ msgstr "配置工程"
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
-msgstr "正在安装工程"
+msgstr "正在安装项目"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:218
 #, c-format
@@ -3450,7 +3450,7 @@ msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
 msgid "Create or update code-index for project file"
-msgstr "为工程文件创建或更新代码索引"
+msgstr "为项目文件创建或更新代码索引"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
 msgid "PROJECT_FILE"
@@ -3474,7 +3474,7 @@ msgstr "填写索引计划失败：%s"
 #: src/plugins/code-index/gbp-code-index-application-addin.c:265
 #, c-format
 msgid "Failed to load project: %s"
-msgstr "加载工程失败：%s"
+msgstr "加载项目失败：%s"
 
 #. Now we can drop our paused state
 #: src/plugins/code-index/gbp-code-index-service.c:209
@@ -3497,7 +3497,7 @@ msgstr "声明"
 
 #: src/plugins/code-index/ide-code-index-search-provider.c:150
 msgid "Project Symbols"
-msgstr "工程符号"
+msgstr "项目符号"
 
 #: src/plugins/codeshot/gtk/menus.ui:6
 msgid "Copy as Image"
@@ -3652,7 +3652,7 @@ msgstr "保存文档时更新版权题头"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
-msgstr "显示工程创建向导"
+msgstr "显示项目创建向导"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:113
@@ -3661,15 +3661,15 @@ msgstr "选择位置"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:257
 msgid "Failed to Create Project"
-msgstr "创建工程失败"
+msgstr "创建项目失败"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:5
 msgid "Create New Project"
-msgstr "创建新工程"
+msgstr "创建新项目"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:17
 msgid "Project Name"
-msgstr "工程名称"
+msgstr "项目名称"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
@@ -3681,7 +3681,7 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"用于该工程文件夹和其他资源的唯一名称。名称必须使用小写且没有空格，而且不能以"
+"用于该项目文件夹和其他资源的唯一名称。名称必须使用小写且没有空格，而且不能以"
 "数字开头。"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
@@ -3706,7 +3706,7 @@ msgstr "位置"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:87
 msgid "The project will be created in a new subdirectory."
-msgstr "该工程将被创建在新的子目录中。"
+msgstr "该项目将被创建在新的子目录中。"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:110
 #: src/plugins/projectui/tweaks.ui:47
@@ -3719,21 +3719,21 @@ msgstr "模板"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:182
 msgid "Create Project"
-msgstr "创建工程"
+msgstr "创建项目"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
-msgstr "创建新工程(_N)…"
+msgstr "创建新项目(_N)…"
 
 #: src/plugins/create-project/gtk/menus.ui:9
 #: src/plugins/create-project/gtk/menus.ui:21
 #: src/plugins/create-project/gtk/menus.ui:34
 msgid "Create New Project…"
-msgstr "创建新工程…"
+msgstr "创建新项目…"
 
 #: src/plugins/create-project/gtk/menus.ui:25
 msgid "Create a new project from template"
-msgstr "从模板创建新工程"
+msgstr "从模板创建新项目"
 
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:276
 #: src/plugins/css-preview/gbp-css-preview-hover-provider.c:307
@@ -3800,7 +3800,7 @@ msgstr "带调试器运行"
 
 #: src/plugins/debuggerui/gtk/menus.ui:14
 msgid "Run the project with debugger"
-msgstr "带调试器运行该工程"
+msgstr "带调试器运行该项目"
 
 #: src/plugins/debuggerui/gtk/menus.ui:20
 #: src/plugins/debuggerui/gtk/menus.ui:81
@@ -4724,7 +4724,7 @@ msgstr "安装或更新 SDK 吗？"
 msgid ""
 "Builder needs to install the following software development kits to build "
 "your project."
-msgstr "构建器需要安装以下软件开发工具集以构建您的工程。"
+msgstr "构建器需要安装以下软件开发工具集以构建您的项目。"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:80
 #: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
@@ -4744,7 +4744,7 @@ msgstr "解决 SDK 扩展的问题"
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:116
 msgid ""
 "Builder is locating the appropriate SDK extensions to build your project"
-msgstr "构建器正在定位适当的 SDK 扩展以构建您的工程"
+msgstr "构建器正在定位适当的 SDK 扩展以构建您的项目"
 
 #: src/plugins/flatpak/gbp-flatpak-manifest.c:857
 msgid "Flatpak"
@@ -5024,7 +5024,7 @@ msgstr "go run"
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
-msgstr "自举工程"
+msgstr "自举项目"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:183
 msgid "Gradle Run"
@@ -5056,11 +5056,11 @@ msgstr "在 %s 中替换(_R)"
 
 #: src/plugins/grep/gbp-grep-panel.c:847
 msgid "Find in Project"
-msgstr "在工程中查找"
+msgstr "在项目中查找"
 
 #: src/plugins/grep/gbp-grep-panel.c:848
 msgid "Replace in Project"
-msgstr "在工程中替换"
+msgstr "在项目中替换"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:15
 msgid "Find in Files"
@@ -5088,11 +5088,11 @@ msgstr "关闭页面（Esc 键）"
 
 #: src/plugins/grep/gbp-grep-panel.ui:137
 msgid "_Find in Project"
-msgstr "在工程中查找(_F)"
+msgstr "在项目中查找(_F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:170
 msgid "_Replace in Project"
-msgstr "在工程中替换(_R)"
+msgstr "在项目中替换(_R)"
 
 #: src/plugins/grep/gbp-grep-popover.ui:31
 msgid "Search for…"
@@ -5160,11 +5160,11 @@ msgstr "用文件浏览器(_B)…"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
-msgstr "空白 Makefile 工程"
+msgstr "空白 Makefile 项目"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:49
 msgid "Create a new empty project using a simple Makefile"
-msgstr "使用一个简单 Makefile 新建空白工程"
+msgstr "使用一个简单 Makefile 新建空白项目"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
@@ -5317,11 +5317,11 @@ msgstr "关闭当前页面"
 #: src/plugins/menu-search/gtk/menus.ui:108
 #: src/plugins/project-tree/gtk/menus.ui:99
 msgid "Reveal in Project Tree"
-msgstr "在工程树中展示"
+msgstr "在项目树中展示"
 
 #: src/plugins/menu-search/gtk/menus.ui:109
 msgid "Reveal the current page in the project tree"
-msgstr "在工程树内展示当前页面"
+msgstr "在项目树内展示当前页面"
 
 #: src/plugins/menu-search/gtk/menus.ui:115
 msgid "Save the current page"
@@ -5401,7 +5401,7 @@ msgstr "GNOME 应用程序"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:176
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr "基于 Meson 使用 GTK4 和 libadwaita 为 GNOME 开发的工程"
+msgstr "基于 Meson 使用 GTK4 和 libadwaita 为 GNOME 开发的项目"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:191
 msgid "GTK 4 Application"
@@ -5409,7 +5409,7 @@ msgstr "GTK4 应用程序"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:192
 msgid "A Meson-based project using GTK 4"
-msgstr "基于 Meson 使用 GTK4 开发的工程"
+msgstr "基于 Meson 使用 GTK4 开发的项目"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:207
 msgid "Shared Library"
@@ -5417,7 +5417,7 @@ msgstr "共享库"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:208
 msgid "A Meson-based project for a shared library"
-msgstr "基于 Meson 用于共享库的工程"
+msgstr "基于 Meson 用于共享库的项目"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:215
 msgid "Command Line Tool"
@@ -5425,15 +5425,15 @@ msgstr "命令行工具"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:216
 msgid "An Meson-based project for a command-line program"
-msgstr "基于 Meson 用于命令行程序的工程"
+msgstr "基于 Meson 用于命令行程序的项目"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:225
 msgid "Empty Meson Project"
-msgstr "空白 Meson 工程"
+msgstr "空白 Meson 项目"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:226
 msgid "An empty Meson project skeleton"
-msgstr "空白的 Meson 工程骨架"
+msgstr "空白的 Meson 项目骨架"
 
 #: src/plugins/meson/gbp-meson-build-system.c:474
 msgid "Meson"
@@ -5445,7 +5445,7 @@ msgstr "加载 Meson 检查"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:293
 msgid "Install project"
-msgstr "安装工程"
+msgstr "安装项目"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:308
 msgid "Cache development environment"
@@ -5532,7 +5532,7 @@ msgstr "章节"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
-msgstr "建议的 GNOME 工程"
+msgstr "建议的 GNOME 项目"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "An IDE for writing GNOME-based software"
@@ -5625,7 +5625,7 @@ msgstr "构建成功"
 #: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr "工程“%s”已完成构建"
+msgstr "项目“%s”已完成构建"
 
 #: src/plugins/notification/ide-notification-addin.c:128
 #: src/plugins/notification/ide-notification-addin.c:216
@@ -5635,7 +5635,7 @@ msgstr "构建失败"
 #: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr "工程“%s”构建失败"
+msgstr "项目“%s”构建失败"
 
 #: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
@@ -5754,7 +5754,7 @@ msgstr "文件将马上被复制完毕"
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:51
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
-msgstr "工程树"
+msgstr "项目树"
 
 #: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
@@ -5807,11 +5807,11 @@ msgstr "优先排列文件夹(_O)"
 
 #: src/plugins/project-tree/gtk/menus.ui:108
 msgid "Reveal in Project _Tree"
-msgstr "在工程树中显示(_T)"
+msgstr "在项目树中显示(_T)"
 
 #: src/plugins/project-tree/tweaks.ui:14
 msgid "Display icons next to files within the project tree"
-msgstr "在工程树中的文件旁显示图标"
+msgstr "在项目树中的文件旁显示图标"
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
@@ -5831,19 +5831,19 @@ msgstr "恢复之前的会话"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
-msgstr "加载工程时打开上次打开的文件"
+msgstr "加载项目时打开上次打开的文件"
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
-msgstr "工程创建"
+msgstr "项目创建"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
-msgstr "用构建器创建的工程将放置在该目录中"
+msgstr "用构建器创建的项目将放置在该目录中"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
-msgstr "创建新工程时的默认许可证"
+msgstr "创建新项目时的默认许可证"
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
@@ -5855,13 +5855,13 @@ msgstr "概览"
 
 #: src/plugins/projectui/tweaks.ui:115
 msgid "Project Identifier"
-msgstr "工程标识符"
+msgstr "项目标识符"
 
 #: src/plugins/projectui/tweaks.ui:123
 msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
-msgstr "引用您工程的设置、构建目录和缓存信息时会使用该标识符。"
+msgstr "引用您项目的设置、构建目录和缓存信息时会使用该标识符。"
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5879,7 +5879,7 @@ msgstr "当前配置"
 msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
-msgstr "配置是用来部署构建管道，配置您的构建系统和运行您的工程的。"
+msgstr "配置是用来部署构建管道，配置您的构建系统和运行您的项目的。"
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5921,7 +5921,7 @@ msgstr "显示更多"
 
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
-msgstr "最近的工程"
+msgstr "最近的项目"
 
 #: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat Tabs"
@@ -6063,15 +6063,15 @@ msgstr "将其当作目标应用程序来运行命令。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
-msgstr "可以用来构建、运行或修改您工程的命令"
+msgstr "可以用来构建、运行或修改您项目的命令"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:118
 msgid "These commands are specific to this project."
-msgstr "这些命令是该工程专用的。"
+msgstr "这些命令是该项目专用的。"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:119
 msgid "These commands are shared across all projects."
-msgstr "这些命令是所有工程共享的。"
+msgstr "这些命令是所有项目共享的。"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -6107,7 +6107,7 @@ msgstr "运行命令"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
-msgstr "为应用程序或工程加载的 run-command 标识列表。"
+msgstr "为应用程序或项目加载的 run-command 标识列表。"
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -6206,7 +6206,7 @@ msgstr "带分析器运行"
 
 #: src/plugins/sysprof/gtk/menus.ui:13
 msgid "Run the project with profiler"
-msgstr "带分析器运行工程"
+msgstr "带分析器运行项目"
 
 #: src/plugins/sysprof/gtk/menus.ui:21 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
@@ -6442,7 +6442,7 @@ msgstr "新建构建终端(_B)"
 
 #: src/plugins/terminal/gtk/menus.ui:21
 msgid "Open a new terminal in project's build pipeline"
-msgstr "在工程构建管道中打开新终端"
+msgstr "在项目构建管道中打开新终端"
 
 #: src/plugins/terminal/gtk/menus.ui:25
 msgid "New _Runtime Terminal"
@@ -6450,7 +6450,7 @@ msgstr "新建运行时终端(_R)"
 
 #: src/plugins/terminal/gtk/menus.ui:30
 msgid "Open a new terminal in project's runtime environment"
-msgstr "在工程运行时环境中打开新终端"
+msgstr "在项目运行时环境中打开新终端"
 
 #: src/plugins/terminal/gtk/menus.ui:43
 msgid "Split"
@@ -6562,7 +6562,7 @@ msgstr "正在更新依赖…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:137
 msgid "Builder is updating your project’s configured dependencies."
-msgstr "构建器正在更新您的工程配置的依赖。"
+msgstr "构建器正在更新您的项目配置的依赖。"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -6570,7 +6570,7 @@ msgstr "更新依赖…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr "下载工程依赖的更新"
+msgstr "下载项目依赖的更新"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6604,7 +6604,7 @@ msgstr "带泄漏检测器运行"
 
 #: src/plugins/valgrind/gtk/menus.ui:14
 msgid "Run the project with valgrind"
-msgstr "带 Valgrind 运行该工程"
+msgstr "带 Valgrind 运行该项目"
 
 #: src/plugins/valgrind/gtk/menus.ui:22 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
@@ -6688,7 +6688,7 @@ msgstr "退出时搜索内存泄漏"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
-msgstr "开始从网址克隆工程"
+msgstr "开始从网址克隆项目"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:150
 msgid "A failure occurred while cloning the repository."
@@ -6710,7 +6710,7 @@ msgstr "分支"
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
-msgstr "键入您想要克隆的工程的源代码仓库网址。"
+msgstr "键入您想要克隆的项目的源代码仓库网址。"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
